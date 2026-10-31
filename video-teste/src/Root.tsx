@@ -2,6 +2,8 @@ import { Composition } from "remotion";
 import { NovaColecao } from "./NovaColecao";
 import { CuriosidadeMinecraft } from "./minecraft/CuriosidadeMinecraft";
 import T from "./minecraft/timing.json";
+import { PowerTech } from "./powertech/PowerTech";
+import PT from "./powertech/timing.json";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -20,6 +22,15 @@ export const RemotionRoot: React.FC = () => (
       fps={T.fps}
       width={1080}
       height={1920}
+    />
+    <Composition
+      id="PowerTech"
+      component={PowerTech}
+      durationInFrames={PT.duration}
+      fps={PT.fps}
+      width={1080}
+      height={1920}
+      defaultProps={{ comAudio: true }}
     />
   </>
 );

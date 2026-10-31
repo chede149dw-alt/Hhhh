@@ -1,0 +1,33 @@
+{
+  "fps": 30,
+  "duration": 960,
+  "bpm": 120,
+  "cenas": {
+    "abertura": [0, 126],
+    "computadores": [120, 306],
+    "parcelamento": [300, 516],
+    "local": [510, 696],
+    "cta": [690, 960]
+  },
+  "eventos": {
+    "pulso": 10,
+    "marcaAbertura": 34,
+    "fraseAbertura": 74,
+    "tecnologia": 136,
+    "setupCorte": 210,
+    "setup": [222, 238, 254],
+    "headlineAcesso": 316,
+    "secundariaAcesso": 400,
+    "boleto": 438,
+    "marcaLocal": 524,
+    "taglineLocal": 566,
+    "pino": 606,
+    "localTexto": 618,
+    "convergencia": 696,
+    "marcaFinal": 712,
+    "ctaPrincipal": 756,
+    "ctaSecundaria": 800,
+    "assinatura": 836,
+    "impactoFinal": 882
+  }
+}
