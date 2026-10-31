@@ -148,7 +148,7 @@ export const Cena5Chamada: React.FC = () => {
 
       {/* Assinatura final, sob a marca centralizada */}
       <AbsoluteFill style={{ alignItems: "center", top: 1210 }}>
-        <Rotulo texto="Acreúna — Goiás" inicio={final + 14} tamanho={44} cor={COR.branco} />
+        <Rotulo texto="Acreúna — Goiás" inicio={final + 14} tamanho={50} cor={COR.branco} />
       </AbsoluteFill>
 
       {/* Clarão do impacto final */}
@@ -167,9 +167,10 @@ export const Cena5Chamada: React.FC = () => {
             fontFamily: FONTE_TITULO,
             fontWeight: 600,
             fontSize: 30,
-            letterSpacing: "0.5em",
-            marginRight: "-0.5em",
-            color: COR.prataEscura,
+            letterSpacing: "0.22em",
+            marginRight: "-0.22em",
+            whiteSpace: "nowrap",
+            color: COR.prata,
             textTransform: "uppercase",
           }}
         >
