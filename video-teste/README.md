@@ -23,3 +23,15 @@ Vídeo vertical de 22 s sobre a origem do Creeper, em motion graphics no estilo 
 ```bash
 npx remotion render CuriosidadeMinecraft out/curiosidade-minecraft.mp4
 ```
+
+## Check-up do Remotion
+
+Vídeo vertical de 16 s que testa os principais recursos do Remotion, um por cena: física de mola (`spring`), contador com anel de progresso, gráfico de barras animado, formas e cores (`interpolateColors`) e uma checklist final.
+
+- Cenas: `src/checkup/CheckupRemotion.tsx`
+- Tempos das cenas (usados pelo vídeo e pela trilha): `src/checkup/timing.json`
+- Trilha e efeitos sintetizados: `python3 scripts/gerar_trilha_checkup.py` (gera `public/checkup/trilha.wav`)
+
+```bash
+npx remotion render CheckupRemotion out/checkup-remotion.mp4
+```
