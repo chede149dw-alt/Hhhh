@@ -23,3 +23,14 @@ Vídeo vertical de 22 s sobre a origem do Creeper, em motion graphics no estilo 
 ```bash
 npx remotion render CuriosidadeMinecraft out/curiosidade-minecraft.mp4
 ```
+
+## Reels "Lembranças" (lyric video)
+
+Reels vertical de 35,6 s com a letra sincronizada palavra por palavra sobre a música (`public/reels/musica.m4a`), em estilo cinematográfico: fundo com luzes desfocadas, bokeh, granulação de filme, flash de luz na entrada do refrão e pulsos nas batidas.
+
+- Letra e tempos de cada palavra: `src/reels/letra.ts` (onde a música diz "menina", o texto mostra "o nosso menino")
+- Cenas e animações: `src/reels/ReelsMenino.tsx`
+
+```bash
+npm run render:reels   # gera out/reels-menino.mp4
+```
