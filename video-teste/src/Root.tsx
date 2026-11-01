@@ -4,6 +4,7 @@ import { CuriosidadeMinecraft } from "./minecraft/CuriosidadeMinecraft";
 import T from "./minecraft/timing.json";
 import { ReelsMenino } from "./reels/ReelsMenino";
 import { DURACAO } from "./reels/letra";
+import { ReelsMotion } from "./reels/ReelsMotion";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -26,6 +27,14 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="ReelsMenino"
       component={ReelsMenino}
+      durationInFrames={Math.round(DURACAO * 30)}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="ReelsMotion"
+      component={ReelsMotion}
       durationInFrames={Math.round(DURACAO * 30)}
       fps={30}
       width={1080}

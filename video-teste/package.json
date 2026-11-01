@@ -4,7 +4,8 @@
   "scripts": {
     "studio": "remotion studio",
     "render": "remotion render NovaColecao out/nova-colecao.mp4",
-    "render:reels": "remotion render ReelsMenino out/reels-menino.mp4"
+    "render:reels": "remotion render ReelsMenino out/reels-menino.mp4",
+    "render:reels-motion": "remotion render ReelsMotion out/reels-motion.mp4"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

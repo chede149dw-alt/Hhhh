@@ -34,3 +34,13 @@ Reels vertical de 35,6 s com a letra sincronizada palavra por palavra sobre a m�
 ```bash
 npm run render:reels   # gera out/reels-menino.mp4
 ```
+
+### Versão motion graphics
+
+Mesma música e letra, no estilo motion graphics: cortes secos entre fundos preto, branco e laranja, tipografia pesada (Inter Black), pílulas e etiquetas empilhadas, ícones em traço que se desenham, rabiscos à mão, arcos e explosões. Uma cena por verso, sincronizada palavra por palavra.
+
+- Cenas: `src/reels/ReelsMotion.tsx` (letra e tempos continuam em `src/reels/letra.ts`)
+
+```bash
+npm run render:reels-motion   # gera out/reels-motion.mp4
+```
