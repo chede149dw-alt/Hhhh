@@ -2,6 +2,7 @@ import React from "react";
 import { AbsoluteFill, Composition, Still } from "remotion";
 import { Chede, Expressao, Pose } from "./personagens/Chede";
 import { Quarto } from "./cenarios/Quarto";
+import { FichaChede } from "./personagens/FichaChede";
 import { Fenda } from "./efeitos/Fenda";
 import { FeixeDeLuz, Gradacao, Grao, Legenda, Poeira } from "./estilo/Acabamento";
 
@@ -43,6 +44,7 @@ export const FrameEstilo: React.FC<{ pose: Pose; expressao: Expressao }> = ({ po
 
 export const RemotionRoot: React.FC = () => (
   <>
+    <Still id="FichaChede" component={FichaChede} width={2400} height={2700} />
     <Still id="ChedeFrente" component={ChedeFrente} width={1080} height={1920} defaultProps={{ expressao: "neutro" as Expressao }} />
     <Composition
       id="FrameEstilo"

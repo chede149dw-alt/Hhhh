@@ -1,4 +1,7 @@
-# Chede (ficha, versão de teste)
+# Chede (ficha oficial, aprovada)
+
+> Regra obrigatória: em todo vídeo o Chede segue esta ficha (cores, proporções, roupa, cabelo).
+> Nunca redesenhar: usar sempre `estudio/src/personagens/Chede.tsx`.
 
 | Item | Definição |
 |---|---|
@@ -23,5 +26,11 @@ sem espiral, sem nome de anime.
 ## Arquivos
 - Código do boneco (partes articuladas + 8 expressões): `estudio/src/personagens/Chede.tsx`
 - Efeito do poder: `estudio/src/efeitos/Fenda.tsx`
-- `teste-frente.png`: de frente, fundo neutro
+- `ficha.png`: vistas (frente, 3/4, perfil, costas), 8 expressões e 6 poses
+- `teste-frente.png`: de frente, fundo neutro (versão aprovada)
 - `frame-estilo.png`: quadro de estilo no quarto (luz, poeira, grão, legenda)
+
+## Como usar no código
+`<Chede vista="frente|tresQuartos|perfil|costas" expressao="neutro|feliz|espanto|medo|raiva|determinado|cansado|rindo" pose={{...}} />`
+As 6 poses prontas estão em `estudio/src/personagens/FichaChede.tsx` (Parado, Andando, Correndo,
+Apontando, Soltando o poder, Caído).

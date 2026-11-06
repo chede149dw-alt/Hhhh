@@ -34,6 +34,8 @@ export type Expressao =
   | "cansado"
   | "rindo";
 
+export type Vista = "frente" | "tresQuartos" | "perfil" | "costas";
+
 export type Pose = {
   cabeca?: number; // inclinação da cabeça (graus)
   tronco?: number; // inclinação do tronco
@@ -104,7 +106,7 @@ const Sobrancelha: React.FC<{ x: number; y: number; ang: number; lado: 1 | -1 }>
   ang,
   lado,
 }) => (
-  <g transform={`translate(${x},${y}) rotate(${ang * lado})`}>
+  <g transform={`translate(${x},${y}) rotate(${-ang * lado})`}>
     <rect x={-34} y={-10} width={68} height={20} rx={10} fill={C.cabelo} />
   </g>
 );
@@ -149,51 +151,89 @@ const EXPRESSOES: Record<
   cansado: { olho: 0.95, sobY: -46, sobAng: -8, semicerrado: 0.6 },
 };
 
-const Cabeca: React.FC<{ expressao: Expressao; pose: Pose }> = ({ expressao, pose }) => {
+const GIRO: Record<Vista, number> = { frente: 0, tresQuartos: 75, perfil: 150, costas: 0 };
+
+export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista }> = ({
+  expressao,
+  pose,
+  vista = "frente",
+}) => {
   const e = EXPRESSOES[expressao];
-  const ox = pose.olharX ?? 0;
+  const ox = pose.olharX ?? (vista === "frente" ? 0 : 0.6);
   const oy = pose.olharY ?? 0;
   const piscar = pose.piscar ?? 0;
+  const fx = GIRO[vista];
+  const costas = vista === "costas";
+  const perfil = vista === "perfil";
+  const tres = vista === "tresQuartos";
   return (
     <g>
       <defs>
-        <clipPath id="clipCabeca">
+        <clipPath id={`clipCabeca-${vista}`}>
           <ellipse cx={0} cy={0} rx={212} ry={205} />
         </clipPath>
       </defs>
       {/* orelhas */}
-      <ellipse cx={-206} cy={22} rx={30} ry={38} fill={C.pele} />
-      <ellipse cx={206} cy={22} rx={30} ry={38} fill={C.peleSombra} />
+      {(vista === "frente" || costas) && (
+        <>
+          <ellipse cx={-206} cy={22} rx={30} ry={38} fill={C.pele} />
+          <ellipse cx={206} cy={22} rx={30} ry={38} fill={C.peleSombra} />
+        </>
+      )}
+      {tres && <ellipse cx={-196} cy={22} rx={26} ry={38} fill={C.pele} />}
+      {/* nariz de perfil (sai do contorno) */}
+      {perfil && <path d="M 196 10 Q 236 50 214 70 Q 204 74 190 66 Z" fill={C.pele} />}
       {/* cabeça com sombra em faces */}
       <ellipse cx={0} cy={0} rx={212} ry={205} fill={C.pele} />
-      <g clipPath="url(#clipCabeca)">
-        <ellipse cx={-70} cy={-40} rx={250} ry={250} fill="none" />
+      <g clipPath={`url(#clipCabeca-${vista})`}>
         <path d="M 60 -260 C 170 -150 190 80 60 260 L 300 260 L 300 -260 Z" fill={C.peleSombra} opacity={0.55} />
         <ellipse cx={-90} cy={-90} rx={70} ry={40} fill={C.peleLuz} opacity={0.35} />
         <path d="M -212 -60 C -230 40 -170 160 -90 200 C -170 150 -200 60 -196 -40 Z" fill="#FFD9A8" opacity={0.35} />
       </g>
-      {/* cabelo: volume arredondado com mechas, franja jogada para o lado */}
-      <path d={CABELO} fill={C.cabelo} />
-      <path d={CABELO_SOMBRA} fill={C.cabeloSombra} />
-      {MECHAS.map((d, i) => (
-        <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={7} fill="none" strokeLinecap="round" />
-      ))}
-      {/* rosto */}
-      <g transform="translate(0,20)">
-        <Sobrancelha x={-74} y={e.sobY} ang={e.sobAng} lado={-1} />
-        <Sobrancelha x={74} y={e.sobY} ang={e.sobAng} lado={1} />
-        <Olho x={-74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={-1} semicerrado={e.semicerrado} />
-        <Olho x={74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={1} semicerrado={e.semicerrado} />
-        {/* nariz */}
-        <path d="M 6 36 Q 22 58 2 66" stroke={C.peleSombra} strokeWidth={8} fill="none" strokeLinecap="round" />
-        <g transform="translate(0,112)">
-          <Boca tipo={expressao} />
+      {perfil && <ellipse cx={-20} cy={22} rx={30} ry={40} fill={C.peleSombra} />}
+      {/* cabelo */}
+      {costas ? (
+        <g>
+          <path d={CABELO_COSTAS} fill={C.cabelo} />
+          {MECHAS.map((d, i) => (
+            <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={7} fill="none" strokeLinecap="round" transform="translate(0,60)" />
+          ))}
         </g>
-      </g>
+      ) : (
+        <g>
+          {(perfil || tres) && <path d={perfil ? CABELO_NUCA_PERFIL : CABELO_NUCA_TRES} fill={C.cabelo} />}
+          <g transform={`translate(${fx * 0.25},0)`}>
+            <path d={CABELO} fill={C.cabelo} />
+            <path d={CABELO_SOMBRA} fill={C.cabeloSombra} />
+            {MECHAS.map((d, i) => (
+              <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={7} fill="none" strokeLinecap="round" />
+            ))}
+          </g>
+        </g>
+      )}
+      {/* rosto */}
+      {!costas && (
+        <g transform={`translate(${fx},20)`}>
+          {!perfil && <Sobrancelha x={-74} y={e.sobY} ang={e.sobAng} lado={-1} />}
+          <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
+            <Sobrancelha x={perfil ? 10 : 74} y={e.sobY} ang={e.sobAng} lado={1} />
+          </g>
+          {!perfil && <Olho x={-74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={-1} semicerrado={e.semicerrado} />}
+          <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
+            <Olho x={perfil ? 10 : 74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={1} semicerrado={e.semicerrado} />
+          </g>
+          {/* nariz */}
+          {!perfil && (
+            <path d="M 6 36 Q 22 58 2 66" stroke={C.peleSombra} strokeWidth={8} fill="none" strokeLinecap="round" />
+          )}
+          <g transform={`translate(${perfil ? 10 : 0},112) scale(${perfil ? 0.6 : tres ? 0.85 : 1},1)`}>
+            <Boca tipo={expressao} />
+          </g>
+        </g>
+      )}
     </g>
   );
 };
-
 
 // ---------- Cabelo (gerado) ----------
 const contorno = () => {
@@ -223,6 +263,12 @@ const contorno = () => {
 const CABELO = contorno();
 const CABELO_SOMBRA =
   "M 120 -200 C 190 -160 230 -80 222 10 L 206 20 L 196 -60 C 180 -80 160 -90 150 -92 C 170 -130 160 -170 120 -200 Z";
+const CABELO_COSTAS =
+  "M -226 40 C -250 -140 -140 -250 0 -252 C 140 -250 250 -140 226 40 C 220 110 170 150 120 150 C 60 120 -60 120 -120 150 C -170 150 -220 110 -226 40 Z";
+const CABELO_NUCA_PERFIL =
+  "M -230 0 C -250 -150 -140 -250 0 -250 L 40 -100 C -40 -60 -90 0 -60 90 C -110 130 -170 130 -210 100 Z";
+const CABELO_NUCA_TRES =
+  "M -228 20 C -250 -150 -140 -250 0 -250 L 20 -100 C -80 -80 -150 -20 -150 60 C -180 90 -210 80 -228 20 Z";
 const MECHAS = [
   "M -150 -170 Q -110 -200 -60 -200",
   "M -40 -220 Q 10 -236 60 -222",
@@ -257,12 +303,14 @@ const Braco: React.FC<{
   );
 };
 
-const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: boolean }> = ({
+const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: boolean; paraDireita?: boolean }> = ({
   lado,
   quadril,
   joelho,
   sombra,
+  paraDireita,
 }) => {
+  const pe = paraDireita ? 1 : lado;
   const pele = sombra ? C.peleSombra : C.pele;
   return (
     <g transform={`rotate(${-quadril * lado})`}>
@@ -271,9 +319,9 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
       <g transform={`translate(0,376) rotate(${-joelho * lado})`}>
         <rect x={-26} y={-14} width={52} height={360} rx={24} fill={pele} />
         {/* tênis */}
-        <g transform={`translate(${12 * lado},364)`}>
-          <path d={`M ${-46} -26 Q ${-46} -50 ${-10} -48 L ${30} -44 Q ${78} -36 ${82} 0 L ${-50} 0 Z`} transform={lado === -1 ? "scale(-1,1)" : undefined} fill={sombra ? C.tenisSombra : C.tenis} />
-          <rect x={-52} y={-6} width={136} height={16} rx={7} fill={C.tenisSola} transform={lado === -1 ? "scale(-1,1)" : undefined} />
+        <g transform={`translate(${12 * pe},364)`}>
+          <path d={`M ${-46} -26 Q ${-46} -50 ${-10} -48 L ${30} -44 Q ${78} -36 ${82} 0 L ${-50} 0 Z`} transform={pe === -1 ? "scale(-1,1)" : undefined} fill={sombra ? C.tenisSombra : C.tenis} />
+          <rect x={-52} y={-6} width={136} height={16} rx={7} fill={C.tenisSola} transform={pe === -1 ? "scale(-1,1)" : undefined} />
         </g>
       </g>
     </g>
@@ -281,10 +329,17 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
 };
 
 // ---------- Corpo inteiro ----------
-export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose }> = ({
+export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista; semSombra?: boolean }> = ({
   expressao = "neutro",
   pose = {},
+  vista = "frente",
+  semSombra,
 }) => {
+  const sx = vista === "perfil" ? 0.58 : vista === "tresQuartos" ? 0.84 : 1;
+  const ombroX = vista === "perfil" ? 20 : 150 * sx;
+  const quadrilX = vista === "perfil" ? 16 : 62 * sx;
+  const costas = vista === "costas";
+  const lateral = vista === "perfil" || vista === "tresQuartos";
   const resp = pose.respiracao ?? 0;
   const P = {
     bracoE: 10,
@@ -300,23 +355,26 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose }> = ({
   return (
     <g>
       {/* sombra no chão */}
-      <ellipse cx={0} cy={6} rx={200} ry={26} fill="#000" opacity={0.18} />
+      {!semSombra && <ellipse cx={0} cy={6} rx={200} ry={26} fill="#000" opacity={0.18} />}
       {/* pernas */}
-      <g transform="translate(-62,-760)">
-        <Perna lado={-1} quadril={P.pernaE} joelho={P.joelhoE} />
+      <g transform={`translate(${-quadrilX},-760)`}>
+        <Perna lado={-1} quadril={P.pernaE} joelho={P.joelhoE} paraDireita={lateral} />
       </g>
-      <g transform="translate(62,-760)">
-        <Perna lado={1} quadril={P.pernaD} joelho={P.joelhoD} sombra />
+      <g transform={`translate(${quadrilX},-760)`}>
+        <Perna lado={1} quadril={P.pernaD} joelho={P.joelhoD} sombra paraDireita={lateral} />
       </g>
       <g transform={`rotate(${P.tronco ?? 0} 0 -560) translate(0,${-resp * 6})`}>
         {/* bermuda */}
+        <g transform={`scale(${sx},1)`}>
         <path d="M -150 -790 L 150 -790 L 172 -470 L 18 -456 L 0 -560 L -18 -456 L -172 -470 Z" fill={C.bermuda} />
         <path d="M 40 -790 L 150 -790 L 172 -470 L 90 -462 Z" fill={C.bermudaSombra} />
         <rect x={-152} y={-800} width={304} height={26} rx={6} fill={C.bermudaSombra} />
+        </g>
         {/* braço de trás (direita da tela) */}
-        <g transform="translate(150,-1150)">
+        <g transform={`translate(${ombroX},-1150)`}>
           <Braco lado={1} ombro={P.bracoD} cotovelo={P.antebracoD} sombra />
         </g>
+        <g transform={`scale(${sx},1)`}>
         {/* tronco / camisa */}
         <path
           d="M -150 -1176 Q 0 -1206 150 -1176 Q 172 -1160 170 -1120 L 158 -780 L -158 -780 L -170 -1120 Q -172 -1160 -150 -1176 Z"
@@ -326,17 +384,26 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose }> = ({
         <path d="M -158 -800 L 158 -800 L 158 -780 L -158 -780 Z" fill={C.camisaDetalhe} />
         {/* pescoço + gola */}
         <rect x={-42} y={-1232} width={84} height={70} rx={20} fill={C.peleSombra} />
-        <path d="M -62 -1188 Q 0 -1130 62 -1188" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
+        {costas ? (
+          <path d="M -60 -1196 Q 0 -1186 60 -1196" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
+        ) : (
+          <path d="M -62 -1188 Q 0 -1130 62 -1188" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
+        )}
         {/* bolso */}
-        <path d="M -118 -1100 L -54 -1100 L -54 -1040 Q -86 -1028 -118 -1040 Z" fill={C.camisaSombra} />
-        <rect x={-118} y={-1104} width={64} height={10} rx={3} fill={C.camisaDetalhe} />
+        {(vista === "frente" || vista === "tresQuartos") && (
+          <g transform={vista === "tresQuartos" ? "translate(40,0)" : undefined}>
+            <path d="M -118 -1100 L -54 -1100 L -54 -1040 Q -86 -1028 -118 -1040 Z" fill={C.camisaSombra} />
+            <rect x={-118} y={-1104} width={64} height={10} rx={3} fill={C.camisaDetalhe} />
+          </g>
+        )}
+        </g>
         {/* braço da frente (esquerda da tela) */}
-        <g transform="translate(-150,-1150)">
+        <g transform={`translate(${-ombroX},-1150)`}>
           <Braco lado={-1} ombro={P.bracoE} cotovelo={P.antebracoE} />
         </g>
         {/* cabeça */}
         <g transform={`translate(0,-1420) rotate(${P.cabeca ?? 0} 0 190)`}>
-          <Cabeca expressao={expressao} pose={P} />
+          <Cabeca expressao={expressao} pose={P} vista={vista} />
         </g>
       </g>
     </g>

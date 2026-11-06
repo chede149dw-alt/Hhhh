@@ -11,6 +11,9 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Roteiro no estilo da referência**: cada etapa mistura humor do dia a dia com uma consequência real
   (lei, ciência, tecnologia). Motivo: é o que segura a atenção na referência.
 
+- **Chede aprovado como versão oficial** (cabelo ondulado e volumoso). Motivo: aprovado pelo usuário;
+  a ficha `personagens/chede/ficha.png` é regra obrigatória em todos os vídeos.
+
 ## Técnico
 - Whisper: usar `HF_HUB_DISABLE_XET=1` e passar o áudio como array (wav 16 kHz), não o caminho.
 - Render: `npx remotion ... --browser-executable=/opt/pw-browsers/chromium`.
