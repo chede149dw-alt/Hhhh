@@ -10,19 +10,17 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   - Trilha + efeitos: `audio/serie-sumir-parte-1-trilha-sfx.wav`
   - Animação completa (22 cenas): `estudio/src/episodios/sumir1/Sumir1.tsx`
   - Texto do post: `roteiros/serie-sumir-parte-1-post.md`
-- ✅ Vídeo v1 pronto: `previas/serie-sumir-parte-1-v1.mp4` (66 s, 1080x1920) + capa `previas/serie-sumir-parte-1-capa.png`
-- ⏳ Aguardando o usuário assistir e aprovar ou pedir correções
+- ✅ **Parte 1 aprovada e pronta**: `prontos/serie-sumir-parte-1.mp4` (66 s, 1080x1920) + capa `prontos/serie-sumir-parte-1-capa.png`
+- ✅ Foto de perfil do Instagram: `prontos/foto-perfil-instagram.png`
+- ⏳ Usuário vai começar a postar no Instagram
 
 ## Próximos passos
-1. Se o vídeo não estiver em `previas/`, renderizar de novo (ver comando abaixo).
-2. Usuário assiste no celular e aponta correções (com o tempo, ex.: "0:12 – …").
-3. Corrigir, anotar em `aprendizados.md`, renderizar de novo.
-4. Aprovado → copiar para `prontos/` junto com a capa.
-5. Criar a skill da série (Passo 7 do ebook) e começar a Parte 2.
+1. Criar a skill da série (Passo 7 do ebook).
+2. Roteiro da Parte 2 ("quem mais está nesse lugar?") → aprovação → vídeo.
 
 ## Comandos para retomar
 ```bash
 cd estudio && npm install
-npx remotion render Sumir1 ../previas/serie-sumir-parte-1-v1.mp4 --concurrency=4 --crf=18 --browser-executable=/opt/pw-browsers/chromium
-npx remotion still Sumir1 ../previas/serie-sumir-parte-1-capa.png --frame=40 --browser-executable=/opt/pw-browsers/chromium
+npx remotion render Sumir1 ../prontos/serie-sumir-parte-1.mp4 --concurrency=4 --crf=18 --browser-executable=/opt/pw-browsers/chromium
+npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --browser-executable=/opt/pw-browsers/chromium
 ```

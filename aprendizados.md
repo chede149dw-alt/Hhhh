@@ -32,3 +32,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - Trilha/efeitos sintetizados: `scripts/gerar_trilha_sumir1.py` (usa o timing).
 - Prévia rápida: `--scale=0.5` (~4 min). Final: `--crf=18` (~10–15 min, 4 núcleos).
 - ElevenLabs: baixar os takes de `elevenlabsusercontent.com`; escolher o take com maior "acerto" no alinhamento.
+- **Parte 1 aprovada** ("ficou legal") sem correções. Motivo: aprovação do usuário; o estilo da Parte 1 é o padrão da série.
+- **Foto de perfil**: Chede espantado + fenda na mão, fundo roxo escuro com brilho; tudo dentro do círculo.
+  Arquivo `prontos/foto-perfil-instagram.png` (código `estudio/src/personagens/FotoPerfil.tsx`).
