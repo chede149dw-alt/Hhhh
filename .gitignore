@@ -22,3 +22,7 @@ build/
 
 # Logs
 *.log
+
+# Material de terceiros (curso pago e vídeo de referência): fica só na pasta local
+referencias/*.pdf
+referencias/*.mp4
