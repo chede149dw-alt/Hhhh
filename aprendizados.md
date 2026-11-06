@@ -21,3 +21,14 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Bermuda presa às pernas**: cada perna da bermuda é desenhada junto com a coxa (não no tronco).
   Motivo: correndo, a perna saía da bermuda e parecia que o Chede estava pelado.
 - **Série 1 = poder de sumir com as coisas (inspirado no kamui, versão original)**. Motivo: escolha do usuário.
+- **Roteiro da Parte 1 aprovado** pelo usuário ("ficou muito top"). Não alterar o texto.
+- **Voz: ElevenLabs direto quando o roteiro já está aprovado** (o texto não muda mais; só as cenas mudam).
+- **Legenda do vídeo não aparece durante a capa** (a capa já mostra a premissa em letras grandes).
+- **Música corta na virada** ("…segurou") e entra um impacto grave. Na "dimensão", a música fica mais baixa.
+
+## Técnico (vídeo)
+- Episódio = `estudio/src/episodios/<nome>/`: `falas.json` (fala por linha; *amarelo*, !vermelho!),
+  `timing.json` (gerado por `scripts/alinhar.py`), uma cena por fala em `<Nome>.tsx`.
+- Trilha/efeitos sintetizados: `scripts/gerar_trilha_sumir1.py` (usa o timing).
+- Prévia rápida: `--scale=0.5` (~4 min). Final: `--crf=18` (~10–15 min, 4 núcleos).
+- ElevenLabs: baixar os takes de `elevenlabsusercontent.com`; escolher o take com maior "acerto" no alinhamento.

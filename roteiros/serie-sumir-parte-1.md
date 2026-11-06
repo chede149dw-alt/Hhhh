@@ -4,7 +4,7 @@
 - **Capa:** "E SE VOCÊ ACORDASSE" / "PODENDO **SUMIR** COM TUDO?" / "PARTE 1" (palavra-chave: SUMIR, em roxo brilhante)
 - **Poder (versão original):** fenda dimensional na palma da mão. Puxa coisas para outro lugar,
   devolve depois e deixa partes do corpo "fora daqui" (atravessa objetos).
-- **Status:** rascunho, aguardando aprovação
+- **Status:** aprovado · narração ElevenLabs (voz Witalo Guimarães) em `audio/serie-sumir-parte-1-narracao.mp3`
 
 | Tempo | Narração | Cena |
 |---|---|---|
