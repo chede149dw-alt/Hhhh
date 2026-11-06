@@ -10,7 +10,8 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   - Trilha + efeitos: `audio/serie-sumir-parte-1-trilha-sfx.wav`
   - Animação completa (22 cenas): `estudio/src/episodios/sumir1/Sumir1.tsx`
   - Texto do post: `roteiros/serie-sumir-parte-1-post.md`
-- ⏳ Render final em andamento → `previas/serie-sumir-parte-1-v1.mp4` (+ capa `previas/serie-sumir-parte-1-capa.png`)
+- ✅ Vídeo v1 pronto: `previas/serie-sumir-parte-1-v1.mp4` (66 s, 1080x1920) + capa `previas/serie-sumir-parte-1-capa.png`
+- ⏳ Aguardando o usuário assistir e aprovar ou pedir correções
 
 ## Próximos passos
 1. Se o vídeo não estiver em `previas/`, renderizar de novo (ver comando abaixo).
