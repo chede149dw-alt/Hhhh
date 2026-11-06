@@ -32,3 +32,9 @@ gancho final ("com isso…").
 ## Ritmo
 - Narração contínua, tom de conversa, frases curtas.
 - Corte de cena acompanhando a frase; algo novo a cada 2–4 s.
+
+## Roteiro (da transcrição com Whisper; texto completo fica só local)
+- 91 s, ~245 palavras (≈160 palavras/min), frases de 1 a 4 s.
+- Premissa → descoberta pequena → escalada → **regras do poder** → **consequência real**
+  (lei, tecnologia) → **virada científica** → mistério → gancho "Na parte dois…".
+- Cada etapa mistura humor do dia a dia com uma consequência lógica/real.
