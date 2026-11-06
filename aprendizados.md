@@ -18,3 +18,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - Whisper: usar `HF_HUB_DISABLE_XET=1` e passar o áudio como array (wav 16 kHz), não o caminho.
 - Render: `npx remotion ... --browser-executable=/opt/pw-browsers/chromium`.
 - Voz provisória gratuita: `espeak-ng -v pt-br`.
+- **Bermuda presa às pernas**: cada perna da bermuda é desenhada junto com a coxa (não no tronco).
+  Motivo: correndo, a perna saía da bermuda e parecia que o Chede estava pelado.
+- **Série 1 = poder de sumir com as coisas (inspirado no kamui, versão original)**. Motivo: escolha do usuário.

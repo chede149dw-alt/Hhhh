@@ -314,7 +314,7 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   const pele = sombra ? C.peleSombra : C.pele;
   return (
     <g transform={`rotate(${-quadril * lado})`}>
-      {/* coxa (coberta pela bermuda) */}
+      {/* coxa */}
       <rect x={-34} y={0} width={68} height={390} rx={30} fill={pele} />
       <g transform={`translate(0,376) rotate(${-joelho * lado})`}>
         <rect x={-26} y={-14} width={52} height={360} rx={24} fill={pele} />
@@ -324,6 +324,9 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
           <rect x={-52} y={-6} width={136} height={16} rx={7} fill={C.tenisSola} transform={pe === -1 ? "scale(-1,1)" : undefined} />
         </g>
       </g>
+      {/* perna da bermuda: acompanha a coxa */}
+      <path d="M -62 -40 L 62 -40 L 70 290 L -70 290 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />
+      {!sombra && <path d="M 20 -40 L 62 -40 L 70 290 L 34 290 Z" fill={C.bermudaSombra} />}
     </g>
   );
 };
@@ -366,8 +369,8 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
       <g transform={`rotate(${P.tronco ?? 0} 0 -560) translate(0,${-resp * 6})`}>
         {/* bermuda */}
         <g transform={`scale(${sx},1)`}>
-        <path d="M -150 -790 L 150 -790 L 172 -470 L 18 -456 L 0 -560 L -18 -456 L -172 -470 Z" fill={C.bermuda} />
-        <path d="M 40 -790 L 150 -790 L 172 -470 L 90 -462 Z" fill={C.bermudaSombra} />
+        <path d="M -150 -790 L 150 -790 L 156 -690 Q 0 -660 -156 -690 Z" fill={C.bermuda} />
+        <path d="M 40 -790 L 150 -790 L 156 -690 Q 100 -676 60 -672 Z" fill={C.bermudaSombra} />
         <rect x={-152} y={-800} width={304} height={26} rx={6} fill={C.bermudaSombra} />
         </g>
         {/* braço de trás (direita da tela) */}
