@@ -25,4 +25,5 @@ referência (`referencias/analise-video-referencia.md`). Personagens e história
   `estudio/src/cenarios`, efeitos em `estudio/src/efeitos`, acabamento/legenda em `estudio/src/estilo`.
   Imagens e fichas renderizadas vão para as pastas do topo (`personagens/`, `cenarios/`…).
 - Ler `guia-de-estilo.md` e `aprendizados.md` antes de criar qualquer cena.
+- Todo vídeo entregue vem com **capa** (PNG 1080x1920) e **descrição do Instagram** no formato do `aprendizados.md`.
 - Ao retomar uma sessão, ler primeiro `andamento.md`.

@@ -35,3 +35,10 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Parte 1 aprovada** ("ficou legal") sem correções. Motivo: aprovação do usuário; o estilo da Parte 1 é o padrão da série.
 - **Foto de perfil**: Chede espantado + fenda na mão, fundo roxo escuro com brilho; tudo dentro do círculo.
   Arquivo `prontos/foto-perfil-instagram.png` (código `estudio/src/personagens/FotoPerfil.tsx`).
+- **Todo vídeo sai com capa + descrição do Instagram**, salvas em `prontos/` e `roteiros/<serie>-parte-N-post.md`,
+  e enviadas ao usuário junto com o vídeo. Formato da descrição (modelo enviado pelo usuário):
+  1. Emoji(s) + TÍTULO EM CAIXA ALTA com a premissa + " | PARTE N"
+  2. Parágrafo 1: o que acontece no episódio (2–3 frases)
+  3. Parágrafo 2: a virada, terminando em suspense ("Só que…", "…") + 😳
+  4. "🔥 " + pergunta para os comentários
+  5. 5 hashtags em CamelCase, terminando com #ReelsBrasil
