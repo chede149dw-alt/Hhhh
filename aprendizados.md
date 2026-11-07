@@ -97,3 +97,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   (Parte 2), o Chede tem que ter medo de abrir de novo — medo de ser puxado ou de ver o que tem do outro lado. Mostrar
   com: mão tremendo + batida de coração, lembrança em cores lavadas/roxo, rosto com medo e sombras de mãos nas bordas.
   Motivo: o que aconteceu num episódio tem que pesar nos próximos; deixa o personagem humano e a fenda assustadora.
+- **Parte 3 aprovada para a versão final** (07/11), já com o trecho do medo do Chede.
