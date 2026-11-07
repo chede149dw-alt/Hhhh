@@ -21,7 +21,7 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   - ✅ Prévia aprovada ("ficou top"). Voz final ElevenLabs (Witalo Guimarães, 66 s): `audio/parte-2-kaik-velocidade-narracao.mp3`
   - Renumerada para **Parte 2** (capa "PARTE 2", final "Na parte 3…" com a frase regravada e emendada).
   - ⏳ Render final → `prontos/parte-2-kaik-velocidade.mp4` + `prontos/parte-2-kaik-velocidade-capa.png`
-    (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/parte-2-kaik-velocidade.mp4 --concurrency=4 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
+    (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/parte-2-kaik-velocidade.mp4 --concurrency=3 --timeout=240000 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
 
 ## Próximos passos
 1. Postar a Parte 2 (Kaik). Depois: **Parte 3** — quem está vigiando os dois (e quem segurou a mão do Chede).

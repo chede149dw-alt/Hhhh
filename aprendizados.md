@@ -53,3 +53,5 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Numeração única da história**: os episódios do Chede e do Kaik são uma história só e seguem a mesma
   contagem (Parte 1 = Chede, Parte 2 = Kaik, Parte 3 = próxima). A capa mostra a parte atual e o final chama a próxima.
   Motivo: o usuário achou estranho o episódio do Kaik começar como "Parte 1" se continua a do Chede.
+- **Render final travando por tempo** (quadros pesados: muitas cópias com blur em resolução cheia):
+  usar `--timeout=240000 --concurrency=3`. A prévia em meia resolução não tem esse problema.
