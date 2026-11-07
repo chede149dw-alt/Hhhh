@@ -23,8 +23,12 @@ while [ $((i * BLOCO)) -lt "$TOTAL" ]; do
   i=$((i + 1))
 done
 if [ ! -s "$DIR/audio.wav" ]; then
-  npx remotion render "$COMP" "$DIR/audio.tmp.wav" --codec=wav $OPTS > "$DIR/log-audio.txt" 2>&1
-  mv "$DIR/audio.tmp.wav" "$DIR/audio.wav"
+  # Mistura narração + trilha direto (o render só de áudio do Remotion trava nas cenas 3D).
+  # Pasta do episódio em public/: 5º argumento (padrão: nome da composição em minúsculas).
+  EP="${5:-$(echo "$COMP" | tr '[:upper:]' '[:lower:]')}"
+  DUR=$(python3 -c "print($TOTAL/30)")
+  ffmpeg -loglevel error -y -i "public/$EP/narracao.mp3" -i "public/$EP/trilha.wav" \
+    -filter_complex "[0:a][1:a]amix=inputs=2:duration=longest:normalize=0,apad,atrim=0:$DUR,aresample=48000" -ac 2 "$DIR/audio.wav"
 fi
 ffmpeg -loglevel error -y -f concat -safe 0 -i "$DIR/lista.txt" -i "$DIR/audio.wav" -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart "$SAIDA"
 echo "pronto: $SAIDA"

@@ -63,3 +63,5 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Render com 3D**: usar `--gl=swangle` (os outros modos não criam WebGL aqui). ~2 s por quadro.
 - **Raios do Kaik em ciano** (decisão do usuário). Objeto levado à boca: desenhar a mão e o antebraço por cima da cabeça (`MaoFechada`).
 - **Render longo = `scripts/render_partes.sh`** (blocos de 300 quadros + áudio separado). O container pode reiniciar e matar o processo; os blocos prontos ficam em `estudio/out/`.
+
+- **Áudio do render em blocos: montar no ffmpeg.** O render só de áudio do Remotion (`--codec=wav`) estourou o tempo nas cenas 3D e não gerou o arquivo. Motivo: ele ainda passa pelos quadros. Como a composição só soma narração + trilha sem ajuste de volume, o `render_partes.sh` agora mistura direto com `ffmpeg amix` (narração e trilha de `public/<episodio>/`).

@@ -23,7 +23,8 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   - ✅ **Final pronto**: `prontos/parte-2-kaik-velocidade.mp4` (67 s, 1080x1920) + `prontos/parte-2-kaik-velocidade-capa.png`
     (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/parte-2-kaik-velocidade.mp4 --concurrency=3 --timeout=240000 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
 
-- ⏳ **Parte 2 (Kaik) refeita no estilo da referência 2** — aprovado pelo usuário (raios em ciano, mesmo roteiro e voz).
+- ✅ **Parte 2 (Kaik) v2 PRONTA, no estilo da referência 2** (raios em ciano, mesmo roteiro e voz): `prontos/parte-2-kaik-velocidade-v2.mp4`
+  (67,2 s) + `prontos/parte-2-kaik-velocidade-v2-capa.png`. Descrição: `roteiros/parte-2-kaik-velocidade-post.md`. Enviado ao usuário.
   Cenas novas em `estudio/src/episodios/velocidade1/CenasNovas.tsx` (3D: capa, vista aérea, mundo parado, pássaro,
   prédio do vigia). Render final → `prontos/parte-2-kaik-velocidade-v2.mp4`
   (`cd estudio && scripts/render_partes.sh Velocidade1 2016 ../prontos/parte-2-kaik-velocidade-v2.mp4` —
