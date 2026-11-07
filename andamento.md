@@ -14,16 +14,17 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
 - ✅ Foto de perfil do Instagram: `prontos/foto-perfil-instagram.png`
 - ✅ Descrição do Instagram da Parte 1: `roteiros/serie-sumir-parte-1-post.md`
 - ⏸️ **Série do Chede pausada** depois da Parte 1. Tudo o que aconteceu e o que ficou em aberto está em `roteiros/universo.md`.
-- ✅ **Série 2 (Kaik, super velocidade)**: Kaik e roteiro aprovados. Animação completa em
+- ✅ **Parte 2 da história (Kaik, super velocidade)** · numeração única: Parte 1 = Chede, Parte 2 = Kaik, Parte 3 = próxima: Kaik e roteiro aprovados. Animação completa em
   `estudio/src/episodios/velocidade1/Velocidade1.tsx`.
-  - Prévia com **voz provisória** (robótica): `previas/serie-velocidade-parte-1-previa-voz-provisoria.mp4`
-  - Capa: `previas/serie-velocidade-parte-1-capa.png` · Descrição: `roteiros/serie-velocidade-parte-1-post.md`
-  - ✅ Prévia aprovada ("ficou top"). Voz final ElevenLabs (Witalo Guimarães, 66 s): `audio/serie-velocidade-parte-1-narracao.mp3`
-  - ⏳ Render final → `prontos/serie-velocidade-parte-1.mp4` + `prontos/serie-velocidade-parte-1-capa.png`
-    (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/serie-velocidade-parte-1.mp4 --concurrency=4 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
+  - Prévia com **voz provisória** (robótica): `previas/parte-2-kaik-velocidade-previa-voz-provisoria.mp4`
+  - Capa: `previas/parte-2-kaik-velocidade-capa.png` · Descrição: `roteiros/parte-2-kaik-velocidade-post.md`
+  - ✅ Prévia aprovada ("ficou top"). Voz final ElevenLabs (Witalo Guimarães, 66 s): `audio/parte-2-kaik-velocidade-narracao.mp3`
+  - Renumerada para **Parte 2** (capa "PARTE 2", final "Na parte 3…" com a frase regravada e emendada).
+  - ⏳ Render final → `prontos/parte-2-kaik-velocidade.mp4` + `prontos/parte-2-kaik-velocidade-capa.png`
+    (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/parte-2-kaik-velocidade.mp4 --concurrency=4 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
 
 ## Próximos passos
-1. Postar a Parte 1 do Kaik. Depois decidir: Parte 2 do Kaik (quem está vigiando) ou Parte 2 do Chede (quem segurou a mão).
+1. Postar a Parte 2 (Kaik). Depois: **Parte 3** — quem está vigiando os dois (e quem segurou a mão do Chede).
 2. Depois: Parte 2 do Chede ("quem mais está nesse lugar?"), seguindo `roteiros/universo.md`.
 3. Criar a skill da série (Passo 7 do ebook).
 

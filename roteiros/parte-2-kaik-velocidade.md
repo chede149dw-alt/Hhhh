@@ -1,8 +1,8 @@
-# Série "E se você acordasse com super velocidade?" · Parte 1
+# "E se você acordasse com super velocidade?" · Parte 2 da história (Kaik)
 
 - **Protagonista:** Kaik · **Participação:** Chede (melhor amigo)
 - **Modelo:** A (etapas) · **Duração alvo:** ~64 s (≈175 palavras)
-- **Capa:** "E SE VOCÊ ACORDASSE" / "COM SUPER **VELOCIDADE**?" / "PARTE 1" (palavra-chave em ciano brilhante)
+- **Capa:** "E SE VOCÊ ACORDASSE" / "COM SUPER **VELOCIDADE**?" / "PARTE 2" (palavra-chave em ciano brilhante)
 - **Liga com:** final da Parte 1 do Chede (a mão presa na fenda)
 - **Status:** aprovado pelo usuário
 
@@ -29,7 +29,7 @@
 | 49–52 s | E perguntaram ao mesmo tempo: você **também**? | Close nos dois rostos, espanto. |
 | 52–55 s | Só que eles não estavam **sozinhos**. | Câmera se afasta pela janela. |
 | 55–59 s | Do prédio da frente, alguém **filmava** tudo. | Janela escura no prédio da frente: silhueta com celular, luz vermelha de gravação. |
-| 59–64 s | Na parte 2: quem está vigiando os dois? | "PARTE 2" grande. |
+| 59–64 s | Na parte 3: quem está vigiando os dois? | "PARTE 3" grande. |
 
 ## Checklist do ebook
 - [x] Primeira frase é a premissa
@@ -37,4 +37,4 @@
 - [x] Novidade a cada 3–5 s, etapas crescentes (casa → rua → mundo parado → salvar o amigo)
 - [x] Consequências reais no estilo da referência (atrito esquenta a sola; gasto de energia e fome)
 - [x] Virada: o amigo preso na fenda; depois, alguém filmando
-- [x] Gancho para a parte 2
+- [x] Gancho para a parte 3

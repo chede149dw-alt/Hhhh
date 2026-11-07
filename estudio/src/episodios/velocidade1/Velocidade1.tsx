@@ -68,7 +68,7 @@ const C0_Capa: React.FC = () => {
           <span style={{ color: "#BFF4FF", textShadow: `0 0 30px ${CIANO}, 0 0 60px ${CIANO}` }}>velocidade?</span>
         </div>
         <div style={{ position: "absolute", top: 1560, right: 70, fontSize: 130, color: "#FFD23F", WebkitTextStroke: "12px #000", paintOrder: "stroke fill", transform: `scale(${pop(14)}) rotate(-6deg)` }}>
-          Parte 1
+          Parte 2
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
@@ -600,7 +600,7 @@ const C21_Parte2: React.FC = () => {
       </AbsoluteFill>
       <AbsoluteFill style={{ fontFamily: "'Roboto Condensed'", fontWeight: 800, textAlign: "center" }}>
         <div style={{ position: "absolute", top: 1450, width: "100%", fontSize: 190, color: "#FFD23F", WebkitTextStroke: "14px #000", paintOrder: "stroke fill", transform: `scale(${sp}) rotate(-4deg)` }}>
-          PARTE 2
+          PARTE 3
         </div>
       </AbsoluteFill>
       <Acab graoForte />

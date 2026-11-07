@@ -1,10 +1,10 @@
-# Post · Série "Velocidade" · Parte 1
+# Post · Parte 2 da história (Kaik, super velocidade)
 
-Vídeo: `prontos/serie-velocidade-parte-1.mp4` (após a voz final) · Capa: `prontos/serie-velocidade-parte-1-capa.png`
+Vídeo: `prontos/parte-2-kaik-velocidade.mp4` (após a voz final) · Capa: `prontos/parte-2-kaik-velocidade-capa.png`
 
 ## Descrição (copiar e colar)
 
-⚡💨 E SE VOCÊ ACORDASSE COM SUPER VELOCIDADE? | PARTE 1
+⚡💨 E SE VOCÊ ACORDASSE COM SUPER VELOCIDADE? | PARTE 2
 
 O Kaik acordou atrasado e, num piscar de olhos, já tinha tomado banho, se vestido e tomado café. Só que o tênis saiu soltando fumaça e a fome veio absurda: correr assim gasta a energia de um dia inteiro em minutos.
 

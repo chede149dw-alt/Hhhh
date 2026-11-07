@@ -22,8 +22,10 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 - Dá para o Chede entrar inteiro no outro lugar?
 - O que mais está guardado lá que não é dele?
 
-## Série 2 · "E se você acordasse com super velocidade?" (Kaik)
-**Parte 1: roteiro aprovado** (`roteiros/serie-velocidade-parte-1.md`).
+## Parte 2 da história · "E se você acordasse com super velocidade?" (Kaik)
+
+> As séries são **uma história só, numerada em sequência**: Parte 1 = Chede, Parte 2 = Kaik, Parte 3 = próxima.
+**Parte 2: roteiro aprovado** (`roteiros/parte-2-kaik-velocidade.md`).
 - Acontece **no mesmo momento** do final da Parte 1 do Chede: o Kaik chega correndo e puxa o Chede de volta da fenda.
 - Os dois descobrem que os dois têm poderes.
 - Alguém do prédio da frente filmou tudo.

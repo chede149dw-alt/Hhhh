@@ -50,3 +50,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   as cenas se reajustam sozinhas porque o tempo vem do alinhamento (`timing.json`).
 - **Corrida de perfil**: usar a função `corrida(f)` (pernas e braços alternando) + `Rastro` ciano + `LinhasVento`.
 - **Prévia do Kaik aprovada** ("ficou top") → voz final ElevenLabs e render final em `prontos/`.
+- **Numeração única da história**: os episódios do Chede e do Kaik são uma história só e seguem a mesma
+  contagem (Parte 1 = Chede, Parte 2 = Kaik, Parte 3 = próxima). A capa mostra a parte atual e o final chama a próxima.
+  Motivo: o usuário achou estranho o episódio do Kaik começar como "Parte 1" se continua a do Chede.
