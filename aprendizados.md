@@ -85,3 +85,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Vilão criado e aprovado para criar: "o Regente" (Otávio Regis), controle mental, cor âmbar.** As 4 regras do
   poder (gatilho olhar/voz, limite, anel âmbar nos controlados, fraquezas) foram aprovadas pelo usuário (07/11).
   Âmbar foi escolhido para não confundir com o ciano do Kaik nem com o roxo da fenda do Chede: cada poder tem sua cor.
+- **Correção do usuário no visual do Regente:** adulto de **35 anos**, **barba** e **cabelo preto lambido para trás**
+  (antes eu tinha feito ~55 anos, grisalho e com rugas). Motivo: é assim que o usuário imagina o vilão. Barba feita
+  curta e aparada; a primeira versão, cheia, pesou o rosto e cobria a nuca nas vistas de lado.

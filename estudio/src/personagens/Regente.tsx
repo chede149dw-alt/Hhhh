@@ -2,7 +2,7 @@ import React from "react";
 import { Aparencia, AparenciaCtx, Cabeca, Chede, CORES_CHEDE, Expressao, Pose, Vista } from "./Chede";
 
 // O Regente (Otávio Regis) — o vilão. Controle mental; manda no governo por dentro.
-// Mesmo rig do Chede, aparência própria: terno grafite, gravata âmbar, cabelo grisalho penteado para trás.
+// Mesmo rig do Chede, aparência própria: terno grafite, gravata âmbar, cabelo preto penteado para trás (lambido), barba.
 export const COR_PODER_REGENTE = "#FFB21E"; // âmbar: brilho dos olhos, ondas mentais, anel dos controlados
 
 export const CORES_REGENTE = {
@@ -10,9 +10,9 @@ export const CORES_REGENTE = {
   pele: "#E3B993",
   peleSombra: "#C29673",
   peleLuz: "#F1D2B3",
-  cabelo: "#8E9098",
-  cabeloSombra: "#5F616A",
-  cabeloBrilho: "#C8CAD0",
+  cabelo: "#17140F",
+  cabeloSombra: "#0A0907",
+  cabeloBrilho: "#4A443D",
   camisa: "#2B2E38", // paletó
   camisaSombra: "#1E2028",
   camisaDetalhe: "#14161C", // lapela / botões
@@ -32,7 +32,7 @@ export const APARENCIA_REGENTE: Aparencia = {
   gravata: "#E8A317",
   gravataSombra: "#B97F0E",
   corPoder: COR_PODER_REGENTE,
-  rugas: true,
+  barba: true,
 };
 
 export const Regente: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista; semSombra?: boolean }> = (props) => (

@@ -60,7 +60,7 @@ const POSES: { nome: string; vista: Vista; expr: Expressao; pose: Pose; caido?: 
 const QUEM = {
   chede: { nome: "Chede", ap: APARENCIA_CHEDE, cores: ["#F07C28", "#232327", "#9A6340", "#1C1817", "#EFEDE8", "#7B4DFF"] },
   kaik: { nome: "Kaik", ap: APARENCIA_KAIK, cores: ["#2F6FD6", "#C93A32", "#F1CBAE", "#1A1615", "#EFEDE8", "#59D8FF"] },
-  regente: { nome: "O Regente", ap: APARENCIA_REGENTE, cores: ["#2B2E38", "#E8A317", "#F2F2EE", "#E3B993", "#8E9098", COR_PODER_REGENTE] },
+  regente: { nome: "O Regente", ap: APARENCIA_REGENTE, cores: ["#2B2E38", "#E8A317", "#F2F2EE", "#E3B993", "#17140F", COR_PODER_REGENTE] },
 };
 type Quem = keyof typeof QUEM;
 

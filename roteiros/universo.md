@@ -7,7 +7,7 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 |---|---|---|---|
 | **Chede** | 23 anos, pele morena, cabelo preto ondulado, camiseta laranja, bermuda preta. Corajoso, às vezes inseguro, muito esperto. | **Fenda dimensional** na palma da mão: some com as coisas, guarda tudo num "outro lugar" e devolve. A mão pode ficar transparente e atravessar objetos. | `personagens/chede/` (oficial) |
 | **Kaik** | Melhor amigo do Chede. Pele clara, cabelo preto cacheado, camiseta azul com faixa branca, bermuda vermelha. | **Super velocidade**. Rastro ciano/branco (nunca raio amarelo). | `personagens/kaik/` (oficial) |
-| **O Regente** (vilão) | Otávio Regis, ~55 anos, terno grafite, gravata âmbar, cabelo grisalho penteado para trás. Manda no governo por dentro. | **Controle mental**: olhos e ondas âmbar; controlados ficam com anel âmbar na íris. | `personagens/regente/` |
+| **O Regente** (vilão) | Otávio Regis, 35 anos, barba preta aparada, cabelo preto lambido para trás, terno grafite, gravata âmbar. Manda no governo por dentro. | **Controle mental**: olhos e ondas âmbar; controlados ficam com anel âmbar na íris. | `personagens/regente/` |
 
 ## Série 1 · "E se você acordasse podendo sumir com qualquer coisa?" (Chede)
 **Parte 1: publicada** (`prontos/serie-sumir-parte-1.mp4`)

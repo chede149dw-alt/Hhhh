@@ -66,6 +66,7 @@ export type Aparencia = {
   gravataSombra?: string;
   corPoder?: string; // cor do brilho dos olhos / anel de controle
   rugas?: boolean;
+  barba?: boolean;
 };
 export const APARENCIA_CHEDE: Aparencia = { cores: CORES_CHEDE, cabelo: "ondulado", estampa: "bolso" };
 export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
@@ -267,6 +268,27 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
                 ))}
               </>
             )}
+          </g>
+        </g>
+      )}
+      {/* barba (contorno do queixo + bigode, boca livre) */}
+      {A.barba && !costas && (
+        <g clipPath={`url(#clipCabeca-${vista})`}>
+          <g transform={`translate(${fx},0)`}>
+            <path
+              fillRule="evenodd"
+              fill={C.cabelo}
+              d={
+                vista === "frente"
+                  ? `M -214 -20 L 214 -20 L 214 300 L -214 300 Z
+                     M -194 -20 C -186 90 -150 140 -90 150 Q 0 138 90 150 C 150 140 186 90 194 -20 Z
+                     M -48 134 A 48 20 0 1 0 48 134 A 48 20 0 1 0 -48 134 Z`
+                  : `M -150 -20 L 214 -20 L 214 300 L -40 300 C -100 220 -150 120 -150 -20 Z
+                     M -128 -20 C -120 90 -110 140 -70 150 Q 0 138 90 150 C 150 140 186 90 194 -20 Z
+                     M -48 134 A 48 20 0 1 0 48 134 A 48 20 0 1 0 -48 134 Z`
+              }
+            />
+            <path d="M -60 116 Q 0 98 60 116 L 54 126 Q 0 112 -54 126 Z" fill={C.cabelo} />
           </g>
         </g>
       )}
