@@ -65,3 +65,17 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Render longo = `scripts/render_partes.sh`** (blocos de 300 quadros + áudio separado). O container pode reiniciar e matar o processo; os blocos prontos ficam em `estudio/out/`.
 
 - **Áudio do render em blocos: montar no ffmpeg.** O render só de áudio do Remotion (`--codec=wav`) estourou o tempo nas cenas 3D e não gerou o arquivo. Motivo: ele ainda passa pelos quadros. Como a composição só soma narração + trilha sem ajuste de volume, o `render_partes.sh` agora mistura direto com `ffmpeg amix` (narração e trilha de `public/<episodio>/`).
+
+## Regras vindas do vídeo de referência 3 (pedido do usuário, 07/11)
+
+- **Sempre pedir engajamento.** Todo vídeo tem chamada para seguir: no fim, junto com o gancho
+  ("Segue aí pra ver a parte 3!"), e de preferência também no meio, escrita dentro do cenário (placa, tela de
+  celular, muro) ou como selo discreto com o @ do canal. Motivo: o usuário pediu, e é o que segura o público
+  da série de uma parte para a outra.
+- **Todo poder tem lógica e consequência.** Nenhum poder é de graça: cada episódio explica pelo menos uma regra
+  física simples do poder (com números e um infográfico na tela) e mostra o custo dele (cansaço, calor, fome,
+  parede de ar, risco). Motivo: o usuário pediu, e é o que deixa a história crível e viciante, como na referência.
+- **Infográficos no estilo da referência 3**: número grande + rótulo pequeno em caixa alta, linha fina até o
+  objeto, contador que sobe; metáforas visuais (raio-X da cabeça, moléculas de ar, elefante = força).
+- Vídeo que o usuário manda acelerado serve igual para estudar: desacelerar o áudio com `atempo=0.5` antes de
+  transcrever.
