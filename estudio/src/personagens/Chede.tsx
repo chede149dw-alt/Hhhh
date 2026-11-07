@@ -53,12 +53,13 @@ export type Pose = {
   respiracao?: number; // 0..1
   olhosPoder?: number; // 0..1 — olhos brilhando (vilão usando o controle mental)
   controlado?: number; // 0..1 — anel âmbar na íris (pessoa sob controle mental)
+  oculos?: number; // 0 sem óculos .. 1 óculos escuros no rosto (entre 0 e 1: tirando)
 };
 
 export type Cores = typeof CORES_CHEDE;
 export type Aparencia = {
   cores: Cores;
-  cabelo: "ondulado" | "cacheado" | "penteado";
+  cabelo: "ondulado" | "cacheado" | "penteado" | "raspado";
   estampa: "bolso" | "faixa" | "terno";
   // só para estampa "terno": camisa social e gravata (o paletó usa cores.camisa, a calça usa cores.bermuda)
   camisaSocial?: string;
@@ -243,7 +244,11 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
         <g>
           {(perfil || tres) && <path d={perfil ? CABELO_NUCA_PERFIL : CABELO_NUCA_TRES} fill={C.cabelo} />}
           <g transform={`translate(${fx * 0.25},0)`}>
-            {A.cabelo === "penteado" ? (
+            {A.cabelo === "raspado" ? (
+              <>
+                <path d={CABELO_RASPADO} fill={C.cabelo} opacity={0.9} />
+              </>
+            ) : A.cabelo === "penteado" ? (
               <>
                 <path d={CABELO_PENTEADO} fill={C.cabelo} />
                 <path d={CABELO_SOMBRA} fill={C.cabeloSombra} opacity={0.6} />
@@ -317,6 +322,17 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           <g transform={`translate(${perfil ? 10 : 0},112) scale(${perfil ? 0.6 : tres ? 0.85 : 1},1)`}>
             <Boca tipo={expressao} />
           </g>
+          {(pose.oculos ?? 0) > 0 && (
+            <g transform={`translate(0,${(1 - (pose.oculos ?? 0)) * 150})`} opacity={Math.min(1, (pose.oculos ?? 0) * 2)}>
+              <g transform={tres ? "translate(74,0) scale(0.85,1) translate(-74,0)" : undefined}>
+                {!perfil && <rect x={-128} y={-30} width={108} height={64} rx={22} fill="#0B0C10" />}
+                <rect x={perfil ? -44 : 20} y={-30} width={108} height={64} rx={22} fill="#0B0C10" />
+                {!perfil && <rect x={-24} y={-12} width={48} height={12} rx={6} fill="#0B0C10" />}
+                {!perfil && <path d="M -110 -16 L -70 -16 L -96 16 Z" fill="#FFFFFF" opacity={0.18} />}
+                <path d={`M ${perfil ? -26 : 38} -16 L ${perfil ? 14 : 78} -16 L ${perfil ? -12 : 52} 16 Z`} fill="#FFFFFF" opacity={0.18} />
+              </g>
+            </g>
+          )}
         </g>
       )}
     </g>
@@ -395,6 +411,8 @@ const contornoPenteado = () => {
   return d;
 };
 const CABELO_PENTEADO = contornoPenteado();
+const CABELO_RASPADO =
+  "M -214 10 C -224 -140 -120 -214 0 -214 C 120 -214 224 -140 214 10 C 206 -60 190 -110 150 -126 C 80 -140 -80 -140 -150 -126 C -190 -110 -206 -60 -214 10 Z";
 const PENTEADO_FIOS = [
   "M -120 -150 Q -150 -200 -110 -236",
   "M -60 -170 Q -70 -220 -30 -250",

@@ -2,6 +2,7 @@ import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Chede, Expressao, Pose, Vista } from "../personagens/Chede";
 import { Kaik } from "../personagens/Kaik";
+import { Agente } from "../personagens/Agente";
 import { FeixeDeLuz, Gradacao, Grao, Poeira } from "../estilo/Acabamento";
 import "@fontsource/roboto-condensed/800.css";
 
@@ -43,7 +44,7 @@ export const Tela: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 export const Vivo: React.FC<{
-  quem: "chede" | "kaik";
+  quem: "chede" | "kaik" | "agente";
   x: number;
   y: number;
   s: number;
@@ -58,7 +59,7 @@ export const Vivo: React.FC<{
   const piscar = !parado && f % 95 < 4 ? 1 : 0;
   const resp = parado ? 0 : (Math.sin(f / 12) + 1) / 2;
   const P = { piscar, respiracao: resp, ...pose };
-  const Comp = quem === "kaik" ? Kaik : Chede;
+  const Comp = quem === "kaik" ? Kaik : quem === "agente" ? Agente : Chede;
   return (
     <g transform={`translate(${x},${y}) scale(${espelhar ? -s : s},${s})`}>
       <Comp vista={vista} expressao={expr} pose={P} semSombra={semSombra} />

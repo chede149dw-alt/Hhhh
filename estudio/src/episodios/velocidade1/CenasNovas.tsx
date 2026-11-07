@@ -41,7 +41,7 @@ export const KaikEletrico: React.FC<{
 };
 
 // mão fechada segurando algo (desenhada por cima da cabeça quando o objeto vai à boca)
-const MaoFechada: React.FC<{ x: number; y: number; s: number; ang?: number }> = ({ x, y, s, ang = 0 }) => (
+export const MaoFechada: React.FC<{ x: number; y: number; s: number; ang?: number }> = ({ x, y, s, ang = 0 }) => (
   <g transform={`translate(${x},${y}) rotate(${ang}) scale(${s})`}>
     <ellipse cx={0} cy={0} rx={40} ry={44} fill="#F1CBAE" />
     <ellipse cx={14} cy={4} rx={20} ry={36} fill="#D7A786" opacity={0.6} />
@@ -52,7 +52,7 @@ const MaoFechada: React.FC<{ x: number; y: number; s: number; ang?: number }> = 
   </g>
 );
 
-const Contador: React.FC<{ valor: number; unidade: string }> = ({ valor, unidade }) => (
+export const Contador: React.FC<{ valor: number; unidade: string }> = ({ valor, unidade }) => (
   <div style={{ position: "absolute", top: 110, left: 70, fontFamily: "'Roboto Condensed'", fontWeight: 800, color: "#FFD23F",
     fontSize: 150, WebkitTextStroke: "10px #000", paintOrder: "stroke fill" }}>
     {valor}
@@ -376,7 +376,7 @@ export const N15_Puxa: React.FC = () => {
 };
 
 // Vigia: câmera 3D saindo da casa do Chede e subindo até a janela escura do prédio da frente
-const Vigia3D: React.FC<{ de: number; ate: number; vigia: boolean; escuro?: boolean }> = ({ de, ate, vigia, escuro }) => {
+export const Vigia3D: React.FC<{ de: number; ate: number; vigia: boolean; escuro?: boolean }> = ({ de, ate, vigia, escuro }) => {
   const { f, p } = useP();
   const j = janelaVigia();
   const zoom = lerp(de, ate, p); // 0 = longe (rua), 1 = colado na janela

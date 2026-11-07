@@ -91,3 +91,5 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **O Regente não aparece por enquanto** — nem rosto, nem silhueta, nem voz — até o usuário liberar. Motivo:
   decisão do usuário (07/11), para guardar o vilão para episódios futuros. Nos próximos episódios a ameaça fica só
   nos agentes / em quem filmou do prédio.
+- **Roteiro da Parte 3 aprovado** (07/11). Não alterar o texto.
+- **Engajamento sem @**: o usuário não quer o @ do canal escrito; usar só "SEGUE PRA VER A PARTE N" / "Segue aí pra não perder!".

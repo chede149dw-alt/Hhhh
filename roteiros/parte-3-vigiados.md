@@ -8,7 +8,7 @@
   - Kaik: tempo de reação humano (0,2 s) e **barreira do som** (passar de 1.235 km/h = estrondo que quebra vidro).
   - Chede: a fenda **guarda, não destrói**, e lá **não tem sinal**; abrir a fenda logo depois do susto custa caro (mão treme, fenda pequena e instável).
   - Controle mental (sem mostrar o Regente): o agente tem o **anel âmbar nos olhos**, não pisca e depois não lembra de nada.
-- **Status:** aguardando aprovação do usuário
+- **Status:** aprovado pelo usuário (07/11). Sem @ do canal (usuário: "não precisa"): o selo e o final dizem só "SEGUE PRA VER". Terceira ficha (borrada) aprovada.
 
 | Tempo | Narração | Cena |
 |---|---|---|

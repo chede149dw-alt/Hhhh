@@ -4,9 +4,9 @@
 # Uso: scripts/render_partes.sh <Composicao> <total_quadros> <saida.mp4> [bloco=300]
 set -e
 COMP="$1"; TOTAL="$2"; SAIDA="$3"; BLOCO="${4:-300}"
-DIR="out/partes-$COMP"
+DIR="out/partes-$COMP${ESCALA:+-e$ESCALA}"
 mkdir -p "$DIR"
-OPTS="--gl=swangle --concurrency=4 --timeout=180000 --browser-executable=/opt/pw-browsers/chromium"
+OPTS="--gl=swangle --concurrency=4 --timeout=180000 --browser-executable=/opt/pw-browsers/chromium ${ESCALA:+--scale=$ESCALA}"
 i=0
 : > "$DIR/lista.txt"
 while [ $((i * BLOCO)) -lt "$TOTAL" ]; do

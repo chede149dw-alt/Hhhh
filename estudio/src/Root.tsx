@@ -8,6 +8,7 @@ import { TesteKaik3D } from "./cenarios3d/TesteKaik3D";
 import { FotoPerfil } from "./personagens/FotoPerfil";
 import { DURACAO, FPS, Sumir1 } from "./episodios/sumir1/Sumir1";
 import { DURACAO_VEL1, Velocidade1 } from "./episodios/velocidade1/Velocidade1";
+import { DURACAO_VIG3, Vigiados3 } from "./episodios/vigiados3/Vigiados3";
 import { Fenda } from "./efeitos/Fenda";
 import { FeixeDeLuz, Gradacao, Grao, Legenda, Poeira } from "./estilo/Acabamento";
 
@@ -50,6 +51,7 @@ export const FrameEstilo: React.FC<{ pose: Pose; expressao: Expressao }> = ({ po
 export const RemotionRoot: React.FC = () => (
   <>
     <Composition id="Velocidade1" component={Velocidade1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_VEL1} />
+    <Composition id="Vigiados3" component={Vigiados3} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_VIG3} />
     <Composition id="Sumir1" component={Sumir1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO} />
     <Composition id="TesteKaik3D" component={TesteKaik3D} width={1080} height={1920} fps={30} durationInFrames={120} />
     <Composition id="Teste3D" component={Teste3D} width={1080} height={1920} fps={30} durationInFrames={90} defaultProps={{ modo: "baixo" as const }} />
