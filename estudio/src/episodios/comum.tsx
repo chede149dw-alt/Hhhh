@@ -155,3 +155,22 @@ export const Legendas: React.FC<{ palavras: Palavra[]; duracao: number }> = ({ p
     </div>
   );
 };
+
+// IK de 2 ossos: ângulos de braço/antebraço para a mão (centro) chegar ao ponto (x,y) no espaço local do personagem.
+export const alcançar = (vista: Vista, lado: 1 | -1, x: number, y: number) => {
+  const sx = vista === "perfil" ? 0.58 : vista === "tresQuartos" ? 0.84 : 1;
+  const ox = (vista === "perfil" ? 20 : 150 * sx) * lado;
+  const L1 = 286;
+  const L2 = 272;
+  const dx = (x - ox) * lado;
+  const dy = y + 1150;
+  const D = Math.min(L1 + L2 - 1, Math.max(20, Math.hypot(dx, dy)));
+  const phi = Math.atan2(dx, dy);
+  const alfa = Math.acos((L1 * L1 + D * D - L2 * L2) / (2 * L1 * D));
+  const o = phi + alfa;
+  const ex = L1 * Math.sin(o);
+  const ey = L1 * Math.cos(o);
+  const seg = Math.atan2(dx - ex, dy - ey);
+  const graus = (r: number) => (r * 180) / Math.PI;
+  return { braco: graus(o), antebraco: graus(seg - o), anguloMao: graus(seg) };
+};

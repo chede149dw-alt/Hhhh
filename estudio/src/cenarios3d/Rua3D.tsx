@@ -92,6 +92,49 @@ const texFrenteOnibus = () => {
   return new THREE.CanvasTexture(c);
 };
 
+// Prédio de apartamentos (para a cena do vigia). A janela escura fica no andar `andarVigia`, coluna 2.
+export const PREDIO = { x: 16, z: -28, w: 14, d: 10, andares: 9, alturaAndar: 3 };
+export const janelaVigia = (): [number, number, number] => [
+  PREDIO.x - PREDIO.d / 2 - 0.05,
+  1.5 + 6 * PREDIO.alturaAndar,
+  PREDIO.z - PREDIO.w / 2 + 2 + 2 * 3.2,
+];
+const texPredio = () => {
+  const c = document.createElement("canvas");
+  c.width = 448;
+  c.height = 864;
+  const g = c.getContext("2d")!;
+  g.fillStyle = "#B8A898";
+  g.fillRect(0, 0, 448, 864);
+  for (let a = 0; a < 9; a++) {
+    for (let k = 0; k < 4; k++) {
+      const x = 30 + k * 104;
+      const y = 864 - (a + 1) * 96 + 20;
+      const escura = a === 6 && k === 2;
+      g.fillStyle = "#6E6258";
+      g.fillRect(x - 6, y - 6, 76, 64);
+      g.fillStyle = escura ? "#0E0E12" : (a + k) % 3 ? "#9DB4C2" : "#F2D9A6";
+      g.fillRect(x, y, 64, 52);
+    }
+  }
+  return new THREE.CanvasTexture(c);
+};
+const Predio: React.FC = () => {
+  const t = useMemo(() => texPredio(), []);
+  const h = PREDIO.andares * PREDIO.alturaAndar;
+  return (
+    <mesh position={[PREDIO.x, h / 2, PREDIO.z]} castShadow receiveShadow>
+      <boxGeometry args={[PREDIO.d, h, PREDIO.w]} />
+      <meshStandardMaterial attach="material-0" color="#A89888" />
+      <meshStandardMaterial attach="material-1" map={t} />
+      <meshStandardMaterial attach="material-2" color="#8E8074" />
+      <meshStandardMaterial attach="material-3" color="#8E8074" />
+      <meshStandardMaterial attach="material-4" color="#A89888" />
+      <meshStandardMaterial attach="material-5" color="#A89888" />
+    </mesh>
+  );
+};
+
 const CORES_CASAS = ["#E9D3B4", "#D98E73", "#F0E6CF", "#C9D7DF", "#E8C07A", "#B7C9A8", "#F2D5C4"];
 
 const Casas: React.FC<{ lado: 1 | -1 }> = ({ lado }) => {
@@ -256,11 +299,12 @@ const Chao: React.FC = () => {
   );
 };
 
-export const Rua3D: React.FC<{ cam: Cam; onibusZ?: number; children?: React.ReactNode; sol?: number }> = ({
+export const Rua3D: React.FC<{ cam: Cam; onibusZ?: number; children?: React.ReactNode; sol?: number; predio?: boolean }> = ({
   cam,
   onibusZ,
   children,
   sol = 1,
+  predio = false,
 }) => (
   <ThreeCanvas
     width={W}
@@ -292,6 +336,7 @@ export const Rua3D: React.FC<{ cam: Cam; onibusZ?: number; children?: React.Reac
     <Arvores />
     <Postes />
     {onibusZ !== undefined && <Onibus z={onibusZ} />}
+    {predio && <Predio />}
     {children}
   </ThreeCanvas>
 );

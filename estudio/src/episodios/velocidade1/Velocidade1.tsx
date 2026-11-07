@@ -9,6 +9,10 @@ import { Fenda } from "../../efeitos/Fenda";
 import { LinhasVento, Rastro } from "../../efeitos/Velocidade";
 import { Celular, Despertador, Escova, Geladeira, Mesa, Papel, Passaro, Tenis } from "../../objetos/Objetos";
 import { Acab, Camera, Flash, FPS, Legendas, Painel, Tela, Vivo, lerp, useP } from "../comum";
+import {
+  N0_Capa, N2_Escova, N3_Montagem, N6_Fome, N9_Aereo, N10_Parado, N11_Passaro, N12_Entra, N15_Puxa,
+  N19_Sozinhos, N20_Filmava, N21_Parte3,
+} from "./CenasNovas";
 
 const T = timing as {
   duracao: number;
@@ -131,25 +135,7 @@ const C2_Escova: React.FC = () => {
       </AbsoluteFill>
     );
   }
-  return (
-    <AbsoluteFill style={{ background: "#000" }}>
-      <Camera z={[1.05, 1.12]}>
-        <Banheiro desfoque={8} />
-        <Tela>
-          <Vivo quem="kaik" x={540} y={3400} s={1.9} expr="espanto" pose={{ olharX: 0.2 }} />
-          <g transform={`translate(470,${1010 + Math.sin(f * 2.5) * 12}) rotate(80) scale(1.3)`}>
-            <Escova />
-          </g>
-          {[0, 1, 2].map((i) => (
-            <circle key={i} cx={420 + i * 40} cy={1060 + Math.sin(f / 3 + i) * 10} r={16} fill="#fff" opacity={0.85} />
-          ))}
-          <LinhasVento dir={1} n={8} forca={0.6} />
-        </Tela>
-      </Camera>
-      <Flash cor={CIANO} quadros={5} de={Math.round(0.4 * d)} />
-      <Acab />
-    </AbsoluteFill>
-  );
+  return <N2_Escova quadroInicio={Math.round(0.4 * d)} />;
 };
 
 const C3_Montagem: React.FC = () => {
@@ -608,11 +594,16 @@ const C21_Parte2: React.FC = () => {
   );
 };
 
+const C6_FomeNova: React.FC = () => <N6_Fome Geladeira={Geladeira} />;
+
+// Versão 2 (estilo da referência 2): cenas de rua em 3D, eletricidade ciano, objetos presos na mão.
 const CENAS: React.FC[] = [
-  C0_Capa, C1_Atrasado, C2_Escova, C3_Montagem, C4_Tenis, C5_Atrito, C6_Fome, C7_Energia, C8_Chede, C9_Corre, C10_Parado,
-  C11_Passaro, C12_Entra, C13_Buraco, C14_Dedos, C15_Puxa, C16_Estalo, C17_Chao, C18_Tambem, C19_Sozinhos, C20_Filmava,
-  C21_Parte2,
+  N0_Capa, C1_Atrasado, C2_Escova, N3_Montagem, C4_Tenis, C5_Atrito, C6_FomeNova, C7_Energia, C8_Chede, N9_Aereo, N10_Parado,
+  N11_Passaro, N12_Entra, C13_Buraco, C14_Dedos, N15_Puxa, C16_Estalo, C17_Chao, C18_Tambem, N19_Sozinhos, N20_Filmava,
+  N21_Parte3,
 ];
+// cenas antigas guardadas (versão 1), fora do vídeo
+export const CENAS_V1 = [C0_Capa, C3_Montagem, C6_Fome, C9_Corre, C10_Parado, C11_Passaro, C12_Entra, C15_Puxa, C19_Sozinhos, C20_Filmava, C21_Parte2];
 
 export const Velocidade1: React.FC<{ trilha?: boolean }> = ({ trilha = true }) => {
   const inicios = T.linhas.map((l, i) => (i === 0 ? 0 : Math.round(l.inicio * FPS) - 2));

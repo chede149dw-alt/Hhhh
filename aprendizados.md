@@ -61,3 +61,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   poder com **raios ramificados + brilho + faíscas** (`efeitos/Eletricidade.tsx`), corrida com passada longa
   (`personagens/poses.ts`) e câmera colada no personagem. Objetos sempre presos à mão que se mexe.
 - **Render com 3D**: usar `--gl=swangle` (os outros modos não criam WebGL aqui). ~2 s por quadro.
+- **Raios do Kaik em ciano** (decisão do usuário). Objeto levado à boca: desenhar a mão e o antebraço por cima da cabeça (`MaoFechada`).
