@@ -15,7 +15,7 @@ const rnd = (i: number) => {
 
 // ---------- Luz da cena sobre personagens 2D ----------
 // Desenha o personagem e, por cima (só dentro da silhueta), o tom do ambiente e a luz quente do poste.
-const LuzCena: React.FC<{
+export const LuzCena: React.FC<{
   id: string;
   ativo: boolean;
   amb: string; // cor do ambiente (multiplica)
@@ -47,7 +47,7 @@ const LuzCena: React.FC<{
   );
 };
 
-const Desfoque: React.FC<{ id: string; px: number; children: React.ReactNode }> = ({ id, px, children }) =>
+export const Desfoque: React.FC<{ id: string; px: number; children: React.ReactNode }> = ({ id, px, children }) =>
   px < 0.3 ? (
     <>{children}</>
   ) : (

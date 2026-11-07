@@ -104,3 +104,9 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   luz do ambiente tingindo o personagem (azul à noite, laranja no pôr do sol), sombra grande e suave de um lado,
   fundo desfocado (profundidade de campo), neblina/atmosfera e câmera lenta e suave. Motivo: o usuário quer manter
   o desenho 2D dos personagens; melhorar a qualidade sem mudar a natureza do traço.
+- **Duração liberada até 2min15** (usuário, 07/11): o episódio pode ter ~2 min (máx. 2min15) — antes era ~66–75 s.
+  Motivo: dá tempo de contar a história com calma (escola, conversa, testes) sem cortar a lógica dos poderes.
+- **Visual das referências 4 e 5 = cenário 3D + personagem 2D** (usuário, 07/11: "tenta fazer exatamente igual").
+  Cenário 3D de verdade com sombra e neblina, personagem 2D recortado dentro (com sombra no chão e luz da cena),
+  câmera 3D sempre se movendo suave (voo do alto, descida do céu, giro em volta) e fundo desfocado.
+  Ver `referencias/analise-video-referencia-4-5.md`.
