@@ -45,3 +45,8 @@ cd estudio && npm install
 npx remotion render Sumir1 ../prontos/serie-sumir-parte-1.mp4 --concurrency=4 --crf=18 --browser-executable=/opt/pw-browsers/chromium
 npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --browser-executable=/opt/pw-browsers/chromium
 ```
+
+## Visual 2.0 (em teste)
+- Referências 4 e 5 (locais, fora do Git). Estilo é 2D — luz da cena tingindo o personagem, fundo desfocado,
+  neblina, câmera suave. Teste em `estudio/src/estilo2/TesteEstilo2.tsx` → `previas/teste-visual-2.mp4`.
+  Personagens oficiais NÃO foram alterados. Aguardando aprovação do usuário para levar aos episódios.
