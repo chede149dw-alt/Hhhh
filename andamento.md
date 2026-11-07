@@ -57,3 +57,11 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
 - Plano: (1) cenários 3D: rua manhã (Rua3D), faculdade (portão, anfiteatro, cantina), campo baldio pôr do sol;
   (2) efeitos: tornado, fenda pelo olhar, pedras, marcas de mão, infográficos; (3) episódio `estudio/src/episodios/limites4/`;
   (4) voz provisória espeak → prévia em `previas/` → aprovação → voz ElevenLabs → final em `prontos/` + capa + post.
+- FEITO: kit `estudio/src/cenarios3d/Kit3D.tsx` (Plano3D/PlanoRua, Atores 2D com sombra, luz e corte atrás de mesa,
+  projetarP), cenários `Cenarios4.tsx`, cenas `episodios/limites4/Cenas4a.tsx` e `Cenas4b.tsx`, trilha
+  `scripts/gerar_trilha_limites4.py`, voz provisória espeak (115 s).
+- Prévia: `cd estudio && ESCALA=0.5 scripts/render_partes.sh Limites4 3485 ../previas/parte-4-limites-previa.mp4 300`
+  (continua de onde parou). Depois da aprovação: voz ElevenLabs (texto em `src/episodios/limites4/texto.txt`) →
+  `scripts/alinhar.py` → trilha → render final (total = ceil((duracao+1.2)*30)) → capa (quadro ~40) → post.
+- Dica: no vídeo vertical o ângulo horizontal é estreito (fov 40 → ±11,5°); planos com dois personagens pedem fov ~50
+  e distância maior.
