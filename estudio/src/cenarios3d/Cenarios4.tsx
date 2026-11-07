@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import * as THREE from "three";
 import { rnd } from "./Kit3D";
+import { Arbusto, Banco, Bicicleta, Canteiro, Cerca, Lixeira, Lixo, Luminaria, Nuvens, Pinheiro, Placa, PostesFios, Skyline, Sol, Toldo } from "./Detalhes4";
 
 // Cenários 3D da Parte 4: faculdade (portão, anfiteatro, cantina), campo baldio e objetos.
 // Low-poly com sombra, no estilo das referências 4 e 5. Unidades em metros.
@@ -249,6 +250,75 @@ export const Faculdade3D: React.FC<{ giroCamera?: number; luzCamera?: number; ca
         <Arvore key={`b${x}`} p={[x, 0, 17]} s={1 + rnd(i + 9) * 0.3} cor="#6AA350" />
       ))}
       {carroPreto !== undefined && <Carro p={[carroPreto, 0, 12]} rotY={Math.PI / 2} />}
+      {/* vida: céu, prédios ao longe, alas laterais, jardim, bancos, bicicletas, carros, ponto de ônibus */}
+      <Nuvens n={9} y={50} z={-160} />
+      <Skyline z={-95} cor="#C9BBA8" />
+      {[-1, 1].map((l) => (
+        <group key={`ala${l}`}>
+          <mesh position={[l * 36, 5, -30]} castShadow receiveShadow>
+            <boxGeometry args={[22, 10, 14]} />
+            <meshStandardMaterial attach="material-0" color="#CDBFA8" />
+            <meshStandardMaterial attach="material-1" color="#CDBFA8" />
+            <meshStandardMaterial attach="material-2" color="#B5A68F" />
+            <meshStandardMaterial attach="material-3" color="#B5A68F" />
+            <meshStandardMaterial attach="material-4" map={fachada} />
+            <meshStandardMaterial attach="material-5" color="#CDBFA8" />
+          </mesh>
+          <mesh position={[l * 36, 10.3, -30]}>
+            <boxGeometry args={[22.6, 0.6, 14.6]} />
+            <meshStandardMaterial color="#A8987F" />
+          </mesh>
+        </group>
+      ))}
+      <mesh position={[0, 14.4, -24]}>
+        <boxGeometry args={[46.8, 0.8, 12.8]} />
+        <meshStandardMaterial color="#B3A48C" />
+      </mesh>
+      <Placa p={[0, 7.4, -16.05]} w={6} h={1.1} linhas={["BLOCO A"]} fundo="#EFE7DA" cor="#1F3B5C" />
+      {[-1, 1].map((l) =>
+        [-5, -11].map((z) => <Canteiro key={`c${l}${z}`} p={[l * 4.2, 0, z]} w={2.2} d={4} />),
+      )}
+      {[-1, 1].map((l) =>
+        Array.from({ length: 9 }).map((_, i) => (
+          <Arbusto key={`a${l}${i}`} p={[l * (6.5 + i * 3), 0, -1.3]} s={0.9 + rnd(i + l) * 0.3} flores={i % 3 === 0 ? "#F2D25A" : undefined} />
+        )),
+      )}
+      {[-1, 1].map((l) => [-3.5, -9.5, -15.5].map((z) => <Luminaria key={`l${l}${z}`} p={[l * 2.9, 0, z]} />))}
+      <Banco p={[-8, 0, -9]} rotY={Math.PI / 2} />
+      <Banco p={[8, 0, -9]} rotY={-Math.PI / 2} />
+      <Banco p={[-12, 0, -13]} rotY={Math.PI / 2} />
+      <Lixeira p={[-4.6, 0, 1.2]} />
+      <Lixeira p={[4.6, 0, 1.2]} cor="#2F6FD6" />
+      {[0, 1, 2, 3].map((i) => (
+        <Bicicleta key={`b${i}`} p={[-8 - i * 0.7, 0, 1.6]} rotY={Math.PI / 2} cor={["#C93A32", "#2F6FD6", "#F2B33D", "#3E7A3E"][i]} />
+      ))}
+      {[[-30, "#C93A32"], [-23, "#EDEDED"], [17, "#2F6FD6"], [25, "#7D8A99"], [40, "#F2B33D"]].map(([x, c]) => (
+        <Carro key={`car${x}`} p={[x as number, 0, 13]} rotY={Math.PI / 2} cor={c as string} />
+      ))}
+      <group position={[14, 0, 5]}>
+        <mesh position={[0, 2.5, 0]} castShadow>
+          <boxGeometry args={[4, 0.12, 1.6]} />
+          <meshStandardMaterial color="#2B2E36" />
+        </mesh>
+        {[-1.9, 1.9].map((x) => (
+          <mesh key={x} position={[x, 1.25, -0.6]}>
+            <boxGeometry args={[0.08, 2.5, 0.08]} />
+            <meshStandardMaterial color="#2B2E36" />
+          </mesh>
+        ))}
+        <mesh position={[0, 1.4, -0.7]}>
+          <boxGeometry args={[3.8, 2, 0.04]} />
+          <meshStandardMaterial color="#BFD9E6" transparent opacity={0.35} />
+        </mesh>
+        <Placa p={[0, 1.5, -0.66]} w={1.6} h={1.1} linhas={["ÔNIBUS", "LINHAS 104 · 220"]} fundo="#F2B33D" cor="#2A2A2E" />
+        <Banco p={[0, 0, -0.3]} />
+      </group>
+      {[-50, -44, 44, 50, -58, 58].map((x, i) => (
+        <Pinheiro key={`pi${x}`} p={[x, 0, -18 - (i % 2) * 8]} s={1.3 + rnd(i) * 0.4} />
+      ))}
+      {[-28, -20, 20, 28].map((x, i) => (
+        <Arvore key={`t2${x}`} p={[x, 0, -40]} s={1.4 + rnd(i + 3) * 0.3} />
+      ))}
     </group>
   );
 };
@@ -310,6 +380,46 @@ export const Anfiteatro3D: React.FC<{ carroPreto?: boolean }> = ({ carroPreto = 
           <Caixa p={[0, 7.7, z]} s={[10, 0.08, 0.4]} cor="#FFF8E8" mat={<meshStandardMaterial color="#FFF8E8" emissive="#FFF2D0" emissiveIntensity={1} />} />
           <pointLight position={[0, 6.8, z]} intensity={14} distance={14} color="#FFE9C6" />
         </group>
+      ))}
+      {/* vida: mesa do professor, relógio, cartazes, cadernos e mochilas, cortinas, feixes de sol */}
+      <mesh position={[0, 0.5, -8]} castShadow>
+        <boxGeometry args={[3, 1, 1]} />
+        <meshStandardMaterial color="#8A5A3A" />
+      </mesh>
+      <mesh position={[0.4, 1.12, -8]} rotation={[-0.3, 0.2, 0]}>
+        <boxGeometry args={[0.5, 0.02, 0.35]} />
+        <meshStandardMaterial color="#C9CDD4" metalness={0.4} />
+      </mesh>
+      <mesh position={[5.6, 6.2, -9.8]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.45, 0.45, 0.08, 24]} />
+        <meshStandardMaterial color="#F6F2EA" />
+      </mesh>
+      <Placa p={[-8.8, 4, -3]} w={2} h={1.4} linhas={["FÍSICA I", "PROVA NA SEXTA"]} fundo="#F2D25A" cor="#2A2A2E" rotY={Math.PI / 2} />
+      <Placa p={[-8.8, 4.2, 4]} w={1.6} h={2.2} linhas={["SEMANA", "DE CIÊNCIA"]} fundo="#2F6FD6" cor="#F2F2EE" rotY={Math.PI / 2} />
+      <Placa p={[-8.8, 3.6, 10]} w={2.2} h={1.4} linhas={["BIBLIOTECA", "ATÉ 22H"]} fundo="#E35D4F" cor="#F2F2EE" rotY={Math.PI / 2} />
+      {Array.from({ length: 8 }).map((_, r) =>
+        [-1, 1].map((l) =>
+          Array.from({ length: 6 }).map((_, k) =>
+            rnd(r * 13 + k + l) < 0.5 ? (
+              <mesh key={`cad${r}${l}${k}`} position={[l * (1.8 + k * 1.1), r * 0.38 + 1.18, -4 + r * 1.7]} rotation={[0, rnd(k + r) - 0.5, 0]}>
+                <boxGeometry args={[0.3, 0.03, 0.22]} />
+                <meshStandardMaterial color={["#C93A32", "#2F6FD6", "#F2B33D", "#3E7A3E", "#F2F2EE"][(r + k) % 5]} />
+              </mesh>
+            ) : null,
+          ),
+        ),
+      )}
+      {Array.from({ length: 6 }).map((_, i) => (
+        <mesh key={`cort${i}`} position={[8.75, 4.2, -6.4 + i * 4.4 - 1.1]}>
+          <boxGeometry args={[0.1, 5.6, 0.7]} />
+          <meshStandardMaterial color="#B5482E" />
+        </mesh>
+      ))}
+      {[-4, 0.4, 4.8, 9.2].map((z) => (
+        <mesh key={`feixe${z}`} position={[5, 3.2, z + 1.4]} rotation={[0, 0, -0.6]}>
+          <planeGeometry args={[9, 3.4]} />
+          <meshBasicMaterial color="#FFE6B0" transparent opacity={0.07} depthWrite={false} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} />
+        </mesh>
       ))}
       {/* lá fora: chão, rua, casas e o carro preto */}
       <Caixa p={[30, -0.2, 4]} s={[40, 0.2, 80]} cor="#9DB078" sombra={false} />
@@ -408,12 +518,79 @@ export const Cantina3D: React.FC = () => {
         [-16, -8].map((z, j) => <Mesa key={`${x}${z}`} p={[x + (j ? 2 : 0), 0, z]} guardaSol={["#E35D4F", "#3D7DD8", "#F2B33D", "#59A85A"][(i + j) % 4]} />),
       )}
       <Mesa p={[0, 0, 0]} />
-      {alunos.map((a, k) => (
-        <Aluno key={k} p={a.p} i={a.i} sentado={a.s} />
-      ))}
+      {/* os alunos agora são figurantes 2D (ver episodios/limites4/Multidoes.tsx) */}
+      {false && alunos.map((a, k) => <Aluno key={k} p={a.p} i={a.i} sentado={a.s} />)}
       {[-20, 20, -10, 10].map((x, i) => (
         <Arvore key={x} p={[x, 0, -22 + (i % 2) * 6]} s={1.1} cor="#5F9C4C" />
       ))}
+      {/* vida: janelas nos prédios, cardápio, toldo, máquina de refrigerante, vasos, varal de luzes, bandejas */}
+      <Nuvens n={8} y={45} z={-120} />
+      {Array.from({ length: 3 }).map((_, a) =>
+        Array.from({ length: 14 }).map((_, i) => (
+          <mesh key={`j${a}${i}`} position={[-26 + i * 4, 3 + a * 3, -28.95]}>
+            <planeGeometry args={[2, 1.6]} />
+            <meshStandardMaterial color={rnd(a * 20 + i) > 0.7 ? "#F6E3B0" : "#4E6A80"} roughness={0.3} />
+          </mesh>
+        )),
+      )}
+      {[-1, 1].map((l) =>
+        Array.from({ length: 2 }).map((_, a) =>
+          Array.from({ length: 10 }).map((_, i) => (
+            <mesh key={`js${l}${a}${i}`} position={[l * 26.95, 3 + a * 3, -26 + i * 4.5]} rotation={[0, -l * Math.PI / 2, 0]}>
+              <planeGeometry args={[2, 1.6]} />
+              <meshStandardMaterial color={rnd(l * 50 + a * 20 + i) > 0.7 ? "#F6E3B0" : "#4E6A80"} roughness={0.3} />
+            </mesh>
+          )),
+        ),
+      )}
+      <Placa p={[-14, 4.6, -28.3]} w={9} h={1.4} linhas={["CANTINA", "SALGADO 6 · SUCO 5 · PF 18"]} fundo="#2A2A2E" cor="#F2D25A" brilho={0.25} />
+      <Toldo p={[-14, 3.2, -28.1]} w={14} cores={["#C93A32", "#F2EDE4"]} />
+      <group position={[-4, 0, -28.2]}>
+        <mesh position={[0, 1.0, 0]} castShadow>
+          <boxGeometry args={[1.2, 2, 0.8]} />
+          <meshStandardMaterial color="#C93A32" />
+        </mesh>
+        <mesh position={[0, 1.2, 0.41]}>
+          <planeGeometry args={[0.9, 1.2]} />
+          <meshStandardMaterial color="#BFE3FF" emissive="#9FD3FF" emissiveIntensity={0.6} />
+        </mesh>
+      </group>
+      {[[-18, -4], [18, -4], [-18, -12], [18, -12], [-6, -22], [6, -22]].map(([x, z], i) => (
+        <group key={`v${i}`} position={[x, 0, z]}>
+          <mesh position={[0, 0.35, 0]} castShadow>
+            <cylinderGeometry args={[0.45, 0.35, 0.7, 10]} />
+            <meshStandardMaterial color="#B5654A" />
+          </mesh>
+          <Arbusto p={[0, 0.6, 0]} s={0.8} cor="#4F8A3E" />
+        </group>
+      ))}
+      {[-12, -6, 0, 6, 12].map((x, i) =>
+        [-16, -8].map((z, j) => (
+          <group key={`bj${i}${j}`} position={[x + (j ? 2 : 0), 0.8, z]}>
+            <mesh position={[0.2, 0.02, 0.1]}>
+              <boxGeometry args={[0.45, 0.03, 0.32]} />
+              <meshStandardMaterial color={["#C93A32", "#2F6FD6", "#F2B33D"][(i + j) % 3]} />
+            </mesh>
+            <mesh position={[-0.25, 0.08, -0.15]}>
+              <cylinderGeometry args={[0.05, 0.04, 0.14, 8]} />
+              <meshStandardMaterial color="#F2F2EE" />
+            </mesh>
+          </group>
+        )),
+      )}
+      {[-8, 0, 8].map((z) =>
+        Array.from({ length: 24 }).map((_, i) => {
+          const t = i / 23;
+          return (
+            <mesh key={`lz${z}${i}`} position={[-22 + 44 * t, 5.2 - Math.sin(t * Math.PI) * 1.0, z - 6]}>
+              <sphereGeometry args={[0.09, 6, 4]} />
+              <meshStandardMaterial color="#FFE6A8" emissive="#FFD27A" emissiveIntensity={1.4} />
+            </mesh>
+          );
+        }),
+      )}
+      <Lixeira p={[3, 0, -4]} />
+      <Lixeira p={[-3.2, 0, -12]} cor="#2F6FD6" />
     </group>
   );
 };
@@ -508,7 +685,17 @@ export const Campo3D: React.FC<{ carro?: boolean; marcas?: number; carroY?: numb
       {porta && <Caixa p={[-7, 0.05, -2]} s={[0.9, 0.06, 2]} cor="#7C5A3E" r={[0, 0.5, 0]} />}
       {carro && carroEscala > 0.01 && <Carro p={[2.5, carroY, -9]} rotY={0.4} velho marcas={marcas} escala={carroEscala} />}
       {filhos}
-      {/* fundo: casas, postes, árvores */}
+      {/* vida: sol, nuvens rosadas, cidade ao longe, cerca quebrada, arbustos, lixo, fios */}
+      <Sol p={[-200, 38, -150]} cor="#FFC27A" tam={50} />
+      <Nuvens n={8} y={38} z={-170} cor="#FFC2A6" semente={4} larg={360} />
+      <Skyline z={-115} cor="#A88A9A" semente={9} />
+      <Cerca de={[-14, 12]} ate={[-14, -38]} quebrada />
+      <Cerca de={[16, 10]} ate={[16, -30]} quebrada />
+      {Array.from({ length: 18 }).map((_, i) => (
+        <Arbusto key={`ab${i}`} p={[(rnd(i + 70) - 0.5) * 50, 0, -14 - rnd(i + 71) * 26]} s={0.7 + rnd(i + 72) * 0.9} cor={i % 2 ? "#6F7F3A" : "#7E8A44"} />
+      ))}
+      <Lixo area={[-12, 14, -20, 6]} n={36} />
+      <PostesFios pts={[[-60, -52], [-36, -52], [-12, -52], [12, -52], [36, -52], [60, -52]]} />
       {Array.from({ length: 10 }).map((_, i) => (
         <Caixa key={`c${i}`} p={[-45 + i * 10, 2.5, -60 - rnd(i) * 8]} s={[8, 4 + rnd(i + 1) * 4, 7]} cor={["#D9B48C", "#C98E73", "#E6D6BA", "#B7A28A"][i % 4]} />
       ))}

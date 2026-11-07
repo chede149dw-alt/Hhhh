@@ -13,6 +13,7 @@ import { Fenda } from "./efeitos/Fenda";
 import { DURACAO_TESTE2, TesteEstilo2 } from "./estilo2/TesteEstilo2";
 import { DURACAO_HIBRIDO, TesteHibrido } from "./estilo2/TesteHibrido";
 import { Vitrine4 } from "./estilo2/Vitrine4";
+import { FichaFigurantes } from "./personagens/FichaFigurantes";
 import { DURACAO_LIM4, Limites4 } from "./episodios/limites4/Limites4";
 import { FeixeDeLuz, Gradacao, Grao, Legenda, Poeira } from "./estilo/Acabamento";
 
@@ -63,6 +64,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Sumir1" component={Sumir1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO} />
     <Composition id="TesteKaik3D" component={TesteKaik3D} width={1080} height={1920} fps={30} durationInFrames={120} />
     <Composition id="Teste3D" component={Teste3D} width={1080} height={1920} fps={30} durationInFrames={90} defaultProps={{ modo: "baixo" as const }} />
+    <Still id="FichaFigurantes" component={FichaFigurantes} width={2400} height={2000} />
     <Still id="FotoPerfil" component={FotoPerfil} width={1080} height={1080} />
     <Still id="FichaChede" component={FichaChede} width={2400} height={2700} />
     <Still id="FichaKaik" component={FichaChede} width={2400} height={2700} defaultProps={{ quem: "kaik" as const }} />

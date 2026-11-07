@@ -68,6 +68,12 @@ export type Aparencia = {
   corPoder?: string; // cor do brilho dos olhos / anel de controle
   rugas?: boolean;
   barba?: boolean;
+  // figurantes (tudo opcional; o Chede e o Kaik não usam)
+  roupa?: "camiseta" | "moletom" | "camisa"; // moletom = manga longa + capuz; camisa = gola e botões
+  calca?: boolean; // calça comprida (usa cores.bermuda)
+  bone?: string; // cor do boné
+  oculosGrau?: boolean;
+  mochila?: string; // cor da mochila
 };
 export const APARENCIA_CHEDE: Aparencia = { cores: CORES_CHEDE, cabelo: "ondulado", estampa: "bolso" };
 export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
@@ -276,6 +282,25 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           </g>
         </g>
       )}
+      {/* boné (figurantes) */}
+      {A.bone && (
+        <g>
+          {costas ? (
+            <path d="M -222 -40 C -230 -200 -120 -262 0 -262 C 120 -262 230 -200 222 -40 Q 0 -80 -222 -40 Z" fill={A.bone} />
+          ) : (
+            <g transform={`translate(${fx * 0.25},0)`}>
+              <path d="M -220 -50 C -226 -205 -118 -262 0 -262 C 118 -262 226 -205 220 -50 Q 0 -96 -220 -50 Z" fill={A.bone} />
+              <path d="M -220 -50 Q 0 -96 220 -50 L 214 -30 Q 0 -76 -214 -30 Z" fill="#000" opacity={0.25} />
+              {vista === "frente" ? (
+                <path d="M -200 -52 Q 0 -120 200 -52 Q 0 -20 -200 -52 Z" fill={A.bone} />
+              ) : (
+                <path d="M 80 -70 Q 260 -110 330 -40 Q 220 -30 90 -40 Z" fill={A.bone} />
+              )}
+              <circle cx={0} cy={-258} r={14} fill="#000" opacity={0.25} />
+            </g>
+          )}
+        </g>
+      )}
       {/* barba (contorno do queixo + bigode, boca livre) */}
       {A.barba && !costas && (
         <g clipPath={`url(#clipCabeca-${vista})`}>
@@ -322,6 +347,16 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           <g transform={`translate(${perfil ? 10 : 0},112) scale(${perfil ? 0.6 : tres ? 0.85 : 1},1)`}>
             <Boca tipo={expressao} />
           </g>
+          {A.oculosGrau && (
+            <g fill="none" stroke="#1A1A1E" strokeWidth={9}>
+              {!perfil && <circle cx={-74} cy={0} r={46} />}
+              <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
+                <circle cx={perfil ? 10 : 74} cy={0} r={46} />
+              </g>
+              {!perfil && <path d="M -28 -6 Q 0 -18 28 -6" />}
+              {perfil && <path d="M -36 -6 L -150 -10" />}
+            </g>
+          )}
           {(pose.oculos ?? 0) > 0 && (
             <g transform={`translate(0,${(1 - (pose.oculos ?? 0)) * 150})`} opacity={Math.min(1, (pose.oculos ?? 0) * 2)}>
               <g transform={tres ? "translate(74,0) scale(0.85,1) translate(-74,0)" : undefined}>
@@ -447,13 +482,14 @@ const Braco: React.FC<{
   const A = useA();
   const C = A.cores;
   const terno = A.estampa === "terno";
+  const mangaLonga = terno || A.roupa === "moletom";
   const pele = sombra ? C.peleSombra : C.pele;
   const manga = sombra ? C.camisaSombra : C.camisa;
   return (
     <g transform={`rotate(${-ombro * lado})`}>
       {/* braço */}
       <rect x={-23} y={0} width={46} height={300} rx={23} fill={pele} />
-      {terno ? (
+      {mangaLonga ? (
         <path d="M -40 -20 Q 0 -40 40 -20 L 38 300 Q 0 312 -38 300 Z" fill={manga} />
       ) : (
         <>
@@ -464,10 +500,14 @@ const Braco: React.FC<{
       )}
       <g transform={`translate(0,286) rotate(${-cotovelo * lado})`}>
         <rect x={-21} y={-10} width={42} height={270} rx={21} fill={pele} />
-        {terno && (
+        {mangaLonga && (
           <>
             <rect x={-36} y={-24} width={72} height={250} rx={30} fill={manga} />
-            <rect x={-30} y={214} width={60} height={22} rx={6} fill={A.camisaSocial ?? "#F2F2EE"} />
+            {terno ? (
+              <rect x={-30} y={214} width={60} height={22} rx={6} fill={A.camisaSocial ?? "#F2F2EE"} />
+            ) : (
+              <rect x={-32} y={206} width={64} height={30} rx={10} fill={C.camisaDetalhe} />
+            )}
           </>
         )}
         {/* mão */}
@@ -487,7 +527,7 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
 }) => {
   const A = useA();
   const C = A.cores;
-  const terno = A.estampa === "terno";
+  const terno = A.estampa === "terno" || !!A.calca;
   const pe = paraDireita ? 1 : lado;
   const pele = sombra ? C.peleSombra : C.pele;
   return (
@@ -559,6 +599,12 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
         <path d="M 40 -790 L 150 -790 L 156 -690 Q 100 -676 60 -672 Z" fill={C.bermudaSombra} />
         <rect x={-152} y={-800} width={304} height={26} rx={6} fill={C.bermudaSombra} />
         </g>
+        {useA().mochila && (vista === "perfil" || vista === "tresQuartos") && (
+          <g transform={`scale(${sx},1)`}>
+            <rect x={-250} y={-1150} width={150} height={320} rx={50} fill={useA().mochila} />
+            <rect x={-240} y={-960} width={100} height={110} rx={30} fill="#000" opacity={0.2} />
+          </g>
+        )}
         {/* braço de trás (direita da tela) */}
         <g transform={`translate(${ombroX},-1150)`}>
           <Braco lado={1} ombro={P.bracoD} cotovelo={P.antebracoD} sombra />
@@ -613,6 +659,42 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
             <rect x={-118} y={-1104} width={64} height={10} rx={3} fill={C.camisaDetalhe} />
           </g>
         )}
+        </g>
+        {/* figurantes: moletom (capuz, cordão, bolso canguru), camisa (gola e botões), alças da mochila */}
+        <g transform={`scale(${sx},1)`}>
+          {useA().roupa === "moletom" && !costas && (
+            <g>
+              <path d="M -110 -1200 Q 0 -1150 110 -1200 Q 120 -1150 80 -1130 Q 0 -1100 -80 -1130 Q -120 -1150 -110 -1200 Z" fill={C.camisaSombra} />
+              <path d="M -24 -1132 L -30 -1040 M 24 -1132 L 30 -1040" stroke="#F2F2EE" strokeWidth={9} strokeLinecap="round" />
+              <path d="M -100 -930 L 100 -930 L 120 -820 L -120 -820 Z" fill={C.camisaSombra} />
+              <path d="M -100 -930 L 100 -930" stroke={C.camisaDetalhe} strokeWidth={6} />
+            </g>
+          )}
+          {useA().roupa === "moletom" && costas && (
+            <path d="M -130 -1200 Q 0 -1220 130 -1200 Q 140 -1080 0 -1040 Q -140 -1080 -130 -1200 Z" fill={C.camisaSombra} />
+          )}
+          {useA().roupa === "camisa" && !costas && (
+            <g>
+              <path d="M -66 -1190 L -10 -1130 L -20 -1180 Z M 66 -1190 L 10 -1130 L 20 -1180 Z" fill={C.camisaDetalhe} />
+              <path d="M 0 -1140 L 0 -790" stroke={C.camisaDetalhe} strokeWidth={6} />
+              {[-1080, -1000, -920, -840].map((y) => (
+                <circle key={y} cx={0} cy={y} r={8} fill={C.camisaDetalhe} />
+              ))}
+            </g>
+          )}
+          {useA().mochila && !costas && vista !== "perfil" && (
+            <g fill={useA().mochila}>
+              <path d="M -120 -1180 L -84 -1180 L -96 -900 L -128 -900 Z" />
+              <path d="M 84 -1180 L 120 -1180 L 128 -900 L 96 -900 Z" />
+            </g>
+          )}
+          {useA().mochila && costas && (
+            <g>
+              <rect x={-130} y={-1150} width={260} height={330} rx={60} fill={useA().mochila} />
+              <rect x={-100} y={-960} width={200} height={110} rx={30} fill="#000" opacity={0.2} />
+              <path d="M -60 -1150 Q 0 -1200 60 -1150" stroke="#000" strokeWidth={14} fill="none" opacity={0.35} />
+            </g>
+          )}
         </g>
         {/* braço da frente (esquerda da tela) */}
         <g transform={`translate(${-ombroX},-1150)`}>

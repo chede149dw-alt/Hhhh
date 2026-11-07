@@ -5,7 +5,8 @@ import { useThree } from "@react-three/fiber";
 import { AbsoluteFill } from "remotion";
 import { projetar, Cam } from "./Rua3D";
 import { Vivo, lerp } from "../episodios/comum";
-import { Expressao, Pose, Vista } from "../personagens/Chede";
+import { Aparencia, AparenciaCtx, Expressao, Pose, Vista } from "../personagens/Chede";
+import { andar, conversar, figurante } from "../personagens/Figurantes";
 import { LuzCena } from "../estilo2/TesteEstilo2";
 
 // Kit do visual 2.0 (referências 4 e 5): cenário 3D de verdade + personagens 2D recortados dentro dele.
@@ -151,6 +152,8 @@ export type Ator = {
   extra?: (s: number) => React.ReactNode; // desenho extra no espaço do personagem (já escalado)
   envolver?: (n: React.ReactNode, s: number) => React.ReactNode; // ex.: Rastro, alguém nas costas
   corte?: number; // altura (m) abaixo da qual o personagem some — fica "atrás" de mesa/carteira
+  aparencia?: Aparencia; // figurante (usa o rig do Chede com outra aparência)
+  dir?: [number, number]; // andando nessa direção (x, z): vira sozinho para o lado certo da tela
   tremor?: number; // px de tremida
 };
 const ALTURA_RIG = 1500;
@@ -186,19 +189,34 @@ export const Atores: React.FC<{ cam: Cam; clima: Clima; atores: Ator[]; id: stri
   const L = CLIMAS[clima].luz2D;
   const lista = atores
     .map((a) => ({ a, pe: projetarP(cam, [a.x, a.y ?? 0, a.z]) }))
-    .filter((o) => o.pe.pxPorMetro > 0)
+    .filter((o) => o.pe.pxPorMetro > 0 && !(o.a.aparencia && o.pe.pxPorMetro > 1920 / (2 * Math.tan(((cam.fov ?? 50) * Math.PI) / 360) * 2.5)))
     .sort((m, n) => m.pe.pxPorMetro - n.pe.pxPorMetro);
   return (
     <g>
       {lista.map(({ a }) =>
-        a.sombra === false ? null : <SombraChao key={`s${a.quem}${a.x}${a.z}`} cam={cam} clima={clima} x={a.x} z={a.z} />,
+        a.sombra === false || a.corte !== undefined || (a.y ?? 0) > 0.05 ? null : <SombraChao key={`s${a.quem}${a.x}${a.z}`} cam={cam} clima={clima} x={a.x} z={a.z} />,
       )}
+      <defs>
+        {lista.map(({ a }, k) =>
+          a.corte === undefined ? null : (
+            <clipPath key={k} id={`${id}c${k}`}>
+              <rect x={-4000} y={-6000} width={9000} height={6000 + projetarP(cam, [a.x, a.corte, a.z]).y} />
+            </clipPath>
+          ),
+        )}
+      </defs>
       <LuzCena id={id} ativo={luz} amb={L.amb} ambForca={L.ambForca} luz={{ x: L.x, y: L.y, raio: 2600, cor: L.cor, forca: L.forca }}>
-        {lista.map(({ a, pe }) => {
+        {lista.map(({ a, pe }, k) => {
           const s = (pe.pxPorMetro * 1.75 * (a.escala ?? 1)) / ALTURA_RIG;
+          let esp = a.espelhar;
+          if (a.dir) {
+            const q = projetarP(cam, [a.x + a.dir[0] * 0.5, a.y ?? 0, a.z + a.dir[1] * 0.5]);
+            esp = q.x < pe.x;
+          }
+          const v = <Vivo quem={a.quem} x={0} y={0} s={s} vista={a.vista} expr={a.expr} pose={a.pose} espelhar={esp} semSombra parado={a.parado} />;
           const corpo = (
             <g>
-              <Vivo quem={a.quem} x={0} y={0} s={s} vista={a.vista} expr={a.expr} pose={a.pose} espelhar={a.espelhar} semSombra parado={a.parado} />
+              {a.aparencia ? <AparenciaCtx.Provider value={a.aparencia}>{v}</AparenciaCtx.Provider> : v}
               {a.extra?.(s)}
             </g>
           );
@@ -209,16 +227,9 @@ export const Atores: React.FC<{ cam: Cam; clima: Clima; atores: Ator[]; id: stri
             </g>
           );
           if (a.corte === undefined) return g;
-          const yc = projetarP(cam, [a.x, a.corte, a.z]).y;
-          const cid = `${id}c${a.quem}`;
           return (
-            <g key={`${a.quem}${a.x}${a.z}`}>
-              <defs>
-                <clipPath id={cid}>
-                  <rect x={-4000} y={-6000} width={9000} height={6000 + yc} />
-                </clipPath>
-              </defs>
-              <g clipPath={`url(#${cid})`}>{g}</g>
+            <g key={`${a.quem}${a.x}${a.z}`} clipPath={`url(#${id}c${k})`}>
+              {g}
             </g>
           );
         })}
@@ -271,6 +282,7 @@ export const Plano3D: React.FC<{
 
 // Mesmo que Plano3D, mas com a rua 3D das partes anteriores (luz própria, manhã ou noite).
 import { Rua3D } from "./Rua3D";
+import { Nuvens } from "./Detalhes4";
 export const PlanoRua: React.FC<{
   cam: Cam;
   atores?: Ator[];
@@ -282,7 +294,10 @@ export const PlanoRua: React.FC<{
 }> = ({ cam, atores = [], desfoque = 0, id = "pr", frente, html, extra3D }) => (
   <AbsoluteFill style={{ background: "#000" }}>
     <AbsoluteFill style={{ filter: desfoque > 0.2 ? `blur(${desfoque}px)` : undefined }}>
-      <Rua3D cam={cam} sol={1.05}>{extra3D}</Rua3D>
+      <Rua3D cam={cam} sol={1.05}>
+        {extra3D}
+        <Nuvens n={9} y={55} z={-190} />
+      </Rua3D>
     </AbsoluteFill>
     <Sobre>
       <Atores cam={cam} clima="manha" atores={atores} id={id} />
@@ -291,6 +306,50 @@ export const PlanoRua: React.FC<{
     {html}
   </AbsoluteFill>
 );
+
+// Multidão de figurantes 2D: parados, conversando ou andando (determinístico pela semente).
+export const multidao = (o: {
+  semente: number;
+  n: number;
+  area: [number, number, number, number]; // x0, x1, z0, z1
+  f: number;
+  livre?: (x: number, z: number) => boolean; // true = não colocar ali
+  andando?: number; // fração que anda (0..1)
+  dir?: [number, number]; // direção principal de quem anda
+  vel?: number; // m por quadro
+  sentado?: { y: number; corte: number }; // sentados atrás de mesas
+}): Ator[] => {
+  const out: Ator[] = [];
+  let k = 0;
+  while (out.length < o.n && k < o.n * 6) {
+    const i = o.semente * 1000 + k++;
+    let x = o.area[0] + rnd(i) * (o.area[1] - o.area[0]);
+    let z = o.area[2] + rnd(i + 0.5) * (o.area[3] - o.area[2]);
+    if (o.livre && o.livre(x, z)) continue;
+    const anda = !o.sentado && rnd(i + 0.7) < (o.andando ?? 0.3);
+    const ap = figurante(i);
+    if (anda) {
+      const sentido = rnd(i + 0.9) < 0.5 ? 1 : -1;
+      const d: [number, number] = o.dir ? [o.dir[0] * sentido, o.dir[1] * sentido] : [sentido, 0];
+      const v = (o.vel ?? 0.025) * (0.8 + rnd(i + 1.1) * 0.4);
+      const w = o.area[1] - o.area[0];
+      const h = o.area[3] - o.area[2];
+      x = o.area[0] + ((((x - o.area[0] + d[0] * v * o.f) % w) + w) % w);
+      z = o.area[2] + ((((z - o.area[2] + d[1] * v * o.f) % h) + h) % h);
+      out.push({ quem: "chede", aparencia: ap, x, z, vista: "perfil", dir: d, pose: andar(o.f + rnd(i) * 50), expr: "neutro" });
+    } else {
+      const fala = rnd(i + 1.3) < 0.6;
+      out.push({
+        quem: "chede", aparencia: ap, x, z, y: o.sentado?.y, corte: o.sentado?.corte,
+        vista: rnd(i + 1.5) < 0.5 ? "tresQuartos" : rnd(i + 1.6) < 0.5 ? "frente" : "costas",
+        espelhar: rnd(i + 1.7) < 0.5,
+        expr: rnd(i + 1.8) < 0.5 ? "feliz" : rnd(i + 1.9) < 0.3 ? "rindo" : "neutro",
+        pose: fala ? conversar(o.f, i) : { olharX: rnd(i + 2) * 2 - 1 },
+      });
+    }
+  }
+  return out;
+};
 
 export const rnd = (i: number) => {
   const s = Math.sin(i * 127.1 + 311.7) * 43758.5453;

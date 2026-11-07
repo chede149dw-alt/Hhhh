@@ -31,7 +31,7 @@ export const LuzCena: React.FC<{
           <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0" />
         </filter>
         <mask id={`${id}m`} maskUnits="userSpaceOnUse" x={-3000} y={-3000} width={8000} height={9000}>
-          <g filter={`url(#${id}b)`}>{children}</g>
+          <use href={`#${id}g`} filter={`url(#${id}b)`} />
         </mask>
         <radialGradient id={`${id}r`} gradientUnits="userSpaceOnUse" cx={luz.x} cy={luz.y} r={luz.raio}>
           <stop offset={0} stopColor={luz.cor} stopOpacity={luz.forca} />
@@ -39,7 +39,7 @@ export const LuzCena: React.FC<{
           <stop offset={1} stopColor={luz.cor} stopOpacity={0} />
         </radialGradient>
       </defs>
-      {children}
+      <g id={`${id}g`}>{children}</g>
       <rect x={-3000} y={-3000} width={8000} height={9000} fill={amb} opacity={ambForca} mask={`url(#${id}m)`} style={{ mixBlendMode: "multiply" }} />
       <rect x={-3000} y={-3000} width={8000} height={9000} fill={`url(#${id}r)`} mask={`url(#${id}m)`} style={{ mixBlendMode: "overlay" }} />
       <rect x={-3000} y={-3000} width={8000} height={9000} fill={`url(#${id}r)`} opacity={0.18} mask={`url(#${id}m)`} style={{ mixBlendMode: "screen" }} />
