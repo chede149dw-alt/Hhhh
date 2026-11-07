@@ -3,6 +3,8 @@ import { AbsoluteFill, Composition, Still } from "remotion";
 import { Chede, Expressao, Pose } from "./personagens/Chede";
 import { Quarto } from "./cenarios/Quarto";
 import { FichaChede } from "./personagens/FichaChede";
+import { Teste3D } from "./cenarios3d/Teste3D";
+import { TesteKaik3D } from "./cenarios3d/TesteKaik3D";
 import { FotoPerfil } from "./personagens/FotoPerfil";
 import { DURACAO, FPS, Sumir1 } from "./episodios/sumir1/Sumir1";
 import { DURACAO_VEL1, Velocidade1 } from "./episodios/velocidade1/Velocidade1";
@@ -49,6 +51,8 @@ export const RemotionRoot: React.FC = () => (
   <>
     <Composition id="Velocidade1" component={Velocidade1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_VEL1} />
     <Composition id="Sumir1" component={Sumir1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO} />
+    <Composition id="TesteKaik3D" component={TesteKaik3D} width={1080} height={1920} fps={30} durationInFrames={120} />
+    <Composition id="Teste3D" component={Teste3D} width={1080} height={1920} fps={30} durationInFrames={90} defaultProps={{ modo: "baixo" as const }} />
     <Still id="FotoPerfil" component={FotoPerfil} width={1080} height={1080} />
     <Still id="FichaChede" component={FichaChede} width={2400} height={2700} />
     <Still id="FichaKaik" component={FichaChede} width={2400} height={2700} defaultProps={{ quem: "kaik" as const }} />

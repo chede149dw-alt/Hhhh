@@ -23,6 +23,9 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   - ✅ **Final pronto**: `prontos/parte-2-kaik-velocidade.mp4` (67 s, 1080x1920) + `prontos/parte-2-kaik-velocidade-capa.png`
     (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/parte-2-kaik-velocidade.mp4 --concurrency=3 --timeout=240000 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
 
+- ⏳ **Refazer a Parte 2 (Kaik) no estilo da referência 2** (3D + raios + movimento). Teste de estilo aprovado?
+  → `previas/teste-estilo-3d-kaik.mp4`. Análise: `referencias/analise-video-referencia-2.md`.
+
 ## Próximos passos
 1. Postar a Parte 2 (Kaik). Depois: **Parte 3** — quem está vigiando os dois (e quem segurou a mão do Chede).
 2. Depois: Parte 2 do Chede ("quem mais está nesse lugar?"), seguindo `roteiros/universo.md`.

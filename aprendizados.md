@@ -56,3 +56,8 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Render final travando por tempo** (quadros pesados: muitas cópias com blur em resolução cheia):
   a causa foi o desfoque (feGaussianBlur) nas cópias do `Rastro`; removido. Usar `--timeout=120000`.
   Testar antes um trecho curto: `--frames=0-120`.
+- **Novo padrão visual (referência 2)**: cenários de rua em **3D de verdade** (`estudio/src/cenarios3d/Rua3D.tsx`,
+  three.js via @remotion/three) com o personagem 2D por cima (`projetar()` dá posição e escala na tela),
+  poder com **raios ramificados + brilho + faíscas** (`efeitos/Eletricidade.tsx`), corrida com passada longa
+  (`personagens/poses.ts`) e câmera colada no personagem. Objetos sempre presos à mão que se mexe.
+- **Render com 3D**: usar `--gl=swangle` (os outros modos não criam WebGL aqui). ~2 s por quadro.
