@@ -12,6 +12,8 @@ import { DURACAO_VIG3, Vigiados3 } from "./episodios/vigiados3/Vigiados3";
 import { Fenda } from "./efeitos/Fenda";
 import { DURACAO_TESTE2, TesteEstilo2 } from "./estilo2/TesteEstilo2";
 import { DURACAO_HIBRIDO, TesteHibrido } from "./estilo2/TesteHibrido";
+import { Vitrine4 } from "./estilo2/Vitrine4";
+import { DURACAO_LIM4, Limites4 } from "./episodios/limites4/Limites4";
 import { FeixeDeLuz, Gradacao, Grao, Legenda, Poeira } from "./estilo/Acabamento";
 
 const FundoNeutro: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -56,6 +58,8 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Vigiados3" component={Vigiados3} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_VIG3} />
     <Composition id="TesteEstilo2" component={TesteEstilo2} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_TESTE2} />
     <Composition id="TesteHibrido" component={TesteHibrido} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_HIBRIDO} />
+    <Composition id="Vitrine4" component={Vitrine4} width={1080} height={1920} fps={FPS} durationInFrames={4} />
+    <Composition id="Limites4" component={Limites4} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_LIM4} />
     <Composition id="Sumir1" component={Sumir1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO} />
     <Composition id="TesteKaik3D" component={TesteKaik3D} width={1080} height={1920} fps={30} durationInFrames={120} />
     <Composition id="Teste3D" component={Teste3D} width={1080} height={1920} fps={30} durationInFrames={90} defaultProps={{ modo: "baixo" as const }} />
