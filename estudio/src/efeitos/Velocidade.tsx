@@ -13,7 +13,6 @@ export const Rastro: React.FC<{ dx: number; dy?: number; n?: number; children: R
     <defs>
       <filter id="tintaCiano" x="-20%" y="-20%" width="140%" height="140%">
         <feColorMatrix type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.85  0 0 0 0 1  0 0 0 1 0" />
-        <feGaussianBlur stdDeviation={6} />
       </filter>
     </defs>
     {Array.from({ length: n }).map((_, i) => (
