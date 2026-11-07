@@ -18,12 +18,12 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   `estudio/src/episodios/velocidade1/Velocidade1.tsx`.
   - Prévia com **voz provisória** (robótica): `previas/serie-velocidade-parte-1-previa-voz-provisoria.mp4`
   - Capa: `previas/serie-velocidade-parte-1-capa.png` · Descrição: `roteiros/serie-velocidade-parte-1-post.md`
-  - ⏳ Falta a **voz final no ElevenLabs** (estava ocupado). Depois: gerar a voz (mesma voz Witalo Guimarães,
-    texto = `estudio/src/episodios/velocidade1/falas.json`), salvar em `estudio/public/velocidade1/narracao.mp3`,
-    rodar `scripts/alinhar.py` e `scripts/gerar_trilha_velocidade1.py`, renderizar o final em `prontos/`.
+  - ✅ Prévia aprovada ("ficou top"). Voz final ElevenLabs (Witalo Guimarães, 66 s): `audio/serie-velocidade-parte-1-narracao.mp3`
+  - ⏳ Render final → `prontos/serie-velocidade-parte-1.mp4` + `prontos/serie-velocidade-parte-1-capa.png`
+    (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/serie-velocidade-parte-1.mp4 --concurrency=4 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
 
 ## Próximos passos
-1. Voz final da série de velocidade → render final em `prontos/` (ver acima).
+1. Postar a Parte 1 do Kaik. Depois decidir: Parte 2 do Kaik (quem está vigiando) ou Parte 2 do Chede (quem segurou a mão).
 2. Depois: Parte 2 do Chede ("quem mais está nesse lugar?"), seguindo `roteiros/universo.md`.
 3. Criar a skill da série (Passo 7 do ebook).
 

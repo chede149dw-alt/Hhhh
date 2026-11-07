@@ -49,3 +49,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Se o ElevenLabs estiver ocupado**: fazer a prévia com `espeak-ng -v pt-br -s 165` e trocar a voz depois;
   as cenas se reajustam sozinhas porque o tempo vem do alinhamento (`timing.json`).
 - **Corrida de perfil**: usar a função `corrida(f)` (pernas e braços alternando) + `Rastro` ciano + `LinhasVento`.
+- **Prévia do Kaik aprovada** ("ficou top") → voz final ElevenLabs e render final em `prontos/`.
