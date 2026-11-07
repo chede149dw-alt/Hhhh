@@ -4,7 +4,7 @@
 - **Modelo:** A (etapas) · **Duração alvo:** ~64 s (≈175 palavras)
 - **Capa:** "E SE VOCÊ ACORDASSE" / "COM SUPER **VELOCIDADE**?" / "PARTE 1" (palavra-chave em ciano brilhante)
 - **Liga com:** final da Parte 1 do Chede (a mão presa na fenda)
-- **Status:** rascunho, aguardando aprovação
+- **Status:** aprovado pelo usuário
 
 | Tempo | Narração | Cena |
 |---|---|---|

@@ -1,13 +1,18 @@
 import React from "react";
 
 // Quarto do Chede. Formas chapadas; a luz vem da janela à esquerda.
-export const Quarto: React.FC<{ desfoque?: number; manha?: boolean }> = ({ desfoque = 7, manha = true }) => (
+export const Quarto: React.FC<{ desfoque?: number; manha?: boolean; parede?: [string, string]; doKaik?: boolean }> = ({
+  desfoque = 7,
+  manha = true,
+  parede = ["#6F8C86", "#4C6662"],
+  doKaik = false,
+}) => (
   <div style={{ position: "absolute", inset: 0, filter: `blur(${desfoque}px)` }}>
     <svg viewBox="0 0 1080 1920" width={1080} height={1920}>
       <defs>
         <linearGradient id="parede" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#6F8C86" />
-          <stop offset="1" stopColor="#4C6662" />
+          <stop offset="0" stopColor={parede[0]} />
+          <stop offset="1" stopColor={parede[1]} />
         </linearGradient>
         <linearGradient id="chao" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#8A6446" />
@@ -27,11 +32,23 @@ export const Quarto: React.FC<{ desfoque?: number; manha?: boolean }> = ({ desfo
       <rect x={-40} y={262} width={256} height={516} fill="url(#janelaLuz)" />
       <rect x={80} y={262} width={14} height={516} fill="#E8E1D2" />
       <rect x={-40} y={512} width={256} height={14} fill="#E8E1D2" />
-      {/* pôster (planeta) */}
-      <rect x={720} y={300} width={250} height={340} rx={6} fill="#22232B" />
-      <circle cx={845} cy={440} r={80} fill="#F07C28" />
-      <ellipse cx={845} cy={440} rx={130} ry={26} fill="none" stroke="#F3E5C8" strokeWidth={8} transform="rotate(-18 845 440)" />
-      <rect x={760} y={570} width={170} height={14} rx={7} fill="#F3E5C8" opacity={0.7} />
+      {doKaik ? (
+        <g>
+          {/* pôster (bola de futebol) */}
+          <rect x={720} y={300} width={250} height={340} rx={6} fill="#F2F4F8" />
+          <circle cx={845} cy={440} r={80} fill="#fff" stroke="#22232B" strokeWidth={8} />
+          <path d="M 845 410 L 873 430 L 862 462 L 828 462 L 817 430 Z" fill="#22232B" />
+          <rect x={760} y={570} width={170} height={14} rx={7} fill="#2F6FD6" />
+        </g>
+      ) : (
+        <g>
+          {/* pôster (planeta) */}
+          <rect x={720} y={300} width={250} height={340} rx={6} fill="#22232B" />
+          <circle cx={845} cy={440} r={80} fill="#F07C28" />
+          <ellipse cx={845} cy={440} rx={130} ry={26} fill="none" stroke="#F3E5C8" strokeWidth={8} transform="rotate(-18 845 440)" />
+          <rect x={760} y={570} width={170} height={14} rx={7} fill="#F3E5C8" opacity={0.7} />
+        </g>
+      )}
       {/* prateleira */}
       <rect x={640} y={820} width={360} height={18} fill="#6B4A32" />
       <rect x={670} y={740} width={36} height={80} fill="#D9C8A4" />

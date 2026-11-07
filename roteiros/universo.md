@@ -6,7 +6,7 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 | Nome | Quem é | Poder | Ficha |
 |---|---|---|---|
 | **Chede** | 23 anos, pele morena, cabelo preto ondulado, camiseta laranja, bermuda preta. Corajoso, às vezes inseguro, muito esperto. | **Fenda dimensional** na palma da mão: some com as coisas, guarda tudo num "outro lugar" e devolve. A mão pode ficar transparente e atravessar objetos. | `personagens/chede/` (oficial) |
-| **Kaik** | Melhor amigo do Chede. Pele clara, cabelo preto cacheado, camiseta azul com faixa branca, bermuda vermelha. | **Super velocidade**. Rastro ciano/branco (nunca raio amarelo). | `personagens/kaik/` (em teste) |
+| **Kaik** | Melhor amigo do Chede. Pele clara, cabelo preto cacheado, camiseta azul com faixa branca, bermuda vermelha. | **Super velocidade**. Rastro ciano/branco (nunca raio amarelo). | `personagens/kaik/` (oficial) |
 
 ## Série 1 · "E se você acordasse podendo sumir com qualquer coisa?" (Chede)
 **Parte 1: publicada** (`prontos/serie-sumir-parte-1.mp4`)
@@ -23,7 +23,7 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 - O que mais está guardado lá que não é dele?
 
 ## Série 2 · "E se você acordasse com super velocidade?" (Kaik)
-**Parte 1: roteiro escrito** (`roteiros/serie-velocidade-parte-1.md`), aguardando aprovação.
+**Parte 1: roteiro aprovado** (`roteiros/serie-velocidade-parte-1.md`).
 - Acontece **no mesmo momento** do final da Parte 1 do Chede: o Kaik chega correndo e puxa o Chede de volta da fenda.
 - Os dois descobrem que os dois têm poderes.
 - Alguém do prédio da frente filmou tudo.

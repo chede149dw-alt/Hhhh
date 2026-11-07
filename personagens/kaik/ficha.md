@@ -1,4 +1,6 @@
-# Kaik (ficha, versão de teste: aguardando aprovação)
+# Kaik (ficha oficial, aprovada)
+
+> Regra obrigatória: em todo vídeo o Kaik segue esta ficha.
 
 | Item | Definição |
 |---|---|

@@ -133,3 +133,54 @@ export const Papel: React.FC<{ r?: number }> = ({ r = 0 }) => (
     ))}
   </g>
 );
+
+export const Escova: React.FC = () => (
+  <g>
+    <rect x={-12} y={-150} width={24} height={260} rx={12} fill="#59D8FF" />
+    <rect x={-18} y={-210} width={36} height={70} rx={8} fill="#F2F4F8" />
+    <rect x={-18} y={-210} width={36} height={20} fill="#BFF4FF" />
+  </g>
+);
+
+export const Tenis: React.FC<{ fumaca?: number }> = ({ fumaca = 0 }) => (
+  <g>
+    <path d="M -150 -60 Q -150 -120 -60 -116 L 70 -104 Q 190 -86 200 0 L -160 0 Z" fill="#EFEDE8" />
+    <path d="M -60 -116 L 70 -104 L 40 -60 L -80 -70 Z" fill="#2F6FD6" />
+    <rect x={-170} y={-14} width={384} height={36} rx={14} fill="#2A2A2E" />
+    {fumaca > 0 &&
+      [0, 1, 2, 3].map((i) => (
+        <circle key={i} cx={-120 + i * 90} cy={40 - fumaca * (80 + i * 30)} r={40 + fumaca * 50} fill="#D9D9D9" opacity={0.55 * (1 - fumaca * 0.6)} />
+      ))}
+  </g>
+);
+
+export const Geladeira: React.FC<{ comida?: number }> = ({ comida = 1 }) => (
+  <g>
+    <rect x={-260} y={-520} width={520} height={1040} rx={24} fill="#E9ECEE" />
+    <rect x={-240} y={-500} width={480} height={1000} rx={14} fill="#FFF8E8" />
+    {[-260, 0, 260].map((y) => (
+      <rect key={y} x={-240} y={y} width={480} height={10} fill="#D0D6DA" />
+    ))}
+    <g opacity={comida}>
+      <rect x={-200} y={-400} width={90} height={140} rx={10} fill="#F2F2F2" stroke="#2F6FD6" strokeWidth={8} />
+      <circle cx={-20} cy={-320} r={60} fill="#D9483B" />
+      <rect x={90} y={-380} width={110} height={120} rx={14} fill="#F2C14E" />
+      <ellipse cx={-120} cy={-60} rx={90} ry={50} fill="#B5651D" />
+      <rect x={20} y={-120} width={170} height={110} rx={10} fill="#6B8E23" />
+      <circle cx={-140} cy={200} r={50} fill="#F28C28" />
+      <circle cx={-40} cy={210} r={44} fill="#F28C28" />
+      <rect x={60} y={150} width={140} height={100} rx={12} fill="#E9E2CF" />
+    </g>
+  </g>
+);
+
+export const Passaro: React.FC = () => (
+  <g>
+    <ellipse rx={60} ry={34} fill="#4A4F5C" />
+    <circle cx={50} cy={-24} r={26} fill="#4A4F5C" />
+    <path d="M 74 -24 L 100 -16 L 74 -10 Z" fill="#F2B33D" />
+    <circle cx={58} cy={-30} r={5} fill="#fff" />
+    <path d="M -20 -10 Q -60 -110 -110 -90 Q -60 -40 -10 10 Z" fill="#3A3F4A" />
+    <path d="M -60 0 L -120 -20 L -110 20 Z" fill="#3A3F4A" />
+  </g>
+);

@@ -5,6 +5,7 @@ import { Quarto } from "./cenarios/Quarto";
 import { FichaChede } from "./personagens/FichaChede";
 import { FotoPerfil } from "./personagens/FotoPerfil";
 import { DURACAO, FPS, Sumir1 } from "./episodios/sumir1/Sumir1";
+import { DURACAO_VEL1, Velocidade1 } from "./episodios/velocidade1/Velocidade1";
 import { Fenda } from "./efeitos/Fenda";
 import { FeixeDeLuz, Gradacao, Grao, Legenda, Poeira } from "./estilo/Acabamento";
 
@@ -46,6 +47,7 @@ export const FrameEstilo: React.FC<{ pose: Pose; expressao: Expressao }> = ({ po
 
 export const RemotionRoot: React.FC = () => (
   <>
+    <Composition id="Velocidade1" component={Velocidade1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO_VEL1} />
     <Composition id="Sumir1" component={Sumir1} width={1080} height={1920} fps={FPS} durationInFrames={DURACAO} />
     <Still id="FotoPerfil" component={FotoPerfil} width={1080} height={1080} />
     <Still id="FichaChede" component={FichaChede} width={2400} height={2700} />

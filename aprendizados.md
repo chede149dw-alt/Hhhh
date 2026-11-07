@@ -45,3 +45,7 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Personagens novos usam o mesmo boneco** (`Chede.tsx`) com outra aparência (`AparenciaCtx`): cores,
   cabelo e estampa. Motivo: mesmo estilo e proporções entre todos os personagens do canal.
 - **Séries se cruzam**: manter `roteiros/universo.md` atualizado a cada episódio (o que aconteceu e o que ficou em aberto).
+- **Kaik aprovado** (versão oficial) e **roteiro da Parte 1 da série de velocidade aprovado**. Não alterar o texto.
+- **Se o ElevenLabs estiver ocupado**: fazer a prévia com `espeak-ng -v pt-br -s 165` e trocar a voz depois;
+  as cenas se reajustam sozinhas porque o tempo vem do alinhamento (`timing.json`).
+- **Corrida de perfil**: usar a função `corrida(f)` (pernas e braços alternando) + `Rastro` ciano + `LinhasVento`.
