@@ -5,7 +5,7 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 ## Personagens
 | Nome | Quem é | Poder | Ficha |
 |---|---|---|---|
-| **Chede** | 23 anos, pele morena, cabelo preto ondulado, camiseta laranja, bermuda preta. Corajoso, às vezes inseguro, muito esperto. | **Fenda dimensional** na palma da mão: some com as coisas, guarda tudo num "outro lugar" e devolve. A mão pode ficar transparente e atravessar objetos. | `personagens/chede/` (oficial) |
+| **Chede** | 23 anos, faz faculdade (com o Kaik), pele morena, cabelo preto ondulado, camiseta laranja, bermuda preta. Corajoso, às vezes inseguro, muito esperto. | **Fenda dimensional** na palma da mão: some com as coisas, guarda tudo num "outro lugar" e devolve. A mão pode ficar transparente e atravessar objetos. | `personagens/chede/` (oficial) |
 | **Kaik** | Melhor amigo do Chede. Pele clara, cabelo preto cacheado, camiseta azul com faixa branca, bermuda vermelha. | **Super velocidade**. Rastro ciano/branco (nunca raio amarelo). | `personagens/kaik/` (oficial) |
 | **O Regente** (vilão) | Otávio Regis, 35 anos, barba preta aparada, cabelo preto lambido para trás, terno grafite, gravata âmbar. Manda no governo por dentro. | **Controle mental**: olhos e ondas âmbar; controlados ficam com anel âmbar na íris. | `personagens/regente/` |
 

@@ -110,3 +110,9 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   Cenário 3D de verdade com sombra e neblina, personagem 2D recortado dentro (com sombra no chão e luz da cena),
   câmera 3D sempre se movendo suave (voo do alto, descida do céu, giro em volta) e fundo desfocado.
   Ver `referencias/analise-video-referencia-4-5.md`.
+- **Chede e Kaik estão na faculdade** (usuário, 07/11). Motivo: o Chede tem 23 anos — escola não combinava.
+- **Roteiro da Parte 4 aprovado** (07/11) com pedidos do usuário: **testes de ataque criativos** — o Kaik corre em
+  círculo para fazer um **tornado**; o Chede pede pro Kaik jogar pedras e tenta abrir a fenda **só com o olhar**, sem as
+  mãos. Pode acrescentar trechinhos se precisar. Motivo: o usuário gosta de ver os poderes sendo explorados de jeitos
+  novos, sempre com lógica e custo (tontura, olho vermelho de esforço).
+- **Qualidade acima de prazo** (usuário, 07/11): "não importa se demorar" — fazer no nível das referências 4 e 5.

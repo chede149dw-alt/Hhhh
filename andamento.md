@@ -50,3 +50,10 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
 - Referências 4 e 5 (locais, fora do Git). Estilo é 2D — luz da cena tingindo o personagem, fundo desfocado,
   neblina, câmera suave. Teste em `estudio/src/estilo2/TesteEstilo2.tsx` → `previas/teste-visual-2.mp4`.
   Personagens oficiais NÃO foram alterados. Aguardando aprovação do usuário para levar aos episódios.
+
+## Parte 4 — "E se você testasse o limite do seu poder?" (EM PRODUÇÃO)
+- Roteiro APROVADO: `roteiros/parte-4-limites.md` (36 falas, ~130 s; limite 2min15). Faculdade, tornado, fenda pelo olhar.
+- Visual: cenários 3D + personagens 2D (ver `referencias/analise-video-referencia-4-5.md`, testes em `estudio/src/estilo2/`).
+- Plano: (1) cenários 3D: rua manhã (Rua3D), faculdade (portão, anfiteatro, cantina), campo baldio pôr do sol;
+  (2) efeitos: tornado, fenda pelo olhar, pedras, marcas de mão, infográficos; (3) episódio `estudio/src/episodios/limites4/`;
+  (4) voz provisória espeak → prévia em `previas/` → aprovação → voz ElevenLabs → final em `prontos/` + capa + post.
