@@ -98,3 +98,9 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   com: mão tremendo + batida de coração, lembrança em cores lavadas/roxo, rosto com medo e sombras de mãos nas bordas.
   Motivo: o que aconteceu num episódio tem que pesar nos próximos; deixa o personagem humano e a fenda assustadora.
 - **Parte 3 aprovada para a versão final** (07/11), já com o trecho do medo do Chede.
+- **O estilo das referências 4 e 5 é 2D, NÃO é 3D.** Correção do usuário (07/11): tentei dar "volume 3D" aos
+  personagens (filtro de relevo/brilho em cada parte) e o usuário reprovou — ficou plástico e estragou os personagens.
+  Desfeito. O que os exemplos fazem é 2D chapado (formas simples, sem contorno) e a "profundidade" vem da cena:
+  luz do ambiente tingindo o personagem (azul à noite, laranja no pôr do sol), sombra grande e suave de um lado,
+  fundo desfocado (profundidade de campo), neblina/atmosfera e câmera lenta e suave. Motivo: o usuário quer manter
+  o desenho 2D dos personagens; melhorar a qualidade sem mudar a natureza do traço.
