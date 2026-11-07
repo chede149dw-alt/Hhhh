@@ -12,11 +12,15 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   - Texto do post: `roteiros/serie-sumir-parte-1-post.md`
 - ✅ **Parte 1 aprovada e pronta**: `prontos/serie-sumir-parte-1.mp4` (66 s, 1080x1920) + capa `prontos/serie-sumir-parte-1-capa.png`
 - ✅ Foto de perfil do Instagram: `prontos/foto-perfil-instagram.png`
-- ⏳ Usuário vai começar a postar no Instagram
+- ✅ Descrição do Instagram da Parte 1: `roteiros/serie-sumir-parte-1-post.md`
+- ⏸️ **Série do Chede pausada** depois da Parte 1. Tudo o que aconteceu e o que ficou em aberto está em `roteiros/universo.md`.
+- ⏳ **Série 2 (Kaik, super velocidade)**: ficha de teste em `personagens/kaik/` e roteiro da Parte 1 em
+  `roteiros/serie-velocidade-parte-1.md`, aguardando aprovação dos dois.
 
 ## Próximos passos
-1. Criar a skill da série (Passo 7 do ebook).
-2. Roteiro da Parte 2 ("quem mais está nesse lugar?") → aprovação → vídeo.
+1. Aprovar o Kaik e o roteiro → narração → vídeo → capa + descrição.
+2. Depois: Parte 2 do Chede ("quem mais está nesse lugar?"), seguindo `roteiros/universo.md`.
+3. Criar a skill da série (Passo 7 do ebook).
 
 ## Comandos para retomar
 ```bash

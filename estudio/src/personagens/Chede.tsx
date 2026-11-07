@@ -53,7 +53,11 @@ export type Pose = {
   respiracao?: number; // 0..1
 };
 
-const C = CORES_CHEDE;
+export type Cores = typeof CORES_CHEDE;
+export type Aparencia = { cores: Cores; cabelo: "ondulado" | "cacheado"; estampa: "bolso" | "faixa" };
+export const APARENCIA_CHEDE: Aparencia = { cores: CORES_CHEDE, cabelo: "ondulado", estampa: "bolso" };
+export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
+const useA = () => React.useContext(AparenciaCtx);
 
 // ---------- Rosto ----------
 const Olho: React.FC<{
@@ -65,6 +69,7 @@ const Olho: React.FC<{
   lado: 1 | -1;
   semicerrado?: number;
 }> = ({ x, esp, piscar, ox, oy, lado, semicerrado = 0 }) => {
+  const C = useA().cores;
   const rx = 25 * esp;
   const ry = 29 * esp * (1 - piscar * 0.95);
   const fechamento = Math.min(1, semicerrado);
@@ -105,13 +110,17 @@ const Sobrancelha: React.FC<{ x: number; y: number; ang: number; lado: 1 | -1 }>
   y,
   ang,
   lado,
-}) => (
-  <g transform={`translate(${x},${y}) rotate(${-ang * lado})`}>
-    <rect x={-34} y={-10} width={68} height={20} rx={10} fill={C.cabelo} />
-  </g>
-);
+}) => {
+  const C = useA().cores;
+  return (
+    <g transform={`translate(${x},${y}) rotate(${-ang * lado})`}>
+      <rect x={-34} y={-10} width={68} height={20} rx={10} fill={C.cabelo} />
+    </g>
+  );
+};
 
 const Boca: React.FC<{ tipo: Expressao }> = ({ tipo }) => {
+  const C = useA().cores;
   switch (tipo) {
     case "feliz":
       return <path d="M -38 0 Q 0 34 38 0" stroke={C.boca} strokeWidth={9} fill="none" strokeLinecap="round" />;
@@ -158,6 +167,8 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
   pose,
   vista = "frente",
 }) => {
+  const A = useA();
+  const C = A.cores;
   const e = EXPRESSOES[expressao];
   const ox = pose.olharX ?? (vista === "frente" ? 0 : 0.6);
   const oy = pose.olharY ?? 0;
@@ -203,11 +214,23 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
         <g>
           {(perfil || tres) && <path d={perfil ? CABELO_NUCA_PERFIL : CABELO_NUCA_TRES} fill={C.cabelo} />}
           <g transform={`translate(${fx * 0.25},0)`}>
-            <path d={CABELO} fill={C.cabelo} />
-            <path d={CABELO_SOMBRA} fill={C.cabeloSombra} />
-            {MECHAS.map((d, i) => (
-              <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={7} fill="none" strokeLinecap="round" />
-            ))}
+            {A.cabelo === "cacheado" ? (
+              <>
+                <path d={CABELO_CACHEADO} fill={C.cabelo} />
+                <path d={CABELO_SOMBRA} fill={C.cabeloSombra} />
+                {CACHOS.map(([x, y], i) => (
+                  <path key={i} d={`M ${x - 14} ${y} a 14 14 0 1 1 14 14`} stroke={C.cabeloBrilho} strokeWidth={6} fill="none" strokeLinecap="round" />
+                ))}
+              </>
+            ) : (
+              <>
+                <path d={CABELO} fill={C.cabelo} />
+                <path d={CABELO_SOMBRA} fill={C.cabeloSombra} />
+                {MECHAS.map((d, i) => (
+                  <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={7} fill="none" strokeLinecap="round" />
+                ))}
+              </>
+            )}
           </g>
         </g>
       )}
@@ -261,6 +284,36 @@ const contorno = () => {
   return d + "Z";
 };
 const CABELO = contorno();
+
+// Cacheado (Kaik): mais volume em cima, cachos pequenos na franja.
+const contornoCacheado = () => {
+  const pts: string[] = [];
+  const n = 70;
+  for (let i = 0; i <= n; i++) {
+    const a = ((194 - (208 * i) / n) * Math.PI) / 180;
+    const R = 232 + 20 * Math.abs(Math.sin(i * 1.7));
+    const y = -Math.sin(a) * R * (Math.sin(a) > 0 ? 1.14 : 1) - 4;
+    pts.push(`${(Math.cos(a) * R).toFixed(1)} ${y.toFixed(1)}`);
+  }
+  let d = `M ${pts[0]} `;
+  for (let i = 1; i < pts.length; i++) d += `L ${pts[i]} `;
+  const fr: [number, number][] = [];
+  for (let i = 0; i <= 12; i++) fr.push([206 - i * 34.3, i % 2 ? -112 : -84]);
+  fr.push([-206, 10]);
+  for (let i = 0; i < fr.length - 1; i++) {
+    const [x1, y1] = fr[i];
+    const [x2, y2] = fr[i + 1];
+    d += `L ${x1} ${y1} Q ${(x1 + x2) / 2} ${(y1 + y2) / 2 + 22} ${x2} ${y2} `;
+  }
+  return d + "Z";
+};
+const CABELO_CACHEADO = contornoCacheado();
+const CACHOS: [number, number][] = [];
+for (let i = 0; i < 26; i++) {
+  const x = -170 + ((i * 67) % 340);
+  const y = -260 + Math.floor(i / 5) * 32 + ((i * 13) % 20);
+  if (Math.hypot(x, y + 60) < 220) CACHOS.push([x, y]);
+}
 const CABELO_SOMBRA =
   "M 120 -200 C 190 -160 230 -80 222 10 L 206 20 L 196 -60 C 180 -80 160 -90 150 -92 C 170 -130 160 -170 120 -200 Z";
 const CABELO_COSTAS =
@@ -284,6 +337,7 @@ const Braco: React.FC<{
   cotovelo: number;
   sombra?: boolean;
 }> = ({ lado, ombro, cotovelo, sombra }) => {
+  const C = useA().cores;
   const pele = sombra ? C.peleSombra : C.pele;
   const manga = sombra ? C.camisaSombra : C.camisa;
   return (
@@ -310,6 +364,7 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   sombra,
   paraDireita,
 }) => {
+  const C = useA().cores;
   const pe = paraDireita ? 1 : lado;
   const pele = sombra ? C.peleSombra : C.pele;
   return (
@@ -338,6 +393,7 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
   vista = "frente",
   semSombra,
 }) => {
+  const C = useA().cores;
   const sx = vista === "perfil" ? 0.58 : vista === "tresQuartos" ? 0.84 : 1;
   const ombroX = vista === "perfil" ? 20 : 150 * sx;
   const quadrilX = vista === "perfil" ? 16 : 62 * sx;
@@ -393,7 +449,13 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           <path d="M -62 -1188 Q 0 -1130 62 -1188" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
         )}
         {/* bolso */}
-        {(vista === "frente" || vista === "tresQuartos") && (
+        {useA().estampa === "faixa" && (
+          <g>
+            <rect x={-170} y={-1060} width={340} height={44} fill={C.camisaDetalhe} />
+            <rect x={-170} y={-1052} width={340} height={28} fill="#F2F4F8" />
+          </g>
+        )}
+        {useA().estampa === "bolso" && (vista === "frente" || vista === "tresQuartos") && (
           <g transform={vista === "tresQuartos" ? "translate(40,0)" : undefined}>
             <path d="M -118 -1100 L -54 -1100 L -54 -1040 Q -86 -1028 -118 -1040 Z" fill={C.camisaSombra} />
             <rect x={-118} y={-1104} width={64} height={10} rx={3} fill={C.camisaDetalhe} />

@@ -1,7 +1,8 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import "@fontsource/roboto-condensed/800.css";
-import { Cabeca, Chede, Expressao, Pose, Vista } from "./Chede";
+import { APARENCIA_CHEDE, AparenciaCtx, Cabeca, Chede, Expressao, Pose, Vista } from "./Chede";
+import { APARENCIA_KAIK } from "./Kaik";
 import { Fenda } from "../efeitos/Fenda";
 
 const W = 2400;
@@ -54,12 +55,18 @@ const POSES: { nome: string; vista: Vista; expr: Expressao; pose: Pose; caido?: 
   { nome: "Caído", vista: "frente", expr: "cansado", pose: { bracoE: 70, antebracoE: 30, bracoD: 20, pernaE: 10, pernaD: 30, joelhoD: -40 }, caido: true },
 ];
 
-export const FichaChede: React.FC = () => (
+const QUEM = {
+  chede: { nome: "Chede", ap: APARENCIA_CHEDE, cores: ["#F07C28", "#232327", "#9A6340", "#1C1817", "#EFEDE8", "#7B4DFF"] },
+  kaik: { nome: "Kaik", ap: APARENCIA_KAIK, cores: ["#2F6FD6", "#C93A32", "#F1CBAE", "#1A1615", "#EFEDE8", "#59D8FF"] },
+};
+
+export const FichaChede: React.FC<{ quem?: "chede" | "kaik" }> = ({ quem = "chede" }) => (
+  <AparenciaCtx.Provider value={QUEM[quem].ap}>
   <AbsoluteFill style={{ background: "#EFE9DD" }}>
     <svg viewBox={`0 0 ${W} 2700`} width={W} height={2700}>
-      <T x={W / 2} y={90} t="Chede — ficha oficial" s={72} />
+      <T x={W / 2} y={90} t={quem === "chede" ? "Chede — ficha oficial" : "Kaik — ficha (teste)"} s={72} />
       {/* faixa de cores */}
-      {["#F07C28", "#232327", "#9A6340", "#1C1817", "#EFEDE8", "#7B4DFF"].map((c, i) => (
+      {QUEM[quem].cores.map((c, i) => (
         <rect key={c} x={W / 2 - 270 + i * 90} y={120} width={80} height={36} rx={8} fill={c} />
       ))}
       {/* vistas */}
@@ -90,7 +97,7 @@ export const FichaChede: React.FC = () => (
             <g transform={p.caido ? `translate(${x + 250},2600) rotate(-84) scale(0.32)` : `translate(${x},2580) scale(0.5)`}>
               <Chede vista={p.vista} expressao={p.expr} pose={p.pose} semSombra={p.caido} />
             </g>
-            {p.poder && (
+            {p.poder && quem === "chede" && (
               <svg x={0} y={0} overflow="visible">
                 <Fenda x={x + 615 * 0.5 + 40} y={2580 - 1375 * 0.5 - 30} tamanho={0.45} />
               </svg>
@@ -101,4 +108,5 @@ export const FichaChede: React.FC = () => (
       })}
     </svg>
   </AbsoluteFill>
+  </AparenciaCtx.Provider>
 );

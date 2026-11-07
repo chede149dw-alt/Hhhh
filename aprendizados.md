@@ -42,3 +42,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   3. Parágrafo 2: a virada, terminando em suspense ("Só que…", "…") + 😳
   4. "🔥 " + pergunta para os comentários
   5. 5 hashtags em CamelCase, terminando com #ReelsBrasil
+- **Personagens novos usam o mesmo boneco** (`Chede.tsx`) com outra aparência (`AparenciaCtx`): cores,
+  cabelo e estampa. Motivo: mesmo estilo e proporções entre todos os personagens do canal.
+- **Séries se cruzam**: manter `roteiros/universo.md` atualizado a cada episódio (o que aconteceu e o que ficou em aberto).
