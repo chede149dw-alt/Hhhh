@@ -86,3 +86,8 @@ export const conversar = (f: number, semente: number): Pose => {
   const g = Math.sin(f / 6 + semente);
   return { bracoD: 30 + g * 12, antebracoD: -70 + g * 15, cabeca: Math.sin(f / 15 + semente) * 3, olharX: rnd(semente) > 0.5 ? 0.8 : -0.4 };
 };
+
+// Sentado (vista 3/4 ou perfil, virado para a direita; espelhe para virar para a esquerda).
+// No 3D, use y = alturaDoAssento - SENTAR_ALTURA (o pé do desenho fica abaixo do chão e o pé de verdade, no chão).
+export const SENTAR_ALTURA = 0.89;
+export const sentar = (extra: Pose = {}): Pose => ({ pernaD: 90, joelhoD: -90, pernaE: -90, joelhoE: 90, ...extra });

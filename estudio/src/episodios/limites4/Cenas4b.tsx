@@ -203,7 +203,7 @@ export const L23_Tornado: React.FC = () => {
 // 24 · Porta velha voando a 10 m
 export const L24_Porta: React.FC = () => {
   const { p, f } = useP();
-  const cam = camEntre({ pos: [CH[0] - 2.5, 0.6, CH[1] + 5], alvo: [TORN[0], 5.5, TORN[2]], fov: 52 }, { pos: [CH[0] - 3, 0.5, CH[1] + 4.2], alvo: [TORN[0], 7, TORN[2]], fov: 52 }, p);
+  const cam = camEntre({ pos: [CH[0] - 2.5, 0.8, CH[1] + 6], alvo: [TORN[0], 3.6, TORN[2]], fov: 56 }, { pos: [CH[0] - 3, 0.7, CH[1] + 5.2], alvo: [TORN[0], 4.6, TORN[2]], fov: 56 }, p);
   const topo = projetar(cam, [TORN[0] + 3, 10, TORN[2]]);
   const base = projetar(cam, [TORN[0] + 3, 0, TORN[2]]);
   return (
@@ -382,7 +382,7 @@ export const L31_Carro: React.FC = () => {
   return (
     <Plano3D id="l31" clima="porDoSol" cam={cam} cenario={<Campo3D />} desfoque={1}
       atores={[
-        { quem: "chede", x: CH[0], z: CH[1], vista: "costas", pose: { ...mao("frente", 1, 300, -1500) } },
+        { quem: "chede", x: CH[0], z: CH[1], vista: "costas", pose: { bracoD: 75, antebracoD: -8 } },
         { quem: "kaik", x: KA[0], z: KA[1] + 0.6, vista: "costas" },
       ]}
       html={<Info rotulo="CARRO VELHO" valor="1" unidade="tonelada" y={190} cor={AMARELO} />}
@@ -442,7 +442,7 @@ export const L33_QuatroMetros: React.FC = () => {
   return (
     <ComOlhoRoxo>
       <Plano3D id="l33" clima="porDoSol" cam={cam} cenario={<Campo3D carroEscala={carroEsc} />}
-        atores={[{ quem: "chede", x: CH[0], z: CH[1], vista: "costas", pose: { ...mao("frente", 1, 300, -1500) } }]}
+        atores={[{ quem: "chede", x: CH[0], z: CH[1], vista: "costas", pose: { bracoD: 75, antebracoD: -8 } }]}
         frente={abre > 0.01 ? <Fenda x={c.x} y={c.y} tamanho={(abre * 4.4 * c.pxPorMetro) / 240} /> : null}
         html={<Info rotulo="CALMO, A FENDA ABRIU" valor="4" unidade="m" y={190} cor="#B48CFF" />}
       />

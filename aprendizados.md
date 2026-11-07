@@ -123,3 +123,8 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Cenários precisam de muito mais detalhe** (usuário, 07/11: "ficaram muito feios"; "não tem problema se demorar").
   Referência: cidades/campos das refs 4 e 5 — muitos objetos, placas, toldos, plantas, carros, nuvens, céu com sol.
   Nada de caixa lisa: toda superfície com textura, borda, janela, sombra.
+- **Nenhuma parte do corpo pode faltar** (usuário, 07/11: "cuidado para as partes do corpo não ficar faltando").
+  Erros que achei e corrigi: sentados cortados na altura da mesa (tronco flutuando), braço levantado de costas
+  parecendo solto, Chede "nas costas" do Kaik voando separado. Regras: sentado usa a pose `sentar()` (coxa e canela
+  dobradas) e nunca corte no meio do corpo; de costas, braço abre para o lado; poses compostas (carregar alguém)
+  se testam isoladas no `Debug` antes de entrar na cena; conferir quadros em resolução alta (zoom) antes de enviar.

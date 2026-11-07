@@ -1,5 +1,5 @@
 import { Ator, multidao } from "../../cenarios3d/Kit3D";
-import { figurante, conversar } from "../../personagens/Figurantes";
+import { figurante, conversar, sentar, SENTAR_ALTURA } from "../../personagens/Figurantes";
 
 // Figurantes 2D de cada lugar da Parte 4.
 const rnd = (i: number) => {
@@ -17,8 +17,8 @@ export const alunosCantina = (f: number): Ator[] => {
     [-1, 1].forEach((l, j) => {
       if (rnd(k * 7 + j) < 0.25) return;
       const i = 500 + k * 2 + j;
-      sentados.push({ quem: "chede", aparencia: figurante(i), x: x + l * 1.15, z, corte: 0.79, vista: "tresQuartos", espelhar: l === 1,
-        expr: rnd(i) < 0.5 ? "feliz" : "rindo", pose: conversar(f, i) });
+      sentados.push({ quem: "chede", aparencia: figurante(i), x: x + l * 1.15, z, y: 0.48 - SENTAR_ALTURA, vista: "tresQuartos", espelhar: l === 1,
+        expr: rnd(i) < 0.5 ? "feliz" : "rindo", pose: sentar(conversar(f, i)) });
     });
   });
   const andando = multidao({ semente: 7, n: 30, area: [-20, 20, -24, -3], f, andando: 0.6, dir: [1, 0.2], vel: 0.022,
@@ -27,7 +27,7 @@ export const alunosCantina = (f: number): Ator[] => {
 };
 
 // Fileiras do anfiteatro (iguais às do Anfiteatro3D)
-export const assento = (r: number) => ({ y: r * 0.38 + 0.38, z: -4 + r * 1.7 + 0.75 });
+export const assento = (r: number) => ({ y: r * 0.38 + 0.38, banco: r * 0.38 + 0.69, z: -4 + r * 1.7 + 0.75 });
 export const alunosAnfiteatro = (f: number, livre: (x: number, r: number) => boolean): Ator[] => {
   const out: Ator[] = [];
   for (let r = 0; r < 8; r++)
@@ -37,8 +37,10 @@ export const alunosAnfiteatro = (f: number, livre: (x: number, r: number) => boo
         const i = 900 + r * 20 + (l + 1) * 6 + k;
         if (rnd(i) < 0.45 || livre(x, r)) continue;
         const a = assento(r);
-        out.push({ quem: "chede", aparencia: figurante(i), x, y: a.y - 0.45, z: a.z, corte: a.y + 0.74, vista: rnd(i + 1) < 0.7 ? "costas" : "tresQuartos",
-          espelhar: x > 0, expr: "neutro", pose: { cabeca: Math.sin(f / 20 + i) * 3, olharX: -0.3, olharY: 0.3 } });
+        const costas = rnd(i + 1) < 0.7;
+        const cab = { cabeca: Math.sin(f / 20 + i) * 3, olharX: -0.3, olharY: 0.3 };
+        out.push({ quem: "chede", aparencia: figurante(i), x, y: a.banco - SENTAR_ALTURA, z: a.z, corte: costas ? a.banco + 0.08 : undefined,
+          vista: costas ? "costas" : "tresQuartos", espelhar: x > 0, expr: "neutro", pose: costas ? cab : sentar(cab) });
       }
   return out;
 };

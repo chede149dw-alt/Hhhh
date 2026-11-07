@@ -66,9 +66,14 @@ export const Relogio: React.FC<{ hora: string; legenda?: string; y?: number }> =
 
 // Kaik correndo com o Chede nas costas (desenho composto, perfil indo para a direita)
 export const ChedeNasCostas: React.FC<{ f: number; s: number; medo?: boolean }> = ({ f, s, medo = true }) => (
-  <g transform={`translate(${-150 * s},${-560 * s}) rotate(-28) `}>
-    <Vivo quem="chede" x={0} y={0} s={s * 0.95} vista="perfil" expr={medo ? "medo" : "espanto"}
-      pose={{ bracoE: 95, antebracoE: 20, bracoD: 100, antebracoD: 30, pernaE: 70 + Math.sin(f) * 6, joelhoE: -100, pernaD: 60, joelhoD: -90, cabeca: 20 + Math.sin(f * 1.7) * 4, olharX: 1 }} />
+  // em unidades do rig do Kaik (perfil, correndo para a direita): acompanha a inclinação do tronco dele (20°)
+  <g transform={`scale(${s})`}>
+    <g transform="rotate(20 0 -560)">
+      <g transform={`translate(-330,-1130) rotate(${16 + Math.sin(f * 0.75) * 3}) translate(0,722)`}>
+        <Vivo quem="chede" x={0} y={0} s={0.95} vista="perfil" expr={medo ? "medo" : "espanto"}
+          pose={{ pernaD: 80, joelhoD: -105, pernaE: -70, joelhoE: 100, bracoD: 95, antebracoD: 25, bracoE: -100, antebracoE: -20, cabeca: -8 + Math.sin(f * 1.7) * 4, olharX: 1 }} />
+      </g>
+    </g>
   </g>
 );
 export const poseCorrida = (f: number) => corridaForte(f, 0.75, 1);

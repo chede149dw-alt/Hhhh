@@ -7,7 +7,8 @@ import { Anfiteatro3D, Campo3D, Cantina3D, Carro, Faculdade3D } from "../../cena
 import { alcançar } from "../comum";
 import { Rastro } from "../../efeitos/Velocidade";
 import { MaoFechada } from "../velocidade1/CenasNovas";
-import { alunosAnfiteatro, alunosCantina, alunosPortao, pedestresRua } from "./Multidoes";
+import { alunosAnfiteatro, alunosCantina, alunosPortao, assento, pedestresRua } from "./Multidoes";
+import { sentar, SENTAR_ALTURA } from "../../personagens/Figurantes";
 import { AMARELO, ChedeNasCostas, CIANO, Info, Relogio, Vento, contorno, fonte, poseCorrida } from "./Comum4";
 
 const mao = (vista: "frente" | "tresQuartos" | "perfil", lado: 1 | -1, x: number, y: number) => {
@@ -201,8 +202,8 @@ export const L9_Aula: React.FC = () => {
   return (
     <Plano3D id="l9" clima="interior" cam={cam} cenario={<Anfiteatro3D />} desfoque={1.5}
       atores={[...alunosAnfiteatro(f, (x, r) => r === 3 && x < -1 && x > -4.6), 
-        { quem: "chede", x: -3.2, y: a.y - 0.45, z: a.z, vista: "tresQuartos", expr: "cansado", corte: a.y + 0.74, pose: { olharX: 0.9, olharY: 0.3, cabeca: Math.sin(f / 18) * 4 } },
-        { quem: "kaik", x: -2.1, y: a.y - 0.45, z: a.z, vista: "tresQuartos", expr: "feliz", corte: a.y + 0.74, pose: { olharX: -0.5, olharY: 0.4 } },
+        { quem: "chede", x: -3.2, y: assento(3).banco - SENTAR_ALTURA, z: a.z, vista: "tresQuartos", expr: "cansado", pose: sentar({ olharX: 0.9, olharY: 0.3, cabeca: Math.sin(f / 18) * 4 }) },
+        { quem: "kaik", x: -2.1, y: assento(3).banco - SENTAR_ALTURA, z: a.z, vista: "tresQuartos", expr: "feliz", pose: sentar({ olharX: -0.5, olharY: 0.4, bracoE: 40, antebracoE: -80 }) },
       ]}
     />
   );
@@ -217,7 +218,7 @@ export const L10_Olhos: React.FC = () => {
   return (
     <AbsoluteFill>
       <Plano3D id="l10" clima="interior" cam={cam} cenario={<Anfiteatro3D />} desfoque={5}
-        atores={[...alunosAnfiteatro(f, (x, r) => r === 3 && x < -1 && x > -4.6), { quem: "chede", x: -3.2, y: a.y - 0.45, z: a.z, vista: "tresQuartos", expr: f > 40 ? "espanto" : "cansado", tremor: f > 40 && f < 50 ? Math.sin(f * 3) * 10 : 0, pose: { piscar: f > 10 && f < 42 ? 1 : 0, olharX: 0.6, cabeca: f > 40 ? -6 : 4 } }]}
+        atores={[...alunosAnfiteatro(f, (x, r) => r === 3 && x < -1 && x > -4.6), { quem: "chede", x: -3.2, y: assento(3).banco - SENTAR_ALTURA, z: a.z, vista: "tresQuartos", expr: f > 40 ? "espanto" : "cansado", tremor: f > 40 && f < 50 ? Math.sin(f * 3) * 10 : 0, pose: sentar({ piscar: f > 10 && f < 42 ? 1 : 0, olharX: 0.6, cabeca: f > 40 ? -6 : 4 }) }]}
       />
       {flash && (
         <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 46%, #2A1060 0%, #07020F 70%)" }}>
@@ -249,8 +250,8 @@ export const L11_CarroFora: React.FC = () => {
 // 12 · Intervalo: contou tudo (câmera gira em volta da mesa)
 const MESA_ALT = 0.79;
 const sentados = (exprC: Ator["expr"], exprK: Ator["expr"], poseK = {}, poseC = {}): Ator[] => [
-  { quem: "chede", x: -1.15, z: 0, y: 0.0, vista: "tresQuartos", expr: exprC, corte: MESA_ALT, escala: 0.98, pose: { olharX: 0.9, ...poseC } },
-  { quem: "kaik", x: 1.15, z: 0, y: 0.0, vista: "tresQuartos", espelhar: true, expr: exprK, corte: MESA_ALT, escala: 0.98, pose: { olharX: 0.9, ...poseK } },
+  { quem: "chede", x: -1.15, z: 0, y: 0.48 - SENTAR_ALTURA, vista: "tresQuartos", expr: exprC, pose: sentar({ olharX: 0.9, ...poseC }) },
+  { quem: "kaik", x: 1.15, z: 0, y: 0.48 - SENTAR_ALTURA, vista: "tresQuartos", espelhar: true, expr: exprK, pose: sentar({ olharX: 0.9, ...poseK }) },
 ];
 export const L12_Intervalo: React.FC = () => {
   const { p, f } = useP();
@@ -272,12 +273,12 @@ const Salgado: React.FC<{ x: number; y: number; s: number }> = ({ x, y, s }) => 
 export const L13_Mora: React.FC = () => {
   const { p, f } = useP();
   const serio = f > 16;
-  const cam = orbita([1.15, 1.3, 0], lerp(58, 68, p), lerp(2.4, 1.8, p), 1.35, 36, 1.3);
+  const cam = orbita([1.15, 1.25, 0], lerp(58, 68, p), lerp(2.4, 1.8, p), 1.3, 36, 1.2);
   return (
     <Plano3D id="l13" clima="dia" cam={cam} cenario={<Cantina3D />} desfoque={6}
       atores={[...alunosCantina(f), ...alunosCantina(f), 
-        { quem: "kaik", x: 1.15, z: 0, vista: "tresQuartos", espelhar: true, expr: serio ? "medo" : "rindo", corte: MESA_ALT, pose: { ...mao("tresQuartos", -1, 200, -1240), olharX: 0.9 },
-          extra: (s) => <Salgado x={-200 * s} y={-1240 * s} s={s * 1.4} /> },
+        { quem: "kaik", x: 1.15, z: 0, y: 0.48 - SENTAR_ALTURA, vista: "tresQuartos", espelhar: true, expr: serio ? "medo" : "rindo", pose: sentar({ ...mao("tresQuartos", -1, 200, -1240), olharX: 0.9 }),
+          extra: (s) => <Salgado x={-200 * s} y={-1240 * s} s={s * 1.2} /> },
       ]}
     />
   );
@@ -317,11 +318,11 @@ export const L14_Ficha: React.FC = () => {
 // 15 · "a gente nem sabe do que é capaz" — Chede fecha a mão
 export const L15_Capaz: React.FC = () => {
   const { p, f } = useP();
-  const cam = orbita([-1.15, 1.3, 0], lerp(122, 112, p), lerp(2.2, 1.7, p), 1.4, 36, 1.3);
-  const pe = projetar(cam, [-1.15, 1.15, 0]);
+  const cam = orbita([-1.15, 1.25, 0], lerp(122, 112, p), lerp(2.2, 1.7, p), 1.3, 36, 1.2);
+  const pe = projetar(cam, [-1.15, 0.85, 0]);
   return (
     <Plano3D id="l15" clima="dia" cam={cam} cenario={<Cantina3D />} desfoque={6}
-      atores={[...alunosCantina(f), { quem: "chede", x: -1.15, z: 0, vista: "tresQuartos", expr: "determinado", corte: MESA_ALT, pose: { olharX: 0.9 } }]}
+      atores={[...alunosCantina(f), { quem: "chede", x: -1.15, z: 0, y: 0.48 - SENTAR_ALTURA, vista: "tresQuartos", expr: "determinado", pose: sentar({ olharX: 0.9 }) }]}
       frente={f > 10 ? <MaoFechada x={pe.x + 250} y={pe.y + 420} s={pe.pxPorMetro / 600} ang={-10} /> : null}
     />
   );
