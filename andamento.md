@@ -30,14 +30,12 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   (`cd estudio && scripts/render_partes.sh Velocidade1 2016 ../prontos/parte-2-kaik-velocidade-v2.mp4` —
   renderiza em blocos e continua de onde parou se o container reiniciar).
 
-- ⏳ **Parte 3 (Chede + Kaik, "E se filmassem o seu poder?")**: roteiro APROVADO (`roteiros/parte-3-vigiados.md`).
-  Episódio em `estudio/src/episodios/vigiados3/` (composição `Vigiados3`, 2090 quadros). Voz FINAL ElevenLabs gravada (74,5 s, acerto 0.977). Render final: `cd estudio && scripts/render_partes.sh Vigiados3 2265 ../prontos/parte-3-vigiados.mp4` (continua de onde parou).
-  Prévia: `cd estudio && ESCALA=0.5 scripts/render_partes.sh Vigiados3 2090 ../previas/parte-3-vigiados-previa.mp4` → enviar ao usuário.
-  Depois da aprovação: voz final ElevenLabs (texto em `src/episodios/vigiados3/texto.txt`, voz cLjWzehDrurj3fqQ6yN7, eleven_v4) →
-  `scripts/alinhar.py` → `scripts/gerar_trilha_vigiados3.py` → render final em blocos → capa + descrição (`roteiros/parte-3-vigiados-post.md`).
+- ✅ **Parte 3 (Chede + Kaik, "E se filmassem o seu poder?")**: PRONTA e entregue — `prontos/parte-3-vigiados.mp4`
+  (75,5 s, voz final ElevenLabs) + `prontos/parte-3-vigiados-capa.png` + descrição em `roteiros/parte-3-vigiados-post.md`.
+  Episódio em `estudio/src/episodios/vigiados3/` (composição `Vigiados3`, 2265 quadros).
 
 ## Próximos passos
-1. Postar a Parte 2 (Kaik). Depois: **Parte 3** — quem está vigiando os dois (e quem segurou a mão do Chede).
+1. Postar as Partes 2 e 3. Depois: **Parte 4** — os agentes chegam ao prédio; o Regente continua sem aparecer.
 2. Depois: Parte 2 do Chede ("quem mais está nesse lugar?"), seguindo `roteiros/universo.md`.
 3. Criar a skill da série (Passo 7 do ebook).
 
