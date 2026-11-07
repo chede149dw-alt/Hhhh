@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Audio, interpolate, Sequence, spring, staticFile, useVideoConfig } from "remotion";
 import timing from "./timing.json";
-import { Cabeca, Pose } from "../../personagens/Chede";
+import { Cabeca, CORES_CHEDE, Pose } from "../../personagens/Chede";
 import { CabecaKaik } from "../../personagens/Kaik";
 import { CabecaAgente } from "../../personagens/Agente";
 import { corridaForte } from "../../personagens/poses";
@@ -223,7 +223,7 @@ const S5_Cruza: React.FC = () => {
   const cam: Cam = { pos: [1.5, 24, -7 - p * 2], alvo: [1.5, 0, -24], fov: 52 };
   const A: [number, number, number] = [-7, 0, -23];
   const B: [number, number, number] = [10.4, 0, -24];
-  const k = interpolate(p, [0.1, 0.45], [0, 1], clamp);
+  const k = interpolate(p, [0.08, 0.85], [0, 1], clamp);
   const pos: [number, number, number] = [A[0] + (B[0] - A[0]) * k, 0, A[2] + (B[2] - A[2]) * k];
   const a = projetar(cam, A);
   const b = projetar(cam, B);
@@ -310,12 +310,12 @@ const S7_Janelas: React.FC = () => {
                 <rect x={ox - 70} y={oy - 80} width={140} height={160} fill="#fff" opacity={Math.max(0, 0.8 - t / 8)} />
                 {Array.from({ length: 12 }).map((_, j) => {
                   const ang = (j / 12) * Math.PI * 2 + i;
-                  const v = 14 + (j % 4) * 6;
+                  const v = 8 + (j % 4) * 4;
                   const x = ox + Math.cos(ang) * v * t;
-                  const y = oy + Math.sin(ang) * v * t * 0.6 + 0.9 * t * t;
+                  const y = oy + Math.sin(ang) * v * t * 0.6 + 0.35 * t * t;
                   return (
                     <path key={j} d="M 0 -18 L 14 10 L -12 14 Z" fill="#DFF3FF" stroke="#fff" strokeWidth={2}
-                      transform={`translate(${x},${y}) rotate(${t * 25 + j * 40}) scale(${1 + (j % 3) * 0.4})`} opacity={Math.max(0, 1 - t / 50)} />
+                      transform={`translate(${x},${y}) rotate(${t * 25 + j * 40}) scale(${1 + (j % 3) * 0.4})`} opacity={Math.max(0, 1 - t / 90)} />
                   );
                 })}
               </g>
@@ -534,31 +534,156 @@ const S14_SemSinal: React.FC = () => {
   );
 };
 
+const Batida: React.FC<{ children: React.ReactNode; forca?: number }> = ({ children, forca = 1 }) => {
+  const { f } = useP();
+  const t = (f % 24) / 24;
+  const k = 1 + forca * 0.025 * (Math.exp(-t * 18) + 0.6 * Math.exp(-Math.max(0, t - 0.18) * 18) * (t > 0.18 ? 1 : 0));
+  return <AbsoluteFill style={{ transform: `scale(${k})` }}>{children}</AbsoluteFill>;
+};
+
+const Suor: React.FC<{ x: number; y: number; n?: number; s?: number }> = ({ x, y, n = 2, s = 1 }) => {
+  const { f } = useP();
+  return (
+    <g>
+      {Array.from({ length: n }).map((_, i) => {
+        const t = ((f + i * 17) % 34) / 34;
+        return <ellipse key={i} cx={x + i * 260 * s} cy={y + t * 180 * s} rx={10 * s} ry={16 * s} fill="#CFEFFF" opacity={0.85 * (1 - t)} />;
+      })}
+    </g>
+  );
+};
+
 const S15_Treme: React.FC = () => {
   const { f } = useP();
-  const tx = Math.sin(f * 2.3) * 8 + Math.sin(f * 3.9) * 5;
-  const tam = 0.55 * (1 + 0.25 * Math.sin(f * 1.7));
+  const tx = Math.sin(f * 2.3) * 9 + Math.sin(f * 3.9) * 6;
   return (
     <AbsoluteFill style={{ background: "#000" }}>
-      <Camera z={[1.05, 1.15]}>
+      <Batida>
+        <Camera z={[1.05, 1.2]}>
+          <Quarto desfoque={20} />
+          <Tela>
+            <g transform={`translate(${540 + tx},1350) scale(1.5)`}>
+              <MaoClose />
+            </g>
+            <Suor x={380} y={1100} />
+          </Tela>
+        </Camera>
+      </Batida>
+      <Acab />
+    </AbsoluteFill>
+  );
+};
+
+// Lembrança da Parte 2: a mão escura puxando o pulso do Chede para dentro da fenda
+const S15b_Lembra: React.FC = () => {
+  const { f, p } = useP();
+  const puxa = Math.sin(f * 0.9) * 14 + p * 60;
+  return (
+    <AbsoluteFill style={{ background: "#000" }}>
+      <AbsoluteFill style={{ filter: "saturate(0.35) brightness(0.75) contrast(1.1)" }}>
+        <Camera z={[1.1, 1.25]} tremor={1}>
+          <Quarto desfoque={22} />
+          <Tela>
+            <g transform="translate(540,900) scale(1.45) translate(-540,-1250)">
+            <ellipse cx={540} cy={1250} rx={330} ry={90} fill="#0B0618" />
+            <Fenda x={540} y={1250} tamanho={1.4} />
+            <rect x={470} y={-100} width={140} height={1350 + puxa} rx={60} fill={CORES_CHEDE.pele} />
+            <rect x={545} y={-100} width={65} height={1350 + puxa} rx={30} fill={CORES_CHEDE.peleSombra} opacity={0.5} />
+            {/* mão escura agarrando o pulso: palma do lado esquerdo, dedos cruzando por cima, polegar à direita */}
+            <g transform={`translate(0,${puxa * 0.3})`}>
+              <ellipse cx={430} cy={1185} rx={60} ry={85} fill="#140A24" />
+              {[0, 1, 2, 3].map((i) => {
+                const y = 1120 + i * 42;
+                return (
+                  <g key={i}>
+                    <path d={`M 430 ${y} Q 545 ${y - 26} 628 ${y - 6}`} stroke="#140A24" strokeWidth={30} strokeLinecap="round" fill="none" />
+                    <circle cx={630} cy={y - 6} r={8} fill="#C9A6FF" />
+                  </g>
+                );
+              })}
+              <path d="M 660 1250 Q 700 1170 640 1110" stroke="#140A24" strokeWidth={30} strokeLinecap="round" fill="none" />
+            </g>
+            </g>
+          </Tela>
+        </Camera>
+      </AbsoluteFill>
+      <AbsoluteFill style={{ background: "#3B1F6E", mixBlendMode: "color", opacity: 0.45 }} />
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,0.85) 100%)" }} />
+      <Flash cor="#FFFFFF" quadros={6} />
+      <Grao forca={0.2} />
+    </AbsoluteFill>
+  );
+};
+
+// O medo: close no rosto do Chede, sombras de mãos surgindo das bordas (imaginação)
+const S15c_Medo: React.FC = () => {
+  const { f, p } = useP();
+  const avanço = lerp(0, 1, p);
+  return (
+    <AbsoluteFill style={{ background: "#000" }}>
+      <Batida forca={1.6}>
+        <Camera z={[1.05, 1.25]}>
+          <AbsoluteFill style={{ filter: "brightness(0.45)" }}>
+            <Quarto desfoque={20} />
+          </AbsoluteFill>
+          <Tela>
+            {[
+              [-120, 300, 30], [1200, 520, 150], [-140, 1500, -20], [1220, 1650, 200],
+            ].map(([x, y, r], i) => {
+              const dx = (x < 540 ? 1 : -1) * avanço * 260;
+              return (
+                <g key={i} transform={`translate(${x + dx},${y}) rotate(${r + Math.sin(f / 9 + i) * 6}) scale(1.6)`} opacity={0.85}>
+                  <rect x={-260} y={-40} width={300} height={80} rx={40} fill="#07040F" />
+                  {[-30, -10, 10, 30].map((dy, j) => (
+                    <path key={j} d={`M 30 ${dy} q ${60 + j * 10} ${dy * 0.6} ${110 + j * 12} ${dy * 1.4 + 10}`} stroke="#07040F" strokeWidth={18} strokeLinecap="round" fill="none" />
+                  ))}
+                </g>
+              );
+            })}
+            <g transform="translate(540,1000) scale(2.2)">
+              <Cabeca expressao="medo" pose={{ olharX: Math.sin(f / 6) * 0.9, olharY: 0.2 }} />
+            </g>
+            <Suor x={250} y={600} n={3} s={1.3} />
+          </Tela>
+        </Camera>
+      </Batida>
+      <Acab graoForte />
+    </AbsoluteFill>
+  );
+};
+
+// Fenda pequena na palma; no fundo dela, dois olhos se abrem
+const S15d_Olhos: React.FC = () => {
+  const { f, p } = useP();
+  const tx = Math.sin(f * 2.3) * 8 + Math.sin(f * 3.9) * 5;
+  const tam = 0.75 * (1 + 0.18 * Math.sin(f * 1.7));
+  const olhos = interpolate(p, [0.5, 0.62], [0, 1], clamp);
+  const zoom = lerp(1.05, 1.5, interpolate(p, [0.45, 1], [0, 1], clamp));
+  return (
+    <AbsoluteFill style={{ background: "#000" }}>
+      <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: "50% 68%" }}>
         <Quarto desfoque={20} />
         <Tela>
-          <g transform={`translate(${540 + tx},1350) scale(1.5)`}>
+          <g transform={`translate(${540 + tx},1400) scale(1.5)`}>
             <MaoClose />
           </g>
-          <Fenda x={540 + tx} y={1300} tamanho={tam} intensidade={0.7 + 0.3 * Math.sin(f * 2.1)} />
+          <ellipse cx={540 + tx} cy={1310} rx={170 * tam} ry={60 * tam} fill="#05030B" />
+          <Fenda x={540 + tx} y={1310} tamanho={tam} intensidade={0.7 + 0.3 * Math.sin(f * 2.1)} />
+          {olhos > 0 && [-36, 36].map((dx) => (
+            <g key={dx}>
+              <ellipse cx={540 + tx + dx} cy={1310} rx={34} ry={20} fill="#B39DFF" opacity={0.35 * olhos} />
+              <ellipse cx={540 + tx + dx} cy={1310} rx={16} ry={9 * olhos} fill="#F1E8FF" />
+            </g>
+          ))}
           {Array.from({ length: 8 }).map((_, i) => {
             const t = ((f + i * 7) % 20) / 20;
             const a = i * 0.8;
-            return <circle key={i} cx={540 + tx + Math.cos(a) * (80 + t * 160)} cy={1300 + Math.sin(a) * (40 + t * 100)} r={6} fill="#C9A6FF" opacity={1 - t} />;
-          })}
-          {[0, 1].map((i) => {
-            const t = ((f + i * 20) % 40) / 40;
-            return <ellipse key={i} cx={390 + i * 300} cy={1150 + t * 200} rx={10} ry={16} fill="#CFEFFF" opacity={0.8 * (1 - t)} />;
+            return <circle key={i} cx={540 + tx + Math.cos(a) * (120 + t * 160)} cy={1310 + Math.sin(a) * (50 + t * 100)} r={6} fill="#C9A6FF" opacity={1 - t} />;
           })}
         </Tela>
-      </Camera>
-      <Acab />
+      </AbsoluteFill>
+      {olhos > 0 && <Flash cor="#B39DFF" quadros={5} de={Math.round(0.5 * 100)} />}
+      <Acab graoForte />
     </AbsoluteFill>
   );
 };
@@ -589,11 +714,11 @@ const S16_Fechou: React.FC = () => {
   }
   return (
     <AbsoluteFill style={{ background: "#000" }}>
-      <Camera z={[1.1, 1.05]} tremor={0.8}>
+      <Camera z={[1.55, 1.5]} y={[260, 260]} tremor={0.8}>
         <Quarto desfoque={10} />
         <Tela>
-          <Vivo quem="chede" x={X + 60} y={Y + 20} s={S} vista="tresQuartos" expr="cansado"
-            pose={{ tronco: 18, pernaE: 75, joelhoE: -95, pernaD: 70, joelhoD: -90, bracoD: 40, bracoE: 30, olharX: 1 }} />
+          <Vivo quem="chede" x={X + 120} y={Y + 260} s={S} vista="tresQuartos" expr="cansado" pose={{ tronco: 10, bracoD: 25, bracoE: 20, olharX: 1, olharY: 0.4 }} />
+          <Suor x={X + 40} y={Y - 1500} n={2} s={0.8} />
         </Tela>
       </Camera>
       <Flash cor="#E9DCFF" quadros={8} de={Math.round(0.5 * d)} />
@@ -704,7 +829,7 @@ const S21_Parte4: React.FC = () => {
 
 const CENAS: React.FC[] = [
   S0_Capa, S1_LuzVermelha, S2_Gravando, S3_Comigo, S4_Reacao, S5_Cruza, S6_Som, S7_Janelas, S8_Terno, S9_Anel,
-  S10_Voltou, S11_Casos, S12_Terceira, S13_Ideia, S14_SemSinal, S15_Treme, S16_Fechou, S17_Sumiu, S18_Nada,
+  S10_Voltou, S11_Casos, S12_Terceira, S13_Ideia, S14_SemSinal, S15_Treme, S15b_Lembra, S15c_Medo, S15d_Olhos, S16_Fechou, S17_Sumiu, S18_Nada,
   S19_Fone, S20_Moram, S21_Parte4,
 ];
 

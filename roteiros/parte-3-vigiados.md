@@ -6,8 +6,9 @@
 - **Liga com:** final da Parte 2 (alguém filmando do prédio da frente)
 - **Lógica dos poderes neste episódio:**
   - Kaik: tempo de reação humano (0,2 s) e **barreira do som** (passar de 1.235 km/h = estrondo que quebra vidro).
-  - Chede: a fenda **guarda, não destrói**, e lá **não tem sinal**; abrir a fenda logo depois do susto custa caro (mão treme, fenda pequena e instável).
+  - Chede: a fenda **guarda, não destrói**, e lá **não tem sinal**. Custo: o **medo** (da mão escura que quase puxou ele e de ver quem é) faz a fenda abrir pequena e instável — e algo lá dentro olha de volta.
   - Controle mental (sem mostrar o Regente): o agente tem o **anel âmbar nos olhos**, não pisca e depois não lembra de nada.
+- **Correção do usuário (07/11):** enfatizar o medo do Chede de abrir a fenda (ser puxado de novo / ver algo que dá muito medo). Trecho reescrito abaixo.
 - **Status:** aprovado pelo usuário (07/11). Sem @ do canal (usuário: "não precisa"): o selo e o final dizem só "SEGUE PRA VER". Terceira ficha (borrada) aprovada.
 
 | Tempo | Narração | Cena |
@@ -27,8 +28,11 @@
 | 37–40 s | E uma terceira ficha… de alguém que eles nunca viram. | Terceira ficha com a foto borrada e um carimbo vermelho: "NÃO ABORDAR". |
 | 40–43 s | O Chede teve uma ideia: sumir com o celular. | Chede olha a própria mão. |
 | 43–47 s | A fenda **guarda**, não destrói. E lá do outro lado **não tem sinal**. | Infográfico: celular entrando na fenda, barras de sinal caindo pra zero, "UPLOAD 0%". |
-| 47–50 s | Só que a mão dele **tremia**. A fenda abriu pequena. | Fenda roxa pequena e instável, faíscas roxas, Chede suando. |
-| 50–52 s | Ele jogou o celular e fechou **rápido**. | Celular some; estalo; Chede cai sentado, exausto. |
+| 47–49 s | Só que a mão dele **tremia**. | Close na mão tremendo, suor, batida de coração (sem fenda ainda). |
+| 49–53 s | Da última vez, uma mão escura quase **puxou** ele pro outro lado. | Lembrança (cores lavadas, roxo): dedos escuros agarrando o pulso dele e puxando pra dentro da fenda. |
+| 53–56 s | E se puxasse de novo? Ou pior: e se ele visse **quem** era? | Close no rosto do Chede com medo; sombras de mãos surgindo das bordas (imaginação); coração acelerado. |
+| 56–62 s | Com medo, a fenda abriu **pequena**. E lá no fundo… dois olhos **brilharam**. | Fenda pequena e instável na palma; no fundo dela, dois olhos claros se abrem. Zoom rápido + impacto. |
+| 62–64 s | Ele jogou o celular e fechou **rápido**. | Celular some na fenda; estalo; Chede escorrega exausto, suando. |
 | 52–55 s | No prédio, o homem piscou. O anel **sumiu**. | Agente piscando, olhando as mãos, perdido: "Onde eu tô?" |
 | 55–58 s | Ele não lembrava de **nada**. | Agente tateando os bolsos; fone no ouvido começa a chiar. |
 | 58–61 s | Aí o fone dele falou: "Não precisa do vídeo." | Close no fone, onda sonora âmbar (voz distorcida, sem mostrar quem fala). |

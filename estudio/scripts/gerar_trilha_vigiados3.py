@@ -80,7 +80,7 @@ def radio(d):
     return ruido(N, 3000, 2500) * (0.5 + 0.5 * (np.sin(2 * np.pi * 9 * t) > 0)) * env(N, 0.02, 0.1)
 
 # suspense em Ré menor, pulso lento; corta no "moram"
-corte = ini(20) + 0.6
+corte = ini(23) + 0.6
 t = np.arange(int(corte * SR)) / SR
 acordes = [(146.8, 174.6, 220.0), (116.5, 146.8, 174.6), (130.8, 164.8, 196.0), (110.0, 138.6, 164.8)]
 pad = np.zeros_like(t)
@@ -92,7 +92,7 @@ for k, ac in enumerate(acordes * 30):
     pad[m] += e * sum(np.sin(2 * np.pi * f * tt) + 0.25 * np.sin(4 * np.pi * f * tt) for f in ac) / 3
 pulso = np.sin(2 * np.pi * 60 * t) * np.exp(-((t * 1.25) % 1) * 10) + 0.25 * ruido(len(t), 6000, 6000) * np.exp(-((t * 2.5) % 1) * 40)
 musica[: len(t)] = pad * 0.5 + pulso * 0.35
-for i in (4, 14):
+for i in (4, 14, 15, 16, 17, 18):
     a, b = int(ini(i) * SR), int(fim(i) * SR); musica[a:b] *= 0.4
 for i in (6, 7):
     a, b = int(ini(i) * SR), int(fim(i) * SR); musica[a:b] *= 0.6
@@ -116,16 +116,29 @@ add(sfx, meio(12, 0.1), whoosh(0.2, 1000, 4000), 0.4)
 add(sfx, meio(12, 0.3), impacto(70, 1.0), 0.6)
 add(sfx, ini(13), brilho(0.8), 0.25)
 add(sfx, meio(14, 0.1), sugar(0.8), 0.5)
-add(sfx, ini(15), chiado(fim(15) - ini(15)), 0.3)
-add(sfx, ini(15), drone(fim(15) - ini(15)), 0.35)
-add(sfx, meio(16, 0.35), sugar(0.4), 0.6)
-add(sfx, meio(16, 0.5), impacto(200, 0.3), 0.9)
-add(sfx, meio(17, 0.3), brilho(0.6)[::-1], 0.3)
-add(sfx, ini(19), radio(fim(20) - ini(19)), 0.35)
-add(sfx, ini(20) + 0.6, impacto(48, 1.6), 1.0)
-add(sfx, ini(20), ronco(fim(20) - ini(20)), 0.4)
-add(sfx, ini(21), impacto(40, 2.0), 0.8)
-add(sfx, ini(21), drone(fim(21) - ini(21) + 1), 0.4)
+def coracao(d):
+    N = int(d * SR); t = np.arange(N) / SR; out = np.zeros(N)
+    for b0 in np.arange(0, d, 0.8):
+        for off, g in ((0, 1.0), (0.18, 0.7)):
+            i0 = int((b0 + off) * SR); L2 = min(int(0.15 * SR), N - i0)
+            if L2 <= 0: continue
+            tt = np.arange(L2) / SR
+            out[i0:i0 + L2] += np.sin(2 * np.pi * 50 * tt) * np.exp(-tt * 30) * g
+    return out
+add(sfx, ini(15), coracao(fim(18) - ini(15)), 0.9)
+add(sfx, ini(16), drone(fim(17) - ini(16)), 0.5)
+add(sfx, ini(16), sugar(1.0), 0.5)
+add(sfx, ini(17), chiado(fim(17) - ini(17)), 0.25)
+add(sfx, ini(18), chiado(fim(18) - ini(18)), 0.3)
+add(sfx, meio(18, 0.5), impacto(60, 1.2), 1.0)
+add(sfx, meio(19, 0.35), sugar(0.4), 0.6)
+add(sfx, meio(19, 0.5), impacto(200, 0.3), 0.9)
+add(sfx, meio(20, 0.3), brilho(0.6)[::-1], 0.3)
+add(sfx, ini(22), radio(fim(23) - ini(22)), 0.35)
+add(sfx, ini(23) + 0.6, impacto(48, 1.6), 1.0)
+add(sfx, ini(23), ronco(fim(23) - ini(23)), 0.4)
+add(sfx, ini(24), impacto(40, 2.0), 0.8)
+add(sfx, ini(24), drone(fim(24) - ini(24) + 1), 0.4)
 mix = musica / (np.abs(musica).max() + 1e-9) * 0.16 + sfx / (np.abs(sfx).max() + 1e-9) * 0.55
 mix = np.clip(mix, -1, 1)
 for saida in sys.argv[1:]:

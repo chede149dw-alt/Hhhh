@@ -93,3 +93,7 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   nos agentes / em quem filmou do prédio.
 - **Roteiro da Parte 3 aprovado** (07/11). Não alterar o texto.
 - **Engajamento sem @**: o usuário não quer o @ do canal escrito; usar só "SEGUE PRA VER A PARTE N" / "Segue aí pra não perder!".
+- **Medo e trauma contam como custo do poder.** Correção do usuário (07/11): depois de quase ser puxado pela fenda
+  (Parte 2), o Chede tem que ter medo de abrir de novo — medo de ser puxado ou de ver o que tem do outro lado. Mostrar
+  com: mão tremendo + batida de coração, lembrança em cores lavadas/roxo, rosto com medo e sombras de mãos nas bordas.
+  Motivo: o que aconteceu num episódio tem que pesar nos próximos; deixa o personagem humano e a fenda assustadora.
