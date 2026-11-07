@@ -7,6 +7,7 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 |---|---|---|---|
 | **Chede** | 23 anos, pele morena, cabelo preto ondulado, camiseta laranja, bermuda preta. Corajoso, às vezes inseguro, muito esperto. | **Fenda dimensional** na palma da mão: some com as coisas, guarda tudo num "outro lugar" e devolve. A mão pode ficar transparente e atravessar objetos. | `personagens/chede/` (oficial) |
 | **Kaik** | Melhor amigo do Chede. Pele clara, cabelo preto cacheado, camiseta azul com faixa branca, bermuda vermelha. | **Super velocidade**. Rastro ciano/branco (nunca raio amarelo). | `personagens/kaik/` (oficial) |
+| **O Regente** (vilão) | Otávio Regis, ~55 anos, terno grafite, gravata âmbar, cabelo grisalho penteado para trás. Manda no governo por dentro. | **Controle mental**: olhos e ondas âmbar; controlados ficam com anel âmbar na íris. | `personagens/regente/` |
 
 ## Série 1 · "E se você acordasse podendo sumir com qualquer coisa?" (Chede)
 **Parte 1: publicada** (`prontos/serie-sumir-parte-1.mp4`)
@@ -37,8 +38,8 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
   agentes de terno obedecem a ele sem saber.
 - É ele (ou gente dele) quem está **vigiando** o Chede e o Kaik: a pessoa que filmou do prédio da frente trabalha
   para ele, e os agentes montam uma **ficha "CONFIDENCIAL"** de cada pessoa com poder.
-- **Nome e visual: ainda não definidos** (perguntar ao usuário antes de mostrar o rosto dele).
-- Seguindo a regra "todo poder tem lógica e consequência", propostas a confirmar com o usuário:
+- **Nome e visual: definidos** — Otávio Regis, "o Regente" (ficha em `personagens/regente/`). Na Parte 3 aparece só em silhueta com olhos âmbar.
+- Regras do poder (**aprovadas pelo usuário**):
   - ele precisa de algo para controlar (contato visual, ouvir a voz dele, ou estar perto);
   - controlar muita gente ao mesmo tempo cansa / tem limite, por isso usa o governo como "multiplicador";
   - quem está sob controle tem um sinal visível (olhar vazio, brilho nos olhos) que o público aprende a reconhecer;

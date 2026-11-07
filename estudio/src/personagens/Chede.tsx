@@ -51,10 +51,22 @@ export type Pose = {
   olharY?: number; // -1..1
   piscar?: number; // 0 aberto .. 1 fechado
   respiracao?: number; // 0..1
+  olhosPoder?: number; // 0..1 — olhos brilhando (vilão usando o controle mental)
+  controlado?: number; // 0..1 — anel âmbar na íris (pessoa sob controle mental)
 };
 
 export type Cores = typeof CORES_CHEDE;
-export type Aparencia = { cores: Cores; cabelo: "ondulado" | "cacheado"; estampa: "bolso" | "faixa" };
+export type Aparencia = {
+  cores: Cores;
+  cabelo: "ondulado" | "cacheado" | "penteado";
+  estampa: "bolso" | "faixa" | "terno";
+  // só para estampa "terno": camisa social e gravata (o paletó usa cores.camisa, a calça usa cores.bermuda)
+  camisaSocial?: string;
+  gravata?: string;
+  gravataSombra?: string;
+  corPoder?: string; // cor do brilho dos olhos / anel de controle
+  rugas?: boolean;
+};
 export const APARENCIA_CHEDE: Aparencia = { cores: CORES_CHEDE, cabelo: "ondulado", estampa: "bolso" };
 export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
 const useA = () => React.useContext(AparenciaCtx);
@@ -68,8 +80,12 @@ const Olho: React.FC<{
   oy: number;
   lado: 1 | -1;
   semicerrado?: number;
-}> = ({ x, esp, piscar, ox, oy, lado, semicerrado = 0 }) => {
-  const C = useA().cores;
+  poder?: number;
+  controlado?: number;
+}> = ({ x, esp, piscar, ox, oy, lado, semicerrado = 0, poder = 0, controlado = 0 }) => {
+  const A = useA();
+  const C = A.cores;
+  const cor = A.corPoder ?? "#FFB21E";
   const rx = 25 * esp;
   const ry = 29 * esp * (1 - piscar * 0.95);
   const fechamento = Math.min(1, semicerrado);
@@ -78,8 +94,14 @@ const Olho: React.FC<{
       <ellipse cx={0} cy={0} rx={rx} ry={ry} fill={C.olhoBranco} />
       {ry > 4 && (
         <>
+          {poder > 0 && <ellipse cx={0} cy={0} rx={rx} ry={ry} fill={cor} opacity={0.35 * poder} />}
           <circle cx={ox * 9} cy={oy * 9} r={12 * Math.min(esp, 1.15)} fill={C.pupila} />
-          <circle cx={ox * 9 - 4} cy={oy * 9 - 5} r={3.5} fill="#fff" />
+          {poder > 0 && <circle cx={ox * 9} cy={oy * 9} r={12 * Math.min(esp, 1.15)} fill={cor} opacity={poder} />}
+          {poder > 0 && <circle cx={ox * 9} cy={oy * 9} r={5} fill="#FFF6D8" opacity={poder} />}
+          {controlado > 0 && (
+            <circle cx={ox * 9} cy={oy * 9} r={15 * Math.min(esp, 1.15)} fill="none" stroke={cor} strokeWidth={5} opacity={controlado} />
+          )}
+          <circle cx={ox * 9 - 4} cy={oy * 9 - 5} r={3.5} fill="#fff" opacity={controlado > 0 ? 1 - controlado * 0.8 : 1} />
         </>
       )}
       {/* pálpebra superior (semicerrado / cansado) */}
@@ -91,6 +113,12 @@ const Olho: React.FC<{
           height={(ry * 2 + 4) * fechamento * 0.55}
           fill={C.pele}
         />
+      )}
+      {poder > 0 && (
+        <g opacity={poder}>
+          <ellipse cx={0} cy={0} rx={rx * 2.1} ry={ry * 1.6} fill={cor} opacity={0.18} />
+          <ellipse cx={0} cy={0} rx={rx * 1.4} ry={ry * 1.15} fill={cor} opacity={0.22} />
+        </g>
       )}
       {piscar > 0.6 && (
         <path
@@ -214,7 +242,15 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
         <g>
           {(perfil || tres) && <path d={perfil ? CABELO_NUCA_PERFIL : CABELO_NUCA_TRES} fill={C.cabelo} />}
           <g transform={`translate(${fx * 0.25},0)`}>
-            {A.cabelo === "cacheado" ? (
+            {A.cabelo === "penteado" ? (
+              <>
+                <path d={CABELO_PENTEADO} fill={C.cabelo} />
+                <path d={CABELO_SOMBRA} fill={C.cabeloSombra} opacity={0.6} />
+                {PENTEADO_FIOS.map((d, i) => (
+                  <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={8} fill="none" strokeLinecap="round" />
+                ))}
+              </>
+            ) : A.cabelo === "cacheado" ? (
               <>
                 <path d={CABELO_CACHEADO} fill={C.cabelo} />
                 <path d={CABELO_SOMBRA} fill={C.cabeloSombra} />
@@ -241,10 +277,17 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
             <Sobrancelha x={perfil ? 10 : 74} y={e.sobY} ang={e.sobAng} lado={1} />
           </g>
-          {!perfil && <Olho x={-74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={-1} semicerrado={e.semicerrado} />}
+          {!perfil && <Olho x={-74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={-1} semicerrado={e.semicerrado} poder={pose.olhosPoder} controlado={pose.controlado} />}
           <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
-            <Olho x={perfil ? 10 : 74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={1} semicerrado={e.semicerrado} />
+            <Olho x={perfil ? 10 : 74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={1} semicerrado={e.semicerrado} poder={pose.olhosPoder} controlado={pose.controlado} />
           </g>
+          {A.rugas && !perfil && (
+            <g stroke={C.peleSombra} strokeWidth={5} fill="none" strokeLinecap="round" opacity={0.7}>
+              <path d="M -40 70 Q -60 100 -54 130" />
+              <path d="M 44 70 Q 64 100 58 130" />
+              <path d="M -30 -100 Q 0 -108 30 -100" />
+            </g>
+          )}
           {/* nariz */}
           {!perfil && (
             <path d="M 6 36 Q 22 58 2 66" stroke={C.peleSombra} strokeWidth={8} fill="none" strokeLinecap="round" />
@@ -314,6 +357,30 @@ for (let i = 0; i < 26; i++) {
   const y = -260 + Math.floor(i / 5) * 32 + ((i * 13) % 20);
   if (Math.hypot(x, y + 60) < 220) CACHOS.push([x, y]);
 }
+// Penteado para trás (vilão): sem franja, entradas altas, fios penteados para trás.
+const contornoPenteado = () => {
+  const pts: string[] = [];
+  const n = 48;
+  for (let i = 0; i <= n; i++) {
+    const a = ((192 - (204 * i) / n) * Math.PI) / 180;
+    const R = 226 + 6 * Math.abs(Math.sin(i * 0.5));
+    pts.push(`${(Math.cos(a) * R).toFixed(1)} ${(-Math.sin(a) * R * 1.06 - 4).toFixed(1)}`);
+  }
+  let d = `M ${pts[0]} `;
+  for (let i = 1; i < pts.length; i++) d += `L ${pts[i]} `;
+  // linha do cabelo: alta, com entradas nas têmporas e um bico no meio
+  d += "L 212 0 C 206 -60 190 -110 150 -128 C 110 -120 80 -150 40 -158 L 0 -146 L -40 -158 C -80 -150 -110 -120 -150 -128 C -190 -110 -206 -60 -212 0 Z";
+  return d;
+};
+const CABELO_PENTEADO = contornoPenteado();
+const PENTEADO_FIOS = [
+  "M -120 -150 Q -150 -200 -110 -236",
+  "M -60 -170 Q -70 -220 -30 -250",
+  "M 0 -160 Q 10 -214 50 -246",
+  "M 60 -168 Q 90 -214 130 -222",
+  "M 140 -140 Q 180 -170 196 -140",
+  "M -180 -100 Q -206 -150 -186 -170",
+];
 const CABELO_SOMBRA =
   "M 120 -200 C 190 -160 230 -80 222 10 L 206 20 L 196 -60 C 180 -80 160 -90 150 -92 C 170 -130 160 -170 120 -200 Z";
 const CABELO_COSTAS =
@@ -337,18 +404,32 @@ const Braco: React.FC<{
   cotovelo: number;
   sombra?: boolean;
 }> = ({ lado, ombro, cotovelo, sombra }) => {
-  const C = useA().cores;
+  const A = useA();
+  const C = A.cores;
+  const terno = A.estampa === "terno";
   const pele = sombra ? C.peleSombra : C.pele;
   const manga = sombra ? C.camisaSombra : C.camisa;
   return (
     <g transform={`rotate(${-ombro * lado})`}>
       {/* braço */}
       <rect x={-23} y={0} width={46} height={300} rx={23} fill={pele} />
-      {/* manga curta */}
-      <path d="M -40 -20 Q 0 -40 40 -20 L 44 100 Q 0 112 -44 100 Z" fill={manga} />
-      <path d="M -44 92 Q 0 104 44 92 L 44 100 Q 0 112 -44 100 Z" fill={C.camisaDetalhe} />
+      {terno ? (
+        <path d="M -40 -20 Q 0 -40 40 -20 L 38 300 Q 0 312 -38 300 Z" fill={manga} />
+      ) : (
+        <>
+          {/* manga curta */}
+          <path d="M -40 -20 Q 0 -40 40 -20 L 44 100 Q 0 112 -44 100 Z" fill={manga} />
+          <path d="M -44 92 Q 0 104 44 92 L 44 100 Q 0 112 -44 100 Z" fill={C.camisaDetalhe} />
+        </>
+      )}
       <g transform={`translate(0,286) rotate(${-cotovelo * lado})`}>
         <rect x={-21} y={-10} width={42} height={270} rx={21} fill={pele} />
+        {terno && (
+          <>
+            <rect x={-36} y={-24} width={72} height={250} rx={30} fill={manga} />
+            <rect x={-30} y={214} width={60} height={22} rx={6} fill={A.camisaSocial ?? "#F2F2EE"} />
+          </>
+        )}
         {/* mão */}
         <ellipse cx={0} cy={272} rx={34} ry={40} fill={pele} />
         <ellipse cx={-26 * lado} cy={256} rx={12} ry={24} fill={pele} transform={`rotate(${-25 * lado} ${-26 * lado} 256)`} />
@@ -364,7 +445,9 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   sombra,
   paraDireita,
 }) => {
-  const C = useA().cores;
+  const A = useA();
+  const C = A.cores;
+  const terno = A.estampa === "terno";
   const pe = paraDireita ? 1 : lado;
   const pele = sombra ? C.peleSombra : C.pele;
   return (
@@ -373,6 +456,7 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
       <rect x={-34} y={0} width={68} height={390} rx={30} fill={pele} />
       <g transform={`translate(0,376) rotate(${-joelho * lado})`}>
         <rect x={-26} y={-14} width={52} height={360} rx={24} fill={pele} />
+        {terno && <path d="M -50 -30 L 50 -30 L 42 340 L -42 340 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />}
         {/* tênis */}
         <g transform={`translate(${12 * pe},364)`}>
           <path d={`M ${-46} -26 Q ${-46} -50 ${-10} -48 L ${30} -44 Q ${78} -36 ${82} 0 L ${-50} 0 Z`} transform={pe === -1 ? "scale(-1,1)" : undefined} fill={sombra ? C.tenisSombra : C.tenis} />
@@ -380,8 +464,14 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
         </g>
       </g>
       {/* perna da bermuda: acompanha a coxa */}
-      <path d="M -62 -40 L 62 -40 L 70 290 L -70 290 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />
-      {!sombra && <path d="M 20 -40 L 62 -40 L 70 290 L 34 290 Z" fill={C.bermudaSombra} />}
+      {terno ? (
+        <path d="M -56 -40 L 56 -40 L 50 396 L -50 396 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />
+      ) : (
+        <>
+          <path d="M -62 -40 L 62 -40 L 70 290 L -70 290 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />
+          {!sombra && <path d="M 20 -40 L 62 -40 L 70 290 L 34 290 Z" fill={C.bermudaSombra} />}
+        </>
+      )}
     </g>
   );
 };
@@ -445,8 +535,30 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
         <rect x={-42} y={-1232} width={84} height={70} rx={20} fill={C.peleSombra} />
         {costas ? (
           <path d="M -60 -1196 Q 0 -1186 60 -1196" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
-        ) : (
+        ) : useA().estampa === "terno" ? null : (
           <path d="M -62 -1188 Q 0 -1130 62 -1188" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
+        )}
+        {/* terno: barra do paletó, camisa, gravata, lapelas */}
+        {useA().estampa === "terno" && (
+          <g>
+            <path d="M -158 -800 L 158 -800 L 164 -712 Q 0 -700 -164 -712 Z" fill={C.camisa} />
+            <path d="M 60 -800 L 158 -800 L 164 -712 Q 110 -706 70 -704 Z" fill={C.camisaSombra} />
+            {!costas && (
+              <>
+                <path d="M -70 -1186 L 70 -1186 L 0 -960 Z" fill={useA().camisaSocial ?? "#F2F2EE"} />
+                <path d="M -18 -1170 L 18 -1170 L 12 -1146 L -12 -1146 Z" fill={useA().gravata ?? "#E8A317"} />
+                <path d="M -12 -1148 L 12 -1148 L 22 -1000 L 0 -972 L -22 -1000 Z" fill={useA().gravata ?? "#E8A317"} />
+                <path d="M 2 -1148 L 12 -1148 L 22 -1000 L 0 -972 Z" fill={useA().gravataSombra ?? "#B97F0E"} />
+                <path d="M -70 -1186 L -100 -1130 L -60 -1100 L -86 -1070 L 0 -940 Z" fill={C.camisaDetalhe} />
+                <path d="M 70 -1186 L 100 -1130 L 60 -1100 L 86 -1070 L 0 -940 Z" fill={C.camisaDetalhe} />
+                {[-900, -830].map((y) => (
+                  <circle key={y} cx={0} cy={y} r={9} fill={C.camisaDetalhe} />
+                ))}
+                <rect x={60} y={-1080} width={70} height={10} rx={3} fill={C.camisaDetalhe} />
+                <path d="M 70 -1080 L 82 -1102 L 94 -1080 Z" fill={useA().gravata ?? "#E8A317"} />
+              </>
+            )}
+          </g>
         )}
         {/* bolso */}
         {useA().estampa === "faixa" && (

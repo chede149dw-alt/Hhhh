@@ -82,3 +82,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **A ameaça da série é um vilão com poder (controle mental) que controla o governo.** Decisão do usuário (07/11).
   Detalhes e propostas de regras do poder em `roteiros/universo.md`. Motivo: dá um inimigo à altura e explica
   os agentes, a ficha confidencial e quem filmou do prédio.
+- **Vilão criado e aprovado para criar: "o Regente" (Otávio Regis), controle mental, cor âmbar.** As 4 regras do
+  poder (gatilho olhar/voz, limite, anel âmbar nos controlados, fraquezas) foram aprovadas pelo usuário (07/11).
+  Âmbar foi escolhido para não confundir com o ciano do Kaik nem com o roxo da fenda do Chede: cada poder tem sua cor.
