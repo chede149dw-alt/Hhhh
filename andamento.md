@@ -20,7 +20,7 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   - Capa: `previas/parte-2-kaik-velocidade-capa.png` · Descrição: `roteiros/parte-2-kaik-velocidade-post.md`
   - ✅ Prévia aprovada ("ficou top"). Voz final ElevenLabs (Witalo Guimarães, 66 s): `audio/parte-2-kaik-velocidade-narracao.mp3`
   - Renumerada para **Parte 2** (capa "PARTE 2", final "Na parte 3…" com a frase regravada e emendada).
-  - ⏳ Render final → `prontos/parte-2-kaik-velocidade.mp4` + `prontos/parte-2-kaik-velocidade-capa.png`
+  - ✅ **Final pronto**: `prontos/parte-2-kaik-velocidade.mp4` (67 s, 1080x1920) + `prontos/parte-2-kaik-velocidade-capa.png`
     (se não estiver lá: `cd estudio && npx remotion render Velocidade1 ../prontos/parte-2-kaik-velocidade.mp4 --concurrency=3 --timeout=240000 --crf=18 --browser-executable=/opt/pw-browsers/chromium`)
 
 ## Próximos passos
