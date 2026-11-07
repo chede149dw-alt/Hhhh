@@ -30,4 +30,16 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 - Os dois descobrem que os dois têm poderes.
 - Alguém do prédio da frente filmou tudo.
 
-**Em aberto:** quem está vigiando os dois? Tem ligação com o "outro lugar"?
+**Em aberto:** quem está vigiando os dois? → Resposta: gente do vilão com controle mental (ver "A ameaça"). Ainda em aberto: tem ligação com o "outro lugar"?
+
+## A ameaça (definida pelo usuário em 07/11)
+- **O vilão também tem poder: controle mental.** É ele quem controla o governo por dentro: políticos, polícia e
+  agentes de terno obedecem a ele sem saber.
+- É ele (ou gente dele) quem está **vigiando** o Chede e o Kaik: a pessoa que filmou do prédio da frente trabalha
+  para ele, e os agentes montam uma **ficha "CONFIDENCIAL"** de cada pessoa com poder.
+- **Nome e visual: ainda não definidos** (perguntar ao usuário antes de mostrar o rosto dele).
+- Seguindo a regra "todo poder tem lógica e consequência", propostas a confirmar com o usuário:
+  - ele precisa de algo para controlar (contato visual, ouvir a voz dele, ou estar perto);
+  - controlar muita gente ao mesmo tempo cansa / tem limite, por isso usa o governo como "multiplicador";
+  - quem está sob controle tem um sinal visível (olhar vazio, brilho nos olhos) que o público aprende a reconhecer;
+  - possível fraqueza: alguém que ele não consegue alcançar (o "outro lugar" do Chede? velocidade maior que a reação dele?).

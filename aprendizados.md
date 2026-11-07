@@ -79,3 +79,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   objeto, contador que sobe; metáforas visuais (raio-X da cabeça, moléculas de ar, elefante = força).
 - Vídeo que o usuário manda acelerado serve igual para estudar: desacelerar o áudio com `atempo=0.5` antes de
   transcrever.
+- **A ameaça da série é um vilão com poder (controle mental) que controla o governo.** Decisão do usuário (07/11).
+  Detalhes e propostas de regras do poder em `roteiros/universo.md`. Motivo: dá um inimigo à altura e explica
+  os agentes, a ficha confidencial e quem filmou do prédio.
