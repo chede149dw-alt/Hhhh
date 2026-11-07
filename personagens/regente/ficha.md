@@ -23,6 +23,6 @@
 - `estudio/src/personagens/Regente.tsx`: `<Regente/>`, `<CabecaRegente/>`, `APARENCIA_REGENTE`, `COR_PODER_REGENTE`.
 - Olhos com poder: `pose={{ olhosPoder: 1 }}`. Pessoa controlada (qualquer personagem): `pose={{ controlado: 1 }}`.
 - Ondas: `<OndasMentais x y forca escala />` em `estudio/src/efeitos/ControleMental.tsx`.
-- Na Parte 3: mostrar só silhueta, olhos âmbar e voz; rosto inteiro mais tarde (revelação).
+- **Ainda não aparece nos episódios** (decisão do usuário). Só entra quando o usuário liberar.
 
 Imagem: `ficha.png`.

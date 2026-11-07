@@ -88,3 +88,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Correção do usuário no visual do Regente:** adulto de **35 anos**, **barba** e **cabelo preto lambido para trás**
   (antes eu tinha feito ~55 anos, grisalho e com rugas). Motivo: é assim que o usuário imagina o vilão. Barba feita
   curta e aparada; a primeira versão, cheia, pesou o rosto e cobria a nuca nas vistas de lado.
+- **O Regente não aparece por enquanto** — nem rosto, nem silhueta, nem voz — até o usuário liberar. Motivo:
+  decisão do usuário (07/11), para guardar o vilão para episódios futuros. Nos próximos episódios a ameaça fica só
+  nos agentes / em quem filmou do prédio.

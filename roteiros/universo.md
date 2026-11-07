@@ -38,7 +38,7 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
   agentes de terno obedecem a ele sem saber.
 - É ele (ou gente dele) quem está **vigiando** o Chede e o Kaik: a pessoa que filmou do prédio da frente trabalha
   para ele, e os agentes montam uma **ficha "CONFIDENCIAL"** de cada pessoa com poder.
-- **Nome e visual: definidos** — Otávio Regis, "o Regente" (ficha em `personagens/regente/`). Na Parte 3 aparece só em silhueta com olhos âmbar.
+- **Nome e visual: definidos** — Otávio Regis, "o Regente" (ficha em `personagens/regente/`). **Não aparece por enquanto** (decisão do usuário, 07/11): fica guardado para episódios futuros, nem em silhueta.
 - Regras do poder (**aprovadas pelo usuário**):
   - ele precisa de algo para controlar (contato visual, ouvir a voz dele, ou estar perto);
   - controlar muita gente ao mesmo tempo cansa / tem limite, por isso usa o governo como "multiplicador";
