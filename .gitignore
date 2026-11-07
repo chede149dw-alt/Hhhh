@@ -27,3 +27,6 @@ build/
 referencias/*.pdf
 referencias/*.mp4
 referencias/transcricao-*.md
+
+# Renders parciais do estúdio
+estudio/out/

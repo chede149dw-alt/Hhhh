@@ -26,7 +26,8 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
 - ⏳ **Parte 2 (Kaik) refeita no estilo da referência 2** — aprovado pelo usuário (raios em ciano, mesmo roteiro e voz).
   Cenas novas em `estudio/src/episodios/velocidade1/CenasNovas.tsx` (3D: capa, vista aérea, mundo parado, pássaro,
   prédio do vigia). Render final → `prontos/parte-2-kaik-velocidade-v2.mp4`
-  (`npx remotion render Velocidade1 ../prontos/parte-2-kaik-velocidade-v2.mp4 --gl=swangle --concurrency=4 --timeout=180000 --crf=18 --browser-executable=/opt/pw-browsers/chromium`).
+  (`cd estudio && scripts/render_partes.sh Velocidade1 2016 ../prontos/parte-2-kaik-velocidade-v2.mp4` —
+  renderiza em blocos e continua de onde parou se o container reiniciar).
 
 ## Próximos passos
 1. Postar a Parte 2 (Kaik). Depois: **Parte 3** — quem está vigiando os dois (e quem segurou a mão do Chede).

@@ -62,3 +62,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   (`personagens/poses.ts`) e câmera colada no personagem. Objetos sempre presos à mão que se mexe.
 - **Render com 3D**: usar `--gl=swangle` (os outros modos não criam WebGL aqui). ~2 s por quadro.
 - **Raios do Kaik em ciano** (decisão do usuário). Objeto levado à boca: desenhar a mão e o antebraço por cima da cabeça (`MaoFechada`).
+- **Render longo = `scripts/render_partes.sh`** (blocos de 300 quadros + áudio separado). O container pode reiniciar e matar o processo; os blocos prontos ficam em `estudio/out/`.
