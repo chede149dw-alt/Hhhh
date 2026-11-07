@@ -116,3 +116,10 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   mãos. Pode acrescentar trechinhos se precisar. Motivo: o usuário gosta de ver os poderes sendo explorados de jeitos
   novos, sempre com lógica e custo (tontura, olho vermelho de esforço).
 - **Qualidade acima de prazo** (usuário, 07/11): "não importa se demorar" — fazer no nível das referências 4 e 5.
+- **Figurantes são personagens 2D de verdade, nunca bonecos de cápsula 3D** (correção do usuário, 07/11: "esses
+  bonecos feios de fundo"). Criar pessoas aleatórias no estilo do Chede/Kaik, variadas: moletom, camisa, camiseta,
+  calça, boné, óculos, mochila nas costas, tons de pele e cabelos diferentes. Motivo: dá vida ao cenário e mantém o
+  estilo dos personagens.
+- **Cenários precisam de muito mais detalhe** (usuário, 07/11: "ficaram muito feios"; "não tem problema se demorar").
+  Referência: cidades/campos das refs 4 e 5 — muitos objetos, placas, toldos, plantas, carros, nuvens, céu com sol.
+  Nada de caixa lisa: toda superfície com textura, borda, janela, sombra.
