@@ -128,3 +128,7 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   parecendo solto, Chede "nas costas" do Kaik voando separado. Regras: sentado usa a pose `sentar()` (coxa e canela
   dobradas) e nunca corte no meio do corpo; de costas, braço abre para o lado; poses compostas (carregar alguém)
   se testam isoladas no `Debug` antes de entrar na cena; conferir quadros em resolução alta (zoom) antes de enviar.
+- **Voz final mais longa que o limite (2min15)**: acelerar com `ffmpeg -af atempo=1.09` (tom igual) antes do
+  alinhamento. Parte 4: 144,6 s → 132,6 s. Motivo: limite de duração pedido pelo usuário.
+- **ElevenLabs "Unusual activity / Free Tier disabled" ou "busy"**: nada é cobrado; tentar de novo alguns minutos
+  depois (na Parte 4 passou na 4ª tentativa, ~15 min depois). Um dos 2 takes pode falhar e o outro sair.
