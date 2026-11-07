@@ -30,6 +30,8 @@ Use este arquivo para retomar de onde parou. Atualizado a cada etapa.
   (`cd estudio && scripts/render_partes.sh Velocidade1 2016 ../prontos/parte-2-kaik-velocidade-v2.mp4` —
   renderiza em blocos e continua de onde parou se o container reiniciar).
 
+- ⏳ **Parte 3 (Chede + Kaik, "E se filmassem o seu poder?")**: roteiro em `roteiros/parte-3-vigiados.md`, aguardando aprovação.
+
 ## Próximos passos
 1. Postar a Parte 2 (Kaik). Depois: **Parte 3** — quem está vigiando os dois (e quem segurou a mão do Chede).
 2. Depois: Parte 2 do Chede ("quem mais está nesse lugar?"), seguindo `roteiros/universo.md`.
