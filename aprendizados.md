@@ -154,3 +154,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   Regra: escolher ângulo com o personagem na frente do objeto, ou tirar o personagem do plano.
 - Marcas/detalhes num lado do objeto: a câmera orbita mostrando ESSE lado, nunca a traseira.
 - **Parte 4 refeita aprovada** (usuário, 08/11: "Bora para a próxima parte"). Motivo: o padrão da referência 5 (proporção 2.0, cor única, primeiro plano desfocado, closes de objeto) é o padrão da série daqui pra frente.
+- **Duração volta ao tempo normal (~60–75 s)** (usuário, 08/11: "coloquei 2 minutos de vídeo, demoro muito pra gerar"). Motivo: o render de 2 min no visual novo leva ~10 h. Roteiros novos com ≈200 palavras.
