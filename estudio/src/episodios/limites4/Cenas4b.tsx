@@ -457,14 +457,10 @@ export const L34_Marcas: React.FC = () => {
   const { p } = useP();
   const abre = interpolate(p, [0, 0.2], [0, 1], clamp) * interpolate(p, [0.4, 0.5], [1, 0], clamp);
   const y = interpolate(p, [0.2, 0.4], [3.5, 0], clamp);
-  const cam = orbita([2.5, 1, -9], lerp(-160, -60, p), lerp(9, 5.5, p), lerp(2.4, 1.3, p), 44, 0.9);
+  const cam = orbita([2.5, 1, -9], lerp(-150, -190, p), lerp(9, 6.5, p), lerp(2.6, 1.6, p), 44, 0.9);
   const c = projetar(cam, [2.5, 3.5, -9]);
   return (
-    <Plano3D id="l34" clima="porDoSol" cam={cam} cenario={<Campo3D carroY={y} marcas={interpolate(p, [0.4, 0.55], [0, 1], clamp)} carroEscala={p < 0.2 ? 0 : 1} />}
-      atores={[
-        { quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", expr: "espanto", pose: { olharX: 0.9 } },
-        { quem: "kaik", x: KA[0] - 0.4, z: KA[1] + 0.8, vista: "tresQuartos", espelhar: true, expr: "medo", pose: { olharX: 0.9 } },
-      ]}
+    <Plano3D id="l34" clima="porDoSol" cam={cam} cenario={<Campo3D carroY={y} marcas={interpolate(p, [0.4, 0.55], [0, 1], clamp)} carroEscala={p < 0.2 ? 0 : 1} rodasNovas />}
       frente={abre > 0.01 ? <Fenda x={c.x} y={c.y} tamanho={(abre * 3.5 * c.pxPorMetro) / 240} /> : null}
     />
   );
@@ -473,10 +469,10 @@ export const L34_Marcas: React.FC = () => {
 // 35 · Não estavam lá antes. Parte 5 + segue
 export const L35_Final: React.FC = () => {
   const { p, f } = useP();
-  const cam = camEntre({ pos: [5.2, 0.9, -6.2], alvo: [3.3, 0.8, -9.3], fov: 40 }, { pos: [4.4, 0.85, -7.2], alvo: [3.3, 0.8, -9.3], fov: 34 }, Math.min(1, p * 1.6));
+  const cam = camEntre({ pos: [7.0, 1.8, -4.6], alvo: [3.0, 0.8, -9.3], fov: 40 }, { pos: [6.3, 1.65, -5.4], alvo: [3.0, 0.8, -9.3], fov: 36 }, Math.min(1, p * 1.6));
   return (
     <AbsoluteFill>
-      <Plano3D id="l35" clima="porDoSol" cam={cam} cenario={<Campo3D marcas={1} />} />
+      <Plano3D id="l35" clima="porDoSol" cam={cam} cenario={<Campo3D marcas={1} rodasNovas />} />
       {p > 0.45 && (
         <AbsoluteFill style={{ background: `rgba(10,6,14,${interpolate(p, [0.45, 0.6], [0, 0.55], clamp)})` }}>
           <div style={{ position: "absolute", top: 700, width: "100%", textAlign: "center", ...fonte }}>

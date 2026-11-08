@@ -50,8 +50,8 @@ export const Arvore: React.FC<{ p: [number, number, number]; s?: number; cor?: s
 );
 
 // ---------- Carros ----------
-export const Carro: React.FC<{ p: [number, number, number]; rotY?: number; cor?: string; velho?: boolean; marcas?: number; escala?: number }> = ({
-  p, rotY = 0, cor = "#121318", velho = false, marcas = 0, escala = 1,
+export const Carro: React.FC<{ p: [number, number, number]; rotY?: number; cor?: string; velho?: boolean; marcas?: number; escala?: number; rodasNovas?: boolean }> = ({
+  p, rotY = 0, cor = "#121318", velho = false, marcas = 0, escala = 1, rodasNovas = false,
 }) => {
   const tMarcas = useMemo(
     () =>
@@ -105,10 +105,28 @@ export const Carro: React.FC<{ p: [number, number, number]; rotY?: number; cor?:
       <Caixa p={[0, 1.18, -1.36]} s={[1.5, 0.42, 0.02]} cor={vidro} rough={0.2} />
       {[-1, 1].map((l) =>
         [-1.35, 1.35].map((zz) => (
+          !rodasNovas ? (
           <mesh key={`${l}${zz}`} position={[l * 0.86, 0.36, zz]} rotation={[0, 0, Math.PI / 2]} castShadow>
             <cylinderGeometry args={[0.36, 0.36, 0.26, 14]} />
             <meshStandardMaterial color="#141416" />
           </mesh>
+          ) : (
+          <group key={`${l}${zz}`} position={[l * 0.86, 0.36, zz]} rotation={[0, 0, Math.PI / 2]}>
+            {/* pneu cinza-escuro (não chapado) + aro e calota claros: não vira bloco preto de perto */}
+            <mesh castShadow>
+              <cylinderGeometry args={[0.36, 0.36, 0.26, 20]} />
+              <meshStandardMaterial color="#38363A" roughness={0.9} />
+            </mesh>
+            <mesh position={[0, -l * 0.135, 0]}>
+              <cylinderGeometry args={[0.22, 0.22, 0.02, 20]} />
+              <meshStandardMaterial color={velho ? "#8C7E70" : "#A9ADB3"} roughness={0.5} metalness={0.3} />
+            </mesh>
+            <mesh position={[0, -l * 0.15, 0]}>
+              <cylinderGeometry args={[0.08, 0.08, 0.02, 12]} />
+              <meshStandardMaterial color="#5A5550" />
+            </mesh>
+          </group>
+          )
         )),
       )}
       {!velho && (
@@ -651,8 +669,8 @@ const Mato: React.FC<{ n?: number; area?: [number, number, number, number]; seme
   );
 };
 
-export const Campo3D: React.FC<{ carro?: boolean; marcas?: number; carroY?: number; porta?: boolean; deita?: number; carroEscala?: number; filhos?: React.ReactNode }> = ({
-  carro = true, marcas = 0, carroY = 0, porta = true, deita = 0, carroEscala = 1, filhos,
+export const Campo3D: React.FC<{ carro?: boolean; marcas?: number; carroY?: number; porta?: boolean; deita?: number; carroEscala?: number; filhos?: React.ReactNode; rodasNovas?: boolean }> = ({
+  carro = true, marcas = 0, carroY = 0, porta = true, deita = 0, carroEscala = 1, filhos, rodasNovas = false,
 }) => {
   const terra = useMemo(
     () =>
@@ -695,7 +713,7 @@ export const Campo3D: React.FC<{ carro?: boolean; marcas?: number; carroY?: numb
         </mesh>
       ))}
       {porta && <Caixa p={[-7, 0.05, -2]} s={[0.9, 0.06, 2]} cor="#7C5A3E" r={[0, 0.5, 0]} />}
-      {carro && carroEscala > 0.01 && <Carro p={[2.5, carroY, -9]} rotY={0.4} velho marcas={marcas} escala={carroEscala} />}
+      {carro && carroEscala > 0.01 && <Carro p={[2.5, carroY, -9]} rotY={0.4} velho marcas={marcas} escala={carroEscala} rodasNovas={rodasNovas} />}
       {filhos}
       {/* vida: sol, nuvens rosadas, cidade ao longe, cerca quebrada, arbustos, lixo, fios */}
       <Sol p={[-200, 38, -150]} cor="#FFC27A" tam={50} />

@@ -146,3 +146,10 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Tronco curvado (> 30°) dobra pela cintura**, com o quadril fixo — senão o tronco solta da bermuda (correção do usuário).
 - **Gancho final tem que ser legível**: as marcas de mão pretas sumiam no carro escuro; agora têm brilho roxo em volta.
 - **Revisar o vídeo inteiro (1 quadro por segundo) antes de entregar**, não só alguns quadros.
+
+## Rodas e personagens 2D atrás de objetos 3D (08/11, varredura final da Parte 4)
+- Roda de carro em close: pneu cinza-escuro (#38363A) com aro e calota claros (`rodasNovas` no `Carro`). Cilindro preto chapado vira um "bloco preto" de perto e parece glitch.
+  Motivo: no gancho final da Parte 4 as rodas pretas tapavam as marcas de mão.
+- Personagem 2D é sempre desenhado POR CIMA do 3D. Se ele fica atrás de um carro/muro no ângulo da câmera, parece que está em cima do objeto.
+  Regra: escolher ângulo com o personagem na frente do objeto, ou tirar o personagem do plano.
+- Marcas/detalhes num lado do objeto: a câmera orbita mostrando ESSE lado, nunca a traseira.
