@@ -58,3 +58,12 @@ O que ainda nos separa dela, em ordem de impacto:
    movimento, com pose de esforço, não poses paradas.
 6. **Infográficos com estilo próprio**: holograma roxo em grade, câmera térmica, raio-X em linha do carro, moléculas.
 7. **Cenários com material**: madeira, concreto sujo, luz de lâmpada com feixe, halo em lua/poste.
+
+## Reenvio 08/11 (mesmos arquivos das referências 4 e 5)
+Recursos para usar já na Parte 5:
+- Close de celular na mão ocupando a tela, com a interface detalhada.
+- Interior de carro: painel, volante e os agentes de terno e óculos escuros no banco da frente.
+- Câmera térmica (silhueta laranja num fundo roxo, escala de cor do lado, moldura com "REC").
+- Holograma em grade roxa (quarto em linhas) para explicar a lógica.
+- Noite azul: lua e postes com halo, bokeh grande, tudo num tom só.
+- Silhueta em contorno branco translúcido para quem "não está ali".

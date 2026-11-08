@@ -63,4 +63,4 @@
 - [x] Engajamento no meio (selo) e no fim
 - [x] O Regente não aparece (só os agentes controlados); quem espera aparece só em silhueta
 - [x] Gancho: quem estava esperando?
-- [ ] Aprovado pelo usuário
+- [x] **Aprovado pelo usuário (08/11)** — "Ótimo. Pode fazer." Quem espera fica em silhueta (definir antes da Parte 6).
