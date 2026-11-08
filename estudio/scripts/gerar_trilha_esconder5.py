@@ -139,7 +139,15 @@ def clique(d=0.05):  # clique seco (ecolocalização de algo no escuro)
     N = int(d * SR); t = np.arange(N) / SR
     return (ruido(N, 5000, 2500) * np.exp(-t * 160) + np.sin(2 * np.pi * 2600 * t) * np.exp(-t * 220)) * 0.9
 
-def miado(d=0.7):
+import subprocess
+def carregar(caminho, a=0.0, b=None):  # trecho de um arquivo de áudio (miado real gerado no ElevenLabs)
+    pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", caminho, "-ac", "1", "-ar", str(SR), "-f", "s16le", "-"], capture_output=True).stdout
+    x = np.frombuffer(pcm, np.int16).astype(np.float32) / 32768
+    x = x[int(a * SR): int(b * SR) if b else None]
+    return x * env(len(x), 0.01, 0.08)
+MIADO = "../audio/sfx-miado-gato.mp3"
+
+def miado_sintetico(d=0.7):
     N = int(d * SR); t = np.arange(N) / SR
     f = 520 + 380 * np.sin(np.pi * t / d) - 120 * (t / d)
     s = np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.4 * np.sin(4 * np.pi * np.cumsum(f) / SR)
@@ -184,14 +192,14 @@ add(sfx, meio(9, 0.78), impacto(45, 1.4), 1.0)
 add(sfx, ini(10), vento(fim(10) - ini(10), 60, 300), 0.35)
 for k in range(4): add(sfx, meio(11, 0.2 + k * 0.08), clique(), 0.5)
 add(sfx, meio(11, 0.6), chiclete(0.2), 0.4)
-add(sfx, meio(12, 0.6), miado(0.8), 0.9)
+add(sfx, meio(12, 0.6), carregar(MIADO, 0.0, 0.75), 0.8)
 add(sfx, meio(13, 0.4), sugar(0.8), 0.7)
 add(sfx, meio(13, 0.42), brilho(1.4), 0.5)
 add(sfx, ini(14), vento(fim(14) - ini(14), 400, 1500), 0.25)
 add(sfx, meio(15, 0.05), vibra(1.6), 0.8)
 for k in range(8): add(sfx, meio(16, 0.15 + k * 0.06), bip(0.06, 2400), 0.3)
 for k in range(7): add(sfx, meio(17, 0.12 + k * 0.11), whoosh(0.25, 800, 2600), 0.35)
-add(sfx, meio(18, 0.3), miado(0.5), 0.7)
+add(sfx, meio(18, 0.3), carregar(MIADO, 1.75, 2.65), 0.6)
 add(sfx, meio(19, 0.1), whoosh(0.4, 600, 2000), 0.4)
 add(sfx, meio(19, 0.75), impacto(50, 1.4), 0.7)
 add(sfx, ini(20), drone(fim(20) - ini(20) + 1), 0.6)
