@@ -43,3 +43,18 @@ continuam originais — aqui só anotamos a **técnica**.
 - Sombra no chão: `SombraChao` (linha borrada projetada no 3D). Luz no personagem: `LuzCena` (tom do ambiente +
   luz quente só dentro da silhueta). Fundo 3D desfocado com `filter: blur(…)`.
 - Testes: `estudio/src/estilo2/TesteEstilo2.tsx` (2D com luz) e `TesteHibrido.tsx` (3D + 2D, câmera voando/girando).
+
+## Revisão detalhada da referência 5 (08/11, pedido do usuário: "essa qualidade, essa animação bonita")
+O que ainda nos separa dela, em ordem de impacto:
+1. **Proporção dos personagens**: cabeça ≈ 1/5 da altura (a nossa ≈ 1/4) e braços/pernas grossos (≈ 2× os nossos,
+   que parecem palitos). Mão e tênis maiores. Teste: `Corpo2Ctx` no rig (`previas/teste-proporcao-2.png`).
+2. **Cor única por cena (gradação)**: a cena inteira — cenário E personagem — mergulha numa cor só (azul-noite,
+   âmbar de lâmpada, roxo de holograma). Pouco contraste, nada saturado destoando. As nossas cores ficam puras demais.
+3. **Profundidade**: mato/objetos desfocados NA FRENTE da câmera em quase todo plano, fundo bem borrado, bokeh,
+   poeira no ar.
+4. **Planos variados e de detalhe**: close de mão segurando ferramenta, objeto grande na tela, câmera baixa, vista do
+   alto, personagem pequeno no cenário enorme. Poucos planos "dois bonecos lado a lado".
+5. **Ação animada de verdade**: escorregar na ladeira, empurrar pedra, voar, sentar no sofá — corpo inteiro em
+   movimento, com pose de esforço, não poses paradas.
+6. **Infográficos com estilo próprio**: holograma roxo em grade, câmera térmica, raio-X em linha do carro, moléculas.
+7. **Cenários com material**: madeira, concreto sujo, luz de lâmpada com feixe, halo em lua/poste.

@@ -79,6 +79,8 @@ export type Aparencia = {
 export const APARENCIA_CHEDE: Aparencia = { cores: CORES_CHEDE, cabelo: "ondulado", estampa: "bolso" };
 export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
 const useA = () => React.useContext(AparenciaCtx);
+// Proporção 2.0 (teste, estilo da referência 5): cabeça menor e braços/pernas mais grossos. Padrão: desligado.
+export const Corpo2Ctx = React.createContext(false);
 
 // ---------- Rosto ----------
 const Olho: React.FC<{
@@ -495,24 +497,25 @@ const Braco: React.FC<{
   const mangaLonga = terno || A.roupa === "moletom";
   const pele = sombra ? C.peleSombra : C.pele;
   const manga = sombra ? C.camisaSombra : C.camisa;
+  const k = React.useContext(Corpo2Ctx) ? 1.75 : 1;
   return (
     <g transform={`rotate(${-ombro * lado})`}>
       {/* braço */}
-      <rect x={-23} y={0} width={46} height={300} rx={23} fill={pele} />
+      <rect x={-23 * k} y={0} width={46 * k} height={300} rx={23 * k} fill={pele} />
       {mangaLonga ? (
-        <path d="M -40 -20 Q 0 -40 40 -20 L 38 300 Q 0 312 -38 300 Z" fill={manga} />
+        <path d={`M ${-40 * k} -20 Q 0 -40 ${40 * k} -20 L ${38 * k} 300 Q 0 312 ${-38 * k} 300 Z`} fill={manga} />
       ) : (
         <>
           {/* manga curta */}
-          <path d="M -40 -20 Q 0 -40 40 -20 L 44 100 Q 0 112 -44 100 Z" fill={manga} />
-          <path d="M -44 92 Q 0 104 44 92 L 44 100 Q 0 112 -44 100 Z" fill={C.camisaDetalhe} />
+          <path d={`M ${-40 * k} -20 Q 0 -40 ${40 * k} -20 L ${44 * k} 100 Q 0 112 ${-44 * k} 100 Z`} fill={manga} />
+          <path d={`M ${-44 * k} 92 Q 0 104 ${44 * k} 92 L ${44 * k} 100 Q 0 112 ${-44 * k} 100 Z`} fill={C.camisaDetalhe} />
         </>
       )}
       <g transform={`translate(0,286) rotate(${-cotovelo * lado})`}>
-        <rect x={-21} y={-10} width={42} height={270} rx={21} fill={pele} />
+        <rect x={-21 * k} y={-10} width={42 * k} height={270} rx={21 * k} fill={pele} />
         {mangaLonga && (
           <>
-            <rect x={-36} y={-24} width={72} height={250} rx={30} fill={manga} />
+            <rect x={-36 * k} y={-24} width={72 * k} height={250} rx={30 * k} fill={manga} />
             {terno ? (
               <rect x={-30} y={214} width={60} height={22} rx={6} fill={A.camisaSocial ?? "#F2F2EE"} />
             ) : (
@@ -521,7 +524,7 @@ const Braco: React.FC<{
           </>
         )}
         {/* mão */}
-        <ellipse cx={0} cy={272} rx={34} ry={40} fill={pele} />
+        <ellipse cx={0} cy={272} rx={34 * Math.sqrt(k)} ry={40 * Math.sqrt(k)} fill={pele} />
         <ellipse cx={-26 * lado} cy={256} rx={12} ry={24} fill={pele} transform={`rotate(${-25 * lado} ${-26 * lado} 256)`} />
       </g>
     </g>
@@ -540,13 +543,14 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   const terno = A.estampa === "terno" || !!A.calca;
   const pe = paraDireita ? 1 : lado;
   const pele = sombra ? C.peleSombra : C.pele;
+  const k = React.useContext(Corpo2Ctx) ? 1.6 : 1;
   return (
     <g transform={`rotate(${-quadril * lado})`}>
       {/* coxa */}
-      <rect x={-34} y={0} width={68} height={390} rx={30} fill={pele} />
+      <rect x={-34 * k} y={0} width={68 * k} height={390} rx={30 * k} fill={pele} />
       <g transform={`translate(0,376) rotate(${-joelho * lado})`}>
-        <rect x={-26} y={-14} width={52} height={360} rx={24} fill={pele} />
-        {terno && <path d="M -50 -30 L 50 -30 L 42 340 L -42 340 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />}
+        <rect x={-26 * k} y={-14} width={52 * k} height={360} rx={24 * k} fill={pele} />
+        {terno && <path d={`M ${-50 * k} -30 L ${50 * k} -30 L ${42 * k} 340 L ${-42 * k} 340 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />}
         {/* tênis */}
         <g transform={`translate(${12 * pe},364)`}>
           <path d={`M ${-46} -26 Q ${-46} -50 ${-10} -48 L ${30} -44 Q ${78} -36 ${82} 0 L ${-50} 0 Z`} transform={pe === -1 ? "scale(-1,1)" : undefined} fill={sombra ? C.tenisSombra : C.tenis} />
@@ -555,11 +559,11 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
       </g>
       {/* perna da bermuda: acompanha a coxa */}
       {terno ? (
-        <path d="M -56 -40 L 56 -40 L 50 396 L -50 396 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />
+        <path d={`M ${-56 * k} -40 L ${56 * k} -40 L ${50 * k} 396 L ${-50 * k} 396 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />
       ) : (
         <>
-          <path d="M -62 -40 L 62 -40 L 70 290 L -70 290 Z" fill={sombra ? C.bermudaSombra : C.bermuda} />
-          {!sombra && <path d="M 20 -40 L 62 -40 L 70 290 L 34 290 Z" fill={C.bermudaSombra} />}
+          <path d={`M ${-62 * k} -40 L ${62 * k} -40 L ${70 * k} 290 L ${-70 * k} 290 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />
+          {!sombra && <path d={`M ${20 * k} -40 L ${62 * k} -40 L ${70 * k} 290 L ${34 * k} 290 Z`} fill={C.bermudaSombra} />}
         </>
       )}
     </g>
@@ -574,9 +578,10 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
   semSombra,
 }) => {
   const C = useA().cores;
+  const c2 = React.useContext(Corpo2Ctx);
   const sx = vista === "perfil" ? 0.58 : vista === "tresQuartos" ? 0.84 : 1;
   const ombroX = vista === "perfil" ? 20 : 150 * sx;
-  const quadrilX = vista === "perfil" ? 16 : 62 * sx;
+  const quadrilX = vista === "perfil" ? 16 : (c2 ? 78 : 62) * sx;
   const costas = vista === "costas";
   const lateral = vista === "perfil" || vista === "tresQuartos";
   const resp = pose.respiracao ?? 0;
@@ -715,7 +720,7 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           <Braco lado={-1} ombro={P.bracoE} cotovelo={P.antebracoE} />
         </g>
         {/* cabeça */}
-        <g transform={`translate(0,-1420) rotate(${P.cabeca ?? 0} 0 190)`}>
+        <g transform={`translate(0,${c2 ? -1372 : -1420}) rotate(${P.cabeca ?? 0} 0 190) scale(${c2 ? 0.76 : 1})`}>
           <Cabeca expressao={expressao} pose={P} vista={vista} />
         </g>
       </g>
