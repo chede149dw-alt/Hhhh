@@ -51,7 +51,9 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
   neblina, câmera suave. Teste em `estudio/src/estilo2/TesteEstilo2.tsx` → `previas/teste-visual-2.mp4`.
   Personagens oficiais NÃO foram alterados. Aguardando aprovação do usuário para levar aos episódios.
 
-## Parte 4 — "E se você testasse o limite do seu poder?" (EM PRODUÇÃO)
+## Parte 4 — "E se você testasse o limite do seu poder?" (ENTREGUE 08/11)
+- ✅ Final: `prontos/parte-4-limites.mp4` (133,9 s, 1080x1920, voz ElevenLabs Witalo acelerada 1,09x) +
+  `prontos/parte-4-limites-capa.png` + `roteiros/parte-4-limites-post.md`. Próximo: Parte 5 ("o que tem do outro lado?").
 - Roteiro APROVADO: `roteiros/parte-4-limites.md` (36 falas, ~130 s; limite 2min15). Faculdade, tornado, fenda pelo olhar.
 - Visual: cenários 3D + personagens 2D (ver `referencias/analise-video-referencia-4-5.md`, testes em `estudio/src/estilo2/`).
 - Plano: (1) cenários 3D: rua manhã (Rua3D), faculdade (portão, anfiteatro, cantina), campo baldio pôr do sol;
