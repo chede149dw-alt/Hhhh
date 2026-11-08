@@ -153,3 +153,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - Personagem 2D é sempre desenhado POR CIMA do 3D. Se ele fica atrás de um carro/muro no ângulo da câmera, parece que está em cima do objeto.
   Regra: escolher ângulo com o personagem na frente do objeto, ou tirar o personagem do plano.
 - Marcas/detalhes num lado do objeto: a câmera orbita mostrando ESSE lado, nunca a traseira.
+- **Parte 4 refeita aprovada** (usuário, 08/11: "Bora para a próxima parte"). Motivo: o padrão da referência 5 (proporção 2.0, cor única, primeiro plano desfocado, closes de objeto) é o padrão da série daqui pra frente.
