@@ -53,6 +53,7 @@ export type Pose = {
   respiracao?: number; // 0..1
   olhosPoder?: number; // 0..1 — olhos brilhando (vilão usando o controle mental)
   controlado?: number; // 0..1 — anel âmbar na íris (pessoa sob controle mental)
+  sangueNariz?: number; // 0..1 — fio de sangue saindo do nariz
   oculos?: number; // 0 sem óculos .. 1 óculos escuros no rosto (entre 0 e 1: tirando)
 };
 
@@ -344,6 +345,15 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           {!perfil && (
             <path d="M 6 36 Q 22 58 2 66" stroke={C.peleSombra} strokeWidth={8} fill="none" strokeLinecap="round" />
           )}
+          {/* sangue escorrendo do nariz (0..1 = comprimento) */}
+          {(pose.sangueNariz ?? 0) > 0 && (() => {
+            const L = 14 + (pose.sangueNariz ?? 0) * 95;
+            const nx = perfil ? 48 : 8;
+            const ny = perfil ? 54 : 66;
+            return (
+              <path d={`M ${nx - 9} ${ny} C ${nx - 12} ${ny + L * 0.5} ${nx - 9} ${ny + L} ${nx - 2} ${ny + L + 8} C ${nx + 6} ${ny + L + 8} ${nx + 8} ${ny + L * 0.6} ${nx + 5} ${ny} Z`} fill="#C81E1E" />
+            );
+          })()}
           <g transform={`translate(${perfil ? 10 : 0},112) scale(${perfil ? 0.6 : tres ? 0.85 : 1},1)`}>
             <Boca tipo={expressao} />
           </g>
@@ -592,7 +602,11 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
       <g transform={`translate(${quadrilX},-760)`}>
         <Perna lado={1} quadril={P.pernaD} joelho={P.joelhoD} sombra paraDireita={lateral} />
       </g>
-      <g transform={`rotate(${P.tronco ?? 0} 0 -560) translate(0,${-resp * 6})`}>
+      {/* curvado (tronco > 30°): dobra pela cintura, com o quadril fixo em cima das pernas (sem buraco) */}
+      {Math.abs(P.tronco ?? 0) > 30 && (
+        <path d={`M ${-150 * sx} -790 L ${150 * sx} -790 L ${156 * sx} -690 Q 0 -660 ${-156 * sx} -690 Z`} fill={C.bermuda} />
+      )}
+      <g transform={`rotate(${P.tronco ?? 0} 0 ${Math.abs(P.tronco ?? 0) > 30 ? -760 : -560}) translate(0,${-resp * 6})`}>
         {/* bermuda */}
         <g transform={`scale(${sx},1)`}>
         <path d="M -150 -790 L 150 -790 L 156 -690 Q 0 -660 -156 -690 Z" fill={C.bermuda} />

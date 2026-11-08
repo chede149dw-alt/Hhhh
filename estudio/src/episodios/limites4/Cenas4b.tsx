@@ -17,6 +17,9 @@ const mao = (vista: "frente" | "tresQuartos" | "perfil", lado: 1 | -1, x: number
 const CH: [number, number] = [-0.9, 2.2]; // Chede (x, z) no campo
 const KA: [number, number] = [1.0, 0.6]; // Kaik
 const TORN: [number, number, number] = [-5, 0, -6];
+// espelhar = true quando o outro está à esquerda na tela (o 3/4 e o perfil olham para a direita por padrão)
+const encarar = (cam: Cam, eu: [number, number], outro: [number, number]) =>
+  projetar(cam, [outro[0], 1.2, outro[1]]).x < projetar(cam, [eu[0], 1.2, eu[1]]).x;
 
 // 17 · Primeiro teste: velocidade máxima
 export const L17_Teste1: React.FC = () => {
@@ -255,8 +258,8 @@ export const L26_JogaPedra: React.FC = () => {
   return (
     <Plano3D id="l26" clima="porDoSol" cam={cam} cenario={<Campo3D />} desfoque={1.5}
       atores={[
-        { quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", expr: "determinado", pose: { ...mao("tresQuartos", -1, 40, -1080), olharX: 0.9 } },
-        { quem: "kaik", x: KA[0], z: KA[1], vista: "tresQuartos", espelhar: true, expr: "rindo", pose: { ...mao("tresQuartos", -1, 190, -900), olharX: 0.9 },
+        { quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", espelhar: encarar(cam, CH, KA), expr: "determinado", pose: { ...mao("tresQuartos", -1, 40, -1080), olharX: 0.9 } },
+        { quem: "kaik", x: KA[0], z: KA[1], vista: "tresQuartos", espelhar: encarar(cam, KA, CH), expr: "rindo", pose: { ...mao("tresQuartos", -1, 190, -900), olharX: 0.9 },
           extra: (s) => (
             <g transform={`translate(${-190 * s},${-900 * s})`}>
               {[[-20, -10], [10, -20], [0, 10], [25, 5]].map(([x, y], i) => (
@@ -295,15 +298,15 @@ export const L28_Testa: React.FC = () => {
   const t = interpolate(f, [4, 40], [0, 1], clamp);
   const bateu = t >= 1;
   const cam = camEntre({ pos: [0.05, 1.55, 6.0], alvo: [0.05, 1.45, 1.35], fov: 52 }, { pos: [-0.3, 1.6, 5.0], alvo: [-0.3, 1.5, 1.35], fov: 48 }, p);
-  const testa = projetar(cam, [CH[0] + 0.1, 1.68, CH[1]]);
+  const testa = projetar(cam, [CH[0] + 0.08, 1.8, CH[1]]);
   return (
     <AbsoluteFill>
       <Plano3D id="l28" clima="porDoSol" cam={cam} cenario={<><Campo3D />{!bateu && <Pedra3D p={trajeto(t)} r={0.08} giro={f * 0.4} />}</>} desfoque={2}
         atores={[
-          { quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", expr: bateu ? "raiva" : "determinado", tremor: bateu && f < 52 ? Math.sin(f * 3) * 10 : 0, pose: { bracoE: -22, antebracoE: -40, bracoD: -22, antebracoD: -40, cabeca: bateu ? -12 : 0, olharX: 0.9, piscar: bateu && f < 48 ? 1 : 0 } },
-          { quem: "kaik", x: KA[0], z: KA[1], vista: "tresQuartos", espelhar: true, expr: bateu ? "rindo" : "feliz", pose: { bracoD: 150, antebracoD: -30, olharX: 0.9 } },
+          { quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", espelhar: encarar(cam, CH, KA), expr: bateu ? "raiva" : "determinado", tremor: bateu && f < 52 ? Math.sin(f * 3) * 10 : 0, pose: { bracoE: -22, antebracoE: -40, bracoD: -22, antebracoD: -40, cabeca: bateu ? -12 : 0, olharX: 0.9, piscar: bateu && f < 48 ? 1 : 0 } },
+          { quem: "kaik", x: KA[0], z: KA[1], vista: "tresQuartos", espelhar: encarar(cam, KA, CH), expr: bateu ? "rindo" : "feliz", pose: { bracoD: 150, antebracoD: -30, olharX: 0.9 } },
         ]}
-        frente={bateu ? <circle cx={testa.x - 6} cy={testa.y - 8} r={(0.04 + interpolate(f, [40, 50], [0, 0.03], clamp)) * testa.pxPorMetro} fill="#C77A55" stroke="#9A5236" strokeWidth={4} /> : null}
+        frente={bateu ? <circle cx={testa.x - 6} cy={testa.y - 8} r={(0.025 + interpolate(f, [40, 50], [0, 0.015], clamp)) * testa.pxPorMetro} fill="#C77A55" stroke="#9A5236" strokeWidth={4} /> : null}
         html={<Info rotulo="A PEDRA LEVA" valor="0,7" unidade="s" y={190} de={0} />}
       />
       {bateu && f < 44 && <AbsoluteFill style={{ background: "#fff", opacity: interpolate(f, [40, 44], [0.7, 0], clamp) }} />}
@@ -326,8 +329,8 @@ export const L29_Fenda: React.FC = () => {
     <ComOlhoRoxo>
       <Plano3D id="l29" clima="porDoSol" cam={cam} cenario={<><Campo3D />{some > 0 && <Pedra3D p={trajeto(t)} r={0.08 * (parou ? some : 1)} giro={f * 0.4} />}</>} desfoque={2}
         atores={[
-          { quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", expr: "determinado", pose: { bracoE: -22, antebracoE: -40, bracoD: -22, antebracoD: -40, olharX: 0.9, olhosPoder: brilho } },
-          { quem: "kaik", x: KA[0], z: KA[1], vista: "tresQuartos", espelhar: true, expr: parou ? "espanto" : "feliz", pose: { bracoD: 150, antebracoD: -30, olharX: 0.9 } },
+          { quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", espelhar: encarar(cam, CH, KA), expr: "determinado", pose: { bracoE: -22, antebracoE: -40, bracoD: -22, antebracoD: -40, olharX: 0.9, olhosPoder: brilho } },
+          { quem: "kaik", x: KA[0], z: KA[1], vista: "tresQuartos", espelhar: encarar(cam, KA, CH), expr: parou ? "espanto" : "feliz", pose: { bracoD: 150, antebracoD: -30, olharX: 0.9 } },
         ]}
         frente={tamanho > 0.01 ? <Fenda x={ponto.x} y={ponto.y} tamanho={tamanho * ponto.pxPorMetro / 160} /> : null}
         html={<Info rotulo="TENTATIVA" valor="5ª ✔" y={190} cor="#B48CFF" de={30} />}
@@ -429,12 +432,10 @@ export const L33_QuatroMetros: React.FC = () => {
   const c = projetar(cam, [2.5, 1.2, -9]);
   if (parte2) {
     const cam2 = orbita([CH[0], 1.62, CH[1]], -25, 0.95, 1.62, 34, 1.6);
-    const nariz = projetar(cam2, [CH[0] + 0.03, 1.6, CH[1]]);
     const gota = interpolate(p, [0.74, 1], [0, 1], clamp);
     return (
       <Plano3D id="l33b" clima="porDoSol" cam={cam2} cenario={<Campo3D carro={false} />} desfoque={7}
-        atores={[{ quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", expr: "cansado", pose: { olharX: 0.4, olharY: 0.4 } }]}
-        frente={<path d={`M ${nariz.x + 30} ${nariz.y + 30} q -14 ${40 + gota * 120} 0 ${50 + gota * 160} q 14 -10 0 ${-(50 + gota * 160)}`} fill="#C81E1E" />}
+        atores={[{ quem: "chede", x: CH[0], z: CH[1], vista: "tresQuartos", expr: "cansado", pose: { olharX: 0.4, olharY: 0.4, sangueNariz: 0.15 + gota * 0.85 } }]}
         html={<Info rotulo="O CORPO PAGA" valor="LIMITE: 8" unidade="s" y={190} cor="#FF5A4A" tam={120} />}
       />
     );
