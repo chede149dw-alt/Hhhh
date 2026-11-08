@@ -1,8 +1,8 @@
-# "E se você entrasse na sua própria fenda?" · Parte 5 da história (Chede + Kaik)
+# "E se você se escondesse dentro do seu poder?" · Parte 5 da história (Chede + Kaik)
 
 - **Protagonistas:** Chede e Kaik · **Ameaça:** os agentes (o Regente **não aparece**)
 - **Modelo:** A (etapas) · **Duração alvo:** ~65 s (tempo normal) · ≈185 palavras
-- **Capa:** "E SE VOCÊ ENTRASSE" / "NA SUA PRÓPRIA **FENDA**?" / "PARTE 5"
+- **Capa:** "E SE VOCÊ SE ESCONDESSE" / "DENTRO DO SEU **PODER**?" / "PARTE 5"
 - **Liga com:** final da Parte 4 (ainda no campo baldio, com o carro marcado)
 - **Ideia do usuário (08/11):**
   - vários carros pretos aparecem e vários agentes cercam os dois, falando "não tem pra onde correr";
@@ -24,7 +24,7 @@
 
 | # | Narração | Cena |
 |---|---|---|
-| 0 | E se você entrasse na sua própria **fenda**? | Capa: os dois caindo dentro de uma fenda roxa no chão; faróis e silhuetas de agentes em volta. |
+| 0 | E se você se escondesse dentro do seu **poder**? | Capa: os dois caindo dentro de uma fenda roxa no chão; faróis e silhuetas de agentes em volta. |
 | 1 | Ainda no campo baldio, uns faróis acenderam. Um carro **preto**. | Campo no fim do pôr do sol; faróis acendem atrás da poeira. |
 | 2 | Depois outro. E outro. **Seis** carros. | Carros chegando por todos os lados; infográfico "6 CARROS" fechando um círculo. |
 | 3 | Desceram doze agentes. Todos com o anel **dourado** nos olhos. | Portas abrindo em sequência; close nos olhos com o anel âmbar. |

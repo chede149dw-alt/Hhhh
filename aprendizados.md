@@ -155,3 +155,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - Marcas/detalhes num lado do objeto: a câmera orbita mostrando ESSE lado, nunca a traseira.
 - **Parte 4 refeita aprovada** (usuário, 08/11: "Bora para a próxima parte"). Motivo: o padrão da referência 5 (proporção 2.0, cor única, primeiro plano desfocado, closes de objeto) é o padrão da série daqui pra frente.
 - **Duração volta ao tempo normal (~60–75 s)** (usuário, 08/11: "coloquei 2 minutos de vídeo, demoro muito pra gerar"). Motivo: o render de 2 min no visual novo leva ~10 h. Roteiros novos com ≈200 palavras.
+- **Premissa da Parte 5: "E se você se escondesse dentro do seu poder?"** (usuário, 08/11). "E se você entrasse na sua própria fenda?" ficou estranho. O nome "Kamui" foi descartado porque é o poder de Naruto. O poder continua sem nome próprio.
