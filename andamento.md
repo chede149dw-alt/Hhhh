@@ -51,7 +51,10 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
   neblina, câmera suave. Teste em `estudio/src/estilo2/TesteEstilo2.tsx` → `previas/teste-visual-2.mp4`.
   Personagens oficiais NÃO foram alterados. Aguardando aprovação do usuário para levar aos episódios.
 
-## Parte 4 — "E se você testasse o limite do seu poder?" (ENTREGUE 08/11)
+## Parte 4 — "E se você testasse o limite do seu poder?" (REENTREGUE 08/11 no padrão da referência 5)
+- Refeita no padrão da referência 5: proporção 2.0, cor única por cena, mato desfocado em primeiro plano, close da câmera de segurança, carro visto pela janela, marcas de mão com brilho roxo, sangue saindo do nariz, Kaik encarando o Chede, corpo inteiro ao se curvar, rodas legíveis e enquadramento novo no gancho final (L34/L35).
+- Vídeo final: `prontos/parte-4-limites.mp4` (4016 quadros, 2min14, crf 21, 56 MB). Capa: `prontos/parte-4-limites-capa.png`. Post: `roteiros/parte-4-limites-post.md`.
+- Próximo: Parte 5 ("O que tem do outro lado?").
 - ✅ Final: `prontos/parte-4-limites.mp4` (133,9 s, 1080x1920, voz ElevenLabs Witalo acelerada 1,09x) +
   `prontos/parte-4-limites-capa.png` + `roteiros/parte-4-limites-post.md`. Próximo: Parte 5 ("o que tem do outro lado?").
 - Roteiro APROVADO: `roteiros/parte-4-limites.md` (36 falas, ~130 s; limite 2min15). Faculdade, tornado, fenda pelo olhar.
