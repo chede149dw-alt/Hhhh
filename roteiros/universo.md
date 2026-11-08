@@ -44,3 +44,21 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
   - controlar muita gente ao mesmo tempo cansa / tem limite, por isso usa o governo como "multiplicador";
   - quem está sob controle tem um sinal visível (olhar vazio, brilho nos olhos) que o público aprende a reconhecer;
   - possível fraqueza: alguém que ele não consegue alcançar (o "outro lugar" do Chede? velocidade maior que a reação dele?).
+
+## Parte 4 · "E se você testasse o limite do seu poder?" (entregue)
+- Testes no campo baldio: Kaik a 2.000 km/h (tênis derrete, fome de maratona, tornado); Chede abre a fenda só com o olhar,
+  o medo encolhe a fenda, calmo ela abriu 4 m e engoliu um carro. Limite: 8 s (nariz sangra).
+- O carro voltou com **cinco marcas de mão pretas** por fora.
+
+## Parte 5 · "E se você se escondesse dentro do seu poder?" (aprovada, em produção)
+- Seis carros pretos e doze agentes controlados cercam os dois ("Não tem pra onde correr" — falam juntos: uma mente só).
+- O Chede abre a fenda no chão; os dois caem e ele fecha os olhos para ela fechar (a fenda só fica aberta enquanto ele olha).
+- Lá dentro: chão de pedra, 4 °C, pilhas de coisas; um **gato preto** (coleira verde).
+- **Regra nova: lá dentro o tempo anda muito mais devagar** — 5 minutos lá = 7 dias aqui. Voltam uma semana depois; os agentes foram embora; 87 chamadas perdidas.
+- O gato volta junto e corre até a estrada, onde **alguém espera os dois** (só silhueta).
+
+**Em aberto / propostas ainda não aprovadas:**
+- Quem estava esperando (Parte 6).
+- **Lia Moraes** (ficha proposta em `personagens/lia/ficha-lia.png`): aluna que sumiu há 2 anos; com o tempo lento lá dentro, quase não envelheceu.
+- **"O Coletor"**: criatura do outro lugar (cega, caça por som/calor, empilha as coisas, quer sair). O usuário disse que ela "veio junto com o poder do Chede" — falta definir se ela dá o poder (antes era da Lia) ou se nasceu com o poder dele.
+- A regra antiga "8× mais rápido lá dentro" foi descartada; vale a do tempo lento.
