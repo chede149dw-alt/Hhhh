@@ -15,6 +15,7 @@ import { DURACAO_HIBRIDO, TesteHibrido } from "./estilo2/TesteHibrido";
 import { Vitrine4 } from "./estilo2/Vitrine4";
 import { Debug } from "./estilo2/Debug";
 import { FichaFigurantes } from "./personagens/FichaFigurantes";
+import { FichaLia } from "./personagens/Lia";
 import { DURACAO_LIM4, Limites4 } from "./episodios/limites4/Limites4";
 import { FeixeDeLuz, Gradacao, Grao, Legenda, Poeira } from "./estilo/Acabamento";
 
@@ -68,6 +69,7 @@ export const RemotionRoot: React.FC = () => (
     <Still id="FichaFigurantes" component={FichaFigurantes} width={2400} height={2000} />
     <Still id="Debug" component={Debug} width={2400} height={1000} />
     <Still id="FotoPerfil" component={FotoPerfil} width={1080} height={1080} />
+    <Still id="FichaLia" component={FichaLia} width={2400} height={1900} />
     <Still id="FichaChede" component={FichaChede} width={2400} height={2700} />
     <Still id="FichaKaik" component={FichaChede} width={2400} height={2700} defaultProps={{ quem: "kaik" as const }} />
     <Still id="FichaRegente" component={FichaChede} width={2400} height={2700} defaultProps={{ quem: "regente" as const }} />

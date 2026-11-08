@@ -75,6 +75,12 @@ export type Aparencia = {
   bone?: string; // cor do boné
   oculosGrau?: boolean;
   mochila?: string; // cor da mochila
+  // Lia
+  cabeloLongo?: "tranca" | "solto"; // trança lateral (ombro esquerdo da tela) ou cabelo comprido solto
+  sardas?: boolean;
+  maos?: string; // cor das mãos (ex.: poeira preta do outro lugar)
+  dedosLongos?: boolean;
+  geada?: boolean; // pontinhos de gelo no cabelo
 };
 export const APARENCIA_CHEDE: Aparencia = { cores: CORES_CHEDE, cabelo: "ondulado", estampa: "bolso" };
 export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
@@ -223,6 +229,22 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           <ellipse cx={0} cy={0} rx={212} ry={205} />
         </clipPath>
       </defs>
+      {/* cabelo comprido solto: atrás da cabeça, caindo até os ombros */}
+      {A.cabeloLongo === "solto" && (
+        <path
+          d={costas
+            ? "M -230 -40 C -250 200 -240 470 -200 600 Q 0 640 200 600 C 240 470 250 200 230 -40 Z"
+            : "M -228 -30 C -262 180 -270 430 -236 590 Q -190 610 -150 590 C -140 400 -130 220 -120 120 L 120 120 C 130 220 140 400 150 590 Q 190 610 236 590 C 270 430 262 180 228 -30 Z"}
+          fill={C.cabeloSombra}
+        />
+      )}
+      {A.cabeloLongo === "solto" && !costas && (
+        <g stroke={C.cabeloBrilho} strokeWidth={6} fill="none" strokeLinecap="round" opacity={0.7}>
+          {[-240, -205, -170, 170, 205, 240].map((x, i) => (
+            <path key={i} d={`M ${x * 0.95} 40 C ${x * 1.05} 220 ${x * 0.9} 380 ${x * 0.98} 570`} />
+          ))}
+        </g>
+      )}
       {/* orelhas */}
       {(vista === "frente" || costas) && (
         <>
@@ -253,7 +275,16 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
         <g>
           {(perfil || tres) && <path d={perfil ? CABELO_NUCA_PERFIL : CABELO_NUCA_TRES} fill={C.cabelo} />}
           <g transform={`translate(${fx * 0.25},0)`}>
-            {A.cabelo === "raspado" ? (
+            {A.cabeloLongo ? (
+              <>
+                {/* cabelo liso com risca no meio (Lia) */}
+                <path d="M -228 150 C -256 -150 -132 -252 0 -252 C 132 -252 256 -150 228 150 L 198 150 C 204 10 172 -66 120 -98 Q 44 -136 0 -104 Q -44 -136 -120 -98 C -172 -66 -204 10 -198 150 Z" fill={C.cabelo} />
+                <path d="M 0 -104 Q 60 -150 150 -110 C 190 -80 214 0 214 80 L 198 150 C 204 10 172 -66 120 -98 Q 44 -136 0 -104 Z" fill={C.cabeloSombra} opacity={0.5} />
+                {["M -40 -200 Q -150 -170 -200 -40", "M 40 -200 Q 150 -170 200 -40", "M -10 -236 Q -120 -220 -180 -120", "M 10 -236 Q 120 -220 180 -120"].map((d, i) => (
+                  <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={7} fill="none" strokeLinecap="round" />
+                ))}
+              </>
+            ) : A.cabelo === "raspado" ? (
               <>
                 <path d={CABELO_RASPADO} fill={C.cabelo} opacity={0.9} />
               </>
@@ -283,6 +314,31 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
               </>
             )}
           </g>
+        </g>
+      )}
+      {/* trança lateral: cai sobre o ombro do lado esquerdo da tela */}
+      {A.cabeloLongo === "tranca" && (
+        <g>
+          {Array.from({ length: 7 }).map((_, i) => {
+            const x = (costas ? 150 : -150) + (costas ? 1 : -1) * Math.sin(i * 0.5) * 18;
+            const y = 150 + i * 62;
+            const r = 46 - i * 3;
+            return (
+              <g key={i}>
+                <ellipse cx={x} cy={y} rx={r} ry={38} fill={C.cabelo} />
+                <path d={`M ${x - r * 0.7} ${y - 10} Q ${x} ${y + 26} ${x + r * 0.7} ${y - 10}`} stroke={C.cabeloBrilho} strokeWidth={6} fill="none" strokeLinecap="round" />
+              </g>
+            );
+          })}
+          <rect x={(costas ? 150 : -150) - 20} y={560} width={40} height={20} rx={8} fill={A.cores.camisaDetalhe} />
+          <path d={`M ${(costas ? 150 : -150) - 26} 578 Q ${costas ? 150 : -150} 640 ${(costas ? 150 : -150) + 26} 578 Z`} fill={C.cabelo} />
+        </g>
+      )}
+      {A.geada && (
+        <g fill="#EAF6FF" opacity={0.85}>
+          {[[-150, -150], [-60, -210], [40, -200], [130, -160], [180, -80], [-190, -60], [-90, -180], [90, -220], [200, 60], [-210, 120], [210, 300], [-220, 380]].map(([x, y], i) => (
+            <circle key={i} cx={x} cy={y} r={6 + (i % 3) * 3} />
+          ))}
         </g>
       )}
       {/* boné (figurantes) */}
@@ -336,6 +392,13 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
             <Olho x={perfil ? 10 : 74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={1} semicerrado={e.semicerrado} poder={pose.olhosPoder} controlado={pose.controlado} />
           </g>
+          {A.sardas && !perfil && (
+            <g fill={C.peleSombra} opacity={0.75}>
+              {[[-70, 70], [-50, 84], [-88, 86], [-62, 100], [70, 70], [50, 84], [88, 86], [62, 100], [-20, 58], [22, 60]].map(([x, y], i) => (
+                <circle key={i} cx={x + (tres ? 30 : 0)} cy={y} r={5} />
+              ))}
+            </g>
+          )}
           {A.rugas && !perfil && (
             <g stroke={C.peleSombra} strokeWidth={5} fill="none" strokeLinecap="round" opacity={0.7}>
               <path d="M -40 70 Q -60 100 -54 130" />
@@ -525,8 +588,12 @@ const Braco: React.FC<{
           </>
         )}
         {/* mão */}
-        <ellipse cx={0} cy={272} rx={34 * Math.sqrt(k)} ry={40 * Math.sqrt(k)} fill={pele} />
-        <ellipse cx={-26 * lado} cy={256} rx={12} ry={24} fill={pele} transform={`rotate(${-25 * lado} ${-26 * lado} 256)`} />
+        <ellipse cx={0} cy={272} rx={34 * Math.sqrt(k)} ry={40 * Math.sqrt(k)} fill={A.maos ?? pele} />
+        <ellipse cx={-26 * lado} cy={256} rx={12} ry={24} fill={A.maos ?? pele} transform={`rotate(${-25 * lado} ${-26 * lado} 256)`} />
+        {A.dedosLongos &&
+          [-22, -7, 8, 23].map((dx, i) => (
+            <ellipse key={i} cx={dx} cy={340 + Math.abs(dx) * -0.6} rx={9} ry={52} fill={A.maos ?? pele} transform={`rotate(${dx * 0.4} ${dx} 300)`} />
+          ))}
       </g>
     </g>
   );
