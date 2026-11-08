@@ -228,7 +228,7 @@ export const E3_Agentes: React.FC = () => {
       <Plano3D id="e3b" clima="noite" cam={cam} cenario={campoNoite(1)} desfoque={14} fundo2D={<Halos cam={cam} chegada={1} />} />
       <AbsoluteFill>
         <svg viewBox="0 0 1080 1920" width={1080} height={1920}>
-          <Vivo quem="agente" x={520} y={860 + 1372 * 0.76 * s} s={s} vista="tresQuartos" expr="neutro" pose={{ controlado: interpolate(q, [0.25, 0.5], [0, 1], clamp), oculos: interpolate(q, [0, 0.3], [1, 0], clamp), olharX: 0.2 }} />
+          <Vivo quem="agente" x={520} y={900 + 1372 * s} s={s} vista="tresQuartos" expr="neutro" pose={{ controlado: interpolate(q, [0.25, 0.5], [0, 1], clamp), oculos: interpolate(q, [0, 0.3], [1, 0], clamp), olharX: 0.2 }} />
         </svg>
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "#2E3F8A", mixBlendMode: "color", opacity: 0.28 }} />
@@ -518,7 +518,7 @@ export const E12_Gato: React.FC = () => {
 // 13 · Ficaram só cinco minutos e abriram a fenda de volta
 export const E13_Volta: React.FC = () => {
   const { p, f } = useP();
-  const cam = camEntre({ pos: [2.8, 0.8, 4.2], alvo: [0, 2.6, -1], fov: 50 }, { pos: [2.4, 0.7, 3.6], alvo: [0, 3.4, -1], fov: 52 }, p);
+  const cam = camEntre({ pos: [1.2, 0.9, 4.6], alvo: [-0.1, 2.4, -1], fov: 52 }, { pos: [1.0, 0.8, 4.0], alvo: [-0.1, 3.1, -1], fov: 54 }, p);
   const abre = interpolate(p, [0.35, 0.8], [0, 1], clamp);
   const s = Math.floor(interpolate(p, [0, 0.4], [0, 300], clamp));
   const mm = String(Math.floor(s / 60)).padStart(2, "0"), ss = String(s % 60).padStart(2, "0");
@@ -706,7 +706,7 @@ export const E18_GatoJunto: React.FC = () => {
   const { p, f } = useP();
   const cam = camEntre({ pos: [KA[0] + 1.6, 0.45, KA[1] + 2.4], alvo: [KA[0], 0.4, KA[1]], fov: 40 }, { pos: [KA[0] + 1.3, 0.42, KA[1] + 2.0], alvo: [KA[0], 0.38, KA[1]], fov: 38 }, p);
   const sai = interpolate(p, [0.1, 0.55], [0, 1], clamp);
-  const gx = lerp(KA[0] - 0.25, KA[0] + 0.45, sai);
+  const gx = lerp(KA[0] - 0.25, KA[0] + 0.18, sai);
   return (
     <Plano3D id="e18" clima="manha" cam={cam} cenario={campoDia()} desfoque={2} mato="esq"
       fundo2D={gatoEm(cam, gx, KA[1] - 0.15, sai > 0 && sai < 1 ? "andando" : "sentado", f, { olharX: 0.6 })}
