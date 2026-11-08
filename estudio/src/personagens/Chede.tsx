@@ -79,8 +79,8 @@ export type Aparencia = {
 export const APARENCIA_CHEDE: Aparencia = { cores: CORES_CHEDE, cabelo: "ondulado", estampa: "bolso" };
 export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
 const useA = () => React.useContext(AparenciaCtx);
-// Proporção 2.0 (teste, estilo da referência 5): cabeça menor e braços/pernas mais grossos. Padrão: desligado.
-export const Corpo2Ctx = React.createContext(false);
+// Proporção 2.0 (estilo da referência 5, aprovada 08/11): cabeça menor e braços/pernas mais grossos. Padrão: ligada.
+export const Corpo2Ctx = React.createContext(true);
 
 // ---------- Rosto ----------
 const Olho: React.FC<{

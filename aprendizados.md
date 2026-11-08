@@ -132,3 +132,17 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   alinhamento. Parte 4: 144,6 s → 132,6 s. Motivo: limite de duração pedido pelo usuário.
 - **ElevenLabs "Unusual activity / Free Tier disabled" ou "busy"**: nada é cobrado; tentar de novo alguns minutos
   depois (na Parte 4 passou na 4ª tentativa, ~15 min depois). Um dos 2 takes pode falhar e o outro sair.
+- **Proporção 2.0 dos personagens (aprovada 08/11)**: cabeça menor (≈1/5 da altura) e braços/pernas ~1,7× mais
+  grossos, como na referência 5. Fica no rig (`Corpo2Ctx`, padrão ligado). Motivo: o usuário quer "essa qualidade,
+  essa animação bonita" — os nossos pareciam bonecos de palito com cabeção.
+- **Cor única por cena** (`Gradacao` no `Plano3D`, cor em `CLIMAS[clima].grade`) e **mato desfocado no primeiro plano**
+  (`PrimeiroPlano`, padrão nas cenas de pôr do sol). Motivo: referência 5 — tudo mergulha numa cor só.
+- **Close de objeto com fundo desfocado**: o objeto em 2D detalhado na frente e `desfoqueAtores` para borrar também
+  os personagens lá atrás (ex.: câmera de segurança da Parte 4).
+- **Efeito no rosto (sangue, marcas) vai DENTRO do rig** (ex.: `pose.sangueNariz`), nunca numa camada por cima
+  calculada pela projeção. Motivo: o sangue saiu embaixo do olho em vez do nariz (correção do usuário).
+- **Quem joga/entrega algo olha para o outro na tela**: usar `encarar(cam, eu, outro)` para escolher o espelhar.
+  Motivo: o Kaik jogou a pedra olhando para a câmera (correção do usuário).
+- **Tronco curvado (> 30°) dobra pela cintura**, com o quadril fixo — senão o tronco solta da bermuda (correção do usuário).
+- **Gancho final tem que ser legível**: as marcas de mão pretas sumiam no carro escuro; agora têm brilho roxo em volta.
+- **Revisar o vídeo inteiro (1 quadro por segundo) antes de entregar**, não só alguns quadros.

@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, interpolate } from "remotion";
+import { AbsoluteFill, Easing, interpolate } from "remotion";
 import { clamp, lerp, useP } from "../comum";
 import { Plano3D, PlanoRua, camEntre, orbita, Ator } from "../../cenarios3d/Kit3D";
 import { projetar } from "../../cenarios3d/Rua3D";
@@ -184,13 +184,77 @@ export const L7_Verde: React.FC = () => {
   );
 };
 
-// 8 · Câmera de segurança vira pra eles
+// 8 · Câmera de segurança vira pra eles — câmera em close (2D detalhada), portão desfocado lá embaixo
+const CameraClose: React.FC<{ giro: number; luz: number; f: number }> = ({ giro, luz, f }) => {
+  // giro 0 = olhando para a rua (de lado); 1 = virada para eles (lente de frente)
+  const ang = lerp(-28, 14, giro);
+  const encurta = lerp(1, 0.55, giro);
+  const lente = lerp(0.35, 1, giro);
+  return (
+    <svg viewBox="0 0 1080 1920" width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
+      <defs>
+        <linearGradient id="cc-corpo" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#FAFAF7" />
+          <stop offset="0.55" stopColor="#DCDCD6" />
+          <stop offset="1" stopColor="#A9A9A2" />
+        </linearGradient>
+        <linearGradient id="cc-poste" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#8E9196" />
+          <stop offset="0.4" stopColor="#D9DBDE" />
+          <stop offset="1" stopColor="#6E7176" />
+        </linearGradient>
+        <radialGradient id="cc-vidro" cx="0.35" cy="0.35" r="0.7">
+          <stop offset="0" stopColor="#5A6A88" />
+          <stop offset="0.5" stopColor="#141820" />
+          <stop offset="1" stopColor="#05060A" />
+        </radialGradient>
+      </defs>
+      {/* poste */}
+      <rect x={900} y={-20} width={120} height={1980} fill="url(#cc-poste)" />
+      <rect x={880} y={640} width={160} height={40} rx={8} fill="#7C7F84" />
+      {/* braço */}
+      <path d="M 900 700 L 700 700 L 690 740 L 900 740 Z" fill="#9A9DA2" />
+      <rect x={690} y={690} width={40} height={60} rx={8} fill="#7C7F84" />
+      {/* cabo */}
+      <path d="M 712 750 Q 760 860 900 880" stroke="#2A2C30" strokeWidth={10} fill="none" />
+      {/* suporte que gira */}
+      <rect x={700} y={740} width={20} height={70} fill="#6E7176" />
+      <g transform={`translate(710,820) scale(1.25) rotate(${ang}) scale(${encurta},1)`}>
+        {/* para-sol */}
+        <path d="M -330 -95 L 140 -95 L 170 -60 L -330 -60 Z" fill="#F2F2EE" />
+        <path d="M -330 -60 L 170 -60 L 170 -52 L -330 -52 Z" fill="#B8B8B2" />
+        {/* corpo */}
+        <rect x={-320} y={-60} width={440} height={170} rx={34} fill="url(#cc-corpo)" />
+        <rect x={-300} y={70} width={400} height={18} rx={9} fill="#000" opacity={0.08} />
+        {/* faixa e LED */}
+        <rect x={-180} y={-10} width={150} height={34} rx={6} fill="#C93A32" />
+        <circle cx={70} cy={-25} r={10} fill={luz > 0.5 ? "#FF2A20" : "#5A1A18"} />
+        {luz > 0.5 && <circle cx={70} cy={-25} r={30 + Math.sin(f / 2) * 6} fill="#FF2A20" opacity={0.35} />}
+        {/* frente com a lente */}
+        <ellipse cx={-322} cy={25} rx={24 + 60 * lente} ry={84} fill="#2A2C30" />
+        <ellipse cx={-326} cy={25} rx={14 + 46 * lente} ry={62} fill="url(#cc-vidro)" />
+        <ellipse cx={-340 + 10 * lente} cy={4} rx={6 + 12 * lente} ry={14} fill="#fff" opacity={0.55} />
+      </g>
+    </svg>
+  );
+};
 export const L8_CameraVira: React.FC = () => {
-  const { p } = useP();
-  const giro = interpolate(p, [0.1, 0.75], [-1.2, -0.25], clamp);
-  const luz = p > 0.78 ? 1 : 0;
-  const cam = camEntre({ pos: [6.8, 4.5, 4.4], alvo: [3.6, 4.1, 0.7], fov: 30 }, { pos: [5.6, 4.4, 3.2], alvo: [3.6, 4.1, 0.7], fov: 26 }, p);
-  return <Plano3D id="l8" clima="manha" cam={cam} cenario={<Faculdade3D giroCamera={giro} luzCamera={luz} />} />;
+  const { p, f } = useP();
+  const giro = interpolate(p, [0.12, 0.72], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const luz = p > 0.76 ? 1 : 0;
+  // fundo: portão visto do alto (onde a câmera fica), bem desfocado, com os dois lá embaixo
+  const cam = camEntre({ pos: [6.5, 7.2, 9.0], alvo: [0.2, 0.4, 2.6], fov: 34 }, { pos: [6.1, 7.0, 8.4], alvo: [0.2, 0.4, 2.8], fov: 31 }, p);
+  return (
+    <AbsoluteFill>
+      <Plano3D id="l8" clima="manha" cam={cam} cenario={<Faculdade3D />} desfoque={8} desfoqueAtores={5}
+        atores={[...alunosPortao(f),
+          { quem: "chede", x: -0.7, z: 3.4, vista: "tresQuartos", expr: "cansado", pose: { bracoE: 30, bracoD: 25 } },
+          { quem: "kaik", x: 0.9, z: 3.1, vista: "tresQuartos", espelhar: true, expr: "feliz", pose: { olharX: 0.9 } },
+        ]}
+        frente={<CameraClose giro={giro} luz={luz} f={f} />}
+      />
+    </AbsoluteFill>
+  );
 };
 
 // 9 · Na aula, não conseguia prestar atenção (câmera desliza entre as fileiras)
@@ -238,13 +302,22 @@ export const L10_Olhos: React.FC = () => {
   );
 };
 
-// 11 · Lá fora, um carro preto parado
+// 11 · Lá fora, um carro preto parado — visto pela janela da sala (moldura e persiana escuras e desfocadas na frente)
+const Janela: React.FC = () => (
+  <svg viewBox="0 0 1080 1920" width={1080} height={1920} style={{ position: "absolute", inset: 0, filter: "blur(10px)" }}>
+    <path fillRule="evenodd" d="M -40 -40 L 1120 -40 L 1120 1960 L -40 1960 Z M 150 330 L 930 330 L 930 1500 L 150 1500 Z" fill="#2A1E16" />
+    <rect x={530} y={330} width={30} height={1170} fill="#2A1E16" />
+    {Array.from({ length: 7 }).map((_, i) => (
+      <rect key={i} x={150} y={330 + i * 46} width={780} height={22} fill="#3A2C22" opacity={0.95} />
+    ))}
+    <rect x={150} y={1500} width={780} height={60} fill="#4A3A2C" />
+    <path d="M 160 360 L 420 360 L 160 900 Z" fill="#fff" opacity={0.06} />
+  </svg>
+);
 export const L11_CarroFora: React.FC = () => {
-  const { p, f } = useP();
-  const cam = camEntre({ pos: [7.2, 2.8, 2.6], alvo: [24, 0.9, 4], fov: 34 }, { pos: [8.3, 2.6, 2.9], alvo: [24, 0.9, 4], fov: 22 }, p);
-  return (
-    <Plano3D id="l11" clima="interior" cam={cam} cenario={<Anfiteatro3D />} semNeblina atores={alunosAnfiteatro(f, () => false)} />
-  );
+  const { p } = useP();
+  const cam = camEntre({ pos: [-1.5, 3.2, -6], alvo: [6, 0.9, 12], fov: 34 }, { pos: [-1.0, 3.1, -4.8], alvo: [6, 0.9, 12], fov: 24 }, p);
+  return <Plano3D id="l11" clima="manha" cam={cam} cenario={<Faculdade3D carroPreto={6} />} desfoque={0.6} frente={<Janela />} />;
 };
 
 // 12 · Intervalo: contou tudo (câmera gira em volta da mesa)

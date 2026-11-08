@@ -428,7 +428,8 @@ export const L33_QuatroMetros: React.FC = () => {
   const parte2 = p > 0.72;
   const carroEsc = interpolate(p, [0.3, 0.55], [1, 0], clamp);
   const abre = interpolate(p, [0.05, 0.3], [0, 1], clamp) * interpolate(p, [0.58, 0.68], [1, 0], clamp);
-  const cam = orbita([0, 1.5, -3.5], lerp(-120, -95, p), 9, 2.2, 46, 1.5);
+  // por cima do ombro do Chede, olhando o carro (antes a câmera ficava colada no carro)
+  const cam = camEntre({ pos: [-1.9, 1.95, 6.4], alvo: [1.4, 1.3, -8], fov: 46 }, { pos: [-1.5, 1.85, 5.2], alvo: [1.6, 1.3, -8], fov: 44 }, p);
   const c = projetar(cam, [2.5, 1.2, -9]);
   if (parte2) {
     const cam2 = orbita([CH[0], 1.62, CH[1]], -25, 0.95, 1.62, 34, 1.6);

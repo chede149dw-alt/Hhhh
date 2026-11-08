@@ -20,6 +20,7 @@ type Def = {
   amb: [string, number];
   sol: { pos: [number, number, number]; cor: string; i: number };
   luz2D: { amb: string; ambForca: number; cor: string; forca: number; x: number; y: number };
+  grade: { cor: string; forca: number; mato: string }; // cor única da cena (tudo mergulha nela) + cor do mato do primeiro plano
 };
 export const CLIMAS: Record<Clima, Def> = {
   manha: {
@@ -29,6 +30,7 @@ export const CLIMAS: Record<Clima, Def> = {
     amb: ["#FFF0DC", 0.5],
     sol: { pos: [-25, 30, 18], cor: "#FFE0B0", i: 3.4 },
     luz2D: { amb: "#FFEBD6", ambForca: 0.3, cor: "#FFC67A", forca: 0.5, x: -500, y: -300 },
+    grade: { cor: "#F0B878", forca: 0.16, mato: "#4E5A2E" },
   },
   dia: {
     ceu: "linear-gradient(#6FA3DD 0%, #BFD9F0 55%, #EAF0F2 100%)",
@@ -37,6 +39,7 @@ export const CLIMAS: Record<Clima, Def> = {
     amb: ["#FFFFFF", 0.55],
     sol: { pos: [20, 40, 15], cor: "#FFF3DE", i: 3.6 },
     luz2D: { amb: "#F4F1EC", ambForca: 0.2, cor: "#FFE2B0", forca: 0.4, x: 1500, y: -400 },
+    grade: { cor: "#9DB6D6", forca: 0.12, mato: "#41552B" },
   },
   porDoSol: {
     ceu: "linear-gradient(#34407A 0%, #9C6A8A 35%, #F08A4B 70%, #FFC77E 100%)",
@@ -45,6 +48,7 @@ export const CLIMAS: Record<Clima, Def> = {
     amb: ["#FFB98A", 0.45],
     sol: { pos: [-40, 9, -30], cor: "#FF9E58", i: 3.4 },
     luz2D: { amb: "#FFC6A0", ambForca: 0.5, cor: "#FF8A3D", forca: 0.75, x: -600, y: 500 },
+    grade: { cor: "#E8784A", forca: 0.3, mato: "#3A2418" },
   },
   interior: {
     ceu: "linear-gradient(#5A5048 0%, #2E2925 100%)",
@@ -53,6 +57,7 @@ export const CLIMAS: Record<Clima, Def> = {
     amb: ["#FFE2BC", 0.6],
     sol: { pos: [-12, 10, 6], cor: "#FFE6C0", i: 2.4 },
     luz2D: { amb: "#FFE0C0", ambForca: 0.35, cor: "#FFC27A", forca: 0.55, x: -400, y: 200 },
+    grade: { cor: "#D9984E", forca: 0.26, mato: "#2E2418" },
   },
   noite: {
     ceu: "linear-gradient(#0B1530 0%, #1B2E5C 55%, #2C4579 100%)",
@@ -61,6 +66,7 @@ export const CLIMAS: Record<Clima, Def> = {
     amb: ["#8FA8FF", 0.35],
     sol: { pos: [20, 30, -10], cor: "#A9C2FF", i: 1.3 },
     luz2D: { amb: "#6F86CF", ambForca: 0.75, cor: "#FFB25C", forca: 0.6, x: 200, y: 400 },
+    grade: { cor: "#3A58B0", forca: 0.4, mato: "#0E1630" },
   },
 };
 
@@ -252,6 +258,38 @@ export const Sobre: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   </AbsoluteFill>
 );
 
+
+// Cor única da cena (como a referência 5): cenário e personagens mergulham na mesma cor.
+export const Gradacao: React.FC<{ clima: Clima; forca?: number }> = ({ clima, forca = 1 }) => {
+  const g = CLIMAS[clima].grade;
+  return (
+    <>
+      <AbsoluteFill style={{ background: g.cor, mixBlendMode: "color", opacity: g.forca * forca, pointerEvents: "none" }} />
+      <AbsoluteFill style={{ background: g.cor, mixBlendMode: "soft-light", opacity: 0.35 * forca, pointerEvents: "none" }} />
+    </>
+  );
+};
+
+// Mato desfocado NA FRENTE da câmera (primeiro plano), com paralaxe pela posição da câmera.
+export const PrimeiroPlano: React.FC<{ cam: Cam; clima: Clima; lados?: "ambos" | "esq" | "dir"; altura?: number }> = ({ cam, clima, lados = "ambos", altura = 1 }) => {
+  const cor = CLIMAS[clima].grade.mato;
+  const off = (cam.pos[0] * 90 + cam.pos[2] * 40) % 400;
+  const touceira = (x0: number, sem: number) =>
+    Array.from({ length: 9 }).map((_, i) => {
+      const r = Math.sin(sem * 91.7 + i * 12.9) * 0.5 + 0.5;
+      const x = x0 + (i - 4) * 38 + r * 30;
+      const h = (380 + r * 420) * altura;
+      const curva = (r - 0.5) * 160;
+      return <path key={i} d={`M ${x - 22} 1960 Q ${x + curva * 0.4} ${1960 - h * 0.6} ${x + curva} ${1960 - h} Q ${x + curva * 0.5 + 8} ${1960 - h * 0.55} ${x + 24} 1960 Z`} fill={cor} />;
+    });
+  return (
+    <svg viewBox="0 0 1080 1920" width={1080} height={1920} style={{ position: "absolute", inset: 0, filter: "blur(14px)", opacity: 0.92, pointerEvents: "none" }}>
+      {lados !== "dir" && touceira(40 - off * 0.3, 1)}
+      {lados !== "esq" && touceira(1040 - off * 0.3, 2)}
+    </svg>
+  );
+};
+
 // Plano completo: cenário 3D (com desfoque de fundo) + atores 2D + camada extra.
 export const Plano3D: React.FC<{
   cam: Cam;
@@ -264,18 +302,25 @@ export const Plano3D: React.FC<{
   fundo2D?: React.ReactNode; // SVG entre o 3D e os atores
   html?: React.ReactNode; // infográficos em HTML
   semNeblina?: boolean;
-}> = ({ cam, clima, cenario, atores = [], desfoque = 0, id = "pl", frente, fundo2D, html, semNeblina }) => (
+  mato?: false | "ambos" | "esq" | "dir"; // mato desfocado no primeiro plano (padrão: ambos em cenas abertas)
+  grade?: number; // força da cor única (padrão 1)
+  desfoqueAtores?: number; // px: desfoca também os personagens (quando o foco está num objeto em primeiro plano)
+}> = ({ cam, clima, cenario, atores = [], desfoque = 0, id = "pl", frente, fundo2D, html, semNeblina, mato, grade = 1, desfoqueAtores = 0 }) => (
   <AbsoluteFill style={{ background: "#000" }}>
     <AbsoluteFill style={{ filter: desfoque > 0.2 ? `blur(${desfoque}px)` : undefined }}>
       <Palco3D cam={cam} clima={clima} semNeblina={semNeblina}>
         {cenario}
       </Palco3D>
     </AbsoluteFill>
-    <Sobre>
-      {fundo2D}
-      <Atores cam={cam} clima={clima} atores={atores} id={id} />
-      {frente}
-    </Sobre>
+    <AbsoluteFill style={{ filter: desfoqueAtores > 0 ? `blur(${desfoqueAtores}px)` : undefined }}>
+      <Sobre>
+        {fundo2D}
+        <Atores cam={cam} clima={clima} atores={atores} id={id} />
+      </Sobre>
+    </AbsoluteFill>
+    <Sobre>{frente}</Sobre>
+    {(mato ?? (clima === "porDoSol" ? "ambos" : false)) && <PrimeiroPlano cam={cam} clima={clima} lados={(mato || "ambos") as "ambos"} />}
+    <Gradacao clima={clima} forca={grade} />
     {html}
   </AbsoluteFill>
 );
@@ -303,6 +348,7 @@ export const PlanoRua: React.FC<{
       <Atores cam={cam} clima="manha" atores={atores} id={id} />
       {frente}
     </Sobre>
+    <Gradacao clima="manha" />
     {html}
   </AbsoluteFill>
 );

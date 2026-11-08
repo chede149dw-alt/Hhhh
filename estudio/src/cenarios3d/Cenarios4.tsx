@@ -64,13 +64,24 @@ export const Carro: React.FC<{ p: [number, number, number]; rotY?: number; cor?:
           g.rotate(a);
           g.scale(s, s);
           g.beginPath();
-          g.ellipse(0, 0, 22, 26, 0, 0, Math.PI * 2);
-          g.fill();
-          [[-16, -38, 7, 22], [-5, -46, 7, 26], [7, -44, 7, 25], [18, -34, 6, 20], [28, 4, 6, 16]].forEach(([fx, fy, rx, ry], i) => {
+          const forma = () => {
             g.beginPath();
-            g.ellipse(fx, fy, rx, ry, i === 4 ? 1 : 0.12 * (i - 1.5), 0, Math.PI * 2);
+            g.ellipse(0, 0, 22, 26, 0, 0, Math.PI * 2);
             g.fill();
-          });
+            [[-16, -38, 7, 22], [-5, -46, 7, 26], [7, -44, 7, 25], [18, -34, 6, 20], [28, 4, 6, 16]].forEach(([fx, fy, rx, ry], i) => {
+              g.beginPath();
+              g.ellipse(fx, fy, rx, ry, i === 4 ? 1 : 0.12 * (i - 1.5), 0, Math.PI * 2);
+              g.fill();
+            });
+          };
+          // brilho roxo em volta (vem do outro lado da fenda) e a mão preta por cima: lê até na sombra
+          g.shadowColor = "rgba(190,150,255,1)";
+          g.shadowBlur = 18;
+          g.fillStyle = "rgba(170,130,255,0.9)";
+          g.save(); g.scale(1.12, 1.12); forma(); g.restore();
+          g.shadowBlur = 0;
+          g.fillStyle = "rgba(6,4,8,1)";
+          forma();
           g.restore();
         };
         mao(90, 150, -0.3, 1.1);
@@ -81,7 +92,7 @@ export const Carro: React.FC<{ p: [number, number, number]; rotY?: number; cor?:
       }),
     [],
   );
-  const corpo = velho ? "#8C5A3C" : cor;
+  const corpo = velho ? "#A86E48" : cor;
   const vidro = velho ? "#2B2A2A" : "#1D2633";
   return (
     <group position={p} rotation={[0, rotY, 0]} scale={escala}>
@@ -114,12 +125,13 @@ export const Carro: React.FC<{ p: [number, number, number]; rotY?: number; cor?:
           <Caixa p={[0, 0.95, 1.6]} s={[1.6, 0.04, 0.9]} cor="#7A4C31" r={[0.12, 0, 0]} />
         </>
       )}
-      {marcas > 0 && (
-        <mesh position={[0.915, 0.75, 0]} rotation={[0, Math.PI / 2, 0]}>
-          <planeGeometry args={[3.6, 1.0]} />
-          <meshStandardMaterial map={tMarcas} transparent opacity={marcas} depthWrite={false} roughness={0.9} />
-        </mesh>
-      )}
+      {marcas > 0 &&
+        [1, -1].map((l) => (
+          <mesh key={l} position={[l * 0.915, 0.75, 0]} rotation={[0, (l * Math.PI) / 2, 0]}>
+            <planeGeometry args={[3.6, 1.0]} />
+            <meshBasicMaterial map={tMarcas} transparent opacity={marcas} depthWrite={false} toneMapped={false} />
+          </mesh>
+        ))}
     </group>
   );
 };
