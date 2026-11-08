@@ -6,7 +6,7 @@ import { Arbusto, Banco, Bicicleta, Canteiro, Cerca, Lixeira, Lixo, Luminaria, N
 // Cenários 3D da Parte 4: faculdade (portão, anfiteatro, cantina), campo baldio e objetos.
 // Low-poly com sombra, no estilo das referências 4 e 5. Unidades em metros.
 
-const tex = (w: number, h: number, desenha: (g: CanvasRenderingContext2D) => void, rep?: [number, number]) => {
+export const tex = (w: number, h: number, desenha: (g: CanvasRenderingContext2D) => void, rep?: [number, number]) => {
   const c = document.createElement("canvas");
   c.width = w;
   c.height = h;
@@ -20,7 +20,7 @@ const tex = (w: number, h: number, desenha: (g: CanvasRenderingContext2D) => voi
   return t;
 };
 
-const Caixa: React.FC<{ p: [number, number, number]; s: [number, number, number]; cor: string; r?: [number, number, number]; sombra?: boolean; rough?: number; mat?: React.ReactNode }> = ({
+export const Caixa: React.FC<{ p: [number, number, number]; s: [number, number, number]; cor: string; r?: [number, number, number]; sombra?: boolean; rough?: number; mat?: React.ReactNode }> = ({
   p, s, cor, r, sombra = true, rough = 0.9, mat,
 }) => (
   <mesh position={p} rotation={r} castShadow={sombra} receiveShadow>
@@ -669,8 +669,8 @@ const Mato: React.FC<{ n?: number; area?: [number, number, number, number]; seme
   );
 };
 
-export const Campo3D: React.FC<{ carro?: boolean; marcas?: number; carroY?: number; porta?: boolean; deita?: number; carroEscala?: number; filhos?: React.ReactNode; rodasNovas?: boolean }> = ({
-  carro = true, marcas = 0, carroY = 0, porta = true, deita = 0, carroEscala = 1, filhos, rodasNovas = false,
+export const Campo3D: React.FC<{ carro?: boolean; marcas?: number; carroY?: number; porta?: boolean; deita?: number; carroEscala?: number; filhos?: React.ReactNode; rodasNovas?: boolean; noite?: boolean }> = ({
+  carro = true, marcas = 0, carroY = 0, porta = true, deita = 0, carroEscala = 1, filhos, rodasNovas = false, noite = false,
 }) => {
   const terra = useMemo(
     () =>
@@ -716,9 +716,9 @@ export const Campo3D: React.FC<{ carro?: boolean; marcas?: number; carroY?: numb
       {carro && carroEscala > 0.01 && <Carro p={[2.5, carroY, -9]} rotY={0.4} velho marcas={marcas} escala={carroEscala} rodasNovas={rodasNovas} />}
       {filhos}
       {/* vida: sol, nuvens rosadas, cidade ao longe, cerca quebrada, arbustos, lixo, fios */}
-      <Sol p={[-200, 38, -150]} cor="#FFC27A" tam={50} />
-      <Nuvens n={8} y={38} z={-170} cor="#FFC2A6" semente={4} larg={360} />
-      <Skyline z={-115} cor="#A88A9A" semente={9} />
+      {noite ? <Sol p={[60, 70, -150]} cor="#EAF0FF" tam={16} /> : <Sol p={[-200, 38, -150]} cor="#FFC27A" tam={50} />}
+      <Nuvens n={8} y={38} z={-170} cor={noite ? "#3A4C80" : "#FFC2A6"} semente={4} larg={360} />
+      <Skyline z={-115} cor={noite ? "#2A3560" : "#A88A9A"} semente={9} acesas={noite} />
       <Cerca de={[-14, 12]} ate={[-14, -38]} quebrada />
       <Cerca de={[16, 10]} ate={[16, -30]} quebrada />
       {Array.from({ length: 18 }).map((_, i) => (

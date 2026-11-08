@@ -1,0 +1,1338 @@
+{
+ "duracao": 74.0,
+ "acerto": 0.975,
+ "linhas": [
+  {
+   "inicio": 0.0,
+   "fim": 2.5
+  },
+  {
+   "inicio": 3.02,
+   "fim": 6.98
+  },
+  {
+   "inicio": 7.22,
+   "fim": 10.18
+  },
+  {
+   "inicio": 10.66,
+   "fim": 14.28
+  },
+  {
+   "inicio": 14.8,
+   "fim": 18.48
+  },
+  {
+   "inicio": 19.08,
+   "fim": 21.16
+  },
+  {
+   "inicio": 21.7,
+   "fim": 26.14
+  },
+  {
+   "inicio": 26.6,
+   "fim": 28.38
+  },
+  {
+   "inicio": 28.38,
+   "fim": 30.94
+  },
+  {
+   "inicio": 31.38,
+   "fim": 34.8
+  },
+  {
+   "inicio": 35.36,
+   "fim": 38.52
+  },
+  {
+   "inicio": 39.02,
+   "fim": 42.04
+  },
+  {
+   "inicio": 42.58,
+   "fim": 45.28
+  },
+  {
+   "inicio": 45.76,
+   "fim": 48.72
+  },
+  {
+   "inicio": 49.3,
+   "fim": 52.24
+  },
+  {
+   "inicio": 52.7,
+   "fim": 55.68
+  },
+  {
+   "inicio": 55.68,
+   "fim": 58.16
+  },
+  {
+   "inicio": 58.96,
+   "fim": 63.5
+  },
+  {
+   "inicio": 64.04,
+   "fim": 65.84
+  },
+  {
+   "inicio": 66.34,
+   "fim": 69.7
+  },
+  {
+   "inicio": 70.38,
+   "fim": 73.72
+  }
+ ],
+ "palavras": [
+  {
+   "w": "E",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 0.0,
+   "fim": 0.12
+  },
+  {
+   "w": "se",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 0.12,
+   "fim": 0.2
+  },
+  {
+   "w": "você",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 0.2,
+   "fim": 0.44
+  },
+  {
+   "w": "se",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 0.44,
+   "fim": 0.62
+  },
+  {
+   "w": "escondesse",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 0.62,
+   "fim": 1.28
+  },
+  {
+   "w": "dentro",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 1.28,
+   "fim": 1.72
+  },
+  {
+   "w": "do",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 1.72,
+   "fim": 1.96
+  },
+  {
+   "w": "seu",
+   "linha": 0,
+   "destaque": null,
+   "inicio": 1.96,
+   "fim": 2.1
+  },
+  {
+   "w": "poder?",
+   "linha": 0,
+   "destaque": "amarelo",
+   "inicio": 2.1,
+   "fim": 2.5
+  },
+  {
+   "w": "Ainda",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 3.02,
+   "fim": 3.36
+  },
+  {
+   "w": "no",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 3.36,
+   "fim": 3.52
+  },
+  {
+   "w": "campo",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 3.52,
+   "fim": 3.7
+  },
+  {
+   "w": "baldio,",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 3.7,
+   "fim": 4.32
+  },
+  {
+   "w": "uns",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 4.5,
+   "fim": 4.66
+  },
+  {
+   "w": "faróis",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 4.66,
+   "fim": 5.06
+  },
+  {
+   "w": "acenderam.",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 5.06,
+   "fim": 5.66
+  },
+  {
+   "w": "Um",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 6.06,
+   "fim": 6.2
+  },
+  {
+   "w": "carro",
+   "linha": 1,
+   "destaque": null,
+   "inicio": 6.2,
+   "fim": 6.38
+  },
+  {
+   "w": "preto.",
+   "linha": 1,
+   "destaque": "amarelo",
+   "inicio": 6.38,
+   "fim": 6.98
+  },
+  {
+   "w": "Depois",
+   "linha": 2,
+   "destaque": null,
+   "inicio": 7.22,
+   "fim": 7.46
+  },
+  {
+   "w": "outro.",
+   "linha": 2,
+   "destaque": null,
+   "inicio": 7.46,
+   "fim": 7.92
+  },
+  {
+   "w": "E",
+   "linha": 2,
+   "destaque": null,
+   "inicio": 8.34,
+   "fim": 8.44
+  },
+  {
+   "w": "outro.",
+   "linha": 2,
+   "destaque": null,
+   "inicio": 8.44,
+   "fim": 8.74
+  },
+  {
+   "w": "Seis",
+   "linha": 2,
+   "destaque": "amarelo",
+   "inicio": 9.22,
+   "fim": 9.72
+  },
+  {
+   "w": "carros.",
+   "linha": 2,
+   "destaque": null,
+   "inicio": 9.72,
+   "fim": 10.18
+  },
+  {
+   "w": "Desceram",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 10.66,
+   "fim": 11.08
+  },
+  {
+   "w": "doze",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 11.08,
+   "fim": 11.5
+  },
+  {
+   "w": "agentes.",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 11.5,
+   "fim": 11.94
+  },
+  {
+   "w": "Todos",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 12.44,
+   "fim": 12.68
+  },
+  {
+   "w": "com",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 12.68,
+   "fim": 12.98
+  },
+  {
+   "w": "o",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 12.98,
+   "fim": 13.1
+  },
+  {
+   "w": "anel",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 13.1,
+   "fim": 13.28
+  },
+  {
+   "w": "dourado",
+   "linha": 3,
+   "destaque": "amarelo",
+   "inicio": 13.28,
+   "fim": 13.76
+  },
+  {
+   "w": "nos",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 13.76,
+   "fim": 13.96
+  },
+  {
+   "w": "olhos.",
+   "linha": 3,
+   "destaque": null,
+   "inicio": 13.96,
+   "fim": 14.28
+  },
+  {
+   "w": "E",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 14.8,
+   "fim": 14.9
+  },
+  {
+   "w": "falaram",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 14.9,
+   "fim": 15.2
+  },
+  {
+   "w": "juntos,",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 15.2,
+   "fim": 15.62
+  },
+  {
+   "w": "na",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 15.62,
+   "fim": 16.0
+  },
+  {
+   "w": "mesma",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 16.0,
+   "fim": 16.32
+  },
+  {
+   "w": "voz:",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 16.32,
+   "fim": 16.66
+  },
+  {
+   "w": "Não",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 17.28,
+   "fim": 17.46
+  },
+  {
+   "w": "tem",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 17.46,
+   "fim": 17.72
+  },
+  {
+   "w": "pra",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 17.72,
+   "fim": 17.96
+  },
+  {
+   "w": "onde",
+   "linha": 4,
+   "destaque": null,
+   "inicio": 17.96,
+   "fim": 18.12
+  },
+  {
+   "w": "correr.",
+   "linha": 4,
+   "destaque": "vermelho",
+   "inicio": 18.12,
+   "fim": 18.48
+  },
+  {
+   "w": "Doze",
+   "linha": 5,
+   "destaque": null,
+   "inicio": 19.08,
+   "fim": 19.48
+  },
+  {
+   "w": "bocas,",
+   "linha": 5,
+   "destaque": null,
+   "inicio": 19.48,
+   "fim": 19.94
+  },
+  {
+   "w": "uma",
+   "linha": 5,
+   "destaque": null,
+   "inicio": 20.32,
+   "fim": 20.46
+  },
+  {
+   "w": "mente",
+   "linha": 5,
+   "destaque": null,
+   "inicio": 20.46,
+   "fim": 20.86
+  },
+  {
+   "w": "só.",
+   "linha": 5,
+   "destaque": "amarelo",
+   "inicio": 20.86,
+   "fim": 21.16
+  },
+  {
+   "w": "O",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 21.7,
+   "fim": 21.82
+  },
+  {
+   "w": "Kaik",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 21.82,
+   "fim": 22.1
+  },
+  {
+   "w": "podia",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 22.1,
+   "fim": 22.4
+  },
+  {
+   "w": "fugir.",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 22.4,
+   "fim": 22.82
+  },
+  {
+   "w": "Mas",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 23.18,
+   "fim": 23.32
+  },
+  {
+   "w": "carregando",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 23.32,
+   "fim": 23.74
+  },
+  {
+   "w": "o",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 23.74,
+   "fim": 23.92
+  },
+  {
+   "w": "Chede,",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 23.92,
+   "fim": 24.24
+  },
+  {
+   "w": "a",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 24.44,
+   "fim": 24.52
+  },
+  {
+   "w": "6",
+   "linha": 6,
+   "destaque": "amarelo",
+   "inicio": 24.52,
+   "fim": 24.82
+  },
+  {
+   "w": "G,",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 24.82,
+   "fim": 25.12
+  },
+  {
+   "w": "ele",
+   "linha": 6,
+   "destaque": null,
+   "inicio": 25.34,
+   "fim": 25.44
+  },
+  {
+   "w": "desmaiava.",
+   "linha": 6,
+   "destaque": "vermelho",
+   "inicio": 25.44,
+   "fim": 26.14
+  },
+  {
+   "w": "Aí",
+   "linha": 7,
+   "destaque": null,
+   "inicio": 26.6,
+   "fim": 26.8
+  },
+  {
+   "w": "o",
+   "linha": 7,
+   "destaque": null,
+   "inicio": 26.8,
+   "fim": 26.88
+  },
+  {
+   "w": "Chede",
+   "linha": 7,
+   "destaque": null,
+   "inicio": 26.88,
+   "fim": 27.18
+  },
+  {
+   "w": "teve",
+   "linha": 7,
+   "destaque": null,
+   "inicio": 27.18,
+   "fim": 27.4
+  },
+  {
+   "w": "uma",
+   "linha": 7,
+   "destaque": null,
+   "inicio": 27.4,
+   "fim": 27.58
+  },
+  {
+   "w": "ideia",
+   "linha": 7,
+   "destaque": null,
+   "inicio": 27.58,
+   "fim": 27.8
+  },
+  {
+   "w": "maluca.",
+   "linha": 7,
+   "destaque": "amarelo",
+   "inicio": 27.8,
+   "fim": 28.38
+  },
+  {
+   "w": "Abriu",
+   "linha": 8,
+   "destaque": null,
+   "inicio": 28.38,
+   "fim": 29.12
+  },
+  {
+   "w": "a",
+   "linha": 8,
+   "destaque": null,
+   "inicio": 29.12,
+   "fim": 29.28
+  },
+  {
+   "w": "fenda",
+   "linha": 8,
+   "destaque": null,
+   "inicio": 29.28,
+   "fim": 29.48
+  },
+  {
+   "w": "no",
+   "linha": 8,
+   "destaque": null,
+   "inicio": 29.48,
+   "fim": 29.62
+  },
+  {
+   "w": "chão,",
+   "linha": 8,
+   "destaque": "amarelo",
+   "inicio": 29.62,
+   "fim": 29.94
+  },
+  {
+   "w": "debaixo",
+   "linha": 8,
+   "destaque": null,
+   "inicio": 29.94,
+   "fim": 30.5
+  },
+  {
+   "w": "dos",
+   "linha": 8,
+   "destaque": null,
+   "inicio": 30.5,
+   "fim": 30.7
+  },
+  {
+   "w": "dois.",
+   "linha": 8,
+   "destaque": null,
+   "inicio": 30.7,
+   "fim": 30.94
+  },
+  {
+   "w": "Caíram.",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 31.38,
+   "fim": 31.94
+  },
+  {
+   "w": "Ele",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 32.32,
+   "fim": 32.54
+  },
+  {
+   "w": "fechou",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 32.54,
+   "fim": 32.88
+  },
+  {
+   "w": "os",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 32.88,
+   "fim": 33.06
+  },
+  {
+   "w": "olhos...",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 33.06,
+   "fim": 33.28
+  },
+  {
+   "w": "e",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 33.28,
+   "fim": 34.02
+  },
+  {
+   "w": "a",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 34.02,
+   "fim": 34.12
+  },
+  {
+   "w": "fenda",
+   "linha": 9,
+   "destaque": null,
+   "inicio": 34.12,
+   "fim": 34.34
+  },
+  {
+   "w": "fechou.",
+   "linha": 9,
+   "destaque": "amarelo",
+   "inicio": 34.34,
+   "fim": 34.8
+  },
+  {
+   "w": "Silêncio.",
+   "linha": 10,
+   "destaque": null,
+   "inicio": 35.36,
+   "fim": 36.04
+  },
+  {
+   "w": "Chão",
+   "linha": 10,
+   "destaque": null,
+   "inicio": 36.36,
+   "fim": 36.64
+  },
+  {
+   "w": "de",
+   "linha": 10,
+   "destaque": null,
+   "inicio": 36.64,
+   "fim": 36.8
+  },
+  {
+   "w": "pedra.",
+   "linha": 10,
+   "destaque": null,
+   "inicio": 36.8,
+   "fim": 37.22
+  },
+  {
+   "w": "Quatro",
+   "linha": 10,
+   "destaque": "amarelo",
+   "inicio": 37.68,
+   "fim": 37.98
+  },
+  {
+   "w": "graus.",
+   "linha": 10,
+   "destaque": "amarelo",
+   "inicio": 37.98,
+   "fim": 38.52
+  },
+  {
+   "w": "No",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 39.02,
+   "fim": 39.12
+  },
+  {
+   "w": "meio",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 39.12,
+   "fim": 39.28
+  },
+  {
+   "w": "das",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 39.28,
+   "fim": 39.46
+  },
+  {
+   "w": "coisas",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 39.46,
+   "fim": 39.7
+  },
+  {
+   "w": "empilhadas,",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 39.7,
+   "fim": 40.36
+  },
+  {
+   "w": "alguma",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 40.64,
+   "fim": 40.98
+  },
+  {
+   "w": "coisa",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 40.98,
+   "fim": 41.42
+  },
+  {
+   "w": "se",
+   "linha": 11,
+   "destaque": null,
+   "inicio": 41.42,
+   "fim": 41.62
+  },
+  {
+   "w": "mexeu.",
+   "linha": 11,
+   "destaque": "vermelho",
+   "inicio": 41.62,
+   "fim": 42.04
+  },
+  {
+   "w": "Dois",
+   "linha": 12,
+   "destaque": null,
+   "inicio": 42.58,
+   "fim": 42.88
+  },
+  {
+   "w": "olhos",
+   "linha": 12,
+   "destaque": null,
+   "inicio": 42.88,
+   "fim": 43.12
+  },
+  {
+   "w": "no",
+   "linha": 12,
+   "destaque": null,
+   "inicio": 43.12,
+   "fim": 43.32
+  },
+  {
+   "w": "escuro...",
+   "linha": 12,
+   "destaque": null,
+   "inicio": 43.32,
+   "fim": 43.78
+  },
+  {
+   "w": "Era",
+   "linha": 12,
+   "destaque": null,
+   "inicio": 44.32,
+   "fim": 44.44
+  },
+  {
+   "w": "um",
+   "linha": 12,
+   "destaque": null,
+   "inicio": 44.44,
+   "fim": 44.56
+  },
+  {
+   "w": "gato",
+   "linha": 12,
+   "destaque": "amarelo",
+   "inicio": 44.56,
+   "fim": 44.74
+  },
+  {
+   "w": "preto.",
+   "linha": 12,
+   "destaque": "amarelo",
+   "inicio": 44.74,
+   "fim": 45.28
+  },
+  {
+   "w": "Ficaram",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 45.76,
+   "fim": 46.12
+  },
+  {
+   "w": "só",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 46.12,
+   "fim": 46.3
+  },
+  {
+   "w": "cinco",
+   "linha": 13,
+   "destaque": "amarelo",
+   "inicio": 46.3,
+   "fim": 46.68
+  },
+  {
+   "w": "minutos.",
+   "linha": 13,
+   "destaque": "amarelo",
+   "inicio": 46.68,
+   "fim": 47.08
+  },
+  {
+   "w": "E",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 47.08,
+   "fim": 47.58
+  },
+  {
+   "w": "abriram",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 47.58,
+   "fim": 48.0
+  },
+  {
+   "w": "a",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 48.0,
+   "fim": 48.1
+  },
+  {
+   "w": "fenda",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 48.1,
+   "fim": 48.32
+  },
+  {
+   "w": "de",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 48.32,
+   "fim": 48.48
+  },
+  {
+   "w": "volta.",
+   "linha": 13,
+   "destaque": null,
+   "inicio": 48.48,
+   "fim": 48.72
+  },
+  {
+   "w": "Os",
+   "linha": 14,
+   "destaque": null,
+   "inicio": 49.3,
+   "fim": 49.42
+  },
+  {
+   "w": "agentes",
+   "linha": 14,
+   "destaque": null,
+   "inicio": 49.42,
+   "fim": 49.78
+  },
+  {
+   "w": "tinham",
+   "linha": 14,
+   "destaque": null,
+   "inicio": 49.78,
+   "fim": 50.08
+  },
+  {
+   "w": "sumido.",
+   "linha": 14,
+   "destaque": "amarelo",
+   "inicio": 50.08,
+   "fim": 50.58
+  },
+  {
+   "w": "O",
+   "linha": 14,
+   "destaque": null,
+   "inicio": 51.0,
+   "fim": 51.1
+  },
+  {
+   "w": "campo,",
+   "linha": 14,
+   "destaque": null,
+   "inicio": 51.1,
+   "fim": 51.42
+  },
+  {
+   "w": "vazio.",
+   "linha": 14,
+   "destaque": null,
+   "inicio": 51.76,
+   "fim": 52.24
+  },
+  {
+   "w": "O",
+   "linha": 15,
+   "destaque": null,
+   "inicio": 52.7,
+   "fim": 52.8
+  },
+  {
+   "w": "celular:",
+   "linha": 15,
+   "destaque": null,
+   "inicio": 52.8,
+   "fim": 53.18
+  },
+  {
+   "w": "87",
+   "linha": 15,
+   "destaque": "amarelo",
+   "inicio": 53.68,
+   "fim": 54.28
+  },
+  {
+   "w": "chamadas",
+   "linha": 15,
+   "destaque": null,
+   "inicio": 54.28,
+   "fim": 55.12
+  },
+  {
+   "w": "perdidas.",
+   "linha": 15,
+   "destaque": null,
+   "inicio": 55.12,
+   "fim": 55.68
+  },
+  {
+   "w": "E",
+   "linha": 16,
+   "destaque": null,
+   "inicio": 55.68,
+   "fim": 56.3
+  },
+  {
+   "w": "a",
+   "linha": 16,
+   "destaque": null,
+   "inicio": 56.3,
+   "fim": 56.4
+  },
+  {
+   "w": "data:",
+   "linha": 16,
+   "destaque": null,
+   "inicio": 56.4,
+   "fim": 56.68
+  },
+  {
+   "w": "uma",
+   "linha": 16,
+   "destaque": "amarelo",
+   "inicio": 57.24,
+   "fim": 57.4
+  },
+  {
+   "w": "semana",
+   "linha": 16,
+   "destaque": "amarelo",
+   "inicio": 57.4,
+   "fim": 57.82
+  },
+  {
+   "w": "depois.",
+   "linha": 16,
+   "destaque": null,
+   "inicio": 57.82,
+   "fim": 58.16
+  },
+  {
+   "w": "Lá",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 58.96,
+   "fim": 59.18
+  },
+  {
+   "w": "dentro,",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 59.18,
+   "fim": 59.5
+  },
+  {
+   "w": "o",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 59.78,
+   "fim": 59.8
+  },
+  {
+   "w": "tempo",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 59.8,
+   "fim": 60.04
+  },
+  {
+   "w": "anda",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 60.04,
+   "fim": 60.28
+  },
+  {
+   "w": "devagar.",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 60.28,
+   "fim": 60.78
+  },
+  {
+   "w": "Cinco",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 61.24,
+   "fim": 61.6
+  },
+  {
+   "w": "minutos",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 61.6,
+   "fim": 61.84
+  },
+  {
+   "w": "lá,",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 61.84,
+   "fim": 62.2
+  },
+  {
+   "w": "sete",
+   "linha": 17,
+   "destaque": "amarelo",
+   "inicio": 62.48,
+   "fim": 62.94
+  },
+  {
+   "w": "dias",
+   "linha": 17,
+   "destaque": "amarelo",
+   "inicio": 62.94,
+   "fim": 63.2
+  },
+  {
+   "w": "aqui.",
+   "linha": 17,
+   "destaque": null,
+   "inicio": 63.2,
+   "fim": 63.5
+  },
+  {
+   "w": "E",
+   "linha": 18,
+   "destaque": null,
+   "inicio": 64.04,
+   "fim": 64.1
+  },
+  {
+   "w": "o",
+   "linha": 18,
+   "destaque": null,
+   "inicio": 64.1,
+   "fim": 64.2
+  },
+  {
+   "w": "gato",
+   "linha": 18,
+   "destaque": null,
+   "inicio": 64.2,
+   "fim": 64.4
+  },
+  {
+   "w": "preto",
+   "linha": 18,
+   "destaque": null,
+   "inicio": 64.4,
+   "fim": 64.86
+  },
+  {
+   "w": "tinha",
+   "linha": 18,
+   "destaque": null,
+   "inicio": 64.86,
+   "fim": 65.04
+  },
+  {
+   "w": "voltado",
+   "linha": 18,
+   "destaque": null,
+   "inicio": 65.04,
+   "fim": 65.56
+  },
+  {
+   "w": "junto.",
+   "linha": 18,
+   "destaque": "amarelo",
+   "inicio": 65.56,
+   "fim": 65.84
+  },
+  {
+   "w": "Ele",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 66.34,
+   "fim": 66.46
+  },
+  {
+   "w": "correu",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 66.46,
+   "fim": 66.9
+  },
+  {
+   "w": "até",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 66.9,
+   "fim": 67.04
+  },
+  {
+   "w": "a",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 67.04,
+   "fim": 67.12
+  },
+  {
+   "w": "estrada...",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 67.12,
+   "fim": 67.62
+  },
+  {
+   "w": "onde",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 67.94,
+   "fim": 68.26
+  },
+  {
+   "w": "tinha",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 68.26,
+   "fim": 68.52
+  },
+  {
+   "w": "alguém",
+   "linha": 19,
+   "destaque": "amarelo",
+   "inicio": 68.52,
+   "fim": 68.86
+  },
+  {
+   "w": "esperando",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 68.86,
+   "fim": 69.24
+  },
+  {
+   "w": "os",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 69.24,
+   "fim": 69.5
+  },
+  {
+   "w": "dois.",
+   "linha": 19,
+   "destaque": null,
+   "inicio": 69.5,
+   "fim": 69.7
+  },
+  {
+   "w": "Na",
+   "linha": 20,
+   "destaque": null,
+   "inicio": 70.38,
+   "fim": 70.48
+  },
+  {
+   "w": "parte",
+   "linha": 20,
+   "destaque": null,
+   "inicio": 70.48,
+   "fim": 70.72
+  },
+  {
+   "w": "6:",
+   "linha": 20,
+   "destaque": null,
+   "inicio": 70.72,
+   "fim": 71.14
+  },
+  {
+   "w": "quem",
+   "linha": 20,
+   "destaque": null,
+   "inicio": 71.68,
+   "fim": 71.82
+  },
+  {
+   "w": "estava",
+   "linha": 20,
+   "destaque": null,
+   "inicio": 71.82,
+   "fim": 72.14
+  },
+  {
+   "w": "esperando?",
+   "linha": 20,
+   "destaque": "amarelo",
+   "inicio": 72.14,
+   "fim": 72.54
+  },
+  {
+   "w": "Segue",
+   "linha": 20,
+   "destaque": null,
+   "inicio": 73.02,
+   "fim": 73.34
+  },
+  {
+   "w": "pra",
+   "linha": 20,
+   "destaque": null,
+   "inicio": 73.34,
+   "fim": 73.52
+  },
+  {
+   "w": "ver",
+   "linha": 20,
+   "destaque": "vermelho",
+   "inicio": 73.52,
+   "fim": 73.72
+  }
+ ]
+}

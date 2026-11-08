@@ -12,7 +12,7 @@ import { LuzCena } from "../estilo2/TesteEstilo2";
 // Kit do visual 2.0 (referências 4 e 5): cenário 3D de verdade + personagens 2D recortados dentro dele.
 // Unidades em metros. Personagem 2D tem 1,75 m e é reposicionado a cada quadro pela projeção da câmera.
 
-export type Clima = "manha" | "dia" | "porDoSol" | "interior" | "noite";
+export type Clima = "manha" | "dia" | "porDoSol" | "interior" | "noite" | "vazio";
 type Def = {
   ceu: string;
   fog: [string, number, number];
@@ -67,6 +67,16 @@ export const CLIMAS: Record<Clima, Def> = {
     sol: { pos: [20, 30, -10], cor: "#A9C2FF", i: 1.3 },
     luz2D: { amb: "#6F86CF", ambForca: 0.75, cor: "#FFB25C", forca: 0.6, x: 200, y: 400 },
     grade: { cor: "#3A58B0", forca: 0.4, mato: "#0E1630" },
+  },
+  // o "outro lugar" dentro da fenda: escuro, frio, neblina roxo-azulada, luz fraca vinda de cima
+  vazio: {
+    ceu: "radial-gradient(ellipse at 50% 20%, #2A2350 0%, #120F24 45%, #06050C 100%)",
+    fog: ["#17142C", 6, 46],
+    hemi: ["#8C86D8", "#0C0A16", 0.9],
+    amb: ["#9C9CFF", 0.35],
+    sol: { pos: [6, 30, 4], cor: "#BFC8FF", i: 1.1 },
+    luz2D: { amb: "#7A78C8", ambForca: 0.7, cor: "#B9A6FF", forca: 0.45, x: 540, y: -400 },
+    grade: { cor: "#4A3FA0", forca: 0.38, mato: "#0A0814" },
   },
 };
 

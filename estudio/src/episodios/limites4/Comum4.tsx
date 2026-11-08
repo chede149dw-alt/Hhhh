@@ -38,14 +38,14 @@ export const Conta: React.FC<{ rotulo: string; de: number; ate: number; unidade:
   return <Info rotulo={rotulo} valor={v.toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas })} unidade={unidade} y={y} cor={cor} de={0} />;
 };
 
-export const SeloSegue: React.FC<{ top?: number }> = ({ top = 70 }) => {
+export const SeloSegue: React.FC<{ top?: number; parte?: number }> = ({ top = 70, parte = 5 }) => {
   const { f } = useP();
   const { fps } = useVideoConfig();
   const sp = spring({ frame: f - 6, fps, config: { damping: 12 } });
   return (
     <div style={{ position: "absolute", top, width: "100%", display: "flex", justifyContent: "center", transform: `scale(${sp})` }}>
       <div style={{ ...fonte, fontSize: 52, color: "#111", background: AMARELO, borderRadius: 60, padding: "14px 40px", border: "6px solid #000", boxShadow: "0 8px 0 rgba(0,0,0,0.5)", transform: `translateY(${Math.sin(f / 5) * 6}px)` }}>
-        SEGUE PRA VER A PARTE 5 ▶
+        SEGUE PRA VER A PARTE {parte} ▶
       </div>
     </div>
   );
