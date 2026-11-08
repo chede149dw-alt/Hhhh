@@ -1,51 +1,62 @@
 # "E se você entrasse na sua própria fenda?" · Parte 5 da história (Chede + Kaik)
 
-- **Protagonistas:** Chede e Kaik · **Ameaça:** o que vive do outro lado da fenda (o Regente **não aparece**)
-- **Modelo:** A (etapas) · **Duração alvo:** ~70 s (tempo normal, pedido do usuário em 08/11: 2 min demora demais pra gerar) · ≈200 palavras
+- **Protagonistas:** Chede e Kaik · **Ameaça:** os agentes (o Regente **não aparece**)
+- **Modelo:** A (etapas) · **Duração alvo:** ~65 s (tempo normal) · ≈190 palavras
 - **Capa:** "E SE VOCÊ ENTRASSE" / "NA SUA PRÓPRIA **FENDA**?" / "PARTE 5"
-- **Liga com:** final da Parte 4 (carro velho voltou da fenda com cinco marcas de mão pretas)
+- **Liga com:** final da Parte 4 (ainda no campo baldio, com o carro marcado)
+- **Ideia do usuário (08/11):**
+  - vários carros pretos aparecem e vários agentes cercam os dois, falando "não tem pra onde correr";
+  - o Chede tem a ideia de entrar na fenda;
+  - lá dentro eles encontram um gato.
 - **Visual (padrão da Parte 4 / referência 5):**
-  - cenários 3D com personagens 2D, proporção 2.0, cor única por cena;
-  - garagem do Kaik à noite (luz de lâmpada quente);
-  - o "outro lugar" já mostrado na Parte 1: chão de pedra infinito, céu escuro, frio azulado, neblina.
+  - campo baldio no fim do pôr do sol, com faróis cortando a poeira;
+  - o "outro lugar" da Parte 1: chão de pedra, céu escuro, frio azulado, neblina, pilhas de coisas.
 - **Lógica dos poderes neste episódio:**
-  - **Limite de 8 s** com a fenda grande aberta (vem da Parte 4).
-  - **O tempo lá dentro corre 8× mais rápido:** 8 s aqui = 64 s lá. Descobrem pelo vídeo do celular, que volta mais longo do que o tempo que ficou lá.
-  - Lá faz **4 °C**. Custo: o Chede volta com gelo no cabelo e tremendo.
-  - **A fenda só fica aberta enquanto o Chede olha pra ela.** Por isso ele entra de costas, sem tirar o olho da saída.
-  - **O medo encolhe a fenda** (regra da Parte 4). A saída fica do tamanho de uma moeda quando ele se assusta, e só cresce quando ele respira.
-  - Custos do Chede: nariz sangrando no limite, frio.
+  - **Controle mental:** os 12 agentes falam juntos, com a mesma voz, porque é uma mente só controlando todos. Todos têm o anel âmbar nos olhos.
+  - **Kaik não foge:** sozinho ele escapa, mas carregando o Chede são quase 6 G (Parte 4) e o Chede desmaia.
+  - **Fenda no chão:** o Chede abre debaixo dos dois. A fenda só fica aberta enquanto ele olha. Ele fecha os olhos de propósito e ela fecha atrás deles.
+  - **Lá dentro:** 4 °C e o tempo corre 8× mais rápido.
+  - **Custo/dilema:** a fenda volta a abrir no mesmo lugar, ou seja, no meio dos agentes.
+  - **Pista do Coletor:** os cliques no escuro.
 
 | # | Narração | Cena |
 |---|---|---|
-| 0 | E se você entrasse na sua própria **fenda**? | Capa: garagem escura, fenda roxa enorme no ar; Chede de costas com uma corda na cintura; Kaik segurando a corda. |
-| 1 | O carro voltou com cinco mãos pretas. Dedos de **14 centímetros**. | Garagem 3D à noite, lona caindo do carro; close na marca, "DEDO 14 cm" ao lado de "MÃO HUMANA 8 cm". |
-| 2 | Primeiro, mandaram o **celular** gravando, preso numa corda. | Kaik amarra o celular; fenda pequena abre; celular entra. |
-| 3 | Ficou oito segundos lá. Voltou com um vídeo de **um minuto**. | Contador "8 s"; tela do celular "01:04"; os dois se olham. |
-| 4 | Lá dentro, o tempo corre **oito vezes** mais rápido. | Infográfico: dois relógios, "AQUI 8 s" / "LÁ 64 s". |
-| 5 | No vídeo: quatro graus… e **pegadas** de pé descalço. Quarenta centímetros. | Tela do celular: chão de pedra, gelo, pegadas compridas; "4 °C" e "PEGADA 40 cm". |
-| 6 | O Chede amarrou a corda na cintura: "eu **entro**". | (selo "SEGUE PRA VER A PARTE 6") Kaik balançando a cabeça; Chede amarrando a corda. |
-| 7 | Só que a fenda só fica aberta enquanto ele **olha** pra ela. | Infográfico: olho → fenda; o olho fecha e a fenda some. |
-| 8 | Então ele entrou **de costas**, sem tirar o olho da saída. | Chede andando de costas para dentro da fenda; o som do mundo some. |
-| 9 | Silêncio total. E pilhas de coisas que **não eram dele**. | Outro lugar 3D: chão de pedra infinito, bafo branco; pilhas na neblina. |
-| 10 | Numa mochila, uma carteirinha da faculdade **deles**. | Close na mão tirando a carteirinha; logo igual ao do portão da Parte 4. |
-| 11 | Aí a corda deu um tranco. Alguém puxava do lado de **lá**. | Corda esticando para dentro da neblina; dois olhos brilham ao longe (sem corpo). |
-| 12 | Com medo, a saída encolheu pro tamanho de uma **moeda**. | Saída roxa tremendo e encolhendo; "MEDO → FENDA ↓". |
-| 13 | Lá fora, o Kaik gritou: "**Respira!**" | Garagem: Kaik com a corda, "7 s"; grito chega abafado lá dentro. |
-| 14 | A saída abriu e o Kaik puxou com **tudo**. | Saída cresce; rastro ciano; Chede cai no chão da garagem, gelo no cabelo, nariz sangrando. |
-| 15 | A corda voltou **arrebentada**. Mas a carteirinha veio: **Lia Moraes**. | Ponta da corda desfiada e congelada; close na carteirinha (foto borrada). |
-| 16 | O Kaik ficou branco: "Essa menina **sumiu** faz dois anos." | Cartaz antigo de "DESAPARECIDA" no mural da faculdade. |
-| 17 | Na parte 6: a Lia é a **terceira ficha**? Segue pra ver! | Ficha borrada "NÃO ABORDAR" da Parte 3 ao lado da carteirinha; "PARTE 6" + "SEGUE PRA VER". |
+| 0 | E se você entrasse na sua própria **fenda**? | Capa: os dois caindo dentro de uma fenda roxa no chão; faróis e silhuetas de agentes em volta. |
+| 1 | Ainda no campo baldio, uns faróis acenderam. Um carro **preto**. | Campo no fim do pôr do sol; faróis acendem atrás da poeira. |
+| 2 | Depois outro. E outro. **Seis** carros. | Carros chegando por todos os lados; infográfico "6 CARROS" com pontos fechando um círculo. |
+| 3 | Desceram doze agentes. Todos com o anel **dourado** nos olhos. | Portas abrindo em sequência; close nos olhos com o anel âmbar. |
+| 4 | E falaram juntos, na mesma voz: "Não tem pra onde **correr**." | Câmera gira em volta dos dois; os agentes falando ao mesmo tempo. |
+| 5 | Doze bocas, uma mente **só**. | Infográfico: 12 bocas ligadas por linhas âmbar a um ponto só. |
+| 6 | O Kaik podia fugir. Mas carregando o Chede, a 6 G, ele **desmaiava**. | Kaik olhando as saídas; infográfico "6 G" piscando vermelho. |
+| 7 | Aí o Chede teve uma ideia **maluca**. | (selo "SEGUE PRA VER A PARTE 6") Chede olhando para o chão. |
+| 8 | Abriu a fenda no **chão**, debaixo dos dois. | Fenda roxa se abrindo sob os pés; agentes correndo na direção deles. |
+| 9 | Caíram. Ele fechou os olhos… e a fenda **fechou**. | Queda; vista de baixo: a fenda fechando sobre as mãos dos agentes. |
+| 10 | Silêncio. Chão de pedra. **Quatro graus**. | Outro lugar 3D; bafo branco; "4 °C". |
+| 11 | E lá o tempo corre **oito vezes** mais rápido. | Infográfico "AQUI 8 s" / "LÁ 64 s". |
+| 12 | No meio das coisas empilhadas, alguma coisa se **mexeu**. | Pilhas na neblina; um objeto cai; os dois congelam. |
+| 13 | Dois olhos brilhando no **escuro**… | Dois olhos acesos entre as pilhas; a câmera chega perto. |
+| 14 | Era um **gato**. | O gato sai da sombra e mia; os dois soltam o ar. |
+| 15 | Magro, peludo. Na coleira, uma plaquinha: "**Pipoca**". | Kaik pega o gato no colo; close na plaquinha. |
+| 16 | E embaixo, o nome da dona: **Lia Moraes**. | Close no verso da plaquinha. |
+| 17 | Só que, se eles voltarem, a fenda abre no mesmo lugar. No meio dos **agentes**. | Infográfico: saída da fenda em cima de um círculo de 12 agentes. |
+| 18 | E lá no fundo, no escuro, começou um **clique**. | Escuridão; cliques; o gato arrepia e olha para o fundo. |
+| 19 | Na parte 6: quem é a **Lia**? Segue pra ver! | "PARTE 6" + "SEGUE PRA VER". |
 
-**≈200 palavras ≈ 70 s.** Os tempos exatos saem da narração.
+**≈190 palavras ≈ 65 s.** Os tempos exatos saem da narração.
 
 ## Checklist
 - [x] Primeira frase é a premissa
 - [x] Frases de até 15 palavras
-- [x] Novidade a cada 3–5 s: marcas → celular → tempo 8× → pegadas → entrada de costas → coisas de outras pessoas → carteirinha → corda puxada → saída encolhe → "respira" → corda arrebentada → Lia sumida
-- [x] Todo poder com lógica e custo: limite de 8 s; tempo 8× mais rápido lá dentro; fenda presa ao olhar; medo encolhe a fenda; frio de 4 °C; nariz sangra.
-- [x] Infográficos com número grande: 14 cm · 8 s · 64 s · 4 °C · 40 cm
-- [x] Engajamento no meio (selo) e no fim ("Segue pra ver a parte 6")
-- [x] O Regente não aparece. A criatura também não: só a corda puxada e dois olhos ao longe.
-- [x] Gancho para a parte 6: quem é a Lia? Ela é a terceira pessoa com poder?
+- [x] Novidade a cada 3–5 s: faróis → 6 carros → 12 agentes → voz única → 6 G → ideia maluca → fenda no chão → outro lugar → algo se mexe → gato → plaquinha → Lia → volta no meio dos agentes → cliques
+- [x] Todo poder com lógica e custo:
+  - controle mental (voz única, anel âmbar);
+  - 6 G impede a fuga;
+  - fenda presa ao olhar;
+  - 4 °C;
+  - tempo 8×;
+  - a volta abre no mesmo lugar.
+- [x] Infográficos com número grande: 6 carros · 12 agentes · 6 G · 4 °C · 8 s / 64 s
+- [x] Engajamento no meio (selo) e no fim
+- [x] O Regente não aparece (só os agentes controlados)
+- [x] Gancho: quem é a Lia, como sair sem cair nos agentes, e o que faz os cliques
 - [ ] Aprovado pelo usuário
