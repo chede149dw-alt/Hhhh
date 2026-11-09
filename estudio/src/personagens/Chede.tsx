@@ -108,9 +108,9 @@ const Olho: React.FC<{
   const cor = A.corPoder ?? "#FFB21E";
   const r3 = React.useContext(Rosto3Ctx);
   const grande = esp >= 1.15; // susto/medo: olho redondo grande
-  const k3 = r3 ? (grande ? 0.95 : 0.55) : 1;
+  const k3 = r3 ? (grande ? 0.95 : 0.7) : 1;
   const rx = 25 * esp * k3;
-  const ry = 29 * esp * k3 * (r3 && !grande ? 1.05 : 1) * (1 - piscar * 0.95);
+  const ry = 29 * esp * k3 * (r3 && !grande ? 1.3 : 1) * (1 - piscar * 0.95);
   const rp = r3 ? (grande ? 12 : rx * 0.9) : 12 * Math.min(esp, 1.15);
   const mv = r3 ? (grande ? 9 : 4) : 9;
   const fechamento = Math.min(1, semicerrado);
@@ -126,7 +126,7 @@ const Olho: React.FC<{
           {controlado > 0 && (
             <circle cx={ox * mv} cy={oy * mv} r={rp * 1.3} fill="none" stroke={cor} strokeWidth={r3 ? 4 : 5} opacity={controlado} />
           )}
-          <circle cx={ox * mv - rp * 0.35} cy={oy * mv - rp * 0.4} r={r3 ? 3 : 3.5} fill="#fff" opacity={controlado > 0 ? 1 - controlado * 0.8 : 1} />
+          {!(r3 && !grande) && <circle cx={ox * mv - rp * 0.35} cy={oy * mv - rp * 0.4} r={r3 ? 3 : 3.5} fill="#fff" opacity={controlado > 0 ? 1 - controlado * 0.8 : 1} />}
         </>
       )}
       {/* pálpebra superior (semicerrado / cansado) */}
@@ -168,7 +168,7 @@ const Sobrancelha: React.FC<{ x: number; y: number; ang: number; lado: 1 | -1 }>
   return (
     <g transform={`translate(${x},${y}) rotate(${-ang * lado})`}>
       {React.useContext(Rosto3Ctx)
-        ? <path d="M -28 6 Q -26 -12 0 -12 Q 26 -12 30 2 Q 28 10 0 6 Q -20 4 -28 6 Z" fill={C.cabelo} />
+        ? <rect x={-36} y={-2} width={72} height={24} rx={5} fill={C.cabelo} />
         : <rect x={-34} y={-10} width={68} height={20} rx={10} fill={C.cabelo} />}
     </g>
   );
@@ -239,9 +239,9 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
   const perfil = vista === "perfil";
   const tres = vista === "tresQuartos";
   const r3 = React.useContext(Rosto3Ctx);
-  const ex = r3 ? 66 : 74; // distância dos olhos ao centro
+  const ex = r3 ? 56 : 74; // distância dos olhos ao centro
   return (
-    <g transform={r3 ? "scale(0.86,1.02)" : undefined}>
+    <g>
       <defs>
         <clipPath id={`clipCabeca-${vista}`}>
           <ellipse cx={0} cy={0} rx={212} ry={205} />
@@ -320,6 +320,8 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
                   <path key={i} d={d} stroke={C.cabeloBrilho} strokeWidth={7} fill="none" strokeLinecap="round" />
                 ))}
               </>
+            ) : r3 && A.cabelo === "ondulado" ? (
+              <CabeloBolinhas cor={C.cabelo} sombra={C.cabeloSombra} brilho={C.cabeloBrilho} />
             ) : A.cabelo === "raspado" ? (
               <>
                 <path d={CABELO_RASPADO} fill={C.cabelo} opacity={0.9} />
@@ -419,7 +421,7 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
       )}
       {/* rosto */}
       {!costas && (
-        <g transform={`translate(${fx},${r3 ? -6 : 20})`}>
+        <g transform={`translate(${fx},${r3 ? 24 : 20})`}>
           {!perfil && <Sobrancelha x={-ex} y={e.sobY} ang={e.sobAng} lado={-1} />}
           <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
             <Sobrancelha x={perfil ? 10 : ex} y={e.sobY} ang={e.sobAng} lado={1} />
@@ -444,7 +446,7 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
           )}
           {/* nariz */}
           {!perfil && (r3
-            ? <path d="M 10 40 Q 24 56 8 62" stroke={C.peleSombra} strokeWidth={6} fill="none" strokeLinecap="round" />
+            ? null
             : <path d="M 6 36 Q 22 58 2 66" stroke={C.peleSombra} strokeWidth={8} fill="none" strokeLinecap="round" />)}
           {/* sangue escorrendo do nariz (0..1 = comprimento) */}
           {(pose.sangueNariz ?? 0) > 0 && (() => {
@@ -455,7 +457,7 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
               <path d={`M ${nx - 9} ${ny} C ${nx - 12} ${ny + L * 0.5} ${nx - 9} ${ny + L} ${nx - 2} ${ny + L + 8} C ${nx + 6} ${ny + L + 8} ${nx + 8} ${ny + L * 0.6} ${nx + 5} ${ny} Z`} fill="#C81E1E" />
             );
           })()}
-          <g transform={`translate(${perfil ? 10 : 0},${r3 ? 104 : 112}) scale(${(perfil ? 0.6 : tres ? 0.85 : 1) * (r3 ? 0.78 : 1)},${r3 ? 0.82 : 1})`}>
+          <g transform={`translate(${perfil ? 10 : 0},${r3 ? 96 : 112}) scale(${(perfil ? 0.6 : tres ? 0.85 : 1) * (r3 ? 0.95 : 1)},${r3 ? 0.9 : 1})`}>
             <Boca tipo={expressao} />
           </g>
           {A.oculosGrau && (
@@ -598,7 +600,7 @@ const Braco: React.FC<{
   const pele = sombra ? C.peleSombra : C.pele;
   const manga = sombra ? C.camisaSombra : C.camisa;
   const r3b = React.useContext(Rosto3Ctx);
-  const k = React.useContext(Corpo2Ctx) ? (r3b ? 1.3 : 1.75) : 1;
+  const k = React.useContext(Corpo2Ctx) ? (r3b ? 1.0 : 1.75) : 1;
   return (
     <g transform={`rotate(${-ombro * lado})`}>
       {/* braço */}
@@ -644,7 +646,7 @@ const Braco: React.FC<{
           <g stroke={C.peleSombra} strokeWidth={4} fill="none" strokeLinecap="round" opacity={0.85}>
             {/* polegar destacado e linhas dos dedos (como na referência) */}
             <path d={`M ${-30 * lado} 238 Q ${-44 * lado} 262 ${-30 * lado} 290`} />
-            {[-14, 4, 22].map((dx) => <path key={dx} d={`M ${dx * lado} ${300} L ${dx * lado * 1.05} ${318}`} />)}
+
           </g>
         )}
         {A.dedosLongos &&
@@ -669,29 +671,45 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   const pe = paraDireita ? 1 : lado;
   const pele = sombra ? C.peleSombra : C.pele;
   const r3 = React.useContext(Rosto3Ctx);
-  const k = React.useContext(Corpo2Ctx) ? (r3 ? 1.3 : 1.6) : 1;
+  const k = React.useContext(Corpo2Ctx) ? (r3 ? 1.15 : 1.6) : 1;
   return (
     <g transform={`rotate(${-quadril * lado})`}>
       {/* coxa */}
-      <rect x={-34 * k} y={0} width={68 * k} height={390} rx={30 * k} fill={pele} />
+      {r3
+        ? <rect x={-26 * k} y={0} width={52 * k} height={390} rx={24 * k} fill={pele} />
+        : <rect x={-34 * k} y={0} width={68 * k} height={390} rx={30 * k} fill={pele} />}
       <g transform={`translate(0,376) rotate(${-joelho * lado})`}>
         <rect x={-26 * k} y={-14} width={52 * k} height={360} rx={24 * k} fill={pele} />
         {r3 && <rect x={-26 * k} y={-14} width={52 * k} height={360} rx={24 * k} fill="url(#sombraSuave3)" />}
         {terno && <path d={`M ${-50 * k} -30 L ${50 * k} -30 L ${42 * k} 340 L ${-42 * k} 340 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />}
         {/* tênis */}
-        <g transform={`translate(${12 * pe},364)`}>
-          <path d={`M ${-46} -26 Q ${-46} -50 ${-10} -48 L ${30} -44 Q ${78} -36 ${82} 0 L ${-50} 0 Z`} transform={pe === -1 ? "scale(-1,1)" : undefined} fill={sombra ? C.tenisSombra : C.tenis} />
-          <rect x={-52} y={-6} width={136} height={16} rx={7} fill={C.tenisSola} transform={pe === -1 ? "scale(-1,1)" : undefined} />
-        </g>
+        {r3 && !paraDireita ? (
+          <g transform="translate(0,368)">
+            {/* tênis grande visto de frente (estilo boneco) */}
+            <path d="M -76 -2 Q -82 -84 -34 -92 L 34 -92 Q 82 -84 76 -2 Z" fill={sombra ? C.tenisSombra : C.tenis} />
+            <path d="M -38 -70 L 38 -70 M -34 -56 L 34 -56" stroke={C.tenisSombra} strokeWidth={5} strokeLinecap="round" />
+            <rect x={-76} y={-16} width={152} height={18} rx={8} fill={C.tenisSola} />
+          </g>
+        ) : (
+          <g transform={`translate(${12 * pe},364) ${r3 ? "scale(1.2)" : ""}`}>
+            <path d={`M ${-46} -26 Q ${-46} -50 ${-10} -48 L ${30} -44 Q ${78} -36 ${82} 0 L ${-50} 0 Z`} transform={pe === -1 ? "scale(-1,1)" : undefined} fill={sombra ? C.tenisSombra : C.tenis} />
+            <rect x={-52} y={-6} width={136} height={16} rx={7} fill={C.tenisSola} transform={pe === -1 ? "scale(-1,1)" : undefined} />
+          </g>
+        )}
       </g>
       {/* perna da bermuda: acompanha a coxa */}
       {terno ? (
         <path d={`M ${-56 * k} -40 L ${56 * k} -40 L ${50 * k} 396 L ${-50 * k} 396 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />
       ) : (
         <>
-          <path d={`M ${-62 * k} -40 L ${62 * k} -40 L ${70 * k} 290 L ${-70 * k} 290 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />
+          {r3 ? (
+            <>
+              <path d={`M ${-50 * k} -40 L ${50 * k} -40 L ${54 * k} 236 L ${-54 * k} 236 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />
+              <path d={`M ${-50 * k} -40 L ${50 * k} -40 L ${54 * k} 236 L ${-54 * k} 236 Z`} fill="url(#sombraSuave3)" />
+            </>
+          ) : <path d={`M ${-62 * k} -40 L ${62 * k} -40 L ${70 * k} 290 L ${-70 * k} 290 Z`} fill={sombra ? C.bermudaSombra : C.bermuda} />}
           {r3
-            ? <path d={`M ${-62 * k} -40 L ${62 * k} -40 L ${70 * k} 290 L ${-70 * k} 290 Z`} fill="url(#sombraSuave3)" />
+            ? null
             : !sombra && <path d={`M ${20 * k} -40 L ${62 * k} -40 L ${70 * k} 290 L ${34 * k} 290 Z`} fill={C.bermudaSombra} />}
         </>
       )}
@@ -699,7 +717,41 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   );
 };
 
-const TRONCO3 = "M -170 -1174 Q 0 -1204 170 -1174 Q 198 -1152 194 -1104 L 170 -728 Q 0 -714 -170 -728 L -194 -1104 Q -198 -1152 -170 -1174 Z";
+const TRONCO3 = "M -112 -1158 Q 0 -1170 112 -1158 Q 140 -1148 142 -1112 L 110 -1070 L 108 -762 Q 0 -754 -108 -762 L -110 -1070 L -142 -1112 Q -140 -1148 -112 -1158 Z";
+
+// Cabelo curto e cacheado em "bolinhas" (estilo boneco 3D, Chede no Rosto 3)
+const BOLINHAS = (() => {
+  const out: [number, number, number][] = [];
+  // contorno: das têmporas, por cima (sem cobrir as orelhas)
+  for (let i = 0; i <= 16; i++) {
+    const ang = Math.PI * (1.1 + (i / 16) * 0.8);
+    out.push([Math.cos(ang) * 206, Math.sin(ang) * 214 - 4, 34 + ((i * 7) % 3) * 4]);
+  }
+  // segundo anel por dentro (cabelo cheio, sem buracos)
+  for (let i = 0; i <= 13; i++) {
+    const ang = Math.PI * (1.12 + (i / 13) * 0.76);
+    out.push([Math.cos(ang) * 170, Math.sin(ang) * 178 - 6, 36]);
+  }
+  // laterais curtas (acima da orelha)
+  [[-204, -30], [204, -30], [-198, 0], [198, 0]].forEach(([x, y]) => out.push([x, y, 30]));
+  // franja: bolinhas na testa
+  for (let i = 0; i < 8; i++) out.push([-154 + i * 44, -126 + (i % 2) * 8, 30]);
+  // miolo
+  for (let i = 0; i < 10; i++) out.push([-150 + (i % 5) * 75, -205 + Math.floor(i / 5) * 46, 36]);
+  return out;
+})();
+const CabeloBolinhas: React.FC<{ cor: string; sombra: string; brilho: string }> = ({ cor, sombra, brilho }) => (
+  <g>
+    <path d="M -214 10 C -234 -150 -126 -240 0 -242 C 126 -240 234 -150 214 10 L 196 0 C 192 -50 168 -100 120 -112 Q 0 -130 -120 -112 C -168 -100 -192 -50 -196 0 Z" fill={cor} />
+    {BOLINHAS.map(([x, y, r], i) => (
+      <g key={i}>
+        <circle cx={x} cy={y} r={r * 0.96} fill={cor} />
+        <circle cx={x + r * 0.2} cy={y + r * 0.25} r={r * 0.6} fill={sombra} opacity={0.3} />
+        <circle cx={x - r * 0.25} cy={y - r * 0.3} r={r * 0.26} fill={brilho} opacity={0.35} />
+      </g>
+    ))}
+  </g>
+);
 
 // ---------- Corpo inteiro ----------
 export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista; semSombra?: boolean }> = ({
@@ -712,8 +764,8 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
   const c2 = React.useContext(Corpo2Ctx);
   const r3 = React.useContext(Rosto3Ctx);
   const sx = vista === "perfil" ? 0.58 : vista === "tresQuartos" ? 0.84 : 1;
-  const ombroX = vista === "perfil" ? 20 : (r3 ? 160 : 150) * sx;
-  const quadrilX = vista === "perfil" ? 16 : (c2 ? 78 : 62) * sx;
+  const ombroX = vista === "perfil" ? 20 : (r3 ? 126 : 150) * sx;
+  const quadrilX = vista === "perfil" ? 16 : (r3 ? 52 : c2 ? 78 : 62) * sx;
   const costas = vista === "costas";
   const lateral = vista === "perfil" || vista === "tresQuartos";
   const resp = pose.respiracao ?? 0;
@@ -760,9 +812,11 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
       <g transform={`rotate(${P.tronco ?? 0} 0 ${Math.abs(P.tronco ?? 0) > 30 ? -760 : -560}) translate(0,${-resp * 6})`}>
         {/* bermuda */}
         <g transform={`scale(${sx},1)`}>
+        <g transform={r3 ? "scale(0.72,1)" : undefined}>
         <path d="M -150 -790 L 150 -790 L 156 -690 Q 0 -660 -156 -690 Z" fill={C.bermuda} />
         <path d="M 40 -790 L 150 -790 L 156 -690 Q 100 -676 60 -672 Z" fill={C.bermudaSombra} />
         <rect x={-152} y={-800} width={304} height={26} rx={6} fill={C.bermudaSombra} />
+        </g>
         </g>
         {useA().mochila && (vista === "perfil" || vista === "tresQuartos") && (
           <g transform={`scale(${sx},1)`}>
@@ -771,7 +825,7 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           </g>
         )}
         {/* braço de trás (direita da tela) */}
-        <g transform={`translate(${ombroX},-1150)`}>
+        <g transform={`translate(${ombroX},${r3 ? -1128 : -1150})`}>
           <Braco lado={1} ombro={P.bracoD} cotovelo={P.antebracoD} sombra />
         </g>
         <g transform={`scale(${sx},1)`}>
@@ -799,13 +853,15 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           </>
         )}
         {r3
-          ? <path d="M -172 -748 Q 0 -734 172 -748 L 170 -728 Q 0 -714 -170 -728 Z" fill={C.camisaDetalhe} />
+          ? <path d="M -109 -782 Q 0 -774 109 -782 L 108 -762 Q 0 -754 -108 -762 Z" fill={C.camisaDetalhe} />
           : <path d="M -158 -800 L 158 -800 L 158 -780 L -158 -780 Z" fill={C.camisaDetalhe} />}
         {/* pescoço + gola */}
-        <rect x={-42} y={-1232} width={84} height={70} rx={20} fill={C.peleSombra} />
+        {r3 ? <rect x={-30} y={-1196} width={60} height={50} rx={16} fill={C.peleSombra} /> : <rect x={-42} y={-1232} width={84} height={70} rx={20} fill={C.peleSombra} />}
         {costas ? (
           <path d="M -60 -1196 Q 0 -1186 60 -1196" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
-        ) : useA().estampa === "terno" ? null : (
+        ) : useA().estampa === "terno" ? null : r3 ? (
+          <path d="M -40 -1160 Q 0 -1132 40 -1160" stroke={C.camisaDetalhe} strokeWidth={10} fill="none" strokeLinecap="round" />
+        ) : (
           <path d="M -62 -1188 Q 0 -1130 62 -1188" stroke={C.camisaDetalhe} strokeWidth={14} fill="none" strokeLinecap="round" />
         )}
         {/* terno: barra do paletó, camisa, gravata, lapelas */}
@@ -838,7 +894,7 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           </g>
         )}
         {useA().estampa === "bolso" && (vista === "frente" || vista === "tresQuartos") && (
-          <g transform={vista === "tresQuartos" ? "translate(40,0)" : undefined}>
+          <g transform={`${vista === "tresQuartos" ? "translate(40,0)" : ""} ${r3 ? "translate(36,10)" : ""} ${r3 ? "translate(-86,-1070) scale(0.78) translate(86,1070)" : ""}`}>
             <path d="M -118 -1100 L -54 -1100 L -54 -1040 Q -86 -1028 -118 -1040 Z" fill={C.camisaSombra} />
             <rect x={-118} y={-1104} width={64} height={10} rx={3} fill={C.camisaDetalhe} />
           </g>
@@ -881,11 +937,11 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           )}
         </g>
         {/* braço da frente (esquerda da tela) */}
-        <g transform={`translate(${-ombroX},-1150)`}>
+        <g transform={`translate(${-ombroX},${r3 ? -1128 : -1150})`}>
           <Braco lado={-1} ombro={P.bracoE} cotovelo={P.antebracoE} />
         </g>
         {/* cabeça */}
-        <g transform={`translate(0,${r3 ? -1326 : c2 ? -1372 : -1420}) rotate(${P.cabeca ?? 0} 0 190) scale(${r3 ? 0.66 : c2 ? 0.76 : 1})`}>
+        <g transform={`translate(0,${r3 ? -1346 : c2 ? -1372 : -1420}) rotate(${P.cabeca ?? 0} 0 190) scale(${r3 ? 0.93 : c2 ? 0.76 : 1})`}>
           <Cabeca expressao={expressao} pose={P} vista={vista} />
         </g>
       </g>
