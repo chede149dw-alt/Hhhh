@@ -71,7 +71,7 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
 - Dica: no vídeo vertical o ângulo horizontal é estreito (fov 40 → ±11,5°); planos com dois personagens pedem fov ~50
   e distância maior.
 
-## Parte 5 — "E se você se escondesse dentro do seu poder?" (EM PRODUÇÃO 08/11)
+## Parte 5 — "E se você se escondesse dentro do seu poder?" (ENTREGUE 09/11)
 - Roteiro APROVADO: `roteiros/parte-5-outro-lado.md` (21 falas, ~75 s — duração normal a pedido do usuário).
 - Voz final ElevenLabs (Witalo, take 1, 74 s, acerto 0,975): `audio/parte-5-esconder-narracao.mp3` → `estudio/public/esconder5/`.
 - Trilha: `python3 scripts/gerar_trilha_esconder5.py public/esconder5/trilha.wav ../audio/parte-5-esconder-trilha.wav`.
@@ -80,3 +80,5 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
 - Prévia: `cd estudio && ESCALA=0.5 scripts/render_partes.sh Esconder5 2256 ../previas/parte-5-esconder-previa.mp4 300`.
 - Final: `scripts/render_partes.sh Esconder5 2256 ../prontos/parte-5-esconder.mp4 300` → capa (quadro ~40) → post `roteiros/parte-5-esconder-post.md`.
 - Em aberto para a Parte 6: quem estava esperando (silhueta); a Lia (ficha proposta em `personagens/lia/`); a criatura "Coletor" (proposta, não aprovada).
+- ✅ Final: `prontos/parte-5-esconder.mp4` (2256 quadros, 75,2 s, 1080x1920, 47 MB) + `prontos/parte-5-esconder-capa.png` + `roteiros/parte-5-esconder-post.md`. Miado real do ElevenLabs (`audio/sfx-miado-gato.mp3`).
+- Próximo: Parte 6 — definir quem estava esperando, a Lia e a origem da criatura.
