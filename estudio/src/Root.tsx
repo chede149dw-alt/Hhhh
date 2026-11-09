@@ -16,6 +16,7 @@ import { Vitrine4 } from "./estilo2/Vitrine4";
 import { Debug } from "./estilo2/Debug";
 import { Comparar } from "./estilo2/Comparar";
 import { Alvo } from "./estilo2/Alvo";
+import { TesteBoneco3D } from "./estilo2/TesteBoneco3D";
 import { FichaFigurantes } from "./personagens/FichaFigurantes";
 import { FichaLia } from "./personagens/Lia";
 import { DURACAO_LIM4, Limites4 } from "./episodios/limites4/Limites4";
@@ -71,6 +72,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="TesteKaik3D" component={TesteKaik3D} width={1080} height={1920} fps={30} durationInFrames={120} />
     <Composition id="Teste3D" component={Teste3D} width={1080} height={1920} fps={30} durationInFrames={90} defaultProps={{ modo: "baixo" as const }} />
     <Still id="FichaFigurantes" component={FichaFigurantes} width={2400} height={2000} />
+    <Still id="TesteBoneco3D" component={TesteBoneco3D} width={2048} height={1536} />
     <Still id="Alvo" component={Alvo} width={2048} height={1536} />
     <Still id="Comparar" component={Comparar} width={2400} height={1960} />
     <Still id="Debug" component={Debug} width={2400} height={1900} />
