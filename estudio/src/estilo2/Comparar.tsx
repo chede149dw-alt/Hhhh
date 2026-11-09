@@ -11,10 +11,10 @@ const T: React.FC<{ x: number; y: number; t: string }> = ({ x, y, t }) => (
 );
 export const Comparar: React.FC = () => (
   <AbsoluteFill style={{ background: "#E6E1D8" }}>
-    <T x={40} y={20} t="REFERÊNCIA 5" />
+    <T x={40} y={20} t="REFERÊNCIA 6" />
     <T x={40} y={1000} t="NOSSOS (NOVO)" />
-    {["q053", "q061", "q006", "q017", "q078"].map((q, i) => (
-      <Img key={q} src={staticFile(`tmp-ref/${q}.png`)} style={{ position: "absolute", left: 20 + i * 470, top: 80, width: 460, height: 818, objectFit: "cover" }} />
+    {["q001", "q016", "q023", "q026", "q011"].map((q, i) => (
+      <Img key={q} src={staticFile(`tmp-ref6/${q}.png`)} style={{ position: "absolute", left: 20 + i * 470, top: 80, width: 460, height: 818, objectFit: "cover" }} />
     ))}
     <svg viewBox="0 0 2400 900" width={2400} height={900} style={{ position: "absolute", left: 0, top: 1060 }}>
       <rect x={20} y={0} width={460} height={818} fill="#8C9BC8" />

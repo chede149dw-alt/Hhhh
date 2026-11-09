@@ -241,7 +241,7 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
   const r3 = React.useContext(Rosto3Ctx);
   const ex = r3 ? 66 : 74; // distância dos olhos ao centro
   return (
-    <g>
+    <g transform={r3 ? "scale(0.86,1.02)" : undefined}>
       <defs>
         <clipPath id={`clipCabeca-${vista}`}>
           <ellipse cx={0} cy={0} rx={212} ry={205} />
@@ -419,7 +419,7 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
       )}
       {/* rosto */}
       {!costas && (
-        <g transform={`translate(${fx},20)`}>
+        <g transform={`translate(${fx},${r3 ? -6 : 20})`}>
           {!perfil && <Sobrancelha x={-ex} y={e.sobY} ang={e.sobAng} lado={-1} />}
           <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
             <Sobrancelha x={perfil ? 10 : ex} y={e.sobY} ang={e.sobAng} lado={1} />
@@ -598,7 +598,7 @@ const Braco: React.FC<{
   const pele = sombra ? C.peleSombra : C.pele;
   const manga = sombra ? C.camisaSombra : C.camisa;
   const r3b = React.useContext(Rosto3Ctx);
-  const k = React.useContext(Corpo2Ctx) ? (r3b ? 1.5 : 1.75) : 1;
+  const k = React.useContext(Corpo2Ctx) ? (r3b ? 1.3 : 1.75) : 1;
   return (
     <g transform={`rotate(${-ombro * lado})`}>
       {/* braço */}
@@ -669,7 +669,7 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   const pe = paraDireita ? 1 : lado;
   const pele = sombra ? C.peleSombra : C.pele;
   const r3 = React.useContext(Rosto3Ctx);
-  const k = React.useContext(Corpo2Ctx) ? (r3 ? 1.45 : 1.6) : 1;
+  const k = React.useContext(Corpo2Ctx) ? (r3 ? 1.3 : 1.6) : 1;
   return (
     <g transform={`rotate(${-quadril * lado})`}>
       {/* coxa */}
@@ -699,7 +699,7 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   );
 };
 
-const TRONCO3 = "M -192 -1172 Q 0 -1206 192 -1172 Q 222 -1150 216 -1100 L 184 -732 Q 0 -716 -184 -732 L -216 -1100 Q -222 -1150 -192 -1172 Z";
+const TRONCO3 = "M -170 -1174 Q 0 -1204 170 -1174 Q 198 -1152 194 -1104 L 170 -728 Q 0 -714 -170 -728 L -194 -1104 Q -198 -1152 -170 -1174 Z";
 
 // ---------- Corpo inteiro ----------
 export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista; semSombra?: boolean }> = ({
@@ -712,7 +712,7 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
   const c2 = React.useContext(Corpo2Ctx);
   const r3 = React.useContext(Rosto3Ctx);
   const sx = vista === "perfil" ? 0.58 : vista === "tresQuartos" ? 0.84 : 1;
-  const ombroX = vista === "perfil" ? 20 : (r3 ? 176 : 150) * sx;
+  const ombroX = vista === "perfil" ? 20 : (r3 ? 160 : 150) * sx;
   const quadrilX = vista === "perfil" ? 16 : (c2 ? 78 : 62) * sx;
   const costas = vista === "costas";
   const lateral = vista === "perfil" || vista === "tresQuartos";
@@ -732,6 +732,20 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
     <g>
       {/* sombra no chão */}
       {!semSombra && <ellipse cx={0} cy={6} rx={200} ry={26} fill="#000" opacity={0.18} />}
+      {r3 && (
+        <defs>
+          {/* contorno de luz fino em volta do corpo (acabamento das referências 5 e 6) */}
+          <filter id="contornoLuz3" x="-25%" y="-8%" width="150%" height="116%">
+            <feMorphology in="SourceAlpha" operator="dilate" radius={4.5} result="d" />
+            <feComposite in="d" in2="SourceAlpha" operator="out" result="anel" />
+            <feFlood floodColor="#FFE9B8" floodOpacity={0.85} />
+            <feComposite in2="anel" operator="in" result="borda" />
+            <feGaussianBlur in="borda" stdDeviation={1.6} result="bb" />
+            <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="bb" /></feMerge>
+          </filter>
+        </defs>
+      )}
+      <g filter={r3 ? "url(#contornoLuz3)" : undefined}>
       {/* pernas */}
       <g transform={`translate(${-quadrilX},-760)`}>
         <Perna lado={-1} quadril={P.pernaE} joelho={P.joelhoE} paraDireita={lateral} />
@@ -785,7 +799,7 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           </>
         )}
         {r3
-          ? <path d="M -186 -752 Q 0 -736 186 -752 L 184 -732 Q 0 -716 -184 -732 Z" fill={C.camisaDetalhe} />
+          ? <path d="M -172 -748 Q 0 -734 172 -748 L 170 -728 Q 0 -714 -170 -728 Z" fill={C.camisaDetalhe} />
           : <path d="M -158 -800 L 158 -800 L 158 -780 L -158 -780 Z" fill={C.camisaDetalhe} />}
         {/* pescoço + gola */}
         <rect x={-42} y={-1232} width={84} height={70} rx={20} fill={C.peleSombra} />
@@ -871,9 +885,10 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
           <Braco lado={-1} ombro={P.bracoE} cotovelo={P.antebracoE} />
         </g>
         {/* cabeça */}
-        <g transform={`translate(0,${r3 ? -1340 : c2 ? -1372 : -1420}) rotate(${P.cabeca ?? 0} 0 190) scale(${r3 ? 0.68 : c2 ? 0.76 : 1})`}>
+        <g transform={`translate(0,${r3 ? -1326 : c2 ? -1372 : -1420}) rotate(${P.cabeca ?? 0} 0 190) scale(${r3 ? 0.66 : c2 ? 0.76 : 1})`}>
           <Cabeca expressao={expressao} pose={P} vista={vista} />
         </g>
+      </g>
       </g>
     </g>
   );
