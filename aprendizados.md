@@ -158,3 +158,9 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Premissa da Parte 5: "E se você se escondesse dentro do seu poder?"** (usuário, 08/11). "E se você entrasse na sua própria fenda?" ficou estranho. O nome "Kamui" foi descartado porque é o poder de Naruto. O poder continua sem nome próprio.
 - **Roteiro da Parte 5 aprovado** (08/11). Não alterar o texto. Referências 4 e 5 reenviadas pelo usuário como padrão de qualidade/animação ("pode copiar até o estilo de animação"). Na Parte 5, usar delas: close de celular na mão, interior do carro dos agentes, câmera térmica/visão noturna, holograma em grade, noite azul com halo e bokeh.
 - **Miado sintetizado ficou feio** (usuário, 08/11: "miado de gato ficou muito feio"). Sons de bicho (miado, latido, voz) não se sintetizam com seno: gerar no ElevenLabs (efeito sonoro, `eleven_text_to_sound_v2`, custa ~17 créditos) e carregar o arquivo na trilha. Miado da série: `audio/sfx-miado-gato.mp3`.
+- **Personagens mais parecidos com a referência 5** (pedido do usuário, 09/11). `Rosto3Ctx` no rig (padrão ligado):
+  - olhos pequenos (bolinha) que só ficam grandes no susto/medo;
+  - boca e nariz menores, sobrancelha curta e grossa, língua rosa na boca aberta;
+  - polegar e linhas dos dedos marcados, antebraço afinando;
+  - tronco com ombro arredondado e cintura mais fina, manga arredondada, sombra em degradê suave.
+  Comparação em `previas/teste-rosto-3.png`. Aguardando o usuário aprovar.

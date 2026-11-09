@@ -87,6 +87,9 @@ export const AparenciaCtx = React.createContext<Aparencia>(APARENCIA_CHEDE);
 const useA = () => React.useContext(AparenciaCtx);
 // Proporção 2.0 (estilo da referência 5, aprovada 08/11): cabeça menor e braços/pernas mais grossos. Padrão: ligada.
 export const Corpo2Ctx = React.createContext(true);
+// Rosto 3 (estilo da referência 5, pedido do usuário 09/11): olhos pequenos (bolinha) que só crescem no susto,
+// boca/nariz menores, sobrancelha curta e grossa, língua na boca aberta, dedos marcados, braço afinando. Padrão: ligado.
+export const Rosto3Ctx = React.createContext(true);
 
 // ---------- Rosto ----------
 const Olho: React.FC<{
@@ -103,8 +106,13 @@ const Olho: React.FC<{
   const A = useA();
   const C = A.cores;
   const cor = A.corPoder ?? "#FFB21E";
-  const rx = 25 * esp;
-  const ry = 29 * esp * (1 - piscar * 0.95);
+  const r3 = React.useContext(Rosto3Ctx);
+  const grande = esp >= 1.15; // susto/medo: olho redondo grande
+  const k3 = r3 ? (grande ? 0.95 : 0.74) : 1;
+  const rx = 25 * esp * k3;
+  const ry = 29 * esp * k3 * (r3 && !grande ? 1.05 : 1) * (1 - piscar * 0.95);
+  const rp = r3 ? (grande ? 12 : rx * 0.68) : 12 * Math.min(esp, 1.15);
+  const mv = r3 ? (grande ? 9 : 4) : 9;
   const fechamento = Math.min(1, semicerrado);
   return (
     <g transform={`translate(${x},0)`}>
@@ -112,13 +120,13 @@ const Olho: React.FC<{
       {ry > 4 && (
         <>
           {poder > 0 && <ellipse cx={0} cy={0} rx={rx} ry={ry} fill={cor} opacity={0.35 * poder} />}
-          <circle cx={ox * 9} cy={oy * 9} r={12 * Math.min(esp, 1.15)} fill={C.pupila} />
-          {poder > 0 && <circle cx={ox * 9} cy={oy * 9} r={12 * Math.min(esp, 1.15)} fill={cor} opacity={poder} />}
-          {poder > 0 && <circle cx={ox * 9} cy={oy * 9} r={5} fill="#FFF6D8" opacity={poder} />}
+          <circle cx={ox * mv} cy={oy * mv} r={rp} fill={C.pupila} />
+          {poder > 0 && <circle cx={ox * mv} cy={oy * mv} r={rp} fill={cor} opacity={poder} />}
+          {poder > 0 && <circle cx={ox * mv} cy={oy * mv} r={5} fill="#FFF6D8" opacity={poder} />}
           {controlado > 0 && (
-            <circle cx={ox * 9} cy={oy * 9} r={15 * Math.min(esp, 1.15)} fill="none" stroke={cor} strokeWidth={5} opacity={controlado} />
+            <circle cx={ox * mv} cy={oy * mv} r={rp * 1.3} fill="none" stroke={cor} strokeWidth={r3 ? 4 : 5} opacity={controlado} />
           )}
-          <circle cx={ox * 9 - 4} cy={oy * 9 - 5} r={3.5} fill="#fff" opacity={controlado > 0 ? 1 - controlado * 0.8 : 1} />
+          <circle cx={ox * mv - rp * 0.35} cy={oy * mv - rp * 0.4} r={r3 ? 3 : 3.5} fill="#fff" opacity={controlado > 0 ? 1 - controlado * 0.8 : 1} />
         </>
       )}
       {/* pálpebra superior (semicerrado / cansado) */}
@@ -159,7 +167,9 @@ const Sobrancelha: React.FC<{ x: number; y: number; ang: number; lado: 1 | -1 }>
   const C = useA().cores;
   return (
     <g transform={`translate(${x},${y}) rotate(${-ang * lado})`}>
-      <rect x={-34} y={-10} width={68} height={20} rx={10} fill={C.cabelo} />
+      {React.useContext(Rosto3Ctx)
+        ? <path d="M -28 6 Q -26 -12 0 -12 Q 26 -12 30 2 Q 28 10 0 6 Q -20 4 -28 6 Z" fill={C.cabelo} />
+        : <rect x={-34} y={-10} width={68} height={20} rx={10} fill={C.cabelo} />}
     </g>
   );
 };
@@ -173,11 +183,17 @@ const Boca: React.FC<{ tipo: Expressao }> = ({ tipo }) => {
       return (
         <g>
           <path d="M -46 -6 Q 0 70 46 -6 Z" fill={C.boca} />
+          <ellipse cx={0} cy={36} rx={18} ry={9} fill="#E8869A" />
           <path d="M -34 -2 Q 0 8 34 -2 L 30 6 Q 0 14 -30 6 Z" fill="#fff" />
         </g>
       );
     case "espanto":
-      return <ellipse cx={0} cy={8} rx={20} ry={28} fill={C.boca} />;
+      return (
+        <g>
+          <ellipse cx={0} cy={8} rx={20} ry={28} fill={C.boca} />
+          <ellipse cx={0} cy={24} rx={13} ry={10} fill="#E8869A" />
+        </g>
+      );
     case "medo":
       return <path d="M -36 10 Q -18 -6 0 8 Q 18 -6 36 10" stroke={C.boca} strokeWidth={8} fill="none" strokeLinecap="round" />;
     case "raiva":
@@ -222,6 +238,8 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
   const costas = vista === "costas";
   const perfil = vista === "perfil";
   const tres = vista === "tresQuartos";
+  const r3 = React.useContext(Rosto3Ctx);
+  const ex = r3 ? 66 : 74; // distância dos olhos ao centro
   return (
     <g>
       <defs>
@@ -384,13 +402,13 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
       {/* rosto */}
       {!costas && (
         <g transform={`translate(${fx},20)`}>
-          {!perfil && <Sobrancelha x={-74} y={e.sobY} ang={e.sobAng} lado={-1} />}
+          {!perfil && <Sobrancelha x={-ex} y={e.sobY} ang={e.sobAng} lado={-1} />}
           <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
-            <Sobrancelha x={perfil ? 10 : 74} y={e.sobY} ang={e.sobAng} lado={1} />
+            <Sobrancelha x={perfil ? 10 : ex} y={e.sobY} ang={e.sobAng} lado={1} />
           </g>
-          {!perfil && <Olho x={-74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={-1} semicerrado={e.semicerrado} poder={pose.olhosPoder} controlado={pose.controlado} />}
+          {!perfil && <Olho x={-ex} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={-1} semicerrado={e.semicerrado} poder={pose.olhosPoder} controlado={pose.controlado} />}
           <g transform={tres ? "translate(74,0) scale(0.8,1) translate(-74,0)" : undefined}>
-            <Olho x={perfil ? 10 : 74} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={1} semicerrado={e.semicerrado} poder={pose.olhosPoder} controlado={pose.controlado} />
+            <Olho x={perfil ? 10 : ex} esp={e.olho} piscar={piscar} ox={ox} oy={oy} lado={1} semicerrado={e.semicerrado} poder={pose.olhosPoder} controlado={pose.controlado} />
           </g>
           {A.sardas && !perfil && (
             <g fill={C.peleSombra} opacity={0.75}>
@@ -407,9 +425,9 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
             </g>
           )}
           {/* nariz */}
-          {!perfil && (
-            <path d="M 6 36 Q 22 58 2 66" stroke={C.peleSombra} strokeWidth={8} fill="none" strokeLinecap="round" />
-          )}
+          {!perfil && (r3
+            ? <path d="M 10 40 Q 24 56 8 62" stroke={C.peleSombra} strokeWidth={6} fill="none" strokeLinecap="round" />
+            : <path d="M 6 36 Q 22 58 2 66" stroke={C.peleSombra} strokeWidth={8} fill="none" strokeLinecap="round" />)}
           {/* sangue escorrendo do nariz (0..1 = comprimento) */}
           {(pose.sangueNariz ?? 0) > 0 && (() => {
             const L = 14 + (pose.sangueNariz ?? 0) * 95;
@@ -419,7 +437,7 @@ export const Cabeca: React.FC<{ expressao: Expressao; pose: Pose; vista?: Vista 
               <path d={`M ${nx - 9} ${ny} C ${nx - 12} ${ny + L * 0.5} ${nx - 9} ${ny + L} ${nx - 2} ${ny + L + 8} C ${nx + 6} ${ny + L + 8} ${nx + 8} ${ny + L * 0.6} ${nx + 5} ${ny} Z`} fill="#C81E1E" />
             );
           })()}
-          <g transform={`translate(${perfil ? 10 : 0},112) scale(${perfil ? 0.6 : tres ? 0.85 : 1},1)`}>
+          <g transform={`translate(${perfil ? 10 : 0},${r3 ? 104 : 112}) scale(${(perfil ? 0.6 : tres ? 0.85 : 1) * (r3 ? 0.78 : 1)},${r3 ? 0.82 : 1})`}>
             <Boca tipo={expressao} />
           </g>
           {A.oculosGrau && (
@@ -570,13 +588,22 @@ const Braco: React.FC<{
         <path d={`M ${-40 * k} -20 Q 0 -40 ${40 * k} -20 L ${38 * k} 300 Q 0 312 ${-38 * k} 300 Z`} fill={manga} />
       ) : (
         <>
-          {/* manga curta */}
-          <path d={`M ${-40 * k} -20 Q 0 -40 ${40 * k} -20 L ${44 * k} 100 Q 0 112 ${-44 * k} 100 Z`} fill={manga} />
+          {/* manga curta (estilo 3: ombro arredondado e degradê suave) */}
+          {React.useContext(Rosto3Ctx) ? (
+            <>
+              <path d={`M ${-42 * k} 30 Q ${-44 * k} -46 0 -48 Q ${44 * k} -46 ${42 * k} 30 L ${44 * k} 100 Q 0 112 ${-44 * k} 100 Z`} fill={manga} />
+              <path d={`M ${-42 * k} 30 Q ${-44 * k} -46 0 -48 Q ${44 * k} -46 ${42 * k} 30 L ${44 * k} 100 Q 0 112 ${-44 * k} 100 Z`} fill="url(#sombraSuave3)" />
+            </>
+          ) : (
+            <path d={`M ${-40 * k} -20 Q 0 -40 ${40 * k} -20 L ${44 * k} 100 Q 0 112 ${-44 * k} 100 Z`} fill={manga} />
+          )}
           <path d={`M ${-44 * k} 92 Q 0 104 ${44 * k} 92 L ${44 * k} 100 Q 0 112 ${-44 * k} 100 Z`} fill={C.camisaDetalhe} />
         </>
       )}
       <g transform={`translate(0,286) rotate(${-cotovelo * lado})`}>
-        <rect x={-21 * k} y={-10} width={42 * k} height={270} rx={21 * k} fill={pele} />
+        {React.useContext(Rosto3Ctx)
+          ? <path d={`M ${-21 * k} 0 Q ${-21 * k} -10 0 -10 Q ${21 * k} -10 ${21 * k} 0 L ${16 * k} 262 Q 0 272 ${-16 * k} 262 Z`} fill={pele} />
+          : <rect x={-21 * k} y={-10} width={42 * k} height={270} rx={21 * k} fill={pele} />}
         {mangaLonga && (
           <>
             <rect x={-36 * k} y={-24} width={72 * k} height={250} rx={30 * k} fill={manga} />
@@ -590,6 +617,13 @@ const Braco: React.FC<{
         {/* mão */}
         <ellipse cx={0} cy={272} rx={34 * Math.sqrt(k)} ry={40 * Math.sqrt(k)} fill={A.maos ?? pele} />
         <ellipse cx={-26 * lado} cy={256} rx={12} ry={24} fill={A.maos ?? pele} transform={`rotate(${-25 * lado} ${-26 * lado} 256)`} />
+        {React.useContext(Rosto3Ctx) && !A.maos && (
+          <g stroke={C.peleSombra} strokeWidth={4} fill="none" strokeLinecap="round" opacity={0.85}>
+            {/* polegar destacado e linhas dos dedos (como na referência) */}
+            <path d={`M ${-30 * lado} 238 Q ${-44 * lado} 262 ${-30 * lado} 290`} />
+            {[-14, 4, 22].map((dx) => <path key={dx} d={`M ${dx * lado} ${300} L ${dx * lado * 1.05} ${318}`} />)}
+          </g>
+        )}
         {A.dedosLongos &&
           [-22, -7, 8, 23].map((dx, i) => (
             <ellipse key={i} cx={dx} cy={340 + Math.abs(dx) * -0.6} rx={9} ry={52} fill={A.maos ?? pele} transform={`rotate(${dx * 0.4} ${dx} 300)`} />
@@ -638,6 +672,8 @@ const Perna: React.FC<{ lado: 1 | -1; quadril: number; joelho: number; sombra?: 
   );
 };
 
+const TRONCO3 = "M -168 -1170 Q 0 -1208 168 -1170 Q 196 -1150 190 -1104 L 152 -780 L -152 -780 L -190 -1104 Q -196 -1150 -168 -1170 Z";
+
 // ---------- Corpo inteiro ----------
 export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista; semSombra?: boolean }> = ({
   expressao = "neutro",
@@ -647,6 +683,7 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
 }) => {
   const C = useA().cores;
   const c2 = React.useContext(Corpo2Ctx);
+  const r3 = React.useContext(Rosto3Ctx);
   const sx = vista === "perfil" ? 0.58 : vista === "tresQuartos" ? 0.84 : 1;
   const ombroX = vista === "perfil" ? 20 : 150 * sx;
   const quadrilX = vista === "perfil" ? 16 : (c2 ? 78 : 62) * sx;
@@ -698,11 +735,28 @@ export const Chede: React.FC<{ expressao?: Expressao; pose?: Pose; vista?: Vista
         </g>
         <g transform={`scale(${sx},1)`}>
         {/* tronco / camisa */}
-        <path
-          d="M -150 -1176 Q 0 -1206 150 -1176 Q 172 -1160 170 -1120 L 158 -780 L -158 -780 L -170 -1120 Q -172 -1160 -150 -1176 Z"
-          fill={C.camisa}
-        />
-        <path d="M 60 -1190 Q 150 -1180 170 -1120 L 158 -780 L 70 -780 Q 100 -980 60 -1190 Z" fill={C.camisaSombra} />
+        {r3 ? (
+          <>
+            {/* estilo da referência: ombro arredondado, cintura mais fina e sombra suave (degradê) */}
+            <defs>
+              <linearGradient id="sombraSuave3" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#FFFFFF" stopOpacity={0.10} />
+                <stop offset="0.45" stopColor="#000000" stopOpacity={0} />
+                <stop offset="1" stopColor="#000000" stopOpacity={0.30} />
+              </linearGradient>
+            </defs>
+            <path d={TRONCO3} fill={C.camisa} />
+            <path d={TRONCO3} fill="url(#sombraSuave3)" />
+          </>
+        ) : (
+          <>
+            <path
+              d="M -150 -1176 Q 0 -1206 150 -1176 Q 172 -1160 170 -1120 L 158 -780 L -158 -780 L -170 -1120 Q -172 -1160 -150 -1176 Z"
+              fill={C.camisa}
+            />
+            <path d="M 60 -1190 Q 150 -1180 170 -1120 L 158 -780 L 70 -780 Q 100 -980 60 -1190 Z" fill={C.camisaSombra} />
+          </>
+        )}
         <path d="M -158 -800 L 158 -800 L 158 -780 L -158 -780 Z" fill={C.camisaDetalhe} />
         {/* pescoço + gola */}
         <rect x={-42} y={-1232} width={84} height={70} rx={20} fill={C.peleSombra} />

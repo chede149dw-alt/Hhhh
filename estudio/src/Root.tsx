@@ -69,7 +69,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="TesteKaik3D" component={TesteKaik3D} width={1080} height={1920} fps={30} durationInFrames={120} />
     <Composition id="Teste3D" component={Teste3D} width={1080} height={1920} fps={30} durationInFrames={90} defaultProps={{ modo: "baixo" as const }} />
     <Still id="FichaFigurantes" component={FichaFigurantes} width={2400} height={2000} />
-    <Still id="Debug" component={Debug} width={2400} height={1000} />
+    <Still id="Debug" component={Debug} width={2400} height={1900} />
     <Still id="FotoPerfil" component={FotoPerfil} width={1080} height={1080} />
     <Still id="FichaLia" component={FichaLia} width={2400} height={1900} />
     <Still id="FichaChede" component={FichaChede} width={2400} height={2700} />
