@@ -163,4 +163,4 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   - boca e nariz menores, sobrancelha curta e grossa, língua rosa na boca aberta;
   - polegar e linhas dos dedos marcados, antebraço afinando;
   - tronco com ombro arredondado e cintura mais fina, manga arredondada, sombra em degradê suave.
-  Comparação em `previas/teste-rosto-3.png`. Aguardando o usuário aprovar.
+  Rodada 2 (09/11): cabeça menor (0,68), camiseta mais larga e comprida até o quadril, olho normal = oval escura (branco só no susto), sombra em degradê no rosto, braços e pernas, braços/pernas um pouco mais finos, mãos maiores, manga sem ombreira. Comparação em `previas/teste-rosto-3.png`. Usuário: "reajustar até pegar o resultado que eu goste".
