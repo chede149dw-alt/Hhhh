@@ -88,8 +88,8 @@ const useA = () => React.useContext(AparenciaCtx);
 // Proporção 2.0 (estilo da referência 5, aprovada 08/11): cabeça menor e braços/pernas mais grossos. Padrão: ligada.
 export const Corpo2Ctx = React.createContext(true);
 // Rosto 3 (estilo da referência 5, pedido do usuário 09/11): olhos pequenos (bolinha) que só crescem no susto,
-// boca/nariz menores, sobrancelha curta e grossa, língua na boca aberta, dedos marcados, braço afinando. Padrão: ligado.
-export const Rosto3Ctx = React.createContext(true);
+// boca/nariz menores, sobrancelha curta e grossa, língua na boca aberta, dedos marcados, braço afinando. Padrão: DESLIGADO (usuário recusou, 09/11).
+export const Rosto3Ctx = React.createContext(false);
 
 // ---------- Rosto ----------
 const Olho: React.FC<{
