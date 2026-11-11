@@ -292,3 +292,17 @@ Carregar (0,3–0,6 s) → disparar (2–4 quadros) → viajar → impactar (fla
 
 ### Efeitos em cena clara
 A seção 7 pede fundo escuro para brilho aditivo. Em cena de dia (ex.: invisibilidade no quarto), o efeito usa partículas **chapadas** em mistura normal, com aura em opacidade baixa; o aditivo só entra com fundo escuro.
+
+---
+
+## 12. Cenários cinematográficos (vídeos)
+
+Referência: `referencias/videos/ref-cenario-01.mp4` (só a linguagem de cenário e câmera; nunca os personagens).
+
+- **Perspectiva real:** cenários de vídeo usam a câmera 3D (`motor/cena3d.js`, mundo em metros), com ponto de fuga e câmera baixa (olho a 0,9–1,5 m).
+- **Profundidade:** névoa que clareia o que está longe; contorno que afina com a distância e some depois de ~30 m.
+- **Luz de fim de tarde/manhã:** sol baixo à esquerda, céu em degradê azul → pêssego, feixes de luz chapados.
+- **Profundidade de campo:** em close, fundo desfocado (10–18 px); primeiro plano (copa de árvore) bem desfocado.
+- **Pós-processamento** (`motor/cinema.js`) em todo quadro: cor quente (soft-light), bloom leve, vinheta, granulado.
+- **Personagens continuam flat** (seções 3–6): só o cenário e a luz ganham profundidade.
+- **Legenda:** Inter 900, caixa alta, branca com contorno Tinta (20% do tamanho), palavra-chave em Mostarda; até 3 palavras; na faixa mais longe dos rostos.

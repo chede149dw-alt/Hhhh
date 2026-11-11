@@ -1,0 +1,33 @@
+{
+  "serie": "E se você acordasse podendo ficar invisível?",
+  "episodio": 1,
+  "parte": 1,
+  "status": "rascunho — aguardando aprovação",
+  "planos": [
+    { "id": "capa", "duracao": 2.0, "fala": { "texto": "E se você acordasse podendo ficar invisível?", "voz": "narrador", "velocidade": 190 }, "destaque": ["INVISÍVEL"],
+      "imagem": "Capa: Lucas no quarto, metade do corpo virando partículas azuis; título grande com a premissa." },
+    { "id": "despertador", "fala": { "texto": "Seis e meia.", "voz": "narrador" }, "destaque": ["MEIA"],
+      "imagem": "Close no despertador tocando no criado-mudo, ao lado do travesseiro do Lucas." },
+    { "id": "acorda", "fala": { "texto": "Você acorda meio tonto...", "voz": "narrador" }, "destaque": ["TONTO"],
+      "imagem": "Close no rosto do Lucas, cansado, abrindo os olhos; luz da janela." },
+    { "id": "maos", "fala": { "texto": "e suas mãos estão sumindo.", "voz": "narrador" }, "destaque": ["SUMINDO"],
+      "imagem": "Close nas mãos abertas do Lucas se desfazendo em partículas azuis; rosto de espanto atrás, desfocado." },
+    { "id": "medo", "fala": { "texto": "Seu corpo inteiro", "voz": "narrador" }, "destaque": ["INTEIRO"],
+      "imagem": "Close no rosto com medo e gota de suor; câmera tremendo de leve." },
+    { "id": "some", "fala": { "texto": "desaparece em segundos!", "voz": "narrador" }, "destaque": ["DESAPARECE"],
+      "imagem": "Plano médio no quarto: o corpo todo vira partículas, sobra só o contorno." },
+    { "id": "mae-porta", "fala": { "texto": "Lucas! Café!", "voz": "mae" }, "destaque": ["CAFÉ!"],
+      "imagem": "Mãe abre a porta do quarto e chama (sincronia labial)." },
+    { "id": "mae-procura", "fala": { "texto": "Ela olha pra você, e nada.", "voz": "narrador" }, "destaque": ["NADA"],
+      "imagem": "Mãe preocupada olhando o quarto; o contorno invisível do Lucas aponta para ela, bem na frente." },
+    { "id": "rua", "fala": { "texto": "Na rua, ninguém te vê.", "voz": "narrador" }, "destaque": ["NINGUÉM"],
+      "imagem": "Rua do bairro em perspectiva, câmera baixa acompanhando o contorno do Lucas andando." },
+    { "id": "escola", "fala": { "texto": "Mas o seu melhor amigo", "voz": "narrador" }, "destaque": ["AMIGO"],
+      "imagem": "Corredor da escola em perspectiva; o amigo no armário dele." },
+    { "id": "armario", "fala": { "texto": "vê seu armário abrir sozinho.", "voz": "narrador" }, "destaque": ["SOZINHO"],
+      "imagem": "O armário ao lado abre sozinho; close no amigo com espanto." },
+    { "id": "desconfia", "fala": { "texto": "Será que ele sabe?", "voz": "narrador" }, "destaque": ["SABE?"],
+      "imagem": "O amigo encara a câmera, desconfiado; zoom lento." },
+    { "id": "parte", "duracao": 2.0, "imagem": "Cartela final: PARTE 1." }
+  ]
+}

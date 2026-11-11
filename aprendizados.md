@@ -39,3 +39,13 @@
 - Efeito de dissolução: em 0% desenhar a imagem inteira (as células deixam a borda serrilhada); usar ruído suave (interpolado) para a borda avançar em manchas; o "fantasma" final fica melhor como contorno fino do que como silhueta preenchida.
 - Sempre criar todos os canvases auxiliares antes do laço (um `null` no meio do laço derrubou o desenho do efeito sem erro visível no render).
 - Título longo em prancha: encolher a fonte até caber.
+
+## Episódio 1 da invisibilidade (prévia)
+- Qualidade de cenário da referência = perspectiva real + névoa por distância + luz baixa + desfoque de profundidade + pós (cor quente, bloom, vinheta, grão). Os personagens podem continuar flat.
+- Névoa por profundidade precisa de chão em faixas de Z; um plano único pega a distância média e fica todo bege.
+- `ctx.filter = blur()` em resolução cheia é o que mais pesa (1,2 s por quadro). Desfocar numa camada de 1/4 e ampliar: 140 ms por quadro. Sombra suave no chão: gradiente radial em vez de blur.
+- Tempo de render: 785 quadros 1080×1920 em ~65 s com 4 abas paralelas, enviando JPEG (não PNG) para o ffmpeg.
+- Close de rosto: pés em y = cy − 0,47·H + A·H (A = altura em cabeças). Errar o sinal deixa a cabeça meia cabeça mais baixa.
+- Folha de teste (um quadro do meio de cada plano) antes do render completo pega quase todos os erros de enquadramento.
+- `freezedetect` do ffmpeg confirma a regra "nada parado por mais de 1 s"; `ebur128` confere o volume.
+- Contorno do personagem invisível precisa de espessura proporcional ao tamanho, senão some em fundo claro.

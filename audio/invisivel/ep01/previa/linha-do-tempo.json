@@ -1,0 +1,530 @@
+{
+  "fps": 30,
+  "total": 26.183310999999996,
+  "planos": [
+    {
+      "id": "capa",
+      "inicio": 0,
+      "fim": 2,
+      "semLegenda": true,
+      "semCinema": false
+    },
+    {
+      "id": "despertador",
+      "inicio": 2,
+      "fim": 4,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "acorda",
+      "inicio": 4,
+      "fim": 6,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "maos",
+      "inicio": 6,
+      "fim": 8,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "medo",
+      "inicio": 8,
+      "fim": 10,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "some",
+      "inicio": 10,
+      "fim": 12,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "mae-porta",
+      "inicio": 12,
+      "fim": 14,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "mae-procura",
+      "inicio": 14,
+      "fim": 16.02576,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "rua",
+      "inicio": 16.02576,
+      "fim": 18.02576,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "escola",
+      "inicio": 18.02576,
+      "fim": 20.02576,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "armario",
+      "inicio": 20.02576,
+      "fim": 22.183310999999996,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "desconfia",
+      "inicio": 22.183310999999996,
+      "fim": 24.183310999999996,
+      "semLegenda": false,
+      "semCinema": false
+    },
+    {
+      "id": "parte",
+      "inicio": 24.183310999999996,
+      "fim": 26.183310999999996,
+      "semLegenda": true,
+      "semCinema": false
+    }
+  ],
+  "falas": [
+    {
+      "id": "capa",
+      "voz": "narrador",
+      "inicio": 0.15,
+      "fim": 2.687596,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/capa.wav"
+    },
+    {
+      "id": "despertador",
+      "voz": "narrador",
+      "inicio": 2.787596,
+      "fim": 3.440929,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/despertador.wav"
+    },
+    {
+      "id": "acorda",
+      "voz": "narrador",
+      "inicio": 4.08,
+      "fim": 5.440907,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/acorda.wav"
+    },
+    {
+      "id": "maos",
+      "voz": "narrador",
+      "inicio": 6.08,
+      "fim": 7.574331,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/maos.wav"
+    },
+    {
+      "id": "medo",
+      "voz": "narrador",
+      "inicio": 8.08,
+      "fim": 9.133061,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/medo.wav"
+    },
+    {
+      "id": "some",
+      "voz": "narrador",
+      "inicio": 10.08,
+      "fim": 11.648118,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/some.wav"
+    },
+    {
+      "id": "mae-porta",
+      "voz": "mae",
+      "inicio": 12.08,
+      "fim": 13.287891,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/mae-porta.wav"
+    },
+    {
+      "id": "mae-procura",
+      "voz": "narrador",
+      "inicio": 14.08,
+      "fim": 15.72576,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/mae-procura.wav"
+    },
+    {
+      "id": "rua",
+      "voz": "narrador",
+      "inicio": 16.105759999999997,
+      "fim": 17.531292999999998,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/rua.wav"
+    },
+    {
+      "id": "escola",
+      "voz": "narrador",
+      "inicio": 18.105759999999997,
+      "fim": 19.346439999999998,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/escola.wav"
+    },
+    {
+      "id": "armario",
+      "voz": "narrador",
+      "inicio": 20.105759999999997,
+      "fim": 21.883310999999996,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/armario.wav"
+    },
+    {
+      "id": "desconfia",
+      "voz": "narrador",
+      "inicio": 22.263310999999995,
+      "fim": 23.222811999999994,
+      "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/desconfia.wav"
+    }
+  ],
+  "legendas": [
+    {
+      "inicio": 2.787596,
+      "fim": 3.5909290000000005,
+      "palavras": [
+        {
+          "texto": "SEIS",
+          "destaque": false,
+          "inicio": 2.787596
+        },
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 3.032595875
+        },
+        {
+          "texto": "MEIA.",
+          "destaque": true,
+          "inicio": 3.1550958125000004
+        }
+      ]
+    },
+    {
+      "inicio": 4.08,
+      "fim": 4.987271333333333,
+      "palavras": [
+        {
+          "texto": "VOCÊ",
+          "destaque": false,
+          "inicio": 4.08
+        },
+        {
+          "texto": "ACORDA",
+          "destaque": false,
+          "inicio": 4.3521814
+        },
+        {
+          "texto": "MEIO",
+          "destaque": false,
+          "inicio": 4.715089933333333
+        }
+      ]
+    },
+    {
+      "inicio": 4.987271333333333,
+      "fim": 5.5909070000000005,
+      "palavras": [
+        {
+          "texto": "TONTO",
+          "destaque": true,
+          "inicio": 4.987271333333333
+        }
+      ]
+    },
+    {
+      "inicio": 6.08,
+      "fim": 6.78046765625,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 6.08
+        },
+        {
+          "texto": "SUAS",
+          "destaque": false,
+          "inicio": 6.22009353125
+        },
+        {
+          "texto": "MÃOS",
+          "destaque": false,
+          "inicio": 6.50028059375
+        }
+      ]
+    },
+    {
+      "inicio": 6.78046765625,
+      "fim": 7.724331,
+      "palavras": [
+        {
+          "texto": "ESTÃO",
+          "destaque": false,
+          "inicio": 6.78046765625
+        },
+        {
+          "texto": "SUMINDO.",
+          "destaque": true,
+          "inicio": 7.1073525625
+        }
+      ]
+    },
+    {
+      "inicio": 8.08,
+      "fim": 9.283061,
+      "palavras": [
+        {
+          "texto": "SEU",
+          "destaque": false,
+          "inicio": 8.08
+        },
+        {
+          "texto": "CORPO",
+          "destaque": false,
+          "inicio": 8.33072880952381
+        },
+        {
+          "texto": "INTEIRO",
+          "destaque": true,
+          "inicio": 8.681749142857143
+        }
+      ]
+    },
+    {
+      "inicio": 10.08,
+      "fim": 11.798118,
+      "palavras": [
+        {
+          "texto": "DESAPARECE",
+          "destaque": true,
+          "inicio": 10.08
+        },
+        {
+          "texto": "EM",
+          "destaque": false,
+          "inicio": 10.776941333333333
+        },
+        {
+          "texto": "SEGUNDOS!",
+          "destaque": false,
+          "inicio": 11.009255111111111
+        }
+      ]
+    },
+    {
+      "inicio": 12.08,
+      "fim": 12.724208533333334,
+      "palavras": [
+        {
+          "texto": "LUCAS!",
+          "destaque": false,
+          "inicio": 12.08
+        }
+      ]
+    },
+    {
+      "inicio": 12.724208533333334,
+      "fim": 13.437891,
+      "palavras": [
+        {
+          "texto": "CAFÉ!",
+          "destaque": true,
+          "inicio": 12.724208533333334
+        }
+      ]
+    },
+    {
+      "inicio": 14.08,
+      "fim": 14.877944242424244,
+      "palavras": [
+        {
+          "texto": "ELA",
+          "destaque": false,
+          "inicio": 14.08
+        },
+        {
+          "texto": "OLHA",
+          "destaque": false,
+          "inicio": 14.329357575757577
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 14.628586666666667
+        }
+      ]
+    },
+    {
+      "inicio": 14.877944242424244,
+      "fim": 15.22704484848485,
+      "palavras": [
+        {
+          "texto": "VOCÊ,",
+          "destaque": false,
+          "inicio": 14.877944242424244
+        }
+      ]
+    },
+    {
+      "inicio": 15.22704484848485,
+      "fim": 15.875760000000001,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 15.22704484848485
+        },
+        {
+          "texto": "NADA.",
+          "destaque": true,
+          "inicio": 15.376659393939395
+        }
+      ]
+    },
+    {
+      "inicio": 16.105759999999997,
+      "fim": 16.614878928571425,
+      "palavras": [
+        {
+          "texto": "NA",
+          "destaque": false,
+          "inicio": 16.105759999999997
+        },
+        {
+          "texto": "RUA,",
+          "destaque": false,
+          "inicio": 16.30940757142857
+        }
+      ]
+    },
+    {
+      "inicio": 16.614878928571425,
+      "fim": 17.681292999999997,
+      "palavras": [
+        {
+          "texto": "NINGUÉM",
+          "destaque": true,
+          "inicio": 16.614878928571425
+        },
+        {
+          "texto": "TE",
+          "destaque": false,
+          "inicio": 17.07308596428571
+        },
+        {
+          "texto": "VÊ.",
+          "destaque": false,
+          "inicio": 17.276733535714282
+        }
+      ]
+    },
+    {
+      "inicio": 18.105759999999997,
+      "fim": 18.68179,
+      "palavras": [
+        {
+          "texto": "MAS",
+          "destaque": false,
+          "inicio": 18.105759999999997
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 18.327309999999997
+        },
+        {
+          "texto": "SEU",
+          "destaque": false,
+          "inicio": 18.46024
+        }
+      ]
+    },
+    {
+      "inicio": 18.68179,
+      "fim": 19.496439999999996,
+      "palavras": [
+        {
+          "texto": "MELHOR",
+          "destaque": false,
+          "inicio": 18.68179
+        },
+        {
+          "texto": "AMIGO",
+          "destaque": true,
+          "inicio": 19.03627
+        }
+      ]
+    },
+    {
+      "inicio": 20.105759999999997,
+      "fim": 21.01992908571428,
+      "palavras": [
+        {
+          "texto": "VÊ",
+          "destaque": false,
+          "inicio": 20.105759999999997
+        },
+        {
+          "texto": "SEU",
+          "destaque": false,
+          "inicio": 20.308908685714282
+        },
+        {
+          "texto": "ARMÁRIO",
+          "destaque": false,
+          "inicio": 20.56284454285714
+        }
+      ]
+    },
+    {
+      "inicio": 21.01992908571428,
+      "fim": 22.033310999999994,
+      "palavras": [
+        {
+          "texto": "ABRIR",
+          "destaque": false,
+          "inicio": 21.01992908571428
+        },
+        {
+          "texto": "SOZINHO.",
+          "destaque": true,
+          "inicio": 21.375439285714283
+        }
+      ]
+    },
+    {
+      "inicio": 22.263310999999995,
+      "fim": 22.930789956521732,
+      "palavras": [
+        {
+          "texto": "SERÁ",
+          "destaque": false,
+          "inicio": 22.263310999999995
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 22.51361560869565
+        },
+        {
+          "texto": "ELE",
+          "destaque": false,
+          "inicio": 22.72220278260869
+        }
+      ]
+    },
+    {
+      "inicio": 22.930789956521732,
+      "fim": 23.222811999999994,
+      "palavras": [
+        {
+          "texto": "SABE?",
+          "destaque": true,
+          "inicio": 22.930789956521732
+        }
+      ]
+    }
+  ]
+}

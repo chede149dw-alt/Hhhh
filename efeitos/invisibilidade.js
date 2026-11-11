@@ -6,6 +6,7 @@
 //   fonte: canvas com o personagem desenhado (fundo transparente), colocado em (x0, y0) no ctx
 //   progresso: 0 = visível ... 1 = invisível (sobra só um contorno translúcido)
 //   t: tempo em segundos (faz as partículas tremularem); celula: tamanho do "grão" em px (padrão 10)
+//   focos: [[x, y], ...] faz o sumiço começar nesses pontos (ex.: nas mãos); raioFocos: alcance em px
 (function () {
   const COR = { nucleo: '#FFFDF2', miolo: '#D6ECFF', principal: '#5B8EF0', aura: '#2B3FB0' };
   const hash = (x, y, s = 0) => { let h = (x * 374761393 + y * 668265263 + s * 2147483647) >>> 0; h = ((h ^ (h >>> 13)) * 1274126177) >>> 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
@@ -57,7 +58,10 @@
         }
         if (!cheia) continue;
         const n = hash(gx, gy);
-        const v = 0.36 * ruido(gx / 5, gy / 5) + 0.14 * n + 0.5 * (1 - (gy - topo) / alt); // pés primeiro, cabeça por último
+        // ordem de sumiço: dos pés para a cabeça; ou, com o.focos (pontos em px no canvas), a partir desses pontos
+        let ordem = 1 - (gy - topo) / alt;
+        if (o.focos) { let d = 1e9; for (const [fx, fy] of o.focos) d = Math.min(d, Math.hypot(gx * cs - fx, gy * cs - fy)); ordem = Math.min(1, d / (o.raioFocos || H * 0.6)); }
+        const v = 0.36 * ruido(gx / 5, gy / 5) + 0.14 * n + 0.5 * ordem;
         const sx = gx * cs, sy = gy * cs;
         if (v > th + banda) {
           ctx.drawImage(fonte, sx, sy, cs, cs, x0 + sx, y0 + sy, cs, cs);
@@ -76,14 +80,15 @@
     // fantasma: quase transparente, só um contorno azul fino tremeluzindo
     if (progresso > 0.55) {
       const g = Math.min(1, (progresso - 0.55) / 0.45);
-      const borda = document.createElement('canvas'); borda.width = W + 8; borda.height = H + 8;
+      const borda = document.createElement('canvas'); borda.width = W + 8; borda.height = H + 8; // margem de 4 px
       const b = borda.getContext('2d');
-      for (const [dx, dy] of [[-3, 0], [3, 0], [0, -3], [0, 3]]) b.drawImage(tint, 4 + dx, 4 + dy);
+      const e = Math.max(3, Math.round(cs * 0.45)); // espessura do contorno proporcional ao tamanho
+      for (const [dx, dy] of [[-e, 0], [e, 0], [0, -e], [0, e], [-e * 0.7, -e * 0.7], [e * 0.7, e * 0.7]]) b.drawImage(tint, 4 + dx, 4 + dy);
       b.globalCompositeOperation = 'destination-out'; b.drawImage(fonte, 4, 4);
       const tremor = 0.75 + 0.25 * Math.sin(t * 7);
-      ctx.globalAlpha = 0.07 * g * tremor;
+      ctx.globalAlpha = 0.1 * g * tremor;
       ctx.drawImage(tingir(fonte, COR.miolo), x0, y0);
-      ctx.globalAlpha = 0.55 * g * tremor;
+      ctx.globalAlpha = 0.8 * g * tremor;
       ctx.drawImage(borda, x0 - 4, y0 - 4);
       ctx.globalAlpha = 1;
     }
