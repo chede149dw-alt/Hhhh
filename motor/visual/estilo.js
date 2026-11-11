@@ -39,6 +39,7 @@ export function criarRampa(gMin = LUZ.gMin) {
 // material chapado; o.volume: escurece a parte de baixo e acende a borda (contorno de luz)
 export function materialToon(cor, o = {}) {
   const m = new THREE.MeshToonMaterial({ color: new THREE.Color(cor), gradientMap: criarRampa(o.gMin) });
+  if (o.mapa) m.map = o.mapa;               // textura gerada por código (a cor do material multiplica a textura)
   if (o.volume) {
     const baixo = o.baixo === undefined ? 0.82 : o.baixo, borda = o.borda === undefined ? 0.35 : o.borda;
     const corBorda = new THREE.Color(o.corBorda || '#FFE7C2');

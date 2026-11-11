@@ -48,6 +48,9 @@ function definirMundo(obj, qMundo) {
   return qPai.invert().multiply(qMundo);
 }
 
+// alvos de IK vêm no espaço do pai da raiz (cena ou palco do cenário)
+const paraMundo = (raiz, v) => (raiz.parent ? raiz.parent.localToWorld(v) : v);
+
 export function pontoSola(boneco, lado, alvo = new THREE.Vector3()) {
   return boneco.juntas['pe_' + lado].localToWorld(alvo.set(0, -boneco.sola, 0));
 }
@@ -69,7 +72,7 @@ export function aplicar(boneco, pose) {
   juntas.quadril.position.set(boneco.base.quadril.x + q[0], boneco.base.quadril.y + q[1], boneco.base.quadril.z + q[2]);
   raiz.updateMatrixWorld(true);
 
-  const s = raiz.scale.x * Math.sqrt(1 / e);
+  const s = raiz.getWorldScale(new THREE.Vector3()).x * Math.sqrt(1 / e);
   // ---- pés ----
   const wPe = p.ikPes === undefined ? 1 : p.ikPes;
   for (const lado of ['e', 'd']) {
@@ -80,10 +83,11 @@ export function aplicar(boneco, pose) {
     const L1 = H.distanceTo(joelho.getWorldPosition(new THREE.Vector3()));
     const L2 = joelho.getWorldPosition(new THREE.Vector3()).distanceTo(pe.getWorldPosition(new THREE.Vector3()));
     // orientação do pé em relação ao chão: giro do corpo + ângulos da pose
-    const qPe = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), G(c.giro || 0))
+    const qPai0 = raiz.parent ? raiz.parent.getWorldQuaternion(new THREE.Quaternion()) : new THREE.Quaternion();
+    const qPe = qPai0.clone().multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), G(c.giro || 0)))
       .multiply(quatEuler((p.juntas && p.juntas['pe_' + lado]) || [0, 0, 0]));
     const offSola = new THREE.Vector3(0, -boneco.sola * s, 0).applyQuaternion(qPe);
-    const A = new THREE.Vector3(...alvo).sub(offSola);
+    const A = paraMundo(raiz, new THREE.Vector3(...alvo)).sub(offSola);
     const frente = new THREE.Vector3(0, 0, 1).applyQuaternion(juntas.quadril.getWorldQuaternion(new THREE.Quaternion()));
     const r = doisOssos(H, A, L1, L2, frente, 1);
     coxa.quaternion.slerp(definirMundo(coxa, r.qMundo), wPe);
@@ -104,7 +108,7 @@ export function aplicar(boneco, pose) {
     const L2 = cot.getWorldPosition(new THREE.Vector3()).distanceTo(mao.getWorldPosition(new THREE.Vector3()));
     const qp = juntas.peito.getWorldQuaternion(new THREE.Quaternion());
     const polo = new THREE.Vector3(sl * 0.6, -0.3, -0.6).applyQuaternion(qp).normalize();
-    const r = doisOssos(S, new THREE.Vector3(...alvo), L1, L2, polo, -1);
+    const r = doisOssos(S, paraMundo(raiz, new THREE.Vector3(...alvo)), L1, L2, polo, -1);
     ombro.quaternion.slerp(definirMundo(ombro, r.qMundo), wMao);
     ombro.updateMatrixWorld(true);
     cot.quaternion.slerp(qb.setFromEuler(new THREE.Euler(r.ang, 0, 0)), wMao);

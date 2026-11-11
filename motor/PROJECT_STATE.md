@@ -27,6 +27,8 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 5 — atuações | 7 atuações; chaves em ordem, sem pose vazia, impacto/sons dentro da duração, fim = repouso ou pausa declarada | **passou** (`testes/atuacoes.test.js`) |
 | 5 — andar | pé de apoio parado enquanto está no chão (4 passos) | **passou**, < 1e-6 m |
 | 5 — vídeos | folhas de 18 quadros de cada atuação + vídeo das 6 novas (18,3 s, 60 fps) | `previas/motor3d/atuacoes/` |
+| 6 — câmera | altura de quadro certa nos 3 tamanhos; câmera sempre dentro da área livre (sem mudar o enquadramento); empurrar/puxar/tremor; determinística | **passou** (`testes/camera.test.js`) |
+| 6 — cenários | rua e quarto, 3 enquadramentos cada; demos: poder da terra no quarto (cortes, empurrar/puxar/órbita, tremor no impacto) e andar na rua (travelling) | `previas/motor3d/cenarios/` (~1,4 quadros/s na nuvem) |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -82,5 +84,18 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - Render: as páginas agora carregam uma por vez (antes uma delas passava de 60 s carregando junto com as outras e o render caía).
 - Sons ainda são só nomes com instante; os efeitos sonoros são gerados no prompt 8.
 
+## Cenário e câmera (prompt 6) — `cena/`, `efeitos3d/`, `visual/texturas.js`
+- `cena/cenarios.js`: `criarRua()`, `criarQuarto()` → { grupo, marca, areaLivre, luz, fundo, nevoa, pontos }. A floresta do prompt
+  foi trocada pelo quarto (é onde a série começa); dá para fazer depois.
+- Paredes do quarto viradas para dentro: vistas de fora ficam invisíveis (a câmera nunca é bloqueada por uma parede).
+- `visual/texturas.js`: asfalto, calçada, madeira, parede, tijolo, grama, pedra, terra (com rachaduras), céu, halo — por código, determinísticas.
+- `cena/camera.js`: `enquadrar(tamanho, ancora, o)` (geral 2,5 m / médio 1,0 m / close 0,5 m de altura de quadro; d = (altura/2)/tan(fov/2));
+  área livre aproxima a câmera e abre a lente; `camNoTempo(plano, ancora, u, dur, area)` com empurrar, puxar, lateral, órbita e tremor.
+  A âncora vem do corpo (pés e cabeça) e é a média de t−0,12, t, t+0,12 s para não sacudir com o passo.
+- `efeitos3d/terra.js`: esfera de terra com rachaduras brilhando (emissiveMap), torrões, pedras orbitando, poeira, halo e luz quente;
+  rachadura no chão. Ancorar a esfera num ponto fixo à frente do peito (entre as mãos ficava torto).
+- IK: alvos agora no espaço do pai da raiz (o boneco fica num "palco" na marca do cenário).
+- `visual/cena.html?cenario=…&modo=folha` (3 enquadramentos) e `&demo=poder|andar` (vídeo).
+
 ## Próxima etapa
-Prompt 6 — cenário e câmera por tamanho de plano (fechado, médio, aberto), com os efeitos de terra em 3D.
+Prompt 7 — roteiro → planos → linha do tempo, com as ações caindo na palavra da narração.

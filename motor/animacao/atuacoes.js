@@ -86,7 +86,7 @@ export const PAUSAS = {
     altura: -0.04, estica: 1, maos: { e: 'aberta', d: 'aberta' }, rosto: 'medo' },
   sentado_triste: { juntas: { coluna: [16, 0, 0], peito: [12, 0, 0], cabeca: [24, -8, 0], ombro_e: [-38, 0, 8], cotovelo_e: [-30, 0, 0], ombro_d: [-38, 0, -8], cotovelo_d: [-30, 0, 0] },
     altura: -0.33, estica: 1, maos: { e: 'relaxada', d: 'relaxada' }, rosto: 'triste' },
-  poder_terra: { juntas: { coluna: [6, -10, 0], peito: [0, -8, 0], cabeca: [-6, -6, 0], ombro_e: [-80, 0, 18], cotovelo_e: [-25, 0, 0], ombro_d: [-82, 0, -14], cotovelo_d: [-20, 0, 0], mao_e: [0, 0, 20], mao_d: [0, 0, -20] },
+  poder_terra: { juntas: { coluna: [6, 0, 0], peito: [0, 0, 0], cabeca: [8, 0, 0], ombro_e: [-52, 0, 14], cotovelo_e: [-62, 0, 0], ombro_d: [-52, 0, -14], cotovelo_d: [-62, 0, 0], mao_e: [0, 0, -10], mao_d: [0, 0, 10] },
     altura: -0.08, estica: 1, maos: { e: 'aberta', d: 'aberta' }, rosto: 'determinado' },
 };
 
@@ -184,7 +184,7 @@ const PODER_TERRA = () => {
     // concentra: mãos descem com a palma para o chão
     { t: 0.95, nome: 'concentra', pose: { ...base, altura: -0.16, juntas: { ...R, coluna: [18, 0, 0], cabeca: [16, 0, 0], ombro_e: [-35, 0, 30], cotovelo_e: [-20, 0, 0], mao_e: [0, 0, 40], ombro_d: [-35, 0, -30], cotovelo_d: [-20, 0, 0], mao_d: [0, 0, -40] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'determinado' } },
     // ergue: as mãos sobem de uma vez e a terra levanta (impacto)
-    { t: 1.2, nome: 'ergue', curva: 'estalo', so: ['altura', 'estica'], pose: { ...base, altura: -0.05, estica: 1.03, juntas: { ...PAUSAS.poder_terra.juntas, ombro_e: [-95, 0, 18], ombro_d: [-97, 0, -14] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'raiva' } },
+    { t: 1.2, nome: 'ergue', curva: 'estalo', so: ['altura', 'estica'], pose: { ...base, altura: -0.05, estica: 1.03, juntas: { ...PAUSAS.poder_terra.juntas, ombro_e: [-68, 0, 12], cotovelo_e: [-50, 0, 0], ombro_d: [-68, 0, -12], cotovelo_d: [-50, 0, 0], cabeca: [-4, 0, 0] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'raiva' } },
     { t: 1.7, nome: 'poder', pose: { ...base, ...PAUSAS.poder_terra } },
     { t: 2.3, nome: 'segura', pose: { ...base, ...PAUSAS.poder_terra } },
   ];
