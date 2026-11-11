@@ -31,6 +31,8 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 6 — cenários | rua e quarto, 3 enquadramentos cada; demos: poder da terra no quarto (cortes, empurrar/puxar/órbita, tremor no impacto) e andar na rua (travelling) | `previas/motor3d/cenarios/` (~1,4 quadros/s na nuvem) |
 | 7 — direção | roteiro de 3 planos: inícios na 1ª palavra, duração = fala + folga, tempos "pN+x"/"fim-x"/segundos, impacto na palavra; nomes errados recusados listando os existentes | **passou** (`testes/direcao.test.js`) |
 | 7 — demo | `roteiros/teste3d/roteiro.json` → 5 frases, 10 cortes, 15,4 s (palavras estimadas, sem voz) | `previas/motor3d/direcao/teste-direcao.mp4` (~1,6 quadros/s) |
+| 8 — áudio | sons sintetizados existem; mixagem voz + efeitos + trilha com ducking; LUFS final entre −14,5 e −13,5 e pico ≤ −1 dBTP | **passou** (`testes/audio.test.js`) |
+| 8 — demo | voz Edge TTS (Antonio) no roteiro de teste: 33 palavras com tempo real; linha do tempo 12,3 s; mix −14,04 LUFS | `previas/motor3d/direcao/teste-com-voz.mp4` |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -116,5 +118,15 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
   no corte), transição de 0,3 s entre atuações, efeitos ligados às atuações (esfera, voo, impacto, rachadura), tremor do roteiro na câmera.
 - Regra de 2–3 s por plano: frases longas ganham cortes de câmera dentro da frase.
 
+## Narração e áudio (prompt 8) — `audio/` (Python)
+- `narrar.py roteiro.json pasta` → `narracao.wav` + `words.json` (Edge TTS, WordBoundary). Vozes: narrador = pt-BR-AntonioNeural, mae = FranciscaNeural.
+  O proxy do ambiente exige o certificado `/root/.ccr/ca-bundle.crt` (trocado no certifi antes de importar o edge_tts) e o parâmetro proxy.
+  Cache por texto+voz em `falas/`; pontuação do roteiro devolvida às palavras.
+- `sfx.py` → 19 sons por código (numpy/scipy), 16 bits, determinísticos; `audio/sfx/` não vai para o git (é só rodar de novo).
+- `mixar.py --voz --linha --saida [--trilha tensa|leve|nenhuma]`: voz com EQ + compressão; efeitos nos instantes de `linha.sons`;
+  trilha em loop com ducking (até −10 dB); ganho + limitador medindo e corrigindo até −14 LUFS (o loudnorm sozinho errava com picos de impacto).
+- `dirigir.js` agora grava `linha.sons` (sons das atuações, tremores do roteiro e um whoosh leve em cada corte) e aceita `--palavras words.json`.
+- Com a voz real a linha do tempo encurtou (15,4 → 12,3 s): a estimativa sem voz é mais lenta que a narração.
+
 ## Próxima etapa
-Prompt 8 — narração com Edge TTS (words.json com o instante real de cada palavra), sons sintetizados e mixagem a −14 LUFS.
+Prompt 9 — legendas (até 3 palavras, sem cobrir rosto, palavra de destaque em amarelo), a partir do words.json.

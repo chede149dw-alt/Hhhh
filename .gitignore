@@ -25,3 +25,7 @@ build/
 
 # Quadros intermediários do render (o MP4 fica)
 quadro_*.png
+
+# Sons sintetizados (gerados de novo com: python3 motor/audio/sfx.py) e cache de falas convertidas
+audio/sfx/
+audio/**/falas/*.wav

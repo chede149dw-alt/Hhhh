@@ -14,6 +14,7 @@ Duas gerações de motor convivem aqui enquanto o 3D é construído:
 | puppeteer-core | 25.17.0 | `motor/node_modules` (`npm install` em `motor/`) |
 | Chrome | Na nuvem: Chromium do ambiente (WebGL por software). No computador: Chrome ou Edge instalado, usando a placa de vídeo | variável `CHROME` para outro caminho; `SOFTWARE=1` força modo software |
 | ffmpeg | 6.1.1 | sistema |
+| Python | edge-tts 7.3.1, numpy, scipy | `pip install edge-tts scipy` |
 
 ## Comandos (motor 3D)
 Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
@@ -46,6 +47,9 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 | `direcao/direcao.js` | Roteiro → planos → linha do tempo: `dirigir`, `estimarPalavras`, `tempo`, `ErroRoteiro` |
 | `direcao/dirigir.js` | Linha de comando: `node motor/direcao/dirigir.js roteiro.json [--palavras words.json] --saida linha.json` |
 | `visual/episodio.html` | Toca uma linha do tempo: `?linha=…/linha-do-tempo.json` |
+| `audio/narrar.py` | Narração Edge TTS: `python3 motor/audio/narrar.py roteiro.json audio/<serie>/<ep>` → narracao.wav + words.json |
+| `audio/sfx.py` | Sons e trilhas sintetizados: `python3 motor/audio/sfx.py audio/sfx` |
+| `audio/mixar.py` | Mixagem a −14 LUFS: `python3 motor/audio/mixar.py --voz … --linha … --saida mix.wav --trilha tensa` |
 | `visual/ficha3d.html` | Folha do personagem 3D (`?ficha=personagens/.../ficha.json`): vistas, bocas e poses |
 | `visual/teste-estilo.html` | Cena de teste do estilo (3 cubos + esfera nas cores do guia); `window.medirCores()` |
 | `testes/determinismo.test.js` | Mesmo instante → mesmo quadro (md5), em qualquer ordem |
@@ -54,6 +58,7 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 | `testes/atuacoes.test.js` | Chaves em ordem, sem pose vazia, fim em repouso/pausa, pé de apoio do andar parado |
 | `testes/camera.test.js` | Enquadramento por tamanho, área livre e movimentos de câmera |
 | `testes/direcao.test.js` | Tempos dos planos, expressões de tempo, impacto na palavra e nomes errados recusados |
+| `testes/audio.test.js` | Sons sintetizados e LUFS final da mixagem |
 | `testes/estilo.test.js` | Cor iluminada = cor do material (calibração da luz) |
 
 Contrato de página: expor `window.quadro(t)` (posiciona tudo pelo tempo `t` em segundos e desenha, sem relógio real)

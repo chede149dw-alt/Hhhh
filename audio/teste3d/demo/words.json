@@ -1,0 +1,233 @@
+[
+ {
+  "i": 0,
+  "texto": "E",
+  "inicio": 0.347,
+  "fim": 0.465,
+  "frase": 0
+ },
+ {
+  "i": 1,
+  "texto": "se",
+  "inicio": 0.477,
+  "fim": 0.583,
+  "frase": 0
+ },
+ {
+  "i": 2,
+  "texto": "você",
+  "inicio": 0.595,
+  "fim": 0.854,
+  "frase": 0
+ },
+ {
+  "i": 3,
+  "texto": "acordasse",
+  "inicio": 0.866,
+  "fim": 1.467,
+  "frase": 0
+ },
+ {
+  "i": 4,
+  "texto": "controlando",
+  "inicio": 1.479,
+  "fim": 1.998,
+  "frase": 0
+ },
+ {
+  "i": 5,
+  "texto": "a",
+  "inicio": 2.01,
+  "fim": 2.069,
+  "frase": 0
+ },
+ {
+  "i": 6,
+  "texto": "terra?",
+  "inicio": 2.081,
+  "fim": 2.47,
+  "frase": 0
+ },
+ {
+  "i": 7,
+  "texto": "Lucas",
+  "inicio": 2.937,
+  "fim": 3.362,
+  "frase": 1
+ },
+ {
+  "i": 8,
+  "texto": "sentiu",
+  "inicio": 3.373,
+  "fim": 3.751,
+  "frase": 1
+ },
+ {
+  "i": 9,
+  "texto": "o",
+  "inicio": 3.762,
+  "fim": 3.798,
+  "frase": 1
+ },
+ {
+  "i": 10,
+  "texto": "chão",
+  "inicio": 3.81,
+  "fim": 4.093,
+  "frase": 1
+ },
+ {
+  "i": 11,
+  "texto": "tremer.",
+  "inicio": 4.104,
+  "fim": 4.47,
+  "frase": 1
+ },
+ {
+  "i": 12,
+  "texto": "A",
+  "inicio": 4.937,
+  "fim": 5.067,
+  "frase": 2
+ },
+ {
+  "i": 13,
+  "texto": "terra",
+  "inicio": 5.079,
+  "fim": 5.421,
+  "frase": 2
+ },
+ {
+  "i": 14,
+  "texto": "virou",
+  "inicio": 5.432,
+  "fim": 5.657,
+  "frase": 2
+ },
+ {
+  "i": 15,
+  "texto": "uma",
+  "inicio": 5.668,
+  "fim": 5.763,
+  "frase": 2
+ },
+ {
+  "i": 16,
+  "texto": "esfera",
+  "inicio": 5.774,
+  "fim": 6.152,
+  "frase": 2
+ },
+ {
+  "i": 17,
+  "texto": "nas",
+  "inicio": 6.164,
+  "fim": 6.364,
+  "frase": 2
+ },
+ {
+  "i": 18,
+  "texto": "mãos",
+  "inicio": 6.376,
+  "fim": 6.635,
+  "frase": 2
+ },
+ {
+  "i": 19,
+  "texto": "dele.",
+  "inicio": 6.647,
+  "fim": 6.989,
+  "frase": 2
+ },
+ {
+  "i": 20,
+  "texto": "E",
+  "inicio": 7.456,
+  "fim": 7.61,
+  "frase": 3
+ },
+ {
+  "i": 21,
+  "texto": "ele",
+  "inicio": 7.621,
+  "fim": 7.786,
+  "frase": 3
+ },
+ {
+  "i": 22,
+  "texto": "arremessou",
+  "inicio": 7.798,
+  "fim": 8.353,
+  "frase": 3
+ },
+ {
+  "i": 23,
+  "texto": "tudo",
+  "inicio": 8.364,
+  "fim": 8.706,
+  "frase": 3
+ },
+ {
+  "i": 24,
+  "texto": "no",
+  "inicio": 8.718,
+  "fim": 8.824,
+  "frase": 3
+ },
+ {
+  "i": 25,
+  "texto": "chão!",
+  "inicio": 8.836,
+  "fim": 9.213,
+  "frase": 3
+ },
+ {
+  "i": 26,
+  "texto": "Ele",
+  "inicio": 9.681,
+  "fim": 9.869,
+  "frase": 4
+ },
+ {
+  "i": 27,
+  "texto": "nem",
+  "inicio": 9.881,
+  "fim": 10.07,
+  "frase": 4
+ },
+ {
+  "i": 28,
+  "texto": "sabia",
+  "inicio": 10.081,
+  "fim": 10.506,
+  "frase": 4
+ },
+ {
+  "i": 29,
+  "texto": "que",
+  "inicio": 10.518,
+  "fim": 10.624,
+  "frase": 4
+ },
+ {
+  "i": 30,
+  "texto": "podia",
+  "inicio": 10.636,
+  "fim": 10.966,
+  "frase": 4
+ },
+ {
+  "i": 31,
+  "texto": "fazer",
+  "inicio": 10.978,
+  "fim": 11.249,
+  "frase": 4
+ },
+ {
+  "i": 32,
+  "texto": "isso.",
+  "inicio": 11.261,
+  "fim": 11.556,
+  "frase": 4
+ }
+]

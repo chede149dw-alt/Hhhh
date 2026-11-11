@@ -1,236 +1,236 @@
 {
   "titulo": "Teste da direção 3D — Lucas e a terra",
-  "duracao": 15.374,
+  "duracao": 12.256,
   "palavras": [
     {
       "i": 0,
       "texto": "E",
-      "inicio": 0.25,
-      "fim": 0.408,
+      "inicio": 0.347,
+      "fim": 0.465,
       "frase": 0
     },
     {
       "i": 1,
       "texto": "se",
-      "inicio": 0.448,
-      "fim": 0.664,
+      "inicio": 0.477,
+      "fim": 0.583,
       "frase": 0
     },
     {
       "i": 2,
       "texto": "você",
-      "inicio": 0.704,
-      "fim": 1.036,
+      "inicio": 0.595,
+      "fim": 0.854,
       "frase": 0
     },
     {
       "i": 3,
       "texto": "acordasse",
-      "inicio": 1.076,
-      "fim": 1.698,
+      "inicio": 0.866,
+      "fim": 1.467,
       "frase": 0
     },
     {
       "i": 4,
       "texto": "controlando",
-      "inicio": 1.738,
-      "fim": 2.476,
+      "inicio": 1.479,
+      "fim": 1.998,
       "frase": 0
     },
     {
       "i": 5,
       "texto": "a",
-      "inicio": 2.516,
-      "fim": 2.674,
+      "inicio": 2.01,
+      "fim": 2.069,
       "frase": 0
     },
     {
       "i": 6,
       "texto": "terra?",
-      "inicio": 2.714,
-      "fim": 3.104,
+      "inicio": 2.081,
+      "fim": 2.47,
       "frase": 0
     },
     {
       "i": 7,
       "texto": "Lucas",
-      "inicio": 3.604,
-      "fim": 3.994,
+      "inicio": 2.937,
+      "fim": 3.362,
       "frase": 1
     },
     {
       "i": 8,
       "texto": "sentiu",
-      "inicio": 4.034,
-      "fim": 4.482,
+      "inicio": 3.373,
+      "fim": 3.751,
       "frase": 1
     },
     {
       "i": 9,
       "texto": "o",
-      "inicio": 4.522,
-      "fim": 4.68,
+      "inicio": 3.762,
+      "fim": 3.798,
       "frase": 1
     },
     {
       "i": 10,
       "texto": "chão",
-      "inicio": 4.72,
-      "fim": 5.052,
+      "inicio": 3.81,
+      "fim": 4.093,
       "frase": 1
     },
     {
       "i": 11,
       "texto": "tremer.",
-      "inicio": 5.092,
-      "fim": 5.54,
+      "inicio": 4.104,
+      "fim": 4.47,
       "frase": 1
     },
     {
       "i": 12,
       "texto": "A",
-      "inicio": 6.04,
-      "fim": 6.198,
+      "inicio": 4.937,
+      "fim": 5.067,
       "frase": 2
     },
     {
       "i": 13,
       "texto": "terra",
-      "inicio": 6.238,
-      "fim": 6.628,
+      "inicio": 5.079,
+      "fim": 5.421,
       "frase": 2
     },
     {
       "i": 14,
       "texto": "virou",
-      "inicio": 6.668,
-      "fim": 7.058,
+      "inicio": 5.432,
+      "fim": 5.657,
       "frase": 2
     },
     {
       "i": 15,
       "texto": "uma",
-      "inicio": 7.098,
-      "fim": 7.372,
+      "inicio": 5.668,
+      "fim": 5.763,
       "frase": 2
     },
     {
       "i": 16,
       "texto": "esfera",
-      "inicio": 7.412,
-      "fim": 7.86,
+      "inicio": 5.774,
+      "fim": 6.152,
       "frase": 2
     },
     {
       "i": 17,
       "texto": "nas",
-      "inicio": 7.9,
-      "fim": 8.174,
+      "inicio": 6.164,
+      "fim": 6.364,
       "frase": 2
     },
     {
       "i": 18,
       "texto": "mãos",
-      "inicio": 8.214,
-      "fim": 8.546,
+      "inicio": 6.376,
+      "fim": 6.635,
       "frase": 2
     },
     {
       "i": 19,
       "texto": "dele.",
-      "inicio": 8.586,
-      "fim": 8.918,
+      "inicio": 6.647,
+      "fim": 6.989,
       "frase": 2
     },
     {
       "i": 20,
       "texto": "E",
-      "inicio": 9.418,
-      "fim": 9.576,
+      "inicio": 7.456,
+      "fim": 7.61,
       "frase": 3
     },
     {
       "i": 21,
       "texto": "ele",
-      "inicio": 9.616,
-      "fim": 9.89,
+      "inicio": 7.621,
+      "fim": 7.786,
       "frase": 3
     },
     {
       "i": 22,
       "texto": "arremessou",
-      "inicio": 9.93,
-      "fim": 10.61,
+      "inicio": 7.798,
+      "fim": 8.353,
       "frase": 3
     },
     {
       "i": 23,
       "texto": "tudo",
-      "inicio": 10.65,
-      "fim": 10.982,
+      "inicio": 8.364,
+      "fim": 8.706,
       "frase": 3
     },
     {
       "i": 24,
       "texto": "no",
-      "inicio": 11.022,
-      "fim": 11.238,
+      "inicio": 8.718,
+      "fim": 8.824,
       "frase": 3
     },
     {
       "i": 25,
       "texto": "chão!",
-      "inicio": 11.278,
-      "fim": 11.61,
+      "inicio": 8.836,
+      "fim": 9.213,
       "frase": 3
     },
     {
       "i": 26,
       "texto": "Ele",
-      "inicio": 12.11,
-      "fim": 12.384,
+      "inicio": 9.681,
+      "fim": 9.869,
       "frase": 4
     },
     {
       "i": 27,
       "texto": "nem",
-      "inicio": 12.424,
-      "fim": 12.698,
+      "inicio": 9.881,
+      "fim": 10.07,
       "frase": 4
     },
     {
       "i": 28,
       "texto": "sabia",
-      "inicio": 12.738,
-      "fim": 13.128,
+      "inicio": 10.081,
+      "fim": 10.506,
       "frase": 4
     },
     {
       "i": 29,
       "texto": "que",
-      "inicio": 13.168,
-      "fim": 13.442,
+      "inicio": 10.518,
+      "fim": 10.624,
       "frase": 4
     },
     {
       "i": 30,
       "texto": "podia",
-      "inicio": 13.482,
-      "fim": 13.872,
+      "inicio": 10.636,
+      "fim": 10.966,
       "frase": 4
     },
     {
       "i": 31,
       "texto": "fazer",
-      "inicio": 13.912,
-      "fim": 14.302,
+      "inicio": 10.978,
+      "fim": 11.249,
       "frase": 4
     },
     {
       "i": 32,
       "texto": "isso.",
-      "inicio": 14.342,
-      "fim": 14.674,
+      "inicio": 11.261,
+      "fim": 11.556,
       "frase": 4
     }
   ],
@@ -240,7 +240,7 @@
       "frase": 0,
       "texto": "E se você acordasse controlando a terra?",
       "inicio": 0,
-      "fim": 3.604,
+      "fim": 2.937,
       "cenario": "quarto",
       "atores": [
         {
@@ -274,7 +274,7 @@
             "graus": 16
           },
           "de": 1.8,
-          "ate": 3.604
+          "ate": 2.937
         }
       ],
       "efeitos": [],
@@ -284,8 +284,8 @@
       "id": "plano2",
       "frase": 1,
       "texto": "Lucas sentiu o chão tremer.",
-      "inicio": 3.604,
-      "fim": 6.04,
+      "inicio": 2.937,
+      "fim": 4.937,
       "cenario": "quarto",
       "atores": [
         {
@@ -298,10 +298,10 @@
           "segmentos": [
             {
               "atuacao": "poder_terra",
-              "inicio": 3.892,
+              "inicio": 2.904,
               "opcoes": {},
               "palavra": "tremer",
-              "tPalavra": 5.092
+              "tPalavra": 4.104
             }
           ]
         }
@@ -316,8 +316,8 @@
             "tipo": "empurrar",
             "forca": 0.12
           },
-          "de": 3.604,
-          "ate": 6.04
+          "de": 2.937,
+          "ate": 4.937
         }
       ],
       "efeitos": [
@@ -325,8 +325,8 @@
           "tipo": "tremor",
           "inicio": "p11",
           "forca": 0.05,
-          "de": 5.092,
-          "ate": 6.04
+          "de": 4.104,
+          "ate": 4.937
         }
       ],
       "trilha": null
@@ -335,8 +335,8 @@
       "id": "plano3",
       "frase": 2,
       "texto": "A terra virou uma esfera nas mãos dele.",
-      "inicio": 6.04,
-      "fim": 9.418,
+      "inicio": 4.937,
+      "fim": 7.456,
       "cenario": "quarto",
       "atores": [
         {
@@ -369,8 +369,8 @@
               "dur": 0.35
             }
           ],
-          "de": 6.04,
-          "ate": 7.74
+          "de": 4.937,
+          "ate": 6.6370000000000005
         },
         {
           "alvo": "objeto",
@@ -382,8 +382,8 @@
             "tipo": "orbita",
             "graus": 25
           },
-          "de": 7.74,
-          "ate": 9.418
+          "de": 6.6370000000000005,
+          "ate": 7.456
         }
       ],
       "efeitos": [],
@@ -393,8 +393,8 @@
       "id": "plano4",
       "frase": 3,
       "texto": "E ele arremessou tudo no chão!",
-      "inicio": 9.418,
-      "fim": 12.11,
+      "inicio": 7.456,
+      "fim": 9.681,
       "cenario": "quarto",
       "atores": [
         {
@@ -407,12 +407,12 @@
           "segmentos": [
             {
               "atuacao": "arremesso_terra",
-              "inicio": 9.38,
+              "inicio": 7.248,
               "opcoes": {
                 "desde": 2.7
               },
               "palavra": "arremessou",
-              "tPalavra": 9.93
+              "tPalavra": 7.798
             }
           ]
         }
@@ -422,8 +422,8 @@
           "tamanho": "medio",
           "lado": 30,
           "angulo": 2,
-          "de": 9.418,
-          "ate": 9.98
+          "de": 7.456,
+          "ate": 7.848
         },
         {
           "alvo": "objeto",
@@ -432,8 +432,8 @@
           "lado": 95,
           "angulo": 6,
           "rolagem": -6,
-          "de": 9.98,
-          "ate": 10.48
+          "de": 7.848,
+          "ate": 8.348
         },
         {
           "tamanho": "geral",
@@ -451,8 +451,8 @@
             "tipo": "subir",
             "metros": 0.4
           },
-          "de": 10.48,
-          "ate": 12.11
+          "de": 8.348,
+          "ate": 9.681
         }
       ],
       "efeitos": [],
@@ -462,8 +462,8 @@
       "id": "plano5",
       "frase": 4,
       "texto": "Ele nem sabia que podia fazer isso.",
-      "inicio": 12.11,
-      "fim": 15.374,
+      "inicio": 9.681,
+      "fim": 12.256,
       "cenario": "quarto",
       "atores": [
         {
@@ -494,8 +494,8 @@
               "dur": 0.35
             }
           ],
-          "de": 12.11,
-          "ate": 13.709999999999999
+          "de": 9.681,
+          "ate": 11.280999999999999
         },
         {
           "tamanho": "medio",
@@ -505,12 +505,85 @@
             "tipo": "empurrar",
             "forca": 0.12
           },
-          "de": 13.709999999999999,
-          "ate": 15.374
+          "de": 11.280999999999999,
+          "ate": 12.256
         }
       ],
       "efeitos": [],
       "trilha": null
+    }
+  ],
+  "sons": [
+    {
+      "t": 1.68,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 2.817,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 3.854,
+      "som": "tremor",
+      "ganho": 1
+    },
+    {
+      "t": 4.104,
+      "som": "terra_sobe",
+      "ganho": 1
+    },
+    {
+      "t": 4.104,
+      "som": "tremor",
+      "dur": 0.833,
+      "ganho": 0.8
+    },
+    {
+      "t": 4.817,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 6.517,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 7.336,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 7.728,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 7.798,
+      "som": "arremesso",
+      "ganho": 1
+    },
+    {
+      "t": 8.228,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 8.298,
+      "som": "impacto_terra",
+      "ganho": 1
+    },
+    {
+      "t": 9.561,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 11.161,
+      "som": "whoosh",
+      "ganho": 0.22
     }
   ]
 }

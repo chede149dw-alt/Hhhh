@@ -13,6 +13,21 @@ export const CATALOGO = {
   efeitos: ['tremor', 'rachadura', 'esfera_terra'],
 };
 
+// sons da linha do tempo: os de cada atuação (no instante relativo a ela), tremores do roteiro e um "whoosh" leve nos cortes
+export function sonsDaLinha(linha) {
+  const sons = [];
+  for (const p of linha.planos) {
+    for (const a of p.atores) for (const sg of a.segmentos) {
+      const at = ATUACOES[sg.atuacao], desde = (sg.opcoes && sg.opcoes.desde) || 0;
+      const lista = typeof at.sons === 'function' ? at.sons(sg.opcoes || {}) : (at.sons || []);
+      for (const som of lista) if (som.t >= desde) sons.push({ t: +(sg.inicio + som.t - desde).toFixed(3), som: som.som, ganho: 1 });
+    }
+    for (const e of p.efeitos) if (e.tipo === 'tremor') sons.push({ t: +e.de.toFixed(3), som: 'tremor', dur: +(e.ate - e.de).toFixed(3), ganho: 0.8 });
+    for (const c of p.cameras) if (c.de > 0.01) sons.push({ t: +Math.max(0, c.de - 0.12).toFixed(3), som: 'whoosh', ganho: 0.22 });
+  }
+  return sons.filter((x) => x.t >= 0 && x.t < linha.duracao).sort((a, b) => a.t - b.t);
+}
+
 const args = process.argv.slice(2);
 const opt = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : undefined; };
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -22,6 +37,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const palavras = opt('palavras') ? JSON.parse(fs.readFileSync(opt('palavras'), 'utf8')) : estimarPalavras(roteiro);
   try {
     const linha = dirigir(roteiro, palavras, CATALOGO);
+    linha.sons = sonsDaLinha(linha);
     const saida = opt('saida') || path.join(path.dirname(arq), 'linha-do-tempo.json');
     fs.mkdirSync(path.dirname(saida), { recursive: true });
     fs.writeFileSync(saida, JSON.stringify(linha, null, 2));
@@ -31,6 +47,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       for (const a of p.atores) for (const s of a.segmentos) console.log(`      ${a.nome}: ${s.atuacao} em ${s.inicio.toFixed(2)} s${s.palavra ? ` (impacto na palavra "${s.palavra}" = ${s.tPalavra.toFixed(2)} s)` : ''}`);
       for (const c of p.cameras) console.log(`      câmera ${c.tamanho || (c.primeiroPlano ? 'primeiro plano' : c.alvo)} ${c.de.toFixed(2)}–${c.ate.toFixed(2)} s`);
     }
+    console.log(`  sons: ${linha.sons.map((x) => `${x.som}@${x.t.toFixed(2)}`).join(', ')}`);
   } catch (e) {
     if (e instanceof ErroRoteiro) { console.error('Erro no roteiro: ' + e.message); process.exit(2); }
     throw e;
