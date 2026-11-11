@@ -20,7 +20,11 @@
 
 - `id` liga o plano à função de mesmo nome em `window.PLANOS`. `capa` e `parte` ficam sem legenda.
 - Duração: se não tiver `duracao`, o plano dura o tempo da fala + 0,3 s, entre 2 e 3 s.
-- Vozes de prévia (espeak-ng): `narrador`, `mae`, `amigo`/`rafael`. `velocidade` em palavras por minuto (padrão 175).
+- Vozes de prévia (espeak-ng): `narrador`, `mae`, `amigo`/`rafael`, `lucas`. `velocidade` em palavras por minuto (padrão 175).
+- `cinema` (opcional): ajusta o pós do plano, ex. `{ "quente": 0.1, "vinheta": 0.9, "bloom": 0.6 }` (cena fria/escura).
+- `sfx` (opcional): lista de efeitos sonoros do plano — `{ "tipo": "coracao", "bpm": 80, "bpmFim": 140, "de": 0, "ate": 2 }`
+  (batidas; o plano recebe os mesmos tempos em `api.batidas` para pulsar a imagem junto),
+  `{ "tipo": "impacto", "em": 0.45, "volume": 1 }` (estrondo grave) e `{ "tipo": "ronco", "de": 0, "ate": 2, "volume": 1.4 }` (tremor grave).
 - Um plano com id `despertador` ganha bipe de despertador automaticamente.
 - O motor gera a legenda (blocos de até 3 palavras, quebrando na pontuação), mixa o áudio a -16 LUFS e renderiza.
 
@@ -45,6 +49,7 @@ O quadro é 1080×1920. O pós de cinema e a legenda são aplicados depois, auto
 | Função | O que faz |
 |---|---|
 | `api.t`, `api.u`, `api.dur` | tempo total, tempo no plano, duração do plano |
+| `api.batidas` | tempos (no plano) das batidas de coração do `sfx`, para a imagem pulsar junto com o som |
 | `api.fase(a, b, curva)` | 0→1 entre os segundos `a` e `b` do plano; curvas `linear`, `suave`, `entra`, `sai`, `volta` (passa e volta) |
 | `api.lerp(a, b, k)`, `api.clamp` | interpolação |
 | `api.camera({ f, x, y, z, yaw, cx, cy, nevoa, distNevoa })` | câmera em metros (f = lente em px; yaw = giro) |

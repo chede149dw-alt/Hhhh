@@ -1,6 +1,6 @@
 # Série: "E se você acordasse controlando a terra?"
 
-Status: roteiro do episódio 1 aprovado; prévia com voz grátis em `previas/terra-ep01-previa-v2.mp4` (planos em `ep01.js`).
+Status: episódio 1 aprovado (ep01.*); versão dramática do episódio 1 com 1 min 12 s em prévia (ep01-dramatico.*, `previas/terra-ep01-dramatico-previa.mp4`).
 
 ## Personagens
 | Personagem | Arquivo | Observação |

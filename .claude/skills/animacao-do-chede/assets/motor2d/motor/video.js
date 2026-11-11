@@ -22,7 +22,7 @@ fs.mkdirSync(pastaAudio, { recursive: true });
 const dur = (f) => parseFloat(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString());
 
 // ---------- 1. voz (prévia: espeak-ng) ----------
-const VOZES = { narrador: ['-v', 'pt-br', '-p', '45'], mae: ['-v', 'pt-br+f3', '-p', '62'], amigo: ['-v', 'pt-br+m3', '-p', '55'], rafael: ['-v', 'pt-br+m3', '-p', '55'] };
+const VOZES = { narrador: ['-v', 'pt-br', '-p', '45'], mae: ['-v', 'pt-br+f3', '-p', '62'], amigo: ['-v', 'pt-br+m3', '-p', '55'], rafael: ['-v', 'pt-br+m3', '-p', '55'], lucas: ['-v', 'pt-br+m1', '-p', '68'] };
 for (const p of roteiro.planos) {
   if (!p.fala) continue;
   const arq = path.join(pastaAudio, p.id + '.wav');
@@ -78,7 +78,14 @@ for (const p of roteiro.planos) {
   } else {
     fim = ini + (p.duracao || 2.0);
   }
-  planos.push({ id: p.id, inicio: ini, fim, semLegenda: p.id === 'capa' || p.id === 'parte', semCinema: false });
+  // batidas de coração do plano (segundos desde o início do plano): sfx { tipo: 'coracao', bpm, bpmFim, de, ate }
+  const batidas = [];
+  for (const s of p.sfx || []) {
+    if (s.tipo !== 'coracao') continue;
+    const d = fim - ini, ate = Math.min(d, s.ate === undefined ? d : s.ate);
+    for (let b = s.de === undefined ? 0.1 : s.de; b < ate - 0.05;) { batidas.push(+b.toFixed(3)); const bpm = s.bpm + ((s.bpmFim || s.bpm) - s.bpm) * (b / d); b += 60 / bpm; }
+  }
+  planos.push({ id: p.id, inicio: ini, fim, semLegenda: p.id === 'capa' || p.id === 'parte', semCinema: false, cinema: p.cinema, batidas, sfx: p.sfx || [] });
   t = fim;
 }
 // legendas não passam do fim da fala seguinte nem se sobrepõem
@@ -102,6 +109,27 @@ if (pDesp) {
   const k = falas.length;
   filtros.push(`[${k}]adelay=${Math.round(pDesp.inicio * 1000)}|${Math.round(pDesp.inicio * 1000)}[sfx]`);
   mix += '[sfx]';
+}
+// efeitos sonoros por plano: coracao (batidas), impacto { em }, ronco { de, ate, volume }
+const SFX = {
+  coracao: "aevalsrc='0.9*sin(2*PI*52*t)*exp(-t*16)+0.65*sin(2*PI*46*(t-0.17))*exp(-(t-0.17)*16)*gte(t,0.17)':d=0.6:s=48000",
+  impacto: "aevalsrc='(0.9*sin(2*PI*38*t)+0.6*sin(2*PI*61*t)*exp(-t*6)+0.5*(random(0)*2-1)*exp(-t*14))*exp(-t*3.2)':d=1.4:s=48000,lowpass=f=500",
+};
+const sfxArq = {};
+for (const [nome, src] of Object.entries(SFX)) { sfxArq[nome] = path.join(pastaAudio, `sfx-${nome}.wav`); execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', src, sfxArq[nome]]); }
+let nSfx = 0;
+const addSfx = (arq, t0, vol, extra = '') => { const k = entradas.length / 2; entradas.push('-i', arq); const ms = Math.max(0, Math.round(t0 * 1000)); filtros.push(`[${k}]${extra}adelay=${ms}|${ms},volume=${vol}[x${nSfx}]`); mix += `[x${nSfx++}]`; };
+for (const p of planos) {
+  for (const b of p.batidas) addSfx(sfxArq.coracao, p.inicio + b, 1.1);
+  for (const s of p.sfx) {
+    if (s.tipo === 'impacto') addSfx(sfxArq.impacto, p.inicio + (s.em || 0), s.volume || 1.0);
+    if (s.tipo === 'ronco') {
+      const de = s.de || 0, ate = Math.min(p.fim - p.inicio, s.ate === undefined ? p.fim - p.inicio : s.ate), d = ate - de;
+      const arq = path.join(pastaAudio, `sfx-ronco-${p.id}.wav`);
+      execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', `anoisesrc=color=brown:d=${d.toFixed(2)}:a=0.9:r=48000:seed=7`, '-af', `lowpass=f=140,lowpass=f=140,afade=t=in:d=${Math.min(0.4, d / 3).toFixed(2)},afade=t=out:st=${(d - Math.min(0.5, d / 3)).toFixed(2)}:d=${Math.min(0.5, d / 3).toFixed(2)}`, arq]);
+      addSfx(arq, p.inicio + de, s.volume || 1.4);
+    }
+  }
 }
 const n = mix.match(/\[/g).length;
 filtros.push(`${mix}amix=inputs=${n}:normalize=0,apad,atrim=0:${total.toFixed(3)},loudnorm=I=-16:TP=-1.5[a]`);
@@ -152,7 +180,7 @@ async function teste(png) {
     fs.writeFileSync(path.join(dir, String(i).padStart(2, '0') + '.jpg'), Buffer.from(b64, 'base64'));
   }
   await browser.close();
-  execFileSync('ffmpeg', ['-v', 'error', '-y', '-pattern_type', 'glob', '-i', path.join(dir, '*.jpg'), '-vf', 'scale=270:480,tile=7x2:padding=6', '-frames:v', '1', png]);
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-pattern_type', 'glob', '-i', path.join(dir, '*.jpg'), '-vf', `scale=270:480,tile=7x${Math.ceil(planos.length / 7)}:padding=6`, '-frames:v', '1', png]);
   fs.rmSync(dir, { recursive: true, force: true });
   console.log('Folha de teste:', png);
 }

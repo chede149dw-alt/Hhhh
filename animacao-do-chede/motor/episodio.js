@@ -263,7 +263,7 @@
       const p = TL.planos.find((q) => t >= q.inicio && t < q.fim) || TL.planos[TL.planos.length - 1];
       const u = t - p.inicio, dur = p.fim - p.inicio;
       const api = {
-        W, H, t, u, dur, fase: (a, b, e) => fase(u, a, b, e), ease, lerp, clamp,
+        W, H, t, u, dur, batidas: p.batidas || [], fase: (a, b, e) => fase(u, a, b, e), ease, lerp, clamp,
         camera: (o) => Cena3D.camera(o),
         personagem: (item, x, y, alt, o) => personagem(ctx, item, x, y, alt, o),
         personagem3d: (cam, item, X, Z, alturaM, o = {}) => { const q = cam.p(X, 0, Z); Cena3D.sombraChao(ctx, cam, X, Z, 0.55, 1.4); return personagem(ctx, item, q.x, q.y, alturaM * q.s, o); },

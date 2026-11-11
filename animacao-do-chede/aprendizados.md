@@ -86,3 +86,15 @@
 - Objetos redondos (vaso) precisam de cilindro com degradê de cilindro (claro a 25%, escuro na borda direita) e boca elíptica; caixa não serve.
 - Câmera auxiliar (`camEm`) permite usar efeitos 3D (impacto) em closes 2D.
 - Chamada final: "PARTE 1" + "SEGUE PRA VER A PARTE 2" + botão que é tocado e vira "SEGUINDO ✓", com fala do narrador; cartela de 3 s.
+
+## Episódio 1, versão dramática (previas/terra-ep01-dramatico-previa.mp4, 1 min 12 s)
+- Clima de madrugada sem mexer nos cenários: desenhar a cena, aplicar um "multiply" azul (#4A5A8C, 0,5–0,65) + vinheta
+  escura, e só depois desenhar o que emite luz (rachaduras, esfera, poeira brilhante). O laranja vira a única luz quente.
+- Rachadura acesa por cima do escuro: redesenhar com "lighter" a 0,3–0,45. Acima disso estoura e vira uma mancha branca.
+- Rachadura muito perto da câmera fica enorme: começar a pelo menos 1,5 m da câmera (na rua, 7 m).
+- Duas mãos no mesmo close: ângulos pequenos (±0,15) e bem separadas (x 270 e 820), senão os dedos se cruzam.
+- Batida de coração: o som e a imagem usam os mesmos tempos (`sfx` coracao → `api.batidas`); a imagem pulsa (brilho,
+  zoom de 1–3%) exatamente quando o som bate. Alternar cortes a cada batida (plano "ritmo") dá muita tensão.
+- Falas longas no espeak a 158 ppm passam de 2,5 s: medir antes e subir a velocidade (170–180) nas que não cabem.
+- Mergulho na rachadura: camadas de rocha 2D (buraco irregular com "evenodd") vindo na direção da câmera + núcleo
+  brilhante pulsando funciona bem e é barato.

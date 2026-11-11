@@ -1,6 +1,6 @@
 # Episódio 1 (versão dramática) — "E se você acordasse controlando a terra?" (PARTE 1)
 
-> **Status: proposta v2 (~1 min 12 s), aguardando aprovação.** A versão aprovada antiga continua em `ep01.md`.
+> **Status: roteiro aprovado; prévia com voz grátis feita (`previas/terra-ep01-dramatico-previa.mp4`).** A versão aprovada antiga continua em `ep01.md`.
 
 Formato: vertical 9:16, **~1 min 12 s** (limite 1 min 15 s), planos de 2 a 3 s, capa com a premissa nos 2 primeiros
 segundos, "PARTE 1" no fim.
