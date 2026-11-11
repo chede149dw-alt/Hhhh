@@ -36,6 +36,8 @@ cabelo). Medidas em px valem para o quadro 1080×1920 com o personagem em tamanh
 - Cada personagem usa **no máximo 5 cores-base** (sem contar sombra/luz): 1 pele, 1 cabelo, 1–2 neutros, **1 acento**.
 - O acento ocupa **10–20%** da área do personagem. Os neutros, 50–70%.
 - **Proibido** `#000000` e `#FFFFFF` puros no personagem. Exceções: pupila pode ir até `#110E14`; brilho do olho pode ser `#FFFFFF`.
+- **Cor-assinatura:** o briefing de um personagem pode definir uma cor-assinatura que ultrapassa o limite do acento (até 50% da área). Registrar na ficha do personagem.
+- **Exceções do briefing** (cor-assinatura, tamanho dos olhos, largura da cabeça) valem só para aquele personagem e ficam anotadas na `ficha.md` dele.
 - Cada cor tem 3 tons: **base**, **sombra** e **luz**. Não inventar tons intermediários.
 
 ### 2.2 Fórmula dos tons
@@ -51,6 +53,7 @@ cabelo). Medidas em px valem para o quadro 1080×1920 com o personagem em tamanh
 | Pedra | Roupa média, detalhes | `#6A6573` | `#514864` | `#857F87` |
 | Linho | Off-white (camisetas, solas, golas) | `#F2EDE6` | `#BAA9C8` | `#F4F0EA` |
 | Denim | Calças | `#55708C` | `#41507A` | `#74889D` |
+| Marinho | Cor-assinatura do protagonista | `#2B3B66` | `#212A59` | `#515C7C` |
 | **Brasa** | Acento | `#D23A42` | `#A12939` | `#DA5C5D` |
 | **Coral** | Acento | `#F28A5E` | `#BA6252` | `#F49E75` |
 | **Turquesa** | Acento | `#3DB5B0` | `#2F8199` | `#60C2BB` |
