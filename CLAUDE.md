@@ -2,7 +2,7 @@
 
 Sempre salve cada arquivo na pasta certa:
 
-- `motor/` — código do sistema de vídeos (renderizador, personagens, câmera, efeitos, comando de render)
+- `motor/` — código do sistema de vídeos. **Motor 3D novo em construção** (three.js, segue `PROMPTS_RECRIAR`; estado em `motor/PROJECT_STATE.md`, comandos em `motor/README.md`); o motor 2D atual continua até o 3D ficar pronto
 - `referencias/` — materiais de referência (imagens, vídeos, links, exemplos de estilo)
 - `personagens/` — personagens (designs, descrições, assets)
 - `cenarios/` — cenários e fundos

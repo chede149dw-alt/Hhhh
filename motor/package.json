@@ -1,0 +1,12 @@
+{
+  "name": "motor-3d",
+  "private": true,
+  "description": "Motor de vídeo 3D chapado (three.js) — ver motor/README.md",
+  "scripts": {
+    "teste": "node --test testes/*.test.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.17.0",
+    "three": "^0.187.0"
+  }
+}

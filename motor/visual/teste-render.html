@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{ "imports": { "three": "./lib/three/three.module.js" } }</script>
+</head>
+<body>
+<script type="module">
+  // Página de teste do render por quadro (prompt 1): uma cena simples, posicionada só pelo tempo t.
+  import * as THREE from 'three';
+
+  const W = 1080, H = 1920;
+  const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(1);
+  renderer.setSize(W, H);
+  document.body.appendChild(renderer.domElement);
+
+  const cena = new THREE.Scene();
+  cena.background = new THREE.Color('#2A2933');
+  const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 100);
+  camera.position.set(0, 1.4, 6);
+  camera.lookAt(0, 1, 0);
+
+  cena.add(new THREE.AmbientLight('#ffffff', 1.2));
+  const sol = new THREE.DirectionalLight('#ffffff', 2.0);
+  sol.position.set(-3, 5, 4);
+  cena.add(sol);
+
+  const chao = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: '#CFC8C0' }));
+  chao.rotation.x = -Math.PI / 2;
+  cena.add(chao);
+  const cubo = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: '#2B3B66' }));
+  cubo.position.y = 1.2;
+  cena.add(cubo);
+  const esfera = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 16), new THREE.MeshStandardMaterial({ color: '#3DB5B0' }));
+  cena.add(esfera);
+
+  // Tudo depende só de t (segundos): nada de relógio real
+  window.quadro = (t) => {
+    cubo.rotation.set(t * 0.7, t * 1.1, 0);
+    esfera.position.set(Math.cos(t * 1.5) * 2, 0.4 + Math.abs(Math.sin(t * 3)) * 1.2, Math.sin(t * 1.5) * 1.2);
+    renderer.render(cena, camera);
+  };
+  window.pronto = true;
+</script>
+</body>
+</html>
