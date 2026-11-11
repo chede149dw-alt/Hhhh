@@ -1,0 +1,15 @@
+# Referências: corpo dos personagens
+
+**O que agradou:** o modelo de corpo dos personagens — aparência, proporções/dimensões
+e as vistas de lado, meio lado (três quartos) e frente.
+
+| Arquivo | O que mostra | Pontos a aproveitar |
+|---|---|---|
+| `01-garoto-moletom-preto-vermelho-frente.jpg` | Garoto chibi, moletom preto com detalhes vermelhos, calça cargo, tênis | Cabeça grande (~1/3 da altura), contorno preto grosso, cores chapadas, mãos no bolso |
+| `02-garota-ficha-frente-costas-lado-expressoes.jpg` | Ficha completa: frente, costas, lado, rosto e 4 expressões (normal, feliz, sério, surpreso) + paleta | Modelo de ficha de personagem; olhos grandes redondos; paleta de 5 cores |
+| `03-garoto-xadrez-costas-lado-tres-quartos-frente.jpg` | Mesmo personagem em 4 ângulos: costas, perfil, três quartos, frente | Proporção mais realista (~5 cabeças), rotação consistente entre ângulos, sombreado suave |
+| `04-garoto-moletom-esboco-frente-tres-quartos-lado.jpg` | Esboço em linha: frente, três quartos, lado, com linhas-guia de altura | Linhas-guia mostrando que cabeça, ombro, cintura e pés ficam na mesma altura em todas as vistas |
+
+## Como isso entra no motor
+- Cada personagem terá 3 vistas desenhadas (frente, três quartos, perfil) e espelhamento para o outro lado.
+- Proporções definidas em "cabeças" (ex.: chibi ≈ 3, padrão ≈ 5), com as alturas de cabeça/ombro/cintura/joelho fixas entre as vistas.
