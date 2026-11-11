@@ -17,6 +17,8 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 1 — velocidade | 120 quadros 1080×1920 com 4 processos | 12,3 s (9,7 quadros/s) |
 | 1 — junção | 120 PNG → MP4 60 fps H.264 crf 20 | ok (`previas/motor3d/teste-render.mp4`) |
 | 2 — calibração | face iluminada de 4 cubos/esfera = cor do guia (pós desligado, tolerância 4) | **passou**: marinho, turquesa e mostarda exatos; brasa −3 (faixa de volume) |
+| 3 — boneco | juntas completas; sola no chão (±1 cm); altura = ficha (±5 cm); altura 1,8 escala tudo; misturar nas pontas e no meio; sentar abaixa o quadril | **passou** (`testes/boneco.test.js`) |
+| 3 — ficha | 4 vistas, 4 bocas, 4 poses (acenar, apontar, sentar, assustado) | `personagens/lucas/3d/ficha.png` — **aguardando aprovação** |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -29,6 +31,13 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - Sombra: só o chão recebe; objetos e personagens projetam, mas não recebem.
 - `PCFSoftShadowMap` foi removido no three 0.187: usar `PCFShadowMap` com `shadow.radius`.
 
+## Boneco (prompt 3) — `personagem/boneco.js`
+- Lucas 3D com o mesmo design da ficha 2D; ficha em `personagens/lucas/3d/ficha.json`.
+- A altura da ficha conta até o topo do cabelo: o boneco se mede montado e ajusta a escala.
+- Coluna com 2 juntas (coluna + peito), como recomendam as armadilhas do documento.
+- Cabelo: calota inclinada para trás + mechas em gota (LatheGeometry) apontando para fora; bolinhas pareciam "black power" e cones puros pareciam anime.
+- Pastas `visual/` e `personagem/` têm `package.json` com `"type": "module"` para o Node importar os módulos nos testes.
+
 ## Próxima etapa
-Prompt 3 — boneco articulado a partir de uma ficha (`criarBoneco(ficha)` → {raiz, juntas, posar}), pose REPOUSO,
-`misturar`; Lucas em 3D com o mesmo design e ficha 3D (4 vistas + 4 poses) para aprovação.
+Depois da aprovação da ficha 3D: prompt 4 — animador por poses-chave (curvas, IK de pés e mãos, arrasto, vida)
+com testes e a atuação "ataque_salto" (folha de 18 quadros).

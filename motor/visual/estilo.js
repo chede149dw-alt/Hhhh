@@ -158,3 +158,12 @@ export function criarPos(renderer, W, H) {
     },
   };
 }
+
+// chão invisível que só mostra a sombra (para fichas e fundos lisos); opacidade = força da sombra
+export function criarChaoSombra(cena, opacidade = 0.18, tamanho = 40) {
+  const chao = new THREE.Mesh(new THREE.PlaneGeometry(tamanho, tamanho), new THREE.ShadowMaterial({ opacity: opacidade }));
+  chao.rotation.x = -Math.PI / 2;
+  chao.receiveShadow = true;
+  cena.add(chao);
+  return chao;
+}
