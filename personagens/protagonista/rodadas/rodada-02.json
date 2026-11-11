@@ -1,0 +1,29 @@
+{
+  "fabrica": "criarProtagonista",
+  "titulo": "Rodada 2 — variações da B",
+  "cabecaPx": 150,
+  "variantes": [
+    { "id": "B1", "nome": "B original", "expressao": "curioso",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.95, "olhos": "oval", "olhoRaio": 0.07, "sobrancelha": "arqueada", "cabelo": "baguncado",
+                  "moletom": "largo", "faixaManga": "turquesa", "calca": "larga", "tenis": "cano-alto", "acentoTenis": "turquesa" } },
+    { "id": "B2", "nome": "Mais volume e traço", "expressao": "curioso",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.97, "olhos": "oval", "olhoRaio": 0.072, "sobrancelha": "arqueada", "sobrancelhaEsp": 0.066,
+                  "cabelo": "baguncado", "cabeloVolume": 1.1, "moletom": "largo", "faixaManga": "turquesa", "calca": "larga",
+                  "tenis": "cano-alto", "acentoTenis": "turquesa", "fatorContorno": 1.35 } },
+    { "id": "B3", "nome": "Mais jovem", "expressao": "curioso",
+      "opcoes": { "altura": 5.0, "cabecaLargura": 1.0, "olhos": "oval", "olhoRaio": 0.074, "sobrancelha": "arqueada", "cabelo": "baguncado",
+                  "cabeloVolume": 1.05, "moletom": "largo", "faixaManga": "turquesa", "calca": "larga", "tenis": "cano-alto",
+                  "acentoTenis": "turquesa", "fatorContorno": 1.15 } },
+    { "id": "B4", "nome": "Sem faixa, jogger", "expressao": "curioso",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.95, "olhos": "oval", "olhoRaio": 0.07, "sobrancelha": "arqueada", "cabelo": "baguncado",
+                  "moletom": "largo", "corCordao": "turquesa", "calca": "jogger", "tenis": "cano-alto", "acentoTenis": "turquesa" } },
+    { "id": "B5", "nome": "Mostarda e jeans", "expressao": "curioso",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.95, "olhos": "oval", "olhoRaio": 0.07, "sobrancelha": "arqueada", "cabelo": "baguncado",
+                  "moletom": "largo", "faixaManga": "mostarda", "calca": "larga", "corCalca": "denim", "tenis": "cano-alto",
+                  "acentoTenis": "mostarda" } },
+    { "id": "B6", "nome": "Faixa clara, olhar firme", "expressao": "curioso",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.95, "olhos": "esclera", "olhoRaio": 0.066, "sobrancelha": "reta", "sobrancelhaEsp": 0.068,
+                  "cabelo": "baguncado", "moletom": "largo", "faixaManga": "linho", "calca": "larga", "tenis": "cano-alto",
+                  "acentoTenis": "linho", "corTenis": "linho", "pele": "pele4" } }
+  ]
+}

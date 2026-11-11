@@ -79,6 +79,7 @@
     sobrancelhaEsp: 0.06,
     cabelo: 'pontas',
     corCabelo: 'cabNoite',
+    cabeloVolume: 1,          // 1 = normal; 1.1 = 10% mais volume
     pele: 'pele3',
     moletom: 'largo',         // 'largo' | 'reto' | 'curto'
     faixaManga: null,         // cor de acento na manga
@@ -474,7 +475,10 @@
       return P((p) => {
         zigue(p, cab.borda, dy, sx);
         if (dy) { p.lineTo(-0.7, -1.3); p.lineTo(0.7, -1.3); p.closePath(); return; }
-        cunhas(p, cab.topo, sx);
+        // volume do cabelo: afasta os pontos do topo a partir do centro da cabeça (mantém as costeletas)
+        const v = c.cabeloVolume;
+        const topo = cab.topo.map(([x, y], i, arr) => (i === 0 || i === arr.length - 1) ? [x, y] : [x * v, -0.5 + (y + 0.5) * v]);
+        cunhas(p, topo, sx);
         p.closePath();
       });
     }
