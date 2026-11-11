@@ -12,3 +12,4 @@ Sempre salve cada arquivo na pasta certa:
 - `previas/` — prévias, rascunhos e renders de teste
 - `prontos/` — vídeos e entregas finais
 - `aprendizados.md` — registro do que funcionou ou não, para consultar nos próximos trabalhos
+- `guia-de-estilo.md` — regras visuais obrigatórias (cores, proporções, contorno, sombra, efeitos); seguir em todo personagem, cenário e efeito
