@@ -91,6 +91,17 @@
     const A = alturaH(item, 'frente');
     return api.personagemGirando(item, cx, cy - 0.47 * Hpx + A * Hpx, A * Hpx, rel, o);
   }
+  // tempo "nominal" de uma tomada que atravessa vários planos: se a duração real dos planos mudar (ex.: voz final),
+  // a câmera e as ações continuam batendo com as falas (cada plano é esticado/encolhido para a sua duração nominal)
+  function tempoTomada(api, ids, nominais) {
+    let acc = 0;
+    for (let i = 0; i < ids.length; i++) {
+      const q = api.planos.find((k) => k.id === ids[i]);
+      if (api.t < q.fim || i === ids.length - 1) return acc + api.clamp((api.t - q.inicio) / (q.fim - q.inicio), 0, 1) * nominais[i];
+      acc += nominais[i];
+    }
+    return acc;
+  }
   const angDe = (de, para) => Math.atan2(-(para[0] - de[0]), -(para[1] - de[1])); // rumo de quem olha de `de` para `para`
   const ALUNOS = [
     { nome: 'Aluna 1', altura: 5.5, pele: 'pele2', cabelo: { estilo: 'coque', cor: 'cabCastanho' }, top: { tipo: 'camiseta', cor: 'lilas' }, calca: { tipo: 'reta', cor: 'denim' } },
@@ -143,7 +154,7 @@
 
   // ---------- tomadas contínuas (a mesma câmera atravessa vários planos) ----------
   function tomadaQuarto(ctx, api) {
-    const T = api.desde('treme');
+    const T = tempoTomada(api, ['treme', 'rachadura'], [2.5, 2.5]);
     const forte = T < 2.5 ? 20 : 6;
     const [tx, ty] = api.tremor(forte);
     ctx.save(); ctx.translate(tx, ty);
@@ -170,13 +181,15 @@
   }
 
   function tomadaMae(ctx, api) {
-    const T = api.desde('mae');
+    const T = tempoTomada(api, ['mae', 'susto', 'mae2', 'mentira'], [2.5, 2.5, 2.5, 2.5]);
     const L = [0.1, 2.0], M = [1.3, 4.45];
     const cam = api.orbita({
-      alvo: chave(T, [[0, [0.1, 1.4, 2.0]], [2.5, [0.4, 1.45, 2.7]], [5, [0.35, 1.35, 2.5]], [7.4, [1.1, 1.5, 3.9]], [8.4, [0.35, 1.45, 2.4]], [10, [0.1, 1.4, 2.0]]]),
-      raio: chave(T, [[0, 1.3], [2.5, 1.9], [5, 1.6], [7.4, 1.3], [8.3, 2.0], [10, 1.2]]),
-      ang: chave(T, [[0, -0.2], [2.5, 0.4], [5, 0.45], [7.4, 0.28], [10, -0.25]]),
-      altura: 1.42, f: 1150, ySalvo: 960, nevoa: Cenarios3D.quarto.nevoa,
+      // 0–5: gira em volta do Lucas e revela a mãe; 5–7,4: por cima do ombro dele, aproxima na mãe (lente fecha);
+      // 7,4–10: volta por fora até ficar de frente para ele (nunca passa rente ao Lucas)
+      alvo: chave(T, [[0, [0.1, 1.4, 2.0]], [2.5, [0.4, 1.45, 2.7]], [5, [0.35, 1.35, 2.5]], [7.4, [1.3, 1.5, 4.45]], [10, [0.1, 1.4, 2.0]]]),
+      raio: chave(T, [[0, 1.3], [2.5, 1.9], [5, 1.6], [7.4, 3.44], [10, 1.2]]),
+      ang: chave(T, [[0, -0.2], [2.5, 0.4], [5, 0.45], [7.4, 0.235], [10, -0.25]]),
+      altura: 1.42, f: chave(T, [[0, 1150], [5, 1150], [7.4, 1700], [10, 1150]]), ySalvo: 960, nevoa: Cenarios3D.quarto.nevoa,
     });
     Cenarios3D.quarto.desenhar(ctx, cam, { portaAberta: api.clamp((T - 0.2) / 0.35, 0, 1), t: api.t });
     // mãe na porta: olha o Lucas; depois olha a terra no chão e fica desconfiada
@@ -199,7 +212,7 @@
   }
 
   function tomadaRua(ctx, api) {
-    const T = api.desde('rua');
+    const T = tempoTomada(api, ['rua', 'onda'], [2.5, 2.5]);
     const X = 0.45;
     const Zl = T < 2.5 ? 1.0 + 2.2 * T : 6.5 + 6 * (T - 2.5) + 1.2 * (T - 2.5) * (T - 2.5);
     const [tx, ty] = api.tremor(T < 2.5 ? 5 : 9);
@@ -241,7 +254,7 @@
   }
 
   function tomadaPortao(ctx, api) {
-    const T = api.desde('portao');
+    const T = tempoTomada(api, ['portao', 'olhares'], [2.5, 2.5]);
     const bate = 0.35, dep = Math.max(0, T - bate);
     const [tx, ty] = T > bate ? api.tremor(4 + 16 * Math.exp(-dep * 3)) : api.tremor(6);
     ctx.save(); ctx.translate(tx, ty);
@@ -277,7 +290,7 @@
   }
 
   function tomadaRafael(ctx, api) {
-    const T = api.desde('rafael');
+    const T = tempoTomada(api, ['rafael', 'buraco', 'coluna'], [2.5, 3, 3]);
     const B = Cenarios3D.patio.bueiro, hx = B.x, hz = B.z + 0.22;
     const L = [-0.7, 2.0];
     const Tb = T - 2.5, Tc = T - 5.5;
@@ -338,7 +351,7 @@
   }
 
   function tomadaSozinho(ctx, api) {
-    const T = api.desde('sozinho');
+    const T = tempoTomada(api, ['sozinho', 'racha'], [3, 2.5]);
     const Tr = T - 3.0;
     const [tx, ty] = api.tremor(Tr < 0 ? 0 : 8 + 14 * api.clamp(Tr / 2.5, 0, 1));
     ctx.save(); ctx.translate(tx, ty);
@@ -353,8 +366,8 @@
       Efeitos.rachadura(ctx, cam, L, [2.8, 7.5], 1, api.t, { largura: 0.06 + 0.06 * g, semente: 51 });
       Efeitos.rachadura(ctx, cam, L, [-3.2, 6.5], 1, api.t, { largura: 0.05 + 0.04 * g, semente: 52 });
       Efeitos.rachadura(ctx, cam, L, [0.9, 10], 1, api.t, { largura: 0.07 + 0.06 * g, semente: 53 });
-      Efeitos.rachadura(ctx, cam, L, [-1.8, 2.6], 1, api.t, { largura: 0.04, semente: 54 });
-      if (g > 0) { Efeitos.rachadura(ctx, cam, [3.5, 6], L, g, api.t, { largura: 0.09, zigue: 0.7, semente: 45 }); Efeitos.rachadura(ctx, cam, [-4, 3], L, api.clamp(g * 1.3 - 0.2, 0, 1), api.t, { largura: 0.07, semente: 47 }); }
+      Efeitos.rachadura(ctx, cam, L, [1.6, 2.4], 1, api.t, { largura: 0.04, semente: 54 });
+      if (g > 0) { Efeitos.rachadura(ctx, cam, [3.5, 6], L, g, api.t, { largura: 0.09, zigue: 0.7, semente: 45 }); Efeitos.rachadura(ctx, cam, [-3.5, 8], L, api.clamp(g * 1.3 - 0.2, 0, 1), api.t, { largura: 0.07, semente: 47 }); }
     };
     rach();
     // Rafael indo embora correndo, de perfil
@@ -368,6 +381,43 @@
   }
 
   window.PLANOS = {
+    // CAPA DO REELS/TIKTOK (não entra no vídeo; gerar com motor/quadro.js). Área segura: título e rosto entre y 280 e 1640
+    // (a grade do Instagram corta em 4:5 e a do TikTok em 3:4 a partir do centro).
+    capaReels(ctx, u, d, api) {
+      const L = [0.1, 2.4];
+      const cam = api.orbita({ alvo: [L[0] + 0.3, 1.25, L[1]], raio: 1.6, ang: -0.28, altura: 0.95, f: 1250, ySalvo: 1290, nevoa: Cenarios3D.quarto.nevoa });
+      Cenarios3D.quarto.desenhar(ctx, cam, { t: api.t });
+      const rach = () => {
+        for (const [para, sem, lg] of [[[1.8, 3.4], 61, 0.025], [[-1.7, 3.6], 62, 0.022], [[0.9, 4.7], 63, 0.025], [[-0.7, 4.7], 64, 0.02]]) Efeitos.rachadura(ctx, cam, [L[0], L[1] + 0.25], para, 1, api.t, { largura: lg, zigue: 0.6, semente: sem });
+      };
+      rach();
+      const rig = api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'determinado' }, L[0], L[1], 1.75, { luz: LUZ_FRIA, parado: true });
+      frio(ctx, 0.72);
+      aceso(ctx, 0.3, rach);
+      const a = maoDoRig(rig), b = maoDoRig(rig, 'e');
+      const ex = (a.x + b.x) / 2 + 40, ey = (a.y + b.y) / 2 - 10;
+      brilho(ctx, ex, ey, 760, 0.55);
+      Efeitos['poder-terra'](ctx, ex, ey, 290, { t: api.t });
+      Efeitos.poeiraTeto(ctx, W, H, api.t, 0.6);
+      // faixa escura atrás do título, para ler bem em qualquer tela
+      const g = ctx.createLinearGradient(0, 120, 0, 900);
+      g.addColorStop(0, 'rgba(6,8,22,0.75)'); g.addColorStop(0.7, 'rgba(6,8,22,0.35)'); g.addColorStop(1, 'rgba(6,8,22,0)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, 900);
+      api.texto('E SE VOCÊ', 540, 330, 104);
+      api.texto('ACORDASSE', 540, 450, 126);
+      api.texto('CONTROLANDO', 540, 575, 118);
+      ctx.save(); ctx.translate(540, 730); ctx.rotate(-0.035); ctx.translate(-540, -730);
+      api.texto('A TERRA?', 540, 730, 196, { cor: Estilo.base.mostarda });
+      ctx.restore();
+      // selo PARTE 1
+      ctx.save(); ctx.translate(540, 1560);
+      ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 8;
+      ctx.fillStyle = '#D23A42'; ctx.beginPath(); ctx.roundRect(-220, -66, 440, 132, 66); ctx.fill();
+      ctx.shadowColor = 'transparent';
+      ctx.font = '900 76px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#FFFFFF'; ctx.fillText('PARTE 1', 0, 5);
+      ctx.restore();
+    },
+
     // 0–2 s: capa com a premissa — a câmera gira devagar em volta do Lucas com a terra nas mãos
     capa(ctx, u, d, api) {
       const L = [0, 2.4];

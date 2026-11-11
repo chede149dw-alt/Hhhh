@@ -95,7 +95,7 @@
     ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     const larg = (q) => Math.max(2, q.s * (o.largura || 0.06));
     // fenda escura, brilho âmbar e miolo claro
-    caminho(pts.slice(0, m + 1)); ctx.strokeStyle = '#2A1A18'; ctx.lineWidth = larg(pts[0]) * 1.6; ctx.stroke();
+    caminho(pts.slice(0, m + 1)); ctx.strokeStyle = '#3A2420'; ctx.lineWidth = larg(pts[0]) * 1.3; ctx.stroke();
     ctx.globalCompositeOperation = 'screen';
     ctx.strokeStyle = `rgba(255,179,71,${0.55 + 0.25 * Math.sin(t * 12)})`; ctx.lineWidth = larg(pts[0]) * 3.2; ctx.stroke();
     ctx.strokeStyle = C.brilho; ctx.lineWidth = larg(pts[0]) * 0.6; ctx.stroke();
@@ -103,8 +103,14 @@
     // galhos
     for (let i = 3; i < m; i += 4) {
       const a = pts[i], ang = (rnd() - 0.5) * 2.4, L = a.s * (0.25 + rnd() * 0.3);
-      ctx.strokeStyle = '#2A1A18'; ctx.lineWidth = larg(a) * 0.8;
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(a.x + Math.cos(ang) * L, a.y + Math.sin(ang) * L * 0.4); ctx.stroke();
+      if (a.atras) continue;
+      // galho fino com brilho (antes era só um risco escuro, que parecia um defeito preto na imagem)
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(a.x + Math.cos(ang) * L, a.y + Math.sin(ang) * L * 0.4);
+      ctx.strokeStyle = 'rgba(58,38,30,0.7)'; ctx.lineWidth = larg(a) * 0.45; ctx.stroke();
+      ctx.globalCompositeOperation = 'screen';
+      ctx.strokeStyle = 'rgba(255,179,71,0.45)'; ctx.lineWidth = larg(a) * 1.3; ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,226,176,0.8)'; ctx.lineWidth = larg(a) * 0.25; ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
     }
     // pedrinhas pulando na ponta da rachadura
     const ponta = pts[m];

@@ -120,3 +120,12 @@
 - `orbita` não pode repassar `nevoa: undefined` para a câmera (cores viram NaN: rua branca e chão preto).
 - Legenda: não trocar de faixa no meio do bloco (fica onde estava enquanto não cobrir rosto).
 - `vida()` agora tem movimentos lentos (troca de peso, tronco, cabeça olhando em volta, braços): ninguém fica estátua.
+
+## Voz final ElevenLabs, capa e descrição (episódio 1 pronto)
+- Vozes reais (eleven_v4) falam ~25% mais devagar que o espeak: 67 s de fala para 28 planos. Solução: cortar silêncio
+  das pontas, usar a versão mais curta, `atempo` até ~1,25× e redistribuir o tempo (falas longas até 3 s, curtas cedem).
+- Tomadas contínuas com `tempoTomada(api, ids, nominais)`: quando a duração dos planos muda, a câmera não sai do lugar.
+- Personagem "some e reaparece" quando a câmera passa a menos de 0,6 m dele: planejar o caminho da câmera por fora
+  (por cima do ombro → no outro personagem → volta pelo lado).
+- Capa: `motor/quadro.js` + plano `capaReels`; personagem com vista FIXA (com órbita, um ângulo perto de 22,5° mistura
+  duas vistas e ele fica transparente); título no terço de cima com faixa escura atrás; selo PARTE X.

@@ -86,3 +86,46 @@
 - Objetos redondos (vaso) precisam de cilindro com degradê de cilindro (claro a 25%, escuro na borda direita) e boca elíptica; caixa não serve.
 - Câmera auxiliar (`camEm`) permite usar efeitos 3D (impacto) em closes 2D.
 - Chamada final: "PARTE 1" + "SEGUE PRA VER A PARTE 2" + botão que é tocado e vira "SEGUINDO ✓", com fala do narrador; cartela de 3 s.
+
+## Episódio 1, versão dramática (previas/terra-ep01-dramatico-previa.mp4, 1 min 12 s)
+- Clima de madrugada sem mexer nos cenários: desenhar a cena, aplicar um "multiply" azul (#4A5A8C, 0,5–0,65) + vinheta
+  escura, e só depois desenhar o que emite luz (rachaduras, esfera, poeira brilhante). O laranja vira a única luz quente.
+- Rachadura acesa por cima do escuro: redesenhar com "lighter" a 0,3–0,45. Acima disso estoura e vira uma mancha branca.
+- Rachadura muito perto da câmera fica enorme: começar a pelo menos 1,5 m da câmera (na rua, 7 m).
+- Duas mãos no mesmo close: ângulos pequenos (±0,15) e bem separadas (x 270 e 820), senão os dedos se cruzam.
+- Batida de coração: o som e a imagem usam os mesmos tempos (`sfx` coracao → `api.batidas`); a imagem pulsa (brilho,
+  zoom de 1–3%) exatamente quando o som bate. Alternar cortes a cada batida (plano "ritmo") dá muita tensão.
+- Falas longas no espeak a 158 ppm passam de 2,5 s: medir antes e subir a velocidade (170–180) nas que não cabem.
+- Mergulho na rachadura: camadas de rocha 2D (buraco irregular com "evenodd") vindo na direção da câmera + núcleo
+  brilhante pulsando funciona bem e é barato.
+
+## Câmera na mão e quadrados pretos/brancos (referências lv_0_20261111104800 e lv_0_20261111104328)
+- Referências: câmera nunca parada — deriva lenta, giro de poucos décimos de grau, aproximação suave e, depois do
+  corte, a câmera "chega" um pouco deslocada e se acomoda. Agora é automático no motor (episodio.js, cameraNaMao):
+  o plano é desenhado numa camada e a camada vai para a tela com esse movimento.
+- Margem de corte (zoom) automática = deriva + giro + força do tremor do plano: sem borda preta mesmo no tapa.
+- Quadrados pretos/brancos/bege de 1 quadro: eram pontos 3D atrás ou rente à câmera (poste, pedra do pisão,
+  rachadura antiga, vizinho) projetados enormes. Correção: recorte no plano perto (cena3d.caminho), `atras` em cam.p
+  e efeitos/personagens rentes não são desenhados. Conferir com o detector de blocos (quadros que piscam).
+
+## Modelo de câmera do autor: tomadas contínuas girando em volta dos personagens (referência lv_0_20261111104328, 9,5–17 s)
+- Na referência, uma tomada de ~8 s atravessa 5 legendas: a câmera gira em volta do personagem (o quarto gira junto),
+  sobe um pouco e revela o outro personagem. Personagens mexem o corpo o tempo todo. O autor quer isso em todos os vídeos.
+- No motor: `api.orbita` (câmera 3D em volta de um ponto) + `personagem3d` com `rumo`/`olhaPara` (vista escolhida pelo
+  ângulo: frente < 22,5° < 3/4 < 67,5° < perfil < 125° < costas, com mistura de ±4° na troca) + `api.desde(id)` para a
+  mesma câmera continuar por vários planos + `chave()` para animar tudo por chaves.
+- Mistura de vistas longa (câmera parada perto do limite) deixa o personagem "fantasma": não parar a órbita perto de
+  22,5°/67,5°/125°.
+- Câmera passando perto de personagem = borrão gigante: na troca de alvo, afastar a câmera (raio maior) no meio.
+- `orbita` não pode repassar `nevoa: undefined` para a câmera (cores viram NaN: rua branca e chão preto).
+- Legenda: não trocar de faixa no meio do bloco (fica onde estava enquanto não cobrir rosto).
+- `vida()` agora tem movimentos lentos (troca de peso, tronco, cabeça olhando em volta, braços): ninguém fica estátua.
+
+## Voz final ElevenLabs, capa e descrição (episódio 1 pronto)
+- Vozes reais (eleven_v4) falam ~25% mais devagar que o espeak: 67 s de fala para 28 planos. Solução: cortar silêncio
+  das pontas, usar a versão mais curta, `atempo` até ~1,25× e redistribuir o tempo (falas longas até 3 s, curtas cedem).
+- Tomadas contínuas com `tempoTomada(api, ids, nominais)`: quando a duração dos planos muda, a câmera não sai do lugar.
+- Personagem "some e reaparece" quando a câmera passa a menos de 0,6 m dele: planejar o caminho da câmera por fora
+  (por cima do ombro → no outro personagem → volta pelo lado).
+- Capa: `motor/quadro.js` + plano `capaReels`; personagem com vista FIXA (com órbita, um ângulo perto de 22,5° mistura
+  duas vistas e ele fica transparente); título no terço de cima com faixa escura atrás; selo PARTE X.

@@ -7,11 +7,16 @@
   "planos": [
     {
       "id": "capa",
-      "duracao": 2.0,
+      "duracao": 3.0,
       "fala": {
         "texto": "E se você acordasse controlando a terra?",
         "voz": "narrador",
-        "velocidade": 210
+        "velocidade": 210,
+        "voz_final": {
+          "arquivo": "vozes/final/capa.wav",
+          "versao": "b",
+          "aceleracao": 1.208
+        }
       },
       "destaque": [
         "TERRA?"
@@ -35,11 +40,16 @@
     },
     {
       "id": "noite",
-      "duracao": 2.5,
+      "duracao": 2.9,
       "fala": {
         "texto": "Ontem à noite, a cidade inteira tremeu.",
         "voz": "narrador",
-        "velocidade": 178
+        "velocidade": 178,
+        "voz_final": {
+          "arquivo": "vozes/final/noite.wav",
+          "versao": "a",
+          "aceleracao": 1.17
+        }
       },
       "destaque": [
         "TREMEU."
@@ -59,11 +69,16 @@
     },
     {
       "id": "acorda",
-      "duracao": 2.5,
+      "duracao": 2.9,
       "fala": {
         "texto": "Você acorda... e o chão ainda treme.",
         "voz": "narrador",
-        "velocidade": 168
+        "velocidade": 168,
+        "voz_final": {
+          "arquivo": "vozes/final/acorda.wav",
+          "versao": "a",
+          "aceleracao": 1.161
+        }
       },
       "destaque": [
         "TREME."
@@ -87,11 +102,16 @@
     },
     {
       "id": "despertador",
-      "duracao": 2.0,
+      "duracao": 1.8,
       "fala": {
         "texto": "O despertador dispara.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/despertador.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "DISPARA."
@@ -105,11 +125,16 @@
     },
     {
       "id": "tapa",
-      "duracao": 2.0,
+      "duracao": 1.6,
       "fala": {
         "texto": "Um tapa...",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/tapa.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "TAPA..."
@@ -130,11 +155,16 @@
     },
     {
       "id": "treme",
-      "duracao": 2.5,
+      "duracao": 2.3,
       "fala": {
         "texto": "e a casa inteira treme.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/treme.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "TREME."
@@ -158,11 +188,16 @@
     },
     {
       "id": "rachadura",
-      "duracao": 2.5,
+      "duracao": 2.9,
       "fala": {
         "texto": "Uma rachadura nasce embaixo da cama.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/rachadura.wav",
+          "versao": "a",
+          "aceleracao": 1.047
+        }
       },
       "destaque": [
         "RACHADURA"
@@ -191,11 +226,16 @@
     },
     {
       "id": "maos",
-      "duracao": 2.5,
+      "duracao": 2.9,
       "fala": {
         "texto": "Suas mãos estão quentes... e tremendo.",
         "voz": "narrador",
-        "velocidade": 172
+        "velocidade": 172,
+        "voz_final": {
+          "arquivo": "vozes/final/maos.wav",
+          "versao": "b",
+          "aceleracao": 1.187
+        }
       },
       "destaque": [
         "QUENTES..."
@@ -219,7 +259,12 @@
       "fala": {
         "texto": "A terra do vaso vem até você.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/vaso.wav",
+          "versao": "b",
+          "aceleracao": 1.004
+        }
       },
       "destaque": [
         "ATÉ",
@@ -234,11 +279,16 @@
     },
     {
       "id": "dedos",
-      "duracao": 3.0,
+      "duracao": 2.9,
       "fala": {
         "texto": "Você fecha a mão... e ela obedece.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/dedos.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "OBEDECE."
@@ -258,11 +308,16 @@
     },
     {
       "id": "mae",
-      "duracao": 2.5,
+      "duracao": 2.4,
       "fala": {
         "texto": "Lucas?! Que barulho foi esse?",
         "voz": "mae",
-        "velocidade": 170
+        "velocidade": 170,
+        "voz_final": {
+          "arquivo": "vozes/final/mae.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "BARULHO"
@@ -280,11 +335,16 @@
     },
     {
       "id": "susto",
-      "duracao": 2.5,
+      "duracao": 2.3,
       "fala": {
         "texto": "A terra desaba no tapete.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/susto.wav",
+          "versao": "b",
+          "aceleracao": 1.013
+        }
       },
       "destaque": [
         "DESABA"
@@ -310,11 +370,16 @@
     },
     {
       "id": "mae2",
-      "duracao": 2.5,
+      "duracao": 2.0,
       "fala": {
         "texto": "Por que tem terra no chão?",
         "voz": "mae",
-        "velocidade": 165
+        "velocidade": 165,
+        "voz_final": {
+          "arquivo": "vozes/final/mae2.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "TERRA"
@@ -333,11 +398,16 @@
     },
     {
       "id": "mentira",
-      "duracao": 2.5,
+      "duracao": 1.6,
       "fala": {
         "texto": "Não é nada, mãe!",
         "voz": "lucas",
-        "velocidade": 175
+        "velocidade": 175,
+        "voz_final": {
+          "arquivo": "vozes/final/mentira.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "NADA,"
@@ -362,11 +432,16 @@
     },
     {
       "id": "rua",
-      "duracao": 2.5,
+      "duracao": 3.0,
       "fala": {
         "texto": "Você foge... e cada passo racha a rua.",
         "voz": "narrador",
-        "velocidade": 172
+        "velocidade": 172,
+        "voz_final": {
+          "arquivo": "vozes/final/rua.wav",
+          "versao": "b",
+          "aceleracao": 1.283
+        }
       },
       "destaque": [
         "RACHA"
@@ -378,22 +453,22 @@
       "sfx": [
         {
           "tipo": "impacto",
-          "em": 0.5,
+          "em": 0.6,
           "volume": 0.5
         },
         {
           "tipo": "impacto",
-          "em": 1.05,
+          "em": 1.26,
           "volume": 0.5
         },
         {
           "tipo": "impacto",
-          "em": 1.6,
+          "em": 1.92,
           "volume": 0.5
         },
         {
           "tipo": "impacto",
-          "em": 2.15,
+          "em": 2.58,
           "volume": 0.5
         }
       ],
@@ -405,11 +480,16 @@
     },
     {
       "id": "onda",
-      "duracao": 2.5,
+      "duracao": 2.9,
       "fala": {
         "texto": "Você tenta parar. A terra não para.",
         "voz": "narrador",
-        "velocidade": 172
+        "velocidade": 172,
+        "voz_final": {
+          "arquivo": "vozes/final/onda.wav",
+          "versao": "b",
+          "aceleracao": 1.185
+        }
       },
       "destaque": [
         "NÃO",
@@ -434,11 +514,16 @@
     },
     {
       "id": "portao",
-      "duracao": 2.5,
+      "duracao": 2.4,
       "fala": {
         "texto": "Ela te joga no portão da escola.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/portao.wav",
+          "versao": "a",
+          "aceleracao": 1.007
+        }
       },
       "destaque": [
         "JOGA"
@@ -462,11 +547,16 @@
     },
     {
       "id": "olhares",
-      "duracao": 2.5,
+      "duracao": 1.8,
       "fala": {
         "texto": "E todo mundo viu.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/olhares.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "VIU."
@@ -490,11 +580,16 @@
     },
     {
       "id": "rafael",
-      "duracao": 2.5,
+      "duracao": 2.3,
       "fala": {
         "texto": "Cara... você tá pálido.",
         "voz": "rafael",
-        "velocidade": 165
+        "velocidade": 165,
+        "voz_final": {
+          "arquivo": "vozes/final/rafael.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "PÁLIDO."
@@ -511,11 +606,16 @@
     },
     {
       "id": "buraco",
-      "duracao": 3.0,
+      "duracao": 2.6,
       "fala": {
         "texto": "Então o chão cede embaixo dele.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/buraco.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "CEDE"
@@ -548,7 +648,12 @@
       "fala": {
         "texto": "Você estende a mão... e a terra segura ele.",
         "voz": "narrador",
-        "velocidade": 168
+        "velocidade": 168,
+        "voz_final": {
+          "arquivo": "vozes/final/coluna.wav",
+          "versao": "b",
+          "aceleracao": 1.19
+        }
       },
       "destaque": [
         "SEGURA"
@@ -577,11 +682,16 @@
     },
     {
       "id": "amigo",
-      "duracao": 2.5,
+      "duracao": 2.2,
       "fala": {
         "texto": "Lucas... o que é você?",
         "voz": "rafael",
-        "velocidade": 150
+        "velocidade": 150,
+        "voz_final": {
+          "arquivo": "vozes/final/amigo.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "VOCÊ?"
@@ -599,11 +709,16 @@
     },
     {
       "id": "resposta",
-      "duracao": 3.0,
+      "duracao": 2.2,
       "fala": {
         "texto": "Eu não sei o que tá acontecendo comigo.",
         "voz": "lucas",
-        "velocidade": 165
+        "velocidade": 165,
+        "voz_final": {
+          "arquivo": "vozes/final/resposta.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "COMIGO."
@@ -631,7 +746,12 @@
       "fala": {
         "texto": "Ele sai correndo... e você fica sozinho.",
         "voz": "narrador",
-        "velocidade": 168
+        "velocidade": 168,
+        "voz_final": {
+          "arquivo": "vozes/final/sozinho.wav",
+          "versao": "b",
+          "aceleracao": 1.175
+        }
       },
       "destaque": [
         "SOZINHO."
@@ -649,11 +769,16 @@
     },
     {
       "id": "racha",
-      "duracao": 2.5,
+      "duracao": 2.3,
       "fala": {
         "texto": "Mas o poder não quer parar.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/racha.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
       },
       "destaque": [
         "PARAR."
@@ -682,7 +807,12 @@
       "fala": {
         "texto": "E lá embaixo... alguma coisa acordou com você.",
         "voz": "narrador",
-        "velocidade": 178
+        "velocidade": 178,
+        "voz_final": {
+          "arquivo": "vozes/final/fundo.wav",
+          "versao": "b",
+          "aceleracao": 1.187
+        }
       },
       "destaque": [
         "ACORDOU"
@@ -707,11 +837,16 @@
     },
     {
       "id": "ritmo",
-      "duracao": 3.0,
+      "duracao": 2.9,
       "fala": {
         "texto": "E bate no mesmo ritmo que o seu coração.",
         "voz": "narrador",
-        "velocidade": 158
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/ritmo.wav",
+          "versao": "b",
+          "aceleracao": 1.001
+        }
       },
       "destaque": [
         "CORAÇÃO."
@@ -736,11 +871,16 @@
     },
     {
       "id": "parte",
-      "duracao": 3.0,
+      "duracao": 2.4,
       "fala": {
         "texto": "Segue pra ver a parte dois!",
         "voz": "narrador",
-        "velocidade": 175
+        "velocidade": 175,
+        "voz_final": {
+          "arquivo": "vozes/final/parte.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
       },
       "cinema": {
         "quente": 0.05,
@@ -749,5 +889,12 @@
       },
       "imagem": "Cartela PARTE 1 + SEGUE PRA VER A PARTE 2."
     }
-  ]
+  ],
+  "vozes": {
+    "narrador": "ElevenLabs Torlien (T2qRqqooUigDNZPs6usG)",
+    "mae": "ElevenLabs Juliana Moreira (dxIMMSJYSsbUSMhioLNb)",
+    "lucas": "ElevenLabs Lucas Gabriel (jGMGxcV5sW7h4qUUl30i)",
+    "rafael": "ElevenLabs Davi Leão (6PhbMr9YjdeOaTNz9y24)",
+    "modelo": "eleven_v4"
+  }
 }

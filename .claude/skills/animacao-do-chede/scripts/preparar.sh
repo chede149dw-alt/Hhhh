@@ -5,7 +5,7 @@ set -u
 AQUI="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="${1:-animacao-do-chede}"
 if [ -e "$DEST/motor/video.js" ]; then echo "Projeto já existe em $DEST (não sobrescrevi)."; else
-  mkdir -p "$DEST" && cp -r "$AQUI/assets/motor2d/." "$DEST/" && mkdir -p "$DEST"/{audio,previas,prontos}
+  mkdir -p "$DEST" && cp -r "$AQUI/assets/motor2d/." "$DEST/" && mkdir -p "$DEST"/{audio,previas,prontos,referencias/videos,referencias/imagens}
   echo "Projeto criado em $DEST"
 fi
 falta=0

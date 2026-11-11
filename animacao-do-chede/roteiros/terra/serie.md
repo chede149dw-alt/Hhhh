@@ -1,6 +1,6 @@
 # Série: "E se você acordasse controlando a terra?"
 
-Status: episódio 1 aprovado (ep01.*); versão dramática do episódio 1 com 1 min 12 s em prévia (ep01-dramatico.*, `previas/terra-ep01-dramatico-previa.mp4`).
+Status: episódio 1 (versão dramática) PRONTO com voz final ElevenLabs: `prontos/terra-ep01-parte1.mp4` (70 s), capa `prontos/capa-ep01.png`, descrição `prontos/descricao-ep01.txt`. Vozes: narrador Torlien, mãe Juliana Moreira, Lucas "Lucas Gabriel", Rafael Davi Leão (eleven_v4).
 
 ## Personagens
 | Personagem | Arquivo | Observação |

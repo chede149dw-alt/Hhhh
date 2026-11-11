@@ -1,6 +1,7 @@
 // Monta um episódio: voz, linha do tempo, legendas, quadros e MP4 final.
 // Uso: node motor/video.js <roteiro.json> <planos.js> <saida.mp4> [--previa] [--workers 4]
 //   --previa: voz sintética gratuita (espeak-ng), só para conferir o tempo das cenas.
+//   sem --previa: usa a voz final de cada fala (fala.voz_final.arquivo, relativo a audio/<serie>/<ep>/).
 // Regras aplicadas: plano de 2 a 3 s; legenda de até 3 palavras; capa nos 2 primeiros segundos; "PARTE X" no fim.
 const { chromium } = require('playwright');
 const { spawn, execFileSync } = require('child_process');
@@ -26,7 +27,12 @@ const VOZES = { narrador: ['-v', 'pt-br', '-p', '45'], mae: ['-v', 'pt-br+f3', '
 for (const p of roteiro.planos) {
   if (!p.fala) continue;
   const arq = path.join(pastaAudio, p.id + '.wav');
-  execFileSync('espeak-ng', [...(VOZES[p.fala.voz] || VOZES.narrador), '-s', String(p.fala.velocidade || 175), '-w', arq, p.fala.texto]);
+  // voz final (ElevenLabs etc.): arquivo pronto em audio/<serie>/<ep>/<voz_final.arquivo>; a prévia usa espeak-ng
+  const final = p.fala.voz_final && path.join(raiz, 'audio', serie, nomeEp, p.fala.voz_final.arquivo);
+  if (!args.includes('--previa') && final) {
+    if (!fs.existsSync(final)) throw new Error('Falta a voz final de ' + p.id + ': ' + final);
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', final, '-ar', '48000', '-ac', '1', arq]);
+  } else execFileSync('espeak-ng', [...(VOZES[p.fala.voz] || VOZES.narrador), '-s', String(p.fala.velocidade || 175), '-w', arq, p.fala.texto]);
   // corta o silêncio do fim
   const cortado = arq.replace('.wav', '-c.wav');
   execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', arq, '-af', 'areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse', cortado]);

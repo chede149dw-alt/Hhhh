@@ -24,7 +24,9 @@
       // árvores atrás do prédio
       for (const x of [-11, -6, 6.5, 11]) arvore(ctx, cam, x, ZP + 3, 7.5);
       // chão de pedra em faixas (névoa por distância) + juntas
-      for (let z = cam.z + 0.2, d = 0.7; z < ZP; z += d, d *= 1.15) face(ctx, cam, [[-14, 0, z], [14, 0, z], [14, 0, Math.min(ZP, z + d + 0.02)], [-14, 0, Math.min(ZP, z + d + 0.02)]], T('calcada').base, { contorno: false });
+      // chão bem largo e até atrás do prédio: com a câmera alta ou girando, nunca aparece o vazio (preto) além do pátio
+      face(ctx, cam, [[-90, 0, ZP - 0.5], [90, 0, ZP - 0.5], [90, 0, ZP + 90], [-90, 0, ZP + 90]], T('calcada').base, { contorno: false });
+      for (let z = cam.z + 0.2, d = 0.7; z < ZP; z += d, d *= 1.15) face(ctx, cam, [[-60, 0, z], [60, 0, z], [60, 0, Math.min(ZP, z + d + 0.02)], [-60, 0, Math.min(ZP, z + d + 0.02)]], T('calcada').base, { contorno: false });
       ctx.save(); ctx.strokeStyle = 'rgba(120,100,120,0.35)';
       for (let z = Math.ceil(cam.z), i = 0; z < ZP; z += 0.8, i++) { const a = cam.p(-14, 0, z), b = cam.p(14, 0, z); ctx.lineWidth = Math.max(0.6, a.s * 0.008); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
       for (let x = -14; x <= 14; x += 0.8) { const a = cam.p(x, 0, Math.max(cam.z + 0.3, 0)), b = cam.p(x, 0, ZP); ctx.lineWidth = Math.max(0.6, a.s * 0.008); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }

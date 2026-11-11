@@ -5,3 +5,15 @@ previas/*
 prontos/*
 audio/*
 !*/.gitkeep
+# ...mas guarda as entregas finais e as vozes pagas (ElevenLabs)
+!prontos/*.mp4
+!prontos/capa-*.png
+!prontos/descricao-*.txt
+!prontos/*.skill
+!audio/*/
+audio/*/*
+!audio/*/*/
+audio/*/*/*
+!audio/*/*/vozes/
+audio/*/*/vozes/*
+!audio/*/*/vozes/final/
