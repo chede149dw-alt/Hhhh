@@ -22,7 +22,8 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 4 — interpolação | em(t) nos instantes das chaves = pose da chave (1e-12); curvas vão de 0 a 1 | **passou** |
 | 4 — IK | sola e pulso no alvo, 3 casos (com giro, agachado, mãos) | **passou**, erro < 1e-6 m |
 | 4 — pé plantado | 60 quadros de corpo descendo, girando e deslocando | **passou**, desliza < 1e-6 m |
-| 4 — ataque_salto | 9 poses-chave, folha de 18 quadros + vídeo 2,3 s 60 fps (138 quadros em 59,5 s, nuvem) | `previas/motor3d/ataque-salto-folha.png`, `ataque-salto.mp4` |
+| 4 — fluidez | variação da velocidade vertical por quadro no ataque_salto < 0,9 m/s (deu 0,31); chave no meio de uma subida não freia | **passou** |
+| 4 — ataque_salto | 11 poses-chave + voo (parábola), folha de 18 quadros + vídeo 2,8 s 60 fps (168 quadros em 79,7 s, nuvem) | `previas/motor3d/ataque-salto-folha.png`, `ataque-salto.mp4` |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -43,7 +44,11 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - Pastas `visual/` e `personagem/` têm `package.json` com `"type": "module"` para o Node importar os módulos nos testes.
 
 ## Animador (prompt 4) — `animacao/`
-- `animador.js` (puro, sem three): chaves {t, pose, curva}; curvas suave, linear, entra, sai, estalo, antecipa.
+- `animador.js` (puro, sem three): chaves {t, pose, curva}. **Padrão 'fluida'**: spline cúbica monotônica (PCHIP)
+  que passa pelas poses sem frear — o autor reclamou que o salto "engasgava": a versão antiga freava até parar em toda chave.
+  Curvas por trecho (linear, suave, entra, sai, sobe, cai, estalo, antecipa) com `so: [...]` para valer só em alguns canais.
+  **Voos**: no ar o corpo segue parábola de gravidade e anda em velocidade constante; impulso e aterrissagem
+  emendam na velocidade do voo (4·h/T). Evitar 'estalo' em golpes: dá tranco no primeiro quadro.
   Campo que falta numa chave vale o neutro (corpo 0, estica 1…); só alvos de IK, mãos e rosto seguram o valor.
   (Bug achado pelo teste do pé plantado: segurar o `corpo` da outra chave girava o corpo antes da hora.)
 - `aplicar.js`: IK analítico de 2 ossos (pés: alvo = ponto da sola; mãos: alvo = pulso), pesos `ikPes`/`ikMaos` 0–1

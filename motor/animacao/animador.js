@@ -1,6 +1,12 @@
 // Animador por poses-chave (prompt 4) — puro: não depende do three, roda no navegador e no Node.
 //
-// criarAnimacao(chaves): cada chave é { t, pose, curva }. A curva diz como se CHEGA naquela chave.
+// criarAnimacao(chaves | { chaves, voos }): cada chave é { t, pose, curva }.
+// Padrão ('fluida'): curva contínua que PASSA pelas poses sem frear em cada uma (spline cúbica monotônica:
+// sem passar do ponto; só para onde o movimento inverte ou há pausa). Outras curvas valem para o trecho
+// que CHEGA naquela chave: linear, suave, entra, sai, sobe, cai, estalo, antecipa. Com `so: ['altura', 'corpo']`
+// a curva vale só para esses canais (o resto continua fluido) — ex.: impulso de salto sem travar os braços.
+// voos: [{ de, ate, altura, zDe, zAte, xDe, xAte }] — no ar o corpo segue uma parábola de gravidade
+// (somada a corpo.y) e anda em velocidade constante no chão (x/z), como um salto de verdade.
 // em(t) devolve a pose interpolada no instante t (função só do tempo: determinística).
 // em(t, { arrasto: true, vida: true }) soma o arrasto (cabeça, cotovelos e mãos atrasados) e a vida
 // (respiração e piscar). final(t) = em(t) com os dois ligados.
@@ -20,6 +26,8 @@ export const CURVAS = {
   suave: (k) => k * k * (3 - 2 * k),
   entra: (k) => k * k * k,                       // começa devagar, chega rápido
   sai: (k) => 1 - Math.pow(1 - k, 3),            // sai rápido, chega devagar
+  sobe: (k) => 1 - (1 - k) * (1 - k),            // subida de salto (gravidade)
+  cai: (k) => k * k,                             // queda (gravidade)
   estalo: (k) => 1 - Math.pow(1 - k, 6),         // quase instantâneo, depois assenta
   antecipa: (k) => { const s = 1.70158; return k * k * ((s + 1) * k - s); }, // recua um pouco antes de ir
 };
@@ -85,35 +93,118 @@ export function vida(pose, t, semente = 0) {
 }
 
 // ---------- animação ----------
-export function criarAnimacao(chaves, opcoes = {}) {
-  const ks = chaves.map((c) => ({ ...c, pose: normalizar(c.pose) })).sort((a, b) => a.t - b.t);
+// achata a pose em canais "caminho → valor" (ex.: 'juntas.coxa_e.0', 'corpo.y', 'rosto') e reconstrói
+function achatar(v, pre, out) {
+  if (v && typeof v === 'object') { for (const k of Object.keys(v)) achatar(v[k], pre ? pre + '.' + k : k, out); return out; }
+  out[pre] = v; return out;
+}
+function montar(plano, listas) {
+  const o = {};
+  for (const [cam, v] of Object.entries(plano)) {
+    if (v === undefined) continue;
+    const ps = cam.split('.'); let at = o;
+    for (let i = 0; i < ps.length - 1; i++) {
+      const caminho = ps.slice(0, i + 1).join('.');
+      if (!(ps[i] in at)) at[ps[i]] = listas.has(caminho) ? [] : {};
+      at = at[ps[i]];
+    }
+    at[ps[ps.length - 1]] = v;
+  }
+  return o;
+}
+function neutroCanal(cam) {
+  const ps = cam.split('.');
+  if (ps[0] === 'juntas' || ps[0] === 'corpo' || ps[0] === 'quadril') return 0;
+  return NEUTRO[cam];
+}
+
+export function criarAnimacao(entrada, opcoes = {}) {
+  const lista = Array.isArray(entrada) ? entrada : entrada.chaves;
+  const voos = (Array.isArray(entrada) ? opcoes.voos : entrada.voos || opcoes.voos) || [];
+  const ks = lista.map((c) => ({ ...c, pose: normalizar(c.pose) })).sort((a, b) => a.t - b.t);
   if (!ks.length) throw new Error('animação sem chaves');
-  const inicio = ks[0].t, fim = ks[ks.length - 1].t;
+  const inicio = ks[0].t, fim = ks[ks.length - 1].t, n = ks.length;
+
+  // canais de todas as chaves; canal que falta: valor neutro, ou o da chave mais próxima no tempo (alvos, mãos, rosto)
+  const planos = ks.map((c) => achatar(c.pose, '', {}));
+  const listas = new Set();
+  ks.forEach((c) => (function marca(v, pre) {
+    if (v && typeof v === 'object') { if (Array.isArray(v)) listas.add(pre); for (const k of Object.keys(v)) marca(v[k], pre ? pre + '.' + k : k); }
+  })(c.pose, ''));
+  const canais = [...new Set(planos.flatMap((p) => Object.keys(p)))];
+  const val = {}, tang = {};
+  for (const cam of canais) {
+    const neutro = neutroCanal(cam);
+    val[cam] = planos.map((p, i) => {
+      if (p[cam] !== undefined) return p[cam];
+      if (neutro !== undefined) return neutro;
+      let melhor, dist = Infinity;
+      planos.forEach((q, j) => { if (q[cam] !== undefined && Math.abs(ks[j].t - ks[i].t) < dist) { dist = Math.abs(ks[j].t - ks[i].t); melhor = q[cam]; } });
+      return melhor;
+    });
+    // tangentes monotônicas (Fritsch–Carlson): contínuas, sem passar do ponto, zero nas inversões e pausas
+    if (val[cam].every((v) => typeof v === 'number')) {
+      const y = val[cam], d = [], m = new Array(n).fill(0);
+      for (let i = 0; i < n - 1; i++) d.push(ks[i + 1].t > ks[i].t ? (y[i + 1] - y[i]) / (ks[i + 1].t - ks[i].t) : 0);
+      for (let i = 1; i < n - 1; i++) {
+        if (d[i - 1] * d[i] <= 0) continue;
+        const h0 = ks[i].t - ks[i - 1].t, h1 = ks[i + 1].t - ks[i].t;
+        const w1 = 2 * h1 + h0, w2 = h1 + 2 * h0;
+        m[i] = (w1 + w2) / (w1 / d[i - 1] + w2 / d[i]);
+      }
+      tang[cam] = m;
+    }
+  }
 
   function bruta(t) {
-    if (t <= inicio) return clone(ks[0].pose);
-    if (t >= fim) return clone(ks[ks.length - 1].pose);
+    const plano = {};
+    if (t <= inicio || t >= fim || n === 1) {
+      const i = t <= inicio ? 0 : n - 1;
+      for (const cam of canais) plano[cam] = val[cam][i];
+      return montar(plano, listas);
+    }
     let i = 0;
     while (ks[i + 1].t < t) i++;
-    const a = ks[i], b = ks[i + 1];
-    if (b.t === a.t) return clone(b.pose);
-    const k = (t - a.t) / (b.t - a.t);
-    const curva = CURVAS[b.curva || 'suave'] || CURVAS.suave;
-    return interp(a.pose, b.pose, curva(k));
+    const a = ks[i], b = ks[i + 1], h = b.t - a.t;
+    const u = h > 0 ? (t - a.t) / h : 1;
+    const curvaB = b.curva && b.curva !== 'fluida' ? (CURVAS[b.curva] || CURVAS.suave) : null;
+    const kB = curvaB ? curvaB(u) : u;
+    const h00 = 2 * u ** 3 - 3 * u ** 2 + 1, h10 = u ** 3 - 2 * u ** 2 + u, h01 = -2 * u ** 3 + 3 * u ** 2, h11 = u ** 3 - u ** 2;
+    for (const cam of canais) {
+      const va = val[cam][i], vb = val[cam][i + 1];
+      const curva = curvaB && (!b.so || b.so.some((pre) => cam === pre || cam.startsWith(pre + '.'))) ? curvaB : null;
+      const k = curva ? kB : u;
+      if (tang[cam]) {
+        plano[cam] = curva ? va + (vb - va) * k : h00 * va + h10 * h * tang[cam][i] + h01 * vb + h11 * h * tang[cam][i + 1];
+      } else plano[cam] = k < 0.5 ? va : vb;
+    }
+    return montar(plano, listas);
+  }
+
+  function voar(p, t) {
+    for (const v of voos) {
+      if (t < v.de || t > v.ate) continue;
+      const u = (t - v.de) / (v.ate - v.de);
+      const c = p.corpo || (p.corpo = {});
+      c.y = (c.y || 0) + 4 * v.altura * u * (1 - u);
+      if (v.zDe !== undefined) c.z = v.zDe + (v.zAte - v.zDe) * u;
+      if (v.xDe !== undefined) c.x = v.xDe + (v.xAte - v.xDe) * u;
+    }
+    return p;
   }
 
   function em(t, o = {}) {
-    const p = bruta(t);
+    const p = voar(bruta(t), t);
     if (o.arrasto) {
       const j = p.juntas || (p.juntas = {});
-      for (const [n, atraso] of Object.entries(ARRASTO)) {
+      for (const [nome, atraso] of Object.entries(ARRASTO)) {
         const atrasada = bruta(t - atraso).juntas || {};
-        j[n] = atrasada[n] || [0, 0, 0];
+        j[nome] = atrasada[nome] || [0, 0, 0];
       }
     }
     if (o.vida) vida(p, t, opcoes.semente || 0);
     return p;
   }
 
-  return { chaves: ks, inicio, fim, duracao: fim - inicio, em, final: (t) => em(t, { arrasto: true, vida: true }) };
+  return { chaves: ks, voos, inicio, fim, duracao: fim - inicio, em, final: (t) => em(t, { arrasto: true, vida: true }) };
 }

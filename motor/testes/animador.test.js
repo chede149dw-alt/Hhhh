@@ -22,8 +22,25 @@ const perto = (a, b, tol, onde = '') => {
 
 test('em(t) nos instantes das chaves devolve a pose da chave', async () => {
   const { criarAnimacao, ATAQUE_SALTO } = await carregar();
-  const anim = criarAnimacao(ATAQUE_SALTO);
+  const anim = criarAnimacao(ATAQUE_SALTO.chaves);   // sem o voo (o voo soma a parábola no ar)
   for (const c of anim.chaves) perto(c.pose, anim.em(c.t), 1e-12, c.nome);
+});
+
+test('fluidez: sem freadas no meio do movimento e sem saltos de velocidade no ataque_salto', async () => {
+  const { criarAnimacao, ATAQUE_SALTO } = await carregar();
+  const anim = criarAnimacao(ATAQUE_SALTO);
+  // altura do quadril ao longo do tempo (altura + corpo.y): a velocidade não pode pular entre quadros vizinhos
+  const y = (t) => { const p = anim.em(t); return (p.altura || 0) + ((p.corpo && p.corpo.y) || 0); };
+  const dt = 1 / 60;
+  let maiorSalto = 0;
+  for (let t = anim.inicio + dt; t < anim.fim - dt; t += dt) {
+    const v0 = (y(t) - y(t - dt)) / dt, v1 = (y(t + dt) - y(t)) / dt;
+    maiorSalto = Math.max(maiorSalto, Math.abs(v1 - v0));
+  }
+  assert.ok(maiorSalto < 0.9, `velocidade vertical pula ${maiorSalto.toFixed(2)} m/s entre quadros`);
+  // na mesma direção, a interpolação passa pela chave sem parar (velocidade ≠ 0 no meio de uma subida)
+  const sobe = criarAnimacao([{ t: 0, pose: { altura: 0 } }, { t: 1, pose: { altura: 1 } }, { t: 2, pose: { altura: 3 } }]);
+  assert.ok(sobe.em(1.01).altura - sobe.em(0.99).altura > 0.02, 'freou na chave do meio');
 });
 
 test('curvas: começam em 0 e terminam em 1', async () => {
