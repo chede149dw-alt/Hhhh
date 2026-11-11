@@ -7,7 +7,7 @@
 
 ![Ficha do Lucas](ficha.png)
 
-**Quem é:** jovem comum que acorda com poderes. Idade aparente 18 a 25 anos.
+**Quem é:** jovem comum que acorda com o poder de controlar a terra. Idade aparente 18 a 25 anos.
 **Personalidade:** curioso, assustado no começo, corajoso depois.
 **Origem do design:** versão B2, escolhida na rodada 2 (histórico em `rodadas/`).
 
@@ -53,15 +53,16 @@ Extras disponíveis: curioso, triste.
 | Andando | `andando` | perfil | neutro |
 | Correndo | `correndo` | perfil | determinado |
 | Apontando | `apontando` | 3/4 | determinado |
-| Soltando poder | `poder` | 3/4 | raiva + efeito `poder-energia` |
+| Controlando a terra | `poder` | 3/4 | determinado + efeito `poder-terra` |
 | Caído | `caido` | perfil (deitado) | cansado |
 
 Mãos disponíveis nas poses (`_maos`): relaxada, apontando, aberta, punho.
 
 ## Poder
-Elemento **Energia** (guia, seção 7), arquivo `efeitos/poder-energia.js`:
-núcleo `#FFFDF2`, miolo `#CDF6FF`, principal `#3FC3F0`, aura `#2A6FD6`. Sai das mãos abertas.
-Sempre sobre fundo escuro (luminância ≤ 20%), como manda o guia.
+**Controlar o elemento terra** (decisão do autor), arquivo `efeitos/poder-terra.js`:
+esfera de terra com textura e rachaduras brilhando, pedras orbitando, poeira e cascalho.
+Cores: terra `#8B5E3C` (escura `#5A3A22`, clara `#B07A4E`), pedra `#7A7480`, rachaduras `#FFB347` com miolo `#FFE2B0`.
+Funciona em cena clara (cores chapadas) e escura (o brilho das rachaduras aparece mais).
 
 ## Exceções ao guia (aprovadas no briefing)
 - Marinho como cor-assinatura (~45% da área).
@@ -75,3 +76,4 @@ node motor/ficha.js personagens/lucas/lucas.js efeitos/poder-energia.js personag
 
 ## Histórico
 - Render passou para o modo suave (menos cartunesco), a pedido. O desenho (cores, proporções, roupa, rosto) não mudou; a ficha foi regerada.
+- Poder trocado de Energia para **controlar a terra**, a pedido. Ficha regerada.

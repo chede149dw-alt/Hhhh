@@ -28,7 +28,7 @@
       "imagem": "Pátio da escola: o celular do amigo escorrega e some na grade do bueiro." },
     { "id": "coluna", "fala": { "texto": "Você puxa a terra, e ele volta inteiro.", "voz": "narrador" }, "destaque": ["INTEIRO."],
       "imagem": "Lucas ergue a mão: uma coluna de terra sobe do bueiro trazendo o celular até a mão do amigo." },
-    { "id": "amigo", "fala": { "texto": "Cara... como você fez isso?", "voz": "amigo" }, "destaque": ["ISSO?"],
+    { "id": "amigo", "fala": { "texto": "Cara... como você fez isso?", "voz": "rafael" }, "destaque": ["ISSO?"],
       "imagem": "Close no amigo, de boca aberta, segurando o celular sujo de terra (sincronia labial)." },
     { "id": "racha", "fala": { "texto": "Mas o chão da escola começa a rachar.", "voz": "narrador" }, "destaque": ["RACHAR."],
       "imagem": "A rachadura corre pelo piso até os pés do Lucas e brilha por dentro; câmera desce e treme." },

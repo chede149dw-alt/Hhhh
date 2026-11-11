@@ -7,7 +7,7 @@ Prancha de produção: `previas/serie-invisivel-prancha.png` (regerar com `node 
 |---|---|---|
 | Lucas (protagonista) | `personagens/lucas/` | Oficial |
 | Mãe | `personagens/mae/` | Proposta |
-| Amigo | `personagens/amigo/` | Proposta (ainda sem nome) |
+| Rafael (amigo) | `personagens/rafael/` | Proposta |
 
 ## Cenários (`cenarios/`)
 | Cenário | Arquivo | Chão (y) | Cabeça sugerida |

@@ -18,9 +18,9 @@ Sempre salve cada arquivo na pasta certa:
 
 - **Lucas** (protagonista): seguir `personagens/lucas/ficha.md` e `personagens/lucas/ficha.png` em todos os vídeos.
   Desenhar sempre com `personagens/lucas/lucas.js` (`criarLucas(opcoes, vista)`), sem alterar a aparência.
-  Usar só as vistas, expressões, poses e o poder (`efeitos/poder-energia.js`) definidos na ficha.
+  Usar só as vistas, expressões, poses e o poder definidos na ficha: **controlar a terra** (`efeitos/poder-terra.js`).
   Mudança de design só com pedido e aprovação explícitos; depois, regerar a ficha.
-- **Mãe** e **Amigo** (série da invisibilidade): propostas em `personagens/mae/` e `personagens/amigo/`, montadas com `motor/personagem-base.js`. Ainda não são obrigatórias; viram regra quando aprovadas.
+- **Mãe** e **Rafael** (melhor amigo do Lucas): propostas em `personagens/mae/` e `personagens/rafael/`, montadas com `motor/personagem-base.js`. Ainda não são obrigatórias; viram regra quando aprovadas.
 
 # Séries
 - Cada série tem uma pasta em `roteiros/<serie>/` com `serie.md` (lista de cenários, objetos, efeitos e personagens) e `prancha.json` (prancha de produção em `previas/`).

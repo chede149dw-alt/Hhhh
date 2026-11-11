@@ -64,3 +64,8 @@
 - A sombra de contato sai de graça: antes de preencher cada peça, pintar a própria forma deslocada para o lado da sombra com alfa 0,16.
 - Andar de costas (rua adentro): de costas a passada vai para dentro da cena, então girar a perna não aparece. O que funciona é erguer a perna do passo (`_dy_coxa`, o topo fica escondido pelo moletom), balançar quadril/ombros e fazer o personagem diminuir com a distância, com a câmera seguindo atrás.
 - O sinal do ângulo das pernas muda entre frente e costas (a perna da esquerda da tela troca de lado); errar o sinal faz as pernas cruzarem.
+
+## Poder da terra e Rafael
+- Efeito de terra funciona em cena clara porque é chapado (terra, pedras, poeira translúcida); o brilho das rachaduras (âmbar) dá o "poder" sem precisar de fundo escuro.
+- Esfera do poder precisa de raio ~0,6 H para ler bem ao lado das mãos; com 0,4 H some.
+- Renomear personagem: manter a função antiga como apelido (`criarAmigo = criarRafael`) para não quebrar episódios já montados.

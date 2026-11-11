@@ -22,7 +22,7 @@ fs.mkdirSync(pastaAudio, { recursive: true });
 const dur = (f) => parseFloat(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString());
 
 // ---------- 1. voz (prévia: espeak-ng) ----------
-const VOZES = { narrador: ['-v', 'pt-br', '-p', '45'], mae: ['-v', 'pt-br+f3', '-p', '62'], amigo: ['-v', 'pt-br+m3', '-p', '55'] };
+const VOZES = { narrador: ['-v', 'pt-br', '-p', '45'], mae: ['-v', 'pt-br+f3', '-p', '62'], amigo: ['-v', 'pt-br+m3', '-p', '55'], rafael: ['-v', 'pt-br+m3', '-p', '55'] };
 for (const p of roteiro.planos) {
   if (!p.fala) continue;
   const arq = path.join(pastaAudio, p.id + '.wav');
@@ -110,10 +110,10 @@ execFileSync('ffmpeg', ['-v', 'error', '-y', ...entradas, '-filter_complex', fil
 
 // ---------- 4. quadros em paralelo ----------
 const scripts = ['motor/cena.js', 'motor/cena3d.js', 'motor/cinema.js', 'motor/personagem-base.js',
-  'personagens/lucas/lucas.js', 'personagens/mae/mae.js', 'personagens/amigo/amigo.js',
+  'personagens/lucas/lucas.js', 'personagens/mae/mae.js', 'personagens/rafael/rafael.js',
   'cenarios/objetos/cama.js', 'cenarios/objetos/despertador.js', 'cenarios/objetos/mochila.js',
   'cenarios/quarto-3d.js', 'cenarios/rua-3d.js', 'cenarios/escola-3d.js',
-  'efeitos/invisibilidade.js', 'efeitos/poder-energia.js', 'motor/episodio.js', planosArq].map((s) => path.resolve(raiz, s));
+  'efeitos/invisibilidade.js', 'efeitos/poder-energia.js', 'efeitos/poder-terra.js', 'motor/episodio.js', planosArq].map((s) => path.resolve(raiz, s));
 
 const tmp = path.join(pastaAudio, 'partes'); fs.mkdirSync(tmp, { recursive: true });
 async function trabalhador(k, browser) {

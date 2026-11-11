@@ -1,9 +1,9 @@
 {
-  "fabrica": "criarAmigo",
+  "fabrica": "criarRafael",
   "registroPoses": "POSES_PADRAO",
   "opcoes": {},
-  "titulo": "AMIGO",
-  "subtitulo": "Melhor amigo do Lucas · nerd, leal e fala demais · série “E se você acordasse podendo ficar invisível?”",
+  "titulo": "RAFAEL",
+  "subtitulo": "Melhor amigo do Lucas · nerd, leal e fala demais",
   "paleta": [
     {
       "nome": "Camiseta",

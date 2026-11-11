@@ -741,7 +741,7 @@
         coxa_d: -8, canela_d: 4, pe_d: 4, coxa_e: 7, canela_e: -2, pe_e: -5, _maos: { d: 'apontando' } },
     },
     poder: {
-      vista: 'tq', expressao: 'raiva', efeito: 'poder-energia',
+      vista: 'tq', expressao: 'determinado', efeito: 'poder-terra',
       angulos: { tronco: 6, cabeca: -2, braco_d: -76, antebraco_d: -14, mao_d: -78, braco_e: -66, antebraco_e: -24, mao_e: -70,
         coxa_d: -20, canela_d: 14, pe_d: 6, coxa_e: 22, canela_e: 4, pe_e: -26, _maos: { d: 'aberta', e: 'aberta' } },
     },

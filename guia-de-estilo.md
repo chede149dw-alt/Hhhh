@@ -202,6 +202,7 @@ Camadas 1, 3, 4 e 5 usam mistura **aditiva** (`globalCompositeOperation = 'light
 | Veneno | `#FFFDF2` | `#D8FFC4` | `#3BEA2A` | `#128A3A` |
 | Água | `#FFFDF2` | `#D6ECFF` | `#5B8EF0` | `#2B3FB0` |
 | Escudo/rosa | `#FFFDF2` | `#FFD6F4` | `#F15FD8` | `#9B2FB8` |
+| **Terra** (poder do Lucas) | `#FFE2B0` (rachadura) | `#FFB347` | `#8B5E3C` (pedra `#7A7480`) | poeira `#B07A4E` translúcida |
 | Prisma (arco-íris) | `#FFFDF2` | — | Sequência `#FF4F6D` → `#FF9A3C` → `#FFE15A` → `#4FE38A` → `#3FC3F0` → `#8A3CF0` | `#4A1FB8` |
 
 ### Peças de efeito do estilo

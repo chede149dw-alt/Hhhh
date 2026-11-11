@@ -5,9 +5,9 @@ Status: roteiro do episódio 1 aguardando aprovação (`ep01.md` / `ep01.json`).
 ## Personagens
 | Personagem | Arquivo | Observação |
 |---|---|---|
-| Lucas (protagonista) | `personagens/lucas/` | **Pendente:** a ficha diz que o poder dele é Energia; nesta série seria Terra |
+| Lucas (protagonista) | `personagens/lucas/` | Oficial; poder: controlar a terra |
 | Mãe | `personagens/mae/` | Proposta (ainda não aprovada) |
-| Amigo | `personagens/amigo/` | Proposta, ainda sem nome |
+| Rafael (amigo) | `personagens/rafael/` | Proposta |
 | Vizinho | figurante (`motor/personagem-base.js`) | — |
 
 ## Cenários (já existem)
@@ -23,4 +23,4 @@ vaso de planta (com terra), livros que caem, celular, grade de bueiro, sacola do
 - onda de pedras correndo pela rua (Lucas em cima);
 - coluna de terra subindo do bueiro;
 - poeira se desfazendo (terra caindo no tapete).
-Cores do elemento a definir no guia (sugestão: terra `#8B5E3C`, pedra `#7A7480`, brilho das rachaduras âmbar `#FFB347`).
+Cores do elemento: guia, seção 7 (Terra). Efeito base: `efeitos/poder-terra.js`.
