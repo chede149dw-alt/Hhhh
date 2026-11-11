@@ -11,7 +11,7 @@
     nevoa: '#EDE7DC',
     pontos: { armario: { x: XL, z: 3.85 } },
     desenhar(ctx, cam, o = {}) {
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.save();
       const parede = T('paredeEscola'), arm = T('armario');
       // faixas em profundidade (névoa muda com a distância)
       const zs = []; for (let z = cam.z + 0.2, d = 0.8; z < ZF; z += d, d *= 1.12) zs.push(z); zs.push(ZF);
@@ -34,6 +34,14 @@
         const chao = J.map(([X, Y, Z]) => [X - Y * 0.9, 0.002, Z - Y * 0.25]);
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = 'rgba(255,226,170,0.45)'; ctx.fill(Cena3D.caminho(cam, chao)); ctx.restore();
       }
+      // cartazes coloridos entre as janelas e um banco de madeira
+      for (let z = 3.6, i = 0; z < 20; z += 3.2, i++) {
+        const cor = ['coral', 'mostarda', 'turquesa', 'lilas'][i % 4];
+        face(ctx, cam, [[XR - 0.003, 1.3, z], [XR - 0.003, 1.3, z + 0.5], [XR - 0.003, 2.0, z + 0.5], [XR - 0.003, 2.0, z]], T(cor).base, { linha: cam.linha(z) * 0.7 });
+        face(ctx, cam, [[XR - 0.004, 1.75, z + 0.08], [XR - 0.004, 1.75, z + 0.42], [XR - 0.004, 1.9, z + 0.42], [XR - 0.004, 1.9, z + 0.08]], T('linho').base, { contorno: false });
+      }
+      caixa(ctx, cam, XR - 0.45, XR - 0.05, 0.42, 0.5, 6.5, 8.5, 'madeira');
+      for (const z of [6.6, 8.3]) caixa(ctx, cam, XR - 0.4, XR - 0.1, 0, 0.42, z, z + 0.1, 'grafite');
       // luminárias no teto
       for (let z = 2; z < ZF; z += 3.2) face(ctx, cam, [[-0.5, YT - 0.01, z], [0.5, YT - 0.01, z], [0.5, YT - 0.01, z + 1.2], [-0.5, YT - 0.01, z + 1.2]], '#FFFBEA', { linha: cam.linha(z) * 0.5 });
       // porta dupla no fim

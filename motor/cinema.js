@@ -67,7 +67,7 @@
     },
     // desenha uma camada inteira desfocada (profundidade de campo), barato: desfoca em 1/4 da resolução
     desfocar(ctx, origem, px, alpha = 1) {
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = alpha;
+      ctx.save(); ctx.globalAlpha = alpha; // respeita o zoom/giro atual do contexto
       if (px <= 0.3) { ctx.drawImage(origem, 0, 0); ctx.restore(); return; }
       const k = 0.25, a = document.createElement('canvas'); a.width = Math.ceil(origem.width * k); a.height = Math.ceil(origem.height * k);
       const g = a.getContext('2d'); g.filter = `blur(${px * k}px)`; g.drawImage(origem, 0, 0, a.width, a.height);
@@ -76,13 +76,13 @@
     },
     camada(W, H) { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; },
     // desenha algo desfocado de forma barata: pinta numa camada de 1/4 da resolução, desfoca lá e amplia
-    desfocado(ctx, px, desenhar) {
+    desfocado(ctx, px, desenhar, modo) {
       const W = ctx.canvas.width, H = ctx.canvas.height, k = 0.25;
       const a = document.createElement('canvas'); a.width = Math.ceil(W * k); a.height = Math.ceil(H * k);
       const g = a.getContext('2d'); g.scale(k, k); desenhar(g);
       const b = document.createElement('canvas'); b.width = a.width; b.height = a.height;
       const h = b.getContext('2d'); h.filter = `blur(${Math.max(0.5, px * k)}px)`; h.drawImage(a, 0, 0);
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingQuality = 'high'; ctx.drawImage(b, 0, 0, W, H); ctx.restore();
+      ctx.save(); if (modo) ctx.globalCompositeOperation = modo; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(b, 0, 0, W, H); ctx.restore();
     },
   };
 })();

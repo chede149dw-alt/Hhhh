@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "total": 26.183310999999996,
+  "total": 27.157550999999998,
   "planos": [
     {
       "id": "capa",
@@ -54,42 +54,42 @@
     {
       "id": "mae-procura",
       "inicio": 14,
-      "fim": 16.02576,
+      "fim": 17,
       "semLegenda": false,
       "semCinema": false
     },
     {
       "id": "rua",
-      "inicio": 16.02576,
-      "fim": 18.02576,
+      "inicio": 17,
+      "fim": 19,
       "semLegenda": false,
       "semCinema": false
     },
     {
       "id": "escola",
-      "inicio": 18.02576,
-      "fim": 20.02576,
+      "inicio": 19,
+      "fim": 21,
       "semLegenda": false,
       "semCinema": false
     },
     {
       "id": "armario",
-      "inicio": 20.02576,
-      "fim": 22.183310999999996,
+      "inicio": 21,
+      "fim": 23.157550999999998,
       "semLegenda": false,
       "semCinema": false
     },
     {
       "id": "desconfia",
-      "inicio": 22.183310999999996,
-      "fim": 24.183310999999996,
+      "inicio": 23.157550999999998,
+      "fim": 25.157550999999998,
       "semLegenda": false,
       "semCinema": false
     },
     {
       "id": "parte",
-      "inicio": 24.183310999999996,
-      "fim": 26.183310999999996,
+      "inicio": 25.157550999999998,
+      "fim": 27.157550999999998,
       "semLegenda": true,
       "semCinema": false
     }
@@ -154,29 +154,29 @@
     {
       "id": "rua",
       "voz": "narrador",
-      "inicio": 16.105759999999997,
-      "fim": 17.531292999999998,
+      "inicio": 17.08,
+      "fim": 18.505533,
       "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/rua.wav"
     },
     {
       "id": "escola",
       "voz": "narrador",
-      "inicio": 18.105759999999997,
-      "fim": 19.346439999999998,
+      "inicio": 19.08,
+      "fim": 20.32068,
       "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/escola.wav"
     },
     {
       "id": "armario",
       "voz": "narrador",
-      "inicio": 20.105759999999997,
-      "fim": 21.883310999999996,
+      "inicio": 21.08,
+      "fim": 22.857550999999997,
       "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/armario.wav"
     },
     {
       "id": "desconfia",
       "voz": "narrador",
-      "inicio": 22.263310999999995,
-      "fim": 23.222811999999994,
+      "inicio": 23.237550999999996,
+      "fim": 24.197051999999996,
       "arquivo": "/home/user/Hhhh/audio/invisivel/ep01/previa/desconfia.wav"
     }
   ],
@@ -384,145 +384,145 @@
       ]
     },
     {
-      "inicio": 16.105759999999997,
-      "fim": 16.614878928571425,
+      "inicio": 17.08,
+      "fim": 17.589118928571427,
       "palavras": [
         {
           "texto": "NA",
           "destaque": false,
-          "inicio": 16.105759999999997
+          "inicio": 17.08
         },
         {
           "texto": "RUA,",
           "destaque": false,
-          "inicio": 16.30940757142857
+          "inicio": 17.28364757142857
         }
       ]
     },
     {
-      "inicio": 16.614878928571425,
-      "fim": 17.681292999999997,
+      "inicio": 17.589118928571427,
+      "fim": 18.655533,
       "palavras": [
         {
           "texto": "NINGUÉM",
           "destaque": true,
-          "inicio": 16.614878928571425
+          "inicio": 17.589118928571427
         },
         {
           "texto": "TE",
           "destaque": false,
-          "inicio": 17.07308596428571
+          "inicio": 18.04732596428571
         },
         {
           "texto": "VÊ.",
           "destaque": false,
-          "inicio": 17.276733535714282
+          "inicio": 18.250973535714284
         }
       ]
     },
     {
-      "inicio": 18.105759999999997,
-      "fim": 18.68179,
+      "inicio": 19.08,
+      "fim": 19.65603,
       "palavras": [
         {
           "texto": "MAS",
           "destaque": false,
-          "inicio": 18.105759999999997
+          "inicio": 19.08
         },
         {
           "texto": "O",
           "destaque": false,
-          "inicio": 18.327309999999997
+          "inicio": 19.30155
         },
         {
           "texto": "SEU",
           "destaque": false,
-          "inicio": 18.46024
+          "inicio": 19.43448
         }
       ]
     },
     {
-      "inicio": 18.68179,
-      "fim": 19.496439999999996,
+      "inicio": 19.65603,
+      "fim": 20.470679999999998,
       "palavras": [
         {
           "texto": "MELHOR",
           "destaque": false,
-          "inicio": 18.68179
+          "inicio": 19.65603
         },
         {
           "texto": "AMIGO",
           "destaque": true,
-          "inicio": 19.03627
+          "inicio": 20.01051
         }
       ]
     },
     {
-      "inicio": 20.105759999999997,
-      "fim": 21.01992908571428,
+      "inicio": 21.08,
+      "fim": 21.994169085714283,
       "palavras": [
         {
           "texto": "VÊ",
           "destaque": false,
-          "inicio": 20.105759999999997
+          "inicio": 21.08
         },
         {
           "texto": "SEU",
           "destaque": false,
-          "inicio": 20.308908685714282
+          "inicio": 21.283148685714284
         },
         {
           "texto": "ARMÁRIO",
           "destaque": false,
-          "inicio": 20.56284454285714
+          "inicio": 21.53708454285714
         }
       ]
     },
     {
-      "inicio": 21.01992908571428,
-      "fim": 22.033310999999994,
+      "inicio": 21.994169085714283,
+      "fim": 23.007550999999996,
       "palavras": [
         {
           "texto": "ABRIR",
           "destaque": false,
-          "inicio": 21.01992908571428
+          "inicio": 21.994169085714283
         },
         {
           "texto": "SOZINHO.",
           "destaque": true,
-          "inicio": 21.375439285714283
+          "inicio": 22.349679285714284
         }
       ]
     },
     {
-      "inicio": 22.263310999999995,
-      "fim": 22.930789956521732,
+      "inicio": 23.237550999999996,
+      "fim": 23.905029956521734,
       "palavras": [
         {
           "texto": "SERÁ",
           "destaque": false,
-          "inicio": 22.263310999999995
+          "inicio": 23.237550999999996
         },
         {
           "texto": "QUE",
           "destaque": false,
-          "inicio": 22.51361560869565
+          "inicio": 23.48785560869565
         },
         {
           "texto": "ELE",
           "destaque": false,
-          "inicio": 22.72220278260869
+          "inicio": 23.696442782608692
         }
       ]
     },
     {
-      "inicio": 22.930789956521732,
-      "fim": 23.222811999999994,
+      "inicio": 23.905029956521734,
+      "fim": 24.197051999999996,
       "palavras": [
         {
           "texto": "SABE?",
           "destaque": true,
-          "inicio": 22.930789956521732
+          "inicio": 23.905029956521734
         }
       ]
     }

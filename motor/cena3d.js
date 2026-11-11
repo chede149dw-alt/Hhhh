@@ -11,10 +11,15 @@
 
   function camera(o) {
     const c = { x: 0, y: 1.0, z: -4, f: 720, cx: 540, cy: 960, nevoa: '#F6DFC2', distNevoa: 45, ...o };
+    // yaw (radianos): giro da câmera para os lados (positivo = vira para a direita)
+    c.yaw = c.yaw || 0;
+    const cy0 = Math.cos(c.yaw), sy0 = Math.sin(c.yaw);
     c.p = (X, Y, Z) => {
-      const dz = Math.max(0.05, Z - c.z);
+      const dx = X - c.x, dz0 = Z - c.z;
+      const xr = dx * cy0 - dz0 * sy0, zr = dx * sy0 + dz0 * cy0;
+      const dz = Math.max(0.05, zr);
       const s = c.f / dz;
-      return { x: c.cx + (X - c.x) * s, y: c.cy - (Y - c.y) * s, s, dz };
+      return { x: c.cx + xr * s, y: c.cy - (Y - c.y) * s, s, dz };
     };
     // quanto da névoa entra numa profundidade (0 perto ... 1 longe)
     c.fator = (Z) => Math.min(0.85, Math.max(0, 1 - Math.exp(-Math.max(0, Z - c.z) / c.distNevoa)));
@@ -94,5 +99,77 @@
     ctx.restore();
   }
 
-  window.Cena3D = { camera, caminho, face, caixa, sombraChao, personagem, arvore, mistura };
+  // ---------- iluminação por face (referência 2: volume com degradê, contraluz da janela) ----------
+  // luz: { pos: [x,y,z] da fonte, cor: '#FFE2AA', forca: 0..1.5, alcance (m), ambiente: '#5C4E86', amb: 0..1 }
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const norm = (a) => { const l = Math.hypot(...a) || 1; return a.map((v) => v / l); };
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  function brilho(luz, P, n) {
+    const L = sub(luz.pos, P), d = Math.hypot(...L);
+    const lam = Math.max(0, dot(n, norm(L)));
+    const at = 1 / (1 + Math.pow(d / (luz.alcance || 4), 2));
+    return Math.min(1, (luz.amb === undefined ? 0.28 : luz.amb) + (luz.forca === undefined ? 1 : luz.forca) * lam * at);
+  }
+  function corPorBrilho(cor, b, luz) {
+    const escuro = Estilo.multiply(cor, luz.ambiente || '#5C4E86');
+    const claro = Estilo.screen(cor, luz.cor || '#FFE2AA', 0.55);
+    return b < 0.5 ? mistura(escuro, cor, b * 2) : mistura(cor, claro, (b - 0.5) * 2);
+  }
+  function faceLuz(ctx, cam, pts, cor, luz, o = {}) {
+    if (cor[0] !== '#') cor = Estilo.tom(cor).base;
+    let n = norm(cross(sub(pts[1], pts[0]), sub(pts[2], pts[0])));
+    const centro = pts.reduce((a, q) => [a[0] + q[0] / pts.length, a[1] + q[1] / pts.length, a[2] + q[2] / pts.length], [0, 0, 0]);
+    if (dot(n, sub([cam.x, cam.y, cam.z], centro)) < 0) n = n.map((v) => -v); // normal virada para a câmera
+    const bs = pts.map((P) => brilho(luz, P, n));
+    let iMax = 0, iMin = 0; bs.forEach((b, i) => { if (b > bs[iMax]) iMax = i; if (b < bs[iMin]) iMin = i; });
+    const a = cam.p(...pts[iMax]), b = cam.p(...pts[iMin]);
+    const path = caminho(cam, pts);
+    const zm = centro[2];
+    const g = ctx.createLinearGradient(a.x, a.y, b.x === a.x && b.y === a.y ? a.x + 1 : b.x, b.y);
+    g.addColorStop(0, cam.tom(corPorBrilho(cor, bs[iMax], luz), zm));
+    g.addColorStop(1, cam.tom(corPorBrilho(cor, bs[iMin], luz), zm));
+    ctx.fillStyle = g; ctx.fill(path);
+    const lw = o.linha === undefined ? cam.linha(zm) * 0.8 : o.linha;
+    if (lw > 0 && o.contorno !== false) { ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = cam.tom(Estilo.base.tinta, zm * 0.7); ctx.stroke(path); }
+    return path;
+  }
+  // caixa com luz por face e cantos levemente realçados (aresta clara no lado da luz)
+  function caixaLuz(ctx, cam, x0, x1, y0, y1, z0, z1, cor, luz, o = {}) {
+    const fs = [];
+    if (cam.y > y1) fs.push([[x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]]);
+    if (cam.y < y0) fs.push([[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]]);
+    const cx = cam.p(0, 0, 0) && cam.x;
+    if (cx > x1) fs.push([[x1, y0, z0], [x1, y0, z1], [x1, y1, z1], [x1, y1, z0]]);
+    if (cx < x0) fs.push([[x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]]);
+    if (cam.z < z0) fs.push([[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]]);
+    if (cam.z > z1) fs.push([[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]]);
+    for (const f of fs) faceLuz(ctx, cam, f, cor, luz, o);
+  }
+  // sombra de contato (oclusão) no chão em volta da base de um objeto
+  function sombraContato(ctx, cam, x0, x1, z0, z1, forca = 0.45) {
+    const m = 0.18;
+    window.Cinema.desfocado(ctx, 14, (g) => {
+      g.fillStyle = `rgba(30,20,45,${forca})`;
+      g.fill(caminho(cam, [[x0 - m * 0.3, 0.001, z0 - m * 0.3], [x1 + m, 0.001, z0 - m * 0.3], [x1 + m, 0.001, z1 + m], [x0 - m * 0.3, 0.001, z1 + m]]));
+    });
+  }
+  // poeira flutuando num volume (caixa) iluminado
+  function poeira(ctx, cam, vol, n, t, o = {}) {
+    const rnd = Cena.rng(o.semente || 3);
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    for (let i = 0; i < n; i++) {
+      const fx = rnd(), fy = rnd(), fz = rnd(), ph = rnd() * 6.28, sp = 0.03 + rnd() * 0.05;
+      const X = vol[0][0] + (vol[1][0] - vol[0][0]) * fx + Math.sin(t * 0.7 + ph) * 0.05;
+      const Y = vol[0][1] + (vol[1][1] - vol[0][1]) * ((fy + t * sp) % 1);
+      const Z = vol[0][2] + (vol[1][2] - vol[0][2]) * fz;
+      const q = cam.p(X, Y, Z), r = Math.max(0.8, q.s * (0.004 + rnd() * 0.006));
+      const brilho = 0.35 + 0.65 * Math.abs(Math.sin(t * 1.3 + ph));
+      ctx.fillStyle = `rgba(255,236,190,${(o.alpha || 0.7) * brilho})`;
+      ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  window.Cena3D = { camera, caminho, face, caixa, sombraChao, personagem, arvore, mistura, faceLuz, caixaLuz, sombraContato, poeira, brilho, corPorBrilho };
 })();

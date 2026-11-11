@@ -77,13 +77,57 @@
     };
   }
 
+  // luz da cena no personagem (referência 2): contraluz no lado da luz + sombra fria do outro lado.
+  // o.luz = { lado: -1 (luz vem da esquerda) | 1, cor: 'rgb(255,214,150)', forca: 0..1, sombra: 0..1 }
+  const camadas = {};
+  function camadaFixa(nome, w, h) {
+    let c = camadas[nome];
+    if (!c || c.width !== w || c.height !== h) { c = camadas[nome] = document.createElement('canvas'); c.width = w; c.height = h; }
+    const g = c.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.clearRect(0, 0, w, h);
+    return c;
+  }
+  function comLuz(ctx, luz, x, alturaPx, desenhar) {
+    const w = ctx.canvas.width, h = ctx.canvas.height;
+    const L = camadaFixa('L', w, h), gL = L.getContext('2d');
+    gL.setTransform(ctx.getTransform());
+    const rig = desenhar(gL);
+    const lado = luz.lado || -1, cor = luz.cor || 'rgb(255,214,150)';
+    // sombra fria do lado oposto à luz e calor leve do lado da luz
+    const S = camadaFixa('S', w, h), gS = S.getContext('2d');
+    gS.drawImage(L, 0, 0); gS.globalCompositeOperation = 'source-atop';
+    const larg = alturaPx * 0.45, gr = gS.createLinearGradient(x + lado * larg, 0, x - lado * larg, 0);
+    gr.addColorStop(0, 'rgba(255,210,150,0.14)'); gr.addColorStop(0.55, 'rgba(255,210,150,0)'); gr.addColorStop(1, `rgba(56,42,104,${0.42 * (luz.sombra === undefined ? 1 : luz.sombra)})`);
+    gS.fillStyle = gr; gS.fillRect(0, 0, w, h);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(S, 0, 0);
+    // contraluz: borda do lado da luz
+    const R = camadaFixa('R', w, h), gR = R.getContext('2d');
+    gR.drawImage(L, 0, 0); gR.globalCompositeOperation = 'source-in'; gR.fillStyle = cor; gR.fillRect(0, 0, w, h);
+    gR.globalCompositeOperation = 'destination-out';
+    const e = Math.max(3, alturaPx * 0.006);
+    gR.drawImage(L, -lado * e, -e * 0.4);
+    ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = luz.forca === undefined ? 0.9 : luz.forca;
+    ctx.drawImage(R, 0, 0);
+    ctx.restore();
+    return rig;
+  }
+
   // desenha um personagem (com vida) num ponto da tela; registra o rosto para a legenda desviar
   function personagem(ctx, item, x, ySola, alturaPx, o = {}) {
+    if (o.luz) { const { luz, ...resto } = o; return comLuz(ctx, luz, x, alturaPx, (g) => personagem(g, item, x, ySola, alturaPx, resto)); }
     const fab = window[item.fabrica];
     const reg = item.registroPoses ? window[item.registroPoses] : {};
     const pdef = typeof item.pose === 'string' ? reg[item.pose] : null;
     const vista = item.vista || (pdef && pdef.vista) || 'frente';
     const def = fab(item.opcoes || {}, vista);
+    // virada de cabeça (referência 4): a cabeça pode usar outra vista que o corpo
+    // item.vistaCabeca: 'frente' | 'tq' | 'perfil'; item.cabecaEsquerda: true vira para o outro lado
+    if (item.vistaCabeca && item.vistaCabeca !== vista) {
+      const defC = fab(item.opcoes || {}, item.vistaCabeca);
+      const cab = def.partes.find((q) => q.nome === 'cabeca'), cabC = defC.partes.find((q) => q.nome === 'cabeca');
+      def.partes = def.partes.map((q) => (q.nome === 'cabeca' ? { ...cab, desenhar: cabC.desenhar, espelho: item.cabecaEsquerda ? -1 : 1 } : q));
+    } else if (item.cabecaEsquerda) {
+      def.partes = def.partes.map((q) => (q.nome === 'cabeca' ? { ...q, espelho: -1 } : q));
+    }
     const rig = new Rig(def);
     let ang = pdef ? pdef.angulos : (item.pose || {});
     if (item.pose2) { const p2 = typeof item.pose2 === 'string' ? reg[item.pose2].angulos : item.pose2; ang = misturaPoses(ang, p2, item.mistura || 0); }
@@ -108,11 +152,37 @@
   }
 
   // personagem invisível (progresso 0..1) com pés em (x, ySola)
+  // durante o sumiço (referência 3): halo azul, anel de energia subindo com a borda e faíscas
   function invisivel(ctx, item, x, ySola, alturaPx, progresso, o = {}) {
     const cam = personagemCamada(item, alturaPx, o);
     const x0 = x - cam.pe[0], y0 = ySola - cam.pe[1];
+    const ativo = progresso > 0.02 && progresso < 0.98;
+    const pulso = 0.85 + 0.15 * Math.sin(TL.t * 9);
+    if (ativo && !o.focos) {
+      const cx = x, cy = ySola - alturaPx * 0.5, r = alturaPx * 0.7;
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      const a = Math.sin(progresso * Math.PI) * 0.35 * pulso;
+      g.addColorStop(0, `rgba(91,142,240,${a})`); g.addColorStop(0.6, `rgba(43,63,176,${a * 0.4})`); g.addColorStop(1, 'rgba(43,63,176,0)');
+      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); ctx.restore();
+    }
     const focos = o.focos ? o.focos.map((nome) => { const p = cam.rig.pontoMundo(nome, [0, 0.2]); return [p.x, p.y]; }) : undefined;
     Efeitos.invisibilidade(ctx, cam.canvas, x0, y0, progresso, { t: TL.t, celula: Math.max(6, Math.round(alturaPx / 110)), focos, raioFocos: o.raioFocos });
+    if (ativo && !o.focos) {
+      // anel de energia na altura da borda que está sumindo (dos pés para a cabeça)
+      const yb = ySola - alturaPx * Math.min(1, progresso * 1.1), rx = alturaPx * 0.3, ry = alturaPx * 0.06;
+      ctx.save(); ctx.globalCompositeOperation = 'screen';
+      for (const [k, al, lw] of [[1.0, 0.9, 0.012], [1.25, 0.45, 0.006]]) {
+        ctx.strokeStyle = `rgba(214,236,255,${al * pulso})`; ctx.lineWidth = Math.max(2, alturaPx * lw);
+        ctx.beginPath(); ctx.ellipse(x, yb, rx * k, ry * k, 0, TL.t * 3, TL.t * 3 + Math.PI * 1.6); ctx.stroke();
+      }
+      // faíscas em estrela girando no anel
+      ctx.fillStyle = 'rgba(255,253,242,0.95)';
+      for (let i = 0; i < 6; i++) {
+        const ang = TL.t * 4 + i * 1.05, sx = x + Math.cos(ang) * rx * 1.1, sy = yb + Math.sin(ang) * ry * 1.1, sr = alturaPx * (0.012 + 0.008 * Math.sin(TL.t * 11 + i));
+        ctx.beginPath(); for (let j = 0; j < 8; j++) { const a2 = (j * Math.PI) / 4, rr = j % 2 ? sr * 0.25 : sr; ctx.lineTo(sx + Math.cos(a2) * rr, sy + Math.sin(a2) * rr); } ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
     if (progresso < 0.6) { const c = cam.rig.pontoMundo('cabeca', [0, -0.45]); rostos.push({ x: x0 + c.x, y: y0 + c.y, r: cam.rig.escalaPx * 0.85 }); }
     return cam;
   }

@@ -306,3 +306,15 @@ Referência: `referencias/videos/ref-cenario-01.mp4` (só a linguagem de cenári
 - **Pós-processamento** (`motor/cinema.js`) em todo quadro: cor quente (soft-light), bloom leve, vinheta, granulado.
 - **Personagens continuam flat** (seções 3–6): só o cenário e a luz ganham profundidade.
 - **Legenda:** Inter 900, caixa alta, branca com contorno Tinta (20% do tamanho), palavra-chave em Mostarda; até 3 palavras; na faixa mais longe dos rostos.
+
+---
+
+## 13. Direção de cena (referências 2, 3 e 4)
+
+- **Câmera perto:** a maior parte dos planos da cintura para cima (rosto no terço de cima). Plano aberto só para situar, e curto. Usar lente mais fechada (focal 1050–1500 px) para o fundo comprimir.
+- **Câmera viva:** além do deslize lento, usar giro (yaw) com pequena passada do ponto e acomodação, e inclinação leve (até 2°) nas viradas e revelações.
+- **Reação em três tempos:** os olhos vão primeiro; a cabeça vira (troca para a vista de 3/4 ou perfil) e a expressão muda; a câmera faz um ajuste curto (empurrão ou deslize de 4–6%).
+- **Interiores:** penumbra com a luz principal entrando pela janela (degradê em cada face, sombras roxo-azuladas), feixes chapados com poeira e sombra de contato nos cantos e embaixo dos móveis. O personagem recebe contraluz quente no lado da janela.
+- **Objetos de cena:** volume com degradê (não cor única), textura simples projetada (veios, xadrez, juntas) e borda que afina com a distância.
+- **Poderes:** sempre em camadas: halo, corpo com textura ou partículas, anel ou rastro de movimento e faíscas em estrela.
+- **Cenário cheio:** cada plano tem pelo menos 3 objetos de cena além da arquitetura (ex.: carro, lixeira, arbusto, cartaz, banco).

@@ -49,3 +49,12 @@
 - Folha de teste (um quadro do meio de cada plano) antes do render completo pega quase todos os erros de enquadramento.
 - `freezedetect` do ffmpeg confirma a regra "nada parado por mais de 1 s"; `ebur128` confere o volume.
 - Contorno do personagem invisível precisa de espessura proporcional ao tamanho, senão some em fundo claro.
+
+## Referências 2, 3 e 4 (prévia v2 do ep01)
+- O Rig, os cenários, o desfoque e os objetos precisam respeitar a transformação atual do canvas (multiplicar por `ctx.getTransform()`); antes, o zoom de câmera só mexia no fundo.
+- Luz por face com degradê (normal da face + distância até a janela) dá o volume dos objetos da referência sem sair do estilo flat; ambiente baixo (0,06) para a penumbra.
+- Revelação com giro de câmera: calcular o ângulo até o alvo (atan2) antes; com yaw curto o personagem revelado fica colado na borda.
+- Virada de cabeça: trocar só a peça `cabeca` por a de outra vista (mesmo pivô do pescoço) funciona bem se a troca acontece junto com a mudança de expressão e um ajuste de câmera.
+- Lente fechada (f 1200–1500) aproxima sem distorcer a perspectiva; com f 720 e câmera perto o cenário fica deformado.
+- Copa de árvore em primeiro plano tem de ficar na borda (x ≈ −2,6 m), senão cobre metade do quadro.
+- Render da v2: 815 quadros em ~110 s (a luz por face e o contraluz custam ~30% a mais).

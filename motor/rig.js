@@ -102,7 +102,8 @@
     desenhar(ctx, x, ySola, alturaPx, o = {}) {
       const A = this.def.alturaEmH;
       const H = alturaPx / A;
-      const raiz = new DOMMatrix().translate(x, ySola).scale(o.espelhar ? -H : H, H).translate(0, -A);
+      const base = ctx.getTransform(); // respeita zoom/giro da câmera aplicados ao contexto
+      const raiz = base.multiply(new DOMMatrix().translate(x, ySola).scale(o.espelhar ? -H : H, H).translate(0, -A));
       const m = this.matrizes(raiz);
       this.ultimas = m;
       this.escalaPx = H;
@@ -110,7 +111,7 @@
 
       // sombra no chão (seção 6)
       ctx.save();
-      ctx.setTransform(new DOMMatrix().translate(x, ySola).scale(o.espelhar ? -H : H, H));
+      ctx.setTransform(base.multiply(new DOMMatrix().translate(x, ySola).scale(o.espelhar ? -H : H, H)));
       ctx.filter = `blur(${12}px)`;
       ctx.fillStyle = E().sombraChao;
       ctx.beginPath();
@@ -139,6 +140,7 @@
         for (const q of grupo) desenharPeca(q, 'contorno');
         for (const q of grupo) { desenharPeca(q, 'preenchimento'); feitos.add(q.nome); }
       }
+      ctx.setTransform(base);
     }
   }
 

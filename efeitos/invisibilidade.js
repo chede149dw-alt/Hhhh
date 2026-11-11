@@ -32,7 +32,7 @@
   window.Efeitos.invisibilidade = function (ctx, fonte, x0, y0, progresso, o = {}) {
     const t = o.t || 0, cs = o.celula || 10;
     const W = fonte.width, H = fonte.height;
-    if (progresso <= 0) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(fonte, x0, y0); ctx.restore(); return; }
+    if (progresso <= 0) { ctx.drawImage(fonte, x0, y0); return; }
     const alfa = fonte.getContext("2d", { willReadFrequently: true }).getImageData(0, 0, W, H).data;
     const cols = Math.ceil(W / cs), rows = Math.ceil(H / cs);
     const th = progresso * 1.15 - 0.05, banda = 0.07;
@@ -47,7 +47,6 @@
     const tint = tingir(fonte, COR.principal);
 
     ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
     for (let gy = 0; gy < rows; gy++) {
       for (let gx = 0; gx < cols; gx++) {
         // a célula conta se qualquer um de 5 pontos dela tiver pixel do personagem

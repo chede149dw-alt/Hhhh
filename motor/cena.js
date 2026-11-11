@@ -9,7 +9,7 @@
   const CONTORNO = { perto: 4, medio: 2.5, longe: 0 };
 
   function pincel(ctx, x, y, escala, contornoPx) {
-    const m = new DOMMatrix().translate(x, y).scale(escala);
+    const m = ctx.getTransform().multiply(new DOMMatrix().translate(x, y).scale(escala));
     ctx.setTransform(m);
     return window.criarPincel(ctx, m, (contornoPx === undefined ? CONTORNO.perto : contornoPx) / escala);
   }
@@ -27,7 +27,6 @@
       ctx.save();
       // sombra no chão
       if (obj.sombra !== false && !o.semSombra) {
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.filter = 'blur(10px)';
         ctx.fillStyle = Estilo.sombraChao;
         ctx.beginPath(); ctx.ellipse(x, yChao, (obj.largura * H) / 2 * 0.95, H * 0.1, 0, 0, Math.PI * 2); ctx.fill();

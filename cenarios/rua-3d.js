@@ -118,16 +118,43 @@
     ctx.restore();
   }
 
+  // carro estacionado (encostado no meio-fio direito)
+  function carro(ctx, cam, x, z, cor) {
+    const c = T(cor);
+    for (const zr of [z + 0.7, z + 3.3]) for (const xr of [x - 0.75, x + 0.75]) {
+      const q = cam.p(xr, 0.33, zr); ctx.fillStyle = cam.tom('#26212C', zr);
+      ctx.beginPath(); ctx.ellipse(q.x, q.y, Math.max(2, q.s * 0.12), q.s * 0.33, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    caixa(ctx, cam, x - 0.85, x + 0.85, 0.3, 1.0, z, z + 4.0, c.base);
+    caixa(ctx, cam, x - 0.75, x + 0.75, 1.0, 1.5, z + 1.1, z + 3.0, c.base);
+    face(ctx, cam, [[x - 0.7, 1.03, z + 1.12], [x + 0.7, 1.03, z + 1.12], [x + 0.62, 1.45, z + 1.3], [x - 0.62, 1.45, z + 1.3]], T('vidro').base);
+    face(ctx, cam, [[x - 0.752, 1.05, z + 1.4], [x - 0.752, 1.05, z + 2.8], [x - 0.752, 1.42, z + 2.7], [x - 0.752, 1.42, z + 1.5]], T('vidro').base);
+    for (const xs of [x - 0.6, x + 0.6]) { const q = cam.p(xs, 0.75, z - 0.01); ctx.fillStyle = cam.tom('#FFF1C8', z); ctx.beginPath(); ctx.arc(q.x, q.y, Math.max(1.5, q.s * 0.09), 0, Math.PI * 2); ctx.fill(); }
+  }
+  function lixeira(ctx, cam, x, z, cor) {
+    caixa(ctx, cam, x - 0.28, x + 0.28, 0.15, 1.15, z, z + 0.55, T(cor).base);
+    caixa(ctx, cam, x - 0.31, x + 0.31, 1.15, 1.22, z - 0.03, z + 0.58, T(cor).sombra);
+  }
+  function arbusto(ctx, cam, x, z) {
+    const q = cam.p(x, 0.15, z), s2 = q.s;
+    for (const [dx, dy, r, cor] of [[0, 0.35, 0.45, '#4F8A3A'], [-0.3, 0.25, 0.32, '#5E9E5A'], [0.3, 0.28, 0.35, '#6FAF55'], [0.05, 0.55, 0.3, '#86B46E']]) {
+      ctx.fillStyle = cam.tom(cor, z); ctx.beginPath(); ctx.arc(q.x + dx * s2, q.y - dy * s2, r * s2, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
   window.Cenarios3D.rua = {
     nevoa: '#F6DFC2',
     desenhar(ctx, cam, o = {}) {
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.save();
       ceu(ctx, cam);
       chao(ctx, cam);
       // do fundo para a frente
       const itens = [];
       for (let k = 0, z = 2; z < 110; k++, z += 11.5) for (const s of [-1, 1]) itens.push({ z, f: () => casa(ctx, cam, s, z, z + 10, k + (s > 0 ? 3 : 0)) });
       for (let z = 8; z < 100; z += 14) for (const s of [-1, 1]) itens.push({ z: z + 0.5, f: () => arvore(ctx, cam, (CALC - 0.7) * s, z + (s > 0 ? 7 : 0), 5.2 + ((z / 14) % 2) * 0.8) });
+      for (const [z, cor] of [[9, 'brasa'], [27, 'casaCeu'], [46, 'mostarda']]) itens.push({ z: z + 2, f: () => carro(ctx, cam, RUA - 1.0, z, cor) });
+      for (let z = 5; z < 70; z += 12.5) itens.push({ z, f: () => lixeira(ctx, cam, -(CALC - 0.45), z, z % 2 ? 'folhagem' : 'pedra') });
+      for (let z = 3; z < 80; z += 7.3) for (const s of [-1, 1]) itens.push({ z: z + 0.2, f: () => arbusto(ctx, cam, (CALC - 0.25) * s, z + (s > 0 ? 3 : 0)) });
       itens.filter((i) => i.z > cam.z + 1).sort((a, b) => b.z - a.z).forEach((i) => i.f());
       postes(ctx, cam);
       ctx.restore();
@@ -135,7 +162,7 @@
     // primeiro plano desfocado (copa de árvore perto da câmera, como na referência)
     frente(ctx, cam, o = {}) {
       if (o.semFrente) return;
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.save();
       arvore(ctx, cam, o.arvoreX === undefined ? -2.6 : o.arvoreX, cam.z + 1.6, 3.6, { desfoque: o.desfoque === undefined ? 10 : o.desfoque });
       ctx.restore();
     },
