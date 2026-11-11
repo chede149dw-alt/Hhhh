@@ -97,5 +97,13 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - IK: alvos agora no espaço do pai da raiz (o boneco fica num "palco" na marca do cenário).
 - `visual/cena.html?cenario=…&modo=folha` (3 enquadramentos) e `&demo=poder|andar` (vídeo).
 
+## Linguagem de câmera das referências (pedido do autor) — `cena/camera.js`
+- Novos campos do plano: `angulo` (vertical: plongée +, contra-plongée −, 89 = zenital), `rolagem` e `giroRolagem` (zenital girando),
+  `deriva` (flutuação lenta sempre ligada), `reenquadres` (ajuste pequeno na reação), `alvo: 'objeto'` (seguir a esfera),
+  `primeiroPlano` (objeto grande na frente, personagem atrás), movimentos `subir`/`descer`, tamanho `detalhe`.
+- Zenital: "cima" da tela = frente do personagem; peças do teto (`pecasTeto`) somem quando a câmera passa do teto.
+- Atuação `arremesso_terra` (eventos: forma, cheia, lançamento, impacto) + `criarImpactoTerra()` (pedras com gravidade, poeira, anel).
+- Demo: `visual/cena.html?cenario=quarto&demo=arremesso` (6 planos em 6 s) → `previas/motor3d/cenarios/quarto-arremesso.mp4`.
+
 ## Próxima etapa
 Prompt 7 — roteiro → planos → linha do tempo, com as ações caindo na palavra da narração.

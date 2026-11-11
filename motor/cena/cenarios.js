@@ -174,7 +174,7 @@ export function criarQuarto() {
   cil(0.8, 0.8, 0.014, '#E8C9A0', [0, 0.008, -0.2], { seg: 40, recebe: true, sombra: false });
   cil(0.18, 0.14, 0.32, '#D9A6A0', [-1.85, 0.16, 1.4]);
   copa(0.3, '#6E9A4E', [-1.85, 0.55, 1.4]); copa(0.22, '#5E8A45', [-1.75, 0.75, 1.32], { rot: [1, 0.3, 0] });
-  cil(0.3, 0.38, 0.22, '#F4EFE6', [0, AL - 0.11, -0.3]);
+  const lustre = cil(0.3, 0.38, 0.22, '#F4EFE6', [0, AL - 0.11, -0.3]);
   const marca = { pos: [0, 0, -0.2], giro: 0 };
   return {
     grupo, marca, nome: 'quarto',
@@ -183,6 +183,7 @@ export function criarQuarto() {
     fundo: new THREE.Color('#E9D9C4'),
     nevoa: ['#E9D9C4', 6, 14],
     pontos: { janela: [-X, 1.55, zj], cama: [1.35, 0.6, -1.35], vaso: [-1.85, 0.55, 1.4] },
+    teto: AL, pecasTeto: [lustre],                 // somem quando a câmera passa do teto (plano zenital)
   };
 }
 

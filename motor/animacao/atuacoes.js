@@ -190,7 +190,30 @@ const PODER_TERRA = () => {
   ];
 };
 
+// arremesso da terra: forma a esfera no peito, segura, recua e arremessa para a frente (a esfera sai em lancamento)
+const ARREMESSO_TERRA = () => {
+  const base = { peEAlvo: [0.17, 0, 0.1], peDAlvo: [-0.16, 0, -0.12], ikPes: 1, estica: 1 };
+  const P = PAUSAS.poder_terra.juntas;
+  return [
+    { t: 0, nome: 'parado', pose: repousoEm() },
+    { t: 0.5, nome: 'base', pose: { ...base, altura: -0.08, juntas: { ...R, coluna: [8, 0, 0], cabeca: [6, 0, 0], ombro_e: [-15, 0, 25], ombro_d: [-15, 0, -25] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'determinado' } },
+    { t: 1.4, nome: 'concentra', pose: { ...base, altura: -0.15, juntas: { ...R, coluna: [16, 0, 0], cabeca: [14, 0, 0], ombro_e: [-40, 0, 18], cotovelo_e: [-55, 0, 0], ombro_d: [-40, 0, -18], cotovelo_d: [-55, 0, 0] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'determinado' } },
+    { t: 2.0, nome: 'ergue', curva: 'estalo', so: ['altura'], pose: { ...base, altura: -0.06, juntas: { ...P, cabeca: [-4, 0, 0] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'raiva' } },
+    { t: 2.7, nome: 'segura', pose: { ...base, altura: -0.08, juntas: { ...P }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'determinado' } },
+    // recua: tronco gira e os braços vão para trás (antecipação do arremesso)
+    { t: 3.05, nome: 'recua', pose: { ...base, altura: -0.12, juntas: { ...R, coluna: [-6, 18, 0], peito: [-6, 10, 0], cabeca: [0, -14, 0], ombro_e: [-30, 0, 30], cotovelo_e: [-70, 0, 0], ombro_d: [-20, 0, -40], cotovelo_d: [-80, 0, 0] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'raiva' } },
+    // arremessa: braços disparam para a frente (lançamento)
+    { t: 3.25, nome: 'arremessa', curva: 'estalo', pose: { ...base, altura: -0.1, estica: 1.02, juntas: { ...R, coluna: [18, -10, 0], peito: [8, -8, 0], cabeca: [-10, 6, 0], ombro_e: [-88, 0, 8], cotovelo_e: [-5, 0, 0], ombro_d: [-88, 0, -8], cotovelo_d: [-5, 0, 0] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'raiva' } },
+    { t: 3.7, nome: 'acompanha', pose: { ...base, altura: -0.14, juntas: { ...R, coluna: [24, -6, 0], peito: [8, -4, 0], cabeca: [-14, 4, 0], ombro_e: [-70, 0, 14], cotovelo_e: [-15, 0, 0], ombro_d: [-70, 0, -14], cotovelo_d: [-15, 0, 0] }, maos: { e: 'aberta', d: 'aberta' }, rosto: 'determinado' } },
+    { t: 4.6, nome: 'olha o estrago', pose: { ...base, altura: -0.06, juntas: { ...R, coluna: [6, 0, 0], cabeca: [10, 0, 0], ombro_e: [-10, 0, 14], ombro_d: [-10, 0, -14] }, maos: { e: 'relaxada', d: 'relaxada' }, rosto: 'espanto' } },
+    { t: 5.6, nome: 'parado', pose: { ...repousoEm(base), rosto: 'neutro' } },
+  ];
+};
+
 export const ATUACOES = {
+  arremesso_terra: { descricao: 'Lucas forma a esfera de terra no peito, segura e arremessa no chão à frente', chaves: ARREMESSO_TERRA, fim: 'repouso',
+    impacto: 3.25, eventos: { forma: 1.3, cheia: 2.0, lancamento: 3.25, impacto: 3.75 },
+    sons: [{ t: 1.3, som: 'terra_sobe' }, { t: 3.25, som: 'arremesso' }, { t: 3.75, som: 'impacto_terra' }] },
   andar: { descricao: 'Anda para a frente (passos configuráveis) e para com os pés juntos', chaves: chavesAndar, fim: 'repouso',
     impacto: null, sons: (o = {}) => { const n = o.passos || 4, T = o.tempo || 0.52; return [...Array(n + 1).keys()].map((i) => ({ t: 0.25 + (i + 1) * T, som: 'passo' })); } },
   acenar: { descricao: 'Nota alguém, sorri e acena com a mão direita', chaves: ACENAR, fim: 'repouso', impacto: 1.0, sons: [] },
@@ -210,5 +233,5 @@ export function montarAtuacao(nome, o = {}) {
   const a = ATUACOES[nome];
   if (!a) throw new Error('atuação desconhecida: ' + nome);
   const val = (v) => (typeof v === 'function' ? v(o) : v);
-  return { nome, descricao: a.descricao, chaves: a.chaves(o), voos: val(a.voos) || [], impacto: a.impacto, sons: val(a.sons) || [], fim: a.fim, cenario: a.cenario || null };
+  return { nome, descricao: a.descricao, chaves: a.chaves(o), voos: val(a.voos) || [], impacto: a.impacto, eventos: a.eventos || {}, sons: val(a.sons) || [], fim: a.fim, cenario: a.cenario || null };
 }

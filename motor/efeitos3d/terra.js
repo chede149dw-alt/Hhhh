@@ -91,3 +91,41 @@ export function criarRachaduraChao() {
   }
   return { grupo, atualizar };
 }
+
+// impacto da esfera no chão: pedras voando com gravidade, nuvem de poeira que abre e baixa, anel de choque
+export function criarImpactoTerra() {
+  const grupo = new THREE.Group(); grupo.visible = false;
+  const pedras = [], po = [];
+  const matP = materialToon('#FFFFFF', { mapa: Texturas.pedra(), gMin: 0.66 }), matT = materialToon('#FFFFFF', { mapa: Texturas.terra(false), gMin: 0.66 });
+  for (let i = 0; i < 18; i++) {
+    const m = new THREE.Mesh(new THREE.DodecahedronGeometry(1, 0), i % 3 ? matT : matP);
+    m.userData = { a: (i / 18) * Math.PI * 2 + ruido(i) * 0.4, v: 1.2 + ruido(i + 5) * 1.6, vy: 1.6 + ruido(i + 9) * 2.2, s: 0.025 + ruido(i + 13) * 0.05 };
+    m.castShadow = true; grupo.add(m); pedras.push(m);
+  }
+  const matPo = materialToon('#C9A27A', { gMin: 0.85 });
+  for (let i = 0; i < 14; i++) {
+    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 0), matPo);
+    m.userData = { a: (i / 14) * Math.PI * 2, s: 0.06 + ruido(i + 30) * 0.05 };
+    grupo.add(m); po.push(m);
+  }
+  const anel = new THREE.Mesh(new THREE.RingGeometry(0.8, 1, 48), new THREE.MeshBasicMaterial({ color: '#FFE2B0', transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+  anel.rotation.x = -Math.PI / 2; grupo.add(anel);
+  function atualizar(dt, [x, y, z]) {
+    grupo.visible = dt >= 0 && dt < 2.5;
+    if (!grupo.visible) return;
+    pedras.forEach((m) => {
+      const { a, v, vy, s } = m.userData, h = Math.max(0, y + vy * dt - 4.9 * dt * dt);
+      const tChao = (vy + Math.sqrt(vy * vy + 19.6 * y)) / 9.8, td = Math.min(dt, tChao);
+      m.position.set(x + Math.cos(a) * v * td, h, z + Math.sin(a) * v * td);
+      m.scale.setScalar(s); m.rotation.set(dt * v * 4, dt * 3 + a, 0);
+    });
+    po.forEach((m) => {
+      const { a, s } = m.userData, r = 0.15 + (1 - Math.exp(-dt * 3)) * 0.9;
+      m.position.set(x + Math.cos(a) * r, y + 0.08 + (1 - Math.exp(-dt * 2)) * 0.25, z + Math.sin(a) * r);
+      m.scale.setScalar(Math.max(1e-4, s * (1 + dt * 1.5) * Math.max(0, 1 - dt / 2.2))); m.rotation.set(a, dt, 0);
+    });
+    const k = Math.min(1, dt / 0.45);
+    anel.position.set(x, 0.02, z); anel.scale.setScalar(0.1 + k * 1.6); anel.material.opacity = 0.8 * (1 - k); anel.visible = k < 1;
+  }
+  return { grupo, atualizar };
+}
