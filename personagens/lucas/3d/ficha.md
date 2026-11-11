@@ -1,9 +1,10 @@
-# Lucas 3D — proposta (aguardando aprovação)
+# Lucas 3D — ficha oficial (aprovada)
 
 > Versão 3D do Lucas para o motor novo. **Mesmo design da ficha oficial 2D** (`../ficha.md`): mesmas cores,
 > moletom marinho com faixa turquesa, capuz enrolado, cordões linho, calça grafite larga com barra embolada,
 > tênis linho de cano alto com detalhes turquesa, pele morena, cabelo noite bagunçado em mechas.
-> Só vira regra depois de aprovada; até lá, a ficha 2D continua valendo.
+> **Aprovada pelo autor.** No motor 3D, o Lucas é sempre `criarBoneco(ficha.json)`, sem mudar a aparência.
+> A ficha 2D continua valendo para o motor 2D.
 
 ![Ficha 3D](ficha.png)
 

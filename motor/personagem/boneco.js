@@ -298,11 +298,18 @@ export function criarBoneco(ficha) {
     const mm = p.maos || REPOUSO.maos;
     mao('e', mm.e); mao('d', mm.d);
     rosto(p.rosto || 'neutro');
+    // piscar: 0 = olho aberto, 1 = fechado (somado por cima da expressão)
+    if (p.piscar) for (const o of olhos) o.scale.y *= Math.max(0.08, 1 - p.piscar);
   }
   posar(REPOUSO);
   // altura da ficha = do chão ao topo do cabelo, em repouso: mede o boneco montado e ajusta a escala
   raiz.updateMatrixWorld(true);
   const medida = new THREE.Box3().setFromObject(raiz).max.y;
   raiz.scale.setScalar((ficha.altura || 1.6) / medida);
-  return { raiz, juntas, posar, rosto, mao, ficha };
+  // medidas usadas pelo IK (em unidades locais do boneco, antes da escala da raiz)
+  raiz.updateMatrixWorld(true);
+  const pe = juntas.pe_e, caixaPe = new THREE.Box3().setFromObject(pe);
+  const sola = (pe.getWorldPosition(new THREE.Vector3()).y - caixaPe.min.y) / raiz.scale.x;
+  const base = { quadril: juntas.quadril.position.clone() };
+  return { raiz, corpo, juntas, posar, rosto, mao, ficha, sola, base };
 }

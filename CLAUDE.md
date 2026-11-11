@@ -20,6 +20,7 @@ Sempre salve cada arquivo na pasta certa:
   Desenhar sempre com `personagens/lucas/lucas.js` (`criarLucas(opcoes, vista)`), sem alterar a aparência.
   Usar só as vistas, expressões, poses e o poder definidos na ficha: **controlar a terra** (`efeitos/poder-terra.js`).
   Mudança de design só com pedido e aprovação explícitos; depois, regerar a ficha.
+  No motor 3D: `personagens/lucas/3d/ficha.json` + `criarBoneco` (`motor/personagem/boneco.js`), ficha 3D aprovada em `personagens/lucas/3d/ficha.png`.
 - **Mãe** e **Rafael** (melhor amigo do Lucas): propostas em `personagens/mae/` e `personagens/rafael/`, montadas com `motor/personagem-base.js`. Ainda não são obrigatórias; viram regra quando aprovadas.
 
 # Séries

@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{ "imports": { "three": "./lib/three/three.module.js" } }</script>
+</head>
+<body>
+<script type="module">
+  // Mostra uma atuação do Lucas 3D (prompt 4).
+  //   acao.html?acao=ataque_salto            → vídeo: window.quadro(t), 1080×1920, estilo chapado com pós
+  //   acao.html?acao=ataque_salto&modo=folha → folha de 18 quadros: window.capturar()
+  import * as THREE from 'three';
+  import { criarLuzes, criarChao, criarChaoSombra, criarRenderer, criarPos } from './estilo.js';
+  import { criarBoneco } from '../personagem/boneco.js';
+  import { criarAnimacao } from '../animacao/animador.js';
+  import { aplicar } from '../animacao/aplicar.js';
+  import { ATUACOES } from '../animacao/atuacoes.js';
+
+  const q = new URLSearchParams(location.search);
+  const nomeAcao = q.get('acao') || 'ataque_salto', folhaModo = q.get('modo') === 'folha';
+  const ficha = await (await fetch('/' + (q.get('ficha') || 'personagens/lucas/3d/ficha.json'))).json();
+  const anim = criarAnimacao(ATUACOES[nomeAcao]);
+  window.duracao = anim.duracao;
+
+  const cena = new THREE.Scene();
+  const boneco = criarBoneco(ficha); cena.add(boneco.raiz);
+  const camera = new THREE.PerspectiveCamera(30, 9 / 16, 0.1, 100);
+
+  if (!folhaModo) {
+    const W = 1080, H = 1920;
+    const renderer = criarRenderer(W, H);
+    cena.background = new THREE.Color('#E6D8C6');
+    cena.fog = new THREE.Fog('#E6D8C6', 7, 22);
+    criarLuzes(cena, { direcao: [-3, 6, 4], raioSombra: 3 });
+    criarChao(cena, '#CBBFB0');
+    // marcas no chão para ver o pé plantado
+    for (let i = -6; i <= 6; i++) {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(0.02, 12), new THREE.MeshBasicMaterial({ color: '#BDB0A0' }));
+      m.rotation.x = -Math.PI / 2; m.position.set(i * 0.5, 0.001, 0); cena.add(m);
+    }
+    const pos = criarPos(renderer, W, H);
+    window.quadro = (t) => {
+      aplicar(boneco, anim.final(t));
+      camera.position.set(4.0, 1.5, 3.7); camera.lookAt(0, 1.0, 0.22);
+      pos.render(cena, camera, { t, foco: camera.position.distanceTo(new THREE.Vector3(0, 1.0, 0.22)), faixa: 1.5, desfoque: 8, grao: 0.025, vinheta: 0.3 });
+    };
+  } else {
+    const LW = 2400, COLS = 6, LIN = 3, M = 50, G = 16, CW = (LW - 2 * M - (COLS - 1) * G) / COLS, CH = Math.round(CW * 1.35);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    renderer.setPixelRatio(1); renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.NoToneMapping;
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.setSize(CW, CH);
+    cena.background = new THREE.Color('#FAF9F7');
+    criarLuzes(cena, { direcao: [-3, 6, 4], raioSombra: 3 });
+    criarChaoSombra(cena, 0.18);
+    const folha = document.createElement('canvas'); document.body.appendChild(folha);
+    const ctx = folha.getContext('2d');
+    window.quadro = () => {
+      folha.width = LW; folha.height = 190 + LIN * (CH + 70 + G) + 40;
+      ctx.fillStyle = '#F3F1EE'; ctx.fillRect(0, 0, folha.width, folha.height);
+      ctx.fillStyle = '#26232C'; ctx.font = '800 72px sans-serif'; ctx.fillText(`${nomeAcao} — 18 quadros`, M, 100);
+      ctx.font = '500 34px sans-serif';
+      ctx.fillText(`${anim.chaves.length} poses-chave: ${anim.chaves.map((c) => c.nome).join(' · ')}`, M, 155);
+      camera.aspect = CW / CH; camera.fov = 30; camera.updateProjectionMatrix();
+      camera.position.set(4.6, 1.7, 4.2); camera.lookAt(0, 1.0, 0.22);
+      for (let i = 0; i < 18; i++) {
+        const t = anim.inicio + (anim.duracao * i) / 17;
+        aplicar(boneco, anim.final(t));
+        renderer.render(cena, camera);
+        const x = M + (i % COLS) * (CW + G), y = 190 + Math.floor(i / COLS) * (CH + 70 + G);
+        ctx.fillStyle = '#FAF9F7'; ctx.beginPath(); ctx.roundRect(x, y, CW, CH + 70, 16); ctx.fill();
+        ctx.drawImage(renderer.domElement, x, y);
+        // nome da chave mais próxima
+        const perto = anim.chaves.reduce((a, b) => (Math.abs(b.t - t) < Math.abs(a.t - t) ? b : a));
+        ctx.fillStyle = '#26232C'; ctx.font = '600 28px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(`${t.toFixed(2)} s${Math.abs(perto.t - t) < 0.07 ? ' · ' + perto.nome : ''}`, x + CW / 2, y + CH + 46);
+        ctx.textAlign = 'left';
+      }
+    };
+    window.capturar = () => folha.toDataURL('image/png').split(',')[1];
+  }
+  window.pronto = true;
+</script>
+</body>
+</html>

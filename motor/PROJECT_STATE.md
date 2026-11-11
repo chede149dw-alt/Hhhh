@@ -18,7 +18,11 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 1 — junção | 120 PNG → MP4 60 fps H.264 crf 20 | ok (`previas/motor3d/teste-render.mp4`) |
 | 2 — calibração | face iluminada de 4 cubos/esfera = cor do guia (pós desligado, tolerância 4) | **passou**: marinho, turquesa e mostarda exatos; brasa −3 (faixa de volume) |
 | 3 — boneco | juntas completas; sola no chão (±1 cm); altura = ficha (±5 cm); altura 1,8 escala tudo; misturar nas pontas e no meio; sentar abaixa o quadril | **passou** (`testes/boneco.test.js`) |
-| 3 — ficha | 4 vistas, 4 bocas, 4 poses (acenar, apontar, sentar, assustado) | `personagens/lucas/3d/ficha.png` — **aguardando aprovação** |
+| 3 — ficha | 4 vistas, 4 bocas, 4 poses (acenar, apontar, sentar, assustado) | `personagens/lucas/3d/ficha.png` — **aprovada** |
+| 4 — interpolação | em(t) nos instantes das chaves = pose da chave (1e-12); curvas vão de 0 a 1 | **passou** |
+| 4 — IK | sola e pulso no alvo, 3 casos (com giro, agachado, mãos) | **passou**, erro < 1e-6 m |
+| 4 — pé plantado | 60 quadros de corpo descendo, girando e deslocando | **passou**, desliza < 1e-6 m |
+| 4 — ataque_salto | 9 poses-chave, folha de 18 quadros + vídeo 2,3 s 60 fps (138 quadros em 59,5 s, nuvem) | `previas/motor3d/ataque-salto-folha.png`, `ataque-salto.mp4` |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -38,6 +42,15 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - Cabelo: calota inclinada para trás + mechas em gota (LatheGeometry) apontando para fora; bolinhas pareciam "black power" e cones puros pareciam anime.
 - Pastas `visual/` e `personagem/` têm `package.json` com `"type": "module"` para o Node importar os módulos nos testes.
 
+## Animador (prompt 4) — `animacao/`
+- `animador.js` (puro, sem three): chaves {t, pose, curva}; curvas suave, linear, entra, sai, estalo, antecipa.
+  Campo que falta numa chave vale o neutro (corpo 0, estica 1…); só alvos de IK, mãos e rosto seguram o valor.
+  (Bug achado pelo teste do pé plantado: segurar o `corpo` da outra chave girava o corpo antes da hora.)
+- `aplicar.js`: IK analítico de 2 ossos (pés: alvo = ponto da sola; mãos: alvo = pulso), pesos `ikPes`/`ikMaos` 0–1
+  misturam IK e ângulos sem pulo. Amassa-e-estica deforma o corpo inteiro: IK exato só com estica = 1.
+- Arrasto: pescoço, cabeça, cotovelos e mãos usam a pose de 0,03–0,08 s antes. Vida: respiração (3,6 s) e piscadas fixas por tempo.
+- `atuacoes.js`: `ataque_salto` (pronto, antecipação, impulso, no ar, golpe, aterrissagem, assentamento, pronto, segura).
+- `visual/acao.html?acao=...` (vídeo) e `&modo=folha` (18 quadros).
+
 ## Próxima etapa
-Depois da aprovação da ficha 3D: prompt 4 — animador por poses-chave (curvas, IK de pés e mãos, arrasto, vida)
-com testes e a atuação "ataque_salto" (folha de 18 quadros).
+Prompt 5 — biblioteca de atuações (ATUACOES) e prompt 6 — cenário e câmera por tamanho de plano.
