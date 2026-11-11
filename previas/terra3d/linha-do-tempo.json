@@ -1,0 +1,3309 @@
+{
+  "titulo": "E se você acordasse controlando a terra? — Parte 1 (3D)",
+  "duracao": 70.169,
+  "palavras": [
+    {
+      "i": 0,
+      "texto": "E",
+      "inicio": 0.347,
+      "fim": 0.465,
+      "frase": 0
+    },
+    {
+      "i": 1,
+      "texto": "se",
+      "inicio": 0.477,
+      "fim": 0.583,
+      "frase": 0
+    },
+    {
+      "i": 2,
+      "texto": "você",
+      "inicio": 0.595,
+      "fim": 0.854,
+      "frase": 0
+    },
+    {
+      "i": 3,
+      "texto": "acordasse",
+      "inicio": 0.866,
+      "fim": 1.467,
+      "frase": 0
+    },
+    {
+      "i": 4,
+      "texto": "controlando",
+      "inicio": 1.479,
+      "fim": 1.998,
+      "frase": 0
+    },
+    {
+      "i": 5,
+      "texto": "a",
+      "inicio": 2.01,
+      "fim": 2.069,
+      "frase": 0
+    },
+    {
+      "i": 6,
+      "texto": "terra?",
+      "inicio": 2.081,
+      "fim": 2.47,
+      "frase": 0
+    },
+    {
+      "i": 7,
+      "texto": "Seis",
+      "inicio": 2.937,
+      "fim": 3.255,
+      "frase": 1
+    },
+    {
+      "i": 8,
+      "texto": "e",
+      "inicio": 3.267,
+      "fim": 3.373,
+      "frase": 1
+    },
+    {
+      "i": 9,
+      "texto": "meia.",
+      "inicio": 3.385,
+      "fim": 3.751,
+      "frase": 1
+    },
+    {
+      "i": 10,
+      "texto": "O",
+      "inicio": 4.562,
+      "fim": 4.668,
+      "frase": 1
+    },
+    {
+      "i": 11,
+      "texto": "despertador",
+      "inicio": 4.679,
+      "fim": 5.352,
+      "frase": 1
+    },
+    {
+      "i": 12,
+      "texto": "toca.",
+      "inicio": 5.363,
+      "fim": 5.729,
+      "frase": 1
+    },
+    {
+      "i": 13,
+      "texto": "Você",
+      "inicio": 6.196,
+      "fim": 6.526,
+      "frase": 2
+    },
+    {
+      "i": 14,
+      "texto": "dá",
+      "inicio": 6.538,
+      "fim": 6.644,
+      "frase": 2
+    },
+    {
+      "i": 15,
+      "texto": "um",
+      "inicio": 6.656,
+      "fim": 6.786,
+      "frase": 2
+    },
+    {
+      "i": 16,
+      "texto": "tapa",
+      "inicio": 6.798,
+      "fim": 7.092,
+      "frase": 2
+    },
+    {
+      "i": 17,
+      "texto": "nele,",
+      "inicio": 7.104,
+      "fim": 7.47,
+      "frase": 2
+    },
+    {
+      "i": 18,
+      "texto": "e",
+      "inicio": 7.797,
+      "fim": 7.915,
+      "frase": 3
+    },
+    {
+      "i": 19,
+      "texto": "o",
+      "inicio": 7.927,
+      "fim": 7.997,
+      "frase": 3
+    },
+    {
+      "i": 20,
+      "texto": "quarto",
+      "inicio": 8.009,
+      "fim": 8.351,
+      "frase": 3
+    },
+    {
+      "i": 21,
+      "texto": "inteiro",
+      "inicio": 8.363,
+      "fim": 8.776,
+      "frase": 3
+    },
+    {
+      "i": 22,
+      "texto": "treme.",
+      "inicio": 8.788,
+      "fim": 9.188,
+      "frase": 3
+    },
+    {
+      "i": 23,
+      "texto": "Você",
+      "inicio": 9.656,
+      "fim": 10.033,
+      "frase": 4
+    },
+    {
+      "i": 24,
+      "texto": "olha",
+      "inicio": 10.045,
+      "fim": 10.363,
+      "frase": 4
+    },
+    {
+      "i": 25,
+      "texto": "pras",
+      "inicio": 10.375,
+      "fim": 10.623,
+      "frase": 4
+    },
+    {
+      "i": 26,
+      "texto": "mãos.",
+      "inicio": 10.634,
+      "fim": 11.059,
+      "frase": 4
+    },
+    {
+      "i": 27,
+      "texto": "Foi",
+      "inicio": 11.87,
+      "fim": 12.094,
+      "frase": 4
+    },
+    {
+      "i": 28,
+      "texto": "você?",
+      "inicio": 12.106,
+      "fim": 12.507,
+      "frase": 4
+    },
+    {
+      "i": 29,
+      "texto": "A",
+      "inicio": 12.974,
+      "fim": 13.103,
+      "frase": 5
+    },
+    {
+      "i": 30,
+      "texto": "terra",
+      "inicio": 13.115,
+      "fim": 13.41,
+      "frase": 5
+    },
+    {
+      "i": 31,
+      "texto": "do",
+      "inicio": 13.422,
+      "fim": 13.516,
+      "frase": 5
+    },
+    {
+      "i": 32,
+      "texto": "vaso",
+      "inicio": 13.528,
+      "fim": 13.858,
+      "frase": 5
+    },
+    {
+      "i": 33,
+      "texto": "começa",
+      "inicio": 13.87,
+      "fim": 14.271,
+      "frase": 5
+    },
+    {
+      "i": 34,
+      "texto": "a",
+      "inicio": 14.283,
+      "fim": 14.318,
+      "frase": 5
+    },
+    {
+      "i": 35,
+      "texto": "flutuar.",
+      "inicio": 14.33,
+      "fim": 14.813,
+      "frase": 5
+    },
+    {
+      "i": 36,
+      "texto": "Você",
+      "inicio": 15.281,
+      "fim": 15.599,
+      "frase": 6
+    },
+    {
+      "i": 37,
+      "texto": "mexe",
+      "inicio": 15.611,
+      "fim": 15.941,
+      "frase": 6
+    },
+    {
+      "i": 38,
+      "texto": "os",
+      "inicio": 15.953,
+      "fim": 16.023,
+      "frase": 6
+    },
+    {
+      "i": 39,
+      "texto": "dedos,",
+      "inicio": 16.035,
+      "fim": 16.413,
+      "frase": 6
+    },
+    {
+      "i": 40,
+      "texto": "e",
+      "inicio": 16.672,
+      "fim": 16.731,
+      "frase": 6
+    },
+    {
+      "i": 41,
+      "texto": "ela",
+      "inicio": 16.743,
+      "fim": 16.896,
+      "frase": 6
+    },
+    {
+      "i": 42,
+      "texto": "obedece.",
+      "inicio": 16.908,
+      "fim": 17.462,
+      "frase": 6
+    },
+    {
+      "i": 43,
+      "texto": "Você",
+      "inicio": 17.929,
+      "fim": 18.224,
+      "frase": 7
+    },
+    {
+      "i": 44,
+      "texto": "faz",
+      "inicio": 18.236,
+      "fim": 18.389,
+      "frase": 7
+    },
+    {
+      "i": 45,
+      "texto": "a",
+      "inicio": 18.401,
+      "fim": 18.531,
+      "frase": 7
+    },
+    {
+      "i": 46,
+      "texto": "terra",
+      "inicio": 18.543,
+      "fim": 18.802,
+      "frase": 7
+    },
+    {
+      "i": 47,
+      "texto": "dar",
+      "inicio": 18.814,
+      "fim": 18.967,
+      "frase": 7
+    },
+    {
+      "i": 48,
+      "texto": "uma",
+      "inicio": 18.979,
+      "fim": 19.132,
+      "frase": 7
+    },
+    {
+      "i": 49,
+      "texto": "volta",
+      "inicio": 19.144,
+      "fim": 19.462,
+      "frase": 7
+    },
+    {
+      "i": 50,
+      "texto": "pelo",
+      "inicio": 19.474,
+      "fim": 19.663,
+      "frase": 7
+    },
+    {
+      "i": 51,
+      "texto": "quarto.",
+      "inicio": 19.675,
+      "fim": 20.087,
+      "frase": 7
+    },
+    {
+      "i": 52,
+      "texto": "Quanto",
+      "inicio": 20.555,
+      "fim": 20.861,
+      "frase": 8
+    },
+    {
+      "i": 53,
+      "texto": "mais",
+      "inicio": 20.873,
+      "fim": 21.073,
+      "frase": 8
+    },
+    {
+      "i": 54,
+      "texto": "você",
+      "inicio": 21.085,
+      "fim": 21.356,
+      "frase": 8
+    },
+    {
+      "i": 55,
+      "texto": "sorri,",
+      "inicio": 21.368,
+      "fim": 21.734,
+      "frase": 8
+    },
+    {
+      "i": 56,
+      "texto": "maior",
+      "inicio": 22.017,
+      "fim": 22.335,
+      "frase": 8
+    },
+    {
+      "i": 57,
+      "texto": "ela",
+      "inicio": 22.347,
+      "fim": 22.512,
+      "frase": 8
+    },
+    {
+      "i": 58,
+      "texto": "fica.",
+      "inicio": 22.524,
+      "fim": 22.866,
+      "frase": 8
+    },
+    {
+      "i": 59,
+      "texto": "Lucas!",
+      "inicio": 23.334,
+      "fim": 23.887,
+      "frase": 9
+    },
+    {
+      "i": 60,
+      "texto": "Desce",
+      "inicio": 24.137,
+      "fim": 24.474,
+      "frase": 9
+    },
+    {
+      "i": 61,
+      "texto": "pro",
+      "inicio": 24.486,
+      "fim": 24.63,
+      "frase": 9
+    },
+    {
+      "i": 62,
+      "texto": "café!",
+      "inicio": 24.642,
+      "fim": 25.087,
+      "frase": 9
+    },
+    {
+      "i": 63,
+      "texto": "O",
+      "inicio": 25.554,
+      "fim": 25.672,
+      "frase": 10
+    },
+    {
+      "i": 64,
+      "texto": "susto",
+      "inicio": 25.684,
+      "fim": 26.108,
+      "frase": 10
+    },
+    {
+      "i": 65,
+      "texto": "faz",
+      "inicio": 26.12,
+      "fim": 26.285,
+      "frase": 10
+    },
+    {
+      "i": 66,
+      "texto": "a",
+      "inicio": 26.297,
+      "fim": 26.438,
+      "frase": 10
+    },
+    {
+      "i": 67,
+      "texto": "terra",
+      "inicio": 26.45,
+      "fim": 26.721,
+      "frase": 10
+    },
+    {
+      "i": 68,
+      "texto": "despencar",
+      "inicio": 26.733,
+      "fim": 27.299,
+      "frase": 10
+    },
+    {
+      "i": 69,
+      "texto": "no",
+      "inicio": 27.311,
+      "fim": 27.405,
+      "frase": 10
+    },
+    {
+      "i": 70,
+      "texto": "tapete.",
+      "inicio": 27.417,
+      "fim": 27.936,
+      "frase": 10
+    },
+    {
+      "i": 71,
+      "texto": "Que",
+      "inicio": 28.404,
+      "fim": 28.524,
+      "frase": 11
+    },
+    {
+      "i": 72,
+      "texto": "sujeira",
+      "inicio": 28.536,
+      "fim": 28.969,
+      "frase": 11
+    },
+    {
+      "i": 73,
+      "texto": "é",
+      "inicio": 28.981,
+      "fim": 29.041,
+      "frase": 11
+    },
+    {
+      "i": 74,
+      "texto": "essa,",
+      "inicio": 29.053,
+      "fim": 29.39,
+      "frase": 11
+    },
+    {
+      "i": 75,
+      "texto": "menino?",
+      "inicio": 29.414,
+      "fim": 29.895,
+      "frase": 11
+    },
+    {
+      "i": 76,
+      "texto": "Regra",
+      "inicio": 30.362,
+      "fim": 30.716,
+      "frase": 12
+    },
+    {
+      "i": 77,
+      "texto": "um:",
+      "inicio": 30.727,
+      "fim": 30.904,
+      "frase": 12
+    },
+    {
+      "i": 78,
+      "texto": "o",
+      "inicio": 31.305,
+      "fim": 31.364,
+      "frase": 12
+    },
+    {
+      "i": 79,
+      "texto": "poder",
+      "inicio": 31.376,
+      "fim": 31.671,
+      "frase": 12
+    },
+    {
+      "i": 80,
+      "texto": "segue",
+      "inicio": 31.682,
+      "fim": 32.001,
+      "frase": 12
+    },
+    {
+      "i": 81,
+      "texto": "o",
+      "inicio": 32.013,
+      "fim": 32.048,
+      "frase": 12
+    },
+    {
+      "i": 82,
+      "texto": "que",
+      "inicio": 32.06,
+      "fim": 32.142,
+      "frase": 12
+    },
+    {
+      "i": 83,
+      "texto": "você",
+      "inicio": 32.154,
+      "fim": 32.402,
+      "frase": 12
+    },
+    {
+      "i": 84,
+      "texto": "sente.",
+      "inicio": 32.414,
+      "fim": 32.85,
+      "frase": 12
+    },
+    {
+      "i": 85,
+      "texto": "Atrasado,",
+      "inicio": 33.317,
+      "fim": 33.954,
+      "frase": 13
+    },
+    {
+      "i": 86,
+      "texto": "você",
+      "inicio": 34.213,
+      "fim": 34.461,
+      "frase": 13
+    },
+    {
+      "i": 87,
+      "texto": "bate",
+      "inicio": 34.473,
+      "fim": 34.779,
+      "frase": 13
+    },
+    {
+      "i": 88,
+      "texto": "o",
+      "inicio": 34.791,
+      "fim": 34.827,
+      "frase": 13
+    },
+    {
+      "i": 89,
+      "texto": "pé",
+      "inicio": 34.838,
+      "fim": 35.003,
+      "frase": 13
+    },
+    {
+      "i": 90,
+      "texto": "no",
+      "inicio": 35.015,
+      "fim": 35.121,
+      "frase": 13
+    },
+    {
+      "i": 91,
+      "texto": "chão,",
+      "inicio": 35.133,
+      "fim": 35.511,
+      "frase": 13
+    },
+    {
+      "i": 92,
+      "texto": "e",
+      "inicio": 35.838,
+      "fim": 35.944,
+      "frase": 14
+    },
+    {
+      "i": 93,
+      "texto": "a",
+      "inicio": 35.956,
+      "fim": 36.026,
+      "frase": 14
+    },
+    {
+      "i": 94,
+      "texto": "calçada",
+      "inicio": 36.038,
+      "fim": 36.545,
+      "frase": 14
+    },
+    {
+      "i": 95,
+      "texto": "racha",
+      "inicio": 36.557,
+      "fim": 36.923,
+      "frase": 14
+    },
+    {
+      "i": 96,
+      "texto": "até",
+      "inicio": 36.934,
+      "fim": 37.135,
+      "frase": 14
+    },
+    {
+      "i": 97,
+      "texto": "a",
+      "inicio": 37.147,
+      "fim": 37.182,
+      "frase": 14
+    },
+    {
+      "i": 98,
+      "texto": "esquina.",
+      "inicio": 37.194,
+      "fim": 37.677,
+      "frase": 14
+    },
+    {
+      "i": 99,
+      "texto": "Uma",
+      "inicio": 38.144,
+      "fim": 38.392,
+      "frase": 15
+    },
+    {
+      "i": 100,
+      "texto": "onda",
+      "inicio": 38.404,
+      "fim": 38.71,
+      "frase": 15
+    },
+    {
+      "i": 101,
+      "texto": "de",
+      "inicio": 38.722,
+      "fim": 38.864,
+      "frase": 15
+    },
+    {
+      "i": 102,
+      "texto": "terra",
+      "inicio": 38.876,
+      "fim": 39.17,
+      "frase": 15
+    },
+    {
+      "i": 103,
+      "texto": "te",
+      "inicio": 39.182,
+      "fim": 39.288,
+      "frase": 15
+    },
+    {
+      "i": 104,
+      "texto": "leva",
+      "inicio": 39.3,
+      "fim": 39.595,
+      "frase": 15
+    },
+    {
+      "i": 105,
+      "texto": "rua",
+      "inicio": 39.607,
+      "fim": 39.854,
+      "frase": 15
+    },
+    {
+      "i": 106,
+      "texto": "abaixo.",
+      "inicio": 39.866,
+      "fim": 40.326,
+      "frase": 15
+    },
+    {
+      "i": 107,
+      "texto": "O",
+      "inicio": 40.793,
+      "fim": 40.899,
+      "frase": 16
+    },
+    {
+      "i": 108,
+      "texto": "vizinho",
+      "inicio": 40.911,
+      "fim": 41.395,
+      "frase": 16
+    },
+    {
+      "i": 109,
+      "texto": "deixa",
+      "inicio": 41.406,
+      "fim": 41.666,
+      "frase": 16
+    },
+    {
+      "i": 110,
+      "texto": "o",
+      "inicio": 41.678,
+      "fim": 41.701,
+      "frase": 16
+    },
+    {
+      "i": 111,
+      "texto": "café",
+      "inicio": 41.713,
+      "fim": 42.02,
+      "frase": 16
+    },
+    {
+      "i": 112,
+      "texto": "cair.",
+      "inicio": 42.031,
+      "fim": 42.373,
+      "frase": 16
+    },
+    {
+      "i": 113,
+      "texto": "Na",
+      "inicio": 42.841,
+      "fim": 42.982,
+      "frase": 17
+    },
+    {
+      "i": 114,
+      "texto": "escola,",
+      "inicio": 42.994,
+      "fim": 43.477,
+      "frase": 17
+    },
+    {
+      "i": 115,
+      "texto": "o",
+      "inicio": 43.666,
+      "fim": 43.749,
+      "frase": 17
+    },
+    {
+      "i": 116,
+      "texto": "Rafael",
+      "inicio": 43.76,
+      "fim": 44.209,
+      "frase": 17
+    },
+    {
+      "i": 117,
+      "texto": "tropeça,",
+      "inicio": 44.22,
+      "fim": 44.81,
+      "frase": 17
+    },
+    {
+      "i": 118,
+      "texto": "e",
+      "inicio": 45.137,
+      "fim": 45.255,
+      "frase": 18
+    },
+    {
+      "i": 119,
+      "texto": "o",
+      "inicio": 45.267,
+      "fim": 45.314,
+      "frase": 18
+    },
+    {
+      "i": 120,
+      "texto": "celular",
+      "inicio": 45.326,
+      "fim": 45.856,
+      "frase": 18
+    },
+    {
+      "i": 121,
+      "texto": "dele",
+      "inicio": 45.868,
+      "fim": 46.081,
+      "frase": 18
+    },
+    {
+      "i": 122,
+      "texto": "some",
+      "inicio": 46.092,
+      "fim": 46.434,
+      "frase": 18
+    },
+    {
+      "i": 123,
+      "texto": "no",
+      "inicio": 46.446,
+      "fim": 46.529,
+      "frase": 18
+    },
+    {
+      "i": 124,
+      "texto": "bueiro.",
+      "inicio": 46.54,
+      "fim": 46.941,
+      "frase": 18
+    },
+    {
+      "i": 125,
+      "texto": "Não!",
+      "inicio": 47.405,
+      "fim": 47.778,
+      "frase": 19
+    },
+    {
+      "i": 126,
+      "texto": "Meu",
+      "inicio": 48.529,
+      "fim": 48.748,
+      "frase": 19
+    },
+    {
+      "i": 127,
+      "texto": "celular",
+      "inicio": 48.759,
+      "fim": 49.219,
+      "frase": 19
+    },
+    {
+      "i": 128,
+      "texto": "novo!",
+      "inicio": 49.23,
+      "fim": 49.581,
+      "frase": 19
+    },
+    {
+      "i": 129,
+      "texto": "Você",
+      "inicio": 50.048,
+      "fim": 50.355,
+      "frase": 20
+    },
+    {
+      "i": 130,
+      "texto": "confere",
+      "inicio": 50.367,
+      "fim": 50.862,
+      "frase": 20
+    },
+    {
+      "i": 131,
+      "texto": "se",
+      "inicio": 50.874,
+      "fim": 50.98,
+      "frase": 20
+    },
+    {
+      "i": 132,
+      "texto": "ninguém",
+      "inicio": 50.992,
+      "fim": 51.31,
+      "frase": 20
+    },
+    {
+      "i": 133,
+      "texto": "está",
+      "inicio": 51.322,
+      "fim": 51.511,
+      "frase": 20
+    },
+    {
+      "i": 134,
+      "texto": "olhando,",
+      "inicio": 51.522,
+      "fim": 51.947,
+      "frase": 20
+    },
+    {
+      "i": 135,
+      "texto": "e",
+      "inicio": 52.274,
+      "fim": 52.392,
+      "frase": 21
+    },
+    {
+      "i": 136,
+      "texto": "a",
+      "inicio": 52.404,
+      "fim": 52.51,
+      "frase": 21
+    },
+    {
+      "i": 137,
+      "texto": "terra",
+      "inicio": 52.522,
+      "fim": 52.84,
+      "frase": 21
+    },
+    {
+      "i": 138,
+      "texto": "devolve",
+      "inicio": 52.852,
+      "fim": 53.253,
+      "frase": 21
+    },
+    {
+      "i": 139,
+      "texto": "o",
+      "inicio": 53.265,
+      "fim": 53.3,
+      "frase": 21
+    },
+    {
+      "i": 140,
+      "texto": "celular,",
+      "inicio": 53.312,
+      "fim": 53.831,
+      "frase": 21
+    },
+    {
+      "i": 141,
+      "texto": "inteirinho.",
+      "inicio": 54.114,
+      "fim": 54.692,
+      "frase": 21
+    },
+    {
+      "i": 142,
+      "texto": "Cara...",
+      "inicio": 55.155,
+      "fim": 55.462,
+      "frase": 22
+    },
+    {
+      "i": 143,
+      "texto": "como",
+      "inicio": 55.693,
+      "fim": 55.945,
+      "frase": 22
+    },
+    {
+      "i": 144,
+      "texto": "você",
+      "inicio": 55.956,
+      "fim": 56.186,
+      "frase": 22
+    },
+    {
+      "i": 145,
+      "texto": "fez",
+      "inicio": 56.197,
+      "fim": 56.405,
+      "frase": 22
+    },
+    {
+      "i": 146,
+      "texto": "isso?",
+      "inicio": 56.416,
+      "fim": 56.8,
+      "frase": 22
+    },
+    {
+      "i": 147,
+      "texto": "Você",
+      "inicio": 57.267,
+      "fim": 57.692,
+      "frase": 23
+    },
+    {
+      "i": 148,
+      "texto": "só",
+      "inicio": 57.704,
+      "fim": 57.892,
+      "frase": 23
+    },
+    {
+      "i": 149,
+      "texto": "sorri.",
+      "inicio": 57.904,
+      "fim": 58.352,
+      "frase": 23
+    },
+    {
+      "i": 150,
+      "texto": "Melhor",
+      "inicio": 59.163,
+      "fim": 59.552,
+      "frase": 23
+    },
+    {
+      "i": 151,
+      "texto": "ninguém",
+      "inicio": 59.564,
+      "fim": 59.93,
+      "frase": 23
+    },
+    {
+      "i": 152,
+      "texto": "saber.",
+      "inicio": 59.941,
+      "fim": 60.331,
+      "frase": 23
+    },
+    {
+      "i": 153,
+      "texto": "Só",
+      "inicio": 60.798,
+      "fim": 61.104,
+      "frase": 24
+    },
+    {
+      "i": 154,
+      "texto": "que",
+      "inicio": 61.116,
+      "fim": 61.187,
+      "frase": 24
+    },
+    {
+      "i": 155,
+      "texto": "alguém",
+      "inicio": 61.199,
+      "fim": 61.47,
+      "frase": 24
+    },
+    {
+      "i": 156,
+      "texto": "filmou",
+      "inicio": 61.482,
+      "fim": 61.894,
+      "frase": 24
+    },
+    {
+      "i": 157,
+      "texto": "tudo.",
+      "inicio": 61.906,
+      "fim": 62.26,
+      "frase": 24
+    },
+    {
+      "i": 158,
+      "texto": "E",
+      "inicio": 62.727,
+      "fim": 62.845,
+      "frase": 25
+    },
+    {
+      "i": 159,
+      "texto": "o",
+      "inicio": 62.857,
+      "fim": 62.892,
+      "frase": 25
+    },
+    {
+      "i": 160,
+      "texto": "chão",
+      "inicio": 62.904,
+      "fim": 63.128,
+      "frase": 25
+    },
+    {
+      "i": 161,
+      "texto": "da",
+      "inicio": 63.14,
+      "fim": 63.211,
+      "frase": 25
+    },
+    {
+      "i": 162,
+      "texto": "escola",
+      "inicio": 63.222,
+      "fim": 63.647,
+      "frase": 25
+    },
+    {
+      "i": 163,
+      "texto": "começa",
+      "inicio": 63.659,
+      "fim": 64.095,
+      "frase": 25
+    },
+    {
+      "i": 164,
+      "texto": "a",
+      "inicio": 64.107,
+      "fim": 64.119,
+      "frase": 25
+    },
+    {
+      "i": 165,
+      "texto": "rachar.",
+      "inicio": 64.13,
+      "fim": 64.52,
+      "frase": 25
+    },
+    {
+      "i": 166,
+      "texto": "Lá",
+      "inicio": 64.987,
+      "fim": 65.152,
+      "frase": 26
+    },
+    {
+      "i": 167,
+      "texto": "embaixo,",
+      "inicio": 65.164,
+      "fim": 65.706,
+      "frase": 26
+    },
+    {
+      "i": 168,
+      "texto": "algo",
+      "inicio": 65.918,
+      "fim": 66.166,
+      "frase": 26
+    },
+    {
+      "i": 169,
+      "texto": "responde",
+      "inicio": 66.178,
+      "fim": 66.685,
+      "frase": 26
+    },
+    {
+      "i": 170,
+      "texto": "a",
+      "inicio": 66.697,
+      "fim": 66.72,
+      "frase": 26
+    },
+    {
+      "i": 171,
+      "texto": "você.",
+      "inicio": 66.732,
+      "fim": 67.168,
+      "frase": 26
+    },
+    {
+      "i": 172,
+      "texto": "Segue",
+      "inicio": 67.636,
+      "fim": 68.06,
+      "frase": 27
+    },
+    {
+      "i": 173,
+      "texto": "pra",
+      "inicio": 68.072,
+      "fim": 68.249,
+      "frase": 27
+    },
+    {
+      "i": 174,
+      "texto": "ver",
+      "inicio": 68.261,
+      "fim": 68.449,
+      "frase": 27
+    },
+    {
+      "i": 175,
+      "texto": "a",
+      "inicio": 68.461,
+      "fim": 68.544,
+      "frase": 27
+    },
+    {
+      "i": 176,
+      "texto": "parte",
+      "inicio": 68.555,
+      "fim": 68.921,
+      "frase": 27
+    },
+    {
+      "i": 177,
+      "texto": "dois!",
+      "inicio": 68.933,
+      "fim": 69.369,
+      "frase": 27
+    }
+  ],
+  "planos": [
+    {
+      "id": "plano1",
+      "frase": 0,
+      "texto": "E se você acordasse controlando a terra?",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": {
+        "linhas": [
+          "E SE VOCÊ",
+          "ACORDASSE",
+          "CONTROLANDO",
+          "A TERRA?"
+        ],
+        "destaque": 3
+      },
+      "cartela": null,
+      "fala": null,
+      "inicio": 0,
+      "fim": 2.937,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "poder_terra",
+              "inicio": 0,
+              "opcoes": {
+                "desde": 1.8
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "lado": 22,
+          "angulo": -12,
+          "rolagem": 3,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          },
+          "de": 0,
+          "ate": 2.937
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano2",
+      "frase": 1,
+      "texto": "Seis e meia. O despertador toca.",
+      "legenda": "auto",
+      "objetos": [
+        {
+          "tipo": "despertador",
+          "palavra": "despertador",
+          "fim": "fim+1.6",
+          "de": 4.679,
+          "ate": 7.795999999999999
+        }
+      ],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 2.937,
+      "fim": 6.196,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            1.35,
+            -1,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "dormindo",
+              "inicio": 2.937,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "olhar": "despertador",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.55,
+          "giroBase": 0,
+          "lado": 140,
+          "angulo": 12,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          },
+          "de": 2.937,
+          "ate": 4.679
+        },
+        {
+          "palavra": "despertador",
+          "tamanho": "geral",
+          "alturaQuadro": 2.6,
+          "angulo": 62,
+          "lado": 40,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 12
+          },
+          "de": 4.679,
+          "ate": 6.196
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano3",
+      "frase": 2,
+      "texto": "Você dá um tapa nele,",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 6.196,
+      "fim": 7.797,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            1.35,
+            -1,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "dormindo",
+              "inicio": 6.196,
+              "opcoes": {}
+            },
+            {
+              "atuacao": "tapa_deitado",
+              "inicio": 6.248,
+              "opcoes": {},
+              "palavra": "tapa",
+              "tPalavra": 6.798
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "olhar": "despertador",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.6,
+          "giroBase": 0,
+          "lado": -70,
+          "angulo": 30,
+          "rolagem": -4,
+          "tremores": [
+            {
+              "t": 0.75,
+              "forca": 0.03,
+              "dur": 0.4
+            }
+          ],
+          "de": 6.196,
+          "ate": 7.797
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "impacto",
+          "ponto": "despertador",
+          "palavra": "tapa",
+          "ajuste": 0.05,
+          "escala": 0.22,
+          "dur": 1.2,
+          "de": 6.848,
+          "ate": 8.048
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano4",
+      "frase": 3,
+      "texto": "e o quarto inteiro treme.",
+      "legenda": "auto",
+      "objetos": [
+        {
+          "tipo": "livros",
+          "inicio": 0.15,
+          "de": 7.947,
+          "ate": 9.656
+        }
+      ],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 7.797,
+      "fim": 9.656,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "segmentos": [
+            {
+              "atuacao": "acorda_assustado",
+              "inicio": 7.797,
+              "opcoes": {
+                "semTransicao": true
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 2.6,
+          "lado": 0,
+          "angulo": 24,
+          "movimento": {
+            "tipo": "puxar",
+            "forca": 0.12
+          },
+          "de": 7.797,
+          "ate": 9.656
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "tremor",
+          "inicio": 0,
+          "forca": 0.06,
+          "de": 7.797,
+          "ate": 9.656
+        },
+        {
+          "tipo": "poeira_teto",
+          "inicio": 0,
+          "fim": "fim+0.8",
+          "de": 7.797,
+          "ate": 10.456000000000001
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano5",
+      "frase": 4,
+      "texto": "Você olha pras mãos. Foi você?",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 9.656,
+      "fim": 12.974,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "segmentos": [
+            {
+              "atuacao": "olha_maos",
+              "inicio": 9.656,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": 20,
+          "angulo": -20,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.08
+          },
+          "de": 9.656,
+          "ate": 11.87
+        },
+        {
+          "palavra": "Foi",
+          "tamanho": "close",
+          "lado": 40,
+          "angulo": -12,
+          "reenquadres": [
+            {
+              "t": 0.25,
+              "dx": -0.05,
+              "dy": 0.01,
+              "zoom": 1.06,
+              "dur": 0.35
+            }
+          ],
+          "de": 11.87,
+          "ate": 12.974
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano6",
+      "frase": 5,
+      "texto": "A terra do vaso começa a flutuar.",
+      "legenda": "auto",
+      "objetos": [
+        {
+          "tipo": "vaso",
+          "inicio": 0.2,
+          "fim": "fim",
+          "de": 13.174,
+          "ate": 15.281
+        }
+      ],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 12.974,
+      "fim": 15.281,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "segmentos": [
+            {
+              "atuacao": "olha_maos",
+              "inicio": 12.974,
+              "opcoes": {
+                "desde": 1.6
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.75,
+          "giroBase": 0,
+          "lado": 70,
+          "angulo": 4,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.18
+          },
+          "de": 12.974,
+          "ate": 15.281
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "terra_vaso",
+          "inicio": 0.1,
+          "fim": "fim",
+          "de": 13.074,
+          "ate": 15.281
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano7",
+      "frase": 6,
+      "texto": "Você mexe os dedos, e ela obedece.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 15.281,
+      "fim": 17.929,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "segmentos": [
+            {
+              "atuacao": "dedos",
+              "inicio": 15.281,
+              "opcoes": {
+                "semTransicao": true
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.6,
+          "lado": -35,
+          "angulo": 22,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 25
+          },
+          "de": 15.281,
+          "ate": 17.929
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_mao",
+          "ator": "lucas",
+          "lado": "d",
+          "raio": [
+            0.06,
+            0.075
+          ],
+          "inicio": 0,
+          "fim": "fim",
+          "aparece": true,
+          "de": 15.281,
+          "ate": 17.929
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano8",
+      "frase": 7,
+      "texto": "Você faz a terra dar uma volta pelo quarto.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 17.929,
+      "fim": 20.555,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "rir_segurando",
+              "inicio": 17.929,
+              "opcoes": {
+                "semTransicao": true
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "lado": 25,
+          "angulo": -6,
+          "de": 17.929,
+          "ate": 19.144
+        },
+        {
+          "palavra": "volta",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.1,
+          "lado": 30,
+          "angulo": 8,
+          "rolagem": -5,
+          "de": 19.144,
+          "ate": 20.555
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_voa",
+          "ator": "lucas",
+          "inicio": 0,
+          "fim": "fim",
+          "centro": [
+            0,
+            1.45,
+            -0.5
+          ],
+          "raioVolta": 1.1,
+          "de": 17.929,
+          "ate": 20.555
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano9",
+      "frase": 8,
+      "texto": "Quanto mais você sorri, maior ela fica.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 20.555,
+      "fim": 23.334,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "rir_segurando",
+              "inicio": 20.555,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "lado": -20,
+          "angulo": -16,
+          "rolagem": 3,
+          "movimento": {
+            "tipo": "puxar",
+            "forca": 0.2
+          },
+          "de": 20.555,
+          "ate": 23.334
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_mao",
+          "ator": "lucas",
+          "ambas": true,
+          "raio": [
+            0.08,
+            0.24
+          ],
+          "inicio": 0,
+          "fim": "fim",
+          "de": 20.555,
+          "ate": 23.334
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano10",
+      "frase": 9,
+      "texto": "Lucas! Desce pro café!",
+      "legenda": "auto",
+      "objetos": [
+        {
+          "tipo": "porta",
+          "inicio": -0.4,
+          "de": 22.934,
+          "ate": 25.554
+        }
+      ],
+      "capa": null,
+      "cartela": null,
+      "fala": {
+        "ator": "mae"
+      },
+      "inicio": 23.334,
+      "fim": 25.554,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "mae",
+          "marca": [
+            1.3,
+            1.6,
+            180
+          ],
+          "segmentos": [
+            {
+              "atuacao": "mae_chama",
+              "inicio": 23.334,
+              "opcoes": {}
+            }
+          ]
+        },
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "rir_segurando",
+              "inicio": 23.334,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "lado": 10,
+          "angulo": 0,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          },
+          "de": 23.334,
+          "ate": 25.554
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_mao",
+          "ator": "lucas",
+          "ambas": true,
+          "raio": [
+            0.24,
+            0.24
+          ],
+          "inicio": 0,
+          "fim": "fim",
+          "de": 23.334,
+          "ate": 25.554
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano11",
+      "frase": 10,
+      "texto": "O susto faz a terra despencar no tapete.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 25.554,
+      "fim": 28.404,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "assustar",
+              "inicio": 25.184,
+              "opcoes": {},
+              "palavra": "susto",
+              "tPalavra": 25.684
+            },
+            {
+              "atuacao": "rir_segurando",
+              "inicio": 25.554,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "lado": 30,
+          "angulo": 28,
+          "de": 25.554,
+          "ate": 27.417
+        },
+        {
+          "palavra": "tapete",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.9,
+          "lado": 20,
+          "angulo": 30,
+          "tremores": [
+            {
+              "t": 0,
+              "forca": 0.03,
+              "dur": 0.5
+            }
+          ],
+          "de": 27.417,
+          "ate": 28.404
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_cai",
+          "ator": "lucas",
+          "raio": 0.24,
+          "alvo": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0.012,
+              0.55
+            ]
+          },
+          "palavra": "despencar",
+          "fica": true,
+          "de": 26.733,
+          "ate": 28.404
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano12",
+      "frase": 11,
+      "texto": "Que sujeira é essa, menino?",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": {
+        "ator": "mae"
+      },
+      "inicio": 28.404,
+      "fim": 30.362,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "mae",
+          "marca": [
+            1.3,
+            1.6,
+            180
+          ],
+          "segmentos": [
+            {
+              "atuacao": "maos_cintura",
+              "inicio": 28.404,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "lado": 8,
+          "angulo": -8,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          },
+          "de": 28.404,
+          "ate": 30.362
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano13",
+      "frase": 12,
+      "texto": "Regra um: o poder segue o que você sente.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 30.362,
+      "fim": 33.317,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            -0.18,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "sem_graca",
+              "inicio": 30.362,
+              "opcoes": {
+                "semTransicao": true
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": 12,
+          "angulo": 4,
+          "de": 30.362,
+          "ate": 31.376
+        },
+        {
+          "palavra": "poder",
+          "tamanho": "medio",
+          "lado": -25,
+          "angulo": 20,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 14
+          },
+          "de": 31.376,
+          "ate": 33.317
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano14",
+      "frase": 13,
+      "texto": "Atrasado, você bate o pé no chão,",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 33.317,
+      "fim": 35.838,
+      "cenario": "rua",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "pisao",
+              "inicio": 33.317,
+              "opcoes": {}
+            },
+            {
+              "atuacao": "pisao",
+              "inicio": 34.388,
+              "opcoes": {},
+              "palavra": "pé",
+              "tPalavra": 34.838
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "lado": 165,
+          "angulo": 12,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          },
+          "tremores": [],
+          "alturaQuadro": 2,
+          "de": 33.317,
+          "ate": 35.838
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "impacto",
+          "ponto": {
+            "ator": "lucas",
+            "local": [
+              -0.16,
+              0,
+              0.05
+            ]
+          },
+          "palavra": "pé",
+          "ajuste": 0.05,
+          "escala": 0.7,
+          "dur": 1.5,
+          "de": 34.888,
+          "ate": 36.388
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano15",
+      "frase": 14,
+      "texto": "e a calçada racha até a esquina.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 35.838,
+      "fim": 38.144,
+      "cenario": "rua",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 4.6,
+          "lado": 165,
+          "angulo": 42,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          },
+          "rolagem": 3,
+          "de": 35.838,
+          "ate": 38.144
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "rachadura_corre",
+          "de_ponto": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0,
+              0.3
+            ]
+          },
+          "para_ponto": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0,
+              14
+            ]
+          },
+          "inicio": 0,
+          "fim": "fim",
+          "largura": 1.8,
+          "fica": true,
+          "de": 35.838,
+          "ate": 38.144
+        },
+        {
+          "tipo": "tremor",
+          "inicio": 0,
+          "forca": 0.03,
+          "de": 35.838,
+          "ate": 38.144
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano16",
+      "frase": 15,
+      "texto": "Uma onda de terra te leva rua abaixo.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 38.144,
+      "fim": 40.793,
+      "cenario": "rua",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -2.7,
+            -6,
+            0,
+            -0.14
+          ],
+          "segmentos": [
+            {
+              "atuacao": "surfar",
+              "inicio": 38.144,
+              "opcoes": {
+                "distancia": 7,
+                "tempo": 2.6,
+                "semTransicao": true
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 2.4,
+          "lado": 95,
+          "angulo": 6,
+          "movimento": {
+            "tipo": "lateral",
+            "metros": 0.4
+          },
+          "de": 38.144,
+          "ate": 40.793
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "onda_terra",
+          "ator": "lucas",
+          "inicio": 0,
+          "fim": "fim",
+          "de": 38.144,
+          "ate": 40.793
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano17",
+      "frase": 16,
+      "texto": "O vizinho deixa o café cair.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 40.793,
+      "fim": 42.841,
+      "cenario": "rua",
+      "atores": [
+        {
+          "nome": "vizinho",
+          "marca": [
+            -7.8,
+            4,
+            90
+          ],
+          "segmentos": [
+            {
+              "atuacao": "derruba_cafe",
+              "inicio": 41.531,
+              "opcoes": {},
+              "palavra": "cair",
+              "tPalavra": 42.031
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "lado": 15,
+          "angulo": 0,
+          "de": 40.793,
+          "ate": 41.931
+        },
+        {
+          "palavra": "cair",
+          "ajuste": -0.1,
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.8,
+          "lado": 40,
+          "angulo": 15,
+          "de": 41.931,
+          "ate": 42.841
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "cafe",
+          "ator": "vizinho",
+          "inicio": 0,
+          "fim": "fim",
+          "chao": 0.14,
+          "fica": true,
+          "de": 40.793,
+          "ate": 42.841
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano18",
+      "frase": 17,
+      "texto": "Na escola, o Rafael tropeça,",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 42.841,
+      "fim": 45.137,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "tropecar",
+              "inicio": 43.87,
+              "opcoes": {},
+              "palavra": "tropeça",
+              "tPalavra": 44.22
+            }
+          ]
+        },
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 3.2,
+          "lado": 30,
+          "angulo": 22,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          },
+          "de": 42.841,
+          "ate": 45.137
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "celular",
+          "ator": "rafael",
+          "inicio": -1,
+          "fim": "fim+2.5",
+          "fica": true,
+          "de": 41.841,
+          "ate": 47.637
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano19",
+      "frase": 18,
+      "texto": "e o celular dele some no bueiro.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 45.137,
+      "fim": 47.405,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "segmentos": []
+        },
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "olhar": "bueiro",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1,
+          "giroBase": 0,
+          "lado": 20,
+          "angulo": 52,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          },
+          "de": 45.137,
+          "ate": 47.405
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano20",
+      "frase": 19,
+      "texto": "Não! Meu celular novo!",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": {
+        "ator": "rafael"
+      },
+      "inicio": 47.405,
+      "fim": 50.048,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "desesperar",
+              "inicio": 47.405,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": 8,
+          "angulo": -12,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          },
+          "de": 47.405,
+          "ate": 50.048
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano21",
+      "frase": 20,
+      "texto": "Você confere se ninguém está olhando,",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 50.048,
+      "fim": 52.274,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": [
+            {
+              "atuacao": "conferir",
+              "inicio": 50.048,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": 0,
+          "angulo": 3,
+          "reenquadres": [
+            {
+              "t": 1.1,
+              "dx": 0.04,
+              "dy": 0,
+              "zoom": 1.05,
+              "dur": 0.3
+            }
+          ],
+          "de": 50.048,
+          "ate": 52.274
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano22",
+      "frase": 21,
+      "texto": "e a terra devolve o celular, inteirinho.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 52.274,
+      "fim": 55.155,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": [
+            {
+              "atuacao": "comandar_terra",
+              "inicio": 51.922,
+              "opcoes": {},
+              "palavra": "terra",
+              "tPalavra": 52.522
+            }
+          ]
+        },
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "desesperar",
+              "inicio": 52.274,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 2.8,
+          "lado": 70,
+          "angulo": -4,
+          "rolagem": -3,
+          "de": 52.274,
+          "ate": 53.312
+        },
+        {
+          "palavra": "celular,",
+          "olhar": "bueiro",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.6,
+          "giroBase": 0,
+          "lado": -30,
+          "angulo": -10,
+          "movimento": {
+            "tipo": "subir",
+            "metros": 0.5
+          },
+          "de": 53.312,
+          "ate": 55.155
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "energia",
+          "ator": "lucas",
+          "lado": "d",
+          "ponto": "bueiro",
+          "palavra": "terra",
+          "fim": "fim",
+          "de": 52.522,
+          "ate": 55.155
+        },
+        {
+          "tipo": "coluna_terra",
+          "ponto": "bueiro",
+          "palavra": "devolve",
+          "fim": "fim",
+          "altura": 1.1,
+          "de": 52.852,
+          "ate": 55.155
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano23",
+      "frase": 22,
+      "texto": "Cara... como você fez isso?",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": {
+        "ator": "rafael"
+      },
+      "inicio": 55.155,
+      "fim": 57.267,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "segurar_celular",
+              "inicio": 55.155,
+              "opcoes": {
+                "semTransicao": true
+              }
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": -15,
+          "angulo": 0,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 10
+          },
+          "de": 55.155,
+          "ate": 57.267
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "celular",
+          "ator": "rafael",
+          "modo": "sujo",
+          "inicio": 0,
+          "fim": "fim",
+          "de": 55.155,
+          "ate": 57.267
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano24",
+      "frase": 23,
+      "texto": "Você só sorri. Melhor ninguém saber.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 57.267,
+      "fim": 60.798,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": [
+            {
+              "atuacao": "sorrir_canto",
+              "inicio": 57.267,
+              "opcoes": {}
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": 2,
+          "angulo": 0,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          },
+          "de": 57.267,
+          "ate": 59.163
+        },
+        {
+          "palavra": "Melhor",
+          "tamanho": "medio",
+          "lado": -30,
+          "angulo": 6,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 12
+          },
+          "de": 59.163,
+          "ate": 60.798
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano25",
+      "frase": 24,
+      "texto": "Só que alguém filmou tudo.",
+      "legenda": "auto",
+      "objetos": [
+        {
+          "tipo": "silhueta",
+          "inicio": -0.2,
+          "fim": "fim",
+          "de": 60.598,
+          "ate": 62.727
+        }
+      ],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 60.798,
+      "fim": 62.727,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "olhar": "janela",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 2.6,
+          "giroBase": 0,
+          "lado": 0,
+          "angulo": -14,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.45
+          },
+          "de": 60.798,
+          "ate": 62.727
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano26",
+      "frase": 25,
+      "texto": "E o chão da escola começa a rachar.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 62.727,
+      "fim": 64.987,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": [
+            {
+              "atuacao": "medo_chao",
+              "inicio": 62.904,
+              "opcoes": {},
+              "palavra": "chão",
+              "tPalavra": 62.904
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 3.4,
+          "lado": 25,
+          "angulo": 48,
+          "giroRolagem": 8,
+          "de": 62.727,
+          "ate": 64.987
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "rachadura_corre",
+          "de_ponto": {
+            "ator": "lucas",
+            "local": [
+              2.5,
+              0,
+              3.5
+            ]
+          },
+          "para_ponto": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0,
+              0.2
+            ]
+          },
+          "inicio": 0.1,
+          "fim": "fim",
+          "largura": 2,
+          "fica": true,
+          "de": 62.827,
+          "ate": 64.987
+        },
+        {
+          "tipo": "tremor",
+          "inicio": 0,
+          "forca": 0.05,
+          "de": 62.727,
+          "ate": 64.987
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano27",
+      "frase": 26,
+      "texto": "Lá embaixo, algo responde a você.",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": null,
+      "fala": null,
+      "inicio": 64.987,
+      "fim": 67.636,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": 10,
+          "angulo": -24,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          },
+          "de": 64.987,
+          "ate": 67.636
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "luz_baixo",
+          "ator": "lucas",
+          "inicio": 0,
+          "fim": "fim+3",
+          "fica": true,
+          "de": 64.987,
+          "ate": 70.636
+        },
+        {
+          "tipo": "tremor",
+          "palavra": "responde",
+          "forca": 0.04,
+          "de": 66.178,
+          "ate": 67.636
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano28",
+      "frase": 27,
+      "texto": "Segue pra ver a parte dois!",
+      "legenda": "auto",
+      "objetos": [],
+      "capa": null,
+      "cartela": {
+        "parte": 1
+      },
+      "fala": null,
+      "inicio": 67.636,
+      "fim": 70.169,
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 3.4,
+          "lado": 40,
+          "angulo": 30,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 12
+          },
+          "de": 67.636,
+          "ate": 70.169
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    }
+  ],
+  "destaques": [
+    16,
+    49,
+    56,
+    64,
+    68,
+    84,
+    89,
+    95,
+    100,
+    111,
+    112,
+    117,
+    124,
+    137,
+    138,
+    151,
+    156,
+    160,
+    165,
+    169
+  ],
+  "sons": [
+    {
+      "t": 2.817,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 4.559,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 6.076,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 6.798,
+      "som": "impacto",
+      "ganho": 1
+    },
+    {
+      "t": 7.677,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 7.797,
+      "som": "tremor",
+      "dur": 1.859,
+      "ganho": 0.8
+    },
+    {
+      "t": 9.536,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 11.75,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 12.854,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 15.161,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 17.809,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 19.024,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 20.435,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 23.214,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 25.434,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 25.664,
+      "som": "susto",
+      "ganho": 1
+    },
+    {
+      "t": 25.904,
+      "som": "passo",
+      "ganho": 1
+    },
+    {
+      "t": 27.297,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 28.284,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 30.242,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 31.256,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 33.197,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 33.767,
+      "som": "impacto_terra",
+      "ganho": 1
+    },
+    {
+      "t": 34.838,
+      "som": "impacto_terra",
+      "ganho": 1
+    },
+    {
+      "t": 35.718,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 35.838,
+      "som": "tremor",
+      "dur": 2.306,
+      "ganho": 0.8
+    },
+    {
+      "t": 38.024,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 38.144,
+      "som": "tremor",
+      "ganho": 1
+    },
+    {
+      "t": 40.673,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 41.811,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 42.721,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 44.17,
+      "som": "passo",
+      "ganho": 1
+    },
+    {
+      "t": 44.47,
+      "som": "passo",
+      "ganho": 1
+    },
+    {
+      "t": 45.017,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 47.285,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 49.928,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 52.154,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 52.222,
+      "som": "terra_sobe",
+      "ganho": 1
+    },
+    {
+      "t": 53.192,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 55.035,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 57.147,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 57.967,
+      "som": "brilho",
+      "ganho": 1
+    },
+    {
+      "t": 59.043,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 60.678,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 62.607,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 62.727,
+      "som": "tremor",
+      "dur": 2.26,
+      "ganho": 0.8
+    },
+    {
+      "t": 64.867,
+      "som": "whoosh",
+      "ganho": 0.22
+    },
+    {
+      "t": 66.178,
+      "som": "tremor",
+      "dur": 1.458,
+      "ganho": 0.8
+    },
+    {
+      "t": 67.516,
+      "som": "whoosh",
+      "ganho": 0.22
+    }
+  ]
+}

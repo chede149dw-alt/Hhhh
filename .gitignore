@@ -29,3 +29,6 @@ quadro_*.png
 # Sons sintetizados (gerados de novo com: python3 motor/audio/sfx.py) e cache de falas convertidas
 audio/sfx/
 audio/**/falas/*.wav
+
+# Partes intermediárias do render em partes (o MP4 final fica em prontos/)
+previas/*/partes/

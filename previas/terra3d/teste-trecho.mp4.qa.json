@@ -1,0 +1,38 @@
+{
+  "video": "previas/terra3d/teste-trecho.mp4",
+  "duracao": 3.033,
+  "lufs": -14.06,
+  "ok": true,
+  "checagens": [
+    {
+      "nome": "Duração ≤ 1 min 15 s",
+      "ok": true,
+      "detalhe": "3.03 s"
+    },
+    {
+      "nome": "Volume −14 LUFS",
+      "ok": true,
+      "detalhe": "-14.06 LUFS"
+    },
+    {
+      "nome": "Nada parado mais de 1 s",
+      "ok": true,
+      "detalhe": "nenhum trecho parado"
+    },
+    {
+      "nome": "Planos de câmera ≤ 3 s",
+      "ok": true,
+      "detalhe": "36 planos, maior 2.94 s"
+    },
+    {
+      "nome": "Capa no começo",
+      "ok": true,
+      "detalhe": "E SE VOCÊ ACORDASSE CONTROLANDO A TERRA?"
+    },
+    {
+      "nome": "Cartela \"PARTE X\" no fim",
+      "ok": true,
+      "detalhe": "PARTE 1"
+    }
+  ]
+}
