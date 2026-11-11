@@ -21,7 +21,7 @@ Sempre salve cada arquivo na pasta certa:
   Usar só as vistas, expressões, poses e o poder definidos na ficha: **controlar a terra** (`efeitos/poder-terra.js`).
   Mudança de design só com pedido e aprovação explícitos; depois, regerar a ficha.
   No motor 3D: `personagens/lucas/3d/ficha.json` + `criarBoneco` (`motor/personagem/boneco.js`), ficha 3D aprovada em `personagens/lucas/3d/ficha.png`.
-- **Mãe** e **Rafael** (melhor amigo do Lucas): propostas em `personagens/mae/` e `personagens/rafael/`, montadas com `motor/personagem-base.js`. Ainda não são obrigatórias; viram regra quando aprovadas.
+- **Mãe** e **Rafael** (melhor amigo do Lucas): **fichas 3D oficiais (aprovadas)** em `personagens/mae/3d/` e `personagens/rafael/3d/` (`criarBoneco(ficha.json)`), sem mudar a aparência. No motor 2D continuam propostas (`personagens/<nome>/`, `motor/personagem-base.js`).
 
 # Séries
 - Cada série tem uma pasta em `roteiros/<serie>/` com `serie.md` (lista de cenários, objetos, efeitos e personagens) e `prancha.json` (prancha de produção em `previas/`).
