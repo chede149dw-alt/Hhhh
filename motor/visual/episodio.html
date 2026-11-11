@@ -19,6 +19,7 @@
   import { CENARIOS } from '../cena/cenarios.js';
   import { camNoTempo } from '../cena/camera.js';
   import { criarPoderTerra, criarRachaduraChao, criarImpactoTerra } from '../efeitos3d/terra.js';
+  import { agrupar, layout, faixaLonge, posicaoPedida, desenhar as desenharLegenda } from '../legendas/legendas.js';
 
   const q = new URLSearchParams(location.search);
   const linha = await (await fetch('/' + q.get('linha'))).json();
@@ -28,6 +29,14 @@
   const pos = criarPos(renderer, W, H);
   const camera = new THREE.PerspectiveCamera(30, W / H, 0.05, 120);
   const suave = (k) => { const x = Math.min(1, Math.max(0, k)); return x * x * (3 - 2 * x); };
+  // legendas (prompt 9): quadro final = imagem 3D + legenda desenhada por cima, num canvas 2D
+  const comLegenda = q.get('legenda') !== '0';
+  await document.fonts.load('900 96px Inter');
+  const grupos = agrupar(linha.palavras, { destaques: linha.destaques || [] });
+  const saida = document.createElement('canvas'); saida.width = W; saida.height = H;
+  const ctx2 = saida.getContext('2d');
+  const medir = (txt, tam) => { ctx2.font = `900 ${tam}px Inter`; return ctx2.measureText(txt).width; };
+  window.capturar = () => saida.toDataURL('image/png').split(',')[1];
 
   // linha do tempo de cada ator, juntando todos os planos (o ator continua o que fazia no corte)
   const segmentosDe = {};
@@ -144,6 +153,20 @@
     if (cc.rolagem) camera.rotateZ((cc.rolagem * Math.PI) / 180);
     for (const m of c.cen.pecasTeto || []) m.visible = !(c.cen.teto && cc.pos[1] > c.cen.teto - 0.05);
     pos.render(c.cena, camera, { t, foco: cc.foco || cc.distancia, faixa: 0.5, desfoque: 14, grao: 0.025, vinheta: 0.32 });
+    ctx2.drawImage(renderer.domElement, 0, 0);
+    if (comLegenda) {
+      const g = grupos.find((x) => t >= x.inicio && t < x.fim);
+      if (g) {
+        // rosto na tela (cabeça projetada pela câmera) → faixa mais longe dele, se o plano não pedir uma posição
+        const rostos = [];
+        if (anc) {
+          const cab = new THREE.Vector3(...anc.cabeca).project(camera), borda = new THREE.Vector3(...anc.cabeca).add(new THREE.Vector3(0, 0.2, 0)).project(camera);
+          if (cab.z < 1) rostos.push({ x: (cab.x + 1) / 2 * W, y: (1 - cab.y) / 2 * H, r: Math.max(80, Math.abs(borda.y - cab.y) / 2 * H * 1.3) });
+        }
+        const y = posicaoPedida(p.legenda, H) ?? faixaLonge(rostos, H);
+        desenharLegenda(ctx2, layout(g, medir, { W, H, y }), t, g);
+      }
+    }
   };
   window.planoEm = (t) => (linha.planos.find((x) => t >= x.inicio && t < x.fim) || {}).id;
   window.pronto = true;

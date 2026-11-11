@@ -103,7 +103,13 @@ export function dirigir(roteiro, palavras, catalogos = {}) {
       if (catalogos.efeitos) conferir(e.tipo, 'Efeito', catalogos.efeitos);
       return { ...e, de: tempo(e.inicio, ctx), ate: e.fim !== undefined ? tempo(e.fim, ctx) : fim };
     });
-    return { id: `plano${k + 1}`, frase: k, texto: f.texto, inicio: +inicio.toFixed(3), fim: +fim.toFixed(3), cenario: f.cenario, atores, cameras: cams, efeitos, trilha: f.trilha || null };
+    return { id: `plano${k + 1}`, frase: k, texto: f.texto, legenda: f.legenda === undefined ? 'auto' : f.legenda, inicio: +inicio.toFixed(3), fim: +fim.toFixed(3), cenario: f.cenario, atores, cameras: cams, efeitos, trilha: f.trilha || null };
   });
-  return { titulo: roteiro.titulo || '', duracao, palavras, planos };
+  // palavras-chave da legenda: as marcadas em "destaque" na frase e as palavras que disparam ações
+  const destaques = [];
+  roteiro.frases.forEach((f, k) => {
+    const alvos = new Set([...(f.destaque || []), ...(f.acoes || []).map((a) => a.palavra).filter(Boolean)].map(semAcento));
+    for (const w of porFrase[k]) if (alvos.has(semAcento(w.texto))) destaques.push(w.i);
+  });
+  return { titulo: roteiro.titulo || '', duracao, palavras, planos, destaques };
 }

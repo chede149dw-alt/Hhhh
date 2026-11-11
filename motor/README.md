@@ -50,6 +50,8 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 | `audio/narrar.py` | Narração Edge TTS: `python3 motor/audio/narrar.py roteiro.json audio/<serie>/<ep>` → narracao.wav + words.json |
 | `audio/sfx.py` | Sons e trilhas sintetizados: `python3 motor/audio/sfx.py audio/sfx` |
 | `audio/mixar.py` | Mixagem a −14 LUFS: `python3 motor/audio/mixar.py --voz … --linha … --saida mix.wav --trilha tensa` |
+| `legendas/legendas.js` | Legendas: `agrupar`, `layout`, `faixaLonge`, `desenhar` (Inter 900, contorno Tinta, destaque Mostarda) |
+| `visual/legenda-teste.html` | Quadro de teste com legendas difíceis |
 | `visual/ficha3d.html` | Folha do personagem 3D (`?ficha=personagens/.../ficha.json`): vistas, bocas e poses |
 | `visual/teste-estilo.html` | Cena de teste do estilo (3 cubos + esfera nas cores do guia); `window.medirCores()` |
 | `testes/determinismo.test.js` | Mesmo instante → mesmo quadro (md5), em qualquer ordem |
@@ -59,6 +61,7 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 | `testes/camera.test.js` | Enquadramento por tamanho, área livre e movimentos de câmera |
 | `testes/direcao.test.js` | Tempos dos planos, expressões de tempo, impacto na palavra e nomes errados recusados |
 | `testes/audio.test.js` | Sons sintetizados e LUFS final da mixagem |
+| `testes/legendas.test.js` | Grupos de legenda, faixa longe do rosto, texto dentro da tela |
 | `testes/estilo.test.js` | Cor iluminada = cor do material (calibração da luz) |
 
 Contrato de página: expor `window.quadro(t)` (posiciona tudo pelo tempo `t` em segundos e desenha, sem relógio real)

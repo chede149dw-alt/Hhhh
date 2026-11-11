@@ -30,6 +30,9 @@
             "graus": 16
           }
         }
+      ],
+      "destaque": [
+        "terra?"
       ]
     },
     {
@@ -108,6 +111,9 @@
             "graus": 25
           }
         }
+      ],
+      "destaque": [
+        "esfera"
       ]
     },
     {
@@ -161,6 +167,9 @@
             "metros": 0.4
           }
         }
+      ],
+      "destaque": [
+        "chão!"
       ]
     },
     {

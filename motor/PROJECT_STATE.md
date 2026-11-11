@@ -33,6 +33,8 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 7 — demo | `roteiros/teste3d/roteiro.json` → 5 frases, 10 cortes, 15,4 s (palavras estimadas, sem voz) | `previas/motor3d/direcao/teste-direcao.mp4` (~1,6 quadros/s) |
 | 8 — áudio | sons sintetizados existem; mixagem voz + efeitos + trilha com ducking; LUFS final entre −14,5 e −13,5 e pico ≤ −1 dBTP | **passou** (`testes/audio.test.js`) |
 | 8 — demo | voz Edge TTS (Antonio) no roteiro de teste: 33 palavras com tempo real; linha do tempo 12,3 s; mix −14,04 LUFS | `previas/motor3d/direcao/teste-com-voz.mp4` |
+| 9 — legendas | grupos de 1–3 palavras sem atravessar frases; faixa longe do rosto; quadro 1080×1920 com palavras longas: nada sai da tela (conta + pixels na borda) | **passou** (`testes/legendas.test.js`) |
+| 9 — demo | teste com voz, som e legendas (12,3 s) | `previas/motor3d/direcao/teste-com-legenda.mp4` |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -128,5 +130,13 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - `dirigir.js` agora grava `linha.sons` (sons das atuações, tremores do roteiro e um whoosh leve em cada corte) e aceita `--palavras words.json`.
 - Com a voz real a linha do tempo encurtou (15,4 → 12,3 s): a estimativa sem voz é mais lenta que a narração.
 
+## Legendas (prompt 9) — `legendas/legendas.js`
+- `agrupar(palavras, { destaques })`, `layout(grupo, medir, { y })` (diminui a fonte até caber nas margens de 70 px),
+  `faixaLonge(rostos)`, `posicaoPedida('cima'|'meio'|'baixo'|0–1)`, `escalaEntrada` (0,82 → 1 com leve passar do ponto), `desenhar`.
+- Estilo do guia: Inter 900, caixa alta, branco com contorno Tinta (20%), destaque Mostarda (pulsa ao ser dita).
+- Destaques = palavras em "destaque" da frase + palavras que disparam ações (direção grava `linha.destaques`). Posição por frase: "legenda".
+- No tocador: o rosto é projetado pela câmera a cada quadro e a legenda vai para a faixa mais longe dele; o quadro final é um canvas 2D
+  (imagem 3D + legenda), devolvido por `window.capturar`. `?legenda=0` desliga.
+
 ## Próxima etapa
-Prompt 9 — legendas (até 3 palavras, sem cobrir rosto, palavra de destaque em amarelo), a partir do words.json.
+Prompt 10 — um comando só (roteiro → voz → direção → quadros → MP4) com capa, cartela final e checagens automáticas (QA).

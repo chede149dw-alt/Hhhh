@@ -239,6 +239,7 @@
       "id": "plano1",
       "frase": 0,
       "texto": "E se você acordasse controlando a terra?",
+      "legenda": "auto",
       "inicio": 0,
       "fim": 2.937,
       "cenario": "quarto",
@@ -284,6 +285,7 @@
       "id": "plano2",
       "frase": 1,
       "texto": "Lucas sentiu o chão tremer.",
+      "legenda": "auto",
       "inicio": 2.937,
       "fim": 4.937,
       "cenario": "quarto",
@@ -335,6 +337,7 @@
       "id": "plano3",
       "frase": 2,
       "texto": "A terra virou uma esfera nas mãos dele.",
+      "legenda": "auto",
       "inicio": 4.937,
       "fim": 7.456,
       "cenario": "quarto",
@@ -393,6 +396,7 @@
       "id": "plano4",
       "frase": 3,
       "texto": "E ele arremessou tudo no chão!",
+      "legenda": "auto",
       "inicio": 7.456,
       "fim": 9.681,
       "cenario": "quarto",
@@ -462,6 +466,7 @@
       "id": "plano5",
       "frase": 4,
       "texto": "Ele nem sabia que podia fazer isso.",
+      "legenda": "auto",
       "inicio": 9.681,
       "fim": 12.256,
       "cenario": "quarto",
@@ -512,6 +517,13 @@
       "efeitos": [],
       "trilha": null
     }
+  ],
+  "destaques": [
+    6,
+    11,
+    16,
+    22,
+    25
   ],
   "sons": [
     {
