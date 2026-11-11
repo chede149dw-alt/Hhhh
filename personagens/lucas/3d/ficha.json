@@ -1,6 +1,6 @@
 {
   "nome": "Lucas",
-  "status": "proposta v2 (cabelo e roupa novos) — aguardando aprovação",
+  "status": "ficha 3D oficial v2 — aprovada pelo autor (cabelo em lascas, moletom aberto com camiseta, forro turquesa, emblema)",
   "altura": 1.6,
   "cores": {
     "pele": "#C98B63",
@@ -24,7 +24,8 @@
     "tenis": "#F2EDE6",
     "tenisSola": "#E2DBD0",
     "tenisDetalhe": "#3DB5B0",
-    "moletomDobra": "#233058"
+    "moletomDobra": "#233058",
+    "camiseta": "#F2EDE6"
   },
   "medidas": {
     "quadrilAltura": 0.803,
@@ -48,7 +49,10 @@
     "calca_larga",
     "barra_embolada",
     "tenis_cano_alto",
-    "dobras"
+    "dobras",
+    "ziper_aberto",
+    "forro_turquesa",
+    "emblema"
   ],
   "expressoes": [
     "neutro",

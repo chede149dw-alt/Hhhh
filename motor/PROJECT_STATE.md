@@ -43,7 +43,7 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - Cabelo: calota inclinada para trás + mechas em gota (LatheGeometry) apontando para fora; bolinhas pareciam "black power" e cones puros pareciam anime.
 - Pastas `visual/` e `personagem/` têm `package.json` com `"type": "module"` para o Node importar os módulos nos testes.
 
-## Lucas 3D v2 (proposta, aguardando aprovação)
+## Lucas 3D v2 — APROVADO (opção C: moletom aberto com camiseta, forro turquesa, emblema)
 - Pedido do autor: estilo dos personagens das referências (3D chapado): cabelo em lascas planas e pontudas, tronco em bloco,
   mãos de luva, sombreado bem liso. Mantém a identidade do Lucas (cores, moletom, pele, cabelo escuro); não copia o personagem da referência.
 - Cabelo: casco com borda recortada (franja/nuca) + lascas planas (ExtrudeGeometry fina, curvada) em camadas e dois tons.
@@ -55,7 +55,7 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
   Sombra de desenho mais marcada nos personagens (rampa com gMin 0,66; a face iluminada segue com a cor exata) e dobras de tecido.
   Opções de roupa para o autor escolher: `previas/motor3d/roupas/opcoes.png` (A fechado, B detalhes turquesa: forro + emblema de montanha,
   C aberto com camiseta) — variantes ligadas por peças na ficha ('forro_turquesa', 'emblema', 'ziper_aberto', 'dobras').
-  Quando aprovada: copiar a folha para `personagens/lucas/3d/ficha.png` e mudar o status na ficha.
+  Aprovada: folha oficial em `personagens/lucas/3d/ficha.png`.
 
 ## Animador (prompt 4) — `animacao/`
 - `animador.js` (puro, sem three): chaves {t, pose, curva}. **Padrão 'fluida'**: spline cúbica monotônica (PCHIP)

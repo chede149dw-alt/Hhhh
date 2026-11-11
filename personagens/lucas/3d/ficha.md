@@ -1,10 +1,13 @@
 # Lucas 3D — ficha oficial (aprovada)
 
-> Versão 3D do Lucas para o motor novo. **Mesmo design da ficha oficial 2D** (`../ficha.md`): mesmas cores,
-> moletom marinho com faixa turquesa, capuz enrolado, cordões linho, calça grafite larga com barra embolada,
-> tênis linho de cano alto com detalhes turquesa, pele morena, cabelo noite bagunçado em mechas.
-> **Aprovada pelo autor.** No motor 3D, o Lucas é sempre `criarBoneco(ficha.json)`, sem mudar a aparência.
-> A ficha 2D continua valendo para o motor 2D.
+> Versão 3D do Lucas (v2, estilo 3D chapado das referências), **aprovada pelo autor** (opção C).
+> Mesmas cores e identidade da ficha 2D (`../ficha.md`), com:
+> - **cabelo** noite em lascas planas e pontudas, bagunçado, franja caída de lado;
+> - **moletom** marinho **aberto com zíper** sobre **camiseta linho**, faixa turquesa nas mangas, punhos e barra
+>   canelados, bolsos de fenda, **forro do capuz turquesa**, cordões linho com pontas turquesa e **emblema de montanha**
+>   (turquesa sobre círculo linho) no peito;
+> - calça grafite larga com barra dobrada; tênis linho de cano alto com gola, biqueira e calcanhar turquesa.
+> No motor 3D, o Lucas é sempre `criarBoneco(ficha.json)`, sem mudar a aparência. A ficha 2D continua valendo para o motor 2D.
 
 ![Ficha 3D](ficha.png)
 
@@ -19,3 +22,7 @@
 
 Regerar a folha: `node motor/render/quadros.js motor/visual/ficha3d.html --quadros 0 --saida previas/motor3d/ficha3d`
 e copiar `quadro_00000.png` para cá como `ficha.png`.
+
+## Histórico
+- v1 aprovada (cabelo em gotas, moletom fechado).
+- v2 aprovada: estilo das referências (cabelo em lascas, roupa em blocos, mãos de luva, sombra de desenho), roupa opção C. Ficha regerada.
