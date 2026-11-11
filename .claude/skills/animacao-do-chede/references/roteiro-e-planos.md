@@ -51,6 +51,9 @@ O quadro é 1080×1920. O pós de cinema e a legenda são aplicados depois, auto
 | Função | O que faz |
 |---|---|
 | `api.t`, `api.u`, `api.dur` | tempo total, tempo no plano, duração do plano |
+| `api.orbita({ alvo: [X, Y, Z], raio, ang, altura, f, ySalvo, nevoa })` | câmera que gira em volta de um ponto (ang em rad; 0 = olhando para +Z; ySalvo = altura na tela onde o alvo fica) |
+| `api.desde(id)` | segundos desde o início do plano `id` (uma tomada contínua usa a mesma câmera em vários planos) |
+| `api.personagemGirando(item, x, y, alt, rel, o)` | personagem 2D na tela com a vista do ângulo `rel` (para closes que giram) |
 | `api.batidas` | tempos (no plano) das batidas de coração do `sfx`, para a imagem pulsar junto com o som |
 | `api.fase(a, b, curva)` | 0→1 entre os segundos `a` e `b` do plano; curvas `linear`, `suave`, `entra`, `sai`, `volta` (passa e volta) |
 | `api.lerp(a, b, k)`, `api.clamp` | interpolação |
@@ -62,6 +65,16 @@ O quadro é 1080×1920. O pós de cinema e a legenda são aplicados depois, auto
 | `api.texto(txt, x, y, tam, { cor })` | texto grande com contorno (capa e cartela) |
 | `api.rosto(x, y, r)` | marca um rosto extra para a legenda desviar |
 | `api.tremor(forca)` | deslocamento [dx, dy] de câmera tremendo |
+
+Opções extras de `personagem3d`: `rumo` (para onde o personagem está virado, rad; 0 = para −Z, de frente para a câmera
+padrão) ou `olhaPara: [X, Z]` — a vista (frente / 3/4 / perfil / costas, com espelho) sai do ângulo da câmera, com
+mistura suave na troca; `y` (altura do chão, para flutuar ou subir numa coluna).
+
+Tomada contínua: planos seguidos chamam a mesma função (`tomadaX(ctx, api)`), que usa `T = api.desde('primeiroPlano')`
+e chaves de animação (`chave(T, [[0, v0], [2.5, v1], ...])`) para câmera, posições, rumos e expressões. No roteiro,
+marque `"camera": { "tomada": true }` no primeiro plano e `{ "tomada": true, "continua": true }` nos seguintes.
+Cuidados: o quarto não tem parede da frente (câmera olhando para +Z, |ang| ≤ ~1); na rua, não passe a câmera por cima
+dos carros estacionados (lado +X); ao trocar de pose num salto, cubra com poeira.
 
 Opções `o` de personagem: `luz: { lado: -1|1 }` (contraluz/rim de janela), `vida` (intensidade da respiração e
 balanço, padrão 1), `parado`, `caminhar: t` (perfil), `caminharFrontal: t` (de frente ou de costas), `velocidade`,

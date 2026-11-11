@@ -27,7 +27,11 @@
           "volume": 1.0
         }
       ],
-      "imagem": "Capa no quarto escuro, pedras flutuando, rachaduras brilhando; título."
+      "imagem": "Capa no quarto escuro, pedras flutuando, rachaduras brilhando; título.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "noite",
@@ -146,7 +150,11 @@
           "volume": 1.8
         }
       ],
-      "imagem": "Quarto chacoalhando forte, livros caindo."
+      "imagem": "Quarto chacoalhando forte, livros caindo.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "rachadura",
@@ -174,7 +182,12 @@
           "volume": 0.9
         }
       ],
-      "imagem": "Rachadura do pé da cama até o Lucas, que recua com medo."
+      "imagem": "Rachadura do pé da cama até o Lucas, que recua com medo.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "maos",
@@ -259,7 +272,11 @@
         "vinheta": 0.9,
         "bloom": 0.6
       },
-      "imagem": "Mãe abre a porta de repente, preocupada."
+      "imagem": "Mãe abre a porta de repente, preocupada.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "susto",
@@ -284,7 +301,12 @@
           "volume": 0.6
         }
       ],
-      "imagem": "Esfera desmancha; Lucas congela com medo."
+      "imagem": "Esfera desmancha; Lucas congela com medo.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "mae2",
@@ -302,7 +324,12 @@
         "vinheta": 0.9,
         "bloom": 0.6
       },
-      "imagem": "Close na mãe, olha o chão e depois o Lucas, desconfiada."
+      "imagem": "Close na mãe, olha o chão e depois o Lucas, desconfiada.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "mentira",
@@ -326,7 +353,12 @@
           "bpm": 110
         }
       ],
-      "imagem": "Lucas com sorriso forçado e suor; rachadura brilhando atrás."
+      "imagem": "Lucas com sorriso forçado e suor; rachadura brilhando atrás.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "rua",
@@ -365,7 +397,11 @@
           "volume": 0.5
         }
       ],
-      "imagem": "Lucas correndo; cada passo racha a calçada."
+      "imagem": "Lucas correndo; cada passo racha a calçada.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "onda",
@@ -389,7 +425,12 @@
           "volume": 2.0
         }
       ],
-      "imagem": "Onda de pedras arrasta o Lucas sem controle."
+      "imagem": "Onda de pedras arrasta o Lucas sem controle.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "portao",
@@ -413,7 +454,11 @@
           "volume": 1.2
         }
       ],
-      "imagem": "Onda desmancha no pátio; Lucas cai na poeira."
+      "imagem": "Onda desmancha no pátio; Lucas cai na poeira.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "olhares",
@@ -436,7 +481,12 @@
           "bpm": 96
         }
       ],
-      "imagem": "Alunos parados olhando; alguém aponta; close no Lucas."
+      "imagem": "Alunos parados olhando; alguém aponta; close no Lucas.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "rafael",
@@ -453,7 +503,11 @@
         "quente": 0.3,
         "vinheta": 0.7
       },
-      "imagem": "Rafael corre até o Lucas, preocupado; bueiro solta poeira."
+      "imagem": "Rafael corre até o Lucas, preocupado; bueiro solta poeira.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "buraco",
@@ -481,7 +535,12 @@
           "volume": 1.6
         }
       ],
-      "imagem": "Bueiro afunda; Rafael escorrega para a beira do buraco."
+      "imagem": "Bueiro afunda; Rafael escorrega para a beira do buraco.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "coluna",
@@ -509,7 +568,12 @@
           "volume": 0.8
         }
       ],
-      "imagem": "Coluna de terra sustenta o Rafael e fecha o chão."
+      "imagem": "Coluna de terra sustenta o Rafael e fecha o chão.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "amigo",
@@ -527,7 +591,11 @@
         "vinheta": 1.0,
         "bloom": 0.8
       },
-      "imagem": "Close no Rafael recuando com medo."
+      "imagem": "Close no Rafael recuando com medo.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "resposta",
@@ -551,7 +619,11 @@
           "bpm": 72
         }
       ],
-      "imagem": "Lucas olhando as próprias mãos, triste."
+      "imagem": "Lucas olhando as próprias mãos, triste.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "sozinho",
@@ -569,7 +641,11 @@
         "vinheta": 1.0,
         "bloom": 0.8
       },
-      "imagem": "Rafael foge; câmera se afasta; Lucas sozinho no pátio rachado."
+      "imagem": "Rafael foge; câmera se afasta; Lucas sozinho no pátio rachado.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "racha",
@@ -593,7 +669,12 @@
           "volume": 1.8
         }
       ],
-      "imagem": "Rachadura maior corre até os pés do Lucas."
+      "imagem": "Rachadura maior corre até os pés do Lucas.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
     },
     {
       "id": "fundo",

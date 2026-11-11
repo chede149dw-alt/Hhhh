@@ -74,6 +74,24 @@
   const maoDoRig = (rig, lado = 'd') => rig.pontoMundo('mao_' + lado, [0, 0.3]);
   const camEm = (x, y, s) => Cena3D.camera({ f: s * 2, x: 0, y: 1, z: 0, cx: x, cy: y - s });
   const zoom = (ctx, cx, cy, z) => { ctx.translate(cx, cy); ctx.scale(z, z); ctx.translate(-cx, -cy); };
+  // chaves de animação: lista [[tempo, valor], ...] (valor número ou lista); interpola suave entre as chaves
+  function chave(T, lista) {
+    if (T <= lista[0][0]) return lista[0][1];
+    for (let i = 0; i < lista.length - 1; i++) {
+      const [t0, v0] = lista[i], [t1, v1] = lista[i + 1];
+      if (T <= t1) {
+        const k0 = (T - t0) / (t1 - t0), k = k0 * k0 * (3 - 2 * k0);
+        return Array.isArray(v0) ? v0.map((v, j) => v + (v1[j] - v) * k) : v0 + (v1 - v0) * k;
+      }
+    }
+    return lista[lista.length - 1][1];
+  }
+  // close com a vista escolhida pelo ângulo (rel): o personagem gira junto com a câmera
+  function closeGira(api, item, cx, cy, Hpx, rel, o = {}) {
+    const A = alturaH(item, 'frente');
+    return api.personagemGirando(item, cx, cy - 0.47 * Hpx + A * Hpx, A * Hpx, rel, o);
+  }
+  const angDe = (de, para) => Math.atan2(-(para[0] - de[0]), -(para[1] - de[1])); // rumo de quem olha de `de` para `para`
   const ALUNOS = [
     { nome: 'Aluna 1', altura: 5.5, pele: 'pele2', cabelo: { estilo: 'coque', cor: 'cabCastanho' }, top: { tipo: 'camiseta', cor: 'lilas' }, calca: { tipo: 'reta', cor: 'denim' } },
     { nome: 'Aluno 2', altura: 5.7, pele: 'pele4', cabelo: { estilo: 'baguncado', cor: 'cabNoite' }, top: { tipo: 'moletom', cor: 'brasa' }, calca: { tipo: 'reta', cor: 'grafite' } },
@@ -123,20 +141,245 @@
     }
   }
 
-  window.PLANOS = {
-    // 0–2 s: capa com a premissa (quarto escuro, pedras em volta das mãos)
-    capa(ctx, u, d, api) {
-      const z = api.lerp(1, 1.06, u / d);
-      ctx.save(); zoom(ctx, 540, 1100, z);
-      fundo(ctx, api, 'quarto', { x: 0.2, y: 1.2, z: -0.3, cy: 1100 }, 10);
-      const rig = api.personagem({ ...LUCAS, pose: 'poder', expressao: 'determinado' }, 330, 2350, 1450, { luz: LUZ_FRIA });
+  // ---------- tomadas contínuas (a mesma câmera atravessa vários planos) ----------
+  function tomadaQuarto(ctx, api) {
+    const T = api.desde('treme');
+    const forte = T < 2.5 ? 20 : 6;
+    const [tx, ty] = api.tremor(forte);
+    ctx.save(); ctx.translate(tx, ty);
+    const L = [-0.3 - 0.35 * api.ease.entra(api.clamp((T - 3.4) / 0.8, 0, 1)), 2.45];
+    const cam = api.orbita({
+      alvo: [L[0], chave(T, [[0, 1.25], [2.5, 1.15], [5, 1.05]]), L[1]], raio: chave(T, [[0, 2.5], [2.5, 2.1], [5, 1.75]]),
+      ang: chave(T, [[0, -0.2], [2.5, 0.12], [5, 0.38]]), altura: chave(T, [[0, 1.45], [2.5, 1.2], [5, 0.95]]), f: 1000, ySalvo: 1020, nevoa: Cenarios3D.quarto.nevoa,
+    });
+    Cenarios3D.quarto.desenhar(ctx, cam, { t: api.t, tremor: T < 2.5 ? 1.6 : 0.4, livrosCaindo: api.clamp((T - 0.1) / 1.5, 0, 1) });
+    const Tr = T - 2.5;
+    const rach = () => {
+      if (Tr <= 0) return;
+      Efeitos.rachadura(ctx, cam, [1.0, 2.0], [L[0] + 0.15, L[1] - 0.05], api.clamp((Tr - 0.1) / 1.2, 0, 1), api.t, { largura: 0.04, zigue: 0.6, semente: 23 });
+      Efeitos.rachadura(ctx, cam, [1.0, 2.3], [0.35, 3.3], api.clamp((Tr - 0.5) / 1.3, 0, 1), api.t, { largura: 0.025, semente: 29 });
+    };
+    rach();
+    const expr = T < 0.7 ? 'espanto' : Tr < 0 ? 'medo' : Tr < 0.4 ? { ...LUCAS_EXPRESSOES.espanto, olhar: [0, 0.012] } : 'medo';
+    const rumo = chave(T, [[0, 0], [2.6, 0], [3.3, angDe(L, [1.0, 2.0]) * 0.7]]);
+    api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: expr }, L[0], L[1], 1.75, { luz: LUZ_FRIA, vida: T < 2.5 ? 3 : 2.2, rumo });
+    ctx.restore();
+    frio(ctx, 0.62);
+    if (T < 2.5) Efeitos.poeiraTeto(ctx, W, H, api.t, 1.4);
+    ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.25, rach); ctx.restore();
+  }
+
+  function tomadaMae(ctx, api) {
+    const T = api.desde('mae');
+    const L = [0.1, 2.0], M = [1.3, 4.45];
+    const cam = api.orbita({
+      alvo: chave(T, [[0, [0.1, 1.4, 2.0]], [2.5, [0.4, 1.45, 2.7]], [5, [0.35, 1.35, 2.5]], [7.4, [1.1, 1.5, 3.9]], [8.4, [0.35, 1.45, 2.4]], [10, [0.1, 1.4, 2.0]]]),
+      raio: chave(T, [[0, 1.3], [2.5, 1.9], [5, 1.6], [7.4, 1.3], [8.3, 2.0], [10, 1.2]]),
+      ang: chave(T, [[0, -0.2], [2.5, 0.4], [5, 0.45], [7.4, 0.28], [10, -0.25]]),
+      altura: 1.42, f: 1150, ySalvo: 960, nevoa: Cenarios3D.quarto.nevoa,
+    });
+    Cenarios3D.quarto.desenhar(ctx, cam, { portaAberta: api.clamp((T - 0.2) / 0.35, 0, 1), t: api.t });
+    // mãe na porta: olha o Lucas; depois olha a terra no chão e fica desconfiada
+    const P = EXPRESSOES_PADRAO;
+    const exM = T < 5 ? 'preocupado' : T < 5.5 ? { ...P.preocupado, olhar: [0, 0.016] } : T < 6.0 ? P.preocupado : P.serio;
+    if (T > 0.3) api.personagem3d(cam, { ...MAE, pose: T > 6 ? 'maos-na-cintura' : 'parado', expressao: exM, voz: 'mae' }, M[0], M[1], 1.65, { luz: LUZ_FRIA, olhaPara: L, vida: 1.4 });
+    // Lucas: encantado com a esfera → vira de corpo inteiro para a porta → volta mentindo
+    const rumo = chave(T, [[0, 0], [0.8, 0], [2.0, angDe(L, M)], [7.6, angDe(L, M)], [8.7, -0.35]]);
+    const forcado = { olhar: [0.012, 0], palpebra: 0.1, pupila: 0.75, sobrancelha: { y: -0.04, ang: 16 }, boca: { tipo: 'aberta', curva: 1.3, abertura: 0.03, largura: 0.085 }, gota: true };
+    const exL = T < 0.8 ? 'curioso' : T < 2.5 ? 'espanto' : T < 7.5 ? 'medo' : forcado;
+    const rig = api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: exL, voz: 'lucas' }, L[0], L[1], 1.75, { luz: LUZ_FRIA, rumo, vida: T > 2.5 && T < 5 ? 0.5 : 1.3 });
+    const m = rig.pontoMundo('mao_e', [0, 0.3]), chao = cam.p(L[0] + 0.25, 0, L[1] - 0.1);
+    const cai = api.clamp((T - 2.6) / 1.2, 0, 1);
+    if (cai > 0.01 && cai < 1 && m.x > -1000) Efeitos.terraCaindo(ctx, m.x + 30, m.y - 50, chao.y, 160, cai);
+    if (cai >= 1 && !chao.atras) { ctx.fillStyle = 'rgba(90,58,34,0.8)'; ctx.beginPath(); ctx.ellipse(chao.x, chao.y, chao.s * 0.3, chao.s * 0.07, 0, 0, Math.PI * 2); ctx.fill(); }
+    frio(ctx, 0.55);
+    if (cai <= 0.01 && m.x > -1000) { brilho(ctx, m.x + 30, m.y - 50, 300, 0.3); Efeitos['poder-terra'](ctx, m.x + 30, m.y - 50, 130, { t: api.t, tamanho: 0.8 }); }
+    // rachadura embaixo da cama ainda brilhando (aparece quando a câmera volta para ele)
+    aceso(ctx, 0.35, () => Efeitos.rachadura(ctx, cam, [1.0, 2.0], [-0.15, 2.4], 1, api.t, { largura: 0.04, zigue: 0.6, semente: 23 }));
+  }
+
+  function tomadaRua(ctx, api) {
+    const T = api.desde('rua');
+    const X = 0.45;
+    const Zl = T < 2.5 ? 1.0 + 2.2 * T : 6.5 + 6 * (T - 2.5) + 1.2 * (T - 2.5) * (T - 2.5);
+    const [tx, ty] = api.tremor(T < 2.5 ? 5 : 9);
+    ctx.save(); ctx.translate(tx, ty);
+    const cam = api.orbita({
+      alvo: [X, chave(T, [[0, 1.05], [2.5, 1.3], [5, 1.6]]), Zl], raio: chave(T, [[0, 2.3], [2.5, 2.7], [5, 3.6]]),
+      ang: chave(T, [[0, 0], [2.3, 0.12], [5, 0.78]]), altura: chave(T, [[0, 1.35], [2.5, 1.5], [5, 1.95]]), f: 1100, ySalvo: 1020, nevoa: Cenarios3D.rua.nevoa,
+    });
+    Cenarios3D.rua.desenhar(ctx, cam, {});
+    const rachas = [];
+    [0.5, 1.05, 1.6, 2.15].forEach((tp, i) => {
+      if (T < tp) return;
+      const Zp = 1.0 + 2.2 * tp + 0.1, xs = X + (i % 2 ? 0.12 : -0.12), lado = i % 2 ? 1 : -1;
+      if (cam.p(xs, 0, Zp).dz < 1.3) return;
+      rachas.push(() => Efeitos.rachadura(ctx, cam, [xs, Zp], [xs + lado * 1.8, Zp + 0.8], api.clamp((T - tp) / 0.5, 0, 1), api.t, { largura: 0.05, zigue: 0.6, semente: 31 + i }));
+      Efeitos.impacto(ctx, cam, xs, Zp, api.clamp((T - tp) / 0.8, 0, 0.99), api.t, { tamanho: 0.45 });
+    });
+    rachas.forEach((f) => f());
+    const VIZ = { fabrica: 'criarPersonagem', opcoes: { nome: 'Vizinho', altura: 5.9, pele: 'pele2', cabelo: { estilo: 'liso-lateral', cor: 'cabCafe' }, top: { tipo: 'camiseta', cor: 'coral' }, calca: { tipo: 'reta', cor: 'pedra' } }, pose: 'parado', registroPoses: 'POSES_PADRAO' };
+    api.personagem3d(cam, { ...VIZ, expressao: T > 3.0 ? 'medo' : T > 1.2 ? 'espanto' : 'neutro' }, 4.6, 16, 1.78, { olhaPara: [X, Zl], vida: 2 });
+    // a onda cresce embaixo dele (de 2,3 s a 2,9 s); poeira esconde a troca de pose
+    const ko = api.ease.suave(api.clamp((T - 2.3) / 0.6, 0, 1));
+    if (T < 2.45) {
+      if (ko > 0) Efeitos.ondaTerra(ctx, cam, X, Zl, api.t, { largura: 2.6 * (0.35 + 0.65 * ko), altura: 1.2 * ko });
+      api.personagem3d(cam, { ...LUCAS, pose: {}, vista: 'costas', expressao: 'medo' }, X, Zl, 1.75, { caminharFrontal: T, velocidade: 1.8 });
+    } else {
+      // em cima da onda, de lado como um surfista (rosto para a câmera), balançando sem controle
+      const crista = Efeitos.ondaTerra(ctx, cam, X, Zl, api.t, { largura: 2.6 * (0.35 + 0.65 * ko), altura: 1.2 * ko });
+      const q = cam.p(X, 0, Zl), rc = Math.atan2(-(cam.x - X), -(cam.z - Zl));
+      ctx.save(); ctx.translate(crista.x, crista.y); ctx.rotate(Math.sin(api.t * 5) * 0.12); ctx.translate(-crista.x, -crista.y);
+      api.personagemGirando({ ...LUCAS, pose: 'poder', expressao: 'medo' }, crista.x, crista.y + q.s * 0.05, 1.75 * q.s, rc - Math.PI / 2, { vida: 2.5 });
       ctx.restore();
+    }
+    if (T > 2.3 && T < 3.3) { const q = cam.p(X, 0, Zl); Efeitos.terraPoeira(ctx, q.x, q.y - q.s * 0.4, q.s * 1.5, api.clamp((T - 2.3) / 1.0, 0, 0.99), { semente: 66 }); }
+    Cenarios3D.rua.frente(ctx, cam, { arvoreX: -2.6, semFrente: T > 2.2 });
+    ctx.restore();
+    frio(ctx, 0.3);
+    ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.3, () => rachas.forEach((f) => f())); ctx.restore();
+  }
+
+  function tomadaPortao(ctx, api) {
+    const T = api.desde('portao');
+    const bate = 0.35, dep = Math.max(0, T - bate);
+    const [tx, ty] = T > bate ? api.tremor(4 + 16 * Math.exp(-dep * 3)) : api.tremor(6);
+    ctx.save(); ctx.translate(tx, ty);
+    const L = [-0.1, 2.6];
+    const cam = api.orbita({
+      alvo: [L[0], chave(T, [[0, 0.45], [2.5, 0.6], [5, 1.35]]), L[1]], raio: chave(T, [[0, 2.9], [2.5, 2.5], [5, 1.6]]),
+      ang: chave(T, [[0, -0.55], [2.5, -0.2], [5, 0.38]]), altura: chave(T, [[0, 0.75], [2.5, 1.0], [5, 1.45]]), f: 1150, ySalvo: 1050, nevoa: Cenarios3D.patio.nevoa,
+    });
+    Cenarios3D.patio.desenhar(ctx, cam, {});
+    // alunos em volta, sempre virados para o Lucas (a câmera gira e eles aparecem)
+    const alunos = [[0, -2.3, 4.9, 'espanto'], [1, -1.0, 5.7, 'espanto', 'acenando'], [2, 1.4, 5.4, 'medo'], [3, 2.5, 4.4, 'espanto'], [0, 0.4, 6.4, 'medo']];
+    alunos.sort((a, b) => b[2] - a[2]).forEach(([i, x, z, ex, pose]) => api.personagem3d(cam, aluno(i, { expressao: ex, ...(pose ? { pose } : {}) }), x, z, 1.62, { olhaPara: L, vida: 1.8, semente: x * 7 }));
+    const rc = Math.atan2(-(cam.x - L[0]), -(cam.z - L[1]));
+    if (T < bate + 0.25) {
+      const crista = Efeitos.ondaTerra(ctx, cam, L[0], L[1] + (bate - T) * 4, api.t, { largura: 2.2, altura: 1.1 * (1 - api.clamp((T - bate) / 0.25, 0, 1)) });
+      if (T < bate) { const q = cam.p(L[0], 0, L[1]); api.personagemGirando({ ...LUCAS, pose: 'poder', expressao: 'medo' }, crista.x, crista.y, 1.75 * q.s, rc + Math.PI / 2); }
+    }
+    if (T >= bate) {
+      // caído de lado; depois se levanta virando o rosto para a câmera
+      const sobe = api.ease.suave(api.clamp((T - 2.7) / 0.9, 0, 1));
+      const pose = sobe > 0 ? { ...LUCAS, pose: 'caido', pose2: 'parado', mistura: sobe } : { ...LUCAS, pose: 'caido' };
+      api.personagem3d(cam, { ...pose, expressao: T < 1.6 ? 'cansado' : 'medo' }, L[0], L[1], 1.75, { vida: 0.8, rumo: rc - api.lerp(Math.PI / 2, 0.15, sobe) });
+      const q = cam.p(L[0], 0, L[1]), rnd = rng(61);
+      for (let i = 0; i < 10; i++) {
+        const a = rnd() * Math.PI * 2, v = 0.6 + rnd() * 1.2, r = 0.05 + rnd() * 0.08, dd = v * (1 - Math.exp(-dep * 2.5));
+        const p = cam.p(L[0] + Math.cos(a) * dd * 1.4, r, L[1] + Math.sin(a) * dd * 0.8);
+        if (!p.atras) Efeitos._pedra(ctx, p.x, p.y, r * p.s, dep * 4 * (i % 2 ? 1 : -1), 70 + i);
+      }
+      Efeitos.terraPoeira(ctx, q.x, q.y - q.s * 0.3, q.s * 1.6, api.clamp(dep / 1.6, 0, 0.99), { semente: 63 });
+    }
+    ctx.restore();
+    frio(ctx, 0.3);
+  }
+
+  function tomadaRafael(ctx, api) {
+    const T = api.desde('rafael');
+    const B = Cenarios3D.patio.bueiro, hx = B.x, hz = B.z + 0.22;
+    const L = [-0.7, 2.0];
+    const Tb = T - 2.5, Tc = T - 5.5;
+    const forca = Tb < 0 ? 2 : Tc < 0 ? 4 + 14 * Math.exp(-Math.max(0, Tb - 0.3) * 2) : 7;
+    const [tx, ty] = api.tremor(forca);
+    ctx.save(); ctx.translate(tx, ty);
+    const cam = api.orbita({
+      alvo: chave(T, [[0, [-0.45, 1.35, 2.5]], [2.5, [0.1, 1.2, 2.9]], [8.5, [0.2, 1.25, 2.95]]]),
+      raio: chave(T, [[0, 1.5], [2.5, 2.6], [5.5, 3.1], [8.5, 3.5]]),
+      ang: chave(T, [[0, 0.25], [2.6, 0.08], [4.2, -0.55], [8.5, -0.95]]), altura: chave(T, [[0, 1.55], [8.5, 1.45]]), f: 1100, ySalvo: 1000, nevoa: Cenarios3D.patio.nevoa,
+    });
+    Cenarios3D.patio.desenhar(ctx, cam, {});
+    // buraco abrindo no bueiro e fechando no fim
+    const abre = Tb < 0 ? 0 : api.ease.entra(api.clamp((Tb - 0.3) / 0.9, 0, 1));
+    const R = (0.15 + abre * 0.85) * (1 - 0.55 * api.ease.suave(api.clamp((Tc - 1.6) / 1.4, 0, 1)));
+    if (Tb < 0) { const bq = cam.p(B.x, 0, B.z + 0.2); for (let i = 0; i < 3; i++) { const ph = (api.t * 0.8 + i / 3) % 1; Efeitos.terraPoeira(ctx, bq.x, bq.y - ph * bq.s * 0.3, bq.s * 0.45, ph, { semente: 50 + i }); } }
+    const c0 = cam.p(hx, 0, hz);
+    if (abre > 0) {
+      const rnd = rng(88), pts = [];
+      for (let i = 0; i < 20; i++) { const a = (i / 20) * Math.PI * 2, r = R * (0.8 + rnd() * 0.35); pts.push(cam.p(hx + Math.cos(a) * r, 0.002, hz + Math.sin(a) * r * 0.8)); }
+      ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y))); ctx.closePath();
+      const gr = ctx.createRadialGradient(c0.x, c0.y, 0, c0.x, c0.y, R * c0.s * 1.1);
+      gr.addColorStop(0, '#2A1206'); gr.addColorStop(0.6, '#120A0C'); gr.addColorStop(1, '#3A2418');
+      ctx.fillStyle = gr; ctx.fill();
+      Efeitos.erupcao(ctx, cam, hx, hz, Tc < 0 ? api.clamp((Tb - 0.3) / 0.8, 0, 1) : 0.6 + 0.3 * api.clamp(Tc / 0.9, 0, 1), api.t, { raio: R + 0.22, altura: Tc < 0 ? 0.7 : 1.4 });
+    }
+    // Rafael: corre até perto do Lucas, escorrega para a beira do buraco, a coluna o levanta
+    const chega = api.ease.entra(api.clamp(T / 1.3, 0, 1));
+    const desliza = api.ease.suave(api.clamp((Tb - 0.5) / 1.8, 0, 1));
+    const Rf = [api.lerp(1.0, hx + 0.55, desliza) + (1 - chega) * 0.2, api.lerp(6.0, hz + 0.35, chega) - desliza * 0.15];
+    const exR = T < 1.4 ? 'preocupado' : Tb < 0.3 ? 'preocupado' : Tc < 0 ? 'medo' : 'medo';
+    const sobe = api.ease.entra(api.clamp((Tc - 0.2) / 1.2, 0, 1));
+    let topo = null;
+    if (Tc > 0) {
+      const b = cam.p(hx, -0.4, hz); topo = cam.p(hx, -0.4 + sobe * 1.05, hz);
+      if (!b.atras) Efeitos.colunaTerra(ctx, b.x, b.y, topo.y, b.s * 0.6, api.t);
+    }
+    const posR = Tc > 0 ? [api.lerp(Rf[0], hx, api.clamp(Tc / 0.5, 0, 1)), api.lerp(Rf[1], hz, api.clamp(Tc / 0.5, 0, 1))] : Rf;
+    const yR = Tc > 0 ? Math.max(0, -0.4 + sobe * 1.05) : 0;
+    const qR = cam.p(posR[0], yR, posR[1]);
+    ctx.save(); ctx.translate(qR.x, qR.y); ctx.rotate(Tc < 0 ? -0.25 * desliza : 0); ctx.translate(-qR.x, -qR.y);
+    if (T < 1.3) api.personagem3d(cam, { ...RAFAEL, pose: {}, expressao: exR, voz: 'rafael' }, posR[0], posR[1], 1.8, { caminharFrontal: T, velocidade: 1.6, olhaPara: L });
+    else api.personagem3d(cam, { ...RAFAEL, pose: 'parado', expressao: exR, voz: 'rafael' }, posR[0], posR[1], 1.8, { olhaPara: L, vida: Tb > 0 ? 2.5 : 1.4, y: yR });
+    ctx.restore();
+    // Lucas: assustado → estende a mão com raiva → determinado
+    const exL = Tb < 0 ? 'medo' : Tc < 0 ? 'espanto' : Tc < 1.3 ? 'raiva' : 'determinado';
+    const poder = api.ease.suave(api.clamp((Tc + 0.2) / 0.5, 0, 1));
+    const rig = api.personagem3d(cam, { ...LUCAS, pose: 'parado', pose2: 'poder', mistura: poder, expressao: exL }, L[0], L[1], 1.75, { luz: LUZ_DIA, olhaPara: posR, vida: 1.4 });
+    ctx.restore();
+    frio(ctx, 0.3);
+    ctx.save(); ctx.translate(tx, ty);
+    if (abre > 0) brilho(ctx, c0.x, c0.y, R * c0.s * 1.6, 0.3 * abre);
+    if (Tc > 0 && topo) {
+      const m = maoDoRig(rig);
+      if (m.x > -1000) { Efeitos.fluxoTerra(ctx, [m.x, m.y], [topo.x, topo.y + 40], api.t, { forca: 0.9 }); brilho(ctx, m.x, m.y, 200, 0.45); }
+    }
+    ctx.restore();
+  }
+
+  function tomadaSozinho(ctx, api) {
+    const T = api.desde('sozinho');
+    const Tr = T - 3.0;
+    const [tx, ty] = api.tremor(Tr < 0 ? 0 : 8 + 14 * api.clamp(Tr / 2.5, 0, 1));
+    ctx.save(); ctx.translate(tx, ty);
+    const L = [0, 4.2];
+    const cam = api.orbita({
+      alvo: [L[0], chave(T, [[0, 1.25], [3, 0.6], [5.5, 1.0]]), L[1]], raio: chave(T, [[0, 2.2], [3, 6.5], [5.5, 2.3]]),
+      ang: chave(T, [[0, -0.1], [3, 0.6], [5.5, 0.95]]), altura: chave(T, [[0, 1.5], [3, 3.6], [5.5, 1.2]]), f: 1150, ySalvo: 1000, nevoa: Cenarios3D.patio.nevoa,
+    });
+    Cenarios3D.patio.desenhar(ctx, cam, {});
+    const g = Tr < 0 ? 0 : api.clamp(Tr / 2.2, 0, 1);
+    const rach = () => {
+      Efeitos.rachadura(ctx, cam, L, [2.8, 7.5], 1, api.t, { largura: 0.06 + 0.06 * g, semente: 51 });
+      Efeitos.rachadura(ctx, cam, L, [-3.2, 6.5], 1, api.t, { largura: 0.05 + 0.04 * g, semente: 52 });
+      Efeitos.rachadura(ctx, cam, L, [0.9, 10], 1, api.t, { largura: 0.07 + 0.06 * g, semente: 53 });
+      Efeitos.rachadura(ctx, cam, L, [-1.8, 2.6], 1, api.t, { largura: 0.04, semente: 54 });
+      if (g > 0) { Efeitos.rachadura(ctx, cam, [3.5, 6], L, g, api.t, { largura: 0.09, zigue: 0.7, semente: 45 }); Efeitos.rachadura(ctx, cam, [-4, 3], L, api.clamp(g * 1.3 - 0.2, 0, 1), api.t, { largura: 0.07, semente: 47 }); }
+    };
+    rach();
+    // Rafael indo embora correndo, de perfil
+    const Xr = 0.9 + T * 2.4;
+    if (T < 3.2) api.personagem3d(cam, { ...RAFAEL, pose: 'andando', expressao: 'medo' }, Xr, 5.2, 1.8, { caminhar: T, velocidade: 1.8, rumo: -Math.PI / 2 });
+    const exL = Tr < 0 ? 'triste' : Tr < 0.6 ? 'espanto' : 'medo';
+    api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: exL }, L[0], L[1], 1.75, { vida: Tr < 0 ? 0.8 : 2.5, rumo: chave(T, [[0, 0], [3, 0.3], [5.5, 0.75]]) });
+    ctx.restore();
+    frio(ctx, Tr < 0 ? 0.5 : 0.45);
+    ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.3 + 0.15 * g, rach); ctx.restore();
+  }
+
+  window.PLANOS = {
+    // 0–2 s: capa com a premissa — a câmera gira devagar em volta do Lucas com a terra nas mãos
+    capa(ctx, u, d, api) {
+      const L = [0, 2.4];
+      const cam = api.orbita({ alvo: [L[0] + 0.25, 1.3, L[1]], raio: 1.75, ang: api.lerp(-0.4, -0.05, u / d), altura: 1.3, f: 1250, ySalvo: 1150, nevoa: Cenarios3D.quarto.nevoa });
+      Cenarios3D.quarto.desenhar(ctx, cam, { t: api.t });
+      const rig = api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'determinado' }, L[0], L[1], 1.75, { luz: LUZ_FRIA, rumo: -0.95, vida: 1.5 });
       frio(ctx, 0.6);
       Efeitos.poeiraTeto(ctx, W, H, api.t, 0.5);
       const a = maoDoRig(rig), b = maoDoRig(rig, 'e');
-      const ex = Math.min(800, (a.x + b.x) / 2 + 90), ey = (a.y + b.y) / 2;
+      const ex = (a.x + b.x) / 2 + 60, ey = (a.y + b.y) / 2;
       brilho(ctx, ex, ey, 520, 0.35);
-      Efeitos['poder-terra'](ctx, ex, ey, 280, { t: api.t });
+      Efeitos['poder-terra'](ctx, ex, ey, 260, { t: api.t });
       const k = api.fase(0, 0.35, 'volta');
       ctx.save(); zoom(ctx, 540, 380, k);
       api.texto('E SE VOCÊ', 540, 250, 92); api.texto('ACORDASSE', 540, 360, 92); api.texto('CONTROLANDO', 540, 470, 92);
@@ -227,37 +470,11 @@
       if (u > bate) brilho(ctx, 400, 1560, 600 * Math.exp(-depois * 2), 0.5 * Math.exp(-depois * 3));
     },
 
-    // a casa inteira treme: livros caem, poeira do teto
-    treme(ctx, u, d, api) {
-      const [tx, ty] = api.tremor(20);
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = api.camera({ f: 1300, x: 0.0, y: 1.3, z: 0.3 + u * 0.1, cy: 950, nevoa: Cenarios3D.quarto.nevoa });
-      Cenarios3D.quarto.desenhar(ctx, cam, { t: api.t, tremor: 1.6, livrosCaindo: api.fase(0.1, 1.6) });
-      api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: u < 0.7 ? 'espanto' : 'medo' }, 0.05, 2.0, 1.75, { luz: LUZ_FRIA, vida: 3 });
-      ctx.restore();
-      frio(ctx, 0.6);
-      Efeitos.poeiraTeto(ctx, W, H, api.t, 1.4);
-    },
+    // TOMADA DO QUARTO (treme + rachadura, 5 s sem corte): a casa treme e a câmera desce girando em volta do Lucas
+    // enquanto a rachadura nasce embaixo da cama e corre até os pés dele; ele recua e olha para ela
+    treme(ctx, u, d, api) { tomadaQuarto(ctx, api); },
 
-    // uma rachadura nasce embaixo da cama e corre até os pés do Lucas, que recua (reação em três tempos)
-    rachadura(ctx, u, d, api) {
-      const [tx, ty] = api.tremor(4);
-      ctx.save(); ctx.translate(tx, ty);
-      const desce = api.fase(0, 1.2, 'suave'), chega = api.fase(1.0, d, 'suave');
-      const cam = api.camera({ f: 1250, x: 0.3, y: api.lerp(1.35, 0.8, desce), z: -0.2 + u * 0.1 + chega * 0.25, cy: api.lerp(950, 1060, desce), nevoa: Cenarios3D.quarto.nevoa });
-      Cenarios3D.quarto.desenhar(ctx, cam, { t: api.t, tremor: 0.4 });
-      const rach = () => {
-        Efeitos.rachadura(ctx, cam, [1.0, 2.0], [-0.3, 2.1], api.fase(0.1, 1.3, 'entra'), api.t, { largura: 0.035, zigue: 0.6, semente: 23 });
-        Efeitos.rachadura(ctx, cam, [1.0, 2.2], [0.35, 3.1], api.fase(0.5, 1.8), api.t, { largura: 0.025, semente: 29 });
-      };
-      rach();
-      const Z = 2.15 + api.fase(0.9, 1.6, 'entra') * 0.35;
-      const expr = u < 0.4 ? { ...LUCAS_EXPRESSOES.espanto, olhar: [0, 0.012] } : 'medo';
-      api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: expr }, -0.4, Z, 1.75, { luz: LUZ_FRIA, vida: 2.2 });
-      ctx.restore();
-      frio(ctx, 0.65);
-      ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.2, rach); ctx.restore();
-    },
+    rachadura(ctx, u, d, api) { tomadaQuarto(ctx, api); },
 
     // suas mãos estão quentes e tremendo: brilho nas linhas da palma, no ritmo do coração
     maos(ctx, u, d, api) {
@@ -308,275 +525,62 @@
       Efeitos['poder-terra'](ctx, cx, cy, 300 * (1 - fecha * 0.25) * (1 + 0.06 * pu), { t: api.t, tamanho: tam });
     },
 
-    // a mãe abre a porta de repente: "Lucas?! Que barulho foi esse?"
-    mae(ctx, u, d, api) {
-      const cam = api.camera({ f: 1500, x: 1.2, y: 1.4, z: 3.0 + u * 0.15, cy: 960, nevoa: Cenarios3D.quarto.nevoa });
-      Cenarios3D.quarto.desenhar(ctx, cam, { portaAberta: api.fase(0, 0.25, 'entra'), t: api.t });
-      api.personagem3d(cam, { ...MAE, pose: 'parado', expressao: 'preocupado', voz: 'mae' }, 1.3, 4.55, 1.65, { luz: LUZ_FRIA });
-      frio(ctx, 0.5);
-    },
+    // TOMADA DA MÃE (mae + susto + mae2 + mentira, 10 s sem corte): a câmera gira em volta do Lucas e revela a mãe na
+    // porta; ele vira de corpo inteiro para ela, a terra cai, a câmera vai até a mãe e volta para ele mentindo
+    mae(ctx, u, d, api) { tomadaMae(ctx, api); },
 
-    // a terra desaba no tapete; Lucas congela
-    susto(ctx, u, d, api) {
-      const cam = api.camera({ f: 1250, x: 0.35, y: 1.35, z: 0.4 + u * 0.12, cy: 940, nevoa: Cenarios3D.quarto.nevoa });
-      Cenarios3D.quarto.desenhar(ctx, cam, { portaAberta: 1, t: api.t });
-      api.personagem3d(cam, { ...MAE, pose: 'parado', expressao: 'preocupado' }, 1.3, 4.5, 1.65, { luz: LUZ_FRIA });
-      const rig = api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: 'medo' }, 0.1, 2.0, 1.75, { luz: LUZ_FRIA, vida: 0.4 });
-      const m = rig.pontoMundo('mao_e', [0, 0.3]), chao = cam.p(0.3, 0, 1.9);
-      const cai = api.fase(0.4, 1.6);
-      if (cai > 0.01) Efeitos.terraCaindo(ctx, m.x + 40, m.y - 60, chao.y, 160, cai);
-      frio(ctx, 0.55);
-      if (cai <= 0.01) Efeitos['poder-terra'](ctx, m.x + 40, m.y - 60, 120, { t: api.t, tamanho: 0.8 });
-    },
+    susto(ctx, u, d, api) { tomadaMae(ctx, api); },
 
-    // close na mãe: olha a terra no chão, depois olha para ele, desconfiada (três tempos)
-    mae2(ctx, u, d, api) {
-      const z = api.lerp(1, 1.06, api.fase(0.9, d));
-      ctx.save(); zoom(ctx, 540, 900, z);
-      fundo(ctx, api, 'quarto', { x: 1.3, y: 1.5, z: 2.4, cy: 950 }, 14, { portaAberta: 1 });
-      const P = EXPRESSOES_PADRAO;
-      const expr = u < 0.5 ? { ...P.preocupado, olhar: [0, 0.016] } : u < 0.9 ? { ...P.preocupado, olhar: [0.01, 0.006] } : { ...P.serio };
-      close(api, { ...MAE, pose: 'parado', expressao: expr, voz: 'mae', ...(u > 0.5 && u < 0.9 ? { vistaCabeca: 'tq' } : {}) }, 540, 1050, 560, { luz: LUZ_FRIA });
-      ctx.restore();
-      frio(ctx, 0.5);
-    },
+    mae2(ctx, u, d, api) { tomadaMae(ctx, api); },
 
-    // "Não é nada, mãe!" — sorriso forçado e suor; atrás, a rachadura ainda brilha embaixo da cama
-    mentira(ctx, u, d, api) {
-      const pu = pulso(api, u);
-      const z = api.lerp(1, 1.05, u / d) + pu * 0.01;
-      ctx.save(); zoom(ctx, 540, 1000, z);
-      fundo(ctx, api, 'quarto', { x: -0.8, y: 1.2, z: 0.0, yaw: 0.55, cy: 980 }, 12, {}, {
-        frio: 0.7,
-        depois: (g, cam) => aceso(g, 1, () => Efeitos.rachadura(g, cam, [0.9, 1.35], [-0.35, 2.5], 1, api.t, { largura: 0.09, zigue: 0.6, semente: 23 })),
-      });
-      const forcado = { olhar: [0.012, 0], palpebra: 0.1, pupila: 0.75, sobrancelha: { y: -0.04, ang: 16 }, boca: { tipo: 'aberta', curva: 1.3, abertura: 0.03, largura: 0.085 }, gota: true };
-      close(api, { ...LUCAS, pose: 'parado', vista: 'tq', espelhar: true, expressao: forcado, voz: 'lucas' }, 560, 1080, 560, { luz: LUZ_FRIA });
-      ctx.restore();
-      frio(ctx, 0.3);
-    },
+    mentira(ctx, u, d, api) { tomadaMae(ctx, api); },
 
-    // você foge... e cada passo racha a rua
-    rua(ctx, u, d, api) {
-      const zc = -1.2 + u * 2.2;
-      const [tx, ty] = api.tremor(5);
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = api.camera({ f: 1150, x: 0.35, y: 1.35, z: zc, cy: 980, nevoa: Cenarios3D.rua.nevoa });
-      Cenarios3D.rua.desenhar(ctx, cam, {});
-      const X = 0.45, Z = zc + 2.1;
-      const rachas = [];
-      [0.5, 1.05, 1.6, 2.15].forEach((tp, i) => {
-        if (u < tp) return;
-        const Zp = -1.2 + tp * 2.2 + 2.2, xs = X + (i % 2 ? 0.12 : -0.12), lado = i % 2 ? 1 : -1;
-        if (Zp < zc + 1.3) return; // a câmera já passou por este passo
-        rachas.push(() => Efeitos.rachadura(ctx, cam, [xs, Zp], [xs + lado * 1.8, Zp + 0.8], api.clamp((u - tp) / 0.5, 0, 1), api.t, { largura: 0.05, zigue: 0.6, semente: 31 + i }));
-        Efeitos.impacto(ctx, cam, xs, Zp, api.clamp((u - tp) / 0.8, 0, 0.99), api.t, { tamanho: 0.45 });
-      });
-      rachas.forEach((f) => f());
-      api.personagem3d(cam, { fabrica: 'criarPersonagem', opcoes: { nome: 'Vizinho', altura: 5.9, pele: 'pele2', cabelo: { estilo: 'liso-lateral', cor: 'cabCafe' }, top: { tipo: 'camiseta', cor: 'coral' }, calca: { tipo: 'reta', cor: 'pedra' } }, pose: 'parado', registroPoses: 'POSES_PADRAO', vista: 'tq', espelhar: true, expressao: u > 0.8 ? 'espanto' : 'neutro' }, 2.6, 6.5, 1.78);
-      api.personagem3d(cam, { ...LUCAS, pose: {}, vista: 'costas', expressao: 'medo' }, X, Z, 1.75, { caminharFrontal: u, velocidade: 1.8 });
-      Cenarios3D.rua.frente(ctx, cam, { arvoreX: -2.6 });
-      ctx.restore();
-      frio(ctx, 0.3);
-      ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.3, () => rachas.forEach((f) => f())); ctx.restore();
-    },
+    // TOMADA DA RUA (rua + onda, 5 s): a câmera segue o Lucas correndo e, quando a onda o leva, gira para o lado
+    rua(ctx, u, d, api) { tomadaRua(ctx, api); },
 
-    // você tenta parar. A terra não para: a onda arrasta o Lucas sem controle
-    onda(ctx, u, d, api) {
-      const zc = -1 + u * 6.5;
-      const [tx, ty] = api.tremor(9);
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = api.camera({ f: 1100, x: 0.2 + Math.sin(u * 2) * 0.08, y: 1.9, z: zc, cy: 1050, nevoa: Cenarios3D.rua.nevoa });
-      Cenarios3D.rua.desenhar(ctx, cam, {});
-      api.personagem3d(cam, { fabrica: 'criarPersonagem', opcoes: { nome: 'Vizinho', altura: 5.9, pele: 'pele2', cabelo: { estilo: 'liso-lateral', cor: 'cabCafe' }, top: { tipo: 'camiseta', cor: 'coral' }, calca: { tipo: 'reta', cor: 'pedra' } }, pose: 'parado', registroPoses: 'POSES_PADRAO', vista: 'frente', expressao: u > 0.9 ? 'medo' : 'neutro' }, 2.2, 11, 1.78);
-      const Z = zc + 3.4;
-      const crista = Efeitos.ondaTerra(ctx, cam, 0.35, Z, api.t, { largura: 2.6, altura: 1.2 });
-      const q = cam.p(0.35, 0, Z);
-      ctx.save(); ctx.translate(crista.x, crista.y); ctx.rotate(Math.sin(api.t * 5) * 0.12); ctx.translate(-crista.x, -crista.y);
-      api.personagem({ ...LUCAS, pose: 'poder', vista: 'tq', espelhar: true, expressao: 'medo' }, crista.x, crista.y + q.s * 0.05, 1.75 * q.s, { vida: 2.5 });
-      ctx.restore();
-      Cenarios3D.rua.frente(ctx, cam, { arvoreX: -2.8 });
-      ctx.restore();
-      frio(ctx, 0.3);
-    },
+    onda(ctx, u, d, api) { tomadaRua(ctx, api); },
 
-    // ela te joga no portão da escola: a onda desmancha e o Lucas cai na poeira
-    portao(ctx, u, d, api) {
-      const bate = 0.35, dep = Math.max(0, u - bate);
-      const [tx, ty] = u > bate ? api.tremor(18 * Math.exp(-dep * 3)) : api.tremor(6);
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = api.camera({ f: 1200, x: 0.0, y: api.lerp(1.1, 0.8, api.fase(0, d)), z: -0.6 + u * 0.18, cy: 1000, nevoa: Cenarios3D.patio.nevoa });
-      Cenarios3D.patio.desenhar(ctx, cam, {});
-      const X = -0.1, Z = 2.4;
-      if (u < bate + 0.25) {
-        const crista = Efeitos.ondaTerra(ctx, cam, X, Z + (bate - u) * 4, api.t, { largura: 2.2, altura: 1.1 * (1 - api.fase(bate, bate + 0.25)) });
-        if (u < bate) { const q = cam.p(X, 0, Z); api.personagem({ ...LUCAS, pose: 'poder', vista: 'tq', expressao: 'medo' }, crista.x, crista.y, 1.75 * q.s); }
-      }
-      if (u >= bate) {
-        api.personagem3d(cam, { ...LUCAS, pose: 'caido', expressao: u < 1.5 ? 'cansado' : 'medo' }, X, Z, 1.75, { vida: 0.6 });
-        // pedras rolando para fora do impacto
-        const q = cam.p(X, 0, Z), rnd = rng(61);
-        for (let i = 0; i < 10; i++) {
-          const a = rnd() * Math.PI * 2, v = 0.6 + rnd() * 1.2, r = 0.05 + rnd() * 0.08;
-          const dd = v * (1 - Math.exp(-dep * 2.5));
-          const p = cam.p(X + Math.cos(a) * dd * 1.4, r, Z + Math.sin(a) * dd * 0.8);
-          Efeitos._pedra(ctx, p.x, p.y, r * p.s, dep * 4 * (i % 2 ? 1 : -1), 70 + i);
-        }
-        Efeitos.terraPoeira(ctx, q.x, q.y - q.s * 0.3, q.s * 1.6, api.clamp(dep / 1.6, 0, 0.99), { semente: 63 });
-      }
-      ctx.restore();
-      frio(ctx, 0.3);
-    },
+    // TOMADA DO PORTÃO (portao + olhares, 5 s): ele cai, a câmera sobe girando e revela os alunos olhando
+    portao(ctx, u, d, api) { tomadaPortao(ctx, api); },
 
-    // e todo mundo viu: alunos parados olhando; o Lucas levanta o olhar
-    olhares(ctx, u, d, api) {
-      const pu = pulso(api, u);
-      const cam = fundo(ctx, api, 'patio', { x: 0.2, y: 1.5, z: -0.2 + u * 0.1, cy: 960 }, 6);
-      api.personagem3d(cam, aluno(0, { expressao: 'espanto' }), -2.3, 5.6, 1.6);
-      api.personagem3d(cam, aluno(1, { pose: 'acenando', expressao: 'espanto' }), -1.0, 6.6, 1.68);
-      api.personagem3d(cam, aluno(2, { expressao: 'medo' }), 1.5, 6.1, 1.58);
-      api.personagem3d(cam, aluno(3, { vista: 'tq', espelhar: true, expressao: 'espanto' }), 2.7, 5.2, 1.65);
-      const z = api.lerp(1, 1.08, api.fase(0.9, d)) + pu * 0.008;
-      ctx.save(); zoom(ctx, 540, 1400, z);
-      const M = LUCAS_EXPRESSOES.medo;
-      const expr = u < 0.45 ? { ...M, olhar: [0, 0.014] } : u < 1.2 ? { ...M, olhar: [-0.014, 0] } : { ...M, olhar: [0.014, -0.004] };
-      close(api, { ...LUCAS, pose: 'parado', expressao: expr }, 540, 1300, 520, { luz: LUZ_DIA });
-      ctx.restore();
-      frio(ctx, 0.3);
-    },
+    olhares(ctx, u, d, api) { tomadaPortao(ctx, api); },
 
-    // Rafael corre até o Lucas: "Cara... você tá pálido." Ao fundo, o bueiro solta poeira
-    rafael(ctx, u, d, api) {
-      const B = Cenarios3D.patio.bueiro;
-      const cam = api.camera({ f: 1250, x: -0.2, y: 1.5, z: u * 0.1, cy: 960, nevoa: Cenarios3D.patio.nevoa });
-      Cenarios3D.patio.desenhar(ctx, cam, {});
-      const bq = cam.p(B.x, 0, B.z + 0.2);
-      for (let i = 0; i < 3; i++) { const ph = (api.t * 0.8 + i / 3) % 1; Efeitos.terraPoeira(ctx, bq.x, bq.y - ph * bq.s * 0.3, bq.s * 0.45, ph, { semente: 50 + i }); }
-      const chega = api.fase(0, 1.3, 'entra'), Zr = api.lerp(5.2, 3.0, chega);
-      if (u < 1.3) api.personagem3d(cam, { ...RAFAEL, pose: {}, vista: 'frente', expressao: 'preocupado', voz: 'rafael' }, 0.1, Zr, 1.8, { caminharFrontal: u, velocidade: 1.6 });
-      else api.personagem3d(cam, { ...RAFAEL, pose: 'parado', expressao: 'preocupado', voz: 'rafael' }, 0.1, Zr, 1.8);
-      api.personagem({ ...LUCAS, pose: 'parado', vista: 'costas', expressao: 'medo' }, 230, 2550, 1750, { semRosto: true });
-      frio(ctx, 0.3);
-    },
+    // TOMADA DO RAFAEL (rafael + buraco + coluna, 8,5 s): por cima do ombro do Lucas; o chão cede e a câmera gira
+    // para o lado e mostra os dois; a coluna sobe com o Rafael
+    rafael(ctx, u, d, api) { tomadaRafael(ctx, api); },
 
-    // então o chão cede embaixo dele: o bueiro afunda e o Rafael escorrega para a beira do buraco
-    buraco(ctx, u, d, api) {
-      const B = Cenarios3D.patio.bueiro, hx = B.x, hz = B.z + 0.22;
-      const dep = Math.max(0, u - 0.3);
-      const [tx, ty] = api.tremor(4 + (u > 0.3 ? 16 * Math.exp(-dep * 2) : 0));
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = api.camera({ f: 1150, x: -0.1, y: 1.6, z: -0.4 + u * 0.12, cy: 960, nevoa: Cenarios3D.patio.nevoa });
-      Cenarios3D.patio.desenhar(ctx, cam, {});
-      const abre = api.fase(0.3, 1.2, 'entra'), R = 0.15 + abre * 0.85;
-      const borda = () => { const rnd = rng(88), pts = []; for (let i = 0; i < 20; i++) { const a = (i / 20) * Math.PI * 2, r = R * (0.8 + rnd() * 0.35); pts.push(cam.p(hx + Math.cos(a) * r, 0.002, hz + Math.sin(a) * r * 0.8)); } return pts; };
-      const pts = borda();
-      ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y))); ctx.closePath();
-      const c0 = cam.p(hx, 0, hz), gr = ctx.createRadialGradient(c0.x, c0.y, 0, c0.x, c0.y, R * c0.s * 1.1);
-      gr.addColorStop(0, '#2A1206'); gr.addColorStop(0.6, '#120A0C'); gr.addColorStop(1, '#3A2418');
-      ctx.fillStyle = gr; ctx.fill();
-      Efeitos.erupcao(ctx, cam, hx, hz, api.fase(0.3, 1.1), api.t, { raio: R + 0.25, altura: 0.7 });
-      const desliza = api.fase(0.8, 2.4, 'suave');
-      const Xr = api.lerp(hx + R + 0.9, hx + R + 0.2, desliza), q = cam.p(Xr, 0, hz);
-      ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(-0.28 * desliza); ctx.translate(-q.x, -q.y);
-      api.personagem3d(cam, { ...RAFAEL, pose: 'tq', vista: 'tq', espelhar: true, expressao: u < 0.6 ? 'espanto' : 'medo' }, Xr, hz, 1.8, { vida: 2.5 });
-      ctx.restore();
-      api.personagem3d(cam, { ...LUCAS, pose: 'parado', vista: 'tq', expressao: 'espanto' }, -1.3, 2.3, 1.75, { luz: LUZ_DIA });
-      ctx.restore();
-      frio(ctx, 0.3);
-      ctx.save(); ctx.translate(tx, ty);
-      brilho(ctx, c0.x, c0.y, R * c0.s * 1.6, 0.3 * abre);
-      ctx.restore();
-    },
+    buraco(ctx, u, d, api) { tomadaRafael(ctx, api); },
 
-    // você estende a mão... e a terra segura ele: a coluna sobe com o Rafael e o chão se fecha
-    coluna(ctx, u, d, api) {
-      const B = Cenarios3D.patio.bueiro, hx = B.x, hz = B.z + 0.22;
-      const [tx, ty] = api.tremor(8);
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = api.camera({ f: 1050, x: 0.3, y: 1.4, z: -0.4 + u * 0.1, cy: 960, nevoa: Cenarios3D.patio.nevoa });
-      Cenarios3D.patio.desenhar(ctx, cam, {});
-      const fecha = api.fase(1.8, d, 'suave'), R = 1.0 - fecha * 0.6;
-      const rnd = rng(88), pts = [];
-      for (let i = 0; i < 20; i++) { const a = (i / 20) * Math.PI * 2, r = R * (0.8 + rnd() * 0.35); pts.push(cam.p(hx + Math.cos(a) * r, 0.002, hz + Math.sin(a) * r * 0.8)); }
-      ctx.fillStyle = '#140B0C'; ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y))); ctx.closePath(); ctx.fill();
-      Efeitos.erupcao(ctx, cam, hx, hz, 0.5 + 0.4 * api.fase(0, 0.9), api.t, { raio: R + 0.2, altura: 1.4 });
-      const sobe = api.fase(0.2, 1.4, 'entra');
-      const b = cam.p(hx, -0.4, hz), topo = cam.p(hx, -0.4 + sobe * 1.0, hz);
-      Efeitos.colunaTerra(ctx, b.x, b.y, topo.y, b.s * 0.6, api.t);
-      api.personagem({ ...RAFAEL, pose: 'parado', expressao: 'medo' }, topo.x, topo.y, 1.8 * topo.s, { vida: 2 });
-      const rig = api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: u < 1.3 ? 'raiva' : 'determinado' }, -0.9, 2.5, 1.75, { luz: LUZ_DIA });
-      const m = maoDoRig(rig);
-      ctx.restore();
-      frio(ctx, 0.3);
-      ctx.save(); ctx.translate(tx, ty);
-      Efeitos.fluxoTerra(ctx, [m.x + 20, m.y], [topo.x, topo.y + b.s * 0.3], api.t, { forca: 0.9 });
-      brilho(ctx, m.x + 20, m.y, 220, 0.45);
-      ctx.restore();
-    },
+    coluna(ctx, u, d, api) { tomadaRafael(ctx, api); },
 
-    // Rafael: "Lucas... o que é você?" — recuando com medo do amigo
+    // Rafael: "Lucas... o que é você?" — recuando; a câmera gira um pouco em volta dele (fundo passa atrás)
     amigo(ctx, u, d, api) {
-      const z = api.lerp(1.1, 1.0, api.fase(0, d, 'suave'));
-      ctx.save(); zoom(ctx, 540, 900, z);
-      fundo(ctx, api, 'patio', { x: 0.5, y: 1.6, z: 1.0, cy: 950 }, 14);
-      close(api, { ...RAFAEL, pose: 'parado', expressao: 'medo', voz: 'rafael' }, 540 + api.lerp(0, 60, api.fase(0, d)), 1050, 560, { vida: 1.5 });
+      const k = api.fase(0, d, 'suave');
+      ctx.save(); zoom(ctx, 540, 900, api.lerp(1.08, 1.0, k));
+      fundo(ctx, api, 'patio', { x: 0.5 + k * 0.8, y: 1.6, z: 1.0, yaw: api.lerp(0.25, -0.15, k), cy: 950 }, 14);
+      closeGira(api, { ...RAFAEL, pose: 'parado', expressao: 'medo', voz: 'rafael' }, 540 + api.lerp(-30, 60, k), 1050, 560, api.lerp(-0.5, -0.8, k), { vida: 1.8 });
       ctx.restore();
       frio(ctx, 0.4);
     },
 
-    // Lucas: "Eu não sei o que tá acontecendo comigo." — olhando as próprias mãos
+    // Lucas: "Eu não sei o que tá acontecendo comigo." — a câmera gira devagar em volta dele
     resposta(ctx, u, d, api) {
-      const pu = pulso(api, u);
-      const z = api.lerp(1, 1.06, u / d);
-      ctx.save(); zoom(ctx, 540, 1000, z);
-      fundo(ctx, api, 'patio', { x: -0.4, y: 1.5, z: 0.6, cy: 950 }, 14);
-      close(api, { ...LUCAS, pose: 'parado', expressao: { ...LUCAS_EXPRESSOES.triste, olhar: [0, 0.014] }, voz: 'lucas' }, 540, 950, 520);
+      const pu = pulso(api, u), k = api.fase(0, d, 'suave');
+      ctx.save(); zoom(ctx, 540, 1000, api.lerp(1, 1.06, k));
+      fundo(ctx, api, 'patio', { x: -0.4 - k * 0.8, y: 1.5, z: 0.6, yaw: api.lerp(-0.3, 0.15, k), cy: 950 }, 14);
+      closeGira(api, { ...LUCAS, pose: 'parado', expressao: { ...LUCAS_EXPRESSOES.triste, olhar: [0, 0.014] }, voz: 'lucas' }, 540, 950, 520, api.lerp(0.48, 0.8, k));
       ctx.restore();
-      const tre = (k) => Math.sin(api.t * 37 + k) * 5;
+      const tre = (j) => Math.sin(api.t * 37 + j) * 5;
       const me = Maos.desenhar(ctx, 330 + tre(1), 2050 + tre(2), 330, { ang: 0.35, curl: [0.3, 0.25, 0.25, 0.3, 0.35], abre: 0.5, espelhar: true });
       const md = Maos.desenhar(ctx, 760 + tre(3), 2040 + tre(4), 330, { ang: -0.35, curl: [0.3, 0.25, 0.25, 0.3, 0.35], abre: 0.5 });
       frio(ctx, 0.4);
       for (const [m, s] of [[me, 7], [md, 8]]) { brilho(ctx, m.palma.x, m.palma.y, 180, 0.15 + 0.3 * pu); veias(ctx, m.palma.x, m.palma.y, 300, 0.3 + 0.4 * pu, s); }
     },
 
-    // ele sai correndo... e você fica sozinho no pátio rachado (câmera se afasta e sobe)
-    sozinho(ctx, u, d, api) {
-      const k = api.fase(0, d, 'suave');
-      const cam = api.camera({ f: 1100, x: 0.0, y: api.lerp(1.5, 3.4, k), z: api.lerp(0.8, -3.0, k), cy: api.lerp(960, 1180, k), nevoa: Cenarios3D.patio.nevoa });
-      Cenarios3D.patio.desenhar(ctx, cam, {});
-      const L = [0, 4.2];
-      const rach = () => {
-        Efeitos.rachadura(ctx, cam, L, [2.8, 7.5], 1, api.t, { largura: 0.06, semente: 51 });
-        Efeitos.rachadura(ctx, cam, L, [-3.2, 6.5], 1, api.t, { largura: 0.05, semente: 52 });
-        Efeitos.rachadura(ctx, cam, L, [0.9, 10], 1, api.t, { largura: 0.07, semente: 53 });
-        Efeitos.rachadura(ctx, cam, L, [-1.8, 2.6], 1, api.t, { largura: 0.04, semente: 54 });
-      };
-      rach();
-      const Xr = 0.9 + u * 2.4;
-      api.personagem3d(cam, { ...RAFAEL, pose: 'andando', vista: 'perfil', expressao: 'medo' }, Xr, 5.2, 1.8, { caminhar: u, velocidade: 1.8 });
-      api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: 'triste' }, L[0], L[1], 1.75, { vida: 0.6 });
-      frio(ctx, 0.5);
-      aceso(ctx, 0.3, rach);
-    },
+    // TOMADA FINAL DO PÁTIO (sozinho + racha, 5,5 s): a câmera se afasta para o alto girando, e mergulha de volta nele
+    sozinho(ctx, u, d, api) { tomadaSozinho(ctx, api); },
 
-    // mas o poder não quer parar: a rachadura volta, maior, até os pés do Lucas
-    racha(ctx, u, d, api) {
-      const [tx, ty] = api.tremor(8 + 14 * api.fase(0.5, d));
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = api.camera({ f: 1100, x: -0.3, y: 1.5 - u * 0.15, z: -0.5 + u * 0.18, cy: 900 + u * 70, nevoa: Cenarios3D.patio.nevoa });
-      Cenarios3D.patio.desenhar(ctx, cam, {});
-      const rach = () => {
-        Efeitos.rachadura(ctx, cam, [0.8, 9], [-0.35, 2.75], api.fase(0, d * 0.8), api.t, { largura: 0.13, zigue: 0.7, semente: 41 });
-        Efeitos.rachadura(ctx, cam, [-2.5, 7], [-0.5, 2.9], api.fase(0.4, d), api.t, { largura: 0.08, semente: 43 });
-        Efeitos.rachadura(ctx, cam, [3.0, 6], [-0.2, 2.8], api.fase(0.8, d), api.t, { largura: 0.07, semente: 45 });
-      };
-      rach();
-      api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: u < 0.8 ? 'espanto' : 'medo' }, -0.35, 2.6, 1.75, { luz: LUZ_DIA, vida: 2.5 });
-      Efeitos.impacto(ctx, cam, -0.35, 2.75, api.clamp((u - d * 0.75) / 0.9, 0, 0.99), api.t, { tamanho: 0.9 });
-      ctx.restore();
-      frio(ctx, 0.45);
-      ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.4, rach); ctx.restore();
-    },
+    racha(ctx, u, d, api) { tomadaSozinho(ctx, api); },
 
     // e lá embaixo... alguma coisa acordou com você: mergulho na rachadura, brilho pulsando como um coração
     fundo(ctx, u, d, api) {

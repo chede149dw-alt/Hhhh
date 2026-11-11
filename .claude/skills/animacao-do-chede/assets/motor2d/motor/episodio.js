@@ -50,7 +50,13 @@
     a.tronco = (a.tronco || 0) + r * 1.2;
     a.cabeca = (a.cabeca || 0) + r2 * 2.0;
     a.braco_d = (a.braco_d || 0) + r * 1.5; a.braco_e = (a.braco_e || 0) - r * 1.5;
-    a._desloca = [(a._desloca || [0, 0])[0], (a._desloca || [0, 0])[1] + Math.sin(t * 2.1) * 0.012 * intensidade];
+    // movimentos lentos (o personagem nunca fica "estátua"): troca o peso, inclina, olha em volta
+    const i2 = intensidade;
+    a.tronco += Math.sin(t * 0.71 + 0.3) * 2.2 * i2;
+    a.cabeca += Math.sin(t * 0.93 + 2.0) * 3.5 * i2 + Math.sin(t * 0.37) * 2.0 * i2;
+    a.braco_d += Math.sin(t * 0.83 + 1.1) * 4 * i2; a.braco_e -= Math.sin(t * 0.77 + 0.2) * 4 * i2;
+    a.antebraco_d = (a.antebraco_d || 0) + Math.sin(t * 1.1 + 0.5) * 3 * i2; a.antebraco_e = (a.antebraco_e || 0) - Math.sin(t * 1.05) * 3 * i2;
+    a._desloca = [(a._desloca || [0, 0])[0] + Math.sin(t * 0.6 + 0.8) * 0.025 * i2, (a._desloca || [0, 0])[1] + Math.sin(t * 2.1) * 0.012 * intensidade];
     return a;
   }
   function piscando(t, semente = 0) {
@@ -164,6 +170,35 @@
     return rig;
   }
 
+  // vista do personagem a partir do ângulo entre a câmera e a frente dele (rel em radianos; 0 = de frente,
+  // positivo = câmera do lado direito dele, ele aparece olhando para a direita da tela)
+  function vistaPorAngulo(rel) {
+    const a = Math.atan2(Math.sin(rel), Math.cos(rel)), g = (Math.abs(a) * 180) / Math.PI, esp = a < 0;
+    const faixas = [[22.5, 'frente', 'tq'], [67.5, 'tq', 'perfil'], [125, 'perfil', 'costas']];
+    const nome = g < 22.5 ? 'frente' : g < 67.5 ? 'tq' : g < 125 ? 'perfil' : 'costas';
+    for (const [lim, v1, v2] of faixas) {
+      const d = g - lim;
+      if (Math.abs(d) < 4) return { vista: v1, vista2: v2, mistura: (d + 4) / 8, espelhar: esp };
+    }
+    return { vista: nome, vista2: null, mistura: 0, espelhar: esp };
+  }
+  // personagem com a vista escolhida pelo ângulo; perto do limite entre duas vistas, mistura as duas
+  function personagemGirando(ctx, item, x, ySola, alturaPx, rel, o) {
+    const v = vistaPorAngulo(rel);
+    const um = (vista) => ({ ...item, vista, espelhar: vista === 'frente' || vista === 'costas' ? false : v.espelhar });
+    if (!v.vista2 || v.mistura <= 0.02 || v.mistura >= 0.98) return personagem(ctx, um(v.vista2 && v.mistura >= 0.98 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
+    const w = ctx.canvas.width, h = ctx.canvas.height, T = ctx.getTransform();
+    const A = camadaFixa('giroA', w, h), B = camadaFixa('giroB', w, h);
+    const gA = A.getContext('2d'), gB = B.getContext('2d'); gA.setTransform(T); gB.setTransform(T);
+    const rig = personagem(gA, um(v.vista), x, ySola, alturaPx, o);
+    personagem(gB, um(v.vista2), x, ySola, alturaPx, { ...o, semRosto: true });
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1 - v.mistura; ctx.drawImage(A, 0, 0);
+    ctx.globalAlpha = v.mistura; ctx.drawImage(B, 0, 0);
+    ctx.restore();
+    return v.mistura < 0.5 ? rig : rig;
+  }
+
   // personagem desenhado numa camada própria (para efeitos como a invisibilidade)
   function personagemCamada(item, alturaPx, o = {}) {
     const w = Math.ceil(alturaPx * 0.95), h = Math.ceil(alturaPx * 1.18);
@@ -221,18 +256,21 @@
   }
 
   // legenda: até 3 palavras, na faixa (alta ou baixa) mais longe dos rostos
+  const legAnterior = { bloco: null, y: 0 };
   function legenda(ctx, t) {
     const bloco = TL.legendas.find((b) => t >= b.inicio && t < b.fim);
     if (!bloco) return;
     const faixas = [380, 1500, 1180, 700];
+    const dist = (y) => { let d = 1e9; for (const r of rostos) d = Math.min(d, Math.abs(r.y - y) - r.r); return rostos.length ? d : 1e9; };
     let melhor = faixas[0], melhorD = -1;
     for (const y of faixas) {
-      let d = 1e9;
-      for (const r of rostos) d = Math.min(d, Math.abs(r.y - y) - r.r);
-      if (!rostos.length) d = 1e9;
+      const d = dist(y);
       if (d > 140) { melhor = y; melhorD = d; break; }
       if (d > melhorD) { melhorD = d; melhor = y; }
     }
+    // a legenda não pula de lugar no meio do bloco: fica onde estava enquanto não cobrir um rosto
+    if (legAnterior.bloco === bloco && legAnterior.y !== melhor && dist(legAnterior.y) > 40) melhor = legAnterior.y;
+    legAnterior.bloco = bloco; legAnterior.y = melhor;
     const k = fase(t, bloco.inicio, bloco.inicio + 0.09, 'entra');
     const tam = 98 * (1.18 - 0.18 * k);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -256,11 +294,11 @@
     const f = o.parada ? 0 : (o.forca === undefined ? 1 : o.forca);
     const r1 = Math.sin(i * 12.9898) * 43758.5453, r2 = Math.sin(i * 78.233) * 12543.1234;
     const ax = (r1 - Math.floor(r1)) * 2 - 1, ay = (r2 - Math.floor(r2)) * 2 - 1;
-    const acom = 1 - ease.entra(clamp(u / 0.7, 0, 1));
+    const acom = o.continua ? 0 : 1 - ease.entra(clamp(u / 0.7, 0, 1));
     const dx = f * (7 * Math.sin(t * 0.53 + 1.3) + 3 * Math.sin(t * 1.17 + 0.4) + 1.2 * Math.sin(t * 2.3) + 12 * ax * acom);
     const dy = f * (6 * Math.sin(t * 0.61 + 2.1) + 3 * Math.sin(t * 1.29 + 0.7) + 8 * ay * acom);
     const giro = f * (0.0055 * Math.sin(t * 0.37 + 0.5) + 0.0028 * Math.sin(t * 0.93 + 1.9) + 0.004 * ax * acom);
-    const empurra = f * (0.025 * ease.suave(clamp(u / Math.max(dur, 0.1), 0, 1)) + 0.012 * acom);
+    const empurra = f * ((o.tomada ? 0 : 0.025 * ease.suave(clamp(u / Math.max(dur, 0.1), 0, 1))) + 0.012 * acom);
     // margem mínima para cobrir deriva + giro (cantos) sem mostrar borda
     const margem = (Math.abs(dx) + Math.abs(giro) * H / 2 + 2) / (W / 2);
     return { dx, dy, giro, zoom: 1 + Math.max(0.035 * f, margem) + empurra };
@@ -286,7 +324,26 @@
         W, H, t, u, dur, batidas: p.batidas || [], fase: (a, b, e) => fase(u, a, b, e), ease, lerp, clamp,
         camera: (o) => Cena3D.camera(o),
         personagem: (item, x, y, alt, o) => personagem(ctx, item, x, y, alt, o),
-        personagem3d: (cam, item, X, Z, alturaM, o = {}) => { const q = cam.p(X, 0, Z); if (q.dz < 0.6) return RIG_FORA; Cena3D.sombraChao(ctx, cam, X, Z, 0.55, 1.4); return personagem(ctx, item, q.x, q.y, alturaM * q.s, o); },
+        personagem3d: (cam, item, X, Z, alturaM, o = {}) => {
+          // o.rumo: para onde o personagem está virado (rad, 0 = para -Z); o.olhaPara: [X, Z]; o.y: altura do chão (flutuando)
+          const y = o.y || 0, q = cam.p(X, y, Z); if (q.dz < 0.6) return RIG_FORA;
+          const { rumo, olhaPara, y: _y, ...resto } = o;
+          Cena3D.sombraChao(ctx, cam, X, Z, 0.55 / (1 + y * 1.5), 1.4);
+          if (rumo === undefined && !olhaPara) return personagem(ctx, item, q.x, q.y, alturaM * q.s, resto);
+          const r = olhaPara ? Math.atan2(-(olhaPara[0] - X), -(olhaPara[1] - Z)) : rumo;
+          const rc = Math.atan2(-(cam.x - X), -(cam.z - Z));
+          return personagemGirando(ctx, item, q.x, q.y, alturaM * q.s, rc - r, resto);
+        },
+        // câmera que orbita um ponto: o = { alvo: [X, Y, Z], raio, ang (rad; 0 = olhando para +Z), altura, f, ySalvo, nevoa }
+        orbita: (o) => {
+          const [X, Y, Z] = o.alvo, R = o.raio || 3, a = o.ang || 0, cy0 = o.altura === undefined ? Y + 0.2 : o.altura, f = o.f || 1200;
+          const extra = {}; if (o.nevoa) extra.nevoa = o.nevoa; if (o.distNevoa) extra.distNevoa = o.distNevoa;
+          return Cena3D.camera({ f, x: X - R * Math.sin(a), y: cy0, z: Z - R * Math.cos(a), yaw: a, cy: (o.ySalvo || 1000) + ((Y - cy0) * f) / R, ...extra });
+        },
+        personagemGirando: (item, x, y, alt, rel, o = {}) => personagemGirando(ctx, item, x, y, alt, rel, o),
+        planos: TL.planos,
+        // segundos desde o início do plano `id` (para tomadas contínuas que atravessam vários planos)
+        desde: (id) => { const q = TL.planos.find((k) => k.id === id); return q ? t - q.inicio : u; },
         invisivel: (item, x, y, alt, prog, o) => invisivel(ctx, item, x, y, alt, prog, o),
         invisivel3d: (cam, item, X, Z, alturaM, prog, o = {}) => { const q = cam.p(X, 0, Z); if (q.dz < 0.6) return RIG_FORA; if (prog < 0.7) Cena3D.sombraChao(ctx, cam, X, Z, 0.55 * (1 - prog), 1.4); return invisivel(ctx, item, q.x, q.y, alturaM * q.s, prog, o); },
         camada: () => Cinema.camada(W, H),

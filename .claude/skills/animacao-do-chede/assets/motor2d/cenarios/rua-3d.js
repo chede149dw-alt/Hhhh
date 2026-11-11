@@ -154,12 +154,12 @@
       chao(ctx, cam);
       // do fundo para a frente
       const itens = [];
-      for (let k = 0, z = 2; z < 110; k++, z += 11.5) for (const s of [-1, 1]) itens.push({ z, f: () => casa(ctx, cam, s, z, z + 10, k + (s > 0 ? 3 : 0)) });
+      for (let k = 0, z = 2; z < 110; k++, z += 11.5) for (const s of [-1, 1]) itens.push({ z, zf: z + 10, f: () => casa(ctx, cam, s, z, z + 10, k + (s > 0 ? 3 : 0)) });
       for (let z = 8; z < 100; z += 14) for (const s of [-1, 1]) itens.push({ z: z + 0.5, f: () => arvore(ctx, cam, (CALC - 0.7) * s, z + (s > 0 ? 7 : 0), 5.2 + ((z / 14) % 2) * 0.8) });
       for (const [z, cor] of [[9, 'brasa'], [27, 'casaCeu'], [46, 'mostarda']]) itens.push({ z: z + 2, f: () => carro(ctx, cam, RUA - 1.0, z, cor) });
       for (let z = 5; z < 70; z += 12.5) itens.push({ z, f: () => lixeira(ctx, cam, -(CALC - 0.45), z, z % 2 ? 'folhagem' : 'pedra') });
       for (let z = 3; z < 80; z += 7.3) for (const s of [-1, 1]) itens.push({ z: z + 0.2, f: () => arbusto(ctx, cam, (CALC - 0.25) * s, z + (s > 0 ? 3 : 0)) });
-      itens.filter((i) => i.z > cam.z + 1).sort((a, b) => b.z - a.z).forEach((i) => i.f());
+      itens.filter((i) => (i.zf || i.z) > cam.z + 1).sort((a, b) => b.z - a.z).forEach((i) => i.f());
       postes(ctx, cam);
       ctx.restore();
     },

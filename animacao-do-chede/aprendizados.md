@@ -107,3 +107,16 @@
 - Quadrados pretos/brancos/bege de 1 quadro: eram pontos 3D atrás ou rente à câmera (poste, pedra do pisão,
   rachadura antiga, vizinho) projetados enormes. Correção: recorte no plano perto (cena3d.caminho), `atras` em cam.p
   e efeitos/personagens rentes não são desenhados. Conferir com o detector de blocos (quadros que piscam).
+
+## Modelo de câmera do autor: tomadas contínuas girando em volta dos personagens (referência lv_0_20261111104328, 9,5–17 s)
+- Na referência, uma tomada de ~8 s atravessa 5 legendas: a câmera gira em volta do personagem (o quarto gira junto),
+  sobe um pouco e revela o outro personagem. Personagens mexem o corpo o tempo todo. O autor quer isso em todos os vídeos.
+- No motor: `api.orbita` (câmera 3D em volta de um ponto) + `personagem3d` com `rumo`/`olhaPara` (vista escolhida pelo
+  ângulo: frente < 22,5° < 3/4 < 67,5° < perfil < 125° < costas, com mistura de ±4° na troca) + `api.desde(id)` para a
+  mesma câmera continuar por vários planos + `chave()` para animar tudo por chaves.
+- Mistura de vistas longa (câmera parada perto do limite) deixa o personagem "fantasma": não parar a órbita perto de
+  22,5°/67,5°/125°.
+- Câmera passando perto de personagem = borrão gigante: na troca de alvo, afastar a câmera (raio maior) no meio.
+- `orbita` não pode repassar `nevoa: undefined` para a câmera (cores viram NaN: rua branca e chão preto).
+- Legenda: não trocar de faixa no meio do bloco (fica onde estava enquanto não cobrir rosto).
+- `vida()` agora tem movimentos lentos (troca de peso, tronco, cabeça olhando em volta, braços): ninguém fica estátua.

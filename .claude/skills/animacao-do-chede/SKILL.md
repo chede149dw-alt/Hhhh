@@ -48,7 +48,12 @@ Para conferir um vídeo: `ffmpeg -i v.mp4 -vf freezedetect=n=-60dB:d=1 -f null -
 ## 3. Regras do vídeo (pedidas pelo autor)
 
 - 9:16, 1080×1920. **Duração máxima 1 min 15 s.**
-- Cada plano dura no máximo 2–3 s; **nada fica parado mais de 1 s** (câmera sempre se mexendo, personagens com vida).
+- Cada fala/legenda dura no máximo 2–3 s; **nada fica parado mais de 1 s** (câmera sempre se mexendo, personagens com vida).
+- **Modelo de câmera do autor (obrigatório):** cenas em **tomadas contínuas** que atravessam várias falas, com a câmera
+  **girando em volta dos personagens** em 3D (`api.orbita`) e **revelando outros personagens** que estavam ali; os
+  personagens viram de corpo inteiro conforme o ângulo (`olhaPara`/`rumo`) e **nunca ficam estáticos** (andam, viram,
+  reagem). Por cima disso, a câmera na mão (deriva leve) é automática. Closes só para mãos/efeitos e reações rápidas.
+  Modelo pronto: as funções `tomada*` de `roteiros/terra/ep01-dramatico.js`.
 - **Primeiros 2 s = capa** com a premissa escrita grande (ex.: "E SE VOCÊ ACORDASSE CONTROLANDO A TERRA?").
 - Legenda com **no máximo 3 palavras** por vez, **nunca cobrindo rosto** (o motor desvia sozinho dos rostos registrados).
 - Objeto aparece **perto de quem usa**.
