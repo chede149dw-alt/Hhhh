@@ -32,7 +32,10 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 | `render/quadros.js` | Abre a página no Chrome sem tela, chama `window.quadro(t)` e salva cada quadro |
 | `render/juntar.js` | PNGs → MP4 com ffmpeg |
 | `visual/teste-render.html` | Página de teste do render por quadro |
+| `visual/estilo.js` | Estilo chapado: `materialToon(cor, {volume})`, `criarLuzes`, `criarChao`, `criarRenderer`, `criarPos` (névoa, foco raso, grão, vinheta) |
+| `visual/teste-estilo.html` | Cena de teste do estilo (3 cubos + esfera nas cores do guia); `window.medirCores()` |
 | `testes/determinismo.test.js` | Mesmo instante → mesmo quadro (md5), em qualquer ordem |
+| `testes/estilo.test.js` | Cor iluminada = cor do material (calibração da luz) |
 
 Contrato de página: expor `window.quadro(t)` (posiciona tudo pelo tempo `t` em segundos e desenha, sem relógio real)
 e `window.pronto = true` quando carregar. Opcional: `window.capturar()` devolvendo o PNG em base64.

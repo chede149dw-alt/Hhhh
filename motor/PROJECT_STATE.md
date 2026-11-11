@@ -16,11 +16,19 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 1 — render por quadro | quadros 0 e 90 renderizados nas ordens [0,90] e [90,0]: md5 iguais | **passou** |
 | 1 — velocidade | 120 quadros 1080×1920 com 4 processos | 12,3 s (9,7 quadros/s) |
 | 1 — junção | 120 PNG → MP4 60 fps H.264 crf 20 | ok (`previas/motor3d/teste-render.mp4`) |
+| 2 — calibração | face iluminada de 4 cubos/esfera = cor do guia (pós desligado, tolerância 4) | **passou**: marinho, turquesa e mostarda exatos; brasa −3 (faixa de volume) |
+| 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
 - WebGL por software (sem GPU): ~2,5 quadros/s por processo na cena de teste; cenas reais serão mais lentas. Planejar 4 processos.
 - `node --test` no Node 22 precisa dos arquivos (`testes/*.test.js`), não da pasta.
 
+## Estilo (prompt 2) — `visual/estilo.js`
+- Conta da luz: `sol × g_max + ambiente = π` → com sol 2,0 e ambiente 1,2, a rampa vai de 0,80 a 0,9708 (transição estreita).
+- Sem tone mapping, saída sRGB. O pós converte de linear para sRGB **antes** do grão e da vinheta (sem isso a imagem fica escura e saturada).
+- Sombra: só o chão recebe; objetos e personagens projetam, mas não recebem.
+- `PCFSoftShadowMap` foi removido no three 0.187: usar `PCFShadowMap` com `shadow.radius`.
+
 ## Próxima etapa
-Prompt 2 — estilo chapado (MeshToonMaterial com rampa estreita, luz calibrada sol 2.0 + ambiente 1.2, sombra só no chão,
-volume opcional, pós-processo com névoa, foco raso, grão e vinheta) e página de teste com 3 cubos e 1 esfera.
+Prompt 3 — boneco articulado a partir de uma ficha (`criarBoneco(ficha)` → {raiz, juntas, posar}), pose REPOUSO,
+`misturar`; Lucas em 3D com o mesmo design e ficha 3D (4 vistas + 4 poses) para aprovação.

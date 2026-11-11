@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{ "imports": { "three": "./lib/three/three.module.js" } }</script>
+</head>
+<body>
+<script type="module">
+  // Teste do estilo chapado (prompt 2): 3 cubos e 1 esfera nas cores do guia, chão que recebe sombra,
+  // névoa, foco raso, grão e vinheta. window.config({ pos: false }) desliga o pós para medir as cores.
+  import * as THREE from 'three';
+  import { materialToon, criarLuzes, criarChao, criarRenderer, criarPos, LUZ } from './estilo.js';
+
+  const W = 1080, H = 1920;
+  const renderer = criarRenderer(W, H);
+  const cena = new THREE.Scene();
+  cena.background = new THREE.Color('#E9D9C4');
+  cena.fog = new THREE.Fog('#E9D9C4', 9, 26);
+  const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 100);
+  criarLuzes(cena, { direcao: [-4, 7, 6] });
+  criarChao(cena, '#CFC8C0');
+
+  // cores do guia de estilo
+  window.CORES = { marinho: '#2B3B66', turquesa: '#3DB5B0', mostarda: '#EBC25A', brasa: '#D23A42' };
+  const objetos = [];
+  const cubo = (cor, x, z, vol) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materialToon(cor, { volume: vol }));
+    m.position.set(x, 0.5, z); m.castShadow = true; m.receiveShadow = false;
+    cena.add(m); objetos.push(m); return m;
+  };
+  const a = cubo(CORES.marinho, -1.3, 0, false);
+  const b = cubo(CORES.turquesa, 0.1, -1.6, false);
+  const c = cubo(CORES.mostarda, 1.4, 0.4, true);
+  const esfera = new THREE.Mesh(new THREE.SphereGeometry(0.55, 48, 24), materialToon(CORES.brasa, { volume: true, yMin: -0.55, yMax: 0.55 }));
+  esfera.position.set(0.1, 0.55, 1.4); esfera.castShadow = true; esfera.receiveShadow = false;
+  cena.add(esfera);
+  // fileira de cubos ao fundo, para ver névoa e foco raso
+  for (let i = 0; i < 6; i++) cubo(['#9FB7C9', '#D9A6A0', '#E8C9A0'][i % 3], -3 + i * 1.3, -7 - (i % 2) * 2.5, false);
+
+  const pos = criarPos(renderer, W, H);
+  let usarPos = true;
+  window.config = (o) => { if (o.pos !== undefined) usarPos = o.pos; };
+  window.LUZ = LUZ;
+
+  window.quadro = (t) => {
+    const ang = 0.35 + Math.sin(t * 0.5) * 0.12;
+    camera.position.set(Math.sin(ang) * 8.0, 2.8, Math.cos(ang) * 8.0);
+    camera.lookAt(0, 0.6, 0);
+    a.rotation.y = t * 0.3;
+    pos.render(cena, camera, { desligado: !usarPos, t, foco: camera.position.length(), faixa: 1.2, desfoque: 14, grao: 0.03, vinheta: 0.35 });
+  };
+  // mede a cor mais comum perto de cada cor do guia, com o pós desligado (usado pelo teste automático)
+  window.medirCores = () => {
+    const antes = usarPos; usarPos = false; window.quadro(0); usarPos = antes;
+    const gl = renderer.getContext(), px = new Uint8Array(W * H * 4);
+    gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, px);
+    const res = {};
+    for (const [nome, hex] of Object.entries(CORES)) {
+      const alvo = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+      const conta = new Map();
+      for (let i = 0; i < px.length; i += 4) {
+        if (Math.abs(px[i] - alvo[0]) + Math.abs(px[i + 1] - alvo[1]) + Math.abs(px[i + 2] - alvo[2]) >= 70) continue;
+        const k = px[i] + ',' + px[i + 1] + ',' + px[i + 2]; conta.set(k, (conta.get(k) || 0) + 1);
+      }
+      const top = [...conta.entries()].sort((a, b) => b[1] - a[1])[0];
+      res[nome] = { alvo, obtido: top ? top[0].split(',').map(Number) : null };
+    }
+    return res;
+  };
+  window.pronto = true;
+</script>
+</body>
+</html>

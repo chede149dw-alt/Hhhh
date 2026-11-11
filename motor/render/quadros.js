@@ -58,7 +58,7 @@ async function renderizar({ pagina, lista, saida, fps = 60, processos = 1, aoQua
   srv.fechar();
 }
 
-module.exports = { renderizar };
+module.exports = { renderizar, CHROME, FLAGS };
 
 if (require.main === module) {
   const o = argumentos(process.argv.slice(2));
