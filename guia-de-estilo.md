@@ -318,3 +318,18 @@ Referência: `referencias/videos/ref-cenario-01.mp4` (só a linguagem de cenári
 - **Objetos de cena:** volume com degradê (não cor única), textura simples projetada (veios, xadrez, juntas) e borda que afina com a distância.
 - **Poderes:** sempre em camadas: halo, corpo com textura ou partículas, anel ou rastro de movimento e faíscas em estrela.
 - **Cenário cheio:** cada plano tem pelo menos 3 objetos de cena além da arquitetura (ex.: carro, lixeira, arbusto, cartaz, banco).
+
+---
+
+## 14. Modo de render "suave" (padrão)
+
+Pedido: deixar os vídeos menos cartunescos, mais perto das referências. Vale para personagens, objetos e cenários
+(`Estilo.modo = 'suave'` em `motor/estilo.js`; o modo `'classico'` continua disponível). Substitui, onde houver conflito, as seções 6 e 11:
+
+- **Sem contorno preto.** A borda de cada peça é fina (42% da espessura clássica) e na cor da própria peça: tom de sombra × `#9A8EAA`.
+- **Sombra em degradê** (não mais corte único): a sombra entra suave do lado oposto à luz.
+- **Sombra de contato entre peças:** cada peça escurece de leve o que está atrás dela (`rgba(28,18,42,0.16)`), dando volume (cabeça no pescoço, braço no corpo).
+- **Linhas internas discretas:** `rgba(48,32,56,0.62)`, 85% da espessura.
+- **Blush leve:** `rgba(232,140,128,0.16)`.
+- **Cenários 3D:** borda 40% da espessura, na cor da face escurecida; nada de Tinta pura.
+- Cores, proporções, roupas e rostos dos personagens **não mudam**.

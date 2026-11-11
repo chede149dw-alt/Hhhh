@@ -21,7 +21,7 @@
     { "id": "mae-procura", "duracao": 3.0, "fala": { "texto": "Ela olha pra você, e nada.", "voz": "narrador" }, "destaque": ["NADA"],
       "imagem": "Plano contínuo (referência 2): a mãe procura, preocupada, e sai andando para a porta; a câmera vira devagar para a janela, inclina, passa um pouco do ponto e volta, revelando o contorno do Lucas parado na luz." },
     { "id": "rua", "fala": { "texto": "Na rua, ninguém te vê.", "voz": "narrador" }, "destaque": ["NINGUÉM"],
-      "imagem": "Rua do bairro em perspectiva, câmera baixa acompanhando o contorno do Lucas andando." },
+      "imagem": "Rua do bairro em perspectiva; câmera atrás do Lucas, que anda de costas rua adentro (só o contorno); um vizinho vem de frente sem perceber." },
     { "id": "escola", "fala": { "texto": "Mas o seu melhor amigo", "voz": "narrador" }, "destaque": ["AMIGO"],
       "imagem": "Corredor da escola em perspectiva; o amigo no armário dele." },
     { "id": "armario", "fala": { "texto": "vê seu armário abrir sozinho.", "voz": "narrador" }, "destaque": ["SOZINHO"],

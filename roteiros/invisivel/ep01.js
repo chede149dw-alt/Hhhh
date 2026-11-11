@@ -136,12 +136,15 @@
       ctx.restore();
     },
 
-    // rua: ninguém te vê (câmera acompanhando de perto, lente fechada)
+    // rua: ninguém te vê — câmera atrás do Lucas, que anda de costas rua adentro
     rua(ctx, u, d, api) {
-      const cam = api.camera({ f: 1250, x: 0.1, y: 1.05, z: -1 + u * 1.1, cy: 1000, nevoa: Cenarios3D.rua.nevoa });
+      const zc = -1.2 + u * 1.25; // câmera e Lucas andando juntos
+      const cam = api.camera({ f: 1150, x: 0.35 + Math.sin(u * 1.3) * 0.03, y: 1.35, z: zc, cy: 980, nevoa: Cenarios3D.rua.nevoa });
       Cenarios3D.rua.desenhar(ctx, cam, {});
-      api.personagem3d(cam, { fabrica: 'criarPersonagem', opcoes: { nome: 'Vizinho', altura: 5.9, pele: 'pele2', cabelo: { estilo: 'liso-lateral', cor: 'cabCafe' }, top: { tipo: 'camiseta', cor: 'coral' }, calca: { tipo: 'reta', cor: 'pedra' } }, pose: {}, vista: 'perfil', espelhar: true, expressao: 'neutro' }, -0.9, 6.5 - u * 1.3, 1.78, { caminhar: u + 0.3 });
-      api.invisivel3d(cam, { ...LUCAS, pose: {}, vista: 'perfil', expressao: 'neutro' }, 0.55, cam.z + 2.2, 1.75, 1, { caminhar: u });
+      // vizinho vindo de frente, sem perceber nada
+      api.personagem3d(cam, { fabrica: 'criarPersonagem', opcoes: { nome: 'Vizinho', altura: 5.9, pele: 'pele2', cabelo: { estilo: 'liso-lateral', cor: 'cabCafe' }, top: { tipo: 'camiseta', cor: 'coral' }, calca: { tipo: 'reta', cor: 'pedra' } }, pose: {}, vista: 'frente', expressao: 'neutro' },
+        -0.55, zc + 7.5 - u * 1.4, 1.78, { caminharFrontal: u + 0.4 });
+      api.invisivel3d(cam, { ...LUCAS, pose: {}, vista: 'costas', expressao: 'neutro' }, 0.45, zc + 2.1, 1.75, 1, { caminharFrontal: u });
       Cenarios3D.rua.frente(ctx, cam, { arvoreX: -2.6 });
     },
 

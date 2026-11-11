@@ -17,7 +17,7 @@
 |---|---|
 | Altura | 5,5 H (H = altura da cabeça) |
 | Cabeça | Redonda e grande, largura 0,97 H |
-| Contorno | Tinta `#211B26`, 1,35× o padrão do guia (≈ 6 px com o personagem a 1100 px) |
+| Contorno | Modo suave (guia, seção 14): borda fina na cor da peça (1,35× × 0,42 do padrão), sombra em degradê e sombra de contato entre peças. Sem contorno preto. |
 | Moletom | Marinho `#2B3B66` (sombra `#212A59`, luz `#515C7C`), largo, com capuz enrolado no pescoço e bolso canguru |
 | Faixa | Turquesa `#3DB5B0` no lado de fora da manga, do ombro ao punho |
 | Cordões | Linho `#F2EDE6`, pontas Pedra `#6A6573` |
@@ -72,3 +72,6 @@ Sempre sobre fundo escuro (luminância ≤ 20%), como manda o guia.
 ```bash
 node motor/ficha.js personagens/lucas/lucas.js efeitos/poder-energia.js personagens/lucas/ficha.json personagens/lucas
 ```
+
+## Histórico
+- Render passou para o modo suave (menos cartunesco), a pedido. O desenho (cores, proporções, roupa, rosto) não mudou; a ficha foi regerada.

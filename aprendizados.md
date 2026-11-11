@@ -58,3 +58,9 @@
 - Lente fechada (f 1200–1500) aproxima sem distorcer a perspectiva; com f 720 e câmera perto o cenário fica deformado.
 - Copa de árvore em primeiro plano tem de ficar na borda (x ≈ −2,6 m), senão cobre metade do quadro.
 - Render da v2: 815 quadros em ~110 s (a luz por face e o contraluz custam ~30% a mais).
+
+## Menos cartunesco (prévia v3)
+- O que mais deixava o vídeo com cara de desenho: contorno preto grosso em tudo e sombra dura de um tom só. Trocar por borda fina na cor da peça (sombra × #9A8EAA, 42% da espessura) + sombra em degradê (4 camadas da cor base deslocadas para a luz) + sombra de contato entre peças resolve sem mudar o desenho dos personagens.
+- A sombra de contato sai de graça: antes de preencher cada peça, pintar a própria forma deslocada para o lado da sombra com alfa 0,16.
+- Andar de costas (rua adentro): de costas a passada vai para dentro da cena, então girar a perna não aparece. O que funciona é erguer a perna do passo (`_dy_coxa`, o topo fica escondido pelo moletom), balançar quadril/ombros e fazer o personagem diminuir com a distância, com a câmera seguindo atrás.
+- O sinal do ângulo das pernas muda entre frente e costas (a perna da esquerda da tela troca de lado); errar o sinal faz as pernas cruzarem.

@@ -40,7 +40,15 @@
     fundoFicha: '#F4F2EE',
     pupila: '#110E14',
     brilhoOlho: '#FFFFFF',
-    blush: 'rgba(240,154,140,0.35)',
+    // Modo de render: 'suave' (padrão desde o pedido de deixar menos cartunesco) ou 'classico' (contorno Tinta grosso, sombra dura)
+    modo: 'suave',
+    suave: {
+      contorno: 0.42,                    // contorno = 42% do clássico
+      borda: '#9A8EAA',                  // contorno = tom de sombra da peça × esta cor (nunca preto)
+      linha: 'rgba(48,32,56,0.62)',      // linhas internas
+      contato: 'rgba(28,18,42,0.16)',    // sombra de contato entre peças
+    },
+    get blush() { return this.modo === 'suave' ? 'rgba(232,140,128,0.16)' : 'rgba(240,154,140,0.35)'; },
     sombraChao: 'rgba(17,14,20,0.22)',
     // Seção 6: contorno = 4‰ da altura do personagem; internas = 55%
     contorno: (alturaEmH) => alturaEmH * 0.004,

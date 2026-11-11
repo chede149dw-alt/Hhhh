@@ -43,9 +43,12 @@
     const p = caminho(cam, pts);
     ctx.fillStyle = o.semNevoa ? cor : cam.tom(cor, zm);
     ctx.fill(p);
-    const lw = o.linha === undefined ? cam.linha(zm) : o.linha;
+    const suave = Estilo.modo === 'suave';
+    const lw = (o.linha === undefined ? cam.linha(zm) : o.linha) * (suave ? 0.4 : 1);
     if (lw > 0 && o.contorno !== false) {
-      ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = cam.tom(Estilo.base.tinta, zm * 0.7);
+      // modo suave: borda na cor da face, escurecida (sem contorno preto)
+      const borda = suave && /^#[0-9a-fA-F]{6}$/.test(cor) ? Estilo.multiply(cor, '#8E82A0') : Estilo.base.tinta;
+      ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = cam.tom(borda, zm * 0.7);
       ctx.stroke(p);
     }
     return p;
@@ -130,8 +133,9 @@
     g.addColorStop(0, cam.tom(corPorBrilho(cor, bs[iMax], luz), zm));
     g.addColorStop(1, cam.tom(corPorBrilho(cor, bs[iMin], luz), zm));
     ctx.fillStyle = g; ctx.fill(path);
-    const lw = o.linha === undefined ? cam.linha(zm) * 0.8 : o.linha;
-    if (lw > 0 && o.contorno !== false) { ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = cam.tom(Estilo.base.tinta, zm * 0.7); ctx.stroke(path); }
+    const suave = Estilo.modo === 'suave';
+    const lw = (o.linha === undefined ? cam.linha(zm) * 0.8 : o.linha) * (suave ? 0.4 : 1);
+    if (lw > 0 && o.contorno !== false) { ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = cam.tom(suave ? Estilo.multiply(corPorBrilho(cor, Math.min(bs[iMin], 0.4), luz), '#9A8EAA') : Estilo.base.tinta, zm * 0.7); ctx.stroke(path); }
     return path;
   }
   // caixa com luz por face e cantos levemente realçados (aresta clara no lado da luz)

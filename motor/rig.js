@@ -17,45 +17,63 @@
     let dx = p1.x - p0.x, dy = p1.y - p0.y;
     const n = Math.hypot(dx, dy) || 1; dx /= n; dy /= n;
 
-    const contorno = linha;
-    const interno = linha * E().fatorInterno;
+    const SUAVE = E().modo === 'suave';
+    // modo suave (menos cartunesco): contorno fino na cor da própria peça, linhas internas discretas
+    const contorno = SUAVE ? linha * E().suave.contorno : linha;
+    const interno = linha * E().fatorInterno * (SUAVE ? 0.85 : 1);
+    const corLinha = SUAVE ? E().suave.linha : E().base.tinta;
+    const bordaDe = (tom) => (SUAVE && tom && tom.sombra && tom.sombra[0] === '#' ? E().multiply(tom.sombra, E().suave.borda) : E().base.tinta);
 
     return {
       ctx, contorno, interno, luzLocal: [dx, dy], modo,
 
-      // Peça chapada: base + sombra de corte único (crescente do lado oposto à luz) + contorno
+      // Peça: base + sombra do lado oposto à luz + contorno.
+      // Modo clássico: sombra de corte único. Modo suave: sombra em degradê + sombra de contato sobre o que está atrás.
       peca(path, tom, o = {}) {
+        const borda = bordaDe(tom);
         if (modo === 'contorno') {
-          if (o.contorno !== false) this.contornar(path, (o.espessura || contorno) * 2, true);
+          if (o.contorno !== false) this.contornar(path, (o.espessura ? o.espessura * (SUAVE ? E().suave.contorno : 1) : contorno) * 2, true, borda);
           return;
+        }
+        const k = o.sombra === undefined ? 0.1 : o.sombra;
+        if (SUAVE && o.ao !== false && k) {
+          // sombra de contato: a peça escurece de leve o que está atrás dela (cabeça no pescoço, braço no corpo)
+          ctx.save(); ctx.translate(dx * k * 0.45, dy * k * 0.45); ctx.fillStyle = E().suave.contato; ctx.fill(path); ctx.restore();
         }
         ctx.fillStyle = tom.base;
         ctx.fill(path);
-        const k = o.sombra === undefined ? 0.1 : o.sombra;
         if (k) {
           ctx.save();
           ctx.clip(path);
           ctx.fillStyle = tom.sombra;
           ctx.fill(path);
-          ctx.translate(-dx * k, -dy * k);
-          ctx.fillStyle = tom.base;
-          ctx.fill(path);
+          if (SUAVE) {
+            // degradê: a base volta em camadas, do lado da luz para o lado da sombra
+            for (const [f, a] of [[0.45, 0.4], [0.75, 0.5], [1.05, 0.65], [1.35, 1]]) {
+              ctx.save(); ctx.globalAlpha = a; ctx.translate(-dx * k * f, -dy * k * f); ctx.fillStyle = tom.base; ctx.fill(path); ctx.restore();
+            }
+          } else {
+            ctx.translate(-dx * k, -dy * k);
+            ctx.fillStyle = tom.base;
+            ctx.fill(path);
+          }
           ctx.restore();
         }
-        if (o.contorno !== false && modo === 'normal') this.contornar(path, o.espessura || contorno);
+        if (o.contorno !== false && modo === 'normal') this.contornar(path, o.espessura ? o.espessura * (SUAVE ? E().suave.contorno : 1) : contorno, false, borda);
       },
       // Mancha de sombra extra, recortada dentro de uma peça
       sombraDentro(pecaPath, sombraPath, cor) {
         if (modo === 'contorno') return;
         ctx.save(); ctx.clip(pecaPath); ctx.fillStyle = cor; ctx.fill(sombraPath); ctx.restore();
       },
-      contornar(path, esp = contorno, forcar = false) {
+      contornar(path, esp = contorno, forcar = false, cor) {
         if (modo === 'contorno' && !forcar) return;
         ctx.lineWidth = esp; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-        ctx.strokeStyle = E().base.tinta; ctx.stroke(path);
+        ctx.strokeStyle = cor || corLinha; ctx.stroke(path);
       },
-      linha(path, esp = interno, cor = E().base.tinta) {
+      linha(path, esp = interno, cor) {
         if (modo === 'contorno') return;
+        if (!cor || (SUAVE && cor === E().base.tinta)) cor = corLinha;
         ctx.lineWidth = esp; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
         ctx.strokeStyle = cor; ctx.stroke(path);
       },
@@ -87,7 +105,9 @@
         const pai = p.pai ? calc(this.partes[p.pai]) : raiz;
         // a peça-raiz (sem pai) pode ser deslocada pela pose: _desloca = [dx, dy] em H
         const [dx, dy] = (!p.pai && this.pose._desloca) || [0, 0];
-        m[p.nome] = pai.translate(p.pivo[0] + dx, p.pivo[1] + dy).rotate(this.pose[p.nome] || 0);
+        // _dy_<peça>: desloca o pivô na vertical (ex.: erguer a perna no passo visto de costas)
+        const ergue = this.pose['_dy_' + p.nome] || 0;
+        m[p.nome] = pai.translate(p.pivo[0] + dx, p.pivo[1] + dy + ergue).rotate(this.pose[p.nome] || 0);
         return m[p.nome];
       };
       for (const p of this.def.partes) calc(p);

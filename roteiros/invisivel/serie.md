@@ -28,6 +28,6 @@ Corpo se desfazendo em partículas azuis (cores do elemento Água), dos pés par
 ## Episódios
 | Ep. | Roteiro | Prévia | Status |
 |---|---|---|---|
-| 1 | `ep01.md` | `previas/invisivel-ep01-previa-v2.mp4` (voz espeak-ng) | Rascunho, aguardando aprovação |
+| 1 | `ep01.md` | `previas/invisivel-ep01-previa-v3.mp4` (voz espeak-ng) | Rascunho, aguardando aprovação |
 
 Cenários de vídeo em perspectiva: `cenarios/quarto-3d.js`, `cenarios/rua-3d.js`, `cenarios/escola-3d.js`.
