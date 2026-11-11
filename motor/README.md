@@ -12,7 +12,7 @@ Duas gerações de motor convivem aqui enquanto o 3D é construído:
 |---|---|---|
 | three.js | 0.187.0 | `motor/visual/lib/three/` (cópia de `three.module.js` + `three.core.js`) |
 | puppeteer-core | 25.17.0 | `motor/node_modules` (`npm install` em `motor/`) |
-| Chrome | Chromium do ambiente (`/opt/pw-browsers/chromium`, WebGL2 por SwiftShader) | variável `CHROME` para trocar |
+| Chrome | Na nuvem: Chromium do ambiente (WebGL por software). No computador: Chrome ou Edge instalado, usando a placa de vídeo | variável `CHROME` para outro caminho; `SOFTWARE=1` força modo software |
 | ffmpeg | 6.1.1 | sistema |
 
 ## Comandos (motor 3D)
@@ -36,3 +36,10 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 
 Contrato de página: expor `window.quadro(t)` (posiciona tudo pelo tempo `t` em segundos e desenha, sem relógio real)
 e `window.pronto = true` quando carregar. Opcional: `window.capturar()` devolvendo o PNG em base64.
+
+## Rodar no computador (com placa de vídeo)
+1. Instalar: Git, Node.js 22, Python 3, ffmpeg (no PATH) e Google Chrome.
+2. `git clone https://github.com/chede149dw-alt/Hhhh.git` e `git checkout ccr-b698bf6a-9k0oak`.
+3. `cd Hhhh/motor && npm install`.
+4. Testar: `npm run teste` e `node motor/render/quadros.js motor/visual/teste-render.html --de 0 --ate 119 --saida previas/motor3d/teste-render --processos 4` (da raiz).
+   O render acha o Chrome sozinho; se não achar, defina `CHROME` com o caminho do `chrome.exe`.

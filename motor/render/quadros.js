@@ -12,7 +12,15 @@ const path = require('path');
 const { iniciar } = require('./servidor');
 
 const RAIZ = path.resolve(__dirname, '..', '..');
-const CHROME = process.env.CHROME || '/opt/pw-browsers/chromium';
+// Chrome: variável CHROME, senão o Chromium da nuvem, senão o Chrome/Edge instalado no computador.
+const CANDIDATOS = [process.env.CHROME, '/opt/pw-browsers/chromium',
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium'];
+const CHROME = CANDIDATOS.find((c) => c && fs.existsSync(c));
+// GPU: na nuvem não há placa de vídeo (SwiftShader, por software); no computador usa a placa (ANGLE padrão).
+// Forçar software em qualquer lugar: SOFTWARE=1.
+const SEM_GPU = process.env.SOFTWARE === '1' || (!process.env.CHROME && CHROME === '/opt/pw-browsers/chromium');
+const FLAGS = ['--no-sandbox', '--headless=new', ...(SEM_GPU ? ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] : ['--enable-gpu', '--ignore-gpu-blocklist'])];
 
 function argumentos(lista) {
   const o = { fps: 60, processos: 1 };
@@ -30,7 +38,8 @@ function argumentos(lista) {
 async function renderizar({ pagina, lista, saida, fps = 60, processos = 1, aoQuadro }) {
   fs.mkdirSync(saida, { recursive: true });
   const srv = await iniciar(RAIZ);
-  const navegador = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--no-sandbox', '--headless=new', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  if (!CHROME) throw new Error('Chrome não encontrado: defina a variável CHROME com o caminho do chrome.exe');
+  const navegador = await puppeteer.launch({ executablePath: CHROME, headless: true, args: FLAGS });
   const fatias = [...Array(processos)].map((_, k) => lista.filter((_, i) => i % processos === k));
   let feitos = 0;
   await Promise.all(fatias.map(async (fatia) => {

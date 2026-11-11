@@ -6,7 +6,7 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - **Motor 3D novo** com three.js 0.187.0 em `motor/visual/lib/three/`; o motor 2D atual fica até o 3D ficar pronto. (aprovado pelo autor)
 - **Lucas refeito em 3D com o mesmo design** (cores, cabelo, moletom com faixa, calça, tênis); ficha 3D vai para aprovação. (aprovado)
 - **Saídas:** testes em `previas/`, vídeos finais em `prontos/` (em vez de `projetos/` do documento). (aprovado)
-- **Chrome:** `puppeteer-core` 25.17.0 usando o Chromium já instalado (`/opt/pw-browsers/chromium`); WebGL2 por SwiftShader (software).
+- **Chrome:** `puppeteer-core` 25.17.0. Na nuvem usa o Chromium do ambiente por software (SwiftShader); no computador do autor (placa RX 7600) usa o Chrome instalado com GPU. Continuar o trabalho no computador é o recomendado para o 3D.
 - **Voz:** Edge TTS (grátis); o host `speech.platform.bing.com` foi liberado na rede do ambiente.
 - **60 fps**, 1080×1920.
 
