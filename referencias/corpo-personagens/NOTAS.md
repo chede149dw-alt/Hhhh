@@ -9,6 +9,7 @@ e as vistas de lado, meio lado (três quartos) e frente.
 | `02-garota-ficha-frente-costas-lado-expressoes.jpg` | Ficha completa: frente, costas, lado, rosto e 4 expressões (normal, feliz, sério, surpreso) + paleta | Modelo de ficha de personagem; olhos grandes redondos; paleta de 5 cores |
 | `03-garoto-xadrez-costas-lado-tres-quartos-frente.jpg` | Mesmo personagem em 4 ângulos: costas, perfil, três quartos, frente | Proporção mais realista (~5 cabeças), rotação consistente entre ângulos, sombreado suave |
 | `04-garoto-moletom-esboco-frente-tres-quartos-lado.jpg` | Esboço em linha: frente, três quartos, lado, com linhas-guia de altura | Linhas-guia mostrando que cabeça, ombro, cintura e pés ficam na mesma altura em todas as vistas |
+| `05-garoto-cabelo-cacheado-moletom-frente-tres-quartos-costas-paleta.jpg` | Garoto estilo anime: frente, três quartos, costas, 2 rostos e paleta | Também agradou o estilo de roupa: moletom largo caído, calça escura com barra dobrada, tênis grandes; cabelo volumoso e bagunçado; olhos azuis grandes; sombras suaves em tons quentes |
 
 ## Como isso entra no motor
 - Cada personagem terá 3 vistas desenhadas (frente, três quartos, perfil) e espelhamento para o outro lado.
