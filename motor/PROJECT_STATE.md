@@ -43,6 +43,15 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - Cabelo: calota inclinada para trás + mechas em gota (LatheGeometry) apontando para fora; bolinhas pareciam "black power" e cones puros pareciam anime.
 - Pastas `visual/` e `personagem/` têm `package.json` com `"type": "module"` para o Node importar os módulos nos testes.
 
+## Lucas 3D v2 (proposta, aguardando aprovação)
+- Pedido do autor: estilo dos personagens das referências (3D chapado): cabelo em lascas planas e pontudas, tronco em bloco,
+  mãos de luva, sombreado bem liso. Mantém a identidade do Lucas (cores, moletom, pele, cabelo escuro); não copia o personagem da referência.
+- Cabelo: casco com borda recortada (franja/nuca) + lascas planas (ExtrudeGeometry fina, curvada) em camadas e dois tons.
+  Tentativas que não funcionaram: bolinhas (black power), cones (anime), gotas, lâminas coladas (capacete).
+- Roupa: RoundedBoxGeometry (addon do three 0.187 copiado para `visual/lib/three/addons/`).
+- Folha: `previas/motor3d/lucas3d-v2-ficha.png`; comparação `lucas3d-antes-x-v2.png`; salto `lucas3d-v2-salto.mp4`.
+  Quando aprovada: copiar a folha para `personagens/lucas/3d/ficha.png` e mudar o status na ficha.
+
 ## Animador (prompt 4) — `animacao/`
 - `animador.js` (puro, sem three): chaves {t, pose, curva}. **Padrão 'fluida'**: spline cúbica monotônica (PCHIP)
   que passa pelas poses sem frear — o autor reclamou que o salto "engasgava": a versão antiga freava até parar em toda chave.

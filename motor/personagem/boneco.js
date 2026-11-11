@@ -13,6 +13,7 @@
 //   y > 0 → gira para a esquerda dele (para a direita de quem olha)
 import * as THREE from 'three';
 import { materialToon } from '../visual/estilo.js';
+import { RoundedBoxGeometry } from '../visual/lib/three/addons/RoundedBoxGeometry.js';
 
 export const JUNTAS = ['quadril', 'coluna', 'peito', 'pescoco', 'cabeca',
   'ombro_e', 'cotovelo_e', 'mao_e', 'ombro_d', 'cotovelo_d', 'mao_d',
@@ -107,7 +108,7 @@ export function criarBoneco(ficha) {
   const tem = (p) => !ficha.pecas || ficha.pecas.includes(p);
   const mats = new Map();
   const mat = (cor) => {
-    if (!mats.has(cor)) mats.set(cor, materialToon(cor, { volume: true, baixo: 1, borda: 0.22 }));
+    if (!mats.has(cor)) mats.set(cor, materialToon(cor, { volume: true, baixo: 1, borda: 0.05 }));
     return mats.get(cor);
   };
   const chapado = new Map();
@@ -122,6 +123,8 @@ export function criarBoneco(ficha) {
     pai.add(me); return me;
   };
   const capsula = (r, comp) => new THREE.CapsuleGeometry(r, comp, 6, 16);
+  const caixa = (w, h, d, r) => new RoundedBoxGeometry(w, h, d, 4, r);
+  const cilindro = (rt, rb, h) => new THREE.CylinderGeometry(rt, rb, h, 20);
   const juntas = {};
   const junta = (nome, pai, pos) => { const g = new THREE.Group(); g.name = nome; g.position.set(...pos); pai.add(g); juntas[nome] = g; return g; };
 
@@ -136,20 +139,22 @@ export function criarBoneco(ficha) {
   // bacia (calça)
   peca(capsula(0.082, 0.1), c.calca, quadril, [0, -0.04, 0], [0, 0, Math.PI / 2], [1, 1, 0.95]);
   if (tem('moletom')) {
-    // parte de baixo do moletom (na coluna) + barra
-    peca(new THREE.CylinderGeometry(0.15, 0.156, 0.27, 28), c.moletom, coluna, [0, 0.055 - 0.0, 0], [0, 0, 0], [L, 1, P]);
-    peca(new THREE.CylinderGeometry(0.159, 0.159, 0.035, 28), c.moletomEscuro, coluna, [0, -0.07, 0], [0, 0, 0], [L, 1, P]);
-    if (tem('bolso_canguru')) peca(new THREE.BoxGeometry(0.2, 0.1, 0.02), c.bolso, coluna, [0, 0.0, 0.156 * P - 0.004], [-0.04, 0, 0]);
-    // peito e ombros (no peito)
-    peca(capsula(0.15, 0.1), c.moletom, peito, [0, 0.08, 0], [0, 0, 0], [L + 0.02, 1, P + 0.02]);
+    // moletom em blocos retos de cantos arredondados (estilo 3D chapado): barriga + barra (na coluna), peito (no peito)
+    peca(caixa(0.39, 0.3, 0.235, 0.04), c.moletom, coluna, [0, 0.05, 0]);
+    peca(caixa(0.4, 0.05, 0.245, 0.022), c.moletomEscuro, coluna, [0, -0.085, 0]);
+    if (tem('bolso_canguru')) {
+      peca(caixa(0.22, 0.115, 0.02, 0.01), c.bolso, coluna, [0, 0.0, 0.113]);
+      peca(caixa(0.2, 0.012, 0.022, 0.005), c.moletomEscuro, coluna, [0, 0.052, 0.114]);
+    }
+    peca(caixa(0.41, 0.3, 0.245, 0.05), c.moletom, peito, [0, 0.075, 0]);
     if (tem('capuz_enrolado')) {
-      peca(new THREE.TorusGeometry(0.085, 0.04, 12, 28), c.moletom, peito, [0, 0.245, -0.015], [Math.PI / 2 - 0.12, 0, 0], [1.05, 0.92, 1]);
-      peca(new THREE.SphereGeometry(0.11, 20, 14), c.bolso, peito, [0, 0.14, -0.108], [0.2, 0, 0], [1, 1.05, 0.3]);
-      peca(new THREE.ConeGeometry(0.075, 0.12, 16), c.bolso, peito, [0, 0.03, -0.112], [Math.PI + 0.2, 0, 0], [1, 1, 0.28]);
+      peca(new THREE.TorusGeometry(0.083, 0.043, 12, 28), c.moletom, peito, [0, 0.235, -0.012], [Math.PI / 2 - 0.12, 0, 0], [1.08, 1, 0.85]);
+      peca(cilindro(0.05, 0.05, 0.03), c.moletomEscuro, peito, [0, 0.245, -0.008]);
+      peca(caixa(0.25, 0.2, 0.05, 0.024), c.bolso, peito, [0, 0.12, -0.125], [0.16, 0, 0]);
     }
     if (tem('cordoes')) for (const s of [1, -1]) {
-      peca(new THREE.CylinderGeometry(0.006, 0.006, 0.12, 6), c.cordao, peito, [s * 0.034, 0.17, 0.125], [0.12, 0, s * 0.05]);
-      peca(new THREE.CylinderGeometry(0.008, 0.008, 0.022, 8), c.cordaoPonta, peito, [s * 0.037, 0.105, 0.133], [0.12, 0, s * 0.05]);
+      peca(new THREE.CylinderGeometry(0.0055, 0.0055, 0.12, 6), c.cordao, peito, [s * 0.034, 0.165, 0.128], [0.1, 0, s * 0.05]);
+      peca(new THREE.CylinderGeometry(0.0075, 0.0075, 0.022, 8), c.cordaoPonta, peito, [s * 0.037, 0.1, 0.134], [0.1, 0, s * 0.05]);
     }
   }
 
@@ -199,58 +204,128 @@ export function criarBoneco(ficha) {
   for (const k in boca) bocaG.add(boca[k]);
   noRosto(bocaG, G(-27), 0, 0.003);
 
-  // cabelo: calota inclinada para trás + cachos + franja
-  if (tem('cabelo_cachos')) {
-    const matCabelo = materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.1 });
-    const cal = new THREE.Mesh(new THREE.SphereGeometry(R * 1.09, 36, 20, 0, Math.PI * 2, 0, G(95)), matCabelo);
-    cal.scale.set(1.04, 0.96, 1.02);
-    cal.rotation.x = G(-35); cal.castShadow = true; cranio.add(cal);
-    // mechas em cunha (como no 2D): cunhas grossas apontando para fora em volta da cabeça, mais no alto,
-    // distribuídas numa espiral determinística, só onde a calota cobre
-    const eixo = new THREE.Vector3(0, 1, 0).applyEuler(new THREE.Euler(G(-35), 0, 0));
-    const n = 72;
-    for (let i = 0; i < n; i++) {
-      const y = 1 - (2 * (i + 0.5)) / n, rr = Math.sqrt(1 - y * y), a = i * 2.39996;
-      const d = new THREE.Vector3(Math.cos(a) * rr, y, Math.sin(a) * rr);
-      if (d.dot(eixo) < Math.cos(G(84))) continue;
-      const k = (i * 7) % 5;
-      const g = new THREE.Group(); g.position.copy(d).multiplyScalar(R * 1.04);
-      // aponta para fora, puxando um pouco para cima (cabelo armado)
-      g.lookAt(g.position.clone().add(d.clone().add(new THREE.Vector3(0, 0.12, -0.08)).normalize()));
-      const cu = new THREE.Mesh(mecha(), matCabelo);
-      const t = 0.07 + k * 0.006;
-      cu.rotation.x = Math.PI / 2; cu.rotation.y = ((i * 13) % 7 - 3) * 0.14; cu.position.z = 0.012;
-      cu.scale.set(t * 1.0, t, t * 0.8);
-      cu.castShadow = true; g.add(cu); cranio.add(g);
+  // cabelo (estilo 3D chapado): calota + mechas PLANAS e angulosas, em camadas — franja caída de lado,
+  // textura no alto, laterais e nuca baixas (corte curto bagunçado, como na ficha 2D)
+  if (tem('cabelo_mechas')) {
+    const matCabelo = materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05 });
+    const matLuz = materialToon(c.cabeloLuz || c.cabelo, { volume: true, baixo: 1, borda: 0.05 });
+    // casco do cabelo: superfície única com a borda recortada em pontas (franja na testa, laterais curtas,
+    // pontas na nuca) e volume no alto. lon 0 = frente; teta = ângulo a partir do topo da cabeça.
+    {
+      const NU = 320, NV = 28, dentes = 17, pos = [], idx = [];
+      const borda = (lon) => {
+        const frente = Math.max(0, Math.cos(lon)), tras = Math.max(0, -Math.cos(lon));
+        const base = 88 - 24 * frente + 26 * tras;                      // franja 64°, lados 88°, nuca 114°
+        const amp = 7 + 9 * frente + 6 * tras;                          // pontas maiores na franja
+        const desl = 0.45 * frente;                                     // franja puxada para a direita dele
+        const f = ((lon / (2 * Math.PI)) * dentes + desl + 10) % 1;
+        const dente = f < 0.7 ? f / 0.7 : (1 - f) / 0.3;                // dente assimétrico, inclinado (corte desfiado)
+        const varia = 0.75 + 0.25 * Math.sin(Math.floor((lon / (2 * Math.PI)) * dentes + desl + 10) * 2.7);  // pontas de tamanhos diferentes
+        return G(base - amp * 0.45 + amp * varia * Math.pow(dente, 1.6));
+      };
+      for (let j = 0; j <= NV; j++) for (let i = 0; i <= NU; i++) {
+        const lon = (i / NU) * Math.PI * 2, t = j / NV;
+        const teta = borda(lon) * t;
+        const r = R * (1.035 + 0.075 * Math.pow(1 - t, 1.6) * (0.75 + 0.25 * Math.cos(lon + 2.6)));   // volume no alto, mais atrás
+        pos.push(r * Math.sin(teta) * Math.sin(lon), r * Math.cos(teta), r * Math.sin(teta) * Math.cos(lon));
+      }
+      for (let j = 0; j < NV; j++) for (let i = 0; i < NU; i++) {
+        const a0 = j * (NU + 1) + i, a1 = a0 + 1, b0 = a0 + NU + 1, b1 = b0 + 1;
+        idx.push(a0, b0, a1, a1, b0, b1);
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
+      const casco = new THREE.Mesh(geo, materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05 }));
+      casco.material.side = THREE.DoubleSide; casco.castShadow = true; cranio.add(casco);
     }
-    if (tem('franja')) {
-      [[-0.42, 0.03, 18], [-0.2, 0.0, 8], [0.03, 0.02, -4], [0.24, 0.0, -10], [0.43, 0.03, -18]].forEach(([lon, dl, tor]) => {
-        const g = new THREE.Group(); g.rotation.set(-G(36 + dl * 100), lon, 0, 'YXZ'); cranio.add(g);
-        const me = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.075, 10), matCabelo);
-        me.position.set(0, -0.012, R * 1.02); me.rotation.set(G(160), 0, G(tor)); me.castShadow = true; g.add(me);
-      });
-    }
+    const geos = new Map();
+    // mecha plana: lâmina de base larga e ponta fina, curvada para acompanhar a cabeça (dobra 1 = colada;
+    // menor = a ponta descola um pouco); espessura pequena com chanfro
+    const lamina = (L, w, curva, dobra) => {
+      const k = `${L}|${w}|${curva}|${dobra}`;
+      if (geos.has(k)) return geos.get(k);
+      const f = new THREE.Shape();
+      f.moveTo(-w / 2, 0);
+      f.quadraticCurveTo(-w * 0.5 + curva * L * 0.3, L * 0.6, curva * L, L);
+      f.quadraticCurveTo(w * 0.55 + curva * L * 0.4, L * 0.5, w / 2, 0);
+      f.lineTo(-w / 2, 0);
+      const g = new THREE.ExtrudeGeometry(f, { depth: 0.005, bevelEnabled: true, bevelThickness: 0.002, bevelSize: 0.002, bevelSegments: 1, curveSegments: 10, steps: 1 });
+      g.translate(0, 0, -0.0025);
+      // dobra ao longo do comprimento (eixo y) em volta de um cilindro de raio Rc (normal = +z)
+      const Rc = (R * 1.07) / Math.max(dobra, 0.01), pos = g.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const y = pos.getY(i), z = pos.getZ(i), th = y / Rc, r = Rc + z;
+        pos.setY(i, r * Math.sin(th)); pos.setZ(i, r * Math.cos(th) - Rc);
+      }
+      g.computeVertexNormals();
+      geos.set(k, g); return g;
+    };
+    const eixoX = new THREE.Vector3(), eixoY = new THREE.Vector3(), eixoZ = new THREE.Vector3(), mb = new THREE.Matrix4();
+    // lat/lon em graus (lon > 0 = esquerda dele); fluxo = para onde a mecha corre; ergue = quanto a mecha sai da cabeça
+    const mecha = (lat, lon, fluxo, L, w, o = {}) => {
+      const n = new THREE.Vector3(Math.cos(G(lat)) * Math.sin(G(lon)), Math.sin(G(lat)), Math.cos(G(lat)) * Math.cos(G(lon)));
+      const f = new THREE.Vector3(...fluxo).normalize();
+      eixoY.copy(f).addScaledVector(n, -f.dot(n)).normalize();
+      eixoZ.copy(n); eixoX.crossVectors(eixoY, eixoZ).normalize();
+      mb.makeBasis(eixoX, eixoY, eixoZ);
+      const me = new THREE.Mesh(lamina(L, w, o.curva || 0, o.dobra === undefined ? 1 : o.dobra), o.luz ? matLuz : matCabelo);
+      me.quaternion.setFromRotationMatrix(mb).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(G(o.ergue || 0), 0, 0)));
+      me.position.copy(n).multiplyScalar(R * (o.alt || 1.055));
+      me.castShadow = true; cranio.add(me);
+    };
+    // estilo 3D chapado: lascas planas grandes e pontudas, em camadas, que saem bem da silhueta da cabeça.
+    // [lat, lon, fluxo, comprimento, largura, ergue, curva, dobra, tom claro]
+    const lascas = [
+      // franja: lascas largas caindo na diagonal sobre a testa, puxadas para a direita dele
+      [72, -40, [-0.5, -1, 0.6], 0.15, 0.11, 10, -0.16, 0.7, false],
+      [75, -10, [-0.55, -1, 0.7], 0.17, 0.12, 12, -0.2, 0.7, true],
+      [75, 20, [-0.45, -1, 0.75], 0.16, 0.115, 10, -0.18, 0.7, false],
+      [71, 48, [-0.2, -1, 0.6], 0.135, 0.105, 12, -0.12, 0.7, true],
+      // coroa: redemoinho de lascas largas, erguidas e abertas para trás e para os lados
+      [86, 0, [-0.2, 0.3, -1], 0.17, 0.12, 28, 0.08, 0.45, true],
+      [83, 50, [0.6, 0.35, -1], 0.16, 0.12, 30, 0.14, 0.45, false],
+      [83, -50, [-0.6, 0.35, -1], 0.16, 0.12, 30, -0.14, 0.45, false],
+      [78, 110, [0.35, 0.2, -1], 0.15, 0.115, 20, 0.16, 0.55, true],
+      [78, -110, [-0.35, 0.2, -1], 0.15, 0.115, 20, -0.16, 0.55, true],
+      [80, 170, [0.1, 0.25, -1], 0.17, 0.12, 24, 0.1, 0.5, false],
+      [76, -165, [-0.3, 0.2, -1], 0.15, 0.115, 22, -0.1, 0.5, true],
+      // lados: lascas para baixo e um pouco para fora
+      [60, 80, [0.1, -1, -0.3], 0.12, 0.1, 10, 0.1, 0.7, false],
+      [55, 118, [0.1, -1, -0.5], 0.13, 0.1, 10, 0.08, 0.7, true],
+      [60, -80, [-0.1, -1, -0.3], 0.12, 0.1, 10, -0.1, 0.7, true],
+      [55, -118, [-0.1, -1, -0.5], 0.13, 0.1, 10, -0.08, 0.7, false],
+      // nuca
+      [46, 155, [0.15, -1, -0.2], 0.12, 0.1, 12, 0.1, 0.65, false],
+      [46, -155, [-0.15, -1, -0.2], 0.12, 0.1, 12, -0.1, 0.65, true],
+      [44, 180, [0, -1, -0.15], 0.13, 0.105, 10, 0.05, 0.65, false],
+    ];
+    if (!tem('franja')) lascas.splice(0, 4);
+    for (const [lat, lon, fl, L, w, er, cv, db, luz] of lascas) mecha(lat, lon, fl, L, w, { ergue: er, curva: cv, dobra: db, alt: 1.06, luz });
   }
 
   // ---- braços ----
   const maos = {};
   for (const [lado, s] of [['e', 1], ['d', -1]]) {
     const ombro = junta('ombro_' + lado, peito, [s * m.ombroX, 0.2, 0]);
-    peca(capsula(0.062, m.braco - 0.02), c.moletom, ombro, [0, -m.braco / 2 - 0.01, 0]);
-    if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.014, m.braco, 0.026), c.faixa, ombro, [s * 0.05, -m.braco / 2 - 0.01, 0.03], [0, -s * 0.5, 0]);
+    // manga: ombro redondo + tubos retos levemente afunilados + cotovelo + punho
+    peca(new THREE.SphereGeometry(0.068, 18, 14), c.moletom, ombro, [0, -0.01, 0]);
+    peca(cilindro(0.067, 0.061, m.braco + 0.01), c.moletom, ombro, [0, -m.braco / 2 - 0.005, 0]);
+    if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.014, m.braco, 0.026), c.faixa, ombro, [s * 0.055, -m.braco / 2 - 0.01, 0.03], [0, -s * 0.5, 0]);
     const cotovelo = junta('cotovelo_' + lado, ombro, [0, -m.braco, 0]);
-    peca(capsula(0.057, m.antebraco - 0.03), c.moletom, cotovelo, [0, -m.antebraco / 2 + 0.005, 0]);
-    if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.013, m.antebraco - 0.03, 0.024), c.faixa, cotovelo, [s * 0.047, -m.antebraco / 2 + 0.005, 0.028], [0, -s * 0.5, 0]);
-    peca(new THREE.CylinderGeometry(0.05, 0.048, 0.035, 18), c.moletomEscuro, cotovelo, [0, -m.antebraco + 0.018, 0]);
+    peca(new THREE.SphereGeometry(0.061, 16, 12), c.moletom, cotovelo);
+    peca(cilindro(0.06, 0.054, m.antebraco - 0.02), c.moletom, cotovelo, [0, -m.antebraco / 2 + 0.005, 0]);
+    if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.013, m.antebraco - 0.04, 0.024), c.faixa, cotovelo, [s * 0.05, -m.antebraco / 2 + 0.01, 0.028], [0, -s * 0.5, 0]);
+    peca(caixa(0.1, 0.04, 0.1, 0.018), c.moletomEscuro, cotovelo, [0, -m.antebraco + 0.016, 0], [0, 0, 0], [1.05, 1, 1.05]);
     const mao = junta('mao_' + lado, cotovelo, [0, -m.antebraco, 0]);
-    peca(new THREE.SphereGeometry(0.04, 16, 12), c.pele, mao, [0, -0.04, 0], [0, 0, 0], [0.55, 1, 0.95]);
-    const dedos = [0.022, 0.0075, -0.0075, -0.022].map((z, i) => {
-      const g = new THREE.Group(); g.position.set(0, -0.07, z); mao.add(g);
-      peca(capsula(0.0088, 0.026 - (i === 3 ? 0.006 : 0)), c.pele, g, [0, -0.02, 0]);
+    // mão simples (luva): palma em bloco + dedos em blocos colados + polegar
+    peca(caixa(0.024, 0.062, 0.066, 0.01), c.pele, mao, [0, -0.04, 0]);
+    const dedos = [0.0235, 0.0078, -0.0078, -0.0235].map((z, i) => {
+      const g = new THREE.Group(); g.position.set(0, -0.068, z); mao.add(g);
+      peca(caixa(0.02, 0.04 - (i === 3 ? 0.008 : 0), 0.0165, 0.007), c.pele, g, [0, -0.018, 0]);
       return g;
     });
-    const pol = new THREE.Group(); pol.position.set(-s * 0.012, -0.028, 0.03); mao.add(pol);
-    peca(capsula(0.01, 0.022), c.pele, pol, [0, -0.018, 0]);
+    const pol = new THREE.Group(); pol.position.set(-s * 0.01, -0.03, 0.033); mao.add(pol);
+    peca(caixa(0.018, 0.036, 0.018, 0.007), c.pele, pol, [0, -0.016, 0]);
     mao.scale.setScalar(m.maoEscala || 1.35);
     maos[lado] = { mao, dedos, pol, s };
   }
@@ -258,20 +333,23 @@ export function criarBoneco(ficha) {
   // ---- pernas ----
   for (const [lado, s] of [['e', 1], ['d', -1]]) {
     const coxa = junta('coxa_' + lado, quadril, [s * 0.088, -0.04, 0]);
-    peca(capsula(0.079, m.coxa - 0.02), c.calca, coxa, [0, -m.coxa / 2 - 0.01, 0]);
+    // calça reta e larga: tubos + joelho + barra dobrada
+    peca(cilindro(0.086, 0.077, m.coxa + 0.03), c.calca, coxa, [0, -m.coxa / 2, 0]);
     const joelho = junta('joelho_' + lado, coxa, [0, -m.coxa, 0]);
-    peca(capsula(0.073, m.canela - 0.06), c.calca, joelho, [0, -m.canela / 2 + 0.02, 0]);
+    peca(new THREE.SphereGeometry(0.077, 16, 12), c.calca, joelho);
+    peca(cilindro(0.076, 0.073, m.canela - 0.04), c.calca, joelho, [0, -m.canela / 2 + 0.01, 0]);
     if (tem('barra_embolada')) {
-      peca(new THREE.TorusGeometry(0.064, 0.019, 10, 22), c.calca, joelho, [0, -m.canela + 0.06, 0], [Math.PI / 2 + 0.08, 0, 0]);
-      peca(new THREE.TorusGeometry(0.062, 0.017, 10, 22), c.calca, joelho, [0, -m.canela + 0.028, 0.004], [Math.PI / 2 - 0.1, 0, 0]);
+      peca(new THREE.TorusGeometry(0.066, 0.02, 10, 24), c.calca, joelho, [0, -m.canela + 0.055, 0], [Math.PI / 2 + 0.06, 0, 0]);
+      peca(cilindro(0.08, 0.08, 0.04), c.calca, joelho, [0, -m.canela + 0.03, 0.002]);
     }
     const pe = junta('pe_' + lado, joelho, [0, -m.canela, 0]);
     if (tem('tenis_cano_alto')) {
-      peca(new THREE.CylinderGeometry(0.05, 0.054, 0.07, 18), c.tenis, pe, [0, -0.012, 0]);
-      peca(new THREE.TorusGeometry(0.05, 0.011, 8, 20), c.tenisDetalhe, pe, [0, 0.022, 0], [Math.PI / 2, 0, 0]);
-      peca(capsula(0.046, 0.11), c.tenis, pe, [0, -0.03, 0.04], [Math.PI / 2, 0, 0], [1, 1, 0.8]);
-      peca(new THREE.SphereGeometry(0.04, 16, 12), c.tenisDetalhe, pe, [0, -0.012, 0.075], [0.45, 0, 0], [1.22, 0.32, 0.5]);
-      peca(capsula(0.05, 0.13), c.tenisSola, pe, [0, -0.062, 0.04], [Math.PI / 2, 0, 0], [1.04, 1, 0.22]);
+      // tênis de cano alto em blocos arredondados: cano, gola, corpo, biqueira e sola
+      peca(cilindro(0.052, 0.056, 0.07), c.tenis, pe, [0, -0.01, 0]);
+      peca(new THREE.TorusGeometry(0.052, 0.011, 8, 20), c.tenisDetalhe, pe, [0, 0.024, 0], [Math.PI / 2, 0, 0]);
+      peca(caixa(0.105, 0.07, 0.2, 0.034), c.tenis, pe, [0, -0.03, 0.035]);
+      peca(caixa(0.107, 0.032, 0.062, 0.015), c.tenisDetalhe, pe, [0, -0.044, 0.108]);
+      peca(caixa(0.112, 0.024, 0.212, 0.01), c.tenisSola, pe, [0, -0.0605, 0.036]);
     }
   }
 
