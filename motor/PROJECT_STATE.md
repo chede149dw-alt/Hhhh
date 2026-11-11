@@ -48,7 +48,9 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
   mãos de luva, sombreado bem liso. Mantém a identidade do Lucas (cores, moletom, pele, cabelo escuro); não copia o personagem da referência.
 - Cabelo: casco com borda recortada (franja/nuca) + lascas planas (ExtrudeGeometry fina, curvada) em camadas e dois tons.
   Tentativas que não funcionaram: bolinhas (black power), cones (anime), gotas, lâminas coladas (capacete).
-- Roupa: RoundedBoxGeometry (addon do three 0.187 copiado para `visual/lib/three/addons/`).
+- Roupa: RoundedBoxGeometry (addon do three 0.187 copiado para `visual/lib/three/addons/`) + `afunilar` e `placa` (Shape extrudado).
+  Moletom solto com barra canelada, bolso canguru em trapézio com aberturas, costuras raglã, capuz em gota deitado nas costas
+  com forro, ilhós e cordões; punho franzido; calça com barra dobrada; tênis com lingueta, cadarço, calcanhar e sola grossa.
 - Folha: `previas/motor3d/lucas3d-v2-ficha.png`; comparação `lucas3d-antes-x-v2.png`; salto `lucas3d-v2-salto.mp4`.
   Quando aprovada: copiar a folha para `personagens/lucas/3d/ficha.png` e mudar o status na ficha.
 

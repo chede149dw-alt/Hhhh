@@ -125,6 +125,18 @@ export function criarBoneco(ficha) {
   const capsula = (r, comp) => new THREE.CapsuleGeometry(r, comp, 6, 16);
   const caixa = (w, h, d, r) => new RoundedBoxGeometry(w, h, d, 4, r);
   const cilindro = (rt, rb, h) => new THREE.CylinderGeometry(rt, rb, h, 20);
+  // afunila uma geometria: largura (x) e profundidade (z) mudam com a altura (y), de "baixo" até "cima"
+  const afunilar = (geo, baixo, cima, zBaixo = baixo, zCima = cima) => {
+    geo.computeBoundingBox(); const y0 = geo.boundingBox.min.y, y1 = geo.boundingBox.max.y, p = geo.attributes.position;
+    for (let i = 0; i < p.count; i++) { const k = (p.getY(i) - y0) / (y1 - y0); p.setX(i, p.getX(i) * (baixo + (cima - baixo) * k)); p.setZ(i, p.getZ(i) * (zBaixo + (zCima - zBaixo) * k)); }
+    geo.computeVertexNormals(); return geo;
+  };
+  // peça plana recortada (Shape) com espessura e cantos chanfrados
+  const placa = (pts, esp, chanfro) => {
+    const f = new THREE.Shape(); f.moveTo(...pts[0]); for (const q of pts.slice(1)) f.lineTo(...q); f.lineTo(...pts[0]);
+    const g = new THREE.ExtrudeGeometry(f, { depth: esp, bevelEnabled: true, bevelThickness: chanfro, bevelSize: chanfro, bevelSegments: 3, curveSegments: 8 });
+    g.translate(0, 0, -esp / 2); return g;
+  };
   const juntas = {};
   const junta = (nome, pai, pos) => { const g = new THREE.Group(); g.name = nome; g.position.set(...pos); pai.add(g); juntas[nome] = g; return g; };
 
@@ -139,22 +151,32 @@ export function criarBoneco(ficha) {
   // bacia (calça)
   peca(capsula(0.082, 0.1), c.calca, quadril, [0, -0.04, 0], [0, 0, Math.PI / 2], [1, 1, 0.95]);
   if (tem('moletom')) {
-    // moletom em blocos retos de cantos arredondados (estilo 3D chapado): barriga + barra (na coluna), peito (no peito)
-    peca(caixa(0.39, 0.3, 0.235, 0.04), c.moletom, coluna, [0, 0.05, 0]);
-    peca(caixa(0.4, 0.05, 0.245, 0.022), c.moletomEscuro, coluna, [0, -0.085, 0]);
+    // moletom: corpo solto que se ajusta na barra canelada, peito mais largo nos ombros, capuz deitado nas costas
+    peca(afunilar(caixa(0.39, 0.29, 0.235, 0.045), 1.03, 0.99, 1.02, 0.99), c.moletom, coluna, [0, 0.055, 0]);
+    peca(caixa(0.37, 0.05, 0.222, 0.02), c.moletomEscuro, coluna, [0, -0.09, 0]);                 // barra canelada
+    for (let i = -4; i <= 4; i++) peca(new THREE.BoxGeometry(0.004, 0.04, 0.004), c.bolso, coluna, [i * 0.04, -0.09, 0.112]);
     if (tem('bolso_canguru')) {
-      peca(caixa(0.22, 0.115, 0.02, 0.01), c.bolso, coluna, [0, 0.0, 0.113]);
-      peca(caixa(0.2, 0.012, 0.022, 0.005), c.moletomEscuro, coluna, [0, 0.052, 0.114]);
+      // bolso canguru em trapézio, com as aberturas inclinadas dos lados
+      peca(placa([[-0.12, -0.055], [0.12, -0.055], [0.085, 0.055], [-0.085, 0.055]], 0.008, 0.004), c.bolso, coluna, [0, 0.0, 0.116]);
+      for (const sl of [1, -1]) peca(new THREE.BoxGeometry(0.006, 0.105, 0.006), c.moletomEscuro, coluna, [sl * 0.103, 0, 0.123], [0, 0, sl * 0.31]);
     }
-    peca(caixa(0.41, 0.3, 0.245, 0.05), c.moletom, peito, [0, 0.075, 0]);
+    peca(afunilar(caixa(0.41, 0.3, 0.245, 0.055), 0.97, 1.02), c.moletom, peito, [0, 0.075, 0]);
+    // costuras dos ombros (raglã): linhas finas do pescoço até a cava
+    for (const sl of [1, -1]) peca(new THREE.BoxGeometry(0.15, 0.005, 0.006), c.bolso, peito, [sl * 0.115, 0.17, 0.122], [0, 0, -sl * 0.62]);
     if (tem('capuz_enrolado')) {
-      peca(new THREE.TorusGeometry(0.083, 0.043, 12, 28), c.moletom, peito, [0, 0.235, -0.012], [Math.PI / 2 - 0.12, 0, 0], [1.08, 1, 0.85]);
-      peca(cilindro(0.05, 0.05, 0.03), c.moletomEscuro, peito, [0, 0.245, -0.008]);
-      peca(caixa(0.25, 0.2, 0.05, 0.024), c.bolso, peito, [0, 0.12, -0.125], [0.16, 0, 0]);
+      // gola do capuz em volta do pescoço, cruzando na frente
+      peca(new THREE.TorusGeometry(0.082, 0.04, 12, 32), c.moletom, peito, [0, 0.232, -0.01], [Math.PI / 2 - 0.15, 0, 0], [1.1, 1, 0.9]);
+      peca(cilindro(0.052, 0.052, 0.03), c.moletomEscuro, peito, [0, 0.245, -0.012]);
+      for (const sl of [1, -1]) peca(capsula(0.022, 0.07), c.moletom, peito, [sl * 0.03, 0.205, 0.105], [0.25, 0, sl * 0.75]);
+      // capuz deitado nas costas: casca em gota, com o forro escuro aparecendo na borda de cima
+      const capuz = new THREE.Group(); capuz.position.set(0, 0.175, -0.127); capuz.rotation.x = -0.04; peito.add(capuz);
+      peca(placa([[-0.12, 0.03], [-0.1, -0.08], [0, -0.17], [0.1, -0.08], [0.12, 0.03], [0.06, 0.07], [-0.06, 0.07]], 0.03, 0.014), c.moletom, capuz);
+      peca(placa([[-0.09, 0.03], [0, -0.1], [0.09, 0.03], [0.05, 0.055], [-0.05, 0.055]], 0.012, 0.006), c.moletomEscuro, capuz, [0, 0.005, 0.016]);
     }
-    if (tem('cordoes')) for (const s of [1, -1]) {
-      peca(new THREE.CylinderGeometry(0.0055, 0.0055, 0.12, 6), c.cordao, peito, [s * 0.034, 0.165, 0.128], [0.1, 0, s * 0.05]);
-      peca(new THREE.CylinderGeometry(0.0075, 0.0075, 0.022, 8), c.cordaoPonta, peito, [s * 0.037, 0.1, 0.134], [0.1, 0, s * 0.05]);
+    if (tem('cordoes')) for (const sl of [1, -1]) {
+      peca(new THREE.TorusGeometry(0.0065, 0.0022, 6, 12), c.cordaoPonta, peito, [sl * 0.03, 0.212, 0.124]);           // ilhós
+      peca(new THREE.CylinderGeometry(0.005, 0.005, 0.15, 6), c.cordao, peito, [sl * 0.036, 0.14, 0.13], [0.08, 0, sl * 0.06]);
+      peca(new THREE.CylinderGeometry(0.0072, 0.0072, 0.024, 8), c.cordaoPonta, peito, [sl * 0.041, 0.062, 0.137], [0.08, 0, sl * 0.06]);
     }
   }
 
@@ -313,9 +335,9 @@ export function criarBoneco(ficha) {
     if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.014, m.braco, 0.026), c.faixa, ombro, [s * 0.055, -m.braco / 2 - 0.01, 0.03], [0, -s * 0.5, 0]);
     const cotovelo = junta('cotovelo_' + lado, ombro, [0, -m.braco, 0]);
     peca(new THREE.SphereGeometry(0.061, 16, 12), c.moletom, cotovelo);
-    peca(cilindro(0.06, 0.054, m.antebraco - 0.02), c.moletom, cotovelo, [0, -m.antebraco / 2 + 0.005, 0]);
+    peca(cilindro(0.06, 0.063, m.antebraco - 0.03), c.moletom, cotovelo, [0, -m.antebraco / 2 + 0.0, 0]);   // manga solta que franze no punho
     if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.013, m.antebraco - 0.04, 0.024), c.faixa, cotovelo, [s * 0.05, -m.antebraco / 2 + 0.01, 0.028], [0, -s * 0.5, 0]);
-    peca(caixa(0.1, 0.04, 0.1, 0.018), c.moletomEscuro, cotovelo, [0, -m.antebraco + 0.016, 0], [0, 0, 0], [1.05, 1, 1.05]);
+    peca(cilindro(0.05, 0.047, 0.045), c.moletomEscuro, cotovelo, [0, -m.antebraco + 0.02, 0]);                      // punho canelado
     const mao = junta('mao_' + lado, cotovelo, [0, -m.antebraco, 0]);
     // mão simples (luva): palma em bloco + dedos em blocos colados + polegar
     peca(caixa(0.024, 0.062, 0.066, 0.01), c.pele, mao, [0, -0.04, 0]);
@@ -333,23 +355,26 @@ export function criarBoneco(ficha) {
   // ---- pernas ----
   for (const [lado, s] of [['e', 1], ['d', -1]]) {
     const coxa = junta('coxa_' + lado, quadril, [s * 0.088, -0.04, 0]);
-    // calça reta e larga: tubos + joelho + barra dobrada
-    peca(cilindro(0.086, 0.077, m.coxa + 0.03), c.calca, coxa, [0, -m.coxa / 2, 0]);
+    // calça reta e larga: tubos + joelho + barra dobrada uma vez
+    peca(cilindro(0.086, 0.078, m.coxa + 0.03), c.calca, coxa, [0, -m.coxa / 2, 0]);
     const joelho = junta('joelho_' + lado, coxa, [0, -m.coxa, 0]);
-    peca(new THREE.SphereGeometry(0.077, 16, 12), c.calca, joelho);
-    peca(cilindro(0.076, 0.073, m.canela - 0.04), c.calca, joelho, [0, -m.canela / 2 + 0.01, 0]);
+    peca(new THREE.SphereGeometry(0.078, 16, 12), c.calca, joelho);
+    peca(cilindro(0.077, 0.071, m.canela - 0.05), c.calca, joelho, [0, -m.canela / 2 + 0.005, 0]);
     if (tem('barra_embolada')) {
-      peca(new THREE.TorusGeometry(0.066, 0.02, 10, 24), c.calca, joelho, [0, -m.canela + 0.055, 0], [Math.PI / 2 + 0.06, 0, 0]);
-      peca(cilindro(0.08, 0.08, 0.04), c.calca, joelho, [0, -m.canela + 0.03, 0.002]);
+      peca(cilindro(0.075, 0.077, 0.045), c.calca, joelho, [0, -m.canela + 0.035, 0]);
+      peca(new THREE.TorusGeometry(0.075, 0.009, 8, 24), c.calca, joelho, [0, -m.canela + 0.058, 0], [Math.PI / 2, 0, 0]);
     }
     const pe = junta('pe_' + lado, joelho, [0, -m.canela, 0]);
     if (tem('tenis_cano_alto')) {
-      // tênis de cano alto em blocos arredondados: cano, gola, corpo, biqueira e sola
-      peca(cilindro(0.052, 0.056, 0.07), c.tenis, pe, [0, -0.01, 0]);
-      peca(new THREE.TorusGeometry(0.052, 0.011, 8, 20), c.tenisDetalhe, pe, [0, 0.024, 0], [Math.PI / 2, 0, 0]);
-      peca(caixa(0.105, 0.07, 0.2, 0.034), c.tenis, pe, [0, -0.03, 0.035]);
-      peca(caixa(0.107, 0.032, 0.062, 0.015), c.tenisDetalhe, pe, [0, -0.044, 0.108]);
-      peca(caixa(0.112, 0.024, 0.212, 0.01), c.tenisSola, pe, [0, -0.0605, 0.036]);
+      // tênis de cano alto: cano, gola turquesa, lingueta, cadarço, corpo, biqueira e reforço do calcanhar turquesa, sola grossa
+      peca(cilindro(0.053, 0.057, 0.075), c.tenis, pe, [0, -0.01, -0.004]);
+      peca(new THREE.TorusGeometry(0.053, 0.012, 8, 22), c.tenisDetalhe, pe, [0, 0.026, -0.004], [Math.PI / 2, 0, 0]);
+      peca(caixa(0.05, 0.06, 0.02, 0.008), c.tenis, pe, [0, 0.02, 0.05], [-0.35, 0, 0]);                       // lingueta
+      peca(caixa(0.104, 0.068, 0.2, 0.034), c.tenis, pe, [0, -0.031, 0.036]);
+      for (let i = 0; i < 3; i++) peca(new THREE.BoxGeometry(0.052, 0.006, 0.008), c.cordaoPonta, pe, [0, -0.0 - i * 0.008, 0.06 + i * 0.022], [-0.5, 0, 0]);
+      peca(caixa(0.106, 0.034, 0.064, 0.016), c.tenisDetalhe, pe, [0, -0.045, 0.108]);
+      peca(caixa(0.07, 0.05, 0.03, 0.012), c.tenisDetalhe, pe, [0, -0.03, -0.063]);                          // calcanhar
+      peca(caixa(0.114, 0.026, 0.214, 0.011), c.tenisSola, pe, [0, -0.0595, 0.036]);
     }
   }
 
