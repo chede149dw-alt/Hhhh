@@ -1,0 +1,74 @@
+{
+  "nome": "Rafael",
+  "status": "proposta 3D — aguardando aprovação (design da ficha 2D proposta)",
+  "altura": 1.6,
+  "cores": {
+    "pupila": "#1F3A2A",
+    "cilio": "#1E1B26",
+    "bocaDentro": "#4A2228",
+    "lingua": "#C4545E",
+    "pele": "#F6D6C0",
+    "peleSombra": "#E0B79E",
+    "cabelo": "#73493A",
+    "cabeloLuz": "#8A5A48",
+    "iris": "#4FAF7A",
+    "sobrancelha": "#5A3A2E",
+    "boca": "#8A4A44",
+    "camiseta": "#F2EDE6",
+    "camisetaDobra": "#D9D2C8",
+    "manga": "#EBC25A",
+    "estampa": "#EBC25A",
+    "calca": "#55708C",
+    "tenis": "#F2EDE6",
+    "tenisDetalhe": "#EBC25A",
+    "tenisSola": "#E2DBD0",
+    "meia": "#F2EDE6",
+    "oculos": "#B9C7CF",
+    "cordaoPonta": "#6A6573"
+  },
+  "medidas": {
+    "quadrilAltura": 0.801,
+    "cabecaRaio": 0.15,
+    "ombroX": 0.17,
+    "braco": 0.26,
+    "antebraco": 0.22,
+    "coxa": 0.33,
+    "canela": 0.36,
+    "calcaLargura": 0.9,
+    "manga": 0.85
+  },
+  "pecas": [
+    "cabelo_tigela",
+    "oculos",
+    "camiseta_manga",
+    "calca_larga",
+    "tenis_baixo",
+    "dobras"
+  ],
+  "paleta": [
+    [
+      "Camiseta",
+      "#F2EDE6"
+    ],
+    [
+      "Manga",
+      "#EBC25A"
+    ],
+    [
+      "Calça",
+      "#55708C"
+    ],
+    [
+      "Pele",
+      "#F6D6C0"
+    ],
+    [
+      "Cabelo",
+      "#73493A"
+    ],
+    [
+      "Olhos",
+      "#4FAF7A"
+    ]
+  ]
+}

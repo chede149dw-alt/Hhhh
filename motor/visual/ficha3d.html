@@ -64,10 +64,10 @@
     ctx.fillStyle = FUNDO; ctx.fillRect(0, 0, LW, altura);
     ctx.fillStyle = TXT; ctx.textAlign = 'left';
     ctx.font = '800 120px sans-serif'; ctx.fillText(ficha.nome.toUpperCase() + ' 3D', M, 150);
-    ctx.font = '500 40px sans-serif'; ctx.fillText(`Altura ${ficha.altura} m · peças: ${ficha.pecas.length} · mesmo design da ficha 2D`, M, 215);
+    ctx.font = '500 40px sans-serif'; ctx.fillText(`Altura ${ficha.altura} m · peças: ${ficha.pecas.length} · design da ficha 2D, no estilo 3D chapado`, M, 215);
     ctx.fillStyle = '#C8323C'; ctx.font = '700 34px sans-serif'; ctx.fillText((ficha.status || '').toUpperCase(), M, 268);
     // paleta
-    const cores = [['Marinho', ficha.cores.moletom], ['Turquesa', ficha.cores.faixa], ['Grafite', ficha.cores.calca], ['Linho', ficha.cores.tenis], ['Pele', ficha.cores.pele], ['Cabelo', ficha.cores.cabelo]];
+    const cores = ficha.paleta || [['Marinho', ficha.cores.moletom], ['Turquesa', ficha.cores.faixa], ['Grafite', ficha.cores.calca], ['Linho', ficha.cores.tenis], ['Pele', ficha.cores.pele], ['Cabelo', ficha.cores.cabelo]];
     cores.forEach(([n, cor], i) => {
       const x = LW - M - (cores.length - i) * 150 + 40;
       ctx.fillStyle = cor; ctx.beginPath(); ctx.arc(x, 150, 38, 0, Math.PI * 2); ctx.fill();

@@ -215,6 +215,30 @@ export function criarBoneco(ficha) {
     }
   }
 
+  if (tem('camiseta_manga')) {
+    // camiseta linho sobre manga longa (Rafael): corpo reto, gola redonda, estampa de triângulo
+    peca(afunilar(caixa(0.37, 0.3, 0.22, 0.04), 1.0, 0.99), c.camiseta, coluna, [0, 0.04, 0]);
+    peca(afunilar(caixa(0.39, 0.3, 0.23, 0.05), 0.97, 1.02), c.camiseta, peito, [0, 0.075, 0]);
+    peca(new THREE.TorusGeometry(0.056, 0.012, 8, 24), c.camisetaDobra || c.camiseta, peito, [0, 0.228, 0.01], [Math.PI / 2 - 0.25, 0, 0], [1, 1, 0.8]);
+    peca(placa([[-0.035, -0.028], [0.035, -0.028], [0, 0.03]], 0.004, 0.0015), c.estampa || '#EBC25A', peito, [0, 0.12, 0.118]);
+    if (tem('dobras')) for (const sl of [1, -1]) peca(capsula(0.0032, 0.06), c.camisetaDobra || '#D9D2C8', coluna, [sl * 0.12, -0.02, 0.112], [0, 0, Math.PI / 2 + sl * 0.4]);
+  }
+  if (tem('cardiga')) {
+    // cardigã aberto (Mãe) sobre blusa: blusa à mostra na frente, cardigã mais longo, botões e bolsinhos
+    peca(afunilar(caixa(0.33, 0.3, 0.21, 0.04), 1.06, 0.98), c.blusa, coluna, [0, 0.04, 0]);
+    peca(afunilar(caixa(0.35, 0.3, 0.22, 0.05), 0.96, 1.0), c.blusa, peito, [0, 0.075, 0]);
+    for (const sl of [1, -1]) {
+      peca(afunilar(caixa(0.13, 0.38, 0.235, 0.03), 1.12, 1.0), c.cardiga, coluna, [sl * 0.13, 0.0, 0.004]);
+      peca(afunilar(caixa(0.14, 0.31, 0.245, 0.04), 1.0, 1.0), c.cardiga, peito, [sl * 0.125, 0.075, 0.0]);
+      peca(caixa(0.03, 0.5, 0.02, 0.008), c.cardiga, coluna, [sl * 0.07, 0.11, 0.118]);          // borda da frente
+      peca(caixa(0.06, 0.05, 0.012, 0.008), c.cardigaDetalhe || '#E2DBD0', coluna, [sl * 0.13, -0.06, 0.122]);   // bolsinho
+      for (let k = 0; k < 3; k++) peca(cilindro(0.007, 0.007, 0.006), c.botao || '#FFFFFF', coluna, [sl * 0.075, 0.2 - k * 0.11, 0.13], [Math.PI / 2, 0, 0]);
+    }
+    peca(caixa(0.22, 0.4, 0.2, 0.05), c.cardiga, coluna, [0, 0.0, -0.025]);                       // costas
+    peca(caixa(0.24, 0.3, 0.2, 0.06), c.cardiga, peito, [0, 0.075, -0.03]);
+    peca(new THREE.TorusGeometry(0.07, 0.016, 8, 24), c.cardiga, peito, [0, 0.23, -0.01], [Math.PI / 2 - 0.3, 0, 0], [1.05, 1, 0.8]);
+  }
+
   // ---- pescoço e cabeça ----
   const pescoco = junta('pescoco', peito, [0, 0.25, 0]);
   peca(new THREE.CylinderGeometry(0.045, 0.048, 0.1, 14), c.pele, pescoco, [0, 0.02, 0]);
@@ -260,6 +284,59 @@ export function criarBoneco(ficha) {
   const bocaG = new THREE.Group();
   for (const k in boca) bocaG.add(boca[k]);
   noRosto(bocaG, G(-27), 0, 0.003);
+
+  // casco de cabelo genérico: borda(lon) = ângulo (rad) a partir do topo onde o cabelo termina; volume(lon, t) = raio extra
+  const cascoCabelo = (borda, volume, cor = c.cabelo) => {
+    const NU = 240, NV = 26, pos = [], idx = [];
+    for (let j = 0; j <= NV; j++) for (let i = 0; i <= NU; i++) {
+      const lon = (i / NU) * Math.PI * 2, t = j / NV, teta = borda(lon) * t, r = R * (1.03 + volume(lon, t));
+      pos.push(r * Math.sin(teta) * Math.sin(lon), r * Math.cos(teta), r * Math.sin(teta) * Math.cos(lon));
+    }
+    for (let j = 0; j < NV; j++) for (let i = 0; i < NU; i++) { const a0 = j * (NU + 1) + i, a1 = a0 + 1, b0 = a0 + NU + 1, b1 = b0 + 1; idx.push(a0, b0, a1, a1, b0, b1); }
+    const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
+    const me = new THREE.Mesh(geo, materialToon(cor, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 }));
+    me.material.side = THREE.DoubleSide; me.castShadow = true; cranio.add(me); return me;
+  };
+  // coque (Mãe): cabelo liso puxado para trás, risca de lado, coque no alto com prendedor
+  if (tem('cabelo_coque')) {
+    cascoCabelo((lon) => { const fr = Math.max(0, Math.cos(lon)), tr = Math.max(0, -Math.cos(lon)); return G(84 - 30 * fr + 22 * tr + 6 * Math.sin(lon) * fr); },
+      (lon, t) => 0.03 * Math.pow(1 - t, 1.2));
+    const coque = new THREE.Mesh(new THREE.SphereGeometry(R * 0.42, 24, 16), materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 }));
+    coque.position.set(0, R * 1.02, -R * 0.42); coque.scale.set(1, 0.9, 0.95); coque.castShadow = true; cranio.add(coque);
+    const presa = new THREE.Mesh(new THREE.TorusGeometry(R * 0.33, R * 0.06, 8, 24), mat(c.detalhe || '#EBC25A'));
+    presa.position.set(0, R * 0.86, -R * 0.34); presa.rotation.x = -0.9; cranio.add(presa);
+    // risca e mecha de lado na testa
+    const mecha2 = new THREE.Mesh(new THREE.SphereGeometry(R * 0.5, 20, 12, 0, Math.PI * 2, 0, Math.PI / 2), materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 }));
+    mecha2.position.set(R * 0.2, R * 0.62, R * 0.58); mecha2.scale.set(1.2, 0.32, 0.6); mecha2.rotation.set(0.5, 0.2, -0.3); cranio.add(mecha2);
+  }
+  // tigela (Rafael): cabelo cheio e liso, franja reta em mechas largas, um topete espetado no alto
+  if (tem('cabelo_tigela')) {
+    cascoCabelo((lon) => {
+      const fr = Math.max(0, Math.cos(lon)), tr = Math.max(0, -Math.cos(lon));
+      const dentes = 11, f = ((lon / (2 * Math.PI)) * dentes + 10.2) % 1, dente = 1 - Math.abs(f - 0.5) * 2;
+      return G(86 - 22 * fr + 18 * tr + (3 + 5 * fr) * Math.pow(dente, 2));
+    }, (lon, t) => 0.085 * Math.pow(1 - t, 1.4) * (0.85 + 0.15 * Math.cos(lon)));
+    const top = new THREE.Mesh(new THREE.ConeGeometry(R * 0.16, R * 0.45, 10), materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 }));
+    top.position.set(R * 0.08, R * 1.18, -R * 0.05); top.rotation.set(-0.35, 0, -0.25); top.scale.set(1, 1, 0.5); top.castShadow = true; cranio.add(top);
+  }
+  if (tem('oculos')) {
+    // óculos redondos: aros, ponte e hastes; lente bem leve
+    const corAro = c.oculos || '#B9C7CF';
+    for (const sl of [1, -1]) {
+      const aro = new THREE.Mesh(new THREE.TorusGeometry(0.026, 0.0035, 8, 28), mat(corAro));
+      const g = new THREE.Group(); g.rotation.set(G(4), sl * 0.36, 0, 'YXZ'); aro.position.z = R + 0.012; g.add(aro); cranio.add(g);
+      const lente = new THREE.Mesh(new THREE.CircleGeometry(0.025, 24), new THREE.MeshBasicMaterial({ color: '#DFF1F7', transparent: true, opacity: 0.25, depthWrite: false }));
+      lente.position.z = R + 0.011; g.add(lente);
+      const haste = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.004, R * 0.95), mat(corAro));
+      haste.position.set(sl * R * 0.86, -0.004, -R * 0.05); haste.rotation.y = sl * 0.18; cranio.add(haste);
+    }
+    const ponte = new THREE.Mesh(new THREE.TorusGeometry(0.014, 0.003, 6, 12, Math.PI), mat(corAro));
+    ponte.position.set(0, 0.004, R * 1.04); cranio.add(ponte);
+  }
+  if (tem('brincos')) for (const sl of [1, -1]) {
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.009, 10, 8), mat(c.detalhe || '#EBC25A'));
+    b.position.set(sl * R * 1.0, -0.04, 0); cranio.add(b);
+  }
 
   // cabelo (estilo 3D chapado): calota + mechas PLANAS e angulosas, em camadas — franja caída de lado,
   // textura no alto, laterais e nuca baixas (corte curto bagunçado, como na ficha 2D)
@@ -365,14 +442,16 @@ export function criarBoneco(ficha) {
   for (const [lado, s] of [['e', 1], ['d', -1]]) {
     const ombro = junta('ombro_' + lado, peito, [s * m.ombroX, 0.2, 0]);
     // manga: ombro redondo + tubos retos levemente afunilados + cotovelo + punho
-    peca(new THREE.SphereGeometry(0.068, 18, 14), c.moletom, ombro, [0, -0.01, 0]);
-    peca(cilindro(0.067, 0.061, m.braco + 0.01), c.moletom, ombro, [0, -m.braco / 2 - 0.005, 0]);
+    const corManga = c.manga || c.moletom, gross = m.manga || 1;
+    peca(new THREE.SphereGeometry(0.068 * gross, 18, 14), tem('camiseta_manga') ? c.camiseta : corManga, ombro, [0, -0.01, 0]);
+    peca(cilindro(0.067 * gross, 0.061 * gross, m.braco + 0.01), corManga, ombro, [0, -m.braco / 2 - 0.005, 0]);
+    if (tem('camiseta_manga')) peca(cilindro(0.074, 0.07, 0.11), c.camiseta, ombro, [0, -0.045, 0]);           // manga curta da camiseta
     if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.014, m.braco, 0.026), c.faixa, ombro, [s * 0.055, -m.braco / 2 - 0.01, 0.03], [0, -s * 0.5, 0]);
     const cotovelo = junta('cotovelo_' + lado, ombro, [0, -m.braco, 0]);
-    peca(new THREE.SphereGeometry(0.061, 16, 12), c.moletom, cotovelo);
-    peca(cilindro(0.06, 0.063, m.antebraco - 0.03), c.moletom, cotovelo, [0, -m.antebraco / 2 + 0.0, 0]);   // manga solta que franze no punho
+    peca(new THREE.SphereGeometry(0.061 * gross, 16, 12), corManga, cotovelo);
+    peca(cilindro(0.06 * gross, 0.063 * gross, m.antebraco - 0.03), corManga, cotovelo, [0, -m.antebraco / 2 + 0.0, 0]);   // manga solta que franze no punho
     if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.013, m.antebraco - 0.04, 0.024), c.faixa, cotovelo, [s * 0.05, -m.antebraco / 2 + 0.01, 0.028], [0, -s * 0.5, 0]);
-    peca(cilindro(0.05, 0.047, 0.045), c.moletomEscuro, cotovelo, [0, -m.antebraco + 0.02, 0]);                      // punho canelado
+    peca(cilindro(0.05 * gross, 0.047 * gross, 0.045), c.punho || c.moletomEscuro || corManga, cotovelo, [0, -m.antebraco + 0.02, 0]);   // punho canelado
     if (tem('dobras')) {
       // dobras no cotovelo e franzido acima do punho
       peca(new THREE.TorusGeometry(0.03, 0.0028, 6, 16, Math.PI * 0.7), c.moletomDobra || c.bolso, cotovelo, [0, 0.0, 0.058], [0, 0, Math.PI * 1.15]);
@@ -396,10 +475,11 @@ export function criarBoneco(ficha) {
   for (const [lado, s] of [['e', 1], ['d', -1]]) {
     const coxa = junta('coxa_' + lado, quadril, [s * 0.088, -0.04, 0]);
     // calça reta e larga: tubos + joelho + barra dobrada uma vez
-    peca(cilindro(0.086, 0.078, m.coxa + 0.03), c.calca, coxa, [0, -m.coxa / 2, 0]);
+    const lc = m.calcaLargura || 1;
+    peca(cilindro(0.086 * lc, 0.078 * lc, m.coxa + 0.03), c.calca, coxa, [0, -m.coxa / 2, 0]);
     const joelho = junta('joelho_' + lado, coxa, [0, -m.coxa, 0]);
-    peca(new THREE.SphereGeometry(0.078, 16, 12), c.calca, joelho);
-    peca(cilindro(0.077, 0.071, m.canela - 0.05), c.calca, joelho, [0, -m.canela / 2 + 0.005, 0]);
+    peca(new THREE.SphereGeometry(0.078 * lc, 16, 12), c.calca, joelho);
+    peca(cilindro(0.077 * lc, 0.071 * lc, m.canela - 0.05), c.calca, joelho, [0, -m.canela / 2 + 0.005, 0]);
     if (tem('barra_embolada')) {
       peca(cilindro(0.075, 0.077, 0.045), c.calca, joelho, [0, -m.canela + 0.035, 0]);
       peca(new THREE.TorusGeometry(0.075, 0.009, 8, 24), c.calca, joelho, [0, -m.canela + 0.058, 0], [Math.PI / 2, 0, 0]);
@@ -415,6 +495,21 @@ export function criarBoneco(ficha) {
       peca(caixa(0.106, 0.034, 0.064, 0.016), c.tenisDetalhe, pe, [0, -0.045, 0.108]);
       peca(caixa(0.07, 0.05, 0.03, 0.012), c.tenisDetalhe, pe, [0, -0.03, -0.063]);                          // calcanhar
       peca(caixa(0.114, 0.026, 0.214, 0.011), c.tenisSola, pe, [0, -0.0595, 0.036]);
+    }
+    if (tem('tenis_baixo')) {
+      // tênis baixo (Rafael): corpo arredondado, biqueira colorida, cadarço, sola
+      peca(cilindro(0.05, 0.054, 0.04), c.meia || '#F2EDE6', pe, [0, 0.0, -0.004]);
+      peca(caixa(0.104, 0.066, 0.2, 0.034), c.tenis, pe, [0, -0.032, 0.036]);
+      for (let i = 0; i < 3; i++) peca(new THREE.BoxGeometry(0.05, 0.006, 0.008), c.tenisDetalhe, pe, [0, -0.002 - i * 0.008, 0.055 + i * 0.022], [-0.5, 0, 0]);
+      peca(caixa(0.106, 0.034, 0.064, 0.016), c.tenisDetalhe, pe, [0, -0.045, 0.108]);
+      peca(caixa(0.114, 0.026, 0.214, 0.011), c.tenisSola, pe, [0, -0.0595, 0.036]);
+    }
+    if (tem('sapatilha')) {
+      // sapatilha (Mãe): baixa, bico arredondado, peito do pé à mostra
+      peca(cilindro(0.044, 0.048, 0.05), c.pele, pe, [0, 0.0, -0.004]);
+      peca(caixa(0.096, 0.05, 0.2, 0.026), c.sapato, pe, [0, -0.045, 0.036]);
+      peca(caixa(0.07, 0.012, 0.05, 0.005), c.pele, pe, [0, -0.02, 0.04]);
+      peca(caixa(0.1, 0.012, 0.205, 0.006), c.sapatoSola || c.sapato, pe, [0, -0.066, 0.036]);
     }
   }
 

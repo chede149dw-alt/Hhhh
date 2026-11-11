@@ -1,0 +1,72 @@
+{
+  "nome": "Mãe",
+  "status": "proposta 3D — aguardando aprovação (design da ficha 2D proposta)",
+  "altura": 1.62,
+  "cores": {
+    "pupila": "#2A1A14",
+    "cilio": "#1E1B26",
+    "bocaDentro": "#4A2228",
+    "lingua": "#C4545E",
+    "pele": "#8F5B3E",
+    "peleSombra": "#6E4330",
+    "cabelo": "#4A3536",
+    "cabeloLuz": "#5E4646",
+    "iris": "#3A2418",
+    "sobrancelha": "#3A2A2C",
+    "boca": "#6E3030",
+    "cardiga": "#F2EDE6",
+    "cardigaDetalhe": "#E2DBD0",
+    "blusa": "#A487DE",
+    "manga": "#F2EDE6",
+    "punho": "#E2DBD0",
+    "calca": "#38343F",
+    "sapato": "#38343F",
+    "detalhe": "#EBC25A",
+    "botao": "#FFFFFF"
+  },
+  "medidas": {
+    "quadrilAltura": 0.801,
+    "cabecaRaio": 0.146,
+    "ombroX": 0.165,
+    "braco": 0.26,
+    "antebraco": 0.22,
+    "coxa": 0.33,
+    "canela": 0.36,
+    "calcaLargura": 0.82,
+    "manga": 0.88
+  },
+  "pecas": [
+    "cabelo_coque",
+    "brincos",
+    "cardiga",
+    "calca_larga",
+    "sapatilha",
+    "dobras"
+  ],
+  "paleta": [
+    [
+      "Cardigã",
+      "#F2EDE6"
+    ],
+    [
+      "Blusa",
+      "#A487DE"
+    ],
+    [
+      "Calça",
+      "#38343F"
+    ],
+    [
+      "Pele",
+      "#8F5B3E"
+    ],
+    [
+      "Cabelo",
+      "#4A3536"
+    ],
+    [
+      "Detalhe",
+      "#EBC25A"
+    ]
+  ]
+}
