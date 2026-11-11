@@ -39,7 +39,8 @@ async function renderizar({ pagina, lista, saida, fps = 60, processos = 1, aoQua
   fs.mkdirSync(saida, { recursive: true });
   const srv = await iniciar(RAIZ);
   if (!CHROME) throw new Error('Chrome não encontrado: defina a variável CHROME com o caminho do chrome.exe');
-  const navegador = await puppeteer.launch({ executablePath: CHROME, headless: true, args: FLAGS });
+  // protocolTimeout alto: com várias páginas pesadas ao mesmo tempo, um quadro pode demorar mais que os 3 min padrão
+  const navegador = await puppeteer.launch({ executablePath: CHROME, headless: true, args: FLAGS, protocolTimeout: 600000 });
   const fatias = [...Array(processos)].map((_, k) => lista.filter((_, i) => i % processos === k));
   let feitos = 0;
   // abre as páginas uma por vez (carregar várias juntas no WebGL por software pode passar do tempo) e só então renderiza

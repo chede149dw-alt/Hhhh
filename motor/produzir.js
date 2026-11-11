@@ -61,7 +61,11 @@ async function produzir(roteiroArq, o = {}) {
       const dir = path.join(pastaPartes, `q${k}`);
       const lista = []; for (let q = a; q <= b; q++) lista.push(q);
       const tp = Date.now();
-      await renderizar({ pagina, lista, saida: dir, fps, processos });
+      // se a parte falhar (navegador travou), tenta de novo com menos processos
+      for (let tentativa = 0, proc = processos; ; tentativa++, proc = Math.max(1, Math.floor(proc / 2))) {
+        try { fs.rmSync(dir, { recursive: true, force: true }); await renderizar({ pagina, lista, saida: dir, fps, processos: proc }); break; }
+        catch (e) { if (tentativa >= 2) throw e; console.log(`  parte ${k + 1} falhou (${e.message.split('\n')[0].slice(0, 80)}); tentando de novo com ${Math.max(1, Math.floor(proc / 2))} processo(s)…`); }
+      }
       // os quadros vêm numerados pelo número global; o juntar lê uma sequência a partir de 0
       fs.readdirSync(dir).forEach((f) => { const q = +f.match(/\d+/)[0]; fs.renameSync(path.join(dir, f), path.join(dir, `quadro_${String(q - a).padStart(5, '0')}.png`)); });
       juntar(dir, mp4, { fps });
