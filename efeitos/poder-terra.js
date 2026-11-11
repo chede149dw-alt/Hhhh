@@ -24,8 +24,7 @@
     const t = o.t || 0;
     const R = H * 0.62 * (o.tamanho || 1) * (1 + Math.sin(t * 5) * 0.03);
     const rnd = rng(o.semente || 11);
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.save(); // respeita o zoom/giro atual do contexto
 
     // 1. nuvem de poeira atrás (translúcida, chapada)
     for (let i = 0; i < 9; i++) {

@@ -69,3 +69,11 @@
 - Efeito de terra funciona em cena clara porque é chapado (terra, pedras, poeira translúcida); o brilho das rachaduras (âmbar) dá o "poder" sem precisar de fundo escuro.
 - Esfera do poder precisa de raio ~0,6 H para ler bem ao lado das mãos; com 0,4 H some.
 - Renomear personagem: manter a função antiga como apelido (`criarAmigo = criarRafael`) para não quebrar episódios já montados.
+
+## Episódio 1 da terra (prévia)
+- Efeitos de terra como funções de cena reaproveitáveis (`efeitos/terra-cena.js`): poeira, terra subindo, terra caindo, rachadura 3D com brilho, onda de pedras, coluna de terra, poeira do teto. Todos usam a mesma pedra de poucos lados com face clara/escura, e isso dá unidade.
+- "Surfar" na onda de pedras: a função da onda devolve o ponto do topo do monte, e o personagem é desenhado ali com a escala da profundidade.
+- Pontos do Rig (`pontoMundo`) vêm em coordenadas de tela: desenhar o efeito depois de `ctx.restore()` do zoom, senão o zoom é aplicado duas vezes.
+- Em close de objeto (despertador), uma mão simples feita com o pincel (punho do moletom com a faixa + palma + dedos) lê bem; um bloco sem dedos não.
+- Ao renomear arquivo de personagem, atualizar também os scripts de teste (o teste quebrou com `fab is not a function`).
+- Render: 1011 quadros em ~2 min com 4 abas.

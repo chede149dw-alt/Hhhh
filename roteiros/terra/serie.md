@@ -1,6 +1,6 @@
 # Série: "E se você acordasse controlando a terra?"
 
-Status: roteiro do episódio 1 aguardando aprovação (`ep01.md` / `ep01.json`).
+Status: roteiro do episódio 1 aprovado; prévia com voz grátis em `previas/terra-ep01-previa.mp4` (planos em `ep01.js`).
 
 ## Personagens
 | Personagem | Arquivo | Observação |
@@ -11,12 +11,12 @@ Status: roteiro do episódio 1 aguardando aprovação (`ep01.md` / `ep01.json`).
 | Vizinho | figurante (`motor/personagem-base.js`) | — |
 
 ## Cenários (já existem)
-quarto (`cenarios/quarto-3d.js`), rua (`cenarios/rua-3d.js`), escola — o plano do celular pede um **pátio** com bueiro (novo, ou adaptar o corredor).
+quarto (`cenarios/quarto-3d.js`, agora com vaso na janela e livros que caem), rua (`cenarios/rua-3d.js`), pátio da escola com bueiro (`cenarios/patio-3d.js`, novo).
 
 ## Objetos novos
 vaso de planta (com terra), livros que caem, celular, grade de bueiro, sacola do vizinho.
 
-## Efeitos novos (poder da terra)
+## Efeitos do poder da terra (`efeitos/poder-terra.js` e `efeitos/terra-cena.js`)
 - terra/pedras flutuando em volta das mãos, esfera de terra girando;
 - tremor (câmera + objetos chacoalhando + poeira do teto);
 - rachadura que corre pelo chão e brilha por dentro;

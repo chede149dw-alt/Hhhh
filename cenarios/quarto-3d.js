@@ -39,7 +39,7 @@
   window.Cenarios3D.quarto = {
     nevoa: '#3E3550',
     luz: LUZ,
-    pontos: { cama: { x: 1.55, z: 1.8 }, criado: { x: 1.9, z: 3.35 }, porta: { x: 1.35, z: 4.85 }, centro: { x: 0, z: 2.4 } },
+    pontos: { cama: { x: 1.55, z: 1.8 }, criado: { x: 1.9, z: 3.35 }, porta: { x: 1.35, z: 4.85 }, centro: { x: 0, z: 2.4 }, vaso: [XL + 0.14, JAN.y0 + 0.3, 2.57] },
     desenhar(ctx, cam, o = {}) {
       const t = o.t || 0;
       cam.distNevoa = 60; // dentro de casa quase não há névoa
@@ -97,6 +97,18 @@
       hg.addColorStop(0, 'rgba(255,226,170,0.55)'); hg.addColorStop(1, 'rgba(255,226,170,0)');
       ctx.fillStyle = hg; ctx.fillRect(hc.x - hc.s * 2, hc.y - hc.s * 2, hc.s * 4, hc.s * 4);
       ctx.restore();
+      // vaso de planta no parapeito da janela (o.vasoTerra: quanto de terra ainda está no vaso, 0..1)
+      if (o.vaso !== false) {
+        const vx0 = XL + 0.02, vx1 = XL + 0.26, vz0 = 2.45, vz1 = 2.69, vy = JAN.y0;
+        caixaLuz(ctx, cam, vx0, vx1, vy, vy + 0.22, vz0, vz1, T('coral').base, LUZ, { linha: 1.5 });
+        const nivel = vy + 0.2 * (o.vasoTerra === undefined ? 1 : o.vasoTerra);
+        face(ctx, cam, [[vx0 + 0.02, nivel, vz0 + 0.02], [vx1 - 0.02, nivel, vz0 + 0.02], [vx1 - 0.02, nivel, vz1 - 0.02], [vx0 + 0.02, nivel, vz1 - 0.02]], '#5A3A22', { contorno: false });
+        for (const [a, h2] of [[-0.6, 0.32], [0, 0.4], [0.6, 0.3], [1.2, 0.26]]) {
+          const b = cam.p((vx0 + vx1) / 2, vy + 0.22, (vz0 + vz1) / 2), tp = cam.p((vx0 + vx1) / 2 + Math.sin(a) * 0.1, vy + 0.22 + h2, (vz0 + vz1) / 2 + Math.cos(a) * 0.05);
+          ctx.fillStyle = Cena3D.corPorBrilho('#5E9E5A', 0.55, LUZ); ctx.beginPath();
+          ctx.moveTo(b.x, b.y); ctx.quadraticCurveTo(tp.x + (tp.x - b.x) * 0.6 + 12, (b.y + tp.y) / 2, tp.x, tp.y); ctx.quadraticCurveTo(tp.x - 14, (b.y + tp.y) / 2, b.x, b.y); ctx.fill();
+        }
+      }
       // cortinas mostarda (com luz por face e dobras)
       for (const [za, zb] of [[0.7, 1.25], [2.95, 3.5]]) {
         faceLuz(ctx, cam, [[XL + 0.07, 0.55, za], [XL + 0.07, 0.55, zb], [XL + 0.07, 2.5, zb], [XL + 0.07, 2.5, za]], T('mostarda').base, LUZ, { linha: 2 });
@@ -110,6 +122,17 @@
       faceLuz(ctx, cam, [[-1.42, 1.43, ZF - 0.012], [-0.63, 1.43, ZF - 0.012], [-0.63, 2.27, ZF - 0.012], [-1.42, 2.27, ZF - 0.012]], T('marinho').base, LUZ, { linha: 1 });
       const pc = cam.p(-1.02, 1.98, ZF); ctx.fillStyle = Cena3D.corPorBrilho(T('turquesa').base, 0.45, LUZ); ctx.beginPath(); ctx.arc(pc.x, pc.y, pc.s * 0.16, 0, Math.PI * 2); ctx.fill();
       face(ctx, cam, [[-1.32, 1.52, ZF - 0.013], [-0.72, 1.52, ZF - 0.013], [-1.02, 1.86, ZF - 0.013]], Cena3D.corPorBrilho(T('mostarda').base, 0.45, LUZ), { linha: 1 });
+      // prateleira com livros (parede do fundo); com o.tremor os livros chacoalham e caem (o.livrosCaindo 0..1)
+      const tr = o.tremor || 0, tt = o.t || 0;
+      caixaLuz(ctx, cam, -2.2, -0.2, 1.05, 1.1, ZF - 0.3, ZF, madeira, LUZ, { linha: 1.5 });
+      let bx = -2.1;
+      [[0.09, 0.32, 'brasa'], [0.07, 0.27, 'denim'], [0.1, 0.34, 'turquesa'], [0.08, 0.25, 'lilas'], [0.09, 0.3, 'mostarda'], [0.08, 0.28, 'coral']].forEach(([w, h, c], i) => {
+        const cai = Math.max(0, Math.min(1, ((o.livrosCaindo || 0) - i * 0.08) / 0.5));
+        const jx = Math.sin(tt * 40 + i) * 0.012 * tr, y0 = 1.1 - cai * cai * 1.1 + (cai > 0.95 ? 0.0 : 0);
+        if (cai < 1) caixaLuz(ctx, cam, bx + jx, bx + w + jx, y0, y0 + h * (1 - cai * 0.6), ZF - 0.25 + cai * 0.4, ZF - 0.05 + cai * 0.4, c, LUZ, { linha: 1 });
+        else caixaLuz(ctx, cam, bx - 0.1, bx + h - 0.1, 0, w * 0.8, ZF - 0.6 + i * 0.05, ZF - 0.35 + i * 0.05, c, LUZ, { linha: 1 });
+        bx += w + 0.015;
+      });
       // porta no fundo
       const ab = o.portaAberta || 0;
       faceLuz(ctx, cam, [[0.85, 0, ZF - 0.005], [1.85, 0, ZF - 0.005], [1.85, 2.15, ZF - 0.005], [0.85, 2.15, ZF - 0.005]], madeiraC, LUZ, { linha: 2 });

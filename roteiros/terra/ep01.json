@@ -2,7 +2,7 @@
   "serie": "E se você acordasse controlando a terra?",
   "episodio": 1,
   "parte": 1,
-  "status": "rascunho — aguardando aprovação",
+  "status": "aprovado — prévia com voz grátis",
   "planos": [
     { "id": "capa", "duracao": 2.0, "fala": { "texto": "E se você acordasse controlando a terra?", "voz": "narrador", "velocidade": 185 }, "destaque": ["TERRA?"],
       "imagem": "Capa: Lucas no quarto, pedras e terra flutuando em volta das mãos, rachaduras brilhando no chão; título com a premissa." },
