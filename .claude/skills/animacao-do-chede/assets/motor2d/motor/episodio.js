@@ -28,6 +28,8 @@
     return out;
   }
 
+  // personagem fora da cena (atrás da câmera): devolve pontos fora da tela
+  const RIG_FORA = { pontoMundo: () => ({ x: -9999, y: -9999 }), escalaPx: 0 };
   let TL = null;
   const rostos = [];
 
@@ -248,6 +250,22 @@
     ctx.restore();
   }
 
+  // câmera na mão: soma de senos lentos (deriva), giro de poucos décimos de grau, aproximação lenta durante o plano
+  // e, logo depois do corte, a câmera chega um pouco deslocada e se acomoda (0,7 s). o.forca escala tudo; o.parada desliga.
+  function cameraNaMao(t, u, dur, i, o) {
+    const f = o.parada ? 0 : (o.forca === undefined ? 1 : o.forca);
+    const r1 = Math.sin(i * 12.9898) * 43758.5453, r2 = Math.sin(i * 78.233) * 12543.1234;
+    const ax = (r1 - Math.floor(r1)) * 2 - 1, ay = (r2 - Math.floor(r2)) * 2 - 1;
+    const acom = 1 - ease.entra(clamp(u / 0.7, 0, 1));
+    const dx = f * (7 * Math.sin(t * 0.53 + 1.3) + 3 * Math.sin(t * 1.17 + 0.4) + 1.2 * Math.sin(t * 2.3) + 12 * ax * acom);
+    const dy = f * (6 * Math.sin(t * 0.61 + 2.1) + 3 * Math.sin(t * 1.29 + 0.7) + 8 * ay * acom);
+    const giro = f * (0.0055 * Math.sin(t * 0.37 + 0.5) + 0.0028 * Math.sin(t * 0.93 + 1.9) + 0.004 * ax * acom);
+    const empurra = f * (0.025 * ease.suave(clamp(u / Math.max(dur, 0.1), 0, 1)) + 0.012 * acom);
+    // margem mínima para cobrir deriva + giro (cantos) sem mostrar borda
+    const margem = (Math.abs(dx) + Math.abs(giro) * H / 2 + 2) / (W / 2);
+    return { dx, dy, giro, zoom: 1 + Math.max(0.035 * f, margem) + empurra };
+  }
+
   window.Episodio = {
     W, H, ease, fase, clamp, lerp,
     iniciar(tl) { TL = tl; },
@@ -256,9 +274,11 @@
       TL.t = t;
       const c = document.getElementById('c');
       if (c.width !== W) { c.width = W; c.height = H; }
-      const ctx = c.getContext('2d');
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      const tela = c.getContext('2d');
+      // o plano é desenhado numa camada; depois a "câmera na mão" leva a camada para a tela
+      const ctx = camadaFixa('cena', W, H).getContext('2d');
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+      let forcaTremor = 0;
       rostos.length = 0;
       const p = TL.planos.find((q) => t >= q.inicio && t < q.fim) || TL.planos[TL.planos.length - 1];
       const u = t - p.inicio, dur = p.fim - p.inicio;
@@ -266,18 +286,29 @@
         W, H, t, u, dur, batidas: p.batidas || [], fase: (a, b, e) => fase(u, a, b, e), ease, lerp, clamp,
         camera: (o) => Cena3D.camera(o),
         personagem: (item, x, y, alt, o) => personagem(ctx, item, x, y, alt, o),
-        personagem3d: (cam, item, X, Z, alturaM, o = {}) => { const q = cam.p(X, 0, Z); Cena3D.sombraChao(ctx, cam, X, Z, 0.55, 1.4); return personagem(ctx, item, q.x, q.y, alturaM * q.s, o); },
+        personagem3d: (cam, item, X, Z, alturaM, o = {}) => { const q = cam.p(X, 0, Z); if (q.dz < 0.6) return RIG_FORA; Cena3D.sombraChao(ctx, cam, X, Z, 0.55, 1.4); return personagem(ctx, item, q.x, q.y, alturaM * q.s, o); },
         invisivel: (item, x, y, alt, prog, o) => invisivel(ctx, item, x, y, alt, prog, o),
-        invisivel3d: (cam, item, X, Z, alturaM, prog, o = {}) => { const q = cam.p(X, 0, Z); if (prog < 0.7) Cena3D.sombraChao(ctx, cam, X, Z, 0.55 * (1 - prog), 1.4); return invisivel(ctx, item, q.x, q.y, alturaM * q.s, prog, o); },
+        invisivel3d: (cam, item, X, Z, alturaM, prog, o = {}) => { const q = cam.p(X, 0, Z); if (q.dz < 0.6) return RIG_FORA; if (prog < 0.7) Cena3D.sombraChao(ctx, cam, X, Z, 0.55 * (1 - prog), 1.4); return invisivel(ctx, item, q.x, q.y, alturaM * q.s, prog, o); },
         camada: () => Cinema.camada(W, H),
         desfocar: (origem, px, a) => Cinema.desfocar(ctx, origem, px, a),
         texto: (txt, x, y, tam, o) => textoContornado(ctx, txt, x, y, tam, o),
         rosto: (x, y, r) => rostos.push({ x, y, r }),
-        tremor: (forca) => [Math.sin(t * 53) * forca + Math.sin(t * 31) * forca * 0.5, Math.cos(t * 47) * forca * 0.6],
+        tremor: (forca) => { forcaTremor = Math.max(forcaTremor, forca); return [Math.sin(t * 53) * forca + Math.sin(t * 31) * forca * 0.5, Math.cos(t * 47) * forca * 0.6]; },
       };
       window.PLANOS[p.id](ctx, u, dur, api);
-      if (!p.semCinema) Cinema.aplicar(ctx, { t, ...(p.cinema || {}) });
-      if (!p.semLegenda) legenda(ctx, t);
+      // câmera na mão (referências do autor): deriva lenta, giro pequeno, aproximação suave e acomodação depois do corte.
+      // A margem de corte (zoom) cobre o movimento e o tremor do plano, para nunca aparecer borda preta.
+      const cm = cameraNaMao(t, u, dur, TL.planos.indexOf(p), p.camera || {});
+      const zoom = cm.zoom + (1.5 * forcaTremor + 2) / (W / 2);
+      tela.setTransform(1, 0, 0, 1, 0, 0);
+      tela.fillStyle = '#000'; tela.fillRect(0, 0, W, H);
+      tela.save();
+      tela.translate(W / 2 + cm.dx, H / 2 + cm.dy); tela.rotate(cm.giro); tela.scale(zoom, zoom); tela.translate(-W / 2, -H / 2);
+      tela.drawImage(ctx.canvas, 0, 0);
+      tela.restore();
+      for (const r of rostos) { r.y = H / 2 + cm.dy + (r.y - H / 2) * zoom; r.x = W / 2 + cm.dx + (r.x - W / 2) * zoom; r.r *= zoom; }
+      if (!p.semCinema) Cinema.aplicar(tela, { t, ...(p.cinema || {}) });
+      if (!p.semLegenda) legenda(tela, t);
       return p.id;
     },
   };

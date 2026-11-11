@@ -9,6 +9,8 @@
   const rgb2hex = (a) => '#' + a.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
   const mistura = (a, b, t) => { const A = hex2rgb(a), B = hex2rgb(b); return rgb2hex(A.map((v, i) => v + (B[i] - v) * t)); };
 
+  // pontos mais perto que isto (em metros, na frente da câmera) não são desenhados: viravam formas gigantes na tela
+  const PERTO = 0.25;
   function camera(o) {
     const c = { x: 0, y: 1.0, z: -4, f: 720, cx: 540, cy: 960, nevoa: '#F6DFC2', distNevoa: 45, ...o };
     // yaw (radianos): giro da câmera para os lados (positivo = vira para a direita)
@@ -19,8 +21,11 @@
       const xr = dx * cy0 - dz0 * sy0, zr = dx * sy0 + dz0 * cy0;
       const dz = Math.max(0.05, zr);
       const s = c.f / dz;
-      return { x: c.cx + xr * s, y: c.cy - (Y - c.y) * s, s, dz };
+      return { x: c.cx + xr * s, y: c.cy - (Y - c.y) * s, s, dz, atras: zr < PERTO };
     };
+    // espaço da câmera (para recortar polígonos que passam por trás dela)
+    c.esp = (X, Y, Z) => { const dx = X - c.x, dz0 = Z - c.z; return [dx * cy0 - dz0 * sy0, Y - c.y, dx * sy0 + dz0 * cy0]; };
+    c.proj = ([xr, yr, zr]) => { const s = c.f / Math.max(0.05, zr); return { x: c.cx + xr * s, y: c.cy - yr * s, s }; };
     // quanto da névoa entra numa profundidade (0 perto ... 1 longe)
     c.fator = (Z) => Math.min(0.85, Math.max(0, 1 - Math.exp(-Math.max(0, Z - c.z) / c.distNevoa)));
     c.tom = (cor, Z) => mistura(cor, c.nevoa, c.fator(Z));
@@ -32,7 +37,18 @@
   // caminho 2D a partir de pontos 3D
   function caminho(cam, pts) {
     const p = new Path2D();
-    pts.forEach(([X, Y, Z], i) => { const q = cam.p(X, Y, Z); if (i) p.lineTo(q.x, q.y); else p.moveTo(q.x, q.y); });
+    let v = pts.map(([X, Y, Z]) => cam.esp(X, Y, Z));
+    if (v.some((q) => q[2] < PERTO)) { // recorta no plano perto da câmera (Sutherland–Hodgman)
+      const out = [];
+      for (let i = 0; i < v.length; i++) {
+        const a = v[i], b = v[(i + 1) % v.length], ia = a[2] >= PERTO, ib = b[2] >= PERTO;
+        if (ia) out.push(a);
+        if (ia !== ib) { const k = (PERTO - a[2]) / (b[2] - a[2]); out.push([a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, PERTO]); }
+      }
+      v = out;
+      if (v.length < 3) return p;
+    }
+    v.forEach((q3, i) => { const q = cam.proj(q3); if (i) p.lineTo(q.x, q.y); else p.moveTo(q.x, q.y); });
     p.closePath();
     return p;
   }
@@ -68,6 +84,7 @@
   function sombraChao(ctx, cam, X, Z, larg, comp = 1) {
     const a = cam.p(X - larg / 2, 0, Z), b = cam.p(X + larg / 2 + larg * 0.6 * comp, 0, Z);
     const c = cam.p(X, 0, Z - larg * 0.3), d = cam.p(X, 0, Z + larg * 0.3);
+    if (a.atras || b.atras || c.atras || d.atras) return;
     // gradiente radial achatado (borda suave sem filtro de desfoque, que é caro)
     const cx = (a.x + b.x) / 2, cy = (c.y + d.y) / 2, rx = Math.abs(b.x - a.x) / 2, ry = Math.max(2, Math.abs(d.y - c.y) / 2);
     ctx.save();
@@ -88,6 +105,7 @@
   // copa de árvore estilizada (círculos com pintinhas), como billboard
   function arvore(ctx, cam, X, Z, alturaM, o = {}) {
     const base = cam.p(X, 0, Z), s = base.s;
+    if (base.dz < alturaM * 0.15) return;
     const folha = cam.tom(o.folha || '#9CCB4A', Z), folhaSombra = cam.tom(o.folhaSombra || '#4F8A3A', Z), tronco = cam.tom('#6B4C3B', Z);
     if (o.desfoque) { const { desfoque, ...resto } = o; window.Cinema.desfocado(ctx, desfoque, (g) => arvore(g, cam, X, Z, alturaM, resto)); return; }
     ctx.save();
@@ -168,6 +186,7 @@
       const Y = vol[0][1] + (vol[1][1] - vol[0][1]) * ((fy + t * sp) % 1);
       const Z = vol[0][2] + (vol[1][2] - vol[0][2]) * fz;
       const q = cam.p(X, Y, Z), r = Math.max(0.8, q.s * (0.004 + rnd() * 0.006));
+      if (q.atras) continue;
       const brilho = 0.35 + 0.65 * Math.abs(Math.sin(t * 1.3 + ph));
       ctx.fillStyle = `rgba(255,236,190,${(o.alpha || 0.7) * brilho})`;
       ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, Math.PI * 2); ctx.fill();
@@ -179,6 +198,7 @@
   // o.boca: cor do interior (se aberto); o.topo: cor da tampa; luz: mesma luz de cena de faceLuz (opcional)
   function cilindro(ctx, cam, X, Z, y0, y1, r0, r1, cor, luz, o = {}) {
     if (cor[0] !== '#') cor = Estilo.tom(cor).base;
+    if (cam.p(X, y0, Z).dz < Math.max(r0, r1) + PERTO) return;
     const el = (y, r) => { const c = cam.p(X, y, Z), a = cam.p(X + r, y, Z), b = cam.p(X, y, Z - r); return { x: c.x, y: c.y, rx: Math.abs(a.x - c.x), ry: Math.max(0.5, Math.abs(b.y - c.y)) }; };
     const B = el(y0, r0), Tp = el(y1, r1);
     const claro = luz ? corPorBrilho(cor, 0.85, luz) : Estilo.screen(cor, '#FFF1CC', 0.3);

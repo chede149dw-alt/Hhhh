@@ -85,7 +85,7 @@ for (const p of roteiro.planos) {
     const d = fim - ini, ate = Math.min(d, s.ate === undefined ? d : s.ate);
     for (let b = s.de === undefined ? 0.1 : s.de; b < ate - 0.05;) { batidas.push(+b.toFixed(3)); const bpm = s.bpm + ((s.bpmFim || s.bpm) - s.bpm) * (b / d); b += 60 / bpm; }
   }
-  planos.push({ id: p.id, inicio: ini, fim, semLegenda: p.id === 'capa' || p.id === 'parte', semCinema: false, cinema: p.cinema, batidas, sfx: p.sfx || [] });
+  planos.push({ id: p.id, inicio: ini, fim, semLegenda: p.id === 'capa' || p.id === 'parte', semCinema: false, cinema: p.cinema, camera: p.camera, batidas, sfx: p.sfx || [] });
   t = fim;
 }
 // legendas não passam do fim da fala seguinte nem se sobrepõem

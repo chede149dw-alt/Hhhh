@@ -86,10 +86,12 @@
     for (let i = 0; i <= n; i++) {
       const k = i / n, desvio = (rnd() - 0.5) * (o.zigue || 0.35) * (i > 0 && i < n ? 1 : 0);
       const X = de[0] + (para[0] - de[0]) * k + desvio, Z = de[1] + (para[1] - de[1]) * k + desvio * 0.5;
-      pts.push(cam.p(X, o.y || 0.005, Z));
+      const q = cam.p(X, o.y || 0.005, Z); if (q.dz < 0.9) q.atras = true; // rente à câmera: o risco ficaria largo demais
+      pts.push(q);
     }
     const m = Math.max(1, Math.floor(p * n));
-    const caminho = (lista) => { ctx.beginPath(); lista.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y))); };
+    // pontos atrás/rente à câmera ficam de fora (viravam riscos gigantes)
+    const caminho = (lista) => { ctx.beginPath(); let novo = true; lista.forEach((q) => { if (q.atras) { novo = true; return; } if (novo) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y); novo = false; }); };
     ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     const larg = (q) => Math.max(2, q.s * (o.largura || 0.06));
     // fenda escura, brilho âmbar e miolo claro
@@ -122,9 +124,10 @@
     // poeira atrás do monte
     for (let i = 0; i < 10; i++) {
       const q = cam.p(X + (rnd() - 0.5) * largura * 1.4, 0.2 + rnd() * 0.5, Z + 0.8 + rnd() * 1.5);
+      if (q.atras) continue;
       ctx.fillStyle = 'rgba(176,122,78,0.22)'; ctx.beginPath(); ctx.arc(q.x, q.y, q.s * (0.25 + rnd() * 0.3), 0, Math.PI * 2); ctx.fill();
     }
-    for (const r of lista) { const q = cam.p(r.X, r.Y, r.Z); pedra(ctx, q.x, q.y, r.r * q.s, r.g, Math.floor(r.r * 1000), r.Y < 0.2 ? TORRAO : null); }
+    for (const r of lista) { const q = cam.p(r.X, r.Y, r.Z); if (q.dz < r.r + 0.3) continue; pedra(ctx, q.x, q.y, r.r * q.s, r.g, Math.floor(r.r * 1000), r.Y < 0.2 ? TORRAO : null); }
     ctx.restore();
     return cam.p(X, 0.62, Z); // topo do monte (onde ficam os pés de quem surfa)
   };
@@ -179,6 +182,7 @@
     if (p <= 0 || p >= 1) return;
     const k = o.tamanho || 1, rnd = rng(o.semente || 71), e = 1 - Math.pow(1 - p, 3);
     const c = cam.p(X, 0, Z), s = c.s * k;
+    if (c.dz < 1.2 * k + 0.3) return; // rente à câmera: não desenha
     ctx.save();
     // anéis de choque brancos no chão (expandem e somem)
     for (const [r0, lw, a] of [[0.6, 0.03, 0.9], [1.1, 0.018, 0.6], [1.6, 0.012, 0.4]]) {
@@ -206,18 +210,21 @@
     for (const q of lista) {
       const px = X + Math.cos(q.a) * q.d * k * (0.6 + e * 0.6), pz = Z + Math.sin(q.a) * q.d * k * 0.6;
       const b = cam.p(px, 0, pz);
+      if (b.atras) continue;
       espinho(ctx, b.x, b.y, q.w * b.s * k, q.h * b.s * k * sobe, Math.cos(q.a) * 0.6, ['#3A2620', '#6A4A3A']);
     }
     // poeira em bolhas cor de areia
     for (let i = 0; i < 18; i++) {
       const a = rnd() * Math.PI * 2, d = (0.5 + rnd() * 0.9) * k * e;
       const b = cam.p(X + Math.cos(a) * d, (0.15 + rnd() * 0.5) * k * e, Z + Math.sin(a) * d * 0.5);
+      if (b.atras) continue;
       bolhaPoeira(ctx, b.x, b.y, b.s * k * (0.12 + rnd() * 0.18) * (0.6 + e), 0.75 * (1 - p));
     }
     // lascas claras e escuras voando
     for (let i = 0; i < 16; i++) {
       const a = rnd() * Math.PI * 2, v = 0.8 + rnd() * 1.4;
       const b = cam.p(X + Math.cos(a) * v * e * k, (Math.sin(e * Math.PI) * (0.6 + rnd()) ) * k, Z + Math.sin(a) * v * e * k * 0.5);
+      if (b.atras) continue;
       ctx.globalAlpha = 1 - p;
       espinho(ctx, b.x, b.y, b.s * 0.04 * k, b.s * 0.12 * k, a, rnd() > 0.5 ? ['#FFF1DC', '#E8D2B8'] : ['#2E2020', '#4E3A30']);
     }
@@ -227,6 +234,7 @@
   window.Efeitos.ondaTerra = function (ctx, cam, X, Z, t, o = {}) {
     const L = o.largura || 2.2, A = o.altura || 1.3, rnd = rng(81);
     const base = cam.p(X, 0, Z), s = base.s;
+    if (base.dz < 1.0) return base;
     const larg = L * s, alt = A * s;
     ctx.save();
     // marca no chão (rastro da onda)
@@ -271,6 +279,7 @@
     if (p <= 0) return;
     const R = o.raio || 0.7, Hm = o.altura || 2.2, rnd = rng(o.semente || 101), e = Math.min(1, p * 1.4);
     const c = cam.p(X, 0, Z), s = c.s;
+    if (c.dz < R + 0.6) return;
     ctx.save();
     // anel incandescente rachado no chão
     const [cx, cy, rx, ry] = elipseChao(cam, X, Z, R * (0.6 + e * 0.4));

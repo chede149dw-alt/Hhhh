@@ -22,6 +22,8 @@
 - Duração: se não tiver `duracao`, o plano dura o tempo da fala + 0,3 s, entre 2 e 3 s.
 - Vozes de prévia (espeak-ng): `narrador`, `mae`, `amigo`/`rafael`, `lucas`. `velocidade` em palavras por minuto (padrão 175).
 - `cinema` (opcional): ajusta o pós do plano, ex. `{ "quente": 0.1, "vinheta": 0.9, "bloom": 0.6 }` (cena fria/escura).
+- `camera` (opcional): a câmera na mão é automática em todo plano (deriva lenta, giro pequeno, aproximação e
+  acomodação depois do corte, como nas referências do autor). `{ "forca": 0.5 }` suaviza, `{ "parada": true }` desliga.
 - `sfx` (opcional): lista de efeitos sonoros do plano — `{ "tipo": "coracao", "bpm": 80, "bpmFim": 140, "de": 0, "ate": 2 }`
   (batidas; o plano recebe os mesmos tempos em `api.batidas` para pulsar a imagem junto),
   `{ "tipo": "impacto", "em": 0.45, "volume": 1 }` (estrondo grave) e `{ "tipo": "ronco", "de": 0, "ate": 2, "volume": 1.4 }` (tremor grave).
@@ -102,6 +104,10 @@ Objetos 2D extras em `cenarios/objetos/` (cama, despertador, mochila).
 Cores da terra (guia): terra `#8B5E3C`, pedra `#7A7480`, rachadura `#FFB347` com miolo `#FFE2B0`.
 
 ## 6. Receitas
+
+- **Nada rente à câmera:** ponto 3D a menos de ~1 m da câmera vira forma gigante (quadrado preto/branco num quadro).
+  O motor já recorta paredes/caixas e pula efeitos rentes, mas ao mover a câmera para frente não desenhe pisões,
+  rachaduras ou personagens que a câmera já passou (ex.: `if (Zp < cam.z + 1.3) return`).
 
 - **Close (cintura para cima):** `api.personagem(item, cx, cy - 0.47 * H + A * H, A * H)` com `A = alturaEmH` da
   vista (`window.criarLucas({}, 'frente').alturaEmH`) e `H` = altura da cabeça em px (ex.: 520).

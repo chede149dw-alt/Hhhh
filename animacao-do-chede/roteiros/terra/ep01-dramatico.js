@@ -247,8 +247,8 @@
       const cam = api.camera({ f: 1250, x: 0.3, y: api.lerp(1.35, 0.8, desce), z: -0.2 + u * 0.1 + chega * 0.25, cy: api.lerp(950, 1060, desce), nevoa: Cenarios3D.quarto.nevoa });
       Cenarios3D.quarto.desenhar(ctx, cam, { t: api.t, tremor: 0.4 });
       const rach = () => {
-        Efeitos.rachadura(ctx, cam, [0.9, 1.6], [-0.3, 2.05], api.fase(0.1, 1.3, 'entra'), api.t, { largura: 0.05, zigue: 0.6, semente: 23 });
-        Efeitos.rachadura(ctx, cam, [0.9, 1.7], [0.35, 3.1], api.fase(0.5, 1.8), api.t, { largura: 0.03, semente: 29 });
+        Efeitos.rachadura(ctx, cam, [1.0, 2.0], [-0.3, 2.1], api.fase(0.1, 1.3, 'entra'), api.t, { largura: 0.035, zigue: 0.6, semente: 23 });
+        Efeitos.rachadura(ctx, cam, [1.0, 2.2], [0.35, 3.1], api.fase(0.5, 1.8), api.t, { largura: 0.025, semente: 29 });
       };
       rach();
       const Z = 2.15 + api.fase(0.9, 1.6, 'entra') * 0.35;
@@ -256,7 +256,7 @@
       api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: expr }, -0.4, Z, 1.75, { luz: LUZ_FRIA, vida: 2.2 });
       ctx.restore();
       frio(ctx, 0.65);
-      ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.35, rach); ctx.restore();
+      ctx.save(); ctx.translate(tx, ty); aceso(ctx, 0.2, rach); ctx.restore();
     },
 
     // suas mãos estão quentes e tremendo: brilho nas linhas da palma, no ritmo do coração
@@ -368,6 +368,7 @@
       [0.5, 1.05, 1.6, 2.15].forEach((tp, i) => {
         if (u < tp) return;
         const Zp = -1.2 + tp * 2.2 + 2.2, xs = X + (i % 2 ? 0.12 : -0.12), lado = i % 2 ? 1 : -1;
+        if (Zp < zc + 1.3) return; // a câmera já passou por este passo
         rachas.push(() => Efeitos.rachadura(ctx, cam, [xs, Zp], [xs + lado * 1.8, Zp + 0.8], api.clamp((u - tp) / 0.5, 0, 1), api.t, { largura: 0.05, zigue: 0.6, semente: 31 + i }));
         Efeitos.impacto(ctx, cam, xs, Zp, api.clamp((u - tp) / 0.8, 0, 0.99), api.t, { tamanho: 0.45 });
       });
@@ -515,7 +516,7 @@
 
     // Rafael: "Lucas... o que é você?" — recuando com medo do amigo
     amigo(ctx, u, d, api) {
-      const z = api.lerp(1.08, 0.98, api.fase(0, d, 'suave'));
+      const z = api.lerp(1.1, 1.0, api.fase(0, d, 'suave'));
       ctx.save(); zoom(ctx, 540, 900, z);
       fundo(ctx, api, 'patio', { x: 0.5, y: 1.6, z: 1.0, cy: 950 }, 14);
       close(api, { ...RAFAEL, pose: 'parado', expressao: 'medo', voz: 'rafael' }, 540 + api.lerp(0, 60, api.fase(0, d)), 1050, 560, { vida: 1.5 });

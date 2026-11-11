@@ -98,3 +98,12 @@
 - Falas longas no espeak a 158 ppm passam de 2,5 s: medir antes e subir a velocidade (170–180) nas que não cabem.
 - Mergulho na rachadura: camadas de rocha 2D (buraco irregular com "evenodd") vindo na direção da câmera + núcleo
   brilhante pulsando funciona bem e é barato.
+
+## Câmera na mão e quadrados pretos/brancos (referências lv_0_20261111104800 e lv_0_20261111104328)
+- Referências: câmera nunca parada — deriva lenta, giro de poucos décimos de grau, aproximação suave e, depois do
+  corte, a câmera "chega" um pouco deslocada e se acomoda. Agora é automático no motor (episodio.js, cameraNaMao):
+  o plano é desenhado numa camada e a camada vai para a tela com esse movimento.
+- Margem de corte (zoom) automática = deriva + giro + força do tremor do plano: sem borda preta mesmo no tapa.
+- Quadrados pretos/brancos/bege de 1 quadro: eram pontos 3D atrás ou rente à câmera (poste, pedra do pisão,
+  rachadura antiga, vizinho) projetados enormes. Correção: recorte no plano perto (cena3d.caminho), `atras` em cam.p
+  e efeitos/personagens rentes não são desenhados. Conferir com o detector de blocos (quadros que piscam).

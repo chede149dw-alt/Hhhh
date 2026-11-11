@@ -15,7 +15,7 @@
 
   function linhas3d(ctx, cam, segs, cor, larg) {
     ctx.save(); ctx.strokeStyle = cor; ctx.lineCap = 'round';
-    for (const [a, b] of segs) { const p = cam.p(...a), q = cam.p(...b); ctx.lineWidth = Math.max(0.6, larg * (p.s + q.s) / 2); ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
+    for (const [a, b] of segs) { const p = cam.p(...a), q = cam.p(...b); if (p.atras || q.atras) continue; ctx.lineWidth = Math.max(0.6, larg * (p.s + q.s) / 2); ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
     ctx.restore();
   }
 
@@ -69,7 +69,7 @@
       linhas3d(ctx, cam, segC, 'rgba(60,35,45,0.3)', 0.004);
       // sombra de contato nos cantos parede/chão
       for (const [a, b] of [[[XL, ZF], [XR, ZF]], [[XR, z0], [XR, ZF]], [[XL, z0], [XL, ZF]]]) {
-        Cinema.desfocado(ctx, 18, (g) => { g.strokeStyle = 'rgba(25,15,40,0.5)'; const p = cam.p(a[0], 0, a[1]), q = cam.p(b[0], 0, b[1]); g.lineWidth = 30; g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(q.x, q.y); g.stroke(); });
+        Cinema.desfocado(ctx, 18, (g) => { g.strokeStyle = 'rgba(25,15,40,0.5)'; const p = cam.p(a[0], 0, a[1]), q = cam.p(b[0], 0, b[1]); if (p.atras || q.atras) return; g.lineWidth = 30; g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(q.x, q.y); g.stroke(); });
       }
 
       // janela estourada de luz (céu bem claro), treliça e moldura de madeira

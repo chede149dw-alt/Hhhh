@@ -51,6 +51,7 @@
     ctx.save(); ctx.strokeStyle = 'rgba(120,100,120,0.3)';
     for (const s of [-1, 1]) for (let z = Math.ceil(cam.z / 1.5) * 1.5; z < 50; z += 1.5) {
       const a = cam.p(RUA * s, 0.15, z), b = cam.p(CALC * s, 0.15, z);
+      if (a.atras || b.atras) continue;
       ctx.lineWidth = Math.max(0.6, a.s * 0.01); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     }
     ctx.restore();
@@ -88,9 +89,10 @@
     const xg = (CALC + 0.1) * s;
     for (let z = z0 + 0.2; z < z1; z += 0.25) {
       const a = cam.p(xg, 1.3, z), b = cam.p(xg, 2.0, z);
+      if (a.atras) continue;
       ctx.lineWidth = Math.max(0.6, a.s * 0.02); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     }
-    const a1 = cam.p(xg, 2.0, z0), b1 = cam.p(xg, 2.0, z1); ctx.lineWidth = Math.max(0.8, a1.s * 0.03); ctx.beginPath(); ctx.moveTo(a1.x, a1.y); ctx.lineTo(b1.x, b1.y); ctx.stroke();
+    const a1 = cam.p(xg, 2.0, z0), b1 = cam.p(xg, 2.0, z1); if (!a1.atras && !b1.atras) { ctx.lineWidth = Math.max(0.8, a1.s * 0.03); ctx.beginPath(); ctx.moveTo(a1.x, a1.y); ctx.lineTo(b1.x, b1.y); ctx.stroke(); }
     ctx.restore();
   }
 
@@ -111,6 +113,7 @@
       const t = tops[s];
       for (let i = 0; i < t.length - 1; i++) for (const dy of [0, 0.25]) {
         const a = t[i], b = t[i + 1];
+        if (a.atras || b.atras) continue;
         ctx.lineWidth = Math.max(0.6, a.s * 0.012);
         ctx.beginPath(); ctx.moveTo(a.x, a.y + dy * a.s); ctx.quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + 0.6 * (a.s + b.s) / 2, b.x, b.y + dy * b.s); ctx.stroke();
       }
@@ -122,14 +125,14 @@
   function carro(ctx, cam, x, z, cor) {
     const c = T(cor);
     for (const zr of [z + 0.7, z + 3.3]) for (const xr of [x - 0.75, x + 0.75]) {
-      const q = cam.p(xr, 0.33, zr); ctx.fillStyle = cam.tom('#26212C', zr);
+      const q = cam.p(xr, 0.33, zr); if (q.atras) continue; ctx.fillStyle = cam.tom('#26212C', zr);
       ctx.beginPath(); ctx.ellipse(q.x, q.y, Math.max(2, q.s * 0.12), q.s * 0.33, 0, 0, Math.PI * 2); ctx.fill();
     }
     caixa(ctx, cam, x - 0.85, x + 0.85, 0.3, 1.0, z, z + 4.0, c.base);
     caixa(ctx, cam, x - 0.75, x + 0.75, 1.0, 1.5, z + 1.1, z + 3.0, c.base);
     face(ctx, cam, [[x - 0.7, 1.03, z + 1.12], [x + 0.7, 1.03, z + 1.12], [x + 0.62, 1.45, z + 1.3], [x - 0.62, 1.45, z + 1.3]], T('vidro').base);
     face(ctx, cam, [[x - 0.752, 1.05, z + 1.4], [x - 0.752, 1.05, z + 2.8], [x - 0.752, 1.42, z + 2.7], [x - 0.752, 1.42, z + 1.5]], T('vidro').base);
-    for (const xs of [x - 0.6, x + 0.6]) { const q = cam.p(xs, 0.75, z - 0.01); ctx.fillStyle = cam.tom('#FFF1C8', z); ctx.beginPath(); ctx.arc(q.x, q.y, Math.max(1.5, q.s * 0.09), 0, Math.PI * 2); ctx.fill(); }
+    for (const xs of [x - 0.6, x + 0.6]) { const q = cam.p(xs, 0.75, z - 0.01); if (q.atras) continue; ctx.fillStyle = cam.tom('#FFF1C8', z); ctx.beginPath(); ctx.arc(q.x, q.y, Math.max(1.5, q.s * 0.09), 0, Math.PI * 2); ctx.fill(); }
   }
   function lixeira(ctx, cam, x, z, cor) {
     caixa(ctx, cam, x - 0.28, x + 0.28, 0.15, 1.15, z, z + 0.55, T(cor).base);
@@ -137,6 +140,7 @@
   }
   function arbusto(ctx, cam, x, z) {
     const q = cam.p(x, 0.15, z), s2 = q.s;
+    if (q.dz < 0.8) return;
     for (const [dx, dy, r, cor] of [[0, 0.35, 0.45, '#4F8A3A'], [-0.3, 0.25, 0.32, '#5E9E5A'], [0.3, 0.28, 0.35, '#6FAF55'], [0.05, 0.55, 0.3, '#86B46E']]) {
       ctx.fillStyle = cam.tom(cor, z); ctx.beginPath(); ctx.arc(q.x + dx * s2, q.y - dy * s2, r * s2, 0, Math.PI * 2); ctx.fill();
     }
