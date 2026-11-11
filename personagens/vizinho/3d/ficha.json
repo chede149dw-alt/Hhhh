@@ -1,0 +1,14 @@
+{
+  "nome": "Vizinho",
+  "status": "personagem de fundo (ep01 da terra) — sem ficha oficial",
+  "altura": 1.66,
+  "cores": {
+    "pele": "#C98B63", "peleSombra": "#A86E4C", "cabelo": "#9A948E", "cabeloLuz": "#B5AFA8",
+    "iris": "#3A2418", "pupila": "#2A1A14", "cilio": "#1E1B26", "sobrancelha": "#7A746E", "boca": "#6E3A30", "bocaDentro": "#4A2228", "lingua": "#C4545E",
+    "camiseta": "#3DB5B0", "camisetaDobra": "#2E9590", "manga": "#C98B63", "estampa": "#3DB5B0",
+    "calca": "#C9B08A", "sapato": "#7A5236", "sapatoSola": "#5A3A22", "bigode": "#7A746E"
+  },
+  "medidas": { "quadrilAltura": 0.801, "cabecaRaio": 0.145, "ombroX": 0.185, "braco": 0.26, "antebraco": 0.22, "coxa": 0.33, "canela": 0.36, "calcaLargura": 1.0, "manga": 0.82 },
+  "pecas": ["cabelo_tigela", "bigode", "camiseta_manga", "calca_larga", "sapatilha"],
+  "paleta": [["Camisa", "#3DB5B0"], ["Bermuda", "#C9B08A"], ["Pele", "#C98B63"], ["Cabelo", "#9A948E"]]
+}

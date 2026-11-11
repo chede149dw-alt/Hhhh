@@ -8,6 +8,7 @@
 //   cenario    → objetos que a atuação precisa (ex.: banco para sentar)
 // montarAtuacao(nome, o) devolve { chaves, voos, impacto, sons, fim, cenario } pronto para criarAnimacao.
 import { REPOUSO } from '../personagem/boneco.js';
+import { ATUACOES_EP01, PAUSAS_EP01 } from './atuacoes-ep01.js';
 
 const guardaBracos = {
   ombro_e: [-50, 0, 22], cotovelo_e: [-105, 0, 0], ombro_d: [-42, 0, -26], cotovelo_d: [-112, 0, 0],
@@ -81,6 +82,7 @@ const repousoEm = (pes = PES, corpo = {}) => ({ ...pes, ikPes: 1, corpo, altura:
 
 // pausas declaradas: poses em que uma atuação pode terminar parada
 export const PAUSAS = {
+  ...PAUSAS_EP01,
   guarda: { juntas: { coluna: [8, 0, 0], cabeca: [-6, 0, 0], ...guardaBracos }, altura: -0.04, estica: 1, maos: { e: 'punho', d: 'punho' }, rosto: 'determinado' },
   assustado: { juntas: { coluna: [-8, 0, 0], peito: [-6, 0, 0], cabeca: [-6, 0, 0], ombro_e: [-55, 0, 32], cotovelo_e: [-70, 0, 0], ombro_d: [-55, 0, -32], cotovelo_d: [-70, 0, 0], mao_e: [0, 0, -10], mao_d: [0, 0, 10] },
     altura: -0.04, estica: 1, maos: { e: 'aberta', d: 'aberta' }, rosto: 'medo' },
@@ -211,6 +213,7 @@ const ARREMESSO_TERRA = () => {
 };
 
 export const ATUACOES = {
+  ...ATUACOES_EP01,
   arremesso_terra: { descricao: 'Lucas forma a esfera de terra no peito, segura e arremessa no chão à frente', chaves: ARREMESSO_TERRA, fim: 'repouso',
     impacto: 3.25, eventos: { forma: 1.3, cheia: 2.0, lancamento: 3.25, impacto: 3.75 },
     sons: [{ t: 1.3, som: 'terra_sobe' }, { t: 3.25, som: 'arremesso' }, { t: 3.75, som: 'impacto_terra' }] },

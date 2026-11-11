@@ -19,7 +19,8 @@
   import { CENARIOS } from '../cena/cenarios.js';
   import { camNoTempo } from '../cena/camera.js';
   import { criarPoderTerra, criarRachaduraChao, criarImpactoTerra } from '../efeitos3d/terra.js';
-  import { agrupar, layout, faixaLonge, posicaoPedida, desenhar as desenharLegenda } from '../legendas/legendas.js';
+  import { agrupar, layout, faixaLonge, posicaoPedida, desenhar as desenharLegenda, escalaEntrada } from '../legendas/legendas.js';
+  import { EFEITOS } from '../efeitos3d/ep01.js';
 
   const q = new URLSearchParams(location.search);
   const linha = await (await fetch('/' + q.get('linha'))).json();
@@ -56,16 +57,73 @@
     sol.position.set(cen.luz.alvo[0] + cen.luz.direcao[0], cen.luz.alvo[1] + cen.luz.direcao[1], cen.luz.alvo[2] + cen.luz.direcao[2]);
     const fx = criarPoderTerra(), racha = criarRachaduraChao(), impacto = criarImpactoTerra();
     cena.add(fx.grupo, racha.grupo, impacto.grupo);
-    return (cenas[nome] = { cen, cena, atores: {}, fx, racha, impacto });
+    const c = (cenas[nome] = { cen, cena, atores: {}, fx, racha, impacto });
+    // cria já todos os atores que aparecem neste cenário (o render pode começar no meio do episódio)
+    for (const p of linha.planos) if (p.cenario === nome) for (const ad of p.atores) if (!c.atores[ad.nome]) atorEm(c, ad.nome, ad.marca);
+    return c;
   }
   function atorEm(c, nome, marca) {
-    if (c.atores[nome]) return c.atores[nome];
+    if (c.atores[nome]) { posicionarPalco(c, c.atores[nome].palco, marca); return c.atores[nome]; }
     const palco = new THREE.Group();
-    palco.position.set(c.cen.marca.pos[0] + marca[0], c.cen.marca.pos[1], c.cen.marca.pos[2] + marca[1]);
-    palco.rotation.y = ((c.cen.marca.giro + (marca[2] || 0)) * Math.PI) / 180;
+    posicionarPalco(c, palco, marca);
     c.cena.add(palco);
     const boneco = criarBoneco(fichas[nome]); palco.add(boneco.raiz);
     return (c.atores[nome] = { palco, boneco });
+  }
+
+  // cada plano pode pôr o ator num lugar diferente do cenário (marca = [dx, dz, giro] a partir da marca do cenário; dy opcional)
+  function posicionarPalco(c, palco, marca) {
+    palco.position.set(c.cen.marca.pos[0] + marca[0], c.cen.marca.pos[1] + (marca[3] || 0), c.cen.marca.pos[2] + marca[1]);
+    palco.rotation.y = ((c.cen.marca.giro + (marca[2] || 0)) * Math.PI) / 180;
+    palco.updateMatrixWorld(true);
+  }
+  // eventos de objetos de cada cenário, juntando todos os planos (o estado fica: livros caídos continuam caídos)
+  const eventosDe = {};
+  for (const p of linha.planos) (eventosDe[p.cenario] ||= []).push(...(p.objetos || []));
+
+  // efeitos do roteiro (ficam visíveis do início ao fim deles; com "fica": true continuam depois)
+  const efeitosDe = {};
+  for (const p of linha.planos) for (const e of p.efeitos || []) if (EFEITOS[e.tipo]) (efeitosDe[p.cenario] ||= []).push({ ...e, plano: p.id });
+  function ctxDe(c, t) {
+    const ator = (n) => c.atores[n];
+    const juntaMundo = (n, j, off = [0, 0, 0]) => { const a = ator(n); return a ? a.boneco.juntas[j].localToWorld(new THREE.Vector3(...off)).toArray() : [0, 1, 0]; };
+    return {
+      cen: c.cen, camera,
+      ponto: (x) => {
+        if (Array.isArray(x)) return x;
+        if (typeof x === 'string') return c.cen.pontos[x] || [0, 0, 0];
+        if (x && x.ator) { const a = ator(x.ator); return a ? a.palco.localToWorld(new THREE.Vector3(...(x.local || [0, 0, 0]))).toArray() : [0, 0, 0]; }
+        return [0, 0, 0];
+      },
+      mao: (n, lado = 'd') => juntaMundo(n, 'mao_' + lado, [0, -0.06, 0]),
+      maoEm: (n, lado, tt) => { const a = ator(n); aplicar(a.boneco, poseDe(n, tt).pose); a.boneco.raiz.updateMatrixWorld(true); const v = juntaMundo(n, 'mao_' + lado, [0, -0.06, 0]); aplicar(a.boneco, poseDe(n, t).pose); a.boneco.raiz.updateMatrixWorld(true); return v; },
+      acimaMao: (n, lado, r) => { const v = juntaMundo(n, 'mao_' + lado, [0, -0.06, 0]); return [v[0], v[1] + r + 0.07, v[2]]; },
+      entreMaosEm: (n, r, tt) => { const a = ator(n); aplicar(a.boneco, poseDe(n, tt).pose); a.boneco.raiz.updateMatrixWorld(true);
+        const x = juntaMundo(n, 'mao_e', [0, -0.06, 0]), y = juntaMundo(n, 'mao_d', [0, -0.06, 0]); aplicar(a.boneco, poseDe(n, t).pose); a.boneco.raiz.updateMatrixWorld(true);
+        return [(x[0] + y[0]) / 2, (x[1] + y[1]) / 2 + r * 0.7 + 0.04, (x[2] + y[2]) / 2]; },
+      entreMaos: (n, r) => { const a = juntaMundo(n, 'mao_e', [0, -0.06, 0]), b = juntaMundo(n, 'mao_d', [0, -0.06, 0]); return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2 + r * 0.7 + 0.04, (a[2] + b[2]) / 2]; },
+      pes: (n) => { const a = ator(n); return a ? a.boneco.raiz.getWorldPosition(new THREE.Vector3()).toArray() : [0, 0, 0]; },
+      peito: (n) => juntaMundo(n, 'peito', [0, 0.1, 0.3]),
+      evento: (n, nome) => {
+        let r = null;
+        for (const sg of (segmentosDe[n] || { lista: [] }).lista) { const ev = animDe(sg).at.eventos || {}; if (ev[nome] !== undefined) r = sg.inicio + ev[nome] - ((sg.opcoes && sg.opcoes.desde) || 0); }
+        return r;
+      },
+    };
+  }
+  const instancias = new Map();
+  function efeitosRoteiro(c, cenario, t) {
+    let objeto = null;
+    const ctx = ctxDe(c, t);
+    for (const e of efeitosDe[cenario] || []) {
+      const k = e.tipo + '|' + e.plano + '|' + e.de;
+      if (!instancias.has(k)) { const g = new THREE.Group(); c.cena.add(g); instancias.set(k, { g, inst: EFEITOS[e.tipo].criar(g) }); }
+      const { g, inst } = instancias.get(k);
+      const ativo = t >= e.de && (t <= e.ate || e.fica);
+      g.visible = ativo;
+      if (ativo) { const r = inst.atualizar(t, e, ctx) || {}; if (r.objeto && t <= e.ate) objeto = r.objeto; }
+    }
+    return objeto;
   }
 
   // pose de um ator no instante t (com transição de 0,3 s entre atuações)
@@ -78,7 +136,7 @@
     if (!lista.length) return { pose: parado.final(t), seg: null };
     const s = lista[lista.length - 1], atual = animDe(s).anim.final(local(s, t));
     const ant = lista[lista.length - 2], dt = t - s.inicio;
-    if (dt < 0.3) {
+    if (dt < 0.3 && !(s.opcoes && s.opcoes.semTransicao)) {
       const antes = ant ? animDe(ant).anim.final(local(ant, t)) : parado.final(t);
       return { pose: misturarPoses(antes, atual, suave(dt / 0.3)), seg: s };
     }
@@ -131,6 +189,9 @@
   window.quadro = (t) => {
     const p = linha.planos.find((x) => t >= x.inicio && t < x.fim) || linha.planos[linha.planos.length - 1];
     const c = cenaDe(p.cenario);
+    c.cen.animar && c.cen.animar(t, eventosDe[p.cenario] || []);
+    // atores de outros planos neste cenário ficam escondidos
+    for (const [n, a] of Object.entries(c.atores)) a.palco.visible = p.atores.some((x) => x.nome === n);
     let anc = null, objeto = null;
     p.atores.forEach((ad, i) => {
       const a = atorEm(c, ad.nome, ad.marca);
@@ -140,9 +201,17 @@
         anc = { pes: [0, 1, 2].map((k) => as.reduce((s, x) => s + x.pes[k], 0) / 3), cabeca: [0, 1, 2].map((k) => as.reduce((s, x) => s + x.cabeca[k], 0) / 3), giro };
       }
       aplicar(a.boneco, poseDe(ad.nome, t).pose);
+      // sincronia labial: quem fala nesta frase abre a boca durante as palavras
+      if (p.fala && p.fala.ator === ad.nome) {
+        const w = linha.palavras.find((x) => x.frase === p.frase && t >= x.inicio && t < x.fim);
+        if (w) { const u = (t - w.inicio) / Math.max(0.05, w.fim - w.inicio); a.boneco.falar(u > 0.12 && u < 0.78 ? 'aberta' : 'neutra'); }
+      }
       a.boneco.raiz.updateMatrixWorld(true);
       const o = efeitos(c, a, ad.nome, t); if (o && i === 0) objeto = o;
     });
+    const oRot = efeitosRoteiro(c, p.cenario, t); if (oRot) objeto = oRot;
+    const camOlhar = (p.cameras.find((x) => t >= x.de && t < x.ate) || {}).olhar;
+    if (camOlhar) objeto = ctxDe(c, t).ponto(camOlhar);
     const cam = p.cameras.find((x) => t >= x.de && t < x.ate) || p.cameras[p.cameras.length - 1];
     // efeitos de câmera declarados no roteiro (tremor)
     const tremores = [...(cam.tremores || [])];
@@ -154,7 +223,9 @@
     for (const m of c.cen.pecasTeto || []) m.visible = !(c.cen.teto && cc.pos[1] > c.cen.teto - 0.05);
     pos.render(c.cena, camera, { t, foco: cc.foco || cc.distancia, faixa: 0.5, desfoque: 14, grao: 0.025, vinheta: 0.32 });
     ctx2.drawImage(renderer.domElement, 0, 0);
-    if (comLegenda) {
+    if (p.capa) desenharCapa(p, t);
+    if (p.cartela) desenharCartela(p, t);
+    if (comLegenda && !p.capa && !p.cartela) {
       const g = grupos.find((x) => t >= x.inicio && t < x.fim);
       if (g) {
         // rosto na tela (cabeça projetada pela câmera) → faixa mais longe dele, se o plano não pedir uma posição
@@ -168,6 +239,35 @@
       }
     }
   };
+  // texto grande com contorno (capa e cartela), no estilo da legenda
+  function textoGrande(txt, x, y, tam, cor = '#FFFFFF', escala = 1) {
+    ctx2.save(); ctx2.translate(x, y); ctx2.scale(escala, escala);
+    ctx2.font = `900 ${tam}px Inter`; ctx2.textAlign = 'center'; ctx2.textBaseline = 'middle'; ctx2.lineJoin = 'round';
+    ctx2.lineWidth = tam * 0.2; ctx2.strokeStyle = '#211B26'; ctx2.strokeText(txt, 0, 0); ctx2.fillStyle = cor; ctx2.fillText(txt, 0, 0);
+    ctx2.restore();
+  }
+  // capa (primeiros 2 s): a premissa escrita grande, linha por linha, com um pulinho de entrada
+  function desenharCapa(p, t) {
+    const u = t - p.inicio, linhas = p.capa.linhas || [], dest = p.capa.destaque ?? linhas.length - 1;
+    linhas.forEach((l, i) => {
+      const tam = i === dest ? 150 : 96, y = 230 + i * 118 + (i === dest ? 30 : 0);
+      textoGrande(l, W / 2, y, tam, i === dest ? '#EBC25A' : '#FFFFFF', escalaEntrada(u - i * 0.12));
+    });
+  }
+  // cartela final: fundo escurecido, PARTE X, chamada e botão de seguir pulsando de leve (sem mão)
+  function desenharCartela(p, t) {
+    const u = t - p.inicio, n = p.cartela.parte || 1;
+    ctx2.fillStyle = 'rgba(30,20,20,0.55)'; ctx2.fillRect(0, 0, W, H);
+    if (u > 0) { textoGrande('PARTE', W / 2, 690, 120, '#FFFFFF', escalaEntrada(u)); textoGrande(String(n), W / 2, 860, 230, '#EBC25A', escalaEntrada(u - 0.1)); }
+    if (u > 0.45) { textoGrande('SEGUE PRA VER', W / 2, 1090, 84, '#FFFFFF', escalaEntrada(u - 0.45)); textoGrande(`A PARTE ${n + 1}`, W / 2, 1195, 96, '#EBC25A', escalaEntrada(u - 0.55)); }
+    if (u > 0.9) {
+      const k = escalaEntrada(u - 0.9) * (1 + Math.sin(t * 6) * 0.04);
+      ctx2.save(); ctx2.translate(W / 2, 1420); ctx2.scale(k, k);
+      ctx2.fillStyle = '#D23A42'; ctx2.beginPath(); ctx2.roundRect(-230, -62, 460, 124, 62); ctx2.fill();
+      ctx2.font = '900 64px Inter'; ctx2.textAlign = 'center'; ctx2.textBaseline = 'middle'; ctx2.fillStyle = '#FFFFFF'; ctx2.fillText('+ SEGUIR', 0, 4);
+      ctx2.restore();
+    }
+  }
   window.planoEm = (t) => (linha.planos.find((x) => t >= x.inicio && t < x.fim) || {}).id;
   window.pronto = true;
 </script>

@@ -5,12 +5,13 @@ import fs from 'fs';
 import path from 'path';
 import { dirigir, estimarPalavras, ErroRoteiro } from './direcao.js';
 import { ATUACOES } from '../animacao/atuacoes.js';
+import { EFEITOS } from '../efeitos3d/ep01.js';
 
 export const CATALOGO = {
-  cenarios: ['quarto', 'rua'],
+  cenarios: ['quarto', 'rua', 'escola'],
   atuacoes: Object.keys(ATUACOES),
   impactos: Object.fromEntries(Object.entries(ATUACOES).map(([n, a]) => [n, a.impacto || 0])),
-  efeitos: ['tremor', 'rachadura', 'esfera_terra'],
+  efeitos: ['tremor', ...Object.keys(EFEITOS)],
 };
 
 // sons da linha do tempo: os de cada atuação (no instante relativo a ela), tremores do roteiro e um "whoosh" leve nos cortes

@@ -16,6 +16,12 @@ Duas gerações de motor convivem aqui enquanto o 3D é construído:
 | ffmpeg | 6.1.1 | sistema |
 | Python | edge-tts 7.3.1, numpy, scipy | `pip install edge-tts scipy` |
 
+## Fazer um episódio (um comando só)
+```bash
+node motor/produzir.js roteiros/terra/ep01-3d.json --saida prontos/terra-ep01-3d.mp4
+```
+Narração, direção, mixagem, render em partes, junção e checagens (relatório em `prontos/…mp4.qa.json`).
+
 ## Comandos (motor 3D)
 Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 
@@ -52,6 +58,9 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 | `audio/mixar.py` | Mixagem a −14 LUFS: `python3 motor/audio/mixar.py --voz … --linha … --saida mix.wav --trilha tensa` |
 | `legendas/legendas.js` | Legendas: `agrupar`, `layout`, `faixaLonge`, `desenhar` (Inter 900, contorno Tinta, destaque Mostarda) |
 | `visual/legenda-teste.html` | Quadro de teste com legendas difíceis |
+| `produzir.js` | Comando único: roteiro → vídeo final + QA |
+| `animacao/atuacoes-ep01.js` | Atuações do episódio 1 da terra |
+| `efeitos3d/ep01.js` | Efeitos do episódio 1 (`EFEITOS[tipo]`) |
 | `visual/ficha3d.html` | Folha do personagem 3D (`?ficha=personagens/.../ficha.json`): vistas, bocas e poses |
 | `visual/teste-estilo.html` | Cena de teste do estilo (3 cubos + esfera nas cores do guia); `window.medirCores()` |
 | `testes/determinismo.test.js` | Mesmo instante → mesmo quadro (md5), em qualquer ordem |

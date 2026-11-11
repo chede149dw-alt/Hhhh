@@ -78,6 +78,13 @@ export function dirigir(roteiro, palavras, catalogos = {}) {
       return { nome: a.nome, ficha: a.ficha, marca: a.marca || [0, 0, 0], segmentos: a.atuacao ? [{ atuacao: a.atuacao, inicio: tempo(a.inicio, ctx), opcoes: a.opcoes || {} }] : [] };
     });
     const nomes = atores.map((a) => a.nome);
+    // efeitos, objetos e cortes de câmera também podem começar numa palavra da frase ("palavra": "pé", "ajuste": 0.1)
+    const naPalavra = (item, campo = 'inicio') => {
+      if (!item.palavra) return tempo(item[campo], ctx);
+      const alvo = semAcento(item.palavra), w = porFrase[k].find((p) => semAcento(p.texto) === alvo);
+      if (!w) throw new ErroRoteiro(`Frase ${k + 1}: a palavra "${item.palavra}" não está na frase. Palavras: ${porFrase[k].map((p) => p.texto).join(' ')}`);
+      return w.inicio + (item.ajuste || 0);
+    };
     for (const ac of f.acoes || []) {
       const ator = atores.find((a) => a.nome === ac.ator);
       if (!ator) throw new ErroRoteiro(`Frase ${k + 1}: a ação usa o ator "${ac.ator}", que não está na cena. Atores: ${nomes.join(', ') || '(nenhum)'}`);
@@ -97,13 +104,16 @@ export function dirigir(roteiro, palavras, catalogos = {}) {
     }
     atores.forEach((a) => a.segmentos.sort((x, y) => x.inicio - y.inicio));
     // câmera: lista de planos de câmera (cortes dentro da frase); cada um vai até o próximo
-    const cams = (f.camera && f.camera.length ? f.camera : [{ tamanho: 'medio' }]).map((c) => ({ ...c, de: tempo(c.inicio, ctx) }));
+    const cams = (f.camera && f.camera.length ? f.camera : [{ tamanho: 'medio' }]).map((c) => ({ ...c, de: naPalavra(c) }));
     cams.forEach((c, i) => { c.ate = i < cams.length - 1 ? cams[i + 1].de : fim; delete c.inicio; });
     const efeitos = (f.efeitos || []).map((e) => {
       if (catalogos.efeitos) conferir(e.tipo, 'Efeito', catalogos.efeitos);
-      return { ...e, de: tempo(e.inicio, ctx), ate: e.fim !== undefined ? tempo(e.fim, ctx) : fim };
+      const de = naPalavra(e);
+      return { ...e, de, ate: e.fim !== undefined ? tempo(e.fim, ctx) : (e.dur ? de + e.dur : fim) };
     });
-    return { id: `plano${k + 1}`, frase: k, texto: f.texto, legenda: f.legenda === undefined ? 'auto' : f.legenda, inicio: +inicio.toFixed(3), fim: +fim.toFixed(3), cenario: f.cenario, atores, cameras: cams, efeitos, trilha: f.trilha || null };
+    // objetos do cenário que se mexem (despertador toca, livros caem, porta abre…): { tipo, inicio, fim }
+    const objetos = (f.objetos || []).map((o) => ({ ...o, de: naPalavra(o), ate: o.fim !== undefined ? tempo(o.fim, ctx) : fim }));
+    return { id: `plano${k + 1}`, frase: k, texto: f.texto, legenda: f.legenda === undefined ? 'auto' : f.legenda, objetos, capa: f.capa || null, cartela: f.cartela || null, fala: f.fala || null, inicio: +inicio.toFixed(3), fim: +fim.toFixed(3), cenario: f.cenario, atores, cameras: cams, efeitos, trilha: f.trilha || null };
   });
   // palavras-chave da legenda: as marcadas em "destaque" na frase e as palavras que disparam ações
   const destaques = [];

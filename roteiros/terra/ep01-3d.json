@@ -1,0 +1,1298 @@
+{
+  "titulo": "E se você acordasse controlando a terra? — Parte 1 (3D)",
+  "serie": "terra",
+  "episodio": 1,
+  "parte": 1,
+  "folga": 0.8,
+  "velocidade": "+6%",
+  "frases": [
+    {
+      "texto": "E se você acordasse controlando a terra?",
+      "cenario": "quarto",
+      "capa": {
+        "linhas": [
+          "E SE VOCÊ",
+          "ACORDASSE",
+          "CONTROLANDO",
+          "A TERRA?"
+        ],
+        "destaque": 3
+      },
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "atuacao": "poder_terra",
+          "opcoes": {
+            "desde": 1.8
+          }
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "lado": 22,
+          "angulo": -12,
+          "rolagem": 3,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Seis e meia. O despertador toca.",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            1.35,
+            -1.0,
+            0
+          ],
+          "atuacao": "dormindo"
+        }
+      ],
+      "objetos": [
+        {
+          "tipo": "despertador",
+          "palavra": "despertador",
+          "fim": "fim+1.6"
+        }
+      ],
+      "camera": [
+        {
+          "olhar": "despertador",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.55,
+          "giroBase": 0,
+          "lado": 140,
+          "angulo": 12,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          }
+        },
+        {
+          "palavra": "despertador",
+          "tamanho": "geral",
+          "alturaQuadro": 2.6,
+          "angulo": 62,
+          "lado": 40,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 12
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Você dá um tapa nele,",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            1.35,
+            -1.0,
+            0
+          ],
+          "atuacao": "dormindo"
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "lucas",
+          "atuacao": "tapa_deitado",
+          "palavra": "tapa"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "impacto",
+          "ponto": "despertador",
+          "palavra": "tapa",
+          "ajuste": 0.05,
+          "escala": 0.22,
+          "dur": 1.2
+        }
+      ],
+      "camera": [
+        {
+          "olhar": "despertador",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.6,
+          "giroBase": 0,
+          "lado": -70,
+          "angulo": 30,
+          "rolagem": -4,
+          "tremores": [
+            {
+              "t": 0.75,
+              "forca": 0.03,
+              "dur": 0.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "e o quarto inteiro treme.",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "atuacao": "acorda_assustado",
+          "opcoes": {
+            "semTransicao": true
+          }
+        }
+      ],
+      "objetos": [
+        {
+          "tipo": "livros",
+          "inicio": 0.15
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "tremor",
+          "inicio": 0,
+          "forca": 0.06
+        },
+        {
+          "tipo": "poeira_teto",
+          "inicio": 0,
+          "fim": "fim+0.8"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 2.6,
+          "lado": 0,
+          "angulo": 24,
+          "movimento": {
+            "tipo": "puxar",
+            "forca": 0.12
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Você olha pras mãos. Foi você?",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "atuacao": "olha_maos"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": 20,
+          "angulo": -20,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.08
+          }
+        },
+        {
+          "palavra": "Foi",
+          "tamanho": "close",
+          "lado": 40,
+          "angulo": -12,
+          "reenquadres": [
+            {
+              "t": 0.25,
+              "dx": -0.05,
+              "dy": 0.01,
+              "zoom": 1.06,
+              "dur": 0.35
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "A terra do vaso começa a flutuar.",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "atuacao": "olha_maos",
+          "opcoes": {
+            "desde": 1.6
+          }
+        }
+      ],
+      "objetos": [
+        {
+          "tipo": "vaso",
+          "inicio": 0.2,
+          "fim": "fim"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "terra_vaso",
+          "inicio": 0.1,
+          "fim": "fim"
+        }
+      ],
+      "camera": [
+        {
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.75,
+          "giroBase": 0,
+          "lado": 70,
+          "angulo": 4,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.18
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Você mexe os dedos, e ela obedece.",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0.85,
+            -0.55,
+            -90
+          ],
+          "atuacao": "dedos",
+          "opcoes": {
+            "semTransicao": true
+          }
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_mao",
+          "ator": "lucas",
+          "lado": "d",
+          "raio": [
+            0.06,
+            0.075
+          ],
+          "inicio": 0,
+          "fim": "fim",
+          "aparece": true
+        }
+      ],
+      "camera": [
+        {
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.6,
+          "lado": -35,
+          "angulo": 22,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 25
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Você faz a terra dar uma volta pelo quarto.",
+      "cenario": "quarto",
+      "destaque": [
+        "volta"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "atuacao": "rir_segurando",
+          "opcoes": {
+            "semTransicao": true
+          }
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_voa",
+          "ator": "lucas",
+          "inicio": 0,
+          "fim": "fim",
+          "centro": [
+            0,
+            1.45,
+            -0.5
+          ],
+          "raioVolta": 1.1
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "lado": 25,
+          "angulo": -6
+        },
+        {
+          "palavra": "volta",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.1,
+          "lado": 30,
+          "angulo": 8,
+          "rolagem": -5
+        }
+      ]
+    },
+    {
+      "texto": "Quanto mais você sorri, maior ela fica.",
+      "cenario": "quarto",
+      "destaque": [
+        "maior"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "atuacao": "rir_segurando"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_mao",
+          "ator": "lucas",
+          "ambas": true,
+          "raio": [
+            0.08,
+            0.24
+          ],
+          "inicio": 0,
+          "fim": "fim"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "lado": -20,
+          "angulo": -16,
+          "rolagem": 3,
+          "movimento": {
+            "tipo": "puxar",
+            "forca": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Lucas! Desce pro café!",
+      "cenario": "quarto",
+      "voz": "mae",
+      "fala": {
+        "ator": "mae"
+      },
+      "atores": [
+        {
+          "nome": "mae",
+          "marca": [
+            1.3,
+            1.6,
+            180
+          ],
+          "atuacao": "mae_chama"
+        },
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "atuacao": "rir_segurando"
+        }
+      ],
+      "objetos": [
+        {
+          "tipo": "porta",
+          "inicio": -0.4
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_mao",
+          "ator": "lucas",
+          "ambas": true,
+          "raio": [
+            0.24,
+            0.24
+          ],
+          "inicio": 0,
+          "fim": "fim"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "lado": 10,
+          "angulo": 0,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          }
+        }
+      ]
+    },
+    {
+      "texto": "O susto faz a terra despencar no tapete.",
+      "cenario": "quarto",
+      "destaque": [
+        "despencar"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "atuacao": "rir_segurando"
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "lucas",
+          "atuacao": "assustar",
+          "palavra": "susto"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "esfera_cai",
+          "ator": "lucas",
+          "raio": 0.24,
+          "alvo": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0.012,
+              0.55
+            ]
+          },
+          "palavra": "despencar",
+          "fica": true
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "lado": 30,
+          "angulo": 28
+        },
+        {
+          "palavra": "tapete",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.9,
+          "lado": 20,
+          "angulo": 30,
+          "tremores": [
+            {
+              "t": 0,
+              "forca": 0.03,
+              "dur": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "Que sujeira é essa, menino?",
+      "cenario": "quarto",
+      "voz": "mae",
+      "fala": {
+        "ator": "mae"
+      },
+      "atores": [
+        {
+          "nome": "mae",
+          "marca": [
+            1.3,
+            1.6,
+            180
+          ],
+          "atuacao": "maos_cintura"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "lado": 8,
+          "angulo": -8,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Regra um: o poder segue o que você sente.",
+      "cenario": "quarto",
+      "destaque": [
+        "sente."
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            -0.18,
+            0
+          ],
+          "atuacao": "sem_graca",
+          "opcoes": {
+            "semTransicao": true
+          }
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": 12,
+          "angulo": 4
+        },
+        {
+          "palavra": "poder",
+          "tamanho": "medio",
+          "lado": -25,
+          "angulo": 20,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 14
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Atrasado, você bate o pé no chão,",
+      "cenario": "rua",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "atuacao": "pisao",
+          "inicio": 0
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "lucas",
+          "atuacao": "pisao",
+          "palavra": "pé"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "impacto",
+          "ponto": {
+            "ator": "lucas",
+            "local": [
+              -0.16,
+              0,
+              0.05
+            ]
+          },
+          "palavra": "pé",
+          "ajuste": 0.05,
+          "escala": 0.7,
+          "dur": 1.5
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "lado": 165,
+          "angulo": 12,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          },
+          "tremores": [],
+          "alturaQuadro": 2.0
+        }
+      ]
+    },
+    {
+      "texto": "e a calçada racha até a esquina.",
+      "cenario": "rua",
+      "destaque": [
+        "racha"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "rachadura_corre",
+          "de_ponto": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0,
+              0.3
+            ]
+          },
+          "para_ponto": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0,
+              14
+            ]
+          },
+          "inicio": 0,
+          "fim": "fim",
+          "largura": 1.8,
+          "fica": true
+        },
+        {
+          "tipo": "tremor",
+          "inicio": 0,
+          "forca": 0.03
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 4.6,
+          "lado": 165,
+          "angulo": 42,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          },
+          "rolagem": 3
+        }
+      ]
+    },
+    {
+      "texto": "Uma onda de terra te leva rua abaixo.",
+      "cenario": "rua",
+      "destaque": [
+        "onda"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -2.7,
+            -6,
+            0,
+            -0.14
+          ],
+          "atuacao": "surfar",
+          "opcoes": {
+            "distancia": 7,
+            "tempo": 2.6,
+            "semTransicao": true
+          }
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "onda_terra",
+          "ator": "lucas",
+          "inicio": 0,
+          "fim": "fim"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 2.4,
+          "lado": 95,
+          "angulo": 6,
+          "movimento": {
+            "tipo": "lateral",
+            "metros": 0.4
+          }
+        }
+      ]
+    },
+    {
+      "texto": "O vizinho deixa o café cair.",
+      "cenario": "rua",
+      "destaque": [
+        "café"
+      ],
+      "atores": [
+        {
+          "nome": "vizinho",
+          "marca": [
+            -7.8,
+            4,
+            90
+          ]
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "vizinho",
+          "atuacao": "derruba_cafe",
+          "palavra": "cair"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "cafe",
+          "ator": "vizinho",
+          "inicio": 0,
+          "fim": "fim",
+          "chao": 0.14,
+          "fica": true
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "lado": 15,
+          "angulo": 0
+        },
+        {
+          "palavra": "cair",
+          "ajuste": -0.1,
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.8,
+          "lado": 40,
+          "angulo": 15
+        }
+      ]
+    },
+    {
+      "texto": "Na escola, o Rafael tropeça,",
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ]
+        },
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ]
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "rafael",
+          "atuacao": "tropecar",
+          "palavra": "tropeça"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "celular",
+          "ator": "rafael",
+          "inicio": -1,
+          "fim": "fim+2.5",
+          "fica": true
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 3.2,
+          "lado": 30,
+          "angulo": 22,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          }
+        }
+      ]
+    },
+    {
+      "texto": "e o celular dele some no bueiro.",
+      "cenario": "escola",
+      "destaque": [
+        "bueiro."
+      ],
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ]
+        },
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ]
+        }
+      ],
+      "camera": [
+        {
+          "olhar": "bueiro",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.0,
+          "giroBase": 0,
+          "lado": 20,
+          "angulo": 52,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.15
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Não! Meu celular novo!",
+      "cenario": "escola",
+      "voz": "rafael",
+      "fala": {
+        "ator": "rafael"
+      },
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "atuacao": "desesperar"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": 8,
+          "angulo": -12,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Você confere se ninguém está olhando,",
+      "cenario": "escola",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "atuacao": "conferir"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": 0,
+          "angulo": 3,
+          "reenquadres": [
+            {
+              "t": 1.1,
+              "dx": 0.04,
+              "dy": 0.0,
+              "zoom": 1.05,
+              "dur": 0.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "e a terra devolve o celular, inteirinho.",
+      "cenario": "escola",
+      "destaque": [
+        "devolve"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ]
+        },
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "atuacao": "desesperar"
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "lucas",
+          "atuacao": "comandar_terra",
+          "palavra": "terra"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "energia",
+          "ator": "lucas",
+          "lado": "d",
+          "ponto": "bueiro",
+          "palavra": "terra",
+          "fim": "fim"
+        },
+        {
+          "tipo": "coluna_terra",
+          "ponto": "bueiro",
+          "palavra": "devolve",
+          "fim": "fim",
+          "altura": 1.1
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 2.8,
+          "lado": 70,
+          "angulo": -4,
+          "rolagem": -3
+        },
+        {
+          "palavra": "celular,",
+          "olhar": "bueiro",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.6,
+          "giroBase": 0,
+          "lado": -30,
+          "angulo": -10,
+          "movimento": {
+            "tipo": "subir",
+            "metros": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Cara... como você fez isso?",
+      "cenario": "escola",
+      "voz": "rafael",
+      "fala": {
+        "ator": "rafael"
+      },
+      "atores": [
+        {
+          "nome": "rafael",
+          "marca": [
+            0.45,
+            -0.5,
+            0
+          ],
+          "atuacao": "segurar_celular",
+          "opcoes": {
+            "semTransicao": true
+          }
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "celular",
+          "ator": "rafael",
+          "modo": "sujo",
+          "inicio": 0,
+          "fim": "fim"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": -15,
+          "angulo": 0,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 10
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Você só sorri. Melhor ninguém saber.",
+      "cenario": "escola",
+      "destaque": [
+        "ninguém"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ],
+          "atuacao": "sorrir_canto"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": 2,
+          "angulo": 0,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.1
+          }
+        },
+        {
+          "palavra": "Melhor",
+          "tamanho": "medio",
+          "lado": -30,
+          "angulo": 6,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 12
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Só que alguém filmou tudo.",
+      "cenario": "escola",
+      "destaque": [
+        "filmou"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ]
+        }
+      ],
+      "objetos": [
+        {
+          "tipo": "silhueta",
+          "inicio": -0.2,
+          "fim": "fim"
+        }
+      ],
+      "camera": [
+        {
+          "olhar": "janela",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 2.6,
+          "giroBase": 0,
+          "lado": 0,
+          "angulo": -14,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.45
+          }
+        }
+      ]
+    },
+    {
+      "texto": "E o chão da escola começa a rachar.",
+      "cenario": "escola",
+      "destaque": [
+        "rachar."
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ]
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "lucas",
+          "atuacao": "medo_chao",
+          "palavra": "chão",
+          "alinhar": "inicio"
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "rachadura_corre",
+          "de_ponto": {
+            "ator": "lucas",
+            "local": [
+              2.5,
+              0,
+              3.5
+            ]
+          },
+          "para_ponto": {
+            "ator": "lucas",
+            "local": [
+              0,
+              0,
+              0.2
+            ]
+          },
+          "inicio": 0.1,
+          "fim": "fim",
+          "largura": 2.0,
+          "fica": true
+        },
+        {
+          "tipo": "tremor",
+          "inicio": 0,
+          "forca": 0.05
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 3.4,
+          "lado": 25,
+          "angulo": 48,
+          "giroRolagem": 8
+        }
+      ]
+    },
+    {
+      "texto": "Lá embaixo, algo responde a você.",
+      "cenario": "escola",
+      "destaque": [
+        "responde"
+      ],
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ]
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "luz_baixo",
+          "ator": "lucas",
+          "inicio": 0,
+          "fim": "fim+3",
+          "fica": true
+        },
+        {
+          "tipo": "tremor",
+          "palavra": "responde",
+          "forca": 0.04
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": 10,
+          "angulo": -24,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Segue pra ver a parte dois!",
+      "cenario": "escola",
+      "cartela": {
+        "parte": 1
+      },
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            -1.1,
+            0.7,
+            35
+          ]
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 3.4,
+          "lado": 40,
+          "angulo": 30,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 12
+          }
+        }
+      ]
+    }
+  ]
+}

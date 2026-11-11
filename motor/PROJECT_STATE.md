@@ -138,5 +138,25 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - No tocador: o rosto é projetado pela câmera a cada quadro e a legenda vai para a faixa mais longe dele; o quadro final é um canvas 2D
   (imagem 3D + legenda), devolvido por `window.capturar`. `?legenda=0` desliga.
 
+## Comando único e QA (prompt 10) — `produzir.js`
+- `node motor/produzir.js roteiro.json [--saida] [--fps 60] [--processos 4] [--de s --ate s] [--sem-qa]`:
+  narração → direção → mixagem → quadros em partes de 5 s (PNG → MP4 → apaga; retoma partes já feitas) → junção com áudio → QA.
+- QA (`<saida>.qa.json`): duração ≤ 75 s, LUFS −14 ± 0,5, freezedetect (nada parado > 1 s), cortes de câmera ≤ 3 s, capa e cartela.
+- Capa (`"capa": { linhas, destaque }`) e cartela final (`"cartela": { parte }`, botão pulsando, sem mão) desenhadas pelo tocador.
+
+## Episódio 1 da terra em 3D — `roteiros/terra/ep01-3d.json` (roteiro v2 aprovado)
+- 28 frases / ~36 cortes, 70,2 s com a voz real (narrador Antonio, Mãe Francisca, Rafael = Antonio +28 Hz, +14%).
+- Personagens 3D oficiais: Lucas, Mãe, Rafael; Vizinho = personagem de fundo (`personagens/vizinho/3d/`).
+- Cenários: quarto (despertador, livros que caem, porta, vaso na janela), rua, escola (pátio, bueiro, silhueta na janela).
+- `animacao/atuacoes-ep01.js`: 20 atuações (dormindo, tapa deitado, acorda assustado, olhar as mãos, dedos, rir segurando,
+  mãe chama, mãos na cintura, sem graça, pisão, surfar, derruba café, tropeçar, desesperar, conferir, comandar a terra,
+  sorrir de canto com piscadela, medo do chão, segurar celular).
+- `efeitos3d/ep01.js`: impacto, terra do vaso, esfera na mão / voando / caindo, rachadura correndo, onda de terra,
+  coluna de terra com celular, energia, luz de baixo, poeira do teto, café, celular.
+- Roteiro: efeitos, objetos e cortes podem começar numa palavra; câmera "olhar" um ponto do cenário; "giroBase";
+  marca por plano (o ator muda de lugar no corte); "semTransicao" nos cortes; boca mexe nas palavras de quem fala ("fala").
+- Lições: criar todos os atores do cenário logo no início (o render começa no meio); efeitos com estado precisam
+  calcular a partir de um instante fixo (determinismo); quarto pequeno → câmera presa: usar marca perto do centro.
+
 ## Próxima etapa
-Prompt 10 — um comando só (roteiro → voz → direção → quadros → MP4) com capa, cartela final e checagens automáticas (QA).
+Prompt 11 — documentação final (README do motor, guia de uso para o autor) e revisão do episódio 1 com o autor.

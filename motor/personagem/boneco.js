@@ -91,6 +91,10 @@ export const EXPRESSOES = {
   determinado: { olho: 0.88, sob: -0.004, ang: -14, boca: 'neutra' },
   raiva:       { olho: 0.8,  sob: -0.006, ang: -24, boca: 'aberta' },
   cansado:     { olho: 0.55, sob: -0.003, ang: 8,   boca: 'neutra' },
+  rindo:       { olho: 0.38, sob: 0.008,  ang: 8,   boca: 'aberta' },
+  sem_graca:   { olho: 0.85, sob: 0.005,  ang: 16,  boca: 'sorriso' },
+  curioso:     { olho: 1.06, sob: 0.009,  ang: -4,  boca: 'neutra' },
+  dormindo:    { olho: 0.06, sob: -0.002, ang: 4,   boca: 'neutra' },
 };
 
 // mãos: dobra de cada dedo (indicador, médio, anelar, mínimo) em graus, abertura e polegar
@@ -99,6 +103,8 @@ const MAOS = {
   aberta:    { dedos: [0, 0, 0, 0], abre: 1, polegar: 35 },
   punho:     { dedos: [115, 115, 115, 115], abre: 0, polegar: 70 },
   apontando: { dedos: [0, 115, 115, 115], abre: 0, polegar: 60 },
+  garra:     { dedos: [55, 60, 65, 70], abre: 0.6, polegar: 45 },
+  segura:    { dedos: [70, 80, 85, 90], abre: 0, polegar: 55 },
 };
 
 // ---------------- construção ----------------
@@ -333,6 +339,10 @@ export function criarBoneco(ficha) {
     const ponte = new THREE.Mesh(new THREE.TorusGeometry(0.014, 0.003, 6, 12, Math.PI), mat(corAro));
     ponte.position.set(0, 0.004, R * 1.04); cranio.add(ponte);
   }
+  if (tem('bigode')) {
+    const bg = new THREE.Mesh(new THREE.CapsuleGeometry(0.012, 0.05, 4, 10), mat(c.bigode || c.cabelo));
+    const g = new THREE.Group(); g.rotation.set(G(-17), 0, 0, 'YXZ'); bg.position.z = R + 0.008; bg.rotation.z = Math.PI / 2; bg.scale.set(1, 1, 0.6); g.add(bg); cranio.add(g);
+  }
   if (tem('brincos')) for (const sl of [1, -1]) {
     const b = new THREE.Mesh(new THREE.SphereGeometry(0.009, 10, 8), mat(c.detalhe || '#EBC25A'));
     b.position.set(sl * R * 1.0, -0.04, 0); cranio.add(b);
@@ -538,7 +548,11 @@ export function criarBoneco(ficha) {
     rosto(p.rosto || 'neutro');
     // piscar: 0 = olho aberto, 1 = fechado (somado por cima da expressão)
     if (p.piscar) for (const o of olhos) o.scale.y *= Math.max(0.08, 1 - p.piscar);
+    // piscadela: fecha só um olho ('e' = esquerdo dele, 'd' = direito), de 0 a 1
+    if (p.piscadela) { const [lado, k] = p.piscadela; olhos[lado === 'e' ? 0 : 1].scale.y *= Math.max(0.08, 1 - k); }
   }
+  // boca durante a fala (sincronia labial): troca só a forma da boca, por cima da expressão
+  function falar(forma) { if (forma) mostrarBoca(forma); }
   posar(REPOUSO);
   // altura da ficha = do chão ao topo do cabelo, em repouso: mede o boneco montado e ajusta a escala
   raiz.updateMatrixWorld(true);
@@ -549,5 +563,5 @@ export function criarBoneco(ficha) {
   const pe = juntas.pe_e, caixaPe = new THREE.Box3().setFromObject(pe);
   const sola = (pe.getWorldPosition(new THREE.Vector3()).y - caixaPe.min.y) / raiz.scale.x;
   const base = { quadril: juntas.quadril.position.clone() };
-  return { raiz, corpo, juntas, posar, rosto, mao, ficha, sola, base };
+  return { raiz, corpo, juntas, posar, rosto, mao, falar, ficha, sola, base };
 }

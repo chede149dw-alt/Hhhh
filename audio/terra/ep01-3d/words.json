@@ -1,0 +1,1248 @@
+[
+ {
+  "i": 0,
+  "texto": "E",
+  "inicio": 0.347,
+  "fim": 0.465,
+  "frase": 0
+ },
+ {
+  "i": 1,
+  "texto": "se",
+  "inicio": 0.477,
+  "fim": 0.583,
+  "frase": 0
+ },
+ {
+  "i": 2,
+  "texto": "você",
+  "inicio": 0.595,
+  "fim": 0.854,
+  "frase": 0
+ },
+ {
+  "i": 3,
+  "texto": "acordasse",
+  "inicio": 0.866,
+  "fim": 1.467,
+  "frase": 0
+ },
+ {
+  "i": 4,
+  "texto": "controlando",
+  "inicio": 1.479,
+  "fim": 1.998,
+  "frase": 0
+ },
+ {
+  "i": 5,
+  "texto": "a",
+  "inicio": 2.01,
+  "fim": 2.069,
+  "frase": 0
+ },
+ {
+  "i": 6,
+  "texto": "terra?",
+  "inicio": 2.081,
+  "fim": 2.47,
+  "frase": 0
+ },
+ {
+  "i": 7,
+  "texto": "Seis",
+  "inicio": 2.937,
+  "fim": 3.255,
+  "frase": 1
+ },
+ {
+  "i": 8,
+  "texto": "e",
+  "inicio": 3.267,
+  "fim": 3.373,
+  "frase": 1
+ },
+ {
+  "i": 9,
+  "texto": "meia.",
+  "inicio": 3.385,
+  "fim": 3.751,
+  "frase": 1
+ },
+ {
+  "i": 10,
+  "texto": "O",
+  "inicio": 4.562,
+  "fim": 4.668,
+  "frase": 1
+ },
+ {
+  "i": 11,
+  "texto": "despertador",
+  "inicio": 4.679,
+  "fim": 5.352,
+  "frase": 1
+ },
+ {
+  "i": 12,
+  "texto": "toca.",
+  "inicio": 5.363,
+  "fim": 5.729,
+  "frase": 1
+ },
+ {
+  "i": 13,
+  "texto": "Você",
+  "inicio": 6.196,
+  "fim": 6.526,
+  "frase": 2
+ },
+ {
+  "i": 14,
+  "texto": "dá",
+  "inicio": 6.538,
+  "fim": 6.644,
+  "frase": 2
+ },
+ {
+  "i": 15,
+  "texto": "um",
+  "inicio": 6.656,
+  "fim": 6.786,
+  "frase": 2
+ },
+ {
+  "i": 16,
+  "texto": "tapa",
+  "inicio": 6.798,
+  "fim": 7.092,
+  "frase": 2
+ },
+ {
+  "i": 17,
+  "texto": "nele,",
+  "inicio": 7.104,
+  "fim": 7.47,
+  "frase": 2
+ },
+ {
+  "i": 18,
+  "texto": "e",
+  "inicio": 7.797,
+  "fim": 7.915,
+  "frase": 3
+ },
+ {
+  "i": 19,
+  "texto": "o",
+  "inicio": 7.927,
+  "fim": 7.997,
+  "frase": 3
+ },
+ {
+  "i": 20,
+  "texto": "quarto",
+  "inicio": 8.009,
+  "fim": 8.351,
+  "frase": 3
+ },
+ {
+  "i": 21,
+  "texto": "inteiro",
+  "inicio": 8.363,
+  "fim": 8.776,
+  "frase": 3
+ },
+ {
+  "i": 22,
+  "texto": "treme.",
+  "inicio": 8.788,
+  "fim": 9.188,
+  "frase": 3
+ },
+ {
+  "i": 23,
+  "texto": "Você",
+  "inicio": 9.656,
+  "fim": 10.033,
+  "frase": 4
+ },
+ {
+  "i": 24,
+  "texto": "olha",
+  "inicio": 10.045,
+  "fim": 10.363,
+  "frase": 4
+ },
+ {
+  "i": 25,
+  "texto": "pras",
+  "inicio": 10.375,
+  "fim": 10.623,
+  "frase": 4
+ },
+ {
+  "i": 26,
+  "texto": "mãos.",
+  "inicio": 10.634,
+  "fim": 11.059,
+  "frase": 4
+ },
+ {
+  "i": 27,
+  "texto": "Foi",
+  "inicio": 11.87,
+  "fim": 12.094,
+  "frase": 4
+ },
+ {
+  "i": 28,
+  "texto": "você?",
+  "inicio": 12.106,
+  "fim": 12.507,
+  "frase": 4
+ },
+ {
+  "i": 29,
+  "texto": "A",
+  "inicio": 12.974,
+  "fim": 13.103,
+  "frase": 5
+ },
+ {
+  "i": 30,
+  "texto": "terra",
+  "inicio": 13.115,
+  "fim": 13.41,
+  "frase": 5
+ },
+ {
+  "i": 31,
+  "texto": "do",
+  "inicio": 13.422,
+  "fim": 13.516,
+  "frase": 5
+ },
+ {
+  "i": 32,
+  "texto": "vaso",
+  "inicio": 13.528,
+  "fim": 13.858,
+  "frase": 5
+ },
+ {
+  "i": 33,
+  "texto": "começa",
+  "inicio": 13.87,
+  "fim": 14.271,
+  "frase": 5
+ },
+ {
+  "i": 34,
+  "texto": "a",
+  "inicio": 14.283,
+  "fim": 14.318,
+  "frase": 5
+ },
+ {
+  "i": 35,
+  "texto": "flutuar.",
+  "inicio": 14.33,
+  "fim": 14.813,
+  "frase": 5
+ },
+ {
+  "i": 36,
+  "texto": "Você",
+  "inicio": 15.281,
+  "fim": 15.599,
+  "frase": 6
+ },
+ {
+  "i": 37,
+  "texto": "mexe",
+  "inicio": 15.611,
+  "fim": 15.941,
+  "frase": 6
+ },
+ {
+  "i": 38,
+  "texto": "os",
+  "inicio": 15.953,
+  "fim": 16.023,
+  "frase": 6
+ },
+ {
+  "i": 39,
+  "texto": "dedos,",
+  "inicio": 16.035,
+  "fim": 16.413,
+  "frase": 6
+ },
+ {
+  "i": 40,
+  "texto": "e",
+  "inicio": 16.672,
+  "fim": 16.731,
+  "frase": 6
+ },
+ {
+  "i": 41,
+  "texto": "ela",
+  "inicio": 16.743,
+  "fim": 16.896,
+  "frase": 6
+ },
+ {
+  "i": 42,
+  "texto": "obedece.",
+  "inicio": 16.908,
+  "fim": 17.462,
+  "frase": 6
+ },
+ {
+  "i": 43,
+  "texto": "Você",
+  "inicio": 17.929,
+  "fim": 18.224,
+  "frase": 7
+ },
+ {
+  "i": 44,
+  "texto": "faz",
+  "inicio": 18.236,
+  "fim": 18.389,
+  "frase": 7
+ },
+ {
+  "i": 45,
+  "texto": "a",
+  "inicio": 18.401,
+  "fim": 18.531,
+  "frase": 7
+ },
+ {
+  "i": 46,
+  "texto": "terra",
+  "inicio": 18.543,
+  "fim": 18.802,
+  "frase": 7
+ },
+ {
+  "i": 47,
+  "texto": "dar",
+  "inicio": 18.814,
+  "fim": 18.967,
+  "frase": 7
+ },
+ {
+  "i": 48,
+  "texto": "uma",
+  "inicio": 18.979,
+  "fim": 19.132,
+  "frase": 7
+ },
+ {
+  "i": 49,
+  "texto": "volta",
+  "inicio": 19.144,
+  "fim": 19.462,
+  "frase": 7
+ },
+ {
+  "i": 50,
+  "texto": "pelo",
+  "inicio": 19.474,
+  "fim": 19.663,
+  "frase": 7
+ },
+ {
+  "i": 51,
+  "texto": "quarto.",
+  "inicio": 19.675,
+  "fim": 20.087,
+  "frase": 7
+ },
+ {
+  "i": 52,
+  "texto": "Quanto",
+  "inicio": 20.555,
+  "fim": 20.861,
+  "frase": 8
+ },
+ {
+  "i": 53,
+  "texto": "mais",
+  "inicio": 20.873,
+  "fim": 21.073,
+  "frase": 8
+ },
+ {
+  "i": 54,
+  "texto": "você",
+  "inicio": 21.085,
+  "fim": 21.356,
+  "frase": 8
+ },
+ {
+  "i": 55,
+  "texto": "sorri,",
+  "inicio": 21.368,
+  "fim": 21.734,
+  "frase": 8
+ },
+ {
+  "i": 56,
+  "texto": "maior",
+  "inicio": 22.017,
+  "fim": 22.335,
+  "frase": 8
+ },
+ {
+  "i": 57,
+  "texto": "ela",
+  "inicio": 22.347,
+  "fim": 22.512,
+  "frase": 8
+ },
+ {
+  "i": 58,
+  "texto": "fica.",
+  "inicio": 22.524,
+  "fim": 22.866,
+  "frase": 8
+ },
+ {
+  "i": 59,
+  "texto": "Lucas!",
+  "inicio": 23.334,
+  "fim": 23.887,
+  "frase": 9
+ },
+ {
+  "i": 60,
+  "texto": "Desce",
+  "inicio": 24.137,
+  "fim": 24.474,
+  "frase": 9
+ },
+ {
+  "i": 61,
+  "texto": "pro",
+  "inicio": 24.486,
+  "fim": 24.63,
+  "frase": 9
+ },
+ {
+  "i": 62,
+  "texto": "café!",
+  "inicio": 24.642,
+  "fim": 25.087,
+  "frase": 9
+ },
+ {
+  "i": 63,
+  "texto": "O",
+  "inicio": 25.554,
+  "fim": 25.672,
+  "frase": 10
+ },
+ {
+  "i": 64,
+  "texto": "susto",
+  "inicio": 25.684,
+  "fim": 26.108,
+  "frase": 10
+ },
+ {
+  "i": 65,
+  "texto": "faz",
+  "inicio": 26.12,
+  "fim": 26.285,
+  "frase": 10
+ },
+ {
+  "i": 66,
+  "texto": "a",
+  "inicio": 26.297,
+  "fim": 26.438,
+  "frase": 10
+ },
+ {
+  "i": 67,
+  "texto": "terra",
+  "inicio": 26.45,
+  "fim": 26.721,
+  "frase": 10
+ },
+ {
+  "i": 68,
+  "texto": "despencar",
+  "inicio": 26.733,
+  "fim": 27.299,
+  "frase": 10
+ },
+ {
+  "i": 69,
+  "texto": "no",
+  "inicio": 27.311,
+  "fim": 27.405,
+  "frase": 10
+ },
+ {
+  "i": 70,
+  "texto": "tapete.",
+  "inicio": 27.417,
+  "fim": 27.936,
+  "frase": 10
+ },
+ {
+  "i": 71,
+  "texto": "Que",
+  "inicio": 28.404,
+  "fim": 28.524,
+  "frase": 11
+ },
+ {
+  "i": 72,
+  "texto": "sujeira",
+  "inicio": 28.536,
+  "fim": 28.969,
+  "frase": 11
+ },
+ {
+  "i": 73,
+  "texto": "é",
+  "inicio": 28.981,
+  "fim": 29.041,
+  "frase": 11
+ },
+ {
+  "i": 74,
+  "texto": "essa,",
+  "inicio": 29.053,
+  "fim": 29.39,
+  "frase": 11
+ },
+ {
+  "i": 75,
+  "texto": "menino?",
+  "inicio": 29.414,
+  "fim": 29.895,
+  "frase": 11
+ },
+ {
+  "i": 76,
+  "texto": "Regra",
+  "inicio": 30.362,
+  "fim": 30.716,
+  "frase": 12
+ },
+ {
+  "i": 77,
+  "texto": "um:",
+  "inicio": 30.727,
+  "fim": 30.904,
+  "frase": 12
+ },
+ {
+  "i": 78,
+  "texto": "o",
+  "inicio": 31.305,
+  "fim": 31.364,
+  "frase": 12
+ },
+ {
+  "i": 79,
+  "texto": "poder",
+  "inicio": 31.376,
+  "fim": 31.671,
+  "frase": 12
+ },
+ {
+  "i": 80,
+  "texto": "segue",
+  "inicio": 31.682,
+  "fim": 32.001,
+  "frase": 12
+ },
+ {
+  "i": 81,
+  "texto": "o",
+  "inicio": 32.013,
+  "fim": 32.048,
+  "frase": 12
+ },
+ {
+  "i": 82,
+  "texto": "que",
+  "inicio": 32.06,
+  "fim": 32.142,
+  "frase": 12
+ },
+ {
+  "i": 83,
+  "texto": "você",
+  "inicio": 32.154,
+  "fim": 32.402,
+  "frase": 12
+ },
+ {
+  "i": 84,
+  "texto": "sente.",
+  "inicio": 32.414,
+  "fim": 32.85,
+  "frase": 12
+ },
+ {
+  "i": 85,
+  "texto": "Atrasado,",
+  "inicio": 33.317,
+  "fim": 33.954,
+  "frase": 13
+ },
+ {
+  "i": 86,
+  "texto": "você",
+  "inicio": 34.213,
+  "fim": 34.461,
+  "frase": 13
+ },
+ {
+  "i": 87,
+  "texto": "bate",
+  "inicio": 34.473,
+  "fim": 34.779,
+  "frase": 13
+ },
+ {
+  "i": 88,
+  "texto": "o",
+  "inicio": 34.791,
+  "fim": 34.827,
+  "frase": 13
+ },
+ {
+  "i": 89,
+  "texto": "pé",
+  "inicio": 34.838,
+  "fim": 35.003,
+  "frase": 13
+ },
+ {
+  "i": 90,
+  "texto": "no",
+  "inicio": 35.015,
+  "fim": 35.121,
+  "frase": 13
+ },
+ {
+  "i": 91,
+  "texto": "chão,",
+  "inicio": 35.133,
+  "fim": 35.511,
+  "frase": 13
+ },
+ {
+  "i": 92,
+  "texto": "e",
+  "inicio": 35.838,
+  "fim": 35.944,
+  "frase": 14
+ },
+ {
+  "i": 93,
+  "texto": "a",
+  "inicio": 35.956,
+  "fim": 36.026,
+  "frase": 14
+ },
+ {
+  "i": 94,
+  "texto": "calçada",
+  "inicio": 36.038,
+  "fim": 36.545,
+  "frase": 14
+ },
+ {
+  "i": 95,
+  "texto": "racha",
+  "inicio": 36.557,
+  "fim": 36.923,
+  "frase": 14
+ },
+ {
+  "i": 96,
+  "texto": "até",
+  "inicio": 36.934,
+  "fim": 37.135,
+  "frase": 14
+ },
+ {
+  "i": 97,
+  "texto": "a",
+  "inicio": 37.147,
+  "fim": 37.182,
+  "frase": 14
+ },
+ {
+  "i": 98,
+  "texto": "esquina.",
+  "inicio": 37.194,
+  "fim": 37.677,
+  "frase": 14
+ },
+ {
+  "i": 99,
+  "texto": "Uma",
+  "inicio": 38.144,
+  "fim": 38.392,
+  "frase": 15
+ },
+ {
+  "i": 100,
+  "texto": "onda",
+  "inicio": 38.404,
+  "fim": 38.71,
+  "frase": 15
+ },
+ {
+  "i": 101,
+  "texto": "de",
+  "inicio": 38.722,
+  "fim": 38.864,
+  "frase": 15
+ },
+ {
+  "i": 102,
+  "texto": "terra",
+  "inicio": 38.876,
+  "fim": 39.17,
+  "frase": 15
+ },
+ {
+  "i": 103,
+  "texto": "te",
+  "inicio": 39.182,
+  "fim": 39.288,
+  "frase": 15
+ },
+ {
+  "i": 104,
+  "texto": "leva",
+  "inicio": 39.3,
+  "fim": 39.595,
+  "frase": 15
+ },
+ {
+  "i": 105,
+  "texto": "rua",
+  "inicio": 39.607,
+  "fim": 39.854,
+  "frase": 15
+ },
+ {
+  "i": 106,
+  "texto": "abaixo.",
+  "inicio": 39.866,
+  "fim": 40.326,
+  "frase": 15
+ },
+ {
+  "i": 107,
+  "texto": "O",
+  "inicio": 40.793,
+  "fim": 40.899,
+  "frase": 16
+ },
+ {
+  "i": 108,
+  "texto": "vizinho",
+  "inicio": 40.911,
+  "fim": 41.395,
+  "frase": 16
+ },
+ {
+  "i": 109,
+  "texto": "deixa",
+  "inicio": 41.406,
+  "fim": 41.666,
+  "frase": 16
+ },
+ {
+  "i": 110,
+  "texto": "o",
+  "inicio": 41.678,
+  "fim": 41.701,
+  "frase": 16
+ },
+ {
+  "i": 111,
+  "texto": "café",
+  "inicio": 41.713,
+  "fim": 42.02,
+  "frase": 16
+ },
+ {
+  "i": 112,
+  "texto": "cair.",
+  "inicio": 42.031,
+  "fim": 42.373,
+  "frase": 16
+ },
+ {
+  "i": 113,
+  "texto": "Na",
+  "inicio": 42.841,
+  "fim": 42.982,
+  "frase": 17
+ },
+ {
+  "i": 114,
+  "texto": "escola,",
+  "inicio": 42.994,
+  "fim": 43.477,
+  "frase": 17
+ },
+ {
+  "i": 115,
+  "texto": "o",
+  "inicio": 43.666,
+  "fim": 43.749,
+  "frase": 17
+ },
+ {
+  "i": 116,
+  "texto": "Rafael",
+  "inicio": 43.76,
+  "fim": 44.209,
+  "frase": 17
+ },
+ {
+  "i": 117,
+  "texto": "tropeça,",
+  "inicio": 44.22,
+  "fim": 44.81,
+  "frase": 17
+ },
+ {
+  "i": 118,
+  "texto": "e",
+  "inicio": 45.137,
+  "fim": 45.255,
+  "frase": 18
+ },
+ {
+  "i": 119,
+  "texto": "o",
+  "inicio": 45.267,
+  "fim": 45.314,
+  "frase": 18
+ },
+ {
+  "i": 120,
+  "texto": "celular",
+  "inicio": 45.326,
+  "fim": 45.856,
+  "frase": 18
+ },
+ {
+  "i": 121,
+  "texto": "dele",
+  "inicio": 45.868,
+  "fim": 46.081,
+  "frase": 18
+ },
+ {
+  "i": 122,
+  "texto": "some",
+  "inicio": 46.092,
+  "fim": 46.434,
+  "frase": 18
+ },
+ {
+  "i": 123,
+  "texto": "no",
+  "inicio": 46.446,
+  "fim": 46.529,
+  "frase": 18
+ },
+ {
+  "i": 124,
+  "texto": "bueiro.",
+  "inicio": 46.54,
+  "fim": 46.941,
+  "frase": 18
+ },
+ {
+  "i": 125,
+  "texto": "Não!",
+  "inicio": 47.405,
+  "fim": 47.778,
+  "frase": 19
+ },
+ {
+  "i": 126,
+  "texto": "Meu",
+  "inicio": 48.529,
+  "fim": 48.748,
+  "frase": 19
+ },
+ {
+  "i": 127,
+  "texto": "celular",
+  "inicio": 48.759,
+  "fim": 49.219,
+  "frase": 19
+ },
+ {
+  "i": 128,
+  "texto": "novo!",
+  "inicio": 49.23,
+  "fim": 49.581,
+  "frase": 19
+ },
+ {
+  "i": 129,
+  "texto": "Você",
+  "inicio": 50.048,
+  "fim": 50.355,
+  "frase": 20
+ },
+ {
+  "i": 130,
+  "texto": "confere",
+  "inicio": 50.367,
+  "fim": 50.862,
+  "frase": 20
+ },
+ {
+  "i": 131,
+  "texto": "se",
+  "inicio": 50.874,
+  "fim": 50.98,
+  "frase": 20
+ },
+ {
+  "i": 132,
+  "texto": "ninguém",
+  "inicio": 50.992,
+  "fim": 51.31,
+  "frase": 20
+ },
+ {
+  "i": 133,
+  "texto": "está",
+  "inicio": 51.322,
+  "fim": 51.511,
+  "frase": 20
+ },
+ {
+  "i": 134,
+  "texto": "olhando,",
+  "inicio": 51.522,
+  "fim": 51.947,
+  "frase": 20
+ },
+ {
+  "i": 135,
+  "texto": "e",
+  "inicio": 52.274,
+  "fim": 52.392,
+  "frase": 21
+ },
+ {
+  "i": 136,
+  "texto": "a",
+  "inicio": 52.404,
+  "fim": 52.51,
+  "frase": 21
+ },
+ {
+  "i": 137,
+  "texto": "terra",
+  "inicio": 52.522,
+  "fim": 52.84,
+  "frase": 21
+ },
+ {
+  "i": 138,
+  "texto": "devolve",
+  "inicio": 52.852,
+  "fim": 53.253,
+  "frase": 21
+ },
+ {
+  "i": 139,
+  "texto": "o",
+  "inicio": 53.265,
+  "fim": 53.3,
+  "frase": 21
+ },
+ {
+  "i": 140,
+  "texto": "celular,",
+  "inicio": 53.312,
+  "fim": 53.831,
+  "frase": 21
+ },
+ {
+  "i": 141,
+  "texto": "inteirinho.",
+  "inicio": 54.114,
+  "fim": 54.692,
+  "frase": 21
+ },
+ {
+  "i": 142,
+  "texto": "Cara...",
+  "inicio": 55.155,
+  "fim": 55.462,
+  "frase": 22
+ },
+ {
+  "i": 143,
+  "texto": "como",
+  "inicio": 55.693,
+  "fim": 55.945,
+  "frase": 22
+ },
+ {
+  "i": 144,
+  "texto": "você",
+  "inicio": 55.956,
+  "fim": 56.186,
+  "frase": 22
+ },
+ {
+  "i": 145,
+  "texto": "fez",
+  "inicio": 56.197,
+  "fim": 56.405,
+  "frase": 22
+ },
+ {
+  "i": 146,
+  "texto": "isso?",
+  "inicio": 56.416,
+  "fim": 56.8,
+  "frase": 22
+ },
+ {
+  "i": 147,
+  "texto": "Você",
+  "inicio": 57.267,
+  "fim": 57.692,
+  "frase": 23
+ },
+ {
+  "i": 148,
+  "texto": "só",
+  "inicio": 57.704,
+  "fim": 57.892,
+  "frase": 23
+ },
+ {
+  "i": 149,
+  "texto": "sorri.",
+  "inicio": 57.904,
+  "fim": 58.352,
+  "frase": 23
+ },
+ {
+  "i": 150,
+  "texto": "Melhor",
+  "inicio": 59.163,
+  "fim": 59.552,
+  "frase": 23
+ },
+ {
+  "i": 151,
+  "texto": "ninguém",
+  "inicio": 59.564,
+  "fim": 59.93,
+  "frase": 23
+ },
+ {
+  "i": 152,
+  "texto": "saber.",
+  "inicio": 59.941,
+  "fim": 60.331,
+  "frase": 23
+ },
+ {
+  "i": 153,
+  "texto": "Só",
+  "inicio": 60.798,
+  "fim": 61.104,
+  "frase": 24
+ },
+ {
+  "i": 154,
+  "texto": "que",
+  "inicio": 61.116,
+  "fim": 61.187,
+  "frase": 24
+ },
+ {
+  "i": 155,
+  "texto": "alguém",
+  "inicio": 61.199,
+  "fim": 61.47,
+  "frase": 24
+ },
+ {
+  "i": 156,
+  "texto": "filmou",
+  "inicio": 61.482,
+  "fim": 61.894,
+  "frase": 24
+ },
+ {
+  "i": 157,
+  "texto": "tudo.",
+  "inicio": 61.906,
+  "fim": 62.26,
+  "frase": 24
+ },
+ {
+  "i": 158,
+  "texto": "E",
+  "inicio": 62.727,
+  "fim": 62.845,
+  "frase": 25
+ },
+ {
+  "i": 159,
+  "texto": "o",
+  "inicio": 62.857,
+  "fim": 62.892,
+  "frase": 25
+ },
+ {
+  "i": 160,
+  "texto": "chão",
+  "inicio": 62.904,
+  "fim": 63.128,
+  "frase": 25
+ },
+ {
+  "i": 161,
+  "texto": "da",
+  "inicio": 63.14,
+  "fim": 63.211,
+  "frase": 25
+ },
+ {
+  "i": 162,
+  "texto": "escola",
+  "inicio": 63.222,
+  "fim": 63.647,
+  "frase": 25
+ },
+ {
+  "i": 163,
+  "texto": "começa",
+  "inicio": 63.659,
+  "fim": 64.095,
+  "frase": 25
+ },
+ {
+  "i": 164,
+  "texto": "a",
+  "inicio": 64.107,
+  "fim": 64.119,
+  "frase": 25
+ },
+ {
+  "i": 165,
+  "texto": "rachar.",
+  "inicio": 64.13,
+  "fim": 64.52,
+  "frase": 25
+ },
+ {
+  "i": 166,
+  "texto": "Lá",
+  "inicio": 64.987,
+  "fim": 65.152,
+  "frase": 26
+ },
+ {
+  "i": 167,
+  "texto": "embaixo,",
+  "inicio": 65.164,
+  "fim": 65.706,
+  "frase": 26
+ },
+ {
+  "i": 168,
+  "texto": "algo",
+  "inicio": 65.918,
+  "fim": 66.166,
+  "frase": 26
+ },
+ {
+  "i": 169,
+  "texto": "responde",
+  "inicio": 66.178,
+  "fim": 66.685,
+  "frase": 26
+ },
+ {
+  "i": 170,
+  "texto": "a",
+  "inicio": 66.697,
+  "fim": 66.72,
+  "frase": 26
+ },
+ {
+  "i": 171,
+  "texto": "você.",
+  "inicio": 66.732,
+  "fim": 67.168,
+  "frase": 26
+ },
+ {
+  "i": 172,
+  "texto": "Segue",
+  "inicio": 67.636,
+  "fim": 68.06,
+  "frase": 27
+ },
+ {
+  "i": 173,
+  "texto": "pra",
+  "inicio": 68.072,
+  "fim": 68.249,
+  "frase": 27
+ },
+ {
+  "i": 174,
+  "texto": "ver",
+  "inicio": 68.261,
+  "fim": 68.449,
+  "frase": 27
+ },
+ {
+  "i": 175,
+  "texto": "a",
+  "inicio": 68.461,
+  "fim": 68.544,
+  "frase": 27
+ },
+ {
+  "i": 176,
+  "texto": "parte",
+  "inicio": 68.555,
+  "fim": 68.921,
+  "frase": 27
+ },
+ {
+  "i": 177,
+  "texto": "dois!",
+  "inicio": 68.933,
+  "fim": 69.369,
+  "frase": 27
+ }
+]

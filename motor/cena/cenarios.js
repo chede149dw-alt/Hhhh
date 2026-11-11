@@ -105,6 +105,7 @@ export function criarRua() {
     fundo: Texturas.ceu('#8EC3E0', '#F3D9B3', '#F7C79A') || new THREE.Color('#F3D9B3'),
     nevoa: ['#F2D6B4', 18, 60],
     pontos: { lixeira: [3.5, 0.95, -5], carro: [-2, 0, 7] },
+    animar() {},
   };
 }
 
@@ -144,8 +145,10 @@ export function criarQuarto() {
   caixa(1.14, 0.9, 0.08, '#9C6B45', [0, 0.5, -1.02], { pai: cama, r: 0.03 });         // cabeceira
   // criado-mudo com despertador
   caixa(0.45, 0.5, 0.4, '#B7845A', [0.55, 0.25, -2.1], { r: 0.02 });
-  caixa(0.16, 0.12, 0.08, '#D23A42', [0.55, 0.56, -2.05], { r: 0.03 });
-  cil(0.045, 0.045, 0.01, '#F4EFE6', [0.55, 0.57, -2.0], { rot: [Math.PI / 2, 0, 0], seg: 18 });
+  const despertador = new THREE.Group(); despertador.position.set(0.55, 0.5, -2.05); grupo.add(despertador);
+  caixa(0.16, 0.12, 0.08, '#D23A42', [0, 0.06, 0], { r: 0.03, pai: despertador });
+  cil(0.045, 0.045, 0.01, '#F4EFE6', [0, 0.07, 0.045], { rot: [Math.PI / 2, 0, 0], seg: 18, pai: despertador });
+  for (const sl of [1, -1]) cil(0.03, 0.03, 0.02, '#EBC25A', [sl * 0.05, 0.14, 0], { rot: [0, 0, sl * 0.6], seg: 12, pai: despertador });   // sininhos
   // escrivaninha perto da janela, notebook, luminária e cadeira
   caixa(0.7, 0.05, 1.3, '#B7845A', [-1.82, 0.75, -1.7]);
   for (const [dx, dz] of [[-0.3, -0.6], [0.3, -0.6], [-0.3, 0.6], [0.3, 0.6]]) caixa(0.05, 0.75, 0.05, '#9C6B45', [-1.82 + dx, 0.375, -1.7 + dz]);
@@ -164,7 +167,7 @@ export function criarQuarto() {
   // prateleira com livros e pôsteres no fundo
   caixa(1.2, 0.04, 0.25, '#9C6B45', [-0.4, 1.7, ZT + 0.13]);
   const livros = ['#D23A42', '#3DB5B0', '#EBC25A', '#2B3B66', '#7FA65A', '#C9B8D9', '#D9A6A0'];
-  livros.forEach((c, i) => caixa(0.08, 0.24 + (i % 3) * 0.04, 0.18, c, [-0.9 + i * 0.12, 1.85 + (i % 3) * 0.02, ZT + 0.13]));
+  const livrosM = livros.map((c, i) => { const h = 0.24 + (i % 3) * 0.04, m = caixa(0.08, h, 0.18, c, [-0.9 + i * 0.12, 1.72 + h / 2, ZT + 0.13]); m.userData = { base: m.position.clone(), h, i }; return m; });
   plano(0.6, 0.85, mat('#2B3B66'), [0.35, 1.6, ZT + 0.01], [0, 0, 0]);
   plano(0.42, 0.42, mat('#EBC25A'), [0.35, 1.7, ZT + 0.015], [0, 0, 0]);
   plano(0.5, 0.5, mat('#3DB5B0'), [-1.35, 1.25, ZT + 0.01], [0, 0, 0.08]);
@@ -174,17 +177,110 @@ export function criarQuarto() {
   cil(0.8, 0.8, 0.014, '#E8C9A0', [0, 0.008, -0.2], { seg: 40, recebe: true, sombra: false });
   cil(0.18, 0.14, 0.32, '#D9A6A0', [-1.85, 0.16, 1.4]);
   copa(0.3, '#6E9A4E', [-1.85, 0.55, 1.4]); copa(0.22, '#5E8A45', [-1.75, 0.75, 1.32], { rot: [1, 0.3, 0] });
+  // vaso de terra no parapeito da janela (a terra flutua no episódio 1)
+  cil(0.1, 0.075, 0.16, '#C47A5A', [-X + 0.16, 0.99, zj + 0.35], { seg: 20 });
+  cil(0.105, 0.105, 0.02, '#B5654A', [-X + 0.16, 1.07, zj + 0.35], { seg: 20 });
+  const terraVaso = cil(0.092, 0.092, 0.03, null, [-X + 0.16, 1.055, zj + 0.35], { mat: mat('#FFFFFF', Texturas.terra(false)), seg: 20 });
+  // porta na parede da frente (abre para dentro; dobradiça do lado da parede direita)
+  const porta = new THREE.Group(); porta.position.set(1.75, 0, ZF - 0.03); grupo.add(porta);
+  caixa(0.86, 2.05, 0.05, '#C99A6E', [-0.43, 1.025, 0], { pai: porta, r: 0.01 });
+  cil(0.025, 0.025, 0.04, '#E8C76A', [-0.78, 1.0, -0.04], { rot: [Math.PI / 2, 0, 0], pai: porta, seg: 10 });
+  caixa(0.06, 2.12, 0.08, '#F4EFE6', [0.03, 1.06, -0.01]); caixa(0.06, 2.12, 0.08, '#F4EFE6', [1.75 - 0.92, 1.06, ZF - 0.04]);
+  caixa(0.98, 0.06, 0.08, '#F4EFE6', [1.75 - 0.43, 2.12, ZF - 0.04]);
   const lustre = cil(0.3, 0.38, 0.22, '#F4EFE6', [0, AL - 0.11, -0.3]);
   const marca = { pos: [0, 0, -0.2], giro: 0 };
   return {
     grupo, marca, nome: 'quarto',
-    areaLivre: { centro: [0, 0.1], raio: 1.55 },
+    areaLivre: { centro: [0, -0.3], raio: 1.85 },
     luz: { direcao: [-6, 4.5, 1.5], raioSombra: 4, alvo: [0, 0, -0.5] },
     fundo: new THREE.Color('#E9D9C4'),
     nevoa: ['#E9D9C4', 6, 14],
-    pontos: { janela: [-X, 1.55, zj], cama: [1.35, 0.6, -1.35], vaso: [-1.85, 0.55, 1.4] },
+    pontos: { janela: [-X, 1.55, zj], cama: [1.35, 0.6, -1.35], vaso: [-X + 0.16, 1.07, zj + 0.35], despertador: [0.55, 0.57, -2.05],
+      porta: [1.32, 1.0, ZF - 0.2], tapete: [0, 0.01, -0.2] },
     teto: AL, pecasTeto: [lustre],                 // somem quando a câmera passa do teto (plano zenital)
+    // objetos que se mexem com o tempo: lista de eventos { tipo, de, ate } (de todos os planos neste cenário)
+    animar(t, eventos = []) {
+      const ev = (tipo) => eventos.filter((e) => e.tipo === tipo);
+      despertador.rotation.set(0, 0, 0); despertador.position.y = 0.5;
+      for (const e of ev('despertador')) if (t >= e.de && t <= e.ate) { despertador.rotation.z = Math.sin(t * 90) * 0.12; despertador.position.y = 0.5 + Math.abs(Math.sin(t * 45)) * 0.012; }
+      let quedaLivros = null; for (const e of ev('livros')) if (t >= e.de) quedaLivros = e.de;
+      for (const m of livrosM) {
+        const { base, h, i } = m.userData; m.position.copy(base); m.rotation.set(0, 0, 0);
+        if (quedaLivros === null) continue;
+        const u = Math.max(0, t - quedaLivros - i * 0.07), chao = h / 2 + 0.01;
+        const y = base.y - 4.9 * u * u, sai = Math.min(u * 0.9, 0.5);
+        m.position.set(base.x + (i - 3) * 0.04 * Math.min(u * 3, 1), Math.max(chao, y), base.z + sai);
+        m.rotation.set(Math.min(u * 6, Math.PI / 2) * (i % 2 ? 1 : -1), 0, Math.min(u * 3, 0.6) * (i % 3 - 1));
+      }
+      let ab = 0; for (const e of ev('porta')) if (t >= e.de) ab = Math.min(1, (t - e.de) / 0.6);
+      porta.rotation.y = ab * ab * (3 - 2 * ab) * 1.4;
+      let nivel = 1; for (const e of ev('vaso')) if (t >= e.de) nivel = 1 - 0.8 * Math.min(1, (t - e.de) / Math.max(0.1, (e.ate || e.de + 1.5) - e.de));
+      terraVaso.scale.y = Math.max(0.05, nivel); terraVaso.position.y = 1.04 + 0.015 * nivel;
+    },
   };
 }
 
-export const CENARIOS = { rua: criarRua, quarto: criarQuarto };
+// --------------------------------------------------------------------------------------------- ESCOLA
+// Pátio da escola: piso de lajotas, prédio de 3 andares ao fundo (janelas; numa delas, uma silhueta filmando),
+// bancos, árvores, muretas e o bueiro com grade (o celular do Rafael cai nele).
+export function criarEscola() {
+  const grupo = new THREE.Group(); grupo.name = 'escola';
+  const { mat, caixa, cil, plano, brilho, copa, add } = ferramentas(grupo);
+  plano(40, 40, mat('#FFFFFF', Texturas.calcada([14, 14])), [0, 0, 0], [-Math.PI / 2, 0, 0], { recebe: true });
+  // prédio
+  const ZP = -9, LP = 24, AP = 9.5;
+  caixa(LP, AP, 4, null, [0, AP / 2, ZP - 2], { mat: mat('#FFFFFF', Texturas.parede('#E8C9A0', [6, 3])) });
+  caixa(LP + 0.4, 0.4, 4.4, '#C47A5A', [0, AP + 0.2, ZP - 2]);
+  for (let andar = 0; andar < 3; andar++) caixa(LP + 0.1, 0.12, 0.1, '#F4EFE6', [0, 0.1 + andar * 3.1, ZP + 0.02]);
+  const janelas = [];
+  for (let andar = 0; andar < 3; andar++) for (let k = -5; k <= 5; k++) {
+    if (andar === 0 && Math.abs(k) <= 1) continue;
+    const x = k * 2.1, y = 1.6 + andar * 3.1;
+    caixa(1.3, 1.5, 0.08, '#F4EFE6', [x, y, ZP + 0.02]);
+    const vidro = caixa(1.12, 1.32, 0.1, null, [x, y, ZP + 0.03], { mat: mat('#4D6A86') });
+    janelas.push({ x, y, vidro });
+  }
+  // entrada com porta dupla e letreiro
+  caixa(3.6, 3.0, 0.3, '#B5654A', [0, 1.5, ZP + 0.1]);
+  caixa(2.6, 2.4, 0.1, '#7A5236', [0, 1.2, ZP + 0.3]);
+  caixa(4.2, 0.7, 0.12, '#2B3B66', [0, 3.4, ZP + 0.3]);
+  // silhueta filmando numa janela do 2º andar (aparece no gancho)
+  const jan = janelas.find((j) => j.x > 4 && j.y > 4 && j.y < 6);
+  const silhueta = new THREE.Group(); silhueta.position.set(jan.x, jan.y - 0.55, ZP - 0.25); grupo.add(silhueta);
+  const sombra = mat('#1E1B26');
+  add(new THREE.CapsuleGeometry(0.22, 0.4, 4, 12), sombra, [0, 0.35, 0], [0, 0, 0], { pai: silhueta });
+  add(new THREE.SphereGeometry(0.18, 16, 12), sombra, [0, 0.95, 0], [0, 0, 0], { pai: silhueta });
+  add(new THREE.CapsuleGeometry(0.06, 0.3, 4, 8), sombra, [0.18, 0.75, 0.22], [1.2, 0, -0.3], { pai: silhueta });
+  const tela = new THREE.Mesh(new THREE.PlaneGeometry(0.12, 0.2), brilho('#CFEFFF'));
+  tela.position.set(0.22, 0.95, 0.42); silhueta.add(tela);
+  const luzTela = new THREE.PointLight('#BFE6FF', 0.0, 1.5, 2); luzTela.position.set(0.22, 0.95, 0.5); silhueta.add(luzTela);
+  silhueta.visible = false; jan.vidro.material = mat('#2E3E52');
+  // mureta, bancos, árvores, cesta de basquete ao longe
+  caixa(LP, 0.7, 0.3, null, [0, 0.35, ZP + 2.2], { mat: mat('#FFFFFF', Texturas.parede('#D9C7B0', [6, 0.5])) });
+  for (const x of [-6, 6]) { caixa(1.8, 0.08, 0.45, '#9C6B45', [x, 0.48, ZP + 3.2], { r: 0.02 }); for (const dx of [-0.75, 0.75]) caixa(0.08, 0.45, 0.4, '#5C5866', [x + dx, 0.23, ZP + 3.2]); }
+  for (const [x, z] of [[-8, -3], [8.5, -2.5], [-9, 4], [9, 5]]) {
+    cil(0.15, 0.2, 2.6, '#7A5236', [x, 1.3, z]);
+    copa(1.4, '#6E9A4E', [x, 3.3, z]); copa(1.0, '#5E8A45', [x + 0.5, 3.9, z + 0.3], { rot: [1, 0.2, 0.3] });
+  }
+  cil(0.06, 0.06, 3.2, '#8E8A86', [-6.5, 1.6, 6]); caixa(1.0, 0.7, 0.05, '#F4EFE6', [-6.5, 3.2, 5.8]);
+  // bueiro com grade, no chão, à frente da marca
+  const bx = 0.9, bz = 1.1;
+  caixa(0.7, 0.04, 0.5, '#5C5866', [bx, 0.02, bz], { recebe: true });
+  caixa(0.6, 0.05, 0.4, '#1E1B26', [bx, 0.015, bz]);
+  for (let k = -3; k <= 3; k++) caixa(0.03, 0.05, 0.42, '#7A7480', [bx + k * 0.08, 0.035, bz]);
+  const marca = { pos: [0, 0, 0], giro: 0 };
+  return {
+    grupo, marca, nome: 'escola',
+    areaLivre: { centro: [0, 1.5], raio: 4.5 },
+    luz: { direcao: [-6, 9, 7], raioSombra: 8, alvo: [0, 0, 0] },
+    fundo: Texturas.ceu('#8EC3E0', '#F3D9B3', '#F7C79A') || new THREE.Color('#F3D9B3'),
+    nevoa: ['#F2D6B4', 22, 70],
+    pontos: { bueiro: [bx, 0.03, bz], janela: [jan.x, jan.y, ZP + 0.05], silhueta: [jan.x, jan.y + 0.2, ZP] },
+    animar(t, eventos = []) {
+      let ve = false; for (const e of eventos) if (e.tipo === 'silhueta' && t >= e.de && t <= (e.ate ?? 1e9)) ve = true;
+      silhueta.visible = ve; luzTela.intensity = ve ? 0.8 + 0.2 * Math.sin(t * 9) : 0;
+    },
+  };
+}
+
+export const CENARIOS = { rua: criarRua, quarto: criarQuarto, escola: criarEscola };

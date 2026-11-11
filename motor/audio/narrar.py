@@ -17,7 +17,9 @@ if os.path.exists(_CA):
     certifi.where = lambda: _CA
 import edge_tts  # noqa: E402
 
-VOZES = {'narrador': 'pt-BR-AntonioNeural', 'mae': 'pt-BR-FranciscaNeural', 'lucas': 'pt-BR-AntonioNeural'}
+VOZES = {'narrador': 'pt-BR-AntonioNeural', 'mae': 'pt-BR-FranciscaNeural', 'lucas': 'pt-BR-AntonioNeural', 'rafael': 'pt-BR-AntonioNeural'}
+# jeito de falar de cada personagem (velocidade, tom), quando a frase não diz
+JEITO = {'rafael': ('+14%', '+28Hz'), 'mae': ('+4%', '+0Hz')}
 SR = 48000
 
 
@@ -55,7 +57,8 @@ def main(roteiro_arq, pasta):
     pedacos, palavras, t = [], [], float(roteiro.get('inicioNarracao', 0.25))
     for k, fr in enumerate(roteiro['frases']):
         voz = VOZES.get(fr.get('voz', 'narrador'), fr.get('voz', 'pt-BR-AntonioNeural'))
-        vel, tom = fr.get('velocidade', roteiro.get('velocidade', '+6%')), fr.get('tom', '+0Hz')
+        jv, jt = JEITO.get(fr.get('voz', 'narrador'), (roteiro.get('velocidade', '+6%'), '+0Hz'))
+        vel, tom = fr.get('velocidade', jv), fr.get('tom', jt)
         chave = hashlib.md5(f'{fr["texto"]}|{voz}|{vel}|{tom}'.encode()).hexdigest()[:12]
         mp3, js, wav = (os.path.join(cache, f'{k:02d}-{chave}.{e}') for e in ('mp3', 'json', 'wav'))
         if not (os.path.exists(mp3) and os.path.exists(js)):

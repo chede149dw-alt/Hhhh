@@ -121,7 +121,8 @@ export function camNoTempo(plano, ancoras, u, dur, areaLivre) {
     c = { pos, alvo, fov: plano.fov || 44, distancia: norma(sub(alvo, pos)) };
     foco = norma(sub(cab, pos));
   } else {
-    const a = plano.alvo === 'objeto' && obj ? { centro: obj.centro, giro: anc ? anc.giro : 0 } : anc;
+    const giroBase = plano.giroBase !== undefined ? plano.giroBase : (anc ? anc.giro : 0);
+    const a = plano.alvo === 'objeto' && obj ? { centro: obj.centro, giro: giroBase } : (plano.giroBase !== undefined && anc ? { ...anc, giro: giroBase } : anc);
     const tam = plano.alvo === 'objeto' && plano.tamanho !== 'detalhe' ? 'detalhe' : plano.tamanho;
     c = enquadrar(tam, a, { lado, angulo, elevacao: plano.elevacao, areaLivre, escalaDist, alturaQuadro: plano.alturaQuadro });
     foco = c.distancia;
