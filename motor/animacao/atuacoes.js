@@ -224,6 +224,7 @@ export const ATUACOES = {
   comemorar: { descricao: 'Comemora: pula com os punhos para cima e faz "yes!"', chaves: COMEMORAR, fim: 'repouso', impacto: 0.66,
     voos: [{ de: 0.5, ate: 0.9, altura: 0.28 }], sons: [{ t: 0.5, som: 'pulo' }, { t: 0.9, som: 'aterrissa' }, { t: 1.35, som: 'yes' }] },
   poder_terra: { descricao: 'Lucas usa o poder da terra: base firme, concentra e ergue as mãos', chaves: PODER_TERRA, fim: 'poder_terra', impacto: 1.2,
+    eventos: { forma: 0.95, cheia: 1.35 },
     sons: [{ t: 0.95, som: 'tremor' }, { t: 1.2, som: 'terra_sobe' }] },
   ataque_salto: { descricao: 'Ataque com salto: antecipa, salta, golpeia no ar e aterrissa em guarda', chaves: () => ATAQUE_SALTO.chaves, fim: 'guarda',
     impacto: 1.08, voos: ATAQUE_SALTO.voos, sons: [{ t: 0.6, som: 'pulo' }, { t: 1.08, som: 'golpe' }, { t: 1.3, som: 'aterrissa' }] },

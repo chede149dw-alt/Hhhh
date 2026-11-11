@@ -29,6 +29,8 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 5 — vídeos | folhas de 18 quadros de cada atuação + vídeo das 6 novas (18,3 s, 60 fps) | `previas/motor3d/atuacoes/` |
 | 6 — câmera | altura de quadro certa nos 3 tamanhos; câmera sempre dentro da área livre (sem mudar o enquadramento); empurrar/puxar/tremor; determinística | **passou** (`testes/camera.test.js`) |
 | 6 — cenários | rua e quarto, 3 enquadramentos cada; demos: poder da terra no quarto (cortes, empurrar/puxar/órbita, tremor no impacto) e andar na rua (travelling) | `previas/motor3d/cenarios/` (~1,4 quadros/s na nuvem) |
+| 7 — direção | roteiro de 3 planos: inícios na 1ª palavra, duração = fala + folga, tempos "pN+x"/"fim-x"/segundos, impacto na palavra; nomes errados recusados listando os existentes | **passou** (`testes/direcao.test.js`) |
+| 7 — demo | `roteiros/teste3d/roteiro.json` → 5 frases, 10 cortes, 15,4 s (palavras estimadas, sem voz) | `previas/motor3d/direcao/teste-direcao.mp4` (~1,6 quadros/s) |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -105,5 +107,14 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - Atuação `arremesso_terra` (eventos: forma, cheia, lançamento, impacto) + `criarImpactoTerra()` (pedras com gravidade, poeira, anel).
 - Demo: `visual/cena.html?cenario=quarto&demo=arremesso` (6 planos em 6 s) → `previas/motor3d/cenarios/quarto-arremesso.mp4`.
 
+## Direção (prompt 7) — `direcao/`
+- `direcao.js`: `dirigir(roteiro, palavras, catalogos)` → { duracao, palavras, planos[{ inicio, fim, cenario, atores[{ segmentos }], cameras[{ de, ate }], efeitos }] };
+  `estimarPalavras(roteiro)` (até a voz real); `tempo(expr)`; `ErroRoteiro` com a lista dos nomes que existem.
+- Ação com "palavra": começa em tPalavra − impacto da atuação (+ "desde" para pular a preparação); "alinhar": "inicio" para começar na palavra.
+- `dirigir.js` (linha de comando) com o catálogo de cenários, atuações e efeitos; imprime o resumo dos planos.
+- `visual/episodio.html?linha=…`: toca a linha do tempo. A linha do tempo de cada ator vale entre planos (ele continua o que fazia
+  no corte), transição de 0,3 s entre atuações, efeitos ligados às atuações (esfera, voo, impacto, rachadura), tremor do roteiro na câmera.
+- Regra de 2–3 s por plano: frases longas ganham cortes de câmera dentro da frase.
+
 ## Próxima etapa
-Prompt 7 — roteiro → planos → linha do tempo, com as ações caindo na palavra da narração.
+Prompt 8 — narração com Edge TTS (words.json com o instante real de cada palavra), sons sintetizados e mixagem a −14 LUFS.

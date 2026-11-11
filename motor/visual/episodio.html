@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{ "imports": { "three": "./lib/three/three.module.js" } }</script>
+</head>
+<body>
+<script type="module">
+  // Toca uma linha do tempo (prompt 7): episodio.html?linha=caminho/linha-do-tempo.json → window.quadro(t)
+  // Cada plano: cenário, atores com suas atuações (linha do tempo de cada ator vale entre planos), cortes de câmera e efeitos.
+  import * as THREE from 'three';
+  import { criarLuzes, criarRenderer, criarPos } from './estilo.js';
+  import { criarBoneco, REPOUSO } from '../personagem/boneco.js';
+  import { criarAnimacao, misturarPoses } from '../animacao/animador.js';
+  import { aplicar } from '../animacao/aplicar.js';
+  import { montarAtuacao } from '../animacao/atuacoes.js';
+  import { CENARIOS } from '../cena/cenarios.js';
+  import { camNoTempo } from '../cena/camera.js';
+  import { criarPoderTerra, criarRachaduraChao, criarImpactoTerra } from '../efeitos3d/terra.js';
+
+  const q = new URLSearchParams(location.search);
+  const linha = await (await fetch('/' + q.get('linha'))).json();
+  window.duracao = linha.duracao;
+  const W = 1080, H = 1920;
+  const renderer = criarRenderer(W, H);
+  const pos = criarPos(renderer, W, H);
+  const camera = new THREE.PerspectiveCamera(30, W / H, 0.05, 120);
+  const suave = (k) => { const x = Math.min(1, Math.max(0, k)); return x * x * (3 - 2 * x); };
+
+  // linha do tempo de cada ator, juntando todos os planos (o ator continua o que fazia no corte)
+  const segmentosDe = {};
+  for (const p of linha.planos) for (const a of p.atores) (segmentosDe[a.nome] ||= { ficha: a.ficha, lista: [] }).lista.push(...a.segmentos.map((s) => ({ ...s, plano: p.id })));
+  Object.values(segmentosDe).forEach((v) => v.lista.sort((x, y) => x.inicio - y.inicio));
+  const fichas = {};
+  for (const [nome, v] of Object.entries(segmentosDe)) fichas[nome] = await (await fetch('/' + (v.ficha || `personagens/${nome}/3d/ficha.json`))).json();
+
+  // cenas (uma por cenário, montadas uma vez)
+  const cenas = {};
+  function cenaDe(nome) {
+    if (cenas[nome]) return cenas[nome];
+    const cen = CENARIOS[nome]();
+    const cena = new THREE.Scene(); cena.add(cen.grupo); cena.background = cen.fundo; cena.fog = new THREE.Fog(...cen.nevoa);
+    const { sol } = criarLuzes(cena, { direcao: cen.luz.direcao, raioSombra: cen.luz.raioSombra });
+    sol.target.position.set(...cen.luz.alvo);
+    sol.position.set(cen.luz.alvo[0] + cen.luz.direcao[0], cen.luz.alvo[1] + cen.luz.direcao[1], cen.luz.alvo[2] + cen.luz.direcao[2]);
+    const fx = criarPoderTerra(), racha = criarRachaduraChao(), impacto = criarImpactoTerra();
+    cena.add(fx.grupo, racha.grupo, impacto.grupo);
+    return (cenas[nome] = { cen, cena, atores: {}, fx, racha, impacto });
+  }
+  function atorEm(c, nome, marca) {
+    if (c.atores[nome]) return c.atores[nome];
+    const palco = new THREE.Group();
+    palco.position.set(c.cen.marca.pos[0] + marca[0], c.cen.marca.pos[1], c.cen.marca.pos[2] + marca[1]);
+    palco.rotation.y = ((c.cen.marca.giro + (marca[2] || 0)) * Math.PI) / 180;
+    c.cena.add(palco);
+    const boneco = criarBoneco(fichas[nome]); palco.add(boneco.raiz);
+    return (c.atores[nome] = { palco, boneco });
+  }
+
+  // pose de um ator no instante t (com transição de 0,3 s entre atuações)
+  const anims = new Map();
+  const animDe = (s) => { const k = s.atuacao + JSON.stringify(s.opcoes || {}); if (!anims.has(k)) anims.set(k, { at: montarAtuacao(s.atuacao, s.opcoes || {}), anim: criarAnimacao(montarAtuacao(s.atuacao, s.opcoes || {})) }); return anims.get(k); };
+  const parado = criarAnimacao([{ t: 0, pose: { peEAlvo: [0.1, 0, 0], peDAlvo: [-0.1, 0, 0], ikPes: 1, juntas: { ...REPOUSO.juntas }, maos: { ...REPOUSO.maos }, rosto: 'neutro' } }]);
+  const local = (s, t) => t - s.inicio + ((s.opcoes && s.opcoes.desde) || 0);
+  function poseDe(nome, t) {
+    const lista = segmentosDe[nome].lista.filter((s) => s.inicio <= t);
+    if (!lista.length) return { pose: parado.final(t), seg: null };
+    const s = lista[lista.length - 1], atual = animDe(s).anim.final(local(s, t));
+    const ant = lista[lista.length - 2], dt = t - s.inicio;
+    if (dt < 0.3) {
+      const antes = ant ? animDe(ant).anim.final(local(ant, t)) : parado.final(t);
+      return { pose: misturarPoses(antes, atual, suave(dt / 0.3)), seg: s };
+    }
+    return { pose: atual, seg: s };
+  }
+
+  // efeitos ligados às atuações (esfera, voo, impacto, rachadura)
+  function efeitos(c, a, nome, t) {
+    let objeto = null;
+    c.fx.grupo.visible = false; c.racha.grupo.visible = false; c.impacto.grupo.visible = false;
+    for (const s of segmentosDe[nome].lista) {
+      if (s.inicio > t) continue;
+      const { at } = animDe(s), ev = at.eventos || {}, u = local(s, t);
+      if (!ev.forma) continue;
+      const proxima = segmentosDe[nome].lista.find((x) => x.inicio > s.inicio);
+      const ativo = !proxima || t < proxima.inicio || s.atuacao === 'arremesso_terra';
+      const peito = () => a.boneco.juntas.peito.localToWorld(new THREE.Vector3(0, 0.1, 0.42)).toArray();
+      if (s.atuacao === 'poder_terra' && (ativo || (proxima && proxima.atuacao === 'arremesso_terra' && t < proxima.inicio + 0.6))) {
+        objeto = peito();
+        c.fx.atualizar(t, { prog: (u - ev.forma) / (ev.cheia - ev.forma), centro: objeto, raio: 0.15, camera });
+        if (u > at.impacto) c.racha.atualizar((u - at.impacto) / 0.5, [a.palco.position.x, a.palco.position.z + 0.45], 2.2);
+      }
+      if (s.atuacao === 'arremesso_terra') {
+        const alvo = a.palco.localToWorld(new THREE.Vector3(0.1, 0, 1.35)).toArray();
+        if (u < ev.impacto) {
+          let p = peito();
+          if (u >= ev.lancamento) {
+            s._voo ||= (() => { const b = a.boneco; aplicar(b, animDe(s).anim.final(ev.lancamento)); b.raiz.updateMatrixWorld(true); const v = b.juntas.peito.localToWorld(new THREE.Vector3(0, 0.1, 0.42)).toArray(); return v; })();
+            const k = (u - ev.lancamento) / (ev.impacto - ev.lancamento);
+            p = s._voo.map((v, i) => v + (alvo[i] + (i === 1 ? 0.12 : 0) - v) * k); p[1] += 0.35 * 4 * k * (1 - k);
+          }
+          objeto = p;
+          if (u >= (ev.forma || 0)) c.fx.atualizar(t, { prog: u < ev.cheia ? (u - ev.forma) / (ev.cheia - ev.forma) : 1, centro: p, raio: 0.15, camera });
+        } else {
+          c.fx.grupo.visible = false;
+          c.impacto.atualizar(u - ev.impacto, alvo);
+          c.racha.atualizar((u - ev.impacto) / 0.45, [alvo[0], alvo[2]], 3.2);
+        }
+      }
+    }
+    return objeto;
+  }
+
+  const v3 = () => new THREE.Vector3();
+  function ancora(a, pose, giro) {
+    aplicar(a.boneco, pose); a.boneco.raiz.updateMatrixWorld(true);
+    return { pes: a.boneco.raiz.getWorldPosition(v3()).toArray(), cabeca: a.boneco.juntas.cabeca.localToWorld(new THREE.Vector3(0, 0.15, 0)).toArray(), giro };
+  }
+
+  window.quadro = (t) => {
+    const p = linha.planos.find((x) => t >= x.inicio && t < x.fim) || linha.planos[linha.planos.length - 1];
+    const c = cenaDe(p.cenario);
+    let anc = null, objeto = null;
+    p.atores.forEach((ad, i) => {
+      const a = atorEm(c, ad.nome, ad.marca);
+      const giro = c.cen.marca.giro + (ad.marca[2] || 0);
+      if (i === 0) {
+        const as = [-0.12, 0, 0.12].map((d) => ancora(a, poseDe(ad.nome, t + d).pose, giro));
+        anc = { pes: [0, 1, 2].map((k) => as.reduce((s, x) => s + x.pes[k], 0) / 3), cabeca: [0, 1, 2].map((k) => as.reduce((s, x) => s + x.cabeca[k], 0) / 3), giro };
+      }
+      aplicar(a.boneco, poseDe(ad.nome, t).pose);
+      a.boneco.raiz.updateMatrixWorld(true);
+      const o = efeitos(c, a, ad.nome, t); if (o && i === 0) objeto = o;
+    });
+    const cam = p.cameras.find((x) => t >= x.de && t < x.ate) || p.cameras[p.cameras.length - 1];
+    // efeitos de câmera declarados no roteiro (tremor)
+    const tremores = [...(cam.tremores || [])];
+    for (const e of p.efeitos) if (e.tipo === 'tremor') tremores.push({ t: e.de - cam.de, forca: e.forca || 0.04, dur: e.ate - e.de });
+    const cc = camNoTempo({ ...cam, tremores }, { personagem: anc, objeto: objeto ? { centro: objeto } : null }, t - cam.de, cam.ate - cam.de, c.cen.areaLivre);
+    camera.position.set(...cc.pos); camera.fov = cc.fov; camera.updateProjectionMatrix();
+    camera.up.set(...cc.cima); camera.lookAt(...cc.alvo); camera.up.set(0, 1, 0);
+    if (cc.rolagem) camera.rotateZ((cc.rolagem * Math.PI) / 180);
+    for (const m of c.cen.pecasTeto || []) m.visible = !(c.cen.teto && cc.pos[1] > c.cen.teto - 0.05);
+    pos.render(c.cena, camera, { t, foco: cc.foco || cc.distancia, faixa: 0.5, desfoque: 14, grao: 0.025, vinheta: 0.32 });
+  };
+  window.planoEm = (t) => (linha.planos.find((x) => t >= x.inicio && t < x.fim) || {}).id;
+  window.pronto = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,516 @@
+{
+  "titulo": "Teste da direção 3D — Lucas e a terra",
+  "duracao": 15.374,
+  "palavras": [
+    {
+      "i": 0,
+      "texto": "E",
+      "inicio": 0.25,
+      "fim": 0.408,
+      "frase": 0
+    },
+    {
+      "i": 1,
+      "texto": "se",
+      "inicio": 0.448,
+      "fim": 0.664,
+      "frase": 0
+    },
+    {
+      "i": 2,
+      "texto": "você",
+      "inicio": 0.704,
+      "fim": 1.036,
+      "frase": 0
+    },
+    {
+      "i": 3,
+      "texto": "acordasse",
+      "inicio": 1.076,
+      "fim": 1.698,
+      "frase": 0
+    },
+    {
+      "i": 4,
+      "texto": "controlando",
+      "inicio": 1.738,
+      "fim": 2.476,
+      "frase": 0
+    },
+    {
+      "i": 5,
+      "texto": "a",
+      "inicio": 2.516,
+      "fim": 2.674,
+      "frase": 0
+    },
+    {
+      "i": 6,
+      "texto": "terra?",
+      "inicio": 2.714,
+      "fim": 3.104,
+      "frase": 0
+    },
+    {
+      "i": 7,
+      "texto": "Lucas",
+      "inicio": 3.604,
+      "fim": 3.994,
+      "frase": 1
+    },
+    {
+      "i": 8,
+      "texto": "sentiu",
+      "inicio": 4.034,
+      "fim": 4.482,
+      "frase": 1
+    },
+    {
+      "i": 9,
+      "texto": "o",
+      "inicio": 4.522,
+      "fim": 4.68,
+      "frase": 1
+    },
+    {
+      "i": 10,
+      "texto": "chão",
+      "inicio": 4.72,
+      "fim": 5.052,
+      "frase": 1
+    },
+    {
+      "i": 11,
+      "texto": "tremer.",
+      "inicio": 5.092,
+      "fim": 5.54,
+      "frase": 1
+    },
+    {
+      "i": 12,
+      "texto": "A",
+      "inicio": 6.04,
+      "fim": 6.198,
+      "frase": 2
+    },
+    {
+      "i": 13,
+      "texto": "terra",
+      "inicio": 6.238,
+      "fim": 6.628,
+      "frase": 2
+    },
+    {
+      "i": 14,
+      "texto": "virou",
+      "inicio": 6.668,
+      "fim": 7.058,
+      "frase": 2
+    },
+    {
+      "i": 15,
+      "texto": "uma",
+      "inicio": 7.098,
+      "fim": 7.372,
+      "frase": 2
+    },
+    {
+      "i": 16,
+      "texto": "esfera",
+      "inicio": 7.412,
+      "fim": 7.86,
+      "frase": 2
+    },
+    {
+      "i": 17,
+      "texto": "nas",
+      "inicio": 7.9,
+      "fim": 8.174,
+      "frase": 2
+    },
+    {
+      "i": 18,
+      "texto": "mãos",
+      "inicio": 8.214,
+      "fim": 8.546,
+      "frase": 2
+    },
+    {
+      "i": 19,
+      "texto": "dele.",
+      "inicio": 8.586,
+      "fim": 8.918,
+      "frase": 2
+    },
+    {
+      "i": 20,
+      "texto": "E",
+      "inicio": 9.418,
+      "fim": 9.576,
+      "frase": 3
+    },
+    {
+      "i": 21,
+      "texto": "ele",
+      "inicio": 9.616,
+      "fim": 9.89,
+      "frase": 3
+    },
+    {
+      "i": 22,
+      "texto": "arremessou",
+      "inicio": 9.93,
+      "fim": 10.61,
+      "frase": 3
+    },
+    {
+      "i": 23,
+      "texto": "tudo",
+      "inicio": 10.65,
+      "fim": 10.982,
+      "frase": 3
+    },
+    {
+      "i": 24,
+      "texto": "no",
+      "inicio": 11.022,
+      "fim": 11.238,
+      "frase": 3
+    },
+    {
+      "i": 25,
+      "texto": "chão!",
+      "inicio": 11.278,
+      "fim": 11.61,
+      "frase": 3
+    },
+    {
+      "i": 26,
+      "texto": "Ele",
+      "inicio": 12.11,
+      "fim": 12.384,
+      "frase": 4
+    },
+    {
+      "i": 27,
+      "texto": "nem",
+      "inicio": 12.424,
+      "fim": 12.698,
+      "frase": 4
+    },
+    {
+      "i": 28,
+      "texto": "sabia",
+      "inicio": 12.738,
+      "fim": 13.128,
+      "frase": 4
+    },
+    {
+      "i": 29,
+      "texto": "que",
+      "inicio": 13.168,
+      "fim": 13.442,
+      "frase": 4
+    },
+    {
+      "i": 30,
+      "texto": "podia",
+      "inicio": 13.482,
+      "fim": 13.872,
+      "frase": 4
+    },
+    {
+      "i": 31,
+      "texto": "fazer",
+      "inicio": 13.912,
+      "fim": 14.302,
+      "frase": 4
+    },
+    {
+      "i": 32,
+      "texto": "isso.",
+      "inicio": 14.342,
+      "fim": 14.674,
+      "frase": 4
+    }
+  ],
+  "planos": [
+    {
+      "id": "plano1",
+      "frase": 0,
+      "texto": "E se você acordasse controlando a terra?",
+      "inicio": 0,
+      "fim": 3.604,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "geral",
+          "angulo": 40,
+          "lado": 35,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.2
+          },
+          "de": 0,
+          "ate": 1.8
+        },
+        {
+          "tamanho": "medio",
+          "lado": -30,
+          "angulo": -6,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 16
+          },
+          "de": 1.8,
+          "ate": 3.604
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano2",
+      "frase": 1,
+      "texto": "Lucas sentiu o chão tremer.",
+      "inicio": 3.604,
+      "fim": 6.04,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "poder_terra",
+              "inicio": 3.892,
+              "opcoes": {},
+              "palavra": "tremer",
+              "tPalavra": 5.092
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "angulo": -14,
+          "lado": -22,
+          "rolagem": 4,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          },
+          "de": 3.604,
+          "ate": 6.04
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "tremor",
+          "inicio": "p11",
+          "forca": 0.05,
+          "de": 5.092,
+          "ate": 6.04
+        }
+      ],
+      "trilha": null
+    },
+    {
+      "id": "plano3",
+      "frase": 2,
+      "texto": "A terra virou uma esfera nas mãos dele.",
+      "inicio": 6.04,
+      "fim": 9.418,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "primeiroPlano": {
+            "distancia": 0.8
+          },
+          "lado": 32,
+          "fov": 40,
+          "movimento": {
+            "tipo": "puxar",
+            "forca": 0.15
+          },
+          "reenquadres": [
+            {
+              "t": 0.7,
+              "dx": 0.04,
+              "dy": 0.02,
+              "zoom": 1.06,
+              "dur": 0.35
+            }
+          ],
+          "de": 6.04,
+          "ate": 7.74
+        },
+        {
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.7,
+          "lado": -60,
+          "angulo": 15,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 25
+          },
+          "de": 7.74,
+          "ate": 9.418
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano4",
+      "frase": 3,
+      "texto": "E ele arremessou tudo no chão!",
+      "inicio": 9.418,
+      "fim": 12.11,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": [
+            {
+              "atuacao": "arremesso_terra",
+              "inicio": 9.38,
+              "opcoes": {
+                "desde": 2.7
+              },
+              "palavra": "arremessou",
+              "tPalavra": 9.93
+            }
+          ]
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "medio",
+          "lado": 30,
+          "angulo": 2,
+          "de": 9.418,
+          "ate": 9.98
+        },
+        {
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1,
+          "lado": 95,
+          "angulo": 6,
+          "rolagem": -6,
+          "de": 9.98,
+          "ate": 10.48
+        },
+        {
+          "tamanho": "geral",
+          "alturaQuadro": 3.2,
+          "angulo": 89,
+          "giroRolagem": 22,
+          "tremores": [
+            {
+              "t": 0,
+              "forca": 0.06,
+              "dur": 0.7
+            }
+          ],
+          "movimento": {
+            "tipo": "subir",
+            "metros": 0.4
+          },
+          "de": 10.48,
+          "ate": 12.11
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    },
+    {
+      "id": "plano5",
+      "frase": 4,
+      "texto": "Ele nem sabia que podia fazer isso.",
+      "inicio": 12.11,
+      "fim": 15.374,
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas",
+          "marca": [
+            0,
+            0,
+            0
+          ],
+          "segmentos": []
+        }
+      ],
+      "cameras": [
+        {
+          "tamanho": "close",
+          "lado": 18,
+          "angulo": -8,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 14
+          },
+          "reenquadres": [
+            {
+              "t": 0.4,
+              "dx": -0.03,
+              "dy": 0.015,
+              "zoom": 1.05,
+              "dur": 0.35
+            }
+          ],
+          "de": 12.11,
+          "ate": 13.709999999999999
+        },
+        {
+          "tamanho": "medio",
+          "lado": -35,
+          "angulo": 4,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          },
+          "de": 13.709999999999999,
+          "ate": 15.374
+        }
+      ],
+      "efeitos": [],
+      "trilha": null
+    }
+  ]
+}

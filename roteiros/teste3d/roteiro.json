@@ -1,0 +1,206 @@
+{
+  "titulo": "Teste da direção 3D — Lucas e a terra",
+  "folga": 0.7,
+  "frases": [
+    {
+      "texto": "E se você acordasse controlando a terra?",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "geral",
+          "angulo": 40,
+          "lado": 35,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.2
+          }
+        },
+        {
+          "inicio": 1.8,
+          "tamanho": "medio",
+          "lado": -30,
+          "angulo": -6,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 16
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Lucas sentiu o chão tremer.",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas"
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "lucas",
+          "atuacao": "poder_terra",
+          "palavra": "tremer"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "angulo": -14,
+          "lado": -22,
+          "rolagem": 4,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          }
+        }
+      ],
+      "efeitos": [
+        {
+          "tipo": "tremor",
+          "inicio": "p11",
+          "forca": 0.05
+        }
+      ]
+    },
+    {
+      "texto": "A terra virou uma esfera nas mãos dele.",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas"
+        }
+      ],
+      "camera": [
+        {
+          "primeiroPlano": {
+            "distancia": 0.8
+          },
+          "lado": 32,
+          "fov": 40,
+          "movimento": {
+            "tipo": "puxar",
+            "forca": 0.15
+          },
+          "reenquadres": [
+            {
+              "t": 0.7,
+              "dx": 0.04,
+              "dy": 0.02,
+              "zoom": 1.06,
+              "dur": 0.35
+            }
+          ]
+        },
+        {
+          "inicio": 1.7,
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 0.7,
+          "lado": -60,
+          "angulo": 15,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 25
+          }
+        }
+      ]
+    },
+    {
+      "texto": "E ele arremessou tudo no chão!",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas"
+        }
+      ],
+      "acoes": [
+        {
+          "ator": "lucas",
+          "atuacao": "arremesso_terra",
+          "palavra": "arremessou",
+          "opcoes": {
+            "desde": 2.7
+          }
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "medio",
+          "lado": 30,
+          "angulo": 2
+        },
+        {
+          "inicio": "p22+0.05",
+          "alvo": "objeto",
+          "tamanho": "detalhe",
+          "alturaQuadro": 1.0,
+          "lado": 95,
+          "angulo": 6,
+          "rolagem": -6
+        },
+        {
+          "inicio": "p22+0.55",
+          "tamanho": "geral",
+          "alturaQuadro": 3.2,
+          "angulo": 89,
+          "giroRolagem": 22,
+          "tremores": [
+            {
+              "t": 0,
+              "forca": 0.06,
+              "dur": 0.7
+            }
+          ],
+          "movimento": {
+            "tipo": "subir",
+            "metros": 0.4
+          }
+        }
+      ]
+    },
+    {
+      "texto": "Ele nem sabia que podia fazer isso.",
+      "cenario": "quarto",
+      "atores": [
+        {
+          "nome": "lucas"
+        }
+      ],
+      "camera": [
+        {
+          "tamanho": "close",
+          "lado": 18,
+          "angulo": -8,
+          "movimento": {
+            "tipo": "orbita",
+            "graus": 14
+          },
+          "reenquadres": [
+            {
+              "t": 0.4,
+              "dx": -0.03,
+              "dy": 0.015,
+              "zoom": 1.05,
+              "dur": 0.35
+            }
+          ]
+        },
+        {
+          "inicio": 1.6,
+          "tamanho": "medio",
+          "lado": -35,
+          "angulo": 4,
+          "movimento": {
+            "tipo": "empurrar",
+            "forca": 0.12
+          }
+        }
+      ]
+    }
+  ]
+}
