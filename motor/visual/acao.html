@@ -16,16 +16,26 @@
   import { criarBoneco } from '../personagem/boneco.js';
   import { criarAnimacao } from '../animacao/animador.js';
   import { aplicar } from '../animacao/aplicar.js';
-  import { ATUACOES } from '../animacao/atuacoes.js';
+  import { montarAtuacao } from '../animacao/atuacoes.js';
 
   const q = new URLSearchParams(location.search);
   const nomeAcao = q.get('acao') || 'ataque_salto', folhaModo = q.get('modo') === 'folha';
   const ficha = await (await fetch('/' + (q.get('ficha') || 'personagens/lucas/3d/ficha.json'))).json();
-  const anim = criarAnimacao(ATUACOES[nomeAcao]);
+  const opcoes = JSON.parse(q.get('opcoes') || '{}');
+  const atuacao = montarAtuacao(nomeAcao, opcoes);
+  const anim = criarAnimacao(atuacao);
   window.duracao = anim.duracao;
+  window.atuacao = { nome: atuacao.nome, impacto: atuacao.impacto, sons: atuacao.sons, fim: atuacao.fim, duracao: anim.duracao };
+  // a câmera acompanha o personagem quando ele se desloca (andar, salto)
+  const seguir = (t) => ((anim.em(t).corpo || {}).z || 0);
 
   const cena = new THREE.Scene();
   const boneco = criarBoneco(ficha); cena.add(boneco.raiz);
+  if (atuacao.cenario && atuacao.cenario.banco) {
+    const b = atuacao.cenario.banco;
+    const banco = new THREE.Mesh(new THREE.BoxGeometry(0.42, b.altura, 0.36), new THREE.MeshToonMaterial({ color: '#B9A58C' }));
+    banco.position.set(0, b.altura / 2, b.z); banco.castShadow = true; banco.receiveShadow = true; cena.add(banco);
+  }
   const camera = new THREE.PerspectiveCamera(30, 9 / 16, 0.1, 100);
 
   if (!folhaModo) {
@@ -43,8 +53,9 @@
     const pos = criarPos(renderer, W, H);
     window.quadro = (t) => {
       aplicar(boneco, anim.final(t));
-      camera.position.set(4.0, 1.5, 3.7); camera.lookAt(0, 1.0, 0.22);
-      pos.render(cena, camera, { t, foco: camera.position.distanceTo(new THREE.Vector3(0, 1.0, 0.22)), faixa: 1.5, desfoque: 8, grao: 0.025, vinheta: 0.3 });
+      const zc = seguir(t), alvo = new THREE.Vector3(0, 1.0, zc + 0.22);
+      camera.position.set(4.0, 1.5, zc + 3.7); camera.lookAt(alvo);
+      pos.render(cena, camera, { t, foco: camera.position.distanceTo(alvo), faixa: 1.5, desfoque: 8, grao: 0.025, vinheta: 0.3 });
     };
   } else {
     const LW = 2400, COLS = 6, LIN = 3, M = 50, G = 16, CW = (LW - 2 * M - (COLS - 1) * G) / COLS, CH = Math.round(CW * 1.35);
@@ -63,10 +74,11 @@
       ctx.font = '500 34px sans-serif';
       ctx.fillText(`${anim.chaves.length} poses-chave: ${anim.chaves.map((c) => c.nome).join(' · ')}`, M, 155);
       camera.aspect = CW / CH; camera.fov = 30; camera.updateProjectionMatrix();
-      camera.position.set(4.6, 1.7, 4.2); camera.lookAt(0, 1.0, 0.22);
+      
       for (let i = 0; i < 18; i++) {
         const t = anim.inicio + (anim.duracao * i) / 17;
         aplicar(boneco, anim.final(t));
+        const zc = seguir(t); camera.position.set(4.6, 1.7, zc + 4.2); camera.lookAt(0, 1.0, zc + 0.22);
         renderer.render(cena, camera);
         const x = M + (i % COLS) * (CW + G), y = 190 + Math.floor(i / COLS) * (CH + 70 + G);
         ctx.fillStyle = '#FAF9F7'; ctx.beginPath(); ctx.roundRect(x, y, CW, CH + 70, 16); ctx.fill();

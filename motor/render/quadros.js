@@ -42,11 +42,17 @@ async function renderizar({ pagina, lista, saida, fps = 60, processos = 1, aoQua
   const navegador = await puppeteer.launch({ executablePath: CHROME, headless: true, args: FLAGS });
   const fatias = [...Array(processos)].map((_, k) => lista.filter((_, i) => i % processos === k));
   let feitos = 0;
-  await Promise.all(fatias.map(async (fatia) => {
+  // abre as páginas uma por vez (carregar várias juntas no WebGL por software pode passar do tempo) e só então renderiza
+  const paginas = [];
+  for (let k = 0; k < fatias.length; k++) {
     const p = await navegador.newPage();
     p.on('pageerror', (e) => { console.error('Erro na página:', e.message); process.exitCode = 1; });
     await p.goto(`${srv.url}/${pagina}`);
-    await p.waitForFunction('window.pronto === true', { timeout: 60000 });
+    await p.waitForFunction('window.pronto === true', { timeout: 180000, polling: 200 });
+    paginas.push(p);
+  }
+  await Promise.all(fatias.map(async (fatia, k) => {
+    const p = paginas[k];
     for (const q of fatia) {
       const b64 = await p.evaluate(async (t) => { await window.quadro(t); return window.capturar ? window.capturar() : document.querySelector('canvas').toDataURL('image/png').split(',')[1]; }, q / fps);
       fs.writeFileSync(path.join(saida, `quadro_${String(q).padStart(5, '0')}.png`), Buffer.from(b64, 'base64'));

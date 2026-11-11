@@ -24,6 +24,9 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 | 4 — pé plantado | 60 quadros de corpo descendo, girando e deslocando | **passou**, desliza < 1e-6 m |
 | 4 — fluidez | variação da velocidade vertical por quadro no ataque_salto < 0,9 m/s (deu 0,31); chave no meio de uma subida não freia | **passou** |
 | 4 — ataque_salto | 11 poses-chave + voo (parábola), folha de 18 quadros + vídeo 2,8 s 60 fps (168 quadros em 79,7 s, nuvem) | `previas/motor3d/ataque-salto-folha.png`, `ataque-salto.mp4` |
+| 5 — atuações | 7 atuações; chaves em ordem, sem pose vazia, impacto/sons dentro da duração, fim = repouso ou pausa declarada | **passou** (`testes/atuacoes.test.js`) |
+| 5 — andar | pé de apoio parado enquanto está no chão (4 passos) | **passou**, < 1e-6 m |
+| 5 — vídeos | folhas de 18 quadros de cada atuação + vídeo das 6 novas (18,3 s, 60 fps) | `previas/motor3d/atuacoes/` |
 | 2 — estilo | 180 quadros com névoa, foco raso, grão e vinheta | 84,6 s (2,1 quadros/s, nuvem); `previas/motor3d/teste-estilo.mp4` |
 
 ## Limitações conhecidas
@@ -71,5 +74,13 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
 - `atuacoes.js`: `ataque_salto` (pronto, antecipação, impulso, no ar, golpe, aterrissagem, assentamento, pronto, segura).
 - `visual/acao.html?acao=...` (vídeo) e `&modo=folha` (18 quadros).
 
+## Atuações (prompt 5) — `animacao/atuacoes.js`
+- `ATUACOES[nome] = { descricao, chaves(o), voos?, impacto, sons, fim, cenario? }`; `montarAtuacao(nome, o)`; `PAUSAS` (poses de fim).
+- andar (passos/passo/tempo configuráveis, pés plantados, braços opostos, quadril e peito girando), acenar, assustar
+  (pula para trás com voo), sentar_triste (banco), comemorar (pulo + "yes"), poder_terra (Lucas), ataque_salto.
+- Ficha: quadril 2 mm mais baixo (0,801) para a perna sempre alcançar o chão com os pés afastados (antes faltava 0,5 mm e o pé deslizava).
+- Render: as páginas agora carregam uma por vez (antes uma delas passava de 60 s carregando junto com as outras e o render caía).
+- Sons ainda são só nomes com instante; os efeitos sonoros são gerados no prompt 8.
+
 ## Próxima etapa
-Prompt 5 — biblioteca de atuações (ATUACOES) e prompt 6 — cenário e câmera por tamanho de plano.
+Prompt 6 — cenário e câmera por tamanho de plano (fechado, médio, aberto), com os efeitos de terra em 3D.

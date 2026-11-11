@@ -36,13 +36,14 @@ Rodar da raiz do projeto (`npm install` dentro de `motor/` na primeira vez).
 | `personagem/boneco.js` | Boneco articulado: `criarBoneco(ficha)`, `REPOUSO`, `POSES`, `misturar`, `EXPRESSOES`, `JUNTAS` |
 | `animacao/animador.js` | Poses-chave → pose no instante t: `criarAnimacao(chaves)`, `em(t)`, `final(t)`, `CURVAS`, `vida`, `piscar` (puro, sem three) |
 | `animacao/aplicar.js` | `aplicar(boneco, pose)` com IK dos pés e das mãos; `pontoSola`, `pontoPulso` |
-| `animacao/atuacoes.js` | Atuações prontas (`ATUACOES.ataque_salto`) |
+| `animacao/atuacoes.js` | Biblioteca de atuações: `ATUACOES`, `montarAtuacao(nome, opções)`, `PAUSAS` (andar, acenar, assustar, sentar_triste, comemorar, poder_terra, ataque_salto) |
 | `visual/acao.html` | Mostra uma atuação: `?acao=ataque_salto` (vídeo) ou `&modo=folha` (18 quadros) |
 | `visual/ficha3d.html` | Folha do personagem 3D (`?ficha=personagens/.../ficha.json`): vistas, bocas e poses |
 | `visual/teste-estilo.html` | Cena de teste do estilo (3 cubos + esfera nas cores do guia); `window.medirCores()` |
 | `testes/determinismo.test.js` | Mesmo instante → mesmo quadro (md5), em qualquer ordem |
 | `testes/boneco.test.js` | Juntas, altura, sola no chão, escala e mistura de poses |
 | `testes/animador.test.js` | Chaves exatas, curvas, IK < 1e-6 m, pé plantado, arrasto e piscar |
+| `testes/atuacoes.test.js` | Chaves em ordem, sem pose vazia, fim em repouso/pausa, pé de apoio do andar parado |
 | `testes/estilo.test.js` | Cor iluminada = cor do material (calibração da luz) |
 
 Contrato de página: expor `window.quadro(t)` (posiciona tudo pelo tempo `t` em segundos e desenha, sem relógio real)
