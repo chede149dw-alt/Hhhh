@@ -1,0 +1,15 @@
+{
+  "fabrica": "criarLucas", "registroPoses": "LUCAS_POSES", "cabecaPx": 120, "colunas": 5, "celulaLargura": 520, "celulaAltura": 900,
+  "variantes": [
+    { "id": "1", "nome": "Frente", "vista": "frente", "pose": "parado" },
+    { "id": "2", "nome": "3/4", "vista": "tq", "pose": {}, "expressao": "neutro" },
+    { "id": "3", "nome": "Perfil", "vista": "perfil", "pose": {}, "expressao": "neutro" },
+    { "id": "4", "nome": "Costas", "vista": "costas", "pose": "parado", "expressao": "neutro" },
+    { "id": "5", "nome": "Andando", "pose": "andando" },
+    { "id": "6", "nome": "Correndo", "pose": "correndo" },
+    { "id": "7", "nome": "Apontando", "pose": "apontando" },
+    { "id": "8", "nome": "Poder", "pose": "poder", "fundo": "#14122B" },
+    { "id": "9", "nome": "Caído", "pose": "caido" },
+    { "id": "10", "nome": "Perfil esq.", "vista": "perfil", "pose": {}, "expressao": "neutro", "espelhar": true }
+  ]
+}

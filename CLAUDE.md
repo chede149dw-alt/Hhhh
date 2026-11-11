@@ -13,3 +13,10 @@ Sempre salve cada arquivo na pasta certa:
 - `prontos/` — vídeos e entregas finais
 - `aprendizados.md` — registro do que funcionou ou não, para consultar nos próximos trabalhos
 - `guia-de-estilo.md` — regras visuais obrigatórias (cores, proporções, contorno, sombra, efeitos); seguir em todo personagem, cenário e efeito
+
+# Personagens oficiais (regra obrigatória)
+
+- **Lucas** (protagonista): seguir `personagens/lucas/ficha.md` e `personagens/lucas/ficha.png` em todos os vídeos.
+  Desenhar sempre com `personagens/lucas/lucas.js` (`criarLucas(opcoes, vista)`), sem alterar a aparência.
+  Usar só as vistas, expressões, poses e o poder (`efeitos/poder-energia.js`) definidos na ficha.
+  Mudança de design só com pedido e aprovação explícitos; depois, regerar a ficha.

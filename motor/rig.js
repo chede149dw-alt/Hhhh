@@ -85,27 +85,38 @@
       const calc = (p) => {
         if (m[p.nome]) return m[p.nome];
         const pai = p.pai ? calc(this.partes[p.pai]) : raiz;
-        m[p.nome] = pai.translate(p.pivo[0], p.pivo[1]).rotate(this.pose[p.nome] || 0);
+        // a peça-raiz (sem pai) pode ser deslocada pela pose: _desloca = [dx, dy] em H
+        const [dx, dy] = (!p.pai && this.pose._desloca) || [0, 0];
+        m[p.nome] = pai.translate(p.pivo[0] + dx, p.pivo[1] + dy).rotate(this.pose[p.nome] || 0);
         return m[p.nome];
       };
       for (const p of this.def.partes) calc(p);
       return m;
     }
+    // Ponto de uma peça em coordenadas da tela (depois de desenhar). Ex.: mão para ancorar um efeito.
+    pontoMundo(nome, [x, y] = [0, 0]) {
+      return this.ultimas[nome].transformPoint(new DOMPoint(x, y));
+    }
     // x, ySola: posição dos pés na tela (px); alturaPx: altura total do personagem na tela
-    desenhar(ctx, x, ySola, alturaPx) {
+    // o.espelhar: true vira o personagem para o outro lado (vistas de 3/4 e perfil olham para a direita)
+    desenhar(ctx, x, ySola, alturaPx, o = {}) {
       const A = this.def.alturaEmH;
       const H = alturaPx / A;
-      const raiz = new DOMMatrix().translate(x, ySola).scale(H).translate(0, -A);
+      const raiz = new DOMMatrix().translate(x, ySola).scale(o.espelhar ? -H : H, H).translate(0, -A);
       const m = this.matrizes(raiz);
+      this.ultimas = m;
+      this.escalaPx = H;
       const linha = E().contorno(A) * (this.def.fatorContorno || 1);
 
       // sombra no chão (seção 6)
       ctx.save();
-      ctx.setTransform(new DOMMatrix().translate(x, ySola).scale(H));
+      ctx.setTransform(new DOMMatrix().translate(x, ySola).scale(o.espelhar ? -H : H, H));
       ctx.filter = `blur(${12}px)`;
       ctx.fillStyle = E().sombraChao;
       ctx.beginPath();
-      ctx.ellipse(0, 0, (this.def.larguraOmbrosH * 1.1) / 2, 0.09, 0, 0, Math.PI * 2);
+      // _sombra: [fator de largura, deslocamento x em H] (ex.: personagem deitado tem sombra comprida)
+      const [fs, sxH] = this.pose._sombra || [1, 0];
+      ctx.ellipse(sxH, 0, (this.def.larguraOmbrosH * 1.1 * fs) / 2, 0.09, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
 

@@ -21,3 +21,13 @@
 - Olhos ovais com pálpebra reta deixam todas as expressões com cara de sono: a borda da pálpebra precisa ser curva e acompanhar o olho.
 - Para expressões ficarem distintas, mexer em mais de uma coisa: olhos fechados em arco (feliz), gota de suor (assustado), pálpebra inclinada (triste/determinado).
 - Folha de rostos: enquadrar com a cabeça a ~0,55 H do topo da célula, senão o volume do cabelo é cortado.
+
+## Ficha oficial do Lucas
+- Vistas de 3/4 e perfil saem de uma projeção cilíndrica simples (x de frente → r·sen(φ+θ)): olhos, sobrancelhas, blush e franja se posicionam sozinhos, e o olho do outro lado some quando cos < 0,22.
+- No 3/4 e perfil, o cabelo precisa de um contorno próprio por trás: costeleta → volta por cima da orelha → nuca em pontas → silhueta de trás em cunhas. Sem as cunhas atrás, o cabelo fica liso e não parece o mesmo personagem.
+- A nuca não pode descer abaixo de y ≈ −0,1 H, senão vira uma "mecha escorrendo" até o queixo.
+- Linhas internas do cabelo: recortar (clip) dentro do cabelo, senão escapam no perfil.
+- Profundidade de lado: lado perto (_d) na frente do tronco, lado longe (_e) atrás de tudo.
+- Personagem deitado: girar a peça-raiz (quadril) e deslocá-la com `_desloca`; a sombra no chão precisa ficar mais comprida (`_sombra`).
+- Boca de raiva com dentes parece sorriso se a borda de cima for reta: curvar para baixo nos cantos.
+- Efeito brilhante só funciona em célula de fundo escuro (o guia já pedia luminância ≤ 20%).

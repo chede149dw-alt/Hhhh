@@ -1,0 +1,47 @@
+{
+  "fabrica": "criarLucas",
+  "registroPoses": "LUCAS_POSES",
+  "opcoes": {},
+  "titulo": "LUCAS",
+  "subtitulo": "Protagonista · jovem comum que acorda com poderes · 18–25 anos · curioso → assustado → corajoso",
+  "paleta": [
+    { "nome": "Marinho", "cor": "#2B3B66" },
+    { "nome": "Turquesa", "cor": "#3DB5B0" },
+    { "nome": "Grafite", "cor": "#38343F" },
+    { "nome": "Linho", "cor": "#F2EDE6" },
+    { "nome": "Pele", "cor": "#C98B63" },
+    { "nome": "Cabelo", "cor": "#2C2936" },
+    { "nome": "Poder", "cor": "#3FC3F0" }
+  ],
+  "vistas": [
+    { "nome": "Frente", "vista": "frente", "pose": "parado" },
+    { "nome": "3/4", "vista": "tq" },
+    { "nome": "Perfil", "vista": "perfil" },
+    { "nome": "Costas", "vista": "costas", "pose": "parado" }
+  ],
+  "expressoes": [
+    { "nome": "Neutro", "expressao": "neutro" },
+    { "nome": "Feliz", "expressao": "feliz" },
+    { "nome": "Espanto", "expressao": "espanto" },
+    { "nome": "Medo", "expressao": "medo" },
+    { "nome": "Raiva", "expressao": "raiva" },
+    { "nome": "Determinado", "expressao": "determinado" },
+    { "nome": "Cansado", "expressao": "cansado" },
+    { "nome": "Rindo", "expressao": "rindo" }
+  ],
+  "poses": [
+    { "nome": "Parado", "pose": "parado" },
+    { "nome": "Andando", "pose": "andando", "dx": -10 },
+    { "nome": "Correndo", "pose": "correndo", "dx": 20 },
+    { "nome": "Apontando", "pose": "apontando", "dx": -60 },
+    { "nome": "Soltando poder", "pose": "poder", "dx": -150, "fundo": "#14122B" },
+    { "nome": "Caído", "pose": "caido", "dx": 50, "subir": 90 }
+  ],
+  "regras": [
+    "Altura 5,5 cabeças; cabeça redonda e grande (0,97 H); contorno 1,35× o padrão do guia; luz de cima à esquerda.",
+    "Moletom Marinho #2B3B66 largo com capuz, faixa Turquesa #3DB5B0 na manga, cordões Linho. Calça Grafite larga com barra embolada.",
+    "Tênis Linho de cano alto com gola e biqueira Turquesa. Cabelo Noite #2C2936 curto, bagunçado, com franja em mechas.",
+    "Olhos pequenos ovais castanhos com cílio grosso; sobrancelhas grossas e arqueadas; pele morena #C98B63.",
+    "Poder: Energia (núcleo #FFFDF2, miolo #CDF6FF, principal #3FC3F0, aura #2A6FD6), saindo das mãos abertas."
+  ]
+}
