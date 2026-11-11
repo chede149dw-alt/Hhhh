@@ -1,0 +1,44 @@
+{
+  "serie": "E se você acordasse controlando a terra?",
+  "episodio": 1,
+  "parte": 1,
+  "versao": 2,
+  "status": "rascunho — aguardando aprovação",
+  "planos": [
+    { "id": "capa", "duracao": 2.0, "fala": { "texto": "E se você acordasse controlando a terra?", "voz": "narrador", "velocidade": 185 }, "destaque": ["TERRA?"],
+      "imagem": "Capa: Lucas no quarto com a esfera de terra brilhando nas mãos." },
+
+    { "id": "despertador", "fala": { "texto": "Seis e meia. O despertador toca.", "voz": "narrador" }, "destaque": ["TOCA."], "imagem": "Close no despertador tocando ao lado do Lucas dormindo." },
+    { "id": "tapa", "fala": { "texto": "Você dá um tapa nele,", "voz": "narrador" }, "destaque": ["TAPA"], "imagem": "A mão do Lucas bate no despertador; impacto de terra e poeira." },
+    { "id": "treme", "fala": { "texto": "e o quarto inteiro treme.", "voz": "narrador" }, "destaque": ["TREME."], "imagem": "O quarto chacoalha; livros caem; poeira do teto." },
+    { "id": "olha-maos", "fala": { "texto": "Você olha pras mãos. Foi você?", "voz": "narrador" }, "destaque": ["VOCÊ?"], "imagem": "Close no Lucas olhando as mãos; os olhos sobem, a cabeça vira para o vaso (reação em três tempos)." },
+    { "id": "vaso", "fala": { "texto": "A terra do vaso começa a flutuar.", "voz": "narrador" }, "destaque": ["FLUTUAR."], "imagem": "O vaso na janela, contra a luz: a terra sobe em grãos." },
+    { "id": "dedos", "fala": { "texto": "Você mexe os dedos, e ela obedece.", "voz": "narrador" }, "destaque": ["OBEDECE."], "imagem": "Close na mão: os dedos mexem e fecham; a esfera se forma em cima da palma." },
+    { "id": "brinca", "fala": { "texto": "Você faz a terra dar uma volta pelo quarto.", "voz": "narrador" }, "destaque": ["VOLTA"], "imagem": "A esfera passa voando perto da câmera, contorna a luminária e volta para a mão; Lucas rindo." },
+    { "id": "maior", "fala": { "texto": "Quanto mais você sorri, maior ela fica.", "voz": "narrador" }, "destaque": ["MAIOR"], "imagem": "A esfera cresce, as rachaduras brilham mais, o cabelo do Lucas balança com o vento de poeira." },
+
+    { "id": "mae", "fala": { "texto": "Lucas! Desce pro café!", "voz": "mae" }, "destaque": ["CAFÉ!"], "imagem": "A mãe abre a porta e chama." },
+    { "id": "susto", "fala": { "texto": "O susto faz a terra despencar no tapete.", "voz": "narrador" }, "destaque": ["TAPETE."], "imagem": "A esfera desmancha e cai no tapete numa nuvem de poeira." },
+    { "id": "mae-tapete", "fala": { "texto": "Que sujeira é essa, menino?", "voz": "mae" }, "destaque": ["SUJEIRA"], "imagem": "Close na mãe de mãos na cintura, olhando o tapete." },
+    { "id": "regra", "fala": { "texto": "Regra um: o poder segue o que você sente.", "voz": "narrador" }, "destaque": ["SENTE."], "imagem": "Close no Lucas com sorriso amarelo; a poeira ainda caindo à frente." },
+
+    { "id": "rua", "fala": { "texto": "Atrasado, você bate o pé no chão,", "voz": "narrador" }, "destaque": ["ATRASADO,"], "imagem": "Rua, câmera atrás do Lucas: pisão com impacto de terra." },
+    { "id": "racha-rua", "fala": { "texto": "e a calçada racha até a esquina.", "voz": "narrador" }, "destaque": ["ESQUINA."], "imagem": "A rachadura brilhando corre pela rua até a esquina." },
+    { "id": "onda", "fala": { "texto": "Uma onda de terra te leva rua abaixo.", "voz": "narrador" }, "destaque": ["ONDA"], "imagem": "Plano de lado: Lucas surfa a crista da onda de terra, rindo." },
+    { "id": "vizinho", "fala": { "texto": "O vizinho deixa o café cair.", "voz": "narrador" }, "destaque": ["CAIR."], "imagem": "O vizinho de boca aberta; o copo de café cai e espirra." },
+
+    { "id": "patio", "fala": { "texto": "Na escola, o Rafael tropeça,", "voz": "narrador" }, "destaque": ["RAFAEL"], "imagem": "Pátio: Rafael tropeça e o celular escorrega da mão." },
+    { "id": "celular", "fala": { "texto": "e o celular dele some no bueiro.", "voz": "narrador" }, "destaque": ["BUEIRO."], "imagem": "O celular cai e some na grade do bueiro." },
+    { "id": "rafael-nao", "fala": { "texto": "Não! Meu celular novo!", "voz": "rafael" }, "destaque": ["NOVO!"], "imagem": "Close no Rafael desesperado, mãos na cabeça." },
+    { "id": "confere", "fala": { "texto": "Você confere se ninguém está olhando,", "voz": "narrador" }, "destaque": ["NINGUÉM"], "imagem": "Close no Lucas: olhos para um lado e para o outro, a cabeça vira (reação em três tempos)." },
+    { "id": "coluna", "fala": { "texto": "e a terra devolve o celular, inteirinho.", "voz": "narrador" }, "destaque": ["INTEIRINHO."], "imagem": "Erupção no bueiro e coluna de terra trazendo o celular; linhas de energia saindo da mão do Lucas." },
+    { "id": "rafael-como", "fala": { "texto": "Cara... como você fez isso?", "voz": "rafael" }, "destaque": ["ISSO?"], "imagem": "Close no Rafael com o celular sujo de terra." },
+    { "id": "segredo", "fala": { "texto": "Você só sorri. Melhor ninguém saber.", "voz": "narrador" }, "destaque": ["SABER."], "imagem": "Close no Lucas sorrindo de canto, piscando para a câmera." },
+
+    { "id": "filmando", "fala": { "texto": "Só que alguém filmou tudo.", "voz": "narrador" }, "destaque": ["FILMOU"], "imagem": "Zoom lento numa janela do prédio: uma silhueta com o celular apontado, a tela brilhando." },
+    { "id": "racha", "fala": { "texto": "E o chão da escola começa a rachar.", "voz": "narrador" }, "destaque": ["RACHAR."], "imagem": "Rachaduras correm pelo pátio até os pés do Lucas; câmera tremendo." },
+    { "id": "embaixo", "fala": { "texto": "Lá embaixo, algo responde a você.", "voz": "narrador" }, "destaque": ["RESPONDE"], "imagem": "Pelas rachaduras sobe uma luz âmbar forte do subsolo; o rosto do Lucas iluminado de baixo, com medo." },
+
+    { "id": "parte", "duracao": 3.0, "fala": { "texto": "Segue pra ver a parte dois!", "voz": "narrador" }, "imagem": "Cartela final: PARTE 1 + SEGUE PRA VER A PARTE 2, botão de seguir pulsando." }
+  ]
+}

@@ -343,4 +343,5 @@ Pedido: deixar os vídeos menos cartunescos, mais perto das referências. Vale p
 - **Linhas de energia:** quando o Lucas controla a terra à distância, linhas âmbar curvas ligam a mão ao alvo, com grãos brilhando viajando por elas.
 - **Mão em close** (`motor/mao-detalhe.js`): nos momentos de poder, um plano da mão grande na tela, dedos articulados mexendo e fechando, punho do moletom com a faixa.
 - **Objetos redondos** usam cilindro com degradê (`Cena3D.cilindro`), nunca caixa.
-- **Final de todo episódio:** "PARTE X" + "SEGUE PRA VER A PARTE X+1", botão de seguir animado e fala do narrador (cartela de 3 s).
+- **Final de todo episódio:** "PARTE X" + "SEGUE PRA VER A PARTE X+1", botão de seguir pulsando de leve (sem mão clicando) e fala do narrador (cartela de 3 s).
+- **Duração:** no máximo 1 min 15 s por episódio.

@@ -251,20 +251,13 @@
       ctx.save(); ctx.translate(540, 1130); ctx.scale(k2, k2); ctx.translate(-540, -1130);
       api.texto('SEGUE PRA VER', 540, 1090, 84); api.texto('A PARTE 2', 540, 1190, 96, { cor: Estilo.base.mostarda });
       ctx.restore();
-      // botão de seguir: aparece, é "tocado" e vira "seguindo"
-      const k3 = api.fase(0.9, 1.2, 'volta'), toque = api.fase(1.7, 1.85), seguindo = u > 1.85;
-      const esc = k3 * (1 - 0.12 * Math.sin(toque * Math.PI));
-      ctx.save(); ctx.translate(540, 1420); ctx.scale(esc, esc);
-      ctx.fillStyle = seguindo ? '#F2EDE6' : '#D23A42';
-      ctx.beginPath(); ctx.roundRect(-230, -62, 460, 124, 62); ctx.fill();
+      // botão de seguir: aparece e pulsa de leve (sem mão clicando)
+      const k3 = api.fase(0.9, 1.2, 'volta'), pulso = 1 + Math.sin(api.t * 6) * 0.04;
+      ctx.save(); ctx.translate(540, 1420); ctx.scale(k3 * pulso, k3 * pulso);
+      ctx.fillStyle = '#D23A42'; ctx.beginPath(); ctx.roundRect(-230, -62, 460, 124, 62); ctx.fill();
       ctx.font = '900 64px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillStyle = seguindo ? '#211B26' : '#FFFFFF'; ctx.fillText(seguindo ? 'SEGUINDO ✓' : '+ SEGUIR', 0, 4);
+      ctx.fillStyle = '#FFFFFF'; ctx.fillText('+ SEGUIR', 0, 4);
       ctx.restore();
-      // dedo tocando o botão
-      if (u > 1.3 && u < 2.4) {
-        const dy = api.lerp(260, 40, api.fase(1.3, 1.75, 'entra')) + (u > 1.85 ? api.fase(1.85, 2.2) * 200 : 0);
-        Maos.desenhar(ctx, 640, 1420 + dy + 380, 210, { ang: -0.15, curl: [0.8, 0, 0.95, 1, 1], abre: 0.2 });
-      }
     },
   };
 })();

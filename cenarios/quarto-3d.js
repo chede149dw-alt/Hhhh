@@ -148,6 +148,76 @@
         else caixaLuz(ctx, cam, bx - 0.1, bx + h - 0.1, 0, w * 0.8, ZF - 0.6 + i * 0.05, ZF - 0.35 + i * 0.05, c, LUZ, { linha: 1 });
         bx += w + 0.015;
       });
+      // ---------- detalhes do quarto ----------
+      // escrivaninha com notebook aceso, luminária e cadeira com moletom pendurado (parede do fundo, entre a prateleira e a porta)
+      caixaLuz(ctx, cam, -0.15, 0.78, 0.72, 0.77, ZF - 0.55, ZF - 0.01, madeiraC, LUZ, { linha: 1.5 });
+      for (const lx of [-0.12, 0.7]) caixaLuz(ctx, cam, lx, lx + 0.05, 0, 0.72, ZF - 0.5, ZF - 0.45, madeira, LUZ, { linha: 1 });
+      caixaLuz(ctx, cam, 0.48, 0.74, 0.3, 0.72, ZF - 0.52, ZF - 0.08, madeira, LUZ, { linha: 1 });
+      // notebook: base e tela com brilho azulado
+      caixaLuz(ctx, cam, 0.0, 0.36, 0.77, 0.79, ZF - 0.42, ZF - 0.18, '#6A6573', LUZ, { linha: 1 });
+      face(ctx, cam, [[0.0, 0.79, ZF - 0.2], [0.36, 0.79, ZF - 0.2], [0.36, 1.03, ZF - 0.12], [0.0, 1.03, ZF - 0.12]], '#3A3446', { linha: 1 });
+      face(ctx, cam, [[0.02, 0.81, ZF - 0.195], [0.34, 0.81, ZF - 0.195], [0.34, 1.01, ZF - 0.118], [0.02, 1.01, ZF - 0.118]], '#9FD8F0', { contorno: false });
+      ctx.save(); ctx.globalCompositeOperation = 'screen';
+      const nb = cam.p(0.18, 0.9, ZF - 0.2), gnb = ctx.createRadialGradient(nb.x, nb.y, 0, nb.x, nb.y, nb.s * 0.5);
+      gnb.addColorStop(0, 'rgba(150,210,255,0.35)'); gnb.addColorStop(1, 'rgba(150,210,255,0)'); ctx.fillStyle = gnb; ctx.fillRect(nb.x - nb.s, nb.y - nb.s, nb.s * 2, nb.s * 2);
+      ctx.restore();
+      // luminária de mesa (haste e cúpula) com halo quente
+      Cena3D.cilindro(ctx, cam, 0.62, ZF - 0.3, 0.77, 0.79, 0.06, 0.06, '#38343F', LUZ);
+      linhas3d(ctx, cam, [[[0.62, 0.79, ZF - 0.3], [0.58, 1.08, ZF - 0.3]], [[0.58, 1.08, ZF - 0.3], [0.48, 1.14, ZF - 0.32]]], '#38343F', 0.015);
+      Cena3D.cilindro(ctx, cam, 0.46, ZF - 0.32, 1.06, 1.15, 0.08, 0.04, '#EBC25A', LUZ);
+      ctx.save(); ctx.globalCompositeOperation = 'screen';
+      const lm = cam.p(0.46, 1.0, ZF - 0.32), glm = ctx.createRadialGradient(lm.x, lm.y, 0, lm.x, lm.y, lm.s * 0.45);
+      glm.addColorStop(0, 'rgba(255,214,150,0.5)'); glm.addColorStop(1, 'rgba(255,214,150,0)'); ctx.fillStyle = glm; ctx.fillRect(lm.x - lm.s, lm.y - lm.s, lm.s * 2, lm.s * 2);
+      ctx.restore();
+      // cadeira com moletom cinza pendurado
+      caixaLuz(ctx, cam, 0.08, 0.5, 0.44, 0.49, ZF - 1.0, ZF - 0.62, '#38343F', LUZ, { linha: 1 });
+      caixaLuz(ctx, cam, 0.08, 0.5, 0.49, 0.95, ZF - 0.66, ZF - 0.62, '#38343F', LUZ, { linha: 1 });
+      for (const [lx, lz] of [[0.1, ZF - 0.98], [0.46, ZF - 0.98], [0.1, ZF - 0.66], [0.46, ZF - 0.66]]) caixaLuz(ctx, cam, lx, lx + 0.03, 0, 0.44, lz, lz + 0.03, '#2A2632', LUZ, { linha: 0.5 });
+      faceLuz(ctx, cam, [[0.1, 0.6, ZF - 0.67], [0.48, 0.6, ZF - 0.67], [0.5, 0.97, ZF - 0.67], [0.08, 0.97, ZF - 0.67]], '#6A6573', LUZ, { linha: 1 });
+      // quadro de fotos na parede direita (acima da cama)
+      faceLuz(ctx, cam, [[XR - 0.005, 1.45, 1.4], [XR - 0.005, 1.45, 2.5], [XR - 0.005, 2.15, 2.5], [XR - 0.005, 2.15, 1.4]], madeiraC, LUZ, { linha: 1.5 });
+      [[1.5, 1.95, 'turquesa'], [1.85, 1.75, 'coral'], [2.15, 1.98, 'mostarda'], [1.62, 1.58, 'lilas'], [2.2, 1.6, 'denim']].forEach(([fz, fy, c]) => {
+        face(ctx, cam, [[XR - 0.008, fy - 0.12, fz], [XR - 0.008, fy - 0.12, fz + 0.2], [XR - 0.008, fy + 0.12, fz + 0.2], [XR - 0.008, fy + 0.12, fz]], '#F2EDE6', { linha: 0.8 });
+        face(ctx, cam, [[XR - 0.009, fy - 0.08, fz + 0.03], [XR - 0.009, fy - 0.08, fz + 0.17], [XR - 0.009, fy + 0.1, fz + 0.17], [XR - 0.009, fy + 0.1, fz + 0.03]], Cena3D.corPorBrilho(T(c).base, 0.55, LUZ), { contorno: false });
+      });
+      // varal de luzinhas (parede do fundo e parede direita), piscando de leve
+      const fio = [];
+      for (let k = 0; k <= 20; k++) { const x = XL + 0.2 + (XR - XL - 0.4) * (k / 20); fio.push([x, 2.42 - Math.sin((k % 5) / 5 * Math.PI) * 0.08, ZF - 0.02]); }
+      for (let k = 0; k < fio.length - 1; k++) linhas3d(ctx, cam, [[fio[k], fio[k + 1]]], 'rgba(60,45,60,0.6)', 0.004);
+      ctx.save(); ctx.globalCompositeOperation = 'screen';
+      fio.forEach((pt, k) => {
+        const q = cam.p(...pt), a = 0.6 + 0.4 * Math.sin(tt * 3 + k * 1.7);
+        const gl = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.s * 0.07);
+        gl.addColorStop(0, `rgba(255,226,170,${a})`); gl.addColorStop(1, 'rgba(255,200,120,0)');
+        ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(q.x, q.y, q.s * 0.07, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = `rgba(255,246,220,${a})`; ctx.beginPath(); ctx.arc(q.x, q.y, Math.max(1.2, q.s * 0.012), 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.restore();
+      // guarda-roupa na parede esquerda (perto do fundo), com puxadores, e cesto de roupa ao lado
+      caixaLuz(ctx, cam, XL, XL + 0.6, 0, 2.1, 3.65, 4.85, madeira, LUZ, { linha: 2 });
+      linhas3d(ctx, cam, [[[XL + 0.601, 0.05, 4.25], [XL + 0.601, 2.05, 4.25]], [[XL + 0.601, 1.6, 3.7], [XL + 0.601, 1.6, 4.8]]], 'rgba(50,30,30,0.45)', 0.006);
+      for (const pz of [4.15, 4.35]) Cena3D.cilindro(ctx, cam, XL + 0.62, pz, 1.0, 1.15, 0.015, 0.015, '#EBC25A', LUZ);
+      Cena3D.cilindro(ctx, cam, XL + 0.9, 3.35, 0, 0.45, 0.17, 0.21, '#A487DE', LUZ, { boca: '#5A4A7A' });
+      faceLuz(ctx, cam, [[XL + 0.78, 0.45, 3.3], [XL + 1.02, 0.45, 3.3], [XL + 1.0, 0.6, 3.35], [XL + 0.8, 0.58, 3.35]], '#6A6573', LUZ, { linha: 0.8 });
+      // pôster na parede esquerda (entre a janela e o guarda-roupa) e relógio na parede do fundo
+      faceLuz(ctx, cam, [[XL + 0.004, 1.35, 3.2], [XL + 0.004, 1.35, 3.6], [XL + 0.004, 2.0, 3.6], [XL + 0.004, 2.0, 3.2]], T('linho').base, LUZ, { linha: 1 });
+      faceLuz(ctx, cam, [[XL + 0.006, 1.42, 3.24], [XL + 0.006, 1.42, 3.56], [XL + 0.006, 1.93, 3.56], [XL + 0.006, 1.93, 3.24]], T('coral').base, LUZ, { contorno: false });
+      const rl = cam.p(1.35, 2.35, ZF - 0.01);
+      ctx.fillStyle = Cena3D.corPorBrilho('#F2EDE6', 0.5, LUZ); ctx.beginPath(); ctx.arc(rl.x, rl.y, rl.s * 0.13, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#3A3045'; ctx.lineWidth = Math.max(1, rl.s * 0.015); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(rl.x, rl.y); ctx.lineTo(rl.x + rl.s * 0.06, rl.y + rl.s * 0.04); ctx.moveTo(rl.x, rl.y); ctx.lineTo(rl.x, rl.y - rl.s * 0.09); ctx.stroke();
+      // planta grande no chão (canto do fundo à esquerda da escrivaninha)
+      Cena3D.cilindro(ctx, cam, -0.45, ZF - 0.3, 0, 0.35, 0.14, 0.17, '#F2EDE6', LUZ, { boca: '#4A2E1E' });
+      const pr = cam.p(-0.45, 0.35, ZF - 0.3);
+      for (const [a, h] of [[-1.0, 0.7], [-0.5, 0.85], [0, 0.95], [0.5, 0.82], [1.0, 0.68], [-0.25, 0.6], [0.3, 0.62]]) {
+        const tp = cam.p(-0.45 + Math.sin(a) * h * 0.45, 0.35 + h * Math.cos(a * 0.5), ZF - 0.3);
+        const gfo = ctx.createLinearGradient(pr.x, pr.y, tp.x, tp.y); gfo.addColorStop(0, Cena3D.corPorBrilho('#3E7A3A', 0.3, LUZ)); gfo.addColorStop(1, Cena3D.corPorBrilho('#6FAF55', 0.6, LUZ));
+        ctx.fillStyle = gfo; ctx.beginPath(); ctx.moveTo(pr.x, pr.y);
+        ctx.quadraticCurveTo((pr.x + tp.x) / 2 + pr.s * 0.08, (pr.y + tp.y) / 2, tp.x, tp.y); ctx.quadraticCurveTo((pr.x + tp.x) / 2 - pr.s * 0.06, (pr.y + tp.y) / 2, pr.x, pr.y); ctx.fill();
+      }
+      // luminária de teto
+      Cena3D.cilindro(ctx, cam, 0, 2.6, YT - 0.25, YT - 0.12, 0.28, 0.1, '#F2EDE6', LUZ);
+      linhas3d(ctx, cam, [[[0, YT - 0.12, 2.6], [0, YT, 2.6]]], '#3A3045', 0.01);
       // porta no fundo
       const ab = o.portaAberta || 0;
       faceLuz(ctx, cam, [[0.85, 0, ZF - 0.005], [1.85, 0, ZF - 0.005], [1.85, 2.15, ZF - 0.005], [0.85, 2.15, ZF - 0.005]], madeiraC, LUZ, { linha: 2 });
@@ -186,12 +256,20 @@
       ctx.save();
       Cena.objeto(ctx, 'despertador', dp.x, dp.y, dp.s * 0.16, { tocando: o.despertadorTocando, t, semSombra: true, contornoPx: 2.5 });
       ctx.restore();
+      // mochila encostada e tênis no chão
+      Cena.objeto(ctx, 'mochila', cam.p(-1.75, 0, 4.3).x, cam.p(-1.75, 0, 4.3).y, cam.p(-1.75, 0, 4.3).s * 0.3, { cor: 'brasa', contornoPx: 1.5 });
+      ctx.setTransform(ctx.getTransform());
+      for (const [tx2, tz2, rot] of [[0.7, 1.0, 0.0], [0.95, 1.15, 0.5]]) {
+        caixaLuz(ctx, cam, tx2, tx2 + 0.11, 0, 0.07, tz2, tz2 + 0.27, '#F2EDE6', LUZ, { linha: 1 });
+        caixaLuz(ctx, cam, tx2, tx2 + 0.11, 0, 0.025, tz2 + 0.18, tz2 + 0.27, '#3DB5B0', LUZ, { linha: 0.6 });
+      }
       // cama: cabeceira, estrado, colchão, lençol dobrado, cobertor xadrez e travesseiro
       sombraContato(ctx, cam, 1.0, XR, 0.8, 3.08, 0.55);
       caixaLuz(ctx, cam, 1.0, XR, 0, 1.15, 3.0, 3.1, madeira, LUZ, { linha: 2 });
       caixaLuz(ctx, cam, 1.0, XR, 0.05, 0.34, 0.8, 3.0, madeira, LUZ, { linha: 2 });
       caixaLuz(ctx, cam, 1.04, XR - 0.04, 0.34, 0.56, 0.84, 2.96, '#EEE6DA', LUZ, { linha: 1.5 });
-      travesseiro(ctx, cam, 1.18, XR - 0.18, 0.56, 2.35, 2.92, 0.16);
+      caixaLuz(ctx, cam, 1.2, XR - 0.2, 0.56, 0.72, 2.4, 2.9, '#F2EDE6', LUZ, { linha: 1.2 });
+      caixaLuz(ctx, cam, 1.24, XR - 0.24, 0.72, 0.75, 2.44, 2.86, '#FBF6EE', LUZ, { contorno: false });
       // cobertor: caixa um pouco maior que o colchão até perto do travesseiro + xadrez projetado
       const cb = { x0: 0.98, x1: XR - 0.02, y0: 0.3, y1: 0.62, z0: 0.78, z1: 2.25 };
       caixaLuz(ctx, cam, cb.x0, cb.x1, cb.y0, cb.y1, cb.z0, cb.z1, T('denim').base, LUZ, { linha: 2 });
