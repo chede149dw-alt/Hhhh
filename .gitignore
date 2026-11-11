@@ -22,3 +22,6 @@ build/
 
 # Logs
 *.log
+
+# Quadros intermediários do render (o MP4 fica)
+quadro_*.png
