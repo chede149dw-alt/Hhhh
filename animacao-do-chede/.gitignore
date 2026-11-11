@@ -1,0 +1,7 @@
+node_modules/
+package-lock.json
+# Renders e áudio gerados (refaça com motor/video.js)
+previas/*
+prontos/*
+audio/*
+!*/.gitkeep
