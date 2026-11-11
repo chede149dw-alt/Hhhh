@@ -86,3 +86,9 @@
 - Objetos redondos (vaso) precisam de cilindro com degradê de cilindro (claro a 25%, escuro na borda direita) e boca elíptica; caixa não serve.
 - Câmera auxiliar (`camEm`) permite usar efeitos 3D (impacto) em closes 2D.
 - Chamada final: "PARTE 1" + "SEGUE PRA VER A PARTE 2" + botão que é tocado e vira "SEGUINDO ✓", com fala do narrador; cartela de 3 s.
+
+## Skill "animacao-do-chede" (o primeiro design, 2D)
+- O motor 2D (modo suave) foi empacotado como skill em `.claude/skills/animacao-do-chede/` e no arquivo
+  `prontos/animacao-do-chede.skill` (para instalar e usar em outras conversas).
+- A skill traz uma cópia completa do motor, do Lucas/Mãe/Rafael 2D, cenários, efeitos, guia de estilo e o ep01 da terra;
+  `scripts/preparar.sh` monta o projeto numa pasta vazia e confere as ferramentas. Testada do zero: folha + prévia ok.
