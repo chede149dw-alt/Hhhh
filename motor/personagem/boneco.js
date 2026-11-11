@@ -108,7 +108,7 @@ export function criarBoneco(ficha) {
   const tem = (p) => !ficha.pecas || ficha.pecas.includes(p);
   const mats = new Map();
   const mat = (cor) => {
-    if (!mats.has(cor)) mats.set(cor, materialToon(cor, { volume: true, baixo: 1, borda: 0.05 }));
+    if (!mats.has(cor)) mats.set(cor, materialToon(cor, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 }));
     return mats.get(cor);
   };
   const chapado = new Map();
@@ -151,32 +151,67 @@ export function criarBoneco(ficha) {
   // bacia (calça)
   peca(capsula(0.082, 0.1), c.calca, quadril, [0, -0.04, 0], [0, 0, Math.PI / 2], [1, 1, 0.95]);
   if (tem('moletom')) {
-    // moletom: corpo solto que se ajusta na barra canelada, peito mais largo nos ombros, capuz deitado nas costas
+    // moletom: corpo solto que se ajusta na barra canelada, peito mais largo nos ombros, capuz deitado nas costas.
+    // Variantes (peças da ficha): 'ziper_aberto' (aberto sobre camiseta), 'forro_turquesa', 'emblema', 'dobras'.
+    const aberto = tem('ziper_aberto');
+    const corForro = tem('forro_turquesa') ? c.faixa : c.moletomEscuro;
+    const dobra = c.moletomDobra || c.bolso;
     peca(afunilar(caixa(0.39, 0.29, 0.235, 0.045), 1.03, 0.99, 1.02, 0.99), c.moletom, coluna, [0, 0.055, 0]);
     peca(caixa(0.37, 0.05, 0.222, 0.02), c.moletomEscuro, coluna, [0, -0.09, 0]);                 // barra canelada
-    for (let i = -4; i <= 4; i++) peca(new THREE.BoxGeometry(0.004, 0.04, 0.004), c.bolso, coluna, [i * 0.04, -0.09, 0.112]);
-    if (tem('bolso_canguru')) {
+    for (let i = -4; i <= 4; i++) if (!aberto || Math.abs(i) > 1) peca(new THREE.BoxGeometry(0.004, 0.04, 0.004), c.bolso, coluna, [i * 0.04, -0.09, 0.112]);
+    peca(afunilar(caixa(0.41, 0.3, 0.245, 0.055), 0.97, 1.02), c.moletom, peito, [0, 0.075, 0]);
+    if (aberto) {
+      // camiseta aparecendo na abertura + bordas da frente com zíper
+      const cam = c.camiseta || c.cordao;
+      peca(caixa(0.08, 0.27, 0.02, 0.008), cam, coluna, [0, 0.05, 0.111]);
+      peca(caixa(0.085, 0.3, 0.02, 0.008), cam, peito, [0, 0.07, 0.117]);
+      peca(caixa(0.082, 0.06, 0.02, 0.01), cam, coluna, [0, -0.1, 0.104]);
+      peca(new THREE.TorusGeometry(0.05, 0.007, 8, 24, Math.PI), c.cordaoPonta, peito, [0, 0.235, 0.075], [Math.PI / 2 + 0.35, 0, Math.PI]);   // gola da camiseta
+      peca(capsula(0.003, 0.05), c.tenisSola || cam, peito, [0.012, 0.08, 0.128], [0, 0, 0.35]);   // dobrinha da camiseta
+      for (const sl of [1, -1]) {
+        peca(caixa(0.024, 0.3, 0.026, 0.008), c.moletom, coluna, [sl * 0.058, 0.055, 0.112]);
+        peca(caixa(0.024, 0.31, 0.026, 0.008), c.moletom, peito, [sl * 0.064, 0.07, 0.118]);
+        peca(new THREE.BoxGeometry(0.006, 0.5, 0.006), c.cordaoPonta, coluna, [sl * 0.044, 0.15, 0.124]);   // zíper
+        // bolsos laterais em fenda
+        peca(new THREE.BoxGeometry(0.006, 0.09, 0.006), c.moletomEscuro, coluna, [sl * 0.135, 0.01, 0.119], [0, 0, sl * 0.35]);
+      }
+      peca(new THREE.BoxGeometry(0.012, 0.022, 0.008), c.cordaoPonta, coluna, [0.046, -0.05, 0.13]);       // puxador
+    } else if (tem('bolso_canguru')) {
       // bolso canguru em trapézio, com as aberturas inclinadas dos lados
       peca(placa([[-0.12, -0.055], [0.12, -0.055], [0.085, 0.055], [-0.085, 0.055]], 0.008, 0.004), c.bolso, coluna, [0, 0.0, 0.116]);
       for (const sl of [1, -1]) peca(new THREE.BoxGeometry(0.006, 0.105, 0.006), c.moletomEscuro, coluna, [sl * 0.103, 0, 0.123], [0, 0, sl * 0.31]);
     }
-    peca(afunilar(caixa(0.41, 0.3, 0.245, 0.055), 0.97, 1.02), c.moletom, peito, [0, 0.075, 0]);
-    // costuras dos ombros (raglã): linhas finas do pescoço até a cava
+    // costuras dos ombros (raglã)
     for (const sl of [1, -1]) peca(new THREE.BoxGeometry(0.15, 0.005, 0.006), c.bolso, peito, [sl * 0.115, 0.17, 0.122], [0, 0, -sl * 0.62]);
+    if (tem('dobras')) {
+      // dobras de tecido (traços escuros): franzido acima da barra e nos lados do peito
+      for (const [x, y, a, L] of [[-0.15, -0.045, 0.5, 0.06], [-0.11, -0.055, 0.25, 0.05], [0.12, -0.05, -0.35, 0.06], [0.155, -0.04, -0.6, 0.05]])
+        peca(capsula(0.0035, L), dobra, coluna, [x, y, 0.118], [0, 0, Math.PI / 2 + a]);
+      for (const sl of [1, -1]) peca(capsula(0.0035, 0.07), dobra, peito, [sl * 0.17, 0.0, 0.11], [0, 0, sl * 0.25]);
+      for (const sl of [1, -1]) peca(capsula(0.0035, 0.06), dobra, coluna, [sl * 0.192, 0.07, 0.03], [0, 0, sl * 0.15]);
+    }
+    if (tem('emblema')) {
+      // emblema bordado no peito: montanha (terra) em turquesa sobre círculo linho
+      const em = new THREE.Group(); em.position.set(0.1, 0.13, 0.124); peito.add(em);
+      peca(cilindro(0.026, 0.026, 0.006), c.cordao, em, [0, 0, 0], [Math.PI / 2, 0, 0]);
+      peca(placa([[-0.017, -0.011], [0.017, -0.011], [0.004, 0.013], [-0.002, 0.004], [-0.007, 0.009]], 0.003, 0.001), c.faixa, em, [0, 0, 0.004]);
+    }
     if (tem('capuz_enrolado')) {
-      // gola do capuz em volta do pescoço, cruzando na frente
+      // gola do capuz em volta do pescoço, cruzando na frente (aberta, se o zíper estiver aberto)
       peca(new THREE.TorusGeometry(0.082, 0.04, 12, 32), c.moletom, peito, [0, 0.232, -0.01], [Math.PI / 2 - 0.15, 0, 0], [1.1, 1, 0.9]);
-      peca(cilindro(0.052, 0.052, 0.03), c.moletomEscuro, peito, [0, 0.245, -0.012]);
-      for (const sl of [1, -1]) peca(capsula(0.022, 0.07), c.moletom, peito, [sl * 0.03, 0.205, 0.105], [0.25, 0, sl * 0.75]);
-      // capuz deitado nas costas: casca em gota, com o forro escuro aparecendo na borda de cima
+      peca(cilindro(0.052, 0.052, 0.03), corForro, peito, [0, 0.245, -0.012]);
+      for (const sl of [1, -1]) peca(capsula(0.022, 0.07), c.moletom, peito, [sl * (aberto ? 0.05 : 0.03), 0.205, 0.105], [0.25, 0, sl * (aberto ? 0.25 : 0.75)]);
+      if (tem('dobras')) for (const sl of [1, -1]) peca(capsula(0.0035, 0.04), dobra, peito, [sl * 0.07, 0.228, 0.085], [0.6, 0, sl * 1.1]);
+      // capuz deitado nas costas: casca em gota, com o forro aparecendo na borda de cima
       const capuz = new THREE.Group(); capuz.position.set(0, 0.175, -0.127); capuz.rotation.x = -0.04; peito.add(capuz);
       peca(placa([[-0.12, 0.03], [-0.1, -0.08], [0, -0.17], [0.1, -0.08], [0.12, 0.03], [0.06, 0.07], [-0.06, 0.07]], 0.03, 0.014), c.moletom, capuz);
-      peca(placa([[-0.09, 0.03], [0, -0.1], [0.09, 0.03], [0.05, 0.055], [-0.05, 0.055]], 0.012, 0.006), c.moletomEscuro, capuz, [0, 0.005, 0.016]);
+      peca(placa([[-0.09, 0.03], [0, -0.1], [0.09, 0.03], [0.05, 0.055], [-0.05, 0.055]], 0.012, 0.006), corForro, capuz, [0, 0.005, 0.016]);
     }
     if (tem('cordoes')) for (const sl of [1, -1]) {
-      peca(new THREE.TorusGeometry(0.0065, 0.0022, 6, 12), c.cordaoPonta, peito, [sl * 0.03, 0.212, 0.124]);           // ilhós
-      peca(new THREE.CylinderGeometry(0.005, 0.005, 0.15, 6), c.cordao, peito, [sl * 0.036, 0.14, 0.13], [0.08, 0, sl * 0.06]);
-      peca(new THREE.CylinderGeometry(0.0072, 0.0072, 0.024, 8), c.cordaoPonta, peito, [sl * 0.041, 0.062, 0.137], [0.08, 0, sl * 0.06]);
+      const x = aberto ? 0.07 : 0.03;
+      peca(new THREE.TorusGeometry(0.0065, 0.0022, 6, 12), c.cordaoPonta, peito, [sl * x, 0.212, 0.124]);           // ilhós
+      peca(new THREE.CylinderGeometry(0.005, 0.005, 0.15, 6), c.cordao, peito, [sl * (x + 0.006), 0.14, 0.13 + (aberto ? 0.004 : 0)], [0.08, 0, sl * 0.06]);
+      peca(new THREE.CylinderGeometry(0.0072, 0.0072, 0.024, 8), tem('forro_turquesa') ? c.faixa : c.cordaoPonta, peito, [sl * (x + 0.011), 0.062, 0.137 + (aberto ? 0.004 : 0)], [0.08, 0, sl * 0.06]);
     }
   }
 
@@ -188,7 +223,7 @@ export function criarBoneco(ficha) {
   const cranio = new THREE.Group(); cranio.position.set(0, R, 0.005); cabeca.add(cranio);
   peca(new THREE.SphereGeometry(R, 40, 28), c.pele, cranio);
   for (const s of [1, -1]) peca(new THREE.SphereGeometry(0.028, 12, 10), c.pele, cranio, [s * R * 0.97, -0.012, -0.004], [0, 0, 0], [0.5, 1, 0.8]);
-  { const nariz = new THREE.Mesh(new THREE.SphereGeometry(0.014, 12, 10), materialToon(c.pele)); nariz.position.set(0, -0.028, R * 0.985); nariz.scale.set(1.1, 0.9, 0.8); cranio.add(nariz); }
+  { const nariz = new THREE.Mesh(new THREE.SphereGeometry(0.014, 12, 10), materialToon(c.pele, { gMin: m.sombra || 0.66 })); nariz.position.set(0, -0.028, R * 0.985); nariz.scale.set(1.1, 0.9, 0.8); cranio.add(nariz); }
   // posiciona uma peça sobre a superfície da cabeça (lat/lon em radianos; lon > 0 = lado esquerdo dele)
   const noRosto = (obj, lat, lon, alt = 0.0025) => {
     const g = new THREE.Group(); g.rotation.set(-lat, lon, 0, 'YXZ');
@@ -229,8 +264,8 @@ export function criarBoneco(ficha) {
   // cabelo (estilo 3D chapado): calota + mechas PLANAS e angulosas, em camadas — franja caída de lado,
   // textura no alto, laterais e nuca baixas (corte curto bagunçado, como na ficha 2D)
   if (tem('cabelo_mechas')) {
-    const matCabelo = materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05 });
-    const matLuz = materialToon(c.cabeloLuz || c.cabelo, { volume: true, baixo: 1, borda: 0.05 });
+    const matCabelo = materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 });
+    const matLuz = materialToon(c.cabeloLuz || c.cabelo, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 });
     // casco do cabelo: superfície única com a borda recortada em pontas (franja na testa, laterais curtas,
     // pontas na nuca) e volume no alto. lon 0 = frente; teta = ângulo a partir do topo da cabeça.
     {
@@ -257,7 +292,7 @@ export function criarBoneco(ficha) {
       }
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
-      const casco = new THREE.Mesh(geo, materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05 }));
+      const casco = new THREE.Mesh(geo, materialToon(c.cabelo, { volume: true, baixo: 1, borda: 0.05, gMin: m.sombra || 0.66 }));
       casco.material.side = THREE.DoubleSide; casco.castShadow = true; cranio.add(casco);
     }
     const geos = new Map();
@@ -338,6 +373,11 @@ export function criarBoneco(ficha) {
     peca(cilindro(0.06, 0.063, m.antebraco - 0.03), c.moletom, cotovelo, [0, -m.antebraco / 2 + 0.0, 0]);   // manga solta que franze no punho
     if (tem('faixa_manga')) peca(new THREE.BoxGeometry(0.013, m.antebraco - 0.04, 0.024), c.faixa, cotovelo, [s * 0.05, -m.antebraco / 2 + 0.01, 0.028], [0, -s * 0.5, 0]);
     peca(cilindro(0.05, 0.047, 0.045), c.moletomEscuro, cotovelo, [0, -m.antebraco + 0.02, 0]);                      // punho canelado
+    if (tem('dobras')) {
+      // dobras no cotovelo e franzido acima do punho
+      peca(new THREE.TorusGeometry(0.03, 0.0028, 6, 16, Math.PI * 0.7), c.moletomDobra || c.bolso, cotovelo, [0, 0.0, 0.058], [0, 0, Math.PI * 1.15]);
+      peca(capsula(0.0028, 0.035), c.moletomDobra || c.bolso, cotovelo, [0, -m.antebraco + 0.06, 0.06], [0, 0, Math.PI / 2 + 0.25]);
+    }
     const mao = junta('mao_' + lado, cotovelo, [0, -m.antebraco, 0]);
     // mão simples (luva): palma em bloco + dedos em blocos colados + polegar
     peca(caixa(0.024, 0.062, 0.066, 0.01), c.pele, mao, [0, -0.04, 0]);

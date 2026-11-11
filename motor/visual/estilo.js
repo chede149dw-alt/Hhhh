@@ -14,29 +14,31 @@ import * as THREE from 'three';
 export const LUZ = { sol: 2.0, ambiente: 1.2, gMin: 0.8 };
 LUZ.gMax = (Math.PI - LUZ.ambiente) / LUZ.sol;
 
-// rampa de 32 pixels: só entre 80% e 97% de brilho, transição estreita perto do terminador (N·L ≈ 0)
-let rampa = null;
-export function criarRampa() {
-  if (rampa) return rampa;
+// rampa de 32 pixels: só entre gMin (80% por padrão) e 97% de brilho, transição estreita perto do terminador (N·L ≈ 0).
+// Personagens podem usar gMin menor (sombra de desenho mais marcada); a face iluminada continua com a cor exata.
+const rampas = new Map();
+export function criarRampa(gMin = LUZ.gMin) {
+  if (rampas.has(gMin)) return rampas.get(gMin);
   const n = 32, dados = new Uint8Array(n * 4);
   for (let i = 0; i < n; i++) {
     const x = i / (n - 1);                       // x = N·L * 0,5 + 0,5
     const k = Math.min(1, Math.max(0, (x - 0.47) / 0.08));
     const s = k * k * (3 - 2 * k);
-    const v = Math.round((LUZ.gMin + (LUZ.gMax - LUZ.gMin) * s) * 255);
+    const v = Math.round((gMin + (LUZ.gMax - gMin) * s) * 255);
     dados.set([v, v, v, 255], i * 4);
   }
-  rampa = new THREE.DataTexture(dados, n, 1, THREE.RGBAFormat);
-  rampa.minFilter = rampa.magFilter = THREE.LinearFilter;
-  rampa.generateMipmaps = false;
-  rampa.colorSpace = THREE.NoColorSpace;
-  rampa.needsUpdate = true;
-  return rampa;
+  const r = new THREE.DataTexture(dados, n, 1, THREE.RGBAFormat);
+  r.minFilter = r.magFilter = THREE.LinearFilter;
+  r.generateMipmaps = false;
+  r.colorSpace = THREE.NoColorSpace;
+  r.needsUpdate = true;
+  rampas.set(gMin, r);
+  return r;
 }
 
 // material chapado; o.volume: escurece a parte de baixo e acende a borda (contorno de luz)
 export function materialToon(cor, o = {}) {
-  const m = new THREE.MeshToonMaterial({ color: new THREE.Color(cor), gradientMap: criarRampa() });
+  const m = new THREE.MeshToonMaterial({ color: new THREE.Color(cor), gradientMap: criarRampa(o.gMin) });
   if (o.volume) {
     const baixo = o.baixo === undefined ? 0.82 : o.baixo, borda = o.borda === undefined ? 0.35 : o.borda;
     const corBorda = new THREE.Color(o.corBorda || '#FFE7C2');
@@ -58,7 +60,7 @@ export function materialToon(cor, o = {}) {
           outgoingLight += uCorBorda * fres * uBorda;
           #include <opaque_fragment>`);
     };
-    m.customProgramCacheKey = () => `toon-vol-${baixo}-${borda}`;
+    m.customProgramCacheKey = () => `toon-vol-${baixo}-${borda}`;  // a rampa é textura: não muda o programa
   }
   return m;
 }

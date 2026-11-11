@@ -52,6 +52,9 @@ Roteiro de construção: `referencias/documentos/PROMPTS_RECRIAR.md` (prompts 0 
   Moletom solto com barra canelada, bolso canguru em trapézio com aberturas, costuras raglã, capuz em gota deitado nas costas
   com forro, ilhós e cordões; punho franzido; calça com barra dobrada; tênis com lingueta, cadarço, calcanhar e sola grossa.
 - Folha: `previas/motor3d/lucas3d-v2-ficha.png`; comparação `lucas3d-antes-x-v2.png`; salto `lucas3d-v2-salto.mp4`.
+  Sombra de desenho mais marcada nos personagens (rampa com gMin 0,66; a face iluminada segue com a cor exata) e dobras de tecido.
+  Opções de roupa para o autor escolher: `previas/motor3d/roupas/opcoes.png` (A fechado, B detalhes turquesa: forro + emblema de montanha,
+  C aberto com camiseta) — variantes ligadas por peças na ficha ('forro_turquesa', 'emblema', 'ziper_aberto', 'dobras').
   Quando aprovada: copiar a folha para `personagens/lucas/3d/ficha.png` e mudar o status na ficha.
 
 ## Animador (prompt 4) — `animacao/`
