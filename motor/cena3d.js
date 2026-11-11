@@ -175,5 +175,34 @@
     ctx.restore();
   }
 
-  window.Cena3D = { camera, caminho, face, caixa, sombraChao, personagem, arvore, mistura, faceLuz, caixaLuz, sombraContato, poeira, brilho, corPorBrilho };
+  // cilindro/tronco de cone em pé (vaso, lixeira, coluna): lateral com degradê de cilindro e boca elíptica
+  // o.boca: cor do interior (se aberto); o.topo: cor da tampa; luz: mesma luz de cena de faceLuz (opcional)
+  function cilindro(ctx, cam, X, Z, y0, y1, r0, r1, cor, luz, o = {}) {
+    if (cor[0] !== '#') cor = Estilo.tom(cor).base;
+    const el = (y, r) => { const c = cam.p(X, y, Z), a = cam.p(X + r, y, Z), b = cam.p(X, y, Z - r); return { x: c.x, y: c.y, rx: Math.abs(a.x - c.x), ry: Math.max(0.5, Math.abs(b.y - c.y)) }; };
+    const B = el(y0, r0), Tp = el(y1, r1);
+    const claro = luz ? corPorBrilho(cor, 0.85, luz) : Estilo.screen(cor, '#FFF1CC', 0.3);
+    const escuro = luz ? corPorBrilho(cor, 0.25, luz) : Estilo.multiply(cor, '#8E82A0');
+    const g = ctx.createLinearGradient(Tp.x - Tp.rx, 0, Tp.x + Tp.rx, 0);
+    g.addColorStop(0, cor); g.addColorStop(0.25, claro); g.addColorStop(0.6, cor); g.addColorStop(1, escuro);
+    const lado = new Path2D();
+    lado.moveTo(Tp.x - Tp.rx, Tp.y); lado.lineTo(B.x - B.rx, B.y);
+    lado.ellipse(B.x, B.y, B.rx, B.ry, 0, Math.PI, 0, true);
+    lado.lineTo(Tp.x + Tp.rx, Tp.y);
+    lado.ellipse(Tp.x, Tp.y, Tp.rx, Tp.ry, 0, 0, Math.PI, false);
+    lado.closePath();
+    ctx.fillStyle = g; ctx.fill(lado);
+    const borda = Estilo.multiply(escuro, '#9A8EAA'), lw = Math.max(0.8, Tp.rx * 0.04);
+    ctx.strokeStyle = borda; ctx.lineWidth = lw; ctx.stroke(lado);
+    const boca = new Path2D(); boca.ellipse(Tp.x, Tp.y, Tp.rx, Tp.ry, 0, 0, Math.PI * 2);
+    if (o.boca) {
+      ctx.fillStyle = claro; ctx.fill(boca);
+      const dentro = new Path2D(); dentro.ellipse(Tp.x, Tp.y + Tp.ry * 0.1, Tp.rx * 0.86, Tp.ry * 0.78, 0, 0, Math.PI * 2);
+      ctx.fillStyle = o.boca; ctx.fill(dentro);
+    } else { ctx.fillStyle = o.topo || claro; ctx.fill(boca); }
+    ctx.stroke(boca);
+    return { topo: Tp, base: B };
+  }
+
+  window.Cena3D = { cilindro, camera, caminho, face, caixa, sombraChao, personagem, arvore, mistura, faceLuz, caixaLuz, sombraContato, poeira, brilho, corPorBrilho };
 })();

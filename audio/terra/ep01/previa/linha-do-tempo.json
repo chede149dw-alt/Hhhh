@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "total": 33.691337000000004,
+  "total": 34.691337000000004,
   "planos": [
     {
       "id": "capa",
@@ -103,7 +103,7 @@
     {
       "id": "parte",
       "inicio": 31.691337,
-      "fim": 33.691337000000004,
+      "fim": 34.691337000000004,
       "semLegenda": true,
       "semCinema": false
     }
@@ -206,6 +206,13 @@
       "inicio": 29.320725,
       "fim": 31.391337,
       "arquivo": "/home/user/Hhhh/audio/terra/ep01/previa/racha.wav"
+    },
+    {
+      "id": "parte",
+      "voz": "narrador",
+      "inicio": 31.771337,
+      "fim": 33.372743,
+      "arquivo": "/home/user/Hhhh/audio/terra/ep01/previa/parte.wav"
     }
   ],
   "legendas": [
@@ -798,7 +805,7 @@
     },
     {
       "inicio": 30.851177347826084,
-      "fim": 31.391336999999996,
+      "fim": 31.541336999999995,
       "palavras": [
         {
           "texto": "A",
@@ -809,6 +816,48 @@
           "texto": "RACHAR.",
           "destaque": true,
           "inicio": 30.986217260869562
+        }
+      ]
+    },
+    {
+      "inicio": 31.771337,
+      "fim": 32.57204000000001,
+      "palavras": [
+        {
+          "texto": "SEGUE",
+          "destaque": false,
+          "inicio": 31.771337
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 32.10103823529412
+        },
+        {
+          "texto": "VER",
+          "destaque": false,
+          "inicio": 32.336539117647064
+        }
+      ]
+    },
+    {
+      "inicio": 32.57204000000001,
+      "fim": 33.37274300000001,
+      "palavras": [
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 32.57204000000001
+        },
+        {
+          "texto": "PARTE",
+          "destaque": false,
+          "inicio": 32.713340529411774
+        },
+        {
+          "texto": "DOIS!",
+          "destaque": false,
+          "inicio": 33.04304176470589
         }
       ]
     }

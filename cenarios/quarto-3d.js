@@ -97,16 +97,31 @@
       hg.addColorStop(0, 'rgba(255,226,170,0.55)'); hg.addColorStop(1, 'rgba(255,226,170,0)');
       ctx.fillStyle = hg; ctx.fillRect(hc.x - hc.s * 2, hc.y - hc.s * 2, hc.s * 4, hc.s * 4);
       ctx.restore();
-      // vaso de planta no parapeito da janela (o.vasoTerra: quanto de terra ainda está no vaso, 0..1)
+      // vaso de barro no parapeito da janela, com terra e planta (o.vasoTerra: quanto de terra ainda há, 0..1)
       if (o.vaso !== false) {
-        const vx0 = XL + 0.02, vx1 = XL + 0.26, vz0 = 2.45, vz1 = 2.69, vy = JAN.y0;
-        caixaLuz(ctx, cam, vx0, vx1, vy, vy + 0.22, vz0, vz1, T('coral').base, LUZ, { linha: 1.5 });
-        const nivel = vy + 0.2 * (o.vasoTerra === undefined ? 1 : o.vasoTerra);
-        face(ctx, cam, [[vx0 + 0.02, nivel, vz0 + 0.02], [vx1 - 0.02, nivel, vz0 + 0.02], [vx1 - 0.02, nivel, vz1 - 0.02], [vx0 + 0.02, nivel, vz1 - 0.02]], '#5A3A22', { contorno: false });
-        for (const [a, h2] of [[-0.6, 0.32], [0, 0.4], [0.6, 0.3], [1.2, 0.26]]) {
-          const b = cam.p((vx0 + vx1) / 2, vy + 0.22, (vz0 + vz1) / 2), tp = cam.p((vx0 + vx1) / 2 + Math.sin(a) * 0.1, vy + 0.22 + h2, (vz0 + vz1) / 2 + Math.cos(a) * 0.05);
-          ctx.fillStyle = Cena3D.corPorBrilho('#5E9E5A', 0.55, LUZ); ctx.beginPath();
-          ctx.moveTo(b.x, b.y); ctx.quadraticCurveTo(tp.x + (tp.x - b.x) * 0.6 + 12, (b.y + tp.y) / 2, tp.x, tp.y); ctx.quadraticCurveTo(tp.x - 14, (b.y + tp.y) / 2, b.x, b.y); ctx.fill();
+        const vx = XL + 0.14, vz = 2.57, vy = JAN.y0;
+        // pratinho
+        Cena3D.cilindro(ctx, cam, vx, vz, vy, vy + 0.025, 0.12, 0.13, '#B5644A', LUZ);
+        // corpo cônico e borda
+        Cena3D.cilindro(ctx, cam, vx, vz, vy + 0.02, vy + 0.19, 0.085, 0.11, '#C9714F', LUZ);
+        const nivel = 0.03 + 0.15 * (o.vasoTerra === undefined ? 1 : o.vasoTerra);
+        Cena3D.cilindro(ctx, cam, vx, vz, vy + 0.18, vy + 0.23, 0.12, 0.125, '#D98260', LUZ, { boca: nivel > 0.12 ? '#4A2E1E' : '#2E1E18' });
+        // planta: folhas curvas sombreadas com nervura (saindo da terra)
+        const raiz = cam.p(vx, vy + 0.2, vz);
+        const folhas = [[-0.9, 0.34, 0.06], [-0.4, 0.42, 0.07], [0.1, 0.46, 0.075], [0.55, 0.38, 0.065], [1.0, 0.3, 0.055], [-0.15, 0.3, 0.05], [0.35, 0.28, 0.05]];
+        for (const [a, h2, w2] of folhas) {
+          const tp = cam.p(vx + Math.sin(a) * h2 * 0.55, vy + 0.2 + h2 * Math.cos(a * 0.6), vz + Math.cos(a) * 0.05);
+          const mx = (raiz.x + tp.x) / 2, my = (raiz.y + tp.y) / 2, nx = -(tp.y - raiz.y), ny = tp.x - raiz.x, L = Math.hypot(nx, ny) || 1;
+          const w = w2 * raiz.s;
+          const folha = new Path2D();
+          folha.moveTo(raiz.x, raiz.y);
+          folha.quadraticCurveTo(mx + nx / L * w, my + ny / L * w, tp.x, tp.y);
+          folha.quadraticCurveTo(mx - nx / L * w * 0.6, my - ny / L * w * 0.6, raiz.x, raiz.y);
+          const gf = ctx.createLinearGradient(mx + nx / L * w, my + ny / L * w, mx - nx / L * w, my - ny / L * w);
+          gf.addColorStop(0, Cena3D.corPorBrilho('#6FAF55', 0.85, LUZ)); gf.addColorStop(1, Cena3D.corPorBrilho('#3E7A3A', 0.35, LUZ));
+          ctx.fillStyle = gf; ctx.fill(folha);
+          ctx.strokeStyle = 'rgba(40,70,40,0.55)'; ctx.lineWidth = Math.max(0.8, raiz.s * 0.004); ctx.stroke(folha);
+          ctx.strokeStyle = 'rgba(220,240,200,0.45)'; ctx.beginPath(); ctx.moveTo(raiz.x, raiz.y); ctx.quadraticCurveTo(mx + nx / L * w * 0.2, my + ny / L * w * 0.2, tp.x, tp.y); ctx.stroke();
         }
       }
       // cortinas mostarda (com luz por face e dobras)

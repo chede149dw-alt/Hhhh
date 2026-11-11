@@ -1,6 +1,6 @@
 # Série: "E se você acordasse controlando a terra?"
 
-Status: roteiro do episódio 1 aprovado; prévia com voz grátis em `previas/terra-ep01-previa.mp4` (planos em `ep01.js`).
+Status: roteiro do episódio 1 aprovado; prévia com voz grátis em `previas/terra-ep01-previa-v2.mp4` (planos em `ep01.js`).
 
 ## Personagens
 | Personagem | Arquivo | Observação |
@@ -24,3 +24,5 @@ vaso de planta (com terra), livros que caem, celular, grade de bueiro, sacola do
 - coluna de terra subindo do bueiro;
 - poeira se desfazendo (terra caindo no tapete).
 Cores do elemento: guia, seção 7 (Terra). Efeito base: `efeitos/poder-terra.js`.
+
+Referências de efeitos: `referencias/efeitos-terra/` (impacto, onda, erupção, pilares) e `referencias/videos/ref-mao-efeito-05.mp4` (close da mão).

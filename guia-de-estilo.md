@@ -334,3 +334,13 @@ Pedido: deixar os vídeos menos cartunescos, mais perto das referências. Vale p
 - **Blush leve:** `rgba(232,140,128,0.16)`.
 - **Cenários 3D:** borda 40% da espessura, na cor da face escurecida; nada de Tinta pura.
 - Cores, proporções, roupas e rostos dos personagens **não mudam**.
+
+---
+
+## 15. Efeitos de terra, mão em close e chamada final
+
+- **Terra** (referências em `referencias/efeitos-terra/`): anel no chão com rachaduras incandescentes âmbar, anéis de choque brancos, espinhos escuros em leque, poeira em bolhas cor de areia, brasas e jatos verticais de poeira. A esfera do poder tem placas de terra separadas por rachaduras que emitem luz.
+- **Linhas de energia:** quando o Lucas controla a terra à distância, linhas âmbar curvas ligam a mão ao alvo, com grãos brilhando viajando por elas.
+- **Mão em close** (`motor/mao-detalhe.js`): nos momentos de poder, um plano da mão grande na tela, dedos articulados mexendo e fechando, punho do moletom com a faixa.
+- **Objetos redondos** usam cilindro com degradê (`Cena3D.cilindro`), nunca caixa.
+- **Final de todo episódio:** "PARTE X" + "SEGUE PRA VER A PARTE X+1", botão de seguir animado e fala do narrador (cartela de 3 s).

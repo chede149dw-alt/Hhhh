@@ -77,3 +77,12 @@
 - Em close de objeto (despertador), uma mão simples feita com o pincel (punho do moletom com a faixa + palma + dedos) lê bem; um bloco sem dedos não.
 - Ao renomear arquivo de personagem, atualizar também os scripts de teste (o teste quebrou com `fab is not a function`).
 - Render: 1011 quadros em ~2 min com 4 abas.
+
+## Efeitos e mão (prévia v2 da terra)
+- Mão detalhada (ref. vídeo 05): cada dedo é uma cadeia de 3 falanges; dobrar = encurtar pelo cosseno do ângulo acumulado, e passando de 90° a falange volta por cima da palma — isso dá o punho fechando em 2D sem modelagem 3D.
+- Larguras de linha dentro de `ctx.scale(escala)` estão em unidades da mão: nada de `Math.max(1, ...)` ali (virou bolha de 160 px).
+- Esfera de terra com cara de "lava" (ref. 03): textura Voronoi calculada UMA vez (256²) com placas e rachaduras + versão só das rachaduras para somar com 'lighter' pulsando; sombreado esférico por cima.
+- Vocabulário dos efeitos de terra (imagens de referência): anel no chão com rachaduras incandescentes, anéis de choque brancos, espinhos escuros em leque, poeira em bolhas cor de areia, brasas, jatos verticais de poeira.
+- Objetos redondos (vaso) precisam de cilindro com degradê de cilindro (claro a 25%, escuro na borda direita) e boca elíptica; caixa não serve.
+- Câmera auxiliar (`camEm`) permite usar efeitos 3D (impacto) em closes 2D.
+- Chamada final: "PARTE 1" + "SEGUE PRA VER A PARTE 2" + botão que é tocado e vira "SEGUINDO ✓", com fala do narrador; cartela de 3 s.
