@@ -143,4 +143,5 @@
   }
 
   window.Rig = Rig;
+  window.criarPincel = criarPincel; // para cenários e objetos usarem as mesmas regras de cor, sombra e contorno
 })();

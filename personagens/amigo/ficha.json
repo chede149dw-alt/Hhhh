@@ -1,0 +1,114 @@
+{
+  "fabrica": "criarAmigo",
+  "registroPoses": "POSES_PADRAO",
+  "opcoes": {},
+  "titulo": "AMIGO",
+  "subtitulo": "Melhor amigo do Lucas · nerd, leal e fala demais · série “E se você acordasse podendo ficar invisível?”",
+  "paleta": [
+    {
+      "nome": "Camiseta",
+      "cor": "#F2EDE6"
+    },
+    {
+      "nome": "Manga",
+      "cor": "#EBC25A"
+    },
+    {
+      "nome": "Calça",
+      "cor": "#55708C"
+    },
+    {
+      "nome": "Pele",
+      "cor": "#F6D6C0"
+    },
+    {
+      "nome": "Cabelo",
+      "cor": "#73493A"
+    },
+    {
+      "nome": "Olhos",
+      "cor": "#4FAF7A"
+    }
+  ],
+  "vistas": [
+    {
+      "nome": "Frente",
+      "vista": "frente",
+      "pose": "parado"
+    },
+    {
+      "nome": "3/4",
+      "vista": "tq",
+      "pose": "tq"
+    },
+    {
+      "nome": "Perfil",
+      "vista": "perfil",
+      "pose": "perfil"
+    },
+    {
+      "nome": "Costas",
+      "vista": "costas",
+      "pose": "costas"
+    }
+  ],
+  "expressoes": [
+    {
+      "nome": "Neutro",
+      "expressao": "neutro"
+    },
+    {
+      "nome": "Feliz",
+      "expressao": "feliz"
+    },
+    {
+      "nome": "Espanto",
+      "expressao": "espanto"
+    },
+    {
+      "nome": "Medo",
+      "expressao": "medo"
+    },
+    {
+      "nome": "Raiva",
+      "expressao": "raiva"
+    },
+    {
+      "nome": "Preocupado",
+      "expressao": "preocupado"
+    },
+    {
+      "nome": "Cansado",
+      "expressao": "cansado"
+    },
+    {
+      "nome": "Rindo",
+      "expressao": "rindo"
+    }
+  ],
+  "poses": [
+    {
+      "nome": "Parado",
+      "pose": "parado"
+    },
+    {
+      "nome": "Andando",
+      "pose": "andando"
+    },
+    {
+      "nome": "Acenando",
+      "pose": "acenando"
+    },
+    {
+      "nome": "Mãos na cintura",
+      "pose": "maos-na-cintura"
+    }
+  ],
+  "regras": [
+    "Altura 5,8 cabeças (mais alto e magro que o Lucas); cabeça 0,90 H; contorno 1,35×.",
+    "Camiseta Linho #F2EDE6 com triângulo Mostarda, sobre manga longa Mostarda #EBC25A (acento).",
+    "Calça Denim #55708C reta; tênis Linho baixo com biqueira Mostarda. Pele 1 #F6D6C0.",
+    "Cabelo Castanho #73493A liso, de lado; óculos redondos; olhos verdes #4FAF7A; sobrancelha reta."
+  ],
+  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}

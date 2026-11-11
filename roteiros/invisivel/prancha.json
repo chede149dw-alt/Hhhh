@@ -1,0 +1,40 @@
+{
+  "titulo": "E SE VOCÊ ACORDASSE PODENDO FICAR INVISÍVEL?",
+  "subtitulo": "Prancha de produção da série · cenários, personagens, objetos e efeitos no estilo do guia",
+  "scripts": [
+    "personagens/lucas/lucas.js", "personagens/mae/mae.js", "personagens/amigo/amigo.js",
+    "cenarios/objetos/cama.js", "cenarios/objetos/despertador.js", "cenarios/objetos/mochila.js",
+    "cenarios/quarto-manha.js", "cenarios/rua-bairro.js", "cenarios/escola.js",
+    "efeitos/invisibilidade.js", "efeitos/poder-energia.js"
+  ],
+  "cenarios": [
+    { "nome": "quarto-manha", "titulo": "Quarto de manhã" },
+    { "nome": "rua-bairro", "titulo": "Rua do bairro" },
+    { "nome": "escola", "titulo": "Escola (corredor)" }
+  ],
+  "personagens": [
+    { "titulo": "Lucas", "descricao": "protagonista · ficha oficial", "fabrica": "criarLucas", "registroPoses": "LUCAS_POSES",
+      "poses": ["parado", "apontando"], "expressoes": ["neutro", "espanto", "medo"], "cabecaPx": 100 },
+    { "titulo": "Mãe", "descricao": "carinhosa e desconfiada", "fabrica": "criarMae", "registroPoses": "POSES_PADRAO",
+      "poses": ["parado", "tq", "maos-na-cintura"], "expressoes": ["neutro", "preocupado", "raiva"], "cabecaPx": 92 },
+    { "titulo": "Amigo", "descricao": "nerd, leal, fala demais", "fabrica": "criarAmigo", "registroPoses": "POSES_PADRAO",
+      "poses": ["parado", "tq", "acenando"], "expressoes": ["neutro", "rindo", "espanto"], "cabecaPx": 95 }
+  ],
+  "objetos": [
+    { "nome": "cama", "titulo": "Cama", "H": 105 },
+    { "nome": "despertador", "titulo": "Despertador (tocando)", "H": 300, "opcoes": { "tocando": true, "t": 0.02 } },
+    { "nome": "mochila", "titulo": "Mochila", "H": 250 }
+  ],
+  "efeitos": [
+    { "titulo": "Invisibilidade (corpo se desfazendo em partículas azuis)", "efeito": "invisibilidade",
+      "nota": "Proposta: o Lucas usando a invisibilidade. Só entra na ficha dele depois da sua aprovação.",
+      "fabrica": "criarLucas", "registroPoses": "LUCAS_POSES", "pose": "parado", "expressao": "espanto",
+      "cenario": "quarto-manha", "recorte": [300, 920, 520], "cabecaPx": 118, "subir": 30,
+      "estagios": [0, 0.3, 0.55, 0.8, 1], "rotulos": ["0% · visível", "30%", "55%", "80%", "100% · invisível"] }
+  ],
+  "notas": [
+    "Cores de cenário calculadas com a fórmula do guia (seção 11); contorno 4 px perto, 2,5 px no meio, sem contorno no fundo distante.",
+    "Mãe e amigo usam a base genérica motor/personagem-base.js e têm as mesmas 4 vistas e expressões do Lucas.",
+    "Invisibilidade: cores do elemento Água; partículas chapadas para funcionar em cena clara de dia."
+  ]
+}

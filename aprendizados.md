@@ -31,3 +31,11 @@
 - Personagem deitado: girar a peça-raiz (quadril) e deslocá-la com `_desloca`; a sombra no chão precisa ficar mais comprida (`_sombra`).
 - Boca de raiva com dentes parece sorriso se a borda de cima for reta: curvar para baixo nos cantos.
 - Efeito brilhante só funciona em célula de fundo escuro (o guia já pedia luminância ≤ 20%).
+
+## Série da invisibilidade (prancha)
+- Personagens secundários numa base genérica (`motor/personagem-base.js`) em vez de copiar o código do Lucas: o Lucas fica intocado e os novos herdam vistas, expressões e poses.
+- Moldura de janela com dois retângulos no mesmo Path2D é pintada inteira (regra nonzero): desenhar moldura, depois o vidro por cima.
+- Céu em faixas precisa descer até a linha do chão do plano médio, senão aparecem buracos pretos entre as casas.
+- Efeito de dissolução: em 0% desenhar a imagem inteira (as células deixam a borda serrilhada); usar ruído suave (interpolado) para a borda avançar em manchas; o "fantasma" final fica melhor como contorno fino do que como silhueta preenchida.
+- Sempre criar todos os canvases auxiliares antes do laço (um `null` no meio do laço derrubou o desenho do efeito sem erro visível no render).
+- Título longo em prancha: encolher a fonte até caber.

@@ -31,7 +31,10 @@
   window.desenharFichaOficial = async function (cfg) {
     await document.fonts.load('800 44px Inter');
     await document.fonts.load('600 32px Inter');
-    const W = 2400, H = 4320, M = 80;
+    const W = 2400, M = 80;
+    // altura conforme a quantidade de expressões (4 por linha) e poses (3 por linha)
+    const linhasE = Math.ceil(cfg.expressoes.length / 4), linhasP = Math.ceil(cfg.poses.length / 3);
+    const H = 520 + 1160 + (50 + linhasE * 420 + 60) + (50 + linhasP * 660 + 40) + cfg.regras.length * 44 + 60;
     const c = document.getElementById('c');
     c.width = W; c.height = H;
     const ctx = c.getContext('2d');
@@ -46,7 +49,7 @@
     ctx.fillText(cfg.subtitulo, M, 232);
     ctx.fillStyle = E().base.brasa;
     ctx.font = '800 28px Inter';
-    ctx.fillText('FICHA OFICIAL · REGRA OBRIGATÓRIA EM TODOS OS VÍDEOS', M, 282);
+    ctx.fillText(cfg.selo || 'FICHA OFICIAL · REGRA OBRIGATÓRIA EM TODOS OS VÍDEOS', M, 282);
     // paleta
     // paleta (linha própria, abaixo do subtítulo)
     cfg.paleta.forEach((p, i) => {
@@ -100,7 +103,7 @@
     });
 
     // ---------- poses ----------
-    y = y + 50 + 2 * (ech + 20) + 60;
+    y = y + 50 + linhasE * (ech + 20) + 60;
     titulo(ctx, 'POSES', M, y);
     const pcw = (W - M * 2) / 3, pch = 640;
     cfg.poses.forEach((p, i) => {
@@ -115,7 +118,7 @@
     });
 
     // ---------- regras ----------
-    y = y + 50 + 2 * (pch + 20) + 40;
+    y = y + 50 + linhasP * (pch + 20) + 40;
     ctx.fillStyle = E().base.tinta; ctx.textAlign = 'left'; ctx.font = '600 28px Inter';
     cfg.regras.forEach((linha, i) => ctx.fillText('•  ' + linha, M, y + i * 44));
 

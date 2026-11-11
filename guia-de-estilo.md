@@ -253,3 +253,42 @@ Carregar (0,3–0,6 s) → disparar (2–4 quadros) → viajar → impactar (fla
 - [ ] Sem preto ou branco puros no personagem; sem textura
 - [ ] Efeitos com núcleo creme ≤ 6%, mistura aditiva, sem contorno, sobre fundo com luminância ≤ 20%
 - [ ] Nenhuma combinação proibida da seção 9
+
+---
+
+## 11. Cenários e objetos
+
+- Formato vertical 1080 × 1920, câmera frontal (ou leve perspectiva de um ponto no chão).
+- **Planos e contorno:** primeiro plano (onde o personagem pisa) 4 px · plano médio 2,5 px · fundo distante sem contorno, com cor clareada.
+- **Luz:** a mesma do guia, de cima à esquerda. Sol e janelas ficam à esquerda. Feixes de luz são polígonos chapados `rgba(255,241,204,0.28–0.32)` sem contorno.
+- **Sombra:** mesma regra de corte único (seção 6); em px, deslocamento de 4–14 px conforme o tamanho da peça.
+- **Céu:** 4 faixas chapadas (Céu → Céu luz → Horizonte clareado → Horizonte), sem degradê contínuo.
+- **Objetos:** desenhados em H (mesma unidade dos personagens), base no chão, com sombra elíptica no chão.
+- **Cores de cenário** (tons calculados pela fórmula da seção 2.2):
+
+| Nome | Base | Sombra | Luz |
+|---|---|---|---|
+| ceu | `#BFE3F2` | `#93A2D3` | `#CBE8F4` |
+| ceuHorizonte | `#FBE3C8` | `#C1A2AE` | `#FCE8D0` |
+| sol | `#FFE6A8` | `#C4A492` | `#FFEAB5` |
+| nuvem | `#F7F4EE` | `#BEAECF` | `#F8F6F0` |
+| parede | `#E9DCCB` | `#B39DB1` | `#EDE2D2` |
+| paredeEscola | `#D8E6E2` | `#A6A4C5` | `#DFEAE6` |
+| madeira | `#B98563` | `#8E5F56` | `#C69A79` |
+| madeiraClara | `#D6A77F` | `#A4776F` | `#DDB691` |
+| telhado | `#B5544A` | `#8B3C40` | `#C27164` |
+| casaAreia | `#E8C9A0` | `#B28F8B` | `#ECD2AE` |
+| casaCeu | `#9FB7C9` | `#7A83AF` | `#B0C3D1` |
+| casaRosa | `#D9A6A0` | `#A7768B` | `#E0B5AE` |
+| asfalto | `#5A5866` | `#453F59` | `#78747C` |
+| calcada | `#CFC8C0` | `#9F8FA7` | `#D8D1C9` |
+| grama | `#86B46E` | `#678060` | `#9CC183` |
+| folhagem | `#5E9E5A` | `#48714E` | `#7BAF72` |
+| tronco | `#7A5A44` | `#5E403B` | `#92765F` |
+| armario | `#5E7FA8` | `#485B92` | `#7B95B5` |
+| vidro | `#CFEAF5` | `#9FA7D5` | `#D8EEF6` |
+
+- Os cenários não usam o Marinho nem o Turquesa em áreas grandes, para não competir com o Lucas.
+
+### Efeitos em cena clara
+A seção 7 pede fundo escuro para brilho aditivo. Em cena de dia (ex.: invisibilidade no quarto), o efeito usa partículas **chapadas** em mistura normal, com aura em opacidade baixa; o aditivo só entra com fundo escuro.

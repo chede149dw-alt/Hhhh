@@ -19,6 +19,12 @@
     brasa: '#D23A42', coral: '#F28A5E', turquesa: '#3DB5B0', lilas: '#A487DE', mostarda: '#EBC25A',
     pele1: '#F6D6C0', pele2: '#EAB28E', pele3: '#C98B63', pele4: '#8F5B3E',
     cabCafe: '#4A3536', cabNoite: '#2C2936', cabCastanho: '#73493A', cabCobre: '#BC673C',
+    // cenários (guia, seção 11)
+    ceu: '#BFE3F2', ceuHorizonte: '#FBE3C8', sol: '#FFE6A8', nuvem: '#F7F4EE',
+    parede: '#E9DCCB', paredeEscola: '#D8E6E2', madeira: '#B98563', madeiraClara: '#D6A77F',
+    telhado: '#B5544A', casaAreia: '#E8C9A0', casaCeu: '#9FB7C9', casaRosa: '#D9A6A0',
+    asfalto: '#5A5866', calcada: '#CFC8C0', grama: '#86B46E', folhagem: '#5E9E5A', tronco: '#7A5A44',
+    armario: '#5E7FA8', vidro: '#CFEAF5',
     irisAzul: '#4F9BE0', irisAmbar: '#D9902F', irisVerde: '#4FAF7A', irisVioleta: '#8B63D9', irisCastanho: '#6A4330',
   };
 
