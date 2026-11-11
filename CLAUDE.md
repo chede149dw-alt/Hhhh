@@ -2,6 +2,7 @@
 
 Sempre salve cada arquivo na pasta certa:
 
+- `motor/` — código do sistema de vídeos (renderizador, personagens, câmera, efeitos, comando de render)
 - `referencias/` — materiais de referência (imagens, vídeos, links, exemplos de estilo)
 - `personagens/` — personagens (designs, descrições, assets)
 - `cenarios/` — cenários e fundos
