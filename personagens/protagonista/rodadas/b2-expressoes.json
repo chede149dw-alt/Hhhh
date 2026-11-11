@@ -1,0 +1,179 @@
+{
+  "fabrica": "criarProtagonista",
+  "titulo": "B2 — expressões",
+  "enquadrar": "rosto",
+  "cabecaPx": 290,
+  "colunas": 4,
+  "celulaLargura": 450,
+  "celulaAltura": 620,
+  "variantes": [
+    {
+      "id": "1",
+      "nome": "Neutro",
+      "expressao": "neutro",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    },
+    {
+      "id": "2",
+      "nome": "Curioso",
+      "expressao": "curioso",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    },
+    {
+      "id": "3",
+      "nome": "Assustado",
+      "expressao": "assustado",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    },
+    {
+      "id": "4",
+      "nome": "Determinado",
+      "expressao": "determinado",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    },
+    {
+      "id": "5",
+      "nome": "Feliz",
+      "expressao": "feliz",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    },
+    {
+      "id": "6",
+      "nome": "Sério",
+      "expressao": "serio",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    },
+    {
+      "id": "7",
+      "nome": "Surpreso",
+      "expressao": "surpreso",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    },
+    {
+      "id": "8",
+      "nome": "Triste",
+      "expressao": "triste",
+      "opcoes": {
+        "altura": 5.5,
+        "cabecaLargura": 0.97,
+        "olhos": "oval",
+        "olhoRaio": 0.072,
+        "sobrancelha": "arqueada",
+        "sobrancelhaEsp": 0.066,
+        "cabelo": "baguncado",
+        "cabeloVolume": 1.1,
+        "moletom": "largo",
+        "faixaManga": "turquesa",
+        "calca": "larga",
+        "tenis": "cano-alto",
+        "acentoTenis": "turquesa",
+        "fatorContorno": 1.35
+      }
+    }
+  ]
+}

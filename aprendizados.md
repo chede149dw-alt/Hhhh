@@ -14,3 +14,10 @@
 - Topo da manga acima da linha do ombro vira ombreira: o raio do topo da cápsula do braço tem de terminar na linha do ombro (pivô do braço 0,18 H abaixo dela).
 - Sinal do ângulo das sobrancelhas: conferir sempre em uma expressão de teste ("assustado" saiu com cara de bravo na primeira vez).
 - Tons de cor nunca à mão: calcular pela fórmula do guia (o Marinho escrito à mão saiu diferente do calculado).
+
+## Rodadas de personagem (protagonista)
+- Gerar 6 variações numa folha (letra + nome) e deixar a pessoa escolher funciona rápido: rodada 1 → B, rodada 2 → B2.
+- Na folha, escalar pelo tamanho da cabeça (não pela altura total), senão um personagem compacto parece do mesmo tamanho que um alongado.
+- Olhos ovais com pálpebra reta deixam todas as expressões com cara de sono: a borda da pálpebra precisa ser curva e acompanhar o olho.
+- Para expressões ficarem distintas, mexer em mais de uma coisa: olhos fechados em arco (feliz), gota de suor (assustado), pálpebra inclinada (triste/determinado).
+- Folha de rostos: enquadrar com a cabeça a ~0,55 H do topo da célula, senão o volume do cabelo é cortado.

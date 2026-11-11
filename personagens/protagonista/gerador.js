@@ -371,6 +371,10 @@
       const x = c.olhoSep * sx * s, cy = -0.37, R = c.olhoRaio;
       const [ox, oy] = e.olhar || [0, 0];
       const pal = e.palpebra || 0;
+      if (e.fechado === 'sorriso') {
+        pc.linha(P((p) => { p.moveTo(x - R * 0.95, cy + R * 0.25); p.quadraticCurveTo(x, cy - R * 1.2, x + R * 0.95, cy + R * 0.25); }), pc.contorno * 1.3);
+        return;
+      }
       let area;
       if (c.olhos === 'esclera') {
         area = P((p) => p.arc(x, cy, R, 0, Math.PI * 2));
@@ -400,12 +404,15 @@
       // pálpebra (pele cobrindo de cima)
       const topo = cy - R * (c.olhos === 'oval' ? 1.0 : 1), alt = 2 * R * (c.olhos === 'oval' ? 1.0 : 1);
       const yP = topo + alt * pal;
-      if (pal > 0) pc.preencher(P((p) => p.rect(x - R * 1.2, topo - 0.02, R * 2.4, yP - topo + 0.02)), COR.pele.base);
+      // borda da pálpebra curva (acompanha o olho); inclinação opcional: e.palpebraInclina (+ = canto de fora mais baixo)
+      const inc = (e.palpebraInclina || 0) * R * s;
+      const bordaPalpebra = (p) => { p.moveTo(x - R * 1.0, yP + R * 0.18 - inc); p.quadraticCurveTo(x, yP - R * 0.28, x + R * 1.0, yP + R * 0.18 + inc); };
+      if (pal > 0) pc.preencher(P((p) => { bordaPalpebra(p); p.lineTo(x + R * 1.3, topo - 0.03); p.lineTo(x - R * 1.3, topo - 0.03); p.closePath(); }), COR.pele.base);
       ctx.restore();
       if (c.olhos === 'esclera') pc.linha(area, pc.interno);
       // linha da pálpebra / cílio superior
       if (pal > 0.02) {
-        pc.linha(P((p) => { p.moveTo(x - R * 0.95, yP); p.lineTo(x + R * 0.95, yP); }), pc.contorno * 1.2);
+        pc.linha(P(bordaPalpebra), pc.contorno * 1.25);
       } else if (c.olhos === 'esclera') {
         pc.linha(P((p) => p.arc(x, cy, R, Math.PI * 1.1, Math.PI * 1.9)), pc.contorno * 1.2);
       } else if (c.olhos === 'oval') {
@@ -500,11 +507,23 @@
       boca(pc, e);
 
       const forma = cabelo();
+      const gota = e.gota ? P((p) => {
+        const gx = 0.4 * sx, gy = -0.62;
+        p.moveTo(gx, gy - 0.1);
+        p.quadraticCurveTo(gx + 0.06, gy - 0.01, gx + 0.045, gy + 0.03);
+        p.arc(gx, gy + 0.03, 0.045, 0, Math.PI);
+        p.quadraticCurveTo(gx - 0.06, gy - 0.01, gx, gy - 0.1);
+        p.closePath();
+      }) : null;
       pc.peca(forma, COR.cabelo, { sombra: 0.06 });
       pc.preencher(P((p) => {
         p.moveTo(-0.36 * sx, -0.92); p.quadraticCurveTo(-0.18 * sx, -1.02, 0.02 * sx, -0.99);
         p.quadraticCurveTo(-0.16 * sx, -0.96, -0.33 * sx, -0.87); p.closePath();
       }), COR.cabelo.luz);
+      if (gota) {
+        pc.peca(gota, { base: '#D6ECFF', sombra: '#A9C8EE' }, { sombra: 0.02, espessura: pc.interno * 1.2 });
+        pc.preencher(P((p) => p.ellipse(0.39 * sx, -0.585, 0.012, 0.02, 0, 0, Math.PI * 2)), '#FFFFFF');
+      }
       pc.linha(P((p) => {
         for (const l of cab.linhas) { p.moveTo(l[0][0] * sx, l[0][1]); p.quadraticCurveTo(l[1][0] * sx, l[1][1], l[2][0] * sx, l[2][1]); }
       }));
@@ -542,14 +561,14 @@
         },
       },
       expressoes: {
-        neutro: { olhar: [0, 0], palpebra: 0.12, pupila: 1, sobrancelha: { y: 0, ang: 0 }, boca: { tipo: 'linha', curva: 0.35 } },
-        curioso: { olhar: [0.012, -0.008], palpebra: 0, pupila: 1.05, sobrancelha: { y: -0.025, ang: 7 }, boca: { tipo: 'linha', curva: 0.15, largura: 0.045 } },
-        assustado: { olhar: [0, 0], palpebra: 0, pupila: 0.65, sobrancelha: { y: -0.04, ang: 16 }, boca: { tipo: 'aberta', curva: -0.6, abertura: 0.03, largura: 0.05 } },
-        determinado: { olhar: [0, 0], palpebra: 0.32, pupila: 1, sobrancelha: { y: 0.018, ang: -15 }, boca: { tipo: 'linha', curva: -0.15, largura: 0.065 } },
-        feliz: { olhar: [0, 0], palpebra: 0.2, pupila: 1, sobrancelha: { y: -0.02, ang: 4 }, boca: { tipo: 'aberta', curva: 1, abertura: 0.04, largura: 0.075 } },
-        serio: { olhar: [0, 0], palpebra: 0.28, pupila: 1, sobrancelha: { y: 0.02, ang: -10 }, boca: { tipo: 'linha', curva: -0.3 } },
-        surpreso: { olhar: [0, 0], palpebra: 0, pupila: 0.6, sobrancelha: { y: -0.06, ang: 5 }, boca: { tipo: 'aberta', curva: 0, abertura: 0.045, largura: 0.04 } },
-        triste: { olhar: [0, 0.006], palpebra: 0.25, pupila: 1, sobrancelha: { y: -0.01, ang: 18 }, boca: { tipo: 'linha', curva: -0.6 } },
+        neutro: { olhar: [0, 0], palpebra: 0, pupila: 1, sobrancelha: { y: 0, ang: 0 }, boca: { tipo: 'linha', curva: 0.35 } },
+        curioso: { olhar: [0.014, -0.01], palpebra: 0, pupila: 1.1, sobrancelha: { y: -0.03, ang: 8 }, boca: { tipo: 'linha', curva: 0.2, largura: 0.045 } },
+        assustado: { olhar: [0, 0.004], palpebra: 0, pupila: 0.6, sobrancelha: { y: -0.045, ang: 18 }, boca: { tipo: 'aberta', curva: -0.8, abertura: 0.035, largura: 0.055 }, gota: true },
+        determinado: { olhar: [0, 0], palpebra: 0.3, palpebraInclina: -0.25, pupila: 1, sobrancelha: { y: 0.025, ang: -18 }, boca: { tipo: 'linha', curva: -0.1, largura: 0.07 } },
+        feliz: { fechado: 'sorriso', sobrancelha: { y: -0.03, ang: 5 }, boca: { tipo: 'aberta', curva: 1.4, abertura: 0.06, largura: 0.09 } },
+        serio: { olhar: [0, 0], palpebra: 0.22, pupila: 1, sobrancelha: { y: 0.025, ang: -6 }, boca: { tipo: 'linha', curva: -0.2, largura: 0.07 } },
+        surpreso: { olhar: [0, 0], palpebra: 0, pupila: 0.55, sobrancelha: { y: -0.075, ang: 4 }, boca: { tipo: 'aberta', curva: 0, abertura: 0.05, largura: 0.035 } },
+        triste: { olhar: [0, 0.012], palpebra: 0.28, palpebraInclina: 0.35, pupila: 1, sobrancelha: { y: -0.015, ang: 20 }, boca: { tipo: 'linha', curva: -0.9, largura: 0.065 } },
       },
     };
   };

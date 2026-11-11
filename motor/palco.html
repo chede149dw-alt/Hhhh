@@ -43,7 +43,13 @@
       ctx.save();
       // escala por tamanho de cabeça (o.cabecaPx) para comparar proporções de verdade
       const alt = o.cabecaPx ? def.alturaEmH * o.cabecaPx : (o.alturaPersonagem || 860);
-      rig.desenhar(ctx, x0 + cw / 2, y0 + ch - 130, alt);
+      let ySola = y0 + ch - 130;
+      if (o.enquadrar === 'rosto') {
+        // cabeça centralizada na célula (cabelo incluído), resto do corpo recortado
+        ySola = y0 + 0.55 * o.cabecaPx + alt;
+        ctx.beginPath(); ctx.rect(x0, y0, cw, ch - 100); ctx.clip();
+      }
+      rig.desenhar(ctx, x0 + cw / 2, ySola, alt);
       ctx.restore();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.fillStyle = Estilo.base.tinta;
