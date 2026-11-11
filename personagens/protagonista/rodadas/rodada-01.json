@@ -1,0 +1,29 @@
+{
+  "fabrica": "criarProtagonista",
+  "titulo": "Rodada 1 — seis direções",
+  "cabecaPx": 150,
+  "variantes": [
+    { "id": "A", "nome": "Clássico", "expressao": "neutro",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.98, "olhos": "esclera", "sobrancelha": "reta", "cabelo": "pontas",
+                  "moletom": "largo", "calca": "reta", "tenis": "baixo", "corCordao": "linho" } },
+    { "id": "B", "nome": "Anime casual", "expressao": "curioso",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.95, "olhos": "oval", "olhoRaio": 0.07, "sobrancelha": "arqueada", "cabelo": "baguncado",
+                  "moletom": "largo", "faixaManga": "turquesa", "calca": "larga", "tenis": "cano-alto", "acentoTenis": "turquesa" } },
+    { "id": "C", "nome": "Cartoon traço grosso", "expressao": "neutro",
+      "opcoes": { "altura": 5.0, "cabecaLargura": 1.04, "olhos": "ponto", "olhoRaio": 0.07, "sobrancelha": "reta", "sobrancelhaEsp": 0.07,
+                  "cabelo": "reto", "moletom": "reto", "calca": "jogger", "corCalca": "pedra", "tenis": "baixo", "acentoTenis": "mostarda",
+                  "corCordao": "mostarda", "pele": "pele4", "fatorContorno": 1.7 } },
+    { "id": "D", "nome": "Alongado", "expressao": "serio",
+      "opcoes": { "altura": 6.0, "cabecaLargura": 0.9, "queixo": "quadrado", "olhos": "esclera", "olhoRaio": 0.062, "sobrancelha": "angular",
+                  "cabelo": "lateral", "moletom": "curto", "calca": "cargo", "tenis": "cano-alto", "acentoTenis": "brasa", "corCordao": "brasa",
+                  "fatorContorno": 1.2 } },
+    { "id": "E", "nome": "Compacto", "expressao": "feliz",
+      "opcoes": { "altura": 4.6, "cabecaLargura": 1.04, "olhos": "ponto", "olhoRaio": 0.072, "sobrancelha": "reta", "cabelo": "baguncado",
+                  "moletom": "largo", "emblema": { "forma": "circulo", "cor": "mostarda" }, "calca": "larga", "corCalca": "denim",
+                  "tenis": "baixo", "acentoTenis": "mostarda", "fatorContorno": 1.3 } },
+    { "id": "F", "nome": "Futuro herói", "expressao": "determinado",
+      "opcoes": { "altura": 5.5, "cabecaLargura": 0.95, "queixo": "quadrado", "olhos": "oval", "olhoRaio": 0.068, "sobrancelha": "angular",
+                  "sobrancelhaEsp": 0.068, "cabelo": "lateral", "moletom": "reto", "faixaManga": "lilas",
+                  "emblema": { "forma": "raio", "cor": "lilas" }, "calca": "jogger", "tenis": "cano-alto", "acentoTenis": "lilas", "pele": "pele4" } }
+  ]
+}

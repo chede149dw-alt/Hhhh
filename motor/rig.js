@@ -97,7 +97,7 @@
       const H = alturaPx / A;
       const raiz = new DOMMatrix().translate(x, ySola).scale(H).translate(0, -A);
       const m = this.matrizes(raiz);
-      const linha = E().contorno(A);
+      const linha = E().contorno(A) * (this.def.fatorContorno || 1);
 
       // sombra no chão (seção 6)
       ctx.save();

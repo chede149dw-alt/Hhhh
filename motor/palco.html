@@ -23,6 +23,40 @@
     rig.desenhar(ctx, o.x || c.width / 2, ySola, o.alturaPersonagem);
     return c.toDataURL('image/png').split(',')[1];
   };
+
+  // Folha com várias versões lado a lado: o.variantes = [{ id, nome, opcoes, expressao, pose }]
+  window.desenharFolha = async function (o) {
+    await document.fonts.load('600 34px Inter');
+    const cols = o.colunas || 3, cw = o.celulaLargura || 600, ch = o.celulaAltura || 1080;
+    const linhas = Math.ceil(o.variantes.length / cols);
+    const c = document.getElementById('c');
+    c.width = cols * cw; c.height = linhas * ch;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = o.fundo || Estilo.fundoFicha;
+    ctx.fillRect(0, 0, c.width, c.height);
+    o.variantes.forEach((v, i) => {
+      const x0 = (i % cols) * cw, y0 = Math.floor(i / cols) * ch;
+      const def = window[o.fabrica](v.opcoes || {});
+      const rig = new Rig(def);
+      if (v.pose) rig.usarPose(v.pose);
+      if (v.expressao) rig.usarExpressao(v.expressao);
+      ctx.save();
+      // escala por tamanho de cabeça (o.cabecaPx) para comparar proporções de verdade
+      const alt = o.cabecaPx ? def.alturaEmH * o.cabecaPx : (o.alturaPersonagem || 860);
+      rig.desenhar(ctx, x0 + cw / 2, y0 + ch - 130, alt);
+      ctx.restore();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = Estilo.base.tinta;
+      ctx.textAlign = 'center';
+      ctx.font = '800 64px Inter';
+      ctx.fillText(v.id, x0 + cw / 2, y0 + ch - 50);
+      ctx.font = '600 28px Inter';
+      ctx.fillText(v.nome || '', x0 + cw / 2, y0 + ch - 14);
+      ctx.strokeStyle = 'rgba(33,27,38,0.12)'; ctx.lineWidth = 2;
+      ctx.strokeRect(x0 + 1, y0 + 1, cw - 2, ch - 2);
+    });
+    return c.toDataURL('image/png').split(',')[1];
+  };
 </script>
 </body>
 </html>
