@@ -1,0 +1,297 @@
+{
+ "serie": "Chede e Kaik",
+ "episodio": 6,
+ "parte": 6,
+ "planos": [
+  {
+   "id": "capa",
+   "fala": {
+    "texto": "E se alguém tivesse o mesmo poder que você?",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/capa.wav"
+    }
+   },
+   "destaque": [
+    "PODER"
+   ],
+   "duracao": 3.17
+  },
+  {
+   "id": "garota",
+   "fala": {
+    "texto": "Na estrada, uma garota de moletom verde esperava os dois.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/garota.wav"
+    }
+   },
+   "destaque": [
+    "VERDE"
+   ],
+   "camera": {
+    "tomada": true
+   },
+   "duracao": 4.05
+  },
+  {
+   "id": "gato",
+   "fala": {
+    "texto": "O gato se enroscou no pé dela: Pipoca, achei você.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/gato.wav"
+    }
+   },
+   "destaque": [
+    "ACHEI"
+   ],
+   "camera": {
+    "tomada": true,
+    "continua": true
+   },
+   "duracao": 4.65
+  },
+  {
+   "id": "lia",
+   "fala": {
+    "texto": "Eu sou a Lia. Faz dois anos que eu procuro esse gato.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/lia.wav"
+    }
+   },
+   "destaque": [
+    "LIA."
+   ],
+   "camera": {
+    "tomada": true,
+    "continua": true
+   },
+   "duracao": 3.55
+  },
+  {
+   "id": "fenda",
+   "fala": {
+    "texto": "Ela abriu a mão, e uma fenda roxa apareceu.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/fenda.wav"
+    }
+   },
+   "destaque": [
+    "ROXA"
+   ],
+   "duracao": 3.73
+  },
+  {
+   "id": "travou",
+   "fala": {
+    "texto": "O Kaik travou: dois com o mesmo poder?",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/travou.wav"
+    }
+   },
+   "destaque": [
+    "PODER?"
+   ],
+   "duracao": 3.45
+  },
+  {
+   "id": "fichas",
+   "fala": {
+    "texto": "Três fichas, três pessoas. A terceira é minha.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/fichas.wav"
+    }
+   },
+   "destaque": [
+    "MINHA."
+   ],
+   "duracao": 4.03
+  },
+  {
+   "id": "some",
+   "fala": {
+    "texto": "Eles não me abordam porque eu sumo antes.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/some.wav"
+    }
+   },
+   "destaque": [
+    "SUMO"
+   ]
+  },
+  {
+   "id": "eco",
+   "fala": {
+    "texto": "Toda fenda que você abre faz um eco. Eu sinto.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/eco.wav"
+    }
+   },
+   "destaque": [
+    "ECO."
+   ],
+   "duracao": 3.57
+  },
+  {
+   "id": "testa",
+   "fala": {
+    "texto": "O Chede abriu a dele pra testar, e as duas se puxaram.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/testa.wav"
+    }
+   },
+   "destaque": [
+    "PUXARAM."
+   ],
+   "camera": {
+    "tomada": true
+   },
+   "duracao": 3.81
+  },
+  {
+   "id": "ima",
+   "fala": {
+    "texto": "Duas fendas perto viram um ímã. Vento de oitenta quilômetros por hora.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/ima.wav"
+    }
+   },
+   "destaque": [
+    "ÍMÃ."
+   ],
+   "camera": {
+    "tomada": true,
+    "continua": true
+   },
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "de": 0,
+     "ate": 2.5,
+     "volume": 1.2
+    }
+   ],
+   "duracao": 4.79
+  },
+  {
+   "id": "fecham",
+   "fala": {
+    "texto": "Só fecharam quando os dois piscaram juntos.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/fecham.wav"
+    }
+   },
+   "destaque": [
+    "JUNTOS."
+   ],
+   "camera": {
+    "tomada": true,
+    "continua": true
+   },
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 0.9,
+     "volume": 0.8
+    }
+   ],
+   "duracao": 3.09
+  },
+  {
+   "id": "seria",
+   "fala": {
+    "texto": "A Lia ficou séria: semana passada, você deixou uma aberta no chão.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/seria.wav"
+    }
+   },
+   "destaque": [
+    "CHÃO."
+   ],
+   "camera": {
+    "tomada": true
+   },
+   "duracao": 4.65
+  },
+  {
+   "id": "saiu",
+   "fala": {
+    "texto": "Tempo demais. Alguma coisa saiu junto.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/saiu.wav"
+    }
+   },
+   "destaque": [
+    "JUNTO."
+   ],
+   "camera": {
+    "tomada": true,
+    "continua": true
+   },
+   "sfx": [
+    {
+     "tipo": "coracao",
+     "bpm": 80,
+     "bpmFim": 120,
+     "de": 0,
+     "ate": 2.6
+    }
+   ],
+   "duracao": 3.05
+  },
+  {
+   "id": "marcas",
+   "fala": {
+    "texto": "No asfalto, cinco marcas de mão pretas, indo pra cidade.",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/marcas.wav"
+    }
+   },
+   "destaque": [
+    "PRETAS,"
+   ],
+   "duracao": 4.43
+  },
+  {
+   "id": "parte",
+   "fala": {
+    "texto": "Na parte sete: o que saiu da fenda? Segue pra ver a parte sete!",
+    "voz": "narrador",
+    "velocidade": 200,
+    "voz_final": {
+     "arquivo": "vozes/final/parte.wav"
+    }
+   },
+   "destaque": [],
+   "duracao": 4.86
+  }
+ ]
+}

@@ -1,0 +1,114 @@
+{
+  "fabrica": "criarMae",
+  "registroPoses": "POSES_PADRAO",
+  "opcoes": {},
+  "titulo": "MÃE",
+  "subtitulo": "Mãe do Lucas · carinhosa, prática e desconfiada · série “E se você acordasse podendo ficar invisível?”",
+  "paleta": [
+    {
+      "nome": "Cardigã",
+      "cor": "#F2EDE6"
+    },
+    {
+      "nome": "Blusa",
+      "cor": "#A487DE"
+    },
+    {
+      "nome": "Calça",
+      "cor": "#38343F"
+    },
+    {
+      "nome": "Pele",
+      "cor": "#8F5B3E"
+    },
+    {
+      "nome": "Cabelo",
+      "cor": "#4A3536"
+    },
+    {
+      "nome": "Detalhe",
+      "cor": "#EBC25A"
+    }
+  ],
+  "vistas": [
+    {
+      "nome": "Frente",
+      "vista": "frente",
+      "pose": "parado"
+    },
+    {
+      "nome": "3/4",
+      "vista": "tq",
+      "pose": "tq"
+    },
+    {
+      "nome": "Perfil",
+      "vista": "perfil",
+      "pose": "perfil"
+    },
+    {
+      "nome": "Costas",
+      "vista": "costas",
+      "pose": "costas"
+    }
+  ],
+  "expressoes": [
+    {
+      "nome": "Neutro",
+      "expressao": "neutro"
+    },
+    {
+      "nome": "Feliz",
+      "expressao": "feliz"
+    },
+    {
+      "nome": "Espanto",
+      "expressao": "espanto"
+    },
+    {
+      "nome": "Medo",
+      "expressao": "medo"
+    },
+    {
+      "nome": "Raiva",
+      "expressao": "raiva"
+    },
+    {
+      "nome": "Preocupado",
+      "expressao": "preocupado"
+    },
+    {
+      "nome": "Cansado",
+      "expressao": "cansado"
+    },
+    {
+      "nome": "Rindo",
+      "expressao": "rindo"
+    }
+  ],
+  "poses": [
+    {
+      "nome": "Parado",
+      "pose": "parado"
+    },
+    {
+      "nome": "Andando",
+      "pose": "andando"
+    },
+    {
+      "nome": "Acenando",
+      "pose": "acenando"
+    },
+    {
+      "nome": "Mãos na cintura",
+      "pose": "maos-na-cintura"
+    }
+  ],
+  "regras": [
+    "Altura 6 cabeças; cabeça 0,90 H; contorno 1,35× o padrão do guia (igual ao Lucas).",
+    "Cardigã Linho #F2EDE6 aberto, com botões, sobre blusa Lilás #A487DE (acento, 10–20% da área).",
+    "Calça Grafite #38343F reta; sapatilha Grafite. Pele 4 #8F5B3E.",
+    "Cabelo Café #4A3536 preso em coque com risca no meio e prendedor Mostarda #EBC25A; brincos Mostarda; cílios."
+  ],
+  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}

@@ -184,3 +184,9 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Nome da série: FENDA** (escolha do usuário, 12/11). Daqui pra frente:
   - na capa, o logo "FENDA" fica no alto (y ≈ 330), com o rasgo roxo atrás do texto, nunca cobrindo as letras;
   - na descrição, o título começa com "🌀 FENDA ·" e a hashtag #Fenda entra primeiro.
+- **Skill "Animação do Chede" atualizada** (usuário, 12/11: "atualiza a skill e me passa"). A versão nova fica em `skill-animacao-do-chede/` e no zip `prontos/skill-animacao-do-chede.zip`. Ela traz:
+  - o motor com as correções (troca de vista direta, bermuda, cacheado, bolso, faixa);
+  - Chede, Kaik e Lia com fichas, e o efeito `fenda`;
+  - a Parte 6 como modelo e o padrão de capa;
+  - as regras novas no SKILL.md.
+  Ela foi testada instalando do zero (folha de teste e capa geradas). A cópia sincronizada em `/root/.claude/skills/synced/` não foi alterada; para trocar a skill da conta, o usuário sobe o zip.
