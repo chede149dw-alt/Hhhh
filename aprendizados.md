@@ -173,3 +173,11 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Gato no colo, desenhado de frente, parece estampa no moletom** (usuário, 12/11). O gato fica no pé da personagem, encostado na perna e desenhado depois dela; a fala virou "O gato se enroscou no pé dela".
 - **Parte 6 no motor da skill:** roteiro `animacao-do-chede/roteiros/chede/ep06.{json,js}`, Lia em `personagens/lia/lia.js`, fenda em `efeitos/fenda.js`. Prévia (voz grátis) renderiza em ~2 min. Infográficos ficam embaixo (y ≈ 1560), porque a legenda do motor fica no alto.
 - **Troca de vista sem transparência e personagens em ordem de profundidade** (usuário, 12/11: "o Kaik fica por cima da personagem"; "quando trocam de 3/4, frente, lado, fica meio transparente"). No motor da skill, `personagemGirando` agora troca a vista direto (a mistura só volta com `window.MISTURA_VISTAS = true`). Nos planos, todo grupo de personagens passa por `emOrdem(cam, …)`, que desenha do mais longe para o mais perto da câmera.
+- **Padrão de capa (usuário, 12/11: "toda vez que gerar esse estilo de capa")**, com a imagem de referência guardada só localmente em `referencias/capa-referencia-anime.jpg`. A capa segue sempre este modelo:
+  - protagonista grande no centro, olhando para a câmera, com o poder na mão vindo para a frente;
+  - dois personagens atrás, nas laterais, menores e mais escuros;
+  - fundo roxo dramático com círculo de runas e silhueta da cidade;
+  - título grande embaixo em letras metálicas (prata, com a palavra-chave em dourado) e brilho roxo;
+  - selo "PARTE N" em moldura hexagonal com linhas laterais.
+  Modelo pronto: plano `capaReels` em `animacao-do-chede/roteiros/chede/ep06.js`; gerar com `node motor/quadro.js roteiros/chede/capa-reels.json roteiros/chede/ep06.js capaReels <saida.png>`.
+- **Voz final no motor da skill:** gerar a narração inteira de uma vez (tom igual), alinhar com `estudio/scripts/alinhar.py` e cortar por fala em `animacao-do-chede/audio/<serie>/<ep>/vozes/final/<id>.wav`. Não usar `afade=t=out:st=0` no corte (deixa o arquivo mudo). Falas maiores que 3 s ganham `duracao` = fala + 0,25 s.

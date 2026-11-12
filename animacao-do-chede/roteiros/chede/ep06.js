@@ -211,6 +211,68 @@
   }
 
   window.PLANOS = {
+    // CAPA DO REELS no estilo da referência do usuário (12/11): protagonista grande no centro com o poder na mão
+    // vindo na direção da câmera, dois personagens atrás nas laterais, fundo roxo dramático com círculo mágico,
+    // título grande embaixo (prata + dourado) e selo "PARTE N".
+    capaReels(ctx, u, d, api) {
+      // fundo: céu roxo de tempestade + círculo de runas + cidade em silhueta
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#1A0B3A'); g.addColorStop(0.45, '#3A1478'); g.addColorStop(0.75, '#22104E'); g.addColorStop(1, '#0C0620');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const rnd = rng(31);
+      for (let i = 0; i < 26; i++) { // nuvens
+        const x = rnd() * W, y = rnd() * 900, r = 120 + rnd() * 220;
+        const n = ctx.createRadialGradient(x, y, 0, x, y, r); n.addColorStop(0, 'rgba(120,70,200,0.35)'); n.addColorStop(1, 'rgba(120,70,200,0)');
+        ctx.fillStyle = n; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+      }
+      ctx.save(); ctx.translate(540, 520); ctx.globalCompositeOperation = 'lighter';
+      for (const [r, a] of [[430, 0.55], [370, 0.35], [300, 0.25]]) { ctx.strokeStyle = `rgba(190,140,255,${a})`; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke(); }
+      ctx.font = '700 34px Inter'; ctx.fillStyle = 'rgba(210,180,255,0.6)'; ctx.textAlign = 'center';
+      for (let i = 0; i < 28; i++) { ctx.save(); ctx.rotate((i / 28) * Math.PI * 2); ctx.fillText('ᚠᚱᛟᚾᛞᚨ'[i % 6], 0, -398); ctx.restore(); }
+      ctx.restore();
+      ctx.fillStyle = '#120828'; ctx.beginPath(); ctx.moveTo(0, 980);
+      for (let x = 0; x <= W; x += 45) { const h = 60 + ((x * 37) % 170) + (x > 380 && x < 700 ? 140 : 0); ctx.lineTo(x, 980 - h); ctx.lineTo(x + 45, 980 - h); }
+      ctx.lineTo(W, 1100); ctx.lineTo(0, 1100); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(200,160,255,0.75)';
+      for (let i = 0; i < 40; i++) { const x = rnd() * W, y = 820 + rnd() * 150; ctx.fillRect(x, y, 6, 9); }
+      // personagens: Lia (esq.) e Kaik (dir.) atrás, Chede grande no centro
+      const sombra = (f) => { ctx.save(); f(); ctx.restore(); };
+      sombra(() => close(api, { ...LIA, pose: 'parado', expressao: 'determinado', vista: 'tq' }, 230, 690, 330, { parado: true, luz: { lado: 1, cor: 'rgb(190,150,255)', forca: 0.8 } }));
+      sombra(() => close(api, { ...KAIK, pose: 'maos-na-cintura', expressao: 'determinado', vista: 'tq', espelhar: true }, 860, 700, 330, { parado: true, luz: { lado: -1, cor: 'rgb(190,150,255)', forca: 0.8 } }));
+      ctx.fillStyle = 'rgba(30,10,70,0.35)'; ctx.fillRect(0, 0, W, 1250);
+      const rig = close(api, { ...CHEDE, pose: { braco_d: 68, antebraco_d: 20, braco_e: -8, antebraco_e: 4 }, expressao: 'determinado' }, 560, 640, 430, { parado: true, luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.9 } });
+      const m = rig && rig.pontoMundo ? rig.pontoMundo('mao_d', [0, 0.25]) : { x: 300, y: 1050 };
+      Efeitos.fenda(ctx, Math.max(260, m.x), m.y - 20, 420, { t: 1.3, abre: 1, semente: 9 });
+      // faixa escura atrás do título
+      const f = ctx.createLinearGradient(0, 1150, 0, 1700); f.addColorStop(0, 'rgba(12,6,32,0)'); f.addColorStop(0.35, 'rgba(12,6,32,0.8)'); f.addColorStop(1, 'rgba(12,6,32,0.95)');
+      ctx.fillStyle = f; ctx.fillRect(0, 1150, W, H - 1150);
+      // título metálico
+      const metal = (txt, y, tam, cores, contorno = '#1A0B30') => {
+        ctx.save(); ctx.font = `900 ${tam}px Inter`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        let k = 1; while (ctx.measureText(txt).width * k > 1000) k -= 0.02;
+        ctx.translate(540, y); ctx.scale(k, 1);
+        ctx.shadowColor = 'rgba(167,121,255,0.9)'; ctx.shadowBlur = 30;
+        ctx.lineJoin = 'round'; ctx.strokeStyle = contorno; ctx.lineWidth = tam * 0.16; ctx.strokeText(txt, 0, 0);
+        ctx.shadowBlur = 0;
+        const gr = ctx.createLinearGradient(0, -tam * 0.5, 0, tam * 0.5); cores.forEach(([o, c]) => gr.addColorStop(o, c));
+        ctx.fillStyle = gr; ctx.fillText(txt, 0, 0);
+        ctx.restore();
+      };
+      const PRATA = [[0, '#FFFFFF'], [0.45, '#D7D2E6'], [0.55, '#9C94B4'], [1, '#E9E5F5']];
+      const OURO = [[0, '#FFF2B0'], [0.45, '#FFC83D'], [0.55, '#D98A12'], [1, '#FFD45E']];
+      metal('E SE ALGUÉM', 1290, 130, PRATA);
+      metal('TIVESSE O MESMO', 1405, 92, PRATA);
+      metal('PODER?', 1530, 168, OURO);
+      // selo PARTE 6 com moldura
+      ctx.save(); ctx.translate(540, 1690);
+      ctx.fillStyle = '#2A1060'; ctx.strokeStyle = '#B98CFF'; ctx.lineWidth = 6;
+      ctx.beginPath(); ctx.moveTo(-230, 0); ctx.lineTo(-195, -62); ctx.lineTo(195, -62); ctx.lineTo(230, 0); ctx.lineTo(195, 62); ctx.lineTo(-195, 62); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(185,140,255,0.8)'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(-420, 0); ctx.lineTo(-250, 0); ctx.moveTo(250, 0); ctx.lineTo(420, 0); ctx.stroke();
+      ctx.restore();
+      metal('PARTE 6', 1693, 84, PRATA);
+    },
+
     capa(ctx, u, d, api) {
       const z = api.lerp(1, 1.06, u / d);
       ctx.save(); ctx.translate(540, 1100); ctx.scale(z, z); ctx.translate(-540, -1100);

@@ -82,3 +82,11 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
 - Em aberto para a Parte 6: quem estava esperando (silhueta); a Lia (ficha proposta em `personagens/lia/`); a criatura "Coletor" (proposta, não aprovada).
 - ✅ Final: `prontos/parte-5-esconder.mp4` (2256 quadros, 75,2 s, 1080x1920, 47 MB) + `prontos/parte-5-esconder-capa.png` + `roteiros/parte-5-esconder-post.md`. Miado real do ElevenLabs (`audio/sfx-miado-gato.mp3`).
 - Próximo: Parte 6 — definir quem estava esperando, a Lia e a origem da criatura.
+
+## Parte 6 — "E se alguém tivesse o mesmo poder que você?" (ENTREGUE 12/11) — primeiro episódio no motor da skill
+- Motor: `animacao-do-chede/` (skill "Animação do Chede"). Roteiro `roteiros/parte-6-mesmo-poder.md`; planos `animacao-do-chede/roteiros/chede/ep06.{json,js}`.
+- Personagens no motor novo: Chede, Kaik e Lia (`animacao-do-chede/personagens/`).
+- Voz final Witalo (take 2, acerto 0,994): `audio/parte-6-mesmo-poder-narracao.mp3`.
+- Final: `prontos/parte-6-mesmo-poder.mp4` (61,5 s, −16,8 LUFS) + capa `prontos/parte-6-mesmo-poder-capa.png` (padrão de capa novo) + post `roteiros/parte-6-mesmo-poder-post.md`.
+- Render final: `cd animacao-do-chede && node motor/video.js roteiros/chede/ep06.json roteiros/chede/ep06.js ../prontos/parte-6-mesmo-poder.mp4 --workers 4` (~3 min).
+- Próximo: Parte 7 — o que saiu da fenda (marcas de mão pretas indo para a cidade).
