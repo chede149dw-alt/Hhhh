@@ -30,6 +30,12 @@
         {
           "tipo": "ronco",
           "volume": 1.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/whoosh.wav",
+          "em": 0.0,
+          "volume": 0.5
         }
       ],
       "imagem": "Capa no quarto escuro, pedras flutuando, rachaduras brilhando; título.",
@@ -63,6 +69,12 @@
         {
           "tipo": "ronco",
           "volume": 1.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.2,
+          "volume": 0.7
         }
       ],
       "imagem": "Rua à noite, luzes piscando, rachadura brilhando no asfalto; câmera sobe."
@@ -96,6 +108,12 @@
         {
           "tipo": "ronco",
           "volume": 0.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.3,
+          "volume": 0.45
         }
       ],
       "imagem": "Lucas deitado abre os olhos devagar; poeira do teto."
@@ -121,7 +139,15 @@
         "vinheta": 0.9,
         "bloom": 0.6
       },
-      "imagem": "Despertador tocando e tremendo."
+      "imagem": "Despertador tocando e tremendo.",
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/despertador.wav",
+          "em": 0.0,
+          "volume": 0.9
+        }
+      ]
     },
     {
       "id": "tapa",
@@ -149,6 +175,12 @@
           "tipo": "impacto",
           "em": 0.45,
           "volume": 1.3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/impacto.wav",
+          "em": 0.45,
+          "volume": 1.0
         }
       ],
       "imagem": "Mão desce; silêncio; impacto."
@@ -178,6 +210,24 @@
         {
           "tipo": "ronco",
           "volume": 1.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.0,
+          "volume": 1.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 1.0,
+          "volume": 0.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terra.wav",
+          "em": 0.6,
+          "volume": 0.5
         }
       ],
       "imagem": "Quarto chacoalhando forte, livros caindo.",
@@ -215,6 +265,18 @@
         {
           "tipo": "ronco",
           "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/rachar.wav",
+          "em": 0.2,
+          "volume": 1.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/rachar.wav",
+          "em": 1.2,
+          "volume": 0.7
         }
       ],
       "imagem": "Rachadura do pé da cama até o Lucas, que recua com medo.",
@@ -275,7 +337,15 @@
         "vinheta": 0.9,
         "bloom": 0.6
       },
-      "imagem": "Terra sobe do vaso e flutua até a mão do Lucas."
+      "imagem": "Terra sobe do vaso e flutua até a mão do Lucas.",
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terra.wav",
+          "em": 0.2,
+          "volume": 0.35
+        }
+      ]
     },
     {
       "id": "dedos",
@@ -302,6 +372,12 @@
         {
           "tipo": "coracao",
           "bpm": 92
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/whoosh.wav",
+          "em": 1.5,
+          "volume": 0.4
         }
       ],
       "imagem": "Esfera de terra se formando na mão."
@@ -331,7 +407,15 @@
       "camera": {
         "tomada": true,
         "forca": 0.7
-      }
+      },
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/porta.wav",
+          "em": 0.15,
+          "volume": 0.9
+        }
+      ]
     },
     {
       "id": "susto",
@@ -359,6 +443,12 @@
           "tipo": "impacto",
           "em": 0.5,
           "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terra.wav",
+          "em": 0.1,
+          "volume": 0.9
         }
       ],
       "imagem": "Esfera desmancha; Lucas congela com medo.",
@@ -394,7 +484,8 @@
         "tomada": true,
         "continua": true,
         "forca": 0.7
-      }
+      },
+      "sfx": []
     },
     {
       "id": "mentira",
@@ -421,6 +512,12 @@
         {
           "tipo": "coracao",
           "bpm": 110
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/whoosh.wav",
+          "em": 0.0,
+          "volume": 0.45
         }
       ],
       "imagem": "Lucas com sorriso forçado e suor; rachadura brilhando atrás.",
@@ -470,6 +567,36 @@
           "tipo": "impacto",
           "em": 2.58,
           "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/impacto.wav",
+          "em": 0.6,
+          "volume": 0.45
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/impacto.wav",
+          "em": 1.26,
+          "volume": 0.45
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/impacto.wav",
+          "em": 1.92,
+          "volume": 0.45
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/impacto.wav",
+          "em": 2.58,
+          "volume": 0.45
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/rachar.wav",
+          "em": 0.6,
+          "volume": 0.5
         }
       ],
       "imagem": "Lucas correndo; cada passo racha a calçada.",
@@ -503,6 +630,18 @@
         {
           "tipo": "ronco",
           "volume": 2.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/whoosh.wav",
+          "em": 0.0,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.1,
+          "volume": 0.8
         }
       ],
       "imagem": "Onda de pedras arrasta o Lucas sem controle.",
@@ -537,6 +676,18 @@
           "tipo": "impacto",
           "em": 0.35,
           "volume": 1.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/impacto.wav",
+          "em": 0.35,
+          "volume": 1.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terra.wav",
+          "em": 0.4,
+          "volume": 0.7
         }
       ],
       "imagem": "Onda desmancha no pátio; Lucas cai na poeira.",
@@ -569,6 +720,12 @@
         {
           "tipo": "coracao",
           "bpm": 96
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/alunos.wav",
+          "em": 0.0,
+          "volume": 0.8
         }
       ],
       "imagem": "Alunos parados olhando; alguém aponta; close no Lucas.",
@@ -602,7 +759,8 @@
       "camera": {
         "tomada": true,
         "forca": 0.7
-      }
+      },
+      "sfx": []
     },
     {
       "id": "buraco",
@@ -633,6 +791,24 @@
         {
           "tipo": "ronco",
           "volume": 1.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/impacto.wav",
+          "em": 0.3,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/rachar.wav",
+          "em": 0.4,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.5,
+          "volume": 0.7
         }
       ],
       "imagem": "Bueiro afunda; Rafael escorrega para a beira do buraco.",
@@ -671,6 +847,18 @@
           "tipo": "impacto",
           "em": 0.4,
           "volume": 0.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.2,
+          "volume": 0.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/whoosh.wav",
+          "em": 0.3,
+          "volume": 0.5
         }
       ],
       "imagem": "Coluna de terra sustenta o Rafael e fecha o chão.",
@@ -705,7 +893,8 @@
       "camera": {
         "tomada": true,
         "forca": 0.7
-      }
+      },
+      "sfx": []
     },
     {
       "id": "resposta",
@@ -765,7 +954,15 @@
       "camera": {
         "tomada": true,
         "forca": 0.7
-      }
+      },
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/whoosh.wav",
+          "em": 0.1,
+          "volume": 0.3
+        }
+      ]
     },
     {
       "id": "racha",
@@ -792,6 +989,24 @@
         {
           "tipo": "ronco",
           "volume": 1.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/rachar.wav",
+          "em": 0.0,
+          "volume": 1.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/rachar.wav",
+          "em": 1.0,
+          "volume": 0.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.3,
+          "volume": 0.7
         }
       ],
       "imagem": "Rachadura maior corre até os pés do Lucas.",
@@ -831,6 +1046,12 @@
         {
           "tipo": "ronco",
           "volume": 2.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/terremoto.wav",
+          "em": 0.0,
+          "volume": 0.6
         }
       ],
       "imagem": "Câmera mergulha na rachadura; brilho enorme pulsando."
@@ -887,7 +1108,15 @@
         "vinheta": 1.0,
         "bloom": 0.8
       },
-      "imagem": "Cartela PARTE 1 + SEGUE PRA VER A PARTE 2."
+      "imagem": "Cartela PARTE 1 + SEGUE PRA VER A PARTE 2.",
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "audio/sfx/whoosh.wav",
+          "em": 0.0,
+          "volume": 0.5
+        }
+      ]
     }
   ],
   "vozes": {
@@ -896,5 +1125,12 @@
     "lucas": "ElevenLabs Lucas Gabriel (jGMGxcV5sW7h4qUUl30i)",
     "rafael": "ElevenLabs Davi Leão (6PhbMr9YjdeOaTNz9y24)",
     "modelo": "eleven_v4"
-  }
+  },
+  "trilha": {
+    "arquivo": "audio/terra/ep01-dramatico/trilha.wav",
+    "volume": 0.4,
+    "abaixar": true,
+    "gerador": "roteiros/terra/ep01-trilha.py"
+  },
+  "efeitos_sonoros": "ElevenLabs Sound Effects v2 (audio/sfx/) + sintetizados no motor (coração, impacto, ronco)"
 }

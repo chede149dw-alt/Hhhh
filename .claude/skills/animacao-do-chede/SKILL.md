@@ -49,12 +49,22 @@ Leia o `guia-de-estilo.md` antes de criar personagem, cenário ou efeito novo.
    `"fala": { ..., "voz_final": { "arquivo": "vozes/final/<id>.wav" } }`. Tomadas contínuas usam `tempoTomada(...)`
    com as durações nominais, para a câmera continuar batendo com as falas quando os planos mudam de tamanho.
    Render final (sem `--previa`): `node motor/video.js roteiros/<serie>/<ep>.json roteiros/<serie>/<ep>.js prontos/<nome>.mp4 --workers 4`
-8. **Capa do Reels/TikTok:** um plano extra `capaReels` no `.js` (não entra no vídeo) e um `.json` só com ele
+8. **Efeitos sonoros e música de fundo:**
+   - Efeitos prontos em `audio/sfx/` (terremoto, impacto, rachar, despertador, porta, whoosh, terra, alunos — gerados
+     no ElevenLabs Sound Effects v2). Novos: `creative_generate_in_flow` com `node_type: "sfx"`, modelo
+     `eleven_text_to_sound_v2`, baixar e normalizar (`loudnorm=I=-16`). No roteiro, por plano:
+     `"sfx": [{ "tipo": "arquivo", "arquivo": "audio/sfx/porta.wav", "em": 0.15, "volume": 0.9 }]` (junto com os
+     sintetizados `coracao`, `impacto`, `ronco`). Whoosh nas viradas de câmera; terra/impacto nos poderes.
+   - Música: o conector restrito da ElevenLabs não gera música; a trilha é composta por código (modelo:
+     `roteiros/terra/ep01-trilha.py`, suspense em Ré menor que lê os tempos das cenas do roteiro). No roteiro:
+     `"trilha": { "arquivo": "audio/<serie>/<ep>/trilha.wav", "volume": 0.4, "abaixar": true }` — ela abaixa sozinha
+     quando alguém fala. Conferir: com fala ~6 dB acima dos trechos sem fala.
+9. **Capa do Reels/TikTok:** um plano extra `capaReels` no `.js` (não entra no vídeo) e um `.json` só com ele
    (modelo: `roteiros/terra/capa-reels.json`). Gerar: `node motor/quadro.js roteiros/<serie>/capa-reels.json roteiros/<serie>/<ep>.js capaReels prontos/capa-<ep>.png`.
    Título e rosto entre y 280 e 1640 (a grade corta em 4:5 no Instagram e 3:4 no TikTok); personagem com vista fixa.
-9. **Descrição:** `prontos/descricao-<ep>.txt` — gancho, resumo sem entregar o final, "PARTE X", pergunta para
+10. **Descrição:** `prontos/descricao-<ep>.txt` — gancho, resumo sem entregar o final, "PARTE X", pergunta para
    comentarem e hashtags.
-10. Anote em `aprendizados.md` o que funcionou ou não.
+11. Anote em `aprendizados.md` o que funcionou ou não.
 
 Para conferir um vídeo: `ffmpeg -i v.mp4 -vf freezedetect=n=-60dB:d=1 -f null -` (nada parado >1 s) e
 `ffprobe` (duração ≤ 1 min 15 s).

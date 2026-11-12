@@ -129,3 +129,11 @@
   (por cima do ombro → no outro personagem → volta pelo lado).
 - Capa: `motor/quadro.js` + plano `capaReels`; personagem com vista FIXA (com órbita, um ângulo perto de 22,5° mistura
   duas vistas e ele fica transparente); título no terço de cima com faixa escura atrás; selo PARTE X.
+
+## Efeitos sonoros e música de fundo
+- ElevenLabs Sound Effects v2 (conector) gera efeitos de 1–3 s; alguns vêm baixos (porta, terra -43 dB): normalizar.
+  "Riser" de 4 s saiu com 0,5 s: subidas longas, fazer por código.
+- O conector restrito não gera música: trilha composta em Python (numpy/scipy) seguindo as seções do roteiro
+  (tique de relógio no quarto, silêncio antes do tapa, acordes Dm–Bb–Gm–A no poder, cordas tremidas na mãe,
+  tambores na perseguição, piano triste, riser + estrondo no gancho, acorde final).
+- Mix: música abaixa com sidechain pela voz (threshold 0.015, ratio 8); resultado: fala ~6 dB acima do resto.

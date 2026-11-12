@@ -108,8 +108,10 @@ const bipe = path.join(pastaAudio, 'sfx-despertador.wav');
 const pDesp = planos.find((p) => p.id === 'despertador');
 const entradas = [], filtros = [];
 falas.forEach((f, i) => { entradas.push('-i', f.arquivo); filtros.push(`[${i}]adelay=${Math.round(f.inicio * 1000)}|${Math.round(f.inicio * 1000)},volume=1.6[f${i}]`); });
-let mix = falas.map((_, i) => `[f${i}]`).join('');
-if (pDesp) {
+const mixVoz = falas.map((_, i) => `[f${i}]`).join('');
+let mix = ''; // efeitos (tudo que não é voz nem música)
+const temDespertadorReal = pDesp && (roteiro.planos.find((p) => p.id === 'despertador').sfx || []).some((s) => s.tipo === 'arquivo');
+if (pDesp && !temDespertadorReal) {
   execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', `sine=frequency=2200:duration=${(pDesp.fim - pDesp.inicio).toFixed(2)}`, '-af', "volume='if(lt(mod(t,0.25),0.1),0.35,0)':eval=frame", bipe]);
   entradas.push('-i', bipe);
   const k = falas.length;
@@ -129,6 +131,8 @@ for (const p of planos) {
   for (const b of p.batidas) addSfx(sfxArq.coracao, p.inicio + b, 1.1);
   for (const s of p.sfx) {
     if (s.tipo === 'impacto') addSfx(sfxArq.impacto, p.inicio + (s.em || 0), s.volume || 1.0);
+    // efeito gravado (ex.: ElevenLabs): { tipo: 'arquivo', arquivo: 'audio/sfx/x.wav' (a partir da pasta do projeto), em, volume }
+    if (s.tipo === 'arquivo') addSfx(path.join(raiz, s.arquivo), p.inicio + (s.em || 0), s.volume || 1.0);
     if (s.tipo === 'ronco') {
       const de = s.de || 0, ate = Math.min(p.fim - p.inicio, s.ate === undefined ? p.fim - p.inicio : s.ate), d = ate - de;
       const arq = path.join(pastaAudio, `sfx-ronco-${p.id}.wav`);
@@ -137,8 +141,18 @@ for (const p of planos) {
     }
   }
 }
-const n = mix.match(/\[/g).length;
-filtros.push(`${mix}amix=inputs=${n}:normalize=0,apad,atrim=0:${total.toFixed(3)},loudnorm=I=-16:TP=-1.5[a]`);
+// vozes juntas; a música de fundo (roteiro.trilha) abaixa sozinha quando alguém fala (sidechain)
+filtros.push(falas.length > 1 ? `${mixVoz}amix=inputs=${falas.length}:normalize=0[vozes]` : `${mixVoz}anull[vozes]`);
+let finais = '[voz1]' + mix, nFinais = 1 + (mix.match(/\[/g) || []).length;
+if (roteiro.trilha) {
+  const k = entradas.length / 2; entradas.push('-i', path.join(raiz, roteiro.trilha.arquivo));
+  filtros.push('[vozes]asplit=2[voz1][vozchave]');
+  filtros.push(`[${k}]aformat=sample_rates=48000:channel_layouts=stereo,volume=${roteiro.trilha.volume || 0.3},apad,atrim=0:${total.toFixed(3)}[mus]`);
+  filtros.push(`[vozchave]aformat=sample_rates=48000:channel_layouts=stereo[chave]`);
+  filtros.push(roteiro.trilha.abaixar === false ? '[mus]anull[musd]' : '[mus][chave]sidechaincompress=threshold=0.015:ratio=8:attack=20:release=400[musd]');
+  finais += '[musd]'; nFinais++;
+} else filtros.push('[vozes]anull[voz1]');
+filtros.push(`${finais}amix=inputs=${nFinais}:normalize=0,apad,atrim=0:${total.toFixed(3)},loudnorm=I=-16:TP=-1.5[a]`);
 const audioFinal = path.join(pastaAudio, 'mix.wav');
 execFileSync('ffmpeg', ['-v', 'error', '-y', ...entradas, '-filter_complex', filtros.join(';'), '-map', '[a]', '-ar', '48000', audioFinal]);
 

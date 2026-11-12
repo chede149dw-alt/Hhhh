@@ -17,3 +17,7 @@ audio/*/*/*
 !audio/*/*/vozes/
 audio/*/*/vozes/*
 !audio/*/*/vozes/final/
+!audio/sfx/
+audio/sfx/*
+!audio/sfx/*.wav
+!audio/*/*/trilha.wav
