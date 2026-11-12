@@ -6,7 +6,7 @@
     altura: 5.6, cabecaLargura: 0.94, pele: 'pele4', fatorContorno: 1.35,
     olhos: { raio: 0.072, sep: 0.19, iris: 'irisCastanho' },
     sobrancelha: { esp: 0.06, tipo: 'reta' },
-    cabelo: { estilo: 'cacheado', cor: 'cabNoite', volume: 1.12 },
+    cabelo: { estilo: 'cacheado', cor: 'cabNoite', volume: 1.06 },
     corpo: { ombro: 0.58, quadril: 0.2 },
     top: { tipo: 'camiseta', cor: 'laranja', bolso: true },
     calca: { tipo: 'bermuda', cor: 'pretoBermuda' },
