@@ -186,6 +186,8 @@
   function personagemGirando(ctx, item, x, ySola, alturaPx, rel, o) {
     const v = vistaPorAngulo(rel);
     const um = (vista) => ({ ...item, vista, espelhar: vista === 'frente' || vista === 'costas' ? false : v.espelhar });
+    // troca de vista direta, sem misturar as duas (usuário 12/11: a mistura deixava o personagem transparente)
+    if (!window.MISTURA_VISTAS) return personagem(ctx, um(v.vista2 && v.mistura >= 0.5 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
     if (!v.vista2 || v.mistura <= 0.02 || v.mistura >= 0.98) return personagem(ctx, um(v.vista2 && v.mistura >= 0.98 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
     const w = ctx.canvas.width, h = ctx.canvas.height, T = ctx.getTransform();
     const A = camadaFixa('giroA', w, h), B = camadaFixa('giroB', w, h);

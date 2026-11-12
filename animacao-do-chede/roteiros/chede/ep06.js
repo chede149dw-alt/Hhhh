@@ -46,6 +46,11 @@
     api.desfocar(camada, px);
     return cam;
   }
+  // desenha os personagens de trás para a frente (o mais longe da câmera primeiro)
+  function emOrdem(cam, lista) {
+    const dist = (X, Z) => (X - cam.x) * (X - cam.x) + (Z - cam.z) * (Z - cam.z);
+    lista.slice().sort((a, b) => dist(b[0], b[1]) - dist(a[0], a[1])).forEach((it) => it[2]());
+  }
   // fenda num ponto 3D (deitada de frente para a câmera)
   function fenda3d(ctx, cam, X, Y, Z, largM, abre, t, sem = 3) {
     const q = cam.p(X, Y, Z); if (q.dz < 0.6) return null;
@@ -141,15 +146,16 @@
     // ordem de desenho: de trás para a frente (Lia mais longe na primeira metade)
     const gx = chave(T, [[0, K[0] + 0.2], [2.6, L[0] - 0.25]]), gz = chave(T, [[0, K[1] + 0.3], [2.6, L[1] - 0.15]]);
     const noColo = T > 3.4;
-    const rigL = api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: T < 3 ? 'neutro' : T < 6 ? 'feliz' : 'neutro', voz: T > 3 ? 'narrador' : undefined }, L[0], L[1], 1.65, { luz: LUZ, olhaPara: T < 3 ? K : C, vida: 1.4 });
-    if (!noColo) gato3d(ctx, cam, gx, gz, { pose: T < 2.6 ? 'andando' : 'sentado', t: api.t, espelhar: cam.p(L[0], 0, L[1]).x < cam.p(K[0], 0, K[1]).x });
-    else {
-      // no pé da Lia, colado na perna (desenhado depois dela, um pouco à frente) — pedido do usuário 12/11
-      const q = cam.p(L[0] - 0.1, 0, L[1] - 0.22);
-      if (q.dz > 0.6) gato(ctx, q.x, q.y, 0.32 * q.s, { pose: 'sentado', t: api.t, espelhar: true });
-    }
-    api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: exK }, K[0], K[1], 1.75, { luz: LUZ, olhaPara: L, vida: 1.6 });
-    api.personagem3d(cam, { ...CHEDE, pose: 'parado', expressao: exC }, C[0], C[1], 1.75, { luz: LUZ, olhaPara: L, vida: 1.5 });
+    const pe = (q) => cam.p(q[0], 0, q[1]);
+    emOrdem(cam, [
+      [L[0], L[1], () => {
+        api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: T < 3 ? 'neutro' : T < 6 ? 'feliz' : 'neutro', voz: T > 3 ? 'narrador' : undefined }, L[0], L[1], 1.65, { luz: LUZ, olhaPara: T < 3 ? K : C, vida: 1.4 });
+        if (noColo) { const q = cam.p(L[0] - 0.1, 0, L[1] - 0.22); if (q.dz > 0.6) gato(ctx, q.x, q.y, 0.32 * q.s, { pose: 'sentado', t: api.t, espelhar: true }); }
+      }],
+      [gx, gz, () => { if (!noColo) gato3d(ctx, cam, gx, gz, { pose: T < 2.6 ? 'andando' : 'sentado', t: api.t, espelhar: pe(L).x < pe(K).x }); }],
+      [K[0], K[1], () => api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: exK }, K[0], K[1], 1.75, { luz: LUZ, olhaPara: L, vida: 1.6 })],
+      [C[0], C[1], () => api.personagem3d(cam, { ...CHEDE, pose: 'parado', expressao: exC }, C[0], C[1], 1.75, { luz: LUZ, olhaPara: L, vida: 1.5 })],
+    ]);
     Cenarios3D.rua.frente && Cenarios3D.rua.frente(ctx, cam, { desfoque: 0 });
   }
 
@@ -167,9 +173,12 @@
     const fecha = T > 7.4;
     const olhosFechados = T > 6.9 && T < 7.8;
     const exF = olhosFechados ? { ...P().neutro, fechado: 'apertado' } : T < 1 ? 'determinado' : fecha ? 'cansado' : 'espanto';
-    const rigL = api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: exF }, L2[0], L2[1], 1.65, { luz: LUZ, olhaPara: C2, vida: 2 });
-    const rigC = api.personagem3d(cam, { ...CHEDE, pose: 'parado', expressao: exF }, C2[0], C2[1], 1.75, { luz: LUZ, olhaPara: L2, vida: 2 });
-    api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: T < 2 ? 'preocupado' : 'medo' }, 2.4, 5.6, 1.75, { luz: LUZ, olhaPara: [0.3, 3.7], vida: 2 });
+    const K2 = [-1.6, 5.4];
+    emOrdem(cam, [
+      [L2[0], L2[1], () => api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: exF }, L2[0], L2[1], 1.65, { luz: LUZ, olhaPara: C2, vida: 2 })],
+      [C2[0], C2[1], () => api.personagem3d(cam, { ...CHEDE, pose: 'parado', expressao: exF }, C2[0], C2[1], 1.75, { luz: LUZ, olhaPara: L2, vida: 2 })],
+      [K2[0], K2[1], () => api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: T < 2 ? 'preocupado' : 'medo' }, K2[0], K2[1], 1.75, { luz: LUZ, olhaPara: [0.3, 3.7], vida: 2 })],
+    ]);
     // fendas: saem das mãos e se puxam para o meio
     const abreC = api.clamp((T - 0.4) / 0.6, 0, 1) * (fecha ? api.clamp(1 - (T - 7.4) / 0.25, 0, 1) : 1);
     const abreL = api.clamp((T - 1.0) / 0.5, 0, 1) * (fecha ? api.clamp(1 - (T - 7.4) / 0.25, 0, 1) : 1);
@@ -193,10 +202,12 @@
       ang: chave(T, [[0, 0.9], [6, 0.2]]), altura: chave(T, [[0, 1.45], [6, 1.25]]), f: 1150, ySalvo: 990, nevoa: Cenarios3D.rua.nevoa,
     });
     Cenarios3D.rua.desenhar(ctx, cam, { t: api.t });
-    api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: T < 3.5 ? 'preocupado' : 'medo' }, K3[0], K3[1], 1.75, { luz: LUZ, olhaPara: L3, vida: 1.6 });
-    api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: T < 3 ? 'preocupado' : 'medo' }, L3[0], L3[1], 1.65, { luz: LUZ, olhaPara: C3, vida: 1.5 });
-    api.personagem3d(cam, { ...CHEDE, pose: 'parado', expressao: T < 3.5 ? 'preocupado' : 'espanto' }, C3[0], C3[1], 1.75, { luz: LUZ, olhaPara: L3, vida: 1.6 });
-    gato3d(ctx, cam, L3[0] - 0.45, L3[1] - 0.35, { pose: T > 3.3 ? 'arrepiado' : 'sentado', t: api.t, espelhar: true });
+    emOrdem(cam, [
+      [K3[0], K3[1], () => api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: T < 3.5 ? 'preocupado' : 'medo' }, K3[0], K3[1], 1.75, { luz: LUZ, olhaPara: L3, vida: 1.6 })],
+      [L3[0], L3[1], () => api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: T < 3 ? 'preocupado' : 'medo' }, L3[0], L3[1], 1.65, { luz: LUZ, olhaPara: C3, vida: 1.5 })],
+      [C3[0], C3[1], () => api.personagem3d(cam, { ...CHEDE, pose: 'parado', expressao: T < 3.5 ? 'preocupado' : 'espanto' }, C3[0], C3[1], 1.75, { luz: LUZ, olhaPara: L3, vida: 1.6 })],
+      [L3[0] - 0.45, L3[1] - 0.35, () => gato3d(ctx, cam, L3[0] - 0.45, L3[1] - 0.35, { pose: T > 3.3 ? 'arrepiado' : 'sentado', t: api.t, espelhar: true })],
+    ]);
   }
 
   window.PLANOS = {
@@ -283,9 +294,11 @@
       Cenarios3D.rua.desenhar(ctx, cam, { t: api.t });
       const A1 = [1.0, 3.3], A2 = [-1.0, 3.7], K4 = [0.0, 3.2];
       const sumiu = u > 0.75, voltou = u > 1.35;
-      api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: voltou ? 'espanto' : 'preocupado' }, K4[0], K4[1], 1.75, { luz: LUZ, olhaPara: voltou ? A2 : A1, vida: voltou ? 3 : 1.5 });
-      if (!sumiu) api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: 'determinado', voz: 'narrador' }, A1[0], A1[1], 1.65, { luz: LUZ, olhaPara: K4 });
-      if (voltou) api.personagem3d(cam, { ...LIA, pose: 'maos-na-cintura', expressao: 'feliz' }, A2[0], A2[1], 1.65, { luz: LUZ, olhaPara: K4 });
+      emOrdem(cam, [
+        [K4[0], K4[1], () => api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: voltou ? 'espanto' : 'preocupado' }, K4[0], K4[1], 1.75, { luz: LUZ, olhaPara: voltou ? A2 : A1, vida: voltou ? 3 : 1.5 })],
+        [A1[0], A1[1], () => { if (!sumiu) api.personagem3d(cam, { ...LIA, pose: 'parado', expressao: 'determinado', voz: 'narrador' }, A1[0], A1[1], 1.65, { luz: LUZ, olhaPara: K4 }); }],
+        [A2[0], A2[1], () => { if (voltou) api.personagem3d(cam, { ...LIA, pose: 'maos-na-cintura', expressao: 'feliz' }, A2[0], A2[1], 1.65, { luz: LUZ, olhaPara: K4 }); }],
+      ]);
       const ab1 = api.fase(0.45, 0.65) * (1 - api.fase(0.8, 0.95));
       fenda3d(ctx, cam, A1[0], 0.9, A1[1] - 0.05, 0.9, ab1, api.t, 2);
       const ab2 = api.fase(1.15, 1.3) * (1 - api.fase(1.45, 1.65));
