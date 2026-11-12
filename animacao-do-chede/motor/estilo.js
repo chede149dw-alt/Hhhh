@@ -17,7 +17,7 @@
     tinta: '#211B26', grafite: '#38343F', pedra: '#6A6573', linho: '#F2EDE6', denim: '#55708C',
     marinho: '#2B3B66',
     // série Chede + Kaik
-    laranja: '#F07C28', azulKaik: '#2F6FD6', vermelhoKaik: '#C93A32', pretoBermuda: '#2A2830',
+    laranja: '#F07C28', azulKaik: '#2F6FD6', vermelhoKaik: '#C93A32', pretoBermuda: '#2A2830', musgo: '#5E7A45', jeansClaro: '#8FA9C9',
     brasa: '#D23A42', coral: '#F28A5E', turquesa: '#3DB5B0', lilas: '#A487DE', mostarda: '#EBC25A',
     pele1: '#F6D6C0', pele2: '#EAB28E', pele3: '#C98B63', pele4: '#8F5B3E',
     cabCafe: '#4A3536', cabNoite: '#2C2936', cabCastanho: '#73493A', cabCobre: '#BC673C',

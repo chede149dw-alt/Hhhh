@@ -18,7 +18,7 @@
 |---|---|---|
 | 0 | E se alguém tivesse o mesmo **poder** que você? | Capa: estrada de manhã, Chede e Kaik de costas; ao longe, uma garota com uma fenda roxa na mão. |
 | 1 | Na estrada, uma garota de moletom **verde** esperava os dois. | Tomada contínua: a câmera segue o gato correndo e gira, revelando a Lia parada na beira da estrada. |
-| 2 | O gato pulou no colo dela: "Pipoca… **achei** você." | A Lia agacha e pega o gato; o gato se esfrega no queixo dela. |
+| 2 | O gato se enroscou no pé dela: "Pipoca… **achei** você." | O gato se esfrega na perna da Lia, no pé dela. |
 | 3 | "Eu sou a **Lia**. Faz dois anos que eu procuro esse gato." | A câmera gira para o Chede e o Kaik, desconfiados. |
 | 4 | Ela abriu a mão… e uma fenda **roxa** apareceu. | Close na mão da Lia; fenda roxa igual à do Chede. |
 | 5 | O Kaik travou: "Dois com o mesmo **poder**?" | Reação em três tempos: olhos do Kaik → cabeça vira → câmera ajusta. |
@@ -48,4 +48,4 @@
 - [x] Engajamento no fim ("Segue pra ver a parte 7")
 - [x] O Regente não aparece; a criatura também não (só as marcas)
 - [x] Gancho: o que saiu da fenda?
-- [ ] Aprovado pelo usuário
+- [x] **Aprovado pelo usuário (12/11)** — "pode começar a renderizar as prévias". Quem espera: a Lia.
