@@ -76,13 +76,14 @@
     return [Math.round((cx + Math.cos(a) * rx * k) * 1000) / 1000, Math.round((cy + Math.sin(a) * ry * k) * 1000) / 1000];
   });
   CABELOS.cacheado = {
-    // justo na cabeça (pedido do usuário 12/11: "o cabelo ficou fora da cabeça")
-    borda: [[0.47, -0.4], ...cachos(12, 0, -0.62, 0.45, 0.13, -0.2, -Math.PI + 0.2, 0.16).slice(1, -1), [-0.47, -0.4]],
-    topo: [[-0.47, -0.4], ...cachos(22, 0, -0.52, 0.53, 0.5, Math.PI - 0.12, 2 * Math.PI + 0.12, 0.06).slice(1, -1), [0.47, -0.4]],
+    // justo na cabeça e descendo nas têmporas (usuário 12/11: "fora da cabeça", "meio careca")
+    borda: [[0.47, -0.3], [0.44, -0.44], ...cachos(12, 0, -0.55, 0.4, 0.07, -0.25, -Math.PI + 0.25, 0.35).slice(1, -1), [-0.44, -0.44], [-0.47, -0.3]],
+    topo: [[-0.47, -0.3], ...cachos(24, 0, -0.5, 0.53, 0.52, Math.PI - 0.08, 2 * Math.PI + 0.08, 0.06).slice(1, -1), [0.47, -0.3]],
     nuca: [[-0.48, -0.3], ...cachos(8, 0, -0.2, 0.44, 0.06, Math.PI, 0, 0.22).slice(1, -1), [0.48, -0.3]],
-    linhas: [[[-0.2, -0.78], [-0.14, -0.88], [-0.02, -0.92]], [[0.12, -0.8], [0.2, -0.88], [0.3, -0.9]]],
-    estufa: 0.14,
+    linhas: [[[-0.2, -0.8], [-0.14, -0.9], [-0.02, -0.94]], [[0.12, -0.82], [0.2, -0.9], [0.3, -0.92]]],
+    estufa: 0.05,
   };
+
 
 
   const ANGULO = { frente: 0, tq: 45, perfil: 90, costas: 180 };
