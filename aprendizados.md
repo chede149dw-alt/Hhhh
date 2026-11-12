@@ -181,3 +181,6 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   - selo "PARTE N" em moldura hexagonal com linhas laterais.
   Modelo pronto: plano `capaReels` em `animacao-do-chede/roteiros/chede/ep06.js`; gerar com `node motor/quadro.js roteiros/chede/capa-reels.json roteiros/chede/ep06.js capaReels <saida.png>`.
 - **Voz final no motor da skill:** gerar a narração inteira de uma vez (tom igual), alinhar com `estudio/scripts/alinhar.py` e cortar por fala em `animacao-do-chede/audio/<serie>/<ep>/vozes/final/<id>.wav`. Não usar `afade=t=out:st=0` no corte (deixa o arquivo mudo). Falas maiores que 3 s ganham `duracao` = fala + 0,25 s.
+- **Nome da série: FENDA** (escolha do usuário, 12/11). Daqui pra frente:
+  - na capa, o logo "FENDA" fica no alto (y ≈ 330), com o rasgo roxo atrás do texto, nunca cobrindo as letras;
+  - na descrição, o título começa com "🌀 FENDA ·" e a hashtag #Fenda entra primeiro.
