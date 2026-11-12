@@ -1,0 +1,14 @@
+{
+  "serie": "E se você acordasse controlando a terra?",
+  "planos": [
+    {
+      "id": "capaReels",
+      "duracao": 3,
+      "cinema": {
+        "quente": 0.15,
+        "vinheta": 0.8,
+        "bloom": 0.9
+      }
+    }
+  ]
+}
