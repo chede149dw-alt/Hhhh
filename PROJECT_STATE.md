@@ -75,6 +75,15 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
   nos dois lados (espelhamento automático). `derivar`, `misturar`, `validarPose` (erro lista os nomes válidos).
 - Rosto: olhos, sobrancelhas em bloco, nariz em bloco, 4 bocas como peças planas na face frontal da cabeça. Canal `rosto.estranho`
   (0..1) faz a revelação do infiltrado: pupilas tomam o olho e a boca alarga.
+- Cinemática pura (`animacao/esqueleto.js`): única tabela de juntas (posições, eixos dos canais, ordem XZY);
+  o boneco three usa a mesma tabela. Teste no navegador confirma: FK pura = three (erro < 1e-5 m, 34 poses).
+- IK (`animacao/ik.js`): analítico de 2 ossos com polo (joelho p/ frente, cotovelo p/ trás-baixo-fora; o canal
+  `giro` da coxa/ombro gira o polo). Pé fica plano. Alvos em coordenadas do mundo; o IK resolve no espaço da
+  raiz, então giro e `corpo.estica` não tiram o pé do lugar.
+- Animador (`animacao/animador.js`): curvas suave, linear, entra, sai, estalo, antecipa (+ passa, degrau).
+  Chave sem pose = pausa. Alvos de IK valem até mudar; `null`/`pernas: 'fk'` solta (mistura de ângulos).
+  Passo com arco automático. Arrasto = amostrar cabeça/pescoço/cotovelos/mãos alguns quadros antes.
+  Vida: respiração (3,8 s) + piscadas determinísticas por semente; **infiltrado (estranho ≥ 0,3) não pisca**.
 - Pós (`visual/estilo/posfx.js`): um passe só (névoa por profundidade, foco raso com 16 amostras, vinheta, grão
   com semente no tempo). Alvo HalfFloat + MSAA 4x; com parâmetros zerados a cor sai idêntica.
 
@@ -94,7 +103,8 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
 Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etapa2_estilo.png`
 (calibração com faixa de referência invisível | dia com pós | noite com lanterna, 2 instantes),
 `projetos/_evidencias/etapa3_personagens.png` (Gabriel, Cliente, Eduardo, Exemplo barba),
-`projetos/_evidencias/etapa3_referencias.png` (referência × resultado).
+`projetos/_evidencias/etapa3_referencias.png` (referência × resultado),
+`projetos/_evidencias/etapa4_larissa_grade_folha.png`, `..._frente.png`, `etapa4_larissa_grade.mp4`.
 
 ## Limitações conhecidas
 
@@ -104,11 +114,13 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
   ao ffmpeg (sem PNG), e opção de prévia com GPU/meia resolução.
 - O teste de determinismo usa a cena de teste; repetir com a cena real na etapa 10.
 - Boneco: peças rígidas aparecem como emendas em close extremo; cabelo longo é feito de caixas (sem
-  física). Membros ainda mais finos e mãos menores que na ref3. Sentar depende de `desl.y` manual até existir IK dos pés (etapa 4).
+  física). Membros ainda mais finos e mãos menores que na ref3. Com a perna 100% esticada o pé no chão fica no limite do alcance do IK: poses em pé devem ter
+  `desl.y` ≈ -0,03 (joelho levemente dobrado).
 
 ## Próxima etapa
 
-Etapa 4: animador por poses-chave (curvas, IK de pés e mãos, arrasto, respiração e piscar) + testes.
-Atuação de exemplo tirada do roteiro: Larissa na grade (chega, para, mãos nas barras, inclina a cabeça
-demais e revela o rosto estranho). Depois: etapa 5 com as atuações da tabela do roteiro, etapa 6 com o
-cenário `distribuidora`, a luz `interior` e a câmera subjetiva.
+Etapa 5: biblioteca de atuações (`animacao/atuacoes.js` já tem o formato e `larissa_grade`). Entram as do
+roteiro: Gabriel (sentado mexendo no celular, rir, levantar e andar até a grade, mão no cadeado), Larissa
+(chegar andando, parar na grade, olhar fixo, olhar para a câmera), mãos do Eduardo (pegar latas, segurar
+celular, estender a mão) + as genéricas do roteiro original (andar, acenar, assustar, sentar_triste, comemorar).
+Teste: chaves em ordem, sem pose vazia, pose final = repouso ou pausa declarada.

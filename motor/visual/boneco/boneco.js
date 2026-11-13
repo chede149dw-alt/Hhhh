@@ -6,19 +6,9 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { materialChapado } from '../estilo/chapado.js';
 import { calcularMedidas } from './medidas.js';
 import { TIPOS, REPOUSO, valor } from '../../animacao/poses.js';
+import { posicoes, angulos, raiz as raizDaPose } from '../../animacao/esqueleto.js';
 
-const D = THREE.MathUtils.DEG2RAD;
 
-// Canal anatômico → [eixo, sinal] para o lado DIREITO. O esquerdo espelha y e z.
-const EIXOS = {
-  tronco: { frente: ['x', 1], lado: ['z', 1], giro: ['y', 1] },
-  ombro: { frente: ['x', -1], abre: ['z', -1], giro: ['y', -1] },
-  cotovelo: { dobra: ['x', -1] },
-  mao: { dobra: ['x', -1], lado: ['z', -1], giro: ['y', -1] },
-  coxa: { frente: ['x', -1], abre: ['z', -1], giro: ['y', -1] },
-  joelho: { dobra: ['x', 1] },
-  pe: { dobra: ['x', -1], lado: ['z', -1] },
-};
 
 export async function carregarFicha(nome) {
   const r = await fetch(`/motor/visual/boneco/fichas/${nome}.json`);
@@ -38,6 +28,7 @@ function bloco(l, a, p) {                        // pedaço facetado (cabelo, ba
 
 export function criarBoneco(ficha) {
   const m = calcularMedidas(ficha);
+  const POS = posicoes(m);   // posições das juntas: mesma tabela da cinemática pura
   const c = {
     sola: '#e8e8e8', sobrancelha: ficha.cores.cabelo, olhos: '#1d1612', boca: '#7a3f36',
     acessorio: '#222222', camisa2: ficha.cores.camisa, detalhe: ficha.cores.camisa, barba: ficha.cores.cabelo,
@@ -65,15 +56,15 @@ export function criarBoneco(ficha) {
   const mangaLonga = !['manga_curta', 'camisa_social'].includes(p.camisa);
 
   // ---------- Tronco ----------
-  J.quadril = grupo('quadril', raiz, 0, m.pernaComp, 0);
+  J.quadril = grupo('quadril', raiz, ...POS.quadril);
   malha(caixa(m.quadrilL, m.quadrilH * 1.7, m.abdomenP * 0.98, 0.3), c.calca, J.quadril, 0, -m.quadrilH * 0.15, 0);
   if (acess.includes('cinto')) {
     malha(caixa(m.quadrilL * 1.04, m.quadrilH * 0.38, m.abdomenP * 1.03, 0.3), c.cinto, J.quadril, 0, m.quadrilH * 0.55, 0);
     malha(caixa(m.quadrilL * 0.26, m.quadrilH * 0.34, 0.012 * m.H, 0.2), c.fivela, J.quadril, 0, m.quadrilH * 0.55, m.abdomenP * 0.52, plano);
   }
-  J.coluna = grupo('coluna', J.quadril, 0, 0.02 * m.H, 0);
+  J.coluna = grupo('coluna', J.quadril, ...POS.coluna);
   malha(caixa(m.abdomenL, m.colunaH * 1.25, m.abdomenP, 0.3), corpoCor, J.coluna, 0, m.colunaH * 0.5, 0);
-  J.peito = grupo('peito', J.coluna, 0, m.colunaH, 0);
+  J.peito = grupo('peito', J.coluna, ...POS.peito);
   malha(caixa(m.peitoL, m.peitoH, m.peitoP, 0.3), corpoCor, J.peito, 0, m.peitoH * 0.5, 0);
   const frente = m.peitoP / 2;
   if (p.camisa === 'moletom') {
@@ -104,11 +95,11 @@ export function criarBoneco(ficha) {
     const colar = malha(new THREE.TorusGeometry(m.pescocoL * 0.8, 0.0035 * m.H, 6, 24), c.acessorio, J.peito, 0, m.peitoH * 0.93, 0.01, plano);
     colar.rotation.x = Math.PI / 2 - 0.55;
   }
-  J.pescoco = grupo('pescoco', J.peito, 0, m.peitoH, 0);
+  J.pescoco = grupo('pescoco', J.peito, ...POS.pescoco);
   malha(caixa(m.pescocoL, m.pescocoH * 1.8, m.pescocoL * 0.95, 0.4), c.pele, J.pescoco, 0, m.pescocoH * 0.5, 0);
 
   // ---------- Cabeça ----------
-  J.cabeca = grupo('cabeca', J.pescoco, 0, m.pescocoH, 0);
+  J.cabeca = grupo('cabeca', J.pescoco, ...POS.cabeca);
   const hl = m.cabecaL, hh = m.cabecaH, hp = m.cabecaP, cy = hh * 0.5, zf = hp / 2;
   malha(caixa(hl, hh, hp, 0.34), c.pele, J.cabeca, 0, cy, 0);
   for (const s of [-1, 1]) malha(caixa(hl * 0.12, hh * 0.22, hp * 0.2, 0.4), c.pele, J.cabeca, s * hl * 0.5, cy - hh * 0.02, -hp * 0.04);
@@ -193,16 +184,16 @@ export function criarBoneco(ficha) {
   // ---------- Braços ----------
   const ombreira = m.bracoL * 1.18;
   for (const [lado, s] of [['D', -1], ['E', 1]]) {
-    const om = J['ombro' + lado] = grupo('ombro' + lado, J.peito, s * m.ombros / 2, m.peitoH - m.bracoL * 0.55, 0);
+    const om = J['ombro' + lado] = grupo('ombro' + lado, J.peito, ...POS['ombro' + lado]);
     malha(caixa(ombreira, ombreira, ombreira, 0.45), camisa, om, -s * m.bracoL * 0.1, 0, 0);
     const curta = !mangaLonga;
     malha(caixa(m.bracoL * (curta ? 1.12 : 1), m.bracoLen * (curta ? 0.72 : 1.08), m.bracoL * (curta ? 1.12 : 1), 0.4), camisa, om, 0, -m.bracoLen * (curta ? 0.32 : 0.5), 0);
     if (curta) malha(caixa(m.bracoL * 0.86, m.bracoLen * 0.7, m.bracoL * 0.86, 0.4), c.pele, om, 0, -m.bracoLen * 0.7, 0);
-    const co = J['cotovelo' + lado] = grupo('cotovelo' + lado, om, 0, -m.bracoLen, 0);
+    const co = J['cotovelo' + lado] = grupo('cotovelo' + lado, om, ...POS['cotovelo' + lado]);
     malha(caixa(m.anteL, m.anteLen * 1.12, m.anteL, 0.42), mangaLonga ? camisa : c.pele, co, 0, -m.anteLen * 0.5, 0);
     if (mangaLonga) malha(caixa(m.anteL * 1.12, m.anteLen * 0.16, m.anteL * 1.12, 0.35), p.camisa === 'moletom' ? camisa : camisa, co, 0, -m.anteLen * 0.9, 0);
     if (acess.includes('relogio') && lado === 'E') malha(caixa(m.anteL * 1.12, m.anteLen * 0.1, m.anteL * 1.12, 0.3), c.acessorio, co, 0, -m.anteLen * 0.86, 0);
-    const mao = J['mao' + lado] = grupo('mao' + lado, co, 0, -m.anteLen, 0);
+    const mao = J['mao' + lado] = grupo('mao' + lado, co, ...POS['mao' + lado]);
     const ml = m.maoLen, pt = m.anteL * 0.62, pw = m.anteL * 1.15;
     malha(caixa(pt, ml * 0.52, pw, 0.35), c.pele, mao, 0, -ml * 0.26, 0);
     const pol = malha(caixa(pt * 0.6, ml * 0.32, pt * 0.6, 0.4), c.pele, mao, -s * pt * 0.25, -ml * 0.22, pw * 0.5); pol.rotation.x = 0.45;
@@ -216,12 +207,12 @@ export function criarBoneco(ficha) {
   // ---------- Pernas ----------
   const bermuda = p.calca === 'bermuda';
   for (const [lado, s] of [['D', -1], ['E', 1]]) {
-    const cx = J['coxa' + lado] = grupo('coxa' + lado, J.quadril, s * m.pernasDist / 2, -0.01 * m.H, 0);
+    const cx = J['coxa' + lado] = grupo('coxa' + lado, J.quadril, ...POS['coxa' + lado]);
     malha(caixa(m.coxaL, m.coxaLen * 1.12, m.coxaL * 1.05, 0.4), c.calca, cx, 0, -m.coxaLen * 0.5, 0);
-    const jo = J['joelho' + lado] = grupo('joelho' + lado, cx, 0, -m.coxaLen, 0);
+    const jo = J['joelho' + lado] = grupo('joelho' + lado, cx, ...POS['joelho' + lado]);
     malha(caixa(m.canelaL * (bermuda ? 0.85 : 1), m.canelaLen * 1.1, m.canelaL * (bermuda ? 0.85 : 1), 0.4), bermuda ? c.pele : c.calca, jo, 0, -m.canelaLen * 0.5, 0);
     if (bermuda) malha(caixa(m.coxaL * 1.05, m.coxaLen * 0.25, m.coxaL * 1.08, 0.35), c.calca, jo, 0, m.coxaLen * 0.06, 0);
-    const pe = J['pe' + lado] = grupo('pe' + lado, jo, 0, -m.canelaLen, 0);
+    const pe = J['pe' + lado] = grupo('pe' + lado, jo, ...POS['pe' + lado]);
     const pl = m.peComp, pa = m.peAlt, pw = m.canelaL * 1.15;
     if (p.calcado === 'chinelo') {
       malha(caixa(pw * 0.9, pa * 0.55, pl * 0.95, 0.35), c.pele, pe, 0, -pa * 0.55, pl * 0.3);
@@ -239,21 +230,16 @@ export function criarBoneco(ficha) {
   }
 
   function posar(pose = REPOUSO) {
-    for (const [nome, tipo] of Object.entries(TIPOS)) {
-      const g = J[nome], esq = nome.endsWith('E') && tipo !== 'tronco';
-      g.rotation.set(0, 0, 0);
-      for (const [canal, [eixo, sinal]] of Object.entries(EIXOS[tipo])) {
-        const espelho = esq && eixo !== 'x' ? -1 : 1;
-        g.rotation[eixo] += valor(pose, nome, canal) * sinal * espelho * D;
-      }
-    }
+    for (const nome of Object.keys(TIPOS)) J[nome].rotation.set(...angulos(pose, nome));
     for (const [lado, s] of [['D', -1], ['E', 1]]) {   // dedos dobram em direção à palma
-      J['dedos' + lado].rotation.set(0, 0, -s * valor(pose, 'mao' + lado, 'fecha') * D);
-      J['indicador' + lado].rotation.set(0, 0, -s * valor(pose, 'mao' + lado, 'indicador') * D);
+      J['dedos' + lado].rotation.set(0, 0, -s * valor(pose, 'mao' + lado, 'fecha') * Math.PI / 180);
+      J['indicador' + lado].rotation.set(0, 0, -s * valor(pose, 'mao' + lado, 'indicador') * Math.PI / 180);
     }
-    raiz.position.set(valor(pose, 'corpo', 'x'), valor(pose, 'corpo', 'y'), valor(pose, 'corpo', 'z'));
-    raiz.rotation.y = valor(pose, 'corpo', 'giro') * D;
-    J.quadril.position.set(valor(pose, 'desl', 'x'), m.pernaComp + valor(pose, 'desl', 'y'), valor(pose, 'desl', 'z'));
+    const rz = raizDaPose(pose);
+    raiz.position.set(...rz.pos);
+    raiz.rotation.y = valor(pose, 'corpo', 'giro') * Math.PI / 180;
+    raiz.scale.set(...rz.esc);
+    J.quadril.position.set(POS.quadril[0] + valor(pose, 'desl', 'x'), POS.quadril[1] + valor(pose, 'desl', 'y'), POS.quadril[2] + valor(pose, 'desl', 'z'));
     // Rosto
     const forma = valor(pose, 'rosto', 'boca'), estr = valor(pose, 'rosto', 'estranho');
     for (const [k, b] of Object.entries(bocas)) b.visible = k === forma;

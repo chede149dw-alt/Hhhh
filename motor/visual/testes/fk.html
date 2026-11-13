@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Teste FK</title>
+<script type="importmap">{ "imports": { "three": "/motor/visual/lib/three/three.module.js", "three/addons/": "/motor/visual/lib/three/addons/" } }</script>
+</head><body>
+<script type="module">
+// Compara posições de sola/pulso do boneco three com a cinemática pura (animacao/esqueleto.js).
+import * as THREE from 'three';
+import { criarBoneco, carregarFicha } from '../boneco/boneco.js';
+import { pontos, SOLA } from '../../animacao/esqueleto.js';
+import { POSES, derivar, JUNTAS, TIPOS, CANAIS } from '../../animacao/poses.js';
+const b = criarBoneco(await carregarFicha('gabriel'));
+let s = 12345; const r = () => (s = (s * 16807) % 2147483647) / 2147483647 - 0.5;
+const poses = [...Object.values(POSES)];
+for (let i = 0; i < 30; i++) {
+  const p = { corpo: { x: r(), y: r() * 0.2, z: r(), giro: r() * 360, estica: r() * 0.2 }, desl: { x: r() * 0.1, y: r() * 0.2, z: r() * 0.1 } };
+  for (const j of JUNTAS) { p[j] = {}; for (const c of CANAIS[TIPOS[j]]) if (c !== 'fecha' && c !== 'indicador') p[j][c] = r() * 120; }
+  poses.push(p);
+}
+window.medirFK = () => {
+  let max = 0;
+  for (const pose of poses) {
+    b.posar(pose); b.raiz.updateMatrixWorld(true);
+    const pp = pontos(pose, b.medidas);
+    for (const l of ['D', 'E']) {
+      const sola = b.juntas['pe' + l].localToWorld(new THREE.Vector3(...SOLA(b.medidas)));
+      const pulso = b.juntas['mao' + l].getWorldPosition(new THREE.Vector3());
+      max = Math.max(max, sola.distanceTo(new THREE.Vector3(...pp['pe' + l])), pulso.distanceTo(new THREE.Vector3(...pp['mao' + l])));
+    }
+  }
+  return { poses: poses.length, max };
+};
+window.quadro = () => {}; window.pronto = Promise.resolve();
+</script></body></html>

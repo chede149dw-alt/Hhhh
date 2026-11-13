@@ -7,7 +7,7 @@
 //   cotovelo / joelho: dobra
 //   mao: dobra, lado, giro, fecha (dedos 0 = abertos, 90 = punho), indicador (padrão = fecha)
 //   pe: dobra (ponta p/ cima), lado
-// corpo: posição (m) e giro (graus) do boneco inteiro. desl: deslocamento do quadril (m), p/ sentar, agachar.
+// corpo: posição (m), giro (graus) e estica (amassa < 0 < estica, volume constante) do boneco inteiro. desl: deslocamento do quadril (m), p/ sentar, agachar.
 // rosto: boca ('neutra'|'sorriso'|'triste'|'aberta'), olhos (abertura, 1 = normal), sobrancelha (-1 brava .. 1 preocupada),
 //        olharX, olharY (-1..1), estranho (0..1: olhos negros, boca larga — o infiltrado).
 
@@ -24,7 +24,7 @@ export const CANAIS = {
 };
 export const BOCAS = ['neutra', 'sorriso', 'triste', 'aberta'];
 const EXTRAS = {
-  corpo: { x: 0, y: 0, z: 0, giro: 0 },
+  corpo: { x: 0, y: 0, z: 0, giro: 0, estica: 0 },
   desl: { x: 0, y: 0, z: 0 },
   rosto: { boca: 'neutra', olhos: 1, sobrancelha: 0, olharX: 0, olharY: 0, estranho: 0 },
 };
