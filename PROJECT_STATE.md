@@ -37,6 +37,12 @@ campo `proxima_parte` no roteiro.json). A grade tem uma **portinhola** quadrada 
 
 Fichas: `gabriel.json`, `cliente.json` (Larissa, infiltrada), `eduardo.json` (mãos em quadro), `exemplo_barba.json` (teste).
 
+**Visual de câmera "verde"** (ref4, `projetos/_referencias/ref4_iluminacao_verde.jpg`, pedido do responsável):
+interior claro de azulejo branco sob luz fluorescente esverdeada (menta), sombras verde-escuras, lente olho de
+peixe com aberração cromática nas bordas, grão leve. Lá fora: rua com fileira de postes laranja sumindo no escuro.
+Preset `VISUAL_VERDE` em `posfx.js`. **Legendas (etapa 9)** no estilo da ref4: texto amarelo grosso com contorno
+escuro; selo verde arredondado "PARTE N" no topo, texto escuro.
+
 **Estilo dos personagens: "blocos"** (referências em `projetos/_referencias/`):
 - ref3 (principal): corpo de caixas arredondadas, cabelo em blocos, olhos escuros ovais sem branco com brilho,
   nariz em bloco, bigode, colarinho/botões/bolso, cinto, relógio, sapato → Gabriel.
@@ -105,8 +111,14 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
   com latas (instanced), prateleiras de garrafas, engradados, neon "ABERTO 24H", tabela de preços, 2 fluorescentes;
   fora: calçada de paralelepípedo, meio-fio, rua, poste com luz laranja, casas. MARCAS: balcao, geladeira,
   engradado, cadeado, portinhola, rua (com raio livre). `atualizar(t, {piscar})` = fluorescente falhando + neon.
-- Luz `interior`: mesma conta do dia (principal 2,0 + ambiente π−2), fria, de cima. A rua fica escura pela
-  névoa preta do pós (4,5→13 m), não por várias luzes com sombra (barato e dá o clima: a rua "some").
+- Luz `interior` (revista): principal 1,6 de dentro para fora (sombras caem para a rua) + ambiente 0,85, ambas
+  esverdeadas, + 2 lâmpadas pontuais nas calhas ≈ π perto delas. Poste lá fora projeta a SOMBRA DA GRADE para
+  dentro da loja (listras laranja no piso); no apagão sobram neon, geladeiras, TV e o poste. Luzes coloridas:
+  geladeiras (frio), neon (vermelho), poste (laranja), tela do celular. Sombra de contato sob os personagens
+  (`visual/estilo/sombras.js`); cantos (rodapé, teto, beirada do piso) escurecidos por degradê.
+  A rua fica escura pela névoa preta do pós (6→26 m); postes distantes viram pontos de luz.
+- Pós em 2 passes: (1) névoa + foco raso; (2) lente (curvatura olho de peixe + aberração cromática), vinheta,
+  cor (tingir preservando brilho, saturação, contraste) e grão. Zerado = idêntico ao render direto (testado).
 - Texturas por código (`visual/estilo/texturas.js`): azulejo, concreto, pedra, madeira, grama, água, metal
   ondulado, parede, asfalto + `texturaTexto` (cartazes/neon). Determinísticas (semente).
 - Câmera (`animacao/camera.js`, puro): `enquadrar` por tamanho de plano (geral/medio/close) → distância e FOV,
@@ -136,12 +148,13 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 `projetos/_evidencias/etapa3_referencias.png` (referência × resultado),
 `projetos/_evidencias/etapa4_larissa_grade_folha.png`, `..._frente.png`, `etapa4_larissa_grade.mp4`,
 `etapa4_revelacao_estagios.png`, `etapa4_revelacao_noite.png`, `etapa5_genericas.png`, `etapa5_roteiro.png`,
-`etapa5_andar.mp4`, `etapa6_cenario_cameras.png`, `etapa6_pov_sequencia.mp4`.
+`etapa5_andar.mp4`, `etapa6_cenario_cameras.png`, `etapa6_pov_sequencia.mp4`,
+`etapa6b_iluminacao.png`, `etapa6b_referencia_x_resultado.png`, `etapa6b_pov_sequencia.mp4`.
 
 ## Limitações conhecidas
 
-- **Velocidade**: WebGL por software + pós ⇒ ~1,4 q/s com 4 processos na cena de teste; **~1,0 q/s no
-  cenário completo** (65 s a 60 fps ≈ 65 min). Prioridade da etapa 10.
+- **Velocidade**: WebGL por software + pós ⇒ ~1,4 q/s com 4 processos na cena de teste; **~0,8 q/s no
+  cenário completo com luzes e pós em 2 passes** (65 s a 60 fps ≈ 80 min). Prioridade da etapa 10.
   Medido: buffer intermediário c/ MSAA custa ~40%; o grão deixa o PNG com 2,4 MB e a captura ~30% mais
   lenta; reduzir amostras do desfoque não muda nada. Plano (etapa 10): capturar pixels crus e mandar direto
   ao ffmpeg (sem PNG), e opção de prévia com GPU/meia resolução.

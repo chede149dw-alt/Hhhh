@@ -24,6 +24,14 @@ export const CADEADO = [0.66, 1.02, GRADE_Z - 0.03];
 
 function rng(semente) { let a = semente >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
+function texturaDegrade(vertical = true) {   // preto → transparente (cantos escurecidos, cone de luz)
+  const c = document.createElement('canvas'); c.width = 4; c.height = 128;
+  const g = c.getContext('2d'), gr = g.createLinearGradient(0, 128, 0, 0);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.35)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 4, 128);
+  const t = new THREE.CanvasTexture(c); return t;
+}
+
 function texturaBrilho() {   // halo radial para lâmpadas/neon
   const c = document.createElement('canvas'); c.width = c.height = 128;
   const g = c.getContext('2d'), gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
@@ -42,17 +50,18 @@ export function criarDistribuidora({ semente = 11 } = {}) {
   const comTex = (cor, nome, rep, o = {}) => materialChapado(cor, { map: textura(nome, rep), ...o });
   const halo = (cor, tam, x, y, z, op = 0.6) => {
     const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: brilhoTex, color: cor, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }));
+    s.renderOrder = 2;
     s.scale.set(tam, tam, 1); s.position.set(x, y, z); return add(s);
   };
   const W = SALA.x1 - SALA.x0, D = SALA.z1 - SALA.z0, cx = (SALA.x0 + SALA.x1) / 2, cz = (SALA.z0 + SALA.z1) / 2;
 
   // ---------- Sala ----------
-  const piso = new THREE.Mesh(new THREE.PlaneGeometry(W, D), comTex('#d9d3c6', 'azulejo', [W / 1.2, D / 1.2], { volume: false }));
+  const piso = new THREE.Mesh(new THREE.PlaneGeometry(W, D), comTex('#e4e9e4', 'azulejo', [W / 1.0, D / 1.0], { volume: false }));
   piso.rotation.x = -Math.PI / 2; piso.position.set(cx, 0, cz); add(comoChao(piso));
   const teto = new THREE.Mesh(new THREE.PlaneGeometry(W, D), mat('#e6e6e0', { volume: false }));
   teto.rotation.x = Math.PI / 2; teto.position.set(cx, SALA.teto, cz); add(teto);
-  const azulejoParede = comTex('#cfe3e6', 'azulejo', [6, 1.2], { volume: false });
-  const pintura = comTex('#e9e2cf', 'parede', [3, 1], { volume: false });
+  const azulejoParede = comTex('#f1f5f2', 'azulejo', [8, 1.6], { volume: false });
+  const pintura = comTex('#eef2ee', 'parede', [3, 1], { volume: false });
   const parede = (l, x, z, giroY) => {
     const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = giroY; add(g);
     const baixo = new THREE.Mesh(new THREE.PlaneGeometry(l, 1.2), azulejoParede); baixo.position.y = 0.6; g.add(baixo);
@@ -97,6 +106,7 @@ export function criarDistribuidora({ semente = 11 } = {}) {
     vidro.position.set(0.315, 0.97, 0); vidro.rotation.y = Math.PI / 2; g.add(vidro);
     const puxador = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.5, 0.03), mat('#9aa3a8')); puxador.position.set(0.33, 1.0, 0.3); g.add(puxador);
     halo('#bfe9ff', 1.6, SALA.x0 + 0.75, 1.0, zc, 0.25);
+    const lg = new THREE.PointLight('#8fd3ff', 0.55, 2.4, 2); lg.position.set(SALA.x0 + 0.95, 1.05, zc); add(lg);
   }
   const latasIM = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.033, 0.033, 0.12, 12), mat('#ffffff', { volume: false }), latas.length);
   const m4 = new THREE.Matrix4(), cor = new THREE.Color();
@@ -135,6 +145,7 @@ export function criarDistribuidora({ semente = 11 } = {}) {
   const neon = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.3), new THREE.MeshBasicMaterial({ map: neonTex, transparent: true, toneMapped: false, depthWrite: false }));
   neon.position.set(SALA.x1 - 0.02, 2.15, -1.1); neon.rotation.y = -Math.PI / 2; add(neon);
   const neonHalo = halo('#ff2a2a', 1.8, SALA.x1 - 0.25, 2.15, -1.1, 0.35);
+  const luzNeon = new THREE.PointLight('#ff2f2f', 1.6, 3.2, 2); luzNeon.position.set(SALA.x1 - 0.35, 2.05, -1.1); add(luzNeon);
   const cartaz = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.95), materialChapado('#ffffff', { volume: false, map: texturaTexto([
     ['TABELA', '900 64px sans-serif', '#c62828'], ['LATA ........ 5,00', '700 40px monospace', '#111'], ['LONG NECK ... 8,00', '700 40px monospace', '#111'],
     ['GARRAFA ..... 12,00', '700 40px monospace', '#111'], ['GELO ........ 10,00', '700 40px monospace', '#111'], ['CIGARRO ..... 14,00', '700 40px monospace', '#111']], { largura: 512, altura: 700, fundo: '#fff7d6' }) }));
@@ -142,10 +153,17 @@ export function criarDistribuidora({ semente = 11 } = {}) {
 
   // ---------- Lâmpadas fluorescentes ----------
   const tubos = [];
-  for (const [x, z] of [[-0.5, 0.1], [0.4, -1.7]]) {
-    caixa(1.3, 0.05, 0.16, mat('#d9d9d4'), x, SALA.teto - 0.03, z);
-    const tubo = caixa(1.2, 0.04, 0.04, new THREE.MeshBasicMaterial({ color: '#f4fbff', toneMapped: false }), x, SALA.teto - 0.08, z);
-    tubos.push({ tubo, halo: halo('#eaf6ff', 2.4, x, SALA.teto - 0.12, z, 0.35) });
+  // calhas longas correndo da frente para o fundo (como na referência), 2 tubos cada
+  for (const [x, z, comLuz] of [[-0.95, 0.05, true], [0.75, 0.05, false], [-0.95, -1.95, false], [0.75, -1.95, true]]) {
+    caixa(0.22, 0.05, 1.7, mat('#d9dcd6'), x, SALA.teto - 0.03, z);
+    for (const dx of [-0.05, 0.05]) {
+      const tubo = caixa(0.035, 0.035, 1.6, new THREE.MeshBasicMaterial({ color: '#f2fff8', toneMapped: false }), x + dx, SALA.teto - 0.075, z);
+      tubos.push({ tubo, halo: { material: { opacity: 0 } }, luz: { intensity: 0 }, base: 0 });
+    }
+    const h = halo('#e6fff2', 2.2, x, SALA.teto - 0.15, z, 0.3); h.scale.set(1.2, 2.4, 1);
+    const item = { tubo: { material: { color: new THREE.Color() } }, halo: h, luz: { intensity: 0 }, base: 0 };
+    if (comLuz) { const pl = new THREE.PointLight('#c2ffdc', 1.3, 7.5, 1.3); pl.position.set(x, SALA.teto - 0.3, z); add(pl); item.luz = pl; item.base = pl.intensity; }
+    tubos.push(item);
   }
 
   // ---------- Grade com portinhola, portão e porta de aço enrolada ----------
@@ -182,16 +200,101 @@ export function criarDistribuidora({ semente = 11 } = {}) {
   const lamp = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.08, 0.18), new THREE.MeshBasicMaterial({ color: '#ffb35c', toneMapped: false })); lamp.position.set(-0.85, 4.5, 0); poste.add(lamp);
   comoObjeto(poste);
   halo('#ff9d3c', 3.2, 2.7 - 0.85, 4.45, GRADE_Z + 2.0, 0.55);
-  const luzPoste = new THREE.SpotLight('#ffb067', 0.9, 9, 0.75, 0.7, 0);
-  luzPoste.position.set(1.85, 4.45, GRADE_Z + 2.0); luzPoste.target.position.set(1.0, 0, GRADE_Z + 1.4); add(luzPoste); add(luzPoste.target);
+  // luz do poste: projeta a sombra da grade PARA DENTRO da loja (listras laranja no piso perto da grade)
+  const luzPoste = new THREE.SpotLight('#ffa552', 1.5, 12, 0.62, 0.5, 0);
+  luzPoste.position.set(1.85, 4.45, GRADE_Z + 2.0); luzPoste.target.position.set(-0.6, 0, GRADE_Z - 1.3); add(luzPoste); add(luzPoste.target);
+  luzPoste.castShadow = true; luzPoste.shadow.mapSize.set(2048, 2048); luzPoste.shadow.bias = -0.0006; luzPoste.shadow.radius = 1.5;
+  luzPoste.shadow.camera.near = 0.5; luzPoste.shadow.camera.far = 14; luzPoste.shadow.intensity = 0.9;
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(1.5, 4.4, 28, 1, true), new THREE.MeshBasicMaterial({
+    map: texturaDegrade(), color: '#ffb25e', transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, toneMapped: false }));
+  cone.position.set(2.7 - 0.85, 4.45 - 2.2, GRADE_Z + 2.0); cone.material.map.repeat.set(1, -1); cone.material.map.offset.set(0, 1); cone.material.map.wrapT = THREE.RepeatWrapping; add(cone);
+  // fileira de postes dos dois lados da rua, sumindo no escuro (só o primeiro projeta sombra)
+  const poca = (x, z, raio, op) => {   // poça de luz falsa no chão (barata)
+    const pc = new THREE.Mesh(new THREE.CircleGeometry(raio, 28), new THREE.MeshBasicMaterial({ map: brilhoTex, color: '#ff9c45', transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }));
+    pc.rotation.x = -Math.PI / 2; pc.position.set(x, -0.07, z); return add(pc);
+  };
+  const posteSimples = (x, z, lado) => {
+    const pg = new THREE.Group(); pg.position.set(x, 0, z); add(pg);
+    const hs = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 4.6, 8), mat('#4d5158')); hs.position.y = 2.3; pg.add(hs);
+    const br = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.06, 0.06), mat('#4d5158')); br.position.set(lado * 0.45, 4.55, 0); pg.add(br);
+    const lp = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.08, 0.18), new THREE.MeshBasicMaterial({ color: new THREE.Color('#ffb35c').multiplyScalar(3), toneMapped: false })); lp.position.set(lado * 0.85, 4.5, 0); pg.add(lp);
+    const hx = x + lado * 0.85;
+    const hl = halo('#ff9d3c', 3.0, hx, 4.45, z, 0.6); hl.material.depthWrite = true;
+    const cn = cone.clone(); cn.position.set(hx, 2.25, z); add(cn);
+    poca(hx, z, 2.6, 0.22);
+  };
+  for (const x of [-4.3, -11.3, 9.7, 16.7]) posteSimples(x, GRADE_Z + 2.0, -1);
+  for (const x of [-7.8, -0.8, 6.2, 13.2]) posteSimples(x, GRADE_Z + 8.6, 1);
+  poca(1.85, GRADE_Z + 2.6, 2.2, 0.12);
   for (let i = 0; i < 7; i++) {   // casas ao longe (silhuetas)
     const h = 3 + r() * 3, l = 3 + r() * 3;
     caixa(l, h, 4, mat(i % 2 ? '#3c3f4a' : '#4a4652'), -10 + i * 3.6, h / 2, GRADE_Z + 14 + r() * 3);
   }
 
+  // ---------- Cantos escurecidos (rodapé e teto) e beirada do piso ----------
+  const degrade = texturaDegrade();
+  const faixa = (l, a, x, y, z, ry, rx = 0, op = 0.45, inverter = false) => {
+    const t = degrade.clone(); t.needsUpdate = true; if (inverter) { t.repeat.set(1, -1); t.offset.set(0, 1); t.wrapT = THREE.RepeatWrapping; }
+    const f = new THREE.Mesh(new THREE.PlaneGeometry(l, a), new THREE.MeshBasicMaterial({ color: '#000', alphaMap: t, transparent: true, opacity: op, depthWrite: false }));
+    f.position.set(x, y, z); f.rotation.set(rx, ry, 0, 'YXZ'); return add(f);
+  };
+  // paredes: (comprimento, centro x, z, rotação y, normal para dentro)
+  for (const [l, x, z, ry, nx, nz] of [[W, cx, SALA.z0, 0, 0, 1], [D, SALA.x0, cz, Math.PI / 2, 1, 0], [D, SALA.x1, cz, -Math.PI / 2, -1, 0]]) {
+    faixa(l, 0.5, x + nx * 0.006, 0.25, z + nz * 0.006, ry, 0, 0.42, true);                       // rodapé
+    faixa(l, 0.45, x + nx * 0.006, SALA.teto - 0.225, z + nz * 0.006, ry, 0, 0.32, false);        // junto ao teto
+    faixa(l, 0.6, x + nx * 0.3, 0.003, z + nz * 0.3, ry, -Math.PI / 2, 0.35, false);               // piso junto à parede
+  }
+
+  // ---------- Objetos de cena ----------
+  // TV de parede com chiado
+  const tvCanvas = document.createElement('canvas'); tvCanvas.width = 160; tvCanvas.height = 96;
+  const tvTex = new THREE.CanvasTexture(tvCanvas); tvTex.colorSpace = THREE.SRGBColorSpace;
+  const tv = new THREE.Group(); tv.position.set(1.55, 2.25, SALA.z0 + 0.08); add(tv);
+  tv.add(new THREE.Mesh(new THREE.BoxGeometry(0.66, 0.42, 0.06), mat('#141518')));
+  const telaTv = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.36), new THREE.MeshBasicMaterial({ map: tvTex, toneMapped: false })); telaTv.position.z = 0.032; tv.add(telaTv);
+  const suporte = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.12), mat('#2a2b30')); suporte.position.z = -0.06; tv.add(suporte);
+  halo('#9fb8ff', 1.2, 1.55, 2.25, SALA.z0 + 0.2, 0.18);
+  function chiado(t) {
+    const g = tvCanvas.getContext('2d'), img = g.createImageData(160, 96), rr = rng(Math.floor(t * 24) + 5);
+    for (let i = 0; i < img.data.length; i += 4) { const v = 40 + rr() * 170; img.data[i] = v * 0.85; img.data[i + 1] = v * 0.9; img.data[i + 2] = v; img.data[i + 3] = 255; }
+    g.putImageData(img, 0, 0); tvTex.needsUpdate = true;
+  }
+  // ventilador de parede
+  const vent = new THREE.Group(); vent.position.set(SALA.x1 - 0.18, 2.35, 0.35); vent.rotation.y = -Math.PI / 2 - 0.4; add(vent);
+  vent.add(new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.14, 12).rotateX(Math.PI / 2), mat('#2b2d33')));
+  const grade2 = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.008, 6, 32), mat('#c9cdd2')); grade2.position.z = 0.1; vent.add(grade2);
+  const helice = new THREE.Group(); helice.position.z = 0.09; vent.add(helice);
+  for (let i = 0; i < 3; i++) { const pa = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.22, 0.01), mat('#2f6fb0')); pa.position.y = 0.12; const gp = new THREE.Group(); gp.rotation.z = (i * Math.PI * 2) / 3; gp.add(pa); helice.add(gp); }
+  // cadeira de plástico, isopor, lixeira
+  const cadeira = new THREE.Group(); cadeira.position.set(1.55, 0, 0.45); cadeira.rotation.y = -2.2; add(cadeira);
+  const plast = mat('#eeeeea');
+  const assentoC = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.04, 0.42), plast); assentoC.position.y = 0.44; cadeira.add(assentoC);
+  const encosto = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.38, 0.04), plast); encosto.position.set(0, 0.66, -0.2); encosto.rotation.x = -0.15; cadeira.add(encosto);
+  for (const [lx, lz] of [[-0.19, -0.18], [0.19, -0.18], [-0.19, 0.18], [0.19, 0.18]]) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.022, 0.44, 8), plast); p.position.set(lx, 0.22, lz); cadeira.add(p); }
+  comoObjeto(cadeira);
+  comoObjeto(caixa(0.5, 0.36, 0.34, mat('#f3f1ea'), 1.85, 0.18, 0.75));
+  comoObjeto(caixa(0.52, 0.05, 0.36, mat('#2d6fb5'), 1.85, 0.385, 0.75));
+  const lixo = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.15, 0.5, 18), mat('#5b6168')); lixo.position.set(-1.6, 0.25, -1.55); add(comoObjeto(lixo));
+  // expositor de cigarros no balcão (caixinhas genéricas coloridas)
+  const expo = new THREE.Group(); expo.position.set(BALCAO.x0 + 0.25, BALCAO.altura, BALCAO.z0 + 0.12); add(expo);
+  expo.add(new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.34, 0.14), new THREE.MeshBasicMaterial({ color: '#cfe7ff', transparent: true, opacity: 0.18, depthWrite: false })).translateY(0.17));
+  const coresMaco = ['#c62828', '#f2f2f2', '#1f4e8c', '#d4a017', '#2e7d32'];
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) { const mc = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.09, 0.03), mat(coresMaco[(i + j * 2) % coresMaco.length])); mc.position.set(-0.13 + i * 0.087, 0.06 + j * 0.105, 0); expo.add(mc); }
+  // placa de menores e cartaz de pagode
+  const placa = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.3), materialChapado('#ffffff', { volume: false, map: texturaTexto([
+    ['PROIBIDA A VENDA DE BEBIDAS', '800 30px sans-serif', '#fff'], ['ALCOÓLICAS PARA MENORES', '800 30px sans-serif', '#fff'], ['DE 18 ANOS', '900 40px sans-serif', '#ffe14a']], { largura: 512, altura: 256, fundo: '#b71c1c' }) }));
+  placa.position.set(SALA.x0 + 0.012, 2.3, 0.55); placa.rotation.y = Math.PI / 2; add(placa);
+  const pagode = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.7), materialChapado('#ffffff', { volume: false, map: texturaTexto([
+    ['PAGODE', '900 70px sans-serif', '#ffe14a'], ['DE SEXTA', '900 52px sans-serif', '#fff'], ['22H', '900 80px sans-serif', '#ff7a1a']], { largura: 360, altura: 500, fundo: '#3a1458' }) }));
+  pagode.position.set(SALA.x1 - 0.012, 1.7, -2.1); pagode.rotation.y = -Math.PI / 2; add(pagode);
+  // manchas no piso e na calçada
+  const mancha = (x, z, rx, rz, op) => { const mm = new THREE.Mesh(new THREE.CircleGeometry(1, 20), new THREE.MeshBasicMaterial({ color: '#2a2016', transparent: true, opacity: op, depthWrite: false })); mm.rotation.x = -Math.PI / 2; mm.scale.set(rx, rz, 1); mm.position.set(x, 0.003, z); return add(mm); };
+  for (let i = 0; i < 9; i++) mancha(-1.8 + r() * 3.6, -2.6 + r() * 3.0, 0.08 + r() * 0.25, 0.06 + r() * 0.18, 0.06 + r() * 0.08);
+  for (let i = 0; i < 6; i++) mancha(-4 + r() * 8, GRADE_Z + 0.3 + r() * 1.7, 0.15 + r() * 0.4, 0.1 + r() * 0.3, 0.12 + r() * 0.1);
+
   // ---------- Animação do cenário (determinística) ----------
   const hash = (n) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
-  const corTubo = new THREE.Color('#f4fbff');
+  const corTubo = new THREE.Color('#f2fff8');
   // piscar: 0 = luz firme; 1 = falhando muito. Devolve o fator de luz (1 = normal).
   function fatorLuz(t, piscar) {
     if (piscar <= 0) return 1;
@@ -202,20 +305,26 @@ export function criarDistribuidora({ semente = 11 } = {}) {
   }
   function atualizar(t, { piscar = 0, luzes = null, neonFalha = 0.15 } = {}) {
     const f = fatorLuz(t, piscar);
-    for (const tb of tubos) { tb.tubo.material.color.copy(corTubo).multiplyScalar(0.25 + 0.75 * f); tb.halo.material.opacity = 0.35 * f; }
+    for (const tb of tubos) { tb.tubo.material.color.copy(corTubo).multiplyScalar(0.25 + 0.75 * f); if (tb.halo.isSprite) tb.halo.material.opacity = 0.3 * f; tb.luz.intensity = tb.base * f; }
+    helice.rotation.z = -t * 14; vent.rotation.y = -Math.PI / 2 - 0.4 + Math.sin(t * 0.6) * 0.5;
+    chiado(t);
     if (luzes) {
       luzes.sol.intensity = luzes._base.sol * f;
       luzes.ambiente.intensity = luzes._base.amb * (0.25 + 0.75 * f);
     }
     const fn = hash(Math.floor(t * 9) + 77) < neonFalha ? 0.35 : 1;
-    neon.material.opacity = fn; neonHalo.material.opacity = 0.35 * fn;
+    neon.material.opacity = fn; neonHalo.material.opacity = 0.35 * fn; luzNeon.intensity = 1.6 * fn;
     return f;
   }
 
+  // apagão: lâmpadas desligadas (só ficam neon, geladeiras, TV e o poste)
+  function apagarLampadas() { for (const tb of tubos) { tb.tubo.material.color.setRGB(0.06, 0.06, 0.07); if (tb.halo.isSprite) tb.halo.material.opacity = 0; tb.luz.intensity = 0; } }
+
   return {
-    raiz, marcas: MARCAS, atualizar,
+    raiz, marcas: MARCAS, atualizar, apagarLampadas,
     limites: { ...SALA, margem: 0.25 },          // a câmera de 3ª pessoa não sai da sala
     luzesExtras: [luzPoste],
-    pos: { nevoaCor: '#04050a', nevoaIni: 4.5, nevoaFim: 13, nevoaMax: 1.0 },   // a rua some no escuro
+    pos: { nevoaCor: '#04050a', nevoaIni: 6, nevoaFim: 26, nevoaMax: 0.97,      // a rua some no escuro (postes viram pontos)
+           tomSombras: '#1d3a5f', tomLuzes: '#f4f1ea', tomForca: 0.45, contraste: 0.08 },
   };
 }

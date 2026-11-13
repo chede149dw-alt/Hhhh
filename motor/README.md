@@ -63,7 +63,8 @@ Toda página renderizável deve:
 | `render/renderizar.mjs` | CLI e função `renderizar()`: quadros → `quadro_NNNNN.png`, com N processos. |
 | `render/juntar.mjs` | CLI e função `juntar()`: PNGs (+ áudio) → MP4 via ffmpeg. |
 | `visual/estilo/chapado.js` | Rampa toon, `materialChapado(cor)`, `VOLUME`, `criarLuzes(cena, 'dia'\|'noite', {camera})`, `comoObjeto`/`comoChao`, `prepararRenderer`. Conta da calibração no topo do arquivo. |
-| `visual/estilo/posfx.js` | `criarPos(renderer, L, A, params, {msaa, taps})`: névoa, foco raso, vinheta, grão. `POS_NEUTRO`. |
+| `visual/estilo/posfx.js` | `criarPos(renderer, L, A, params, {msaa, taps})`: 2 passes — névoa, foco raso; lente (curvatura, aberração), vinheta, cor (tom, saturação, contraste), grão. `POS_NEUTRO`, `VISUAL_VERDE`. |
+| `visual/estilo/sombras.js` | `criarSombraContato(boneco)` → mancha no chão que segue o quadril. |
 | `animacao/poses.js` | Puro (Node + navegador): juntas, canais, `REPOUSO`, `POSES` (acenar, apontar, sentar, assustado), `derivar`, `misturar`, `validarPose`. |
 | `animacao/mat.js` | Rotação 3x3 e vetores (puro). |
 | `animacao/esqueleto.js` | Tabela de juntas, canais ↔ ângulos, `fk`, `pontos` (sola/pulso no mundo), `paraMundo`/`paraLocal`. |
@@ -81,7 +82,7 @@ Toda página renderizável deve:
 | `visual/testes/boneco.html` | `?ficha=nome`, quadros 0-8 com `--fps 1`: 4 vistas, 4 poses e o rosto infiltrado. |
 | `visual/testes/atuacao.html` | `?atuacao=nome&ficha=x&vista=34\|frente\|lado\|costas34\|pov&rotulo=0` (t em segundos); mostra os adereços da atuação. |
 | `render/folha_atuacoes.mjs` | `node render/folha_atuacoes.mjs saida.png nome:ficha:vista ...` → 6 quadros por atuação, uma linha cada. |
-| `visual/testes/cenario.html` | Quadros 0-9 (`--fps 1`): visão geral, 1ª pessoa (Gabriel, portinhola, geladeira, alerta, luz falhando), geral/médio/close, de fora. `?seq=1`: sequência POV de 5,2 s. |
+| `visual/testes/cenario.html` | Quadros 0-9 (`--fps 1`): visão geral, 1ª pessoa (Gabriel, portinhola, geladeira, alerta, luz falhando), geral/médio/close, de fora. `?seq=1`: sequência POV de 5,2 s. `?visual=neutro` desliga o visual verde. |
 | `visual/testes/fk.html` | Compara FK pura com o boneco three. |
 | `visual/testes/relogio.html` | Cena mínima de teste do contrato `quadro(t)`. |
 | `visual/testes/estilo.html` | 3 cubos + 1 esfera. URL: `luz=dia\|noite`, `pos=0\|neutro\|1`, `calib=1`. Expõe `window.medir()`. |

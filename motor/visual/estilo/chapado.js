@@ -89,8 +89,10 @@ export function prepararRenderer(renderer) {
 // Luzes calibradas. 'dia': sol + ambiente. 'noite': lua + ambiente + lanterna presa à câmera (1ª pessoa).
 export const LUZES = {
   dia:   { principal: 2.0, ambiente: Math.PI - 2.0, corAmbiente: '#ffffff', corPrincipal: '#ffffff', sombra: 0.55 },
-  // interior: fluorescente de cima (luz fria), mesma conta do dia (principal + ambiente = π)
-  interior: { principal: 2.0, ambiente: Math.PI - 2.0, corAmbiente: '#f4f8ff', corPrincipal: '#f4f8ff', sombra: 0.5, posicao: [0.8, 6, 1.5] },
+  // interior: luz principal de dentro para fora (sombras caem para a rua) + ambiente + lâmpadas do cenário
+  // (pontuais). Perto das lâmpadas: 1,6 + 0,85 + ~0,7 ≈ π (fluorescente clara e esverdeada, como na referência;
+  // o medo vem da cor do pós, não do escuro). Cantos mais escuros; sombra forte (0,8) e nítida (mapa 3072).
+  interior: { principal: 1.6, ambiente: 0.85, corAmbiente: '#a6eac6', corPrincipal: '#bcfcd8', sombra: 0.8, mapa: 3072, raioPCF: 1.5, posicao: [0.3, 5.5, -2.8], alvo: [0, 0, 1.0] },
   noite: { principal: 0.30, ambiente: 0.30, corAmbiente: '#c4ccff', corPrincipal: '#b8c6ff', sombra: 0.0,
            lanterna: Math.PI - 0.60, corLanterna: '#ffffff', sombraLanterna: 0.8 },
 };
@@ -104,12 +106,13 @@ export function criarLuzes(cena, nome = 'dia', { camera, raioSombra = 8 } = {}) 
   if (p.sombra > 0) {
     sol.castShadow = true;
     sol.shadow.intensity = p.sombra;
-    sol.shadow.mapSize.set(2048, 2048);
-    sol.shadow.radius = 3;
+    sol.shadow.mapSize.set(p.mapa || 2048, p.mapa || 2048);
+    sol.shadow.radius = p.raioPCF ?? 3;
     sol.shadow.bias = -0.0005;
     const c = sol.shadow.camera;
     c.left = c.bottom = -raioSombra; c.right = c.top = raioSombra; c.near = 0.5; c.far = 40;
   }
+  if (p.alvo) sol.target.position.set(...p.alvo);
   cena.add(ambiente, sol, sol.target);
   const luzes = { ambiente, sol, nome };
   if (p.lanterna) {
