@@ -28,7 +28,10 @@
    "fala": {
     "texto": "E se um videogame pagasse o seu aluguel?",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/capa.wav"
+    }
    },
    "destaque": [
     "ALUGUEL?"
@@ -45,7 +48,10 @@
    "fala": {
     "texto": "O Davi juntou dinheiro por dois anos...",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/saldo.wav"
+    }
    },
    "destaque": [
     "DINHEIRO"
@@ -54,14 +60,18 @@
     "quente": 0.0,
     "vinheta": 0.95,
     "bloom": 0.5
-   }
+   },
+   "duracao": 2.31
   },
   {
    "id": "comprar",
    "fala": {
     "texto": "e gastou tudo numa cadeira de realidade virtual.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/comprar.wav"
+    }
    },
    "destaque": [
     "TUDO"
@@ -77,14 +87,18 @@
      "em": 1.0,
      "volume": 0.5
     }
-   ]
+   ],
+   "duracao": 2.76
   },
   {
    "id": "mae",
    "fala": {
     "texto": "A mãe dele ainda não sabe.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/mae.wav"
+    }
    },
    "destaque": [
     "MÃE"
@@ -93,14 +107,18 @@
     "quente": 0.0,
     "vinheta": 0.95,
     "bloom": 0.5
-   }
+   },
+   "duracao": 1.8
   },
   {
    "id": "itens",
    "fala": {
     "texto": "Porque em Valdor, tudo que você pega lá dentro",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/itens.wav"
+    }
    },
    "destaque": [
     "VALDOR,"
@@ -109,14 +127,18 @@
     "quente": 0.0,
     "vinheta": 0.9,
     "bloom": 0.8
-   }
+   },
+   "duracao": 2.63
   },
   {
    "id": "precos",
    "fala": {
     "texto": "vale dinheiro de verdade aqui fora.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/precos.wav"
+    }
    },
    "destaque": [
     "DINHEIRO"
@@ -125,14 +147,18 @@
     "quente": 0.0,
     "vinheta": 0.9,
     "bloom": 0.8
-   }
+   },
+   "duracao": 1.92
   },
   {
    "id": "capsulas",
    "fala": {
     "texto": "Tem gente pagando a faculdade jogando.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/capsulas.wav"
+    }
    },
    "destaque": [
     "FACULDADE"
@@ -141,14 +167,18 @@
     "quente": 0.0,
     "vinheta": 0.95,
     "bloom": 0.5
-   }
+   },
+   "duracao": 2.21
   },
   {
    "id": "raro",
    "fala": {
     "texto": "Um item épico cai uma vez a cada mil monstros.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/raro.wav"
+    }
    },
    "destaque": [
     "ÉPICO",
@@ -158,14 +188,18 @@
     "quente": 0.0,
     "vinheta": 0.8,
     "bloom": 0.75
-   }
+   },
+   "duracao": 2.94
   },
   {
    "id": "teo",
    "fala": {
     "texto": "E o Téo, melhor amigo dele, comprou junto.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/teo.wav"
+    }
    },
    "destaque": [
     "TÉO,"
@@ -174,14 +208,18 @@
     "quente": 0.0,
     "vinheta": 0.95,
     "bloom": 0.5
-   }
+   },
+   "duracao": 2.49
   },
   {
    "id": "novatos",
    "fala": {
     "texto": "Nenhum dos dois tinha jogado antes.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/novatos.wav"
+    }
    },
    "destaque": [
     "ANTES."
@@ -190,14 +228,18 @@
     "quente": 0.0,
     "vinheta": 0.95,
     "bloom": 0.5
-   }
+   },
+   "duracao": 2.01
   },
   {
    "id": "ouvido",
    "fala": {
     "texto": "O corpo fica parado, mas o ouvido não sabe.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/ouvido.wav"
+    }
    },
    "destaque": [
     "OUVIDO"
@@ -206,14 +248,18 @@
     "quente": 0.0,
     "vinheta": 0.8,
     "bloom": 0.75
-   }
+   },
+   "duracao": 2.66
   },
   {
    "id": "pulso",
    "fala": {
     "texto": "O capacete manda um pulso pro labirinto do ouvido,",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/pulso.wav"
+    }
    },
    "destaque": [
     "PULSO",
@@ -223,14 +269,18 @@
     "quente": 0.0,
     "vinheta": 0.8,
     "bloom": 0.75
-   }
+   },
+   "duracao": 2.81
   },
   {
    "id": "cerebro",
    "fala": {
     "texto": "e o cérebro jura que você está andando.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/cerebro.wav"
+    }
    },
    "destaque": [
     "CÉREBRO",
@@ -240,104 +290,139 @@
     "quente": 0.0,
     "vinheta": 0.8,
     "bloom": 0.75
-   }
+   },
+   "duracao": 2.27
   },
   {
    "id": "visor",
    "fala": {
     "texto": "Bem-vindos a Valdor.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/visor.wav"
+    }
    },
    "destaque": [
     "VALDOR."
    ],
-   "duracao": 2.6
+   "duracao": 2.4
   },
   {
    "id": "raca",
    "fala": {
     "texto": "Primeiro, escolha sua raça.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/raca.wav"
+    }
    },
    "destaque": [
     "RAÇA."
-   ]
+   ],
+   "duracao": 1.97
   },
   {
    "id": "fera",
    "fala": {
     "texto": "O Téo escolheu homem-fera, e não contou por quê.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/fera.wav"
+    }
    },
    "destaque": [
     "HOMEM-FERA,"
-   ]
+   ],
+   "duracao": 3.02
   },
   {
    "id": "classe",
    "fala": {
     "texto": "Depois, a classe. O Davi virou mago.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/classe.wav"
+    }
    },
    "destaque": [
     "MAGO."
-   ]
+   ],
+   "duracao": 2.83
   },
   {
    "id": "guardiao",
    "fala": {
     "texto": "E o Téo, guardião.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/guardiao.wav"
+    }
    },
    "destaque": [
     "GUARDIÃO."
-   ]
+   ],
+   "duracao": 1.8
   },
   {
    "id": "nivel",
    "fala": {
     "texto": "Nível um: magia fraca e espada de madeira.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/nivel.wav"
+    }
    },
    "destaque": [
     "UM:",
     "MADEIRA."
-   ]
+   ],
+   "duracao": 3.36
   },
   {
    "id": "explorar",
    "fala": {
     "texto": "Antes de sonhar alto, eles precisavam ficar fortes.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/explorar.wav"
+    }
    },
    "destaque": [
     "FORTES."
-   ]
+   ],
+   "duracao": 3.04
   },
   {
    "id": "gosma",
    "fala": {
     "texto": "Primeiro monstro: um lobo jovem.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/gosma.wav"
+    }
    },
    "destaque": [
     "LOBO"
-   ]
+   ],
+   "duracao": 2.27
   },
   {
    "id": "golpe",
    "fala": {
     "texto": "Faísca, escudo, adaga!",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/golpe.wav"
+    }
    },
    "destaque": [
     "ADAGA!"
@@ -353,37 +438,48 @@
      "em": 1.55,
      "volume": 0.8
     }
-   ]
+   ],
+   "duracao": 2.38
   },
   {
    "id": "drop",
    "fala": {
     "texto": "Ele deixou cair... dois centavos.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/drop.wav"
+    }
    },
    "destaque": [
     "CENTAVOS."
-   ]
+   ],
+   "duracao": 2.85
   },
   {
    "id": "nivel2",
    "fala": {
     "texto": "Nível dois!",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/nivel2.wav"
+    }
    },
    "destaque": [
     "DOIS!"
    ],
-   "duracao": 2.2
+   "duracao": 1.8
   },
   {
    "id": "xp",
    "fala": {
     "texto": "A barra de experiência foi feita pra prender você.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/xp.wav"
+    }
    },
    "destaque": [
     "PRENDER"
@@ -392,54 +488,49 @@
     "quente": 0.0,
     "vinheta": 0.8,
     "bloom": 0.75
-   }
-  },
-  {
-   "id": "progresso",
-   "fala": {
-    "texto": "O cérebro ama progresso pequeno e frequente.",
-    "voz": "narrador",
-    "velocidade": 210
    },
-   "destaque": [
-    "PEQUENO",
-    "FREQUENTE."
-   ],
-   "cinema": {
-    "quente": 0.0,
-    "vinheta": 0.8,
-    "bloom": 0.75
-   }
+   "duracao": 2.72
   },
   {
    "id": "forte",
    "fala": {
     "texto": "Aí passou um jogador nível oitenta.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/forte.wav"
+    }
    },
    "destaque": [
     "OITENTA."
-   ]
+   ],
+   "duracao": 2.01
   },
   {
    "id": "adaga",
    "fala": {
     "texto": "Na cintura, uma adaga épica. Quinze mil reais.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/adaga.wav"
+    }
    },
    "destaque": [
     "ÉPICA.",
     "QUINZE"
-   ]
+   ],
+   "duracao": 3.64
   },
   {
    "id": "aluguel",
    "fala": {
     "texto": "Só que o Davi tinha sete reais...",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/aluguel.wav"
+    }
    },
    "destaque": [
     "SETE"
@@ -448,25 +539,33 @@
     "quente": 0.0,
     "vinheta": 0.95,
     "bloom": 0.5
-   }
+   },
+   "duracao": 2.09
   },
   {
    "id": "trinta",
    "fala": {
     "texto": "e o aluguel vencia em trinta dias.",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/trinta.wav"
+    }
    },
    "destaque": [
     "TRINTA"
-   ]
+   ],
+   "duracao": 2.03
   },
   {
    "id": "parte",
    "fala": {
     "texto": "Segue pra ver a parte dois!",
     "voz": "narrador",
-    "velocidade": 210
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/parte.wav"
+    }
    },
    "destaque": [],
    "duracao": 2.8

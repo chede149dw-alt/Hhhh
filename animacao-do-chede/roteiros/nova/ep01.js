@@ -84,6 +84,72 @@
   }
 
   window.PLANOS = {
+    // CAPA DO REELS/TIKTOK (padrão do autor): protagonista grande no centro com a magia na mão vindo para a câmera,
+    // dois personagens atrás nas laterais (menores e mais escuros), fundo roxo com círculo de runas e silhueta do castelo,
+    // logo VALDOR no alto (brilho atrás das letras), título metálico embaixo (prata + dourado) e selo "PARTE 1".
+    capaReels(ctx, u, d, api) {
+      const rng = (s) => () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#1A0B3A'); g.addColorStop(0.45, '#3A1478'); g.addColorStop(0.75, '#22104E'); g.addColorStop(1, '#0C0620');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const rnd = rng(31);
+      for (let i = 0; i < 26; i++) { const x = rnd() * W, y = rnd() * 900, r = 120 + rnd() * 220; const n = ctx.createRadialGradient(x, y, 0, x, y, r); n.addColorStop(0, 'rgba(120,70,200,0.35)'); n.addColorStop(1, 'rgba(120,70,200,0)'); ctx.fillStyle = n; ctx.fillRect(x - r, y - r, r * 2, r * 2); }
+      // círculo de runas de pé atrás do Davi
+      Valdor.circuloMagico(ctx, 540, 560, 440, { k: 1, t: 1.2, achata: 1, rgb: '190,140,255', colunas: false });
+      // montanhas, castelo e espadas gigantes em silhueta
+      ctx.fillStyle = '#1A0C3A'; ctx.beginPath(); ctx.moveTo(0, 1000);
+      for (const [x, y] of [[0, 820], [160, 700], [300, 820], [430, 640], [560, 780], [700, 610], [860, 760], [1000, 680], [1080, 740]]) ctx.lineTo(x, y);
+      ctx.lineTo(W, 1100); ctx.lineTo(0, 1100); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#120828';
+      ctx.fillRect(640, 520, 120, 140); for (const [tx, th] of [[620, 210], [740, 190], [685, 260]]) { ctx.fillRect(tx, 660 - th, 40, th); ctx.beginPath(); ctx.moveTo(tx - 8, 660 - th); ctx.lineTo(tx + 20, 600 - th); ctx.lineTo(tx + 48, 660 - th); ctx.fill(); }
+      for (const [x, a, h] of [[120, -0.2, 420], [960, 0.18, 380]]) { ctx.save(); ctx.translate(x, 1000); ctx.rotate(a); ctx.fillRect(-22, -h, 44, h); ctx.fillRect(-75, -h * 0.82, 150, 26); ctx.fillRect(-12, -h * 1.12, 24, h * 0.3); ctx.beginPath(); ctx.arc(0, -h * 1.14, 24, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      ctx.fillStyle = 'rgba(200,160,255,0.75)'; for (let i = 0; i < 30; i++) { const x = 600 + rnd() * 200, y = 420 + rnd() * 220; ctx.fillRect(x, y, 5, 8); }
+      // Téo (esq.) e Kael (dir.) atrás, mais escuros
+      close(api, { ...TEOJ, pose: 'maos-na-cintura', expressao: 'determinado', vista: 'tq' }, 220, 690, 320, { parado: true, luz: { lado: 1, cor: 'rgb(190,150,255)', forca: 0.8 } });
+      close(api, { ...FORTE, pose: 'parado', expressao: 'serio', vista: 'tq', espelhar: true }, 870, 680, 330, { parado: true, luz: { lado: -1, cor: 'rgb(190,150,255)', forca: 0.8 } });
+      ctx.fillStyle = 'rgba(30,10,70,0.4)'; ctx.fillRect(0, 0, W, 1250);
+      // Davi grande no centro, olhando para a câmera, magia na mão vindo para a frente
+      const rig = close(api, { ...DAVIJ, pose: { braco_d: 70, antebraco_d: 22, braco_e: -8, antebraco_e: 4, _magia: 1.4 }, expressao: 'determinado' }, 560, 640, 430, { parado: true, luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.9 } });
+      const m = rig && rig.pontoMundo ? rig.pontoMundo('mao_d', [0, 0.25]) : { x: 300, y: 1050 };
+      Valdor.esferaEnergia(ctx, Math.max(250, m.x), m.y - 10, 120, 1.3, 1);
+      // logo VALDOR: brilho mágico ATRÁS das letras
+      Valdor.brilhoRadial(ctx, 540, 300, 520, '160,110,255', 0.9);
+      Valdor.circuloMagico(ctx, 540, 300, 300, { k: 1, t: 0.5, achata: 0.3, rgb: '200,160,255', colunas: false });
+      ctx.save(); ctx.translate(540, 300);
+      ctx.font = '900 168px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(167,121,255,0.95)'; ctx.shadowBlur = 40;
+      ctx.lineJoin = 'round'; ctx.strokeStyle = '#140826'; ctx.lineWidth = 22; ctx.strokeText('VALDOR', 0, 0);
+      ctx.shadowBlur = 0;
+      const lg = ctx.createLinearGradient(0, -80, 0, 80); lg.addColorStop(0, '#F3EBFF'); lg.addColorStop(0.5, '#C9A6FF'); lg.addColorStop(1, '#7B4DFF');
+      ctx.fillStyle = lg; ctx.fillText('VALDOR', 0, 0);
+      ctx.restore();
+      const f = ctx.createLinearGradient(0, 1150, 0, 1700); f.addColorStop(0, 'rgba(12,6,32,0)'); f.addColorStop(0.35, 'rgba(12,6,32,0.8)'); f.addColorStop(1, 'rgba(12,6,32,0.95)');
+      ctx.fillStyle = f; ctx.fillRect(0, 1150, W, H - 1150);
+      const metal = (txt, y, tam, cores, contorno = '#1A0B30') => {
+        ctx.save(); ctx.font = `900 ${tam}px Inter`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        let k = 1; while (ctx.measureText(txt).width * k > 1000) k -= 0.02;
+        ctx.translate(540, y); ctx.scale(k, 1);
+        ctx.shadowColor = 'rgba(167,121,255,0.9)'; ctx.shadowBlur = 30;
+        ctx.lineJoin = 'round'; ctx.strokeStyle = contorno; ctx.lineWidth = tam * 0.16; ctx.strokeText(txt, 0, 0);
+        ctx.shadowBlur = 0;
+        const gr = ctx.createLinearGradient(0, -tam * 0.5, 0, tam * 0.5); cores.forEach(([o, c]) => gr.addColorStop(o, c));
+        ctx.fillStyle = gr; ctx.fillText(txt, 0, 0);
+        ctx.restore();
+      };
+      const PRATA = [[0, '#FFFFFF'], [0.45, '#D7D2E6'], [0.55, '#9C94B4'], [1, '#E9E5F5']];
+      const OURO = [[0, '#FFF2B0'], [0.45, '#FFC83D'], [0.55, '#D98A12'], [1, '#FFD45E']];
+      metal('GASTEI TUDO', 1290, 130, PRATA);
+      metal('NUM', 1400, 92, PRATA);
+      metal('VIDEOGAME', 1525, 160, OURO);
+      ctx.save(); ctx.translate(540, 1690);
+      ctx.fillStyle = '#2A1060'; ctx.strokeStyle = '#B98CFF'; ctx.lineWidth = 6;
+      ctx.beginPath(); ctx.moveTo(-230, 0); ctx.lineTo(-195, -62); ctx.lineTo(195, -62); ctx.lineTo(230, 0); ctx.lineTo(195, 62); ctx.lineTo(-195, 62); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(185,140,255,0.8)'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(-420, 0); ctx.lineTo(-250, 0); ctx.moveTo(250, 0); ctx.lineTo(420, 0); ctx.stroke();
+      ctx.restore();
+      metal('PARTE 1', 1693, 84, PRATA);
+    },
+
     // 1) gancho: caixa misteriosa no quarto escuro + premissa
     capa(ctx, u, d, api) {
       const cam = quarto(ctx, api, { x: 0.15 - u * 0.05, y: 1.1, z: -0.6 + u * 0.25, cy: 860 });

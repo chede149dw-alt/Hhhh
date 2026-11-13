@@ -148,3 +148,7 @@
   árvores com luz quente na borda, pinheiros, samambaias escuras nos cantos e vinheta (refs: ref-batalha-luz.mp4).
 - De costas, pose feita de frente cruzava os braços nas costas (print do autor). O motor agora inverte os ângulos dos braços
   na vista de costas (menos em poses feitas para costas e nas caminhadas).
+- Voz final (13/11): Witalo Guimarães (pt-BR, energética, ideal para Shorts), eleven_v4, 2 versões por fala, a mais curta.
+  Com voz real deu 92 s: acelerei 1,2× (atempo) e cortei 1 plano repetido ("progresso") para fechar em 74,8 s.
+  Plano com animação longa (visor) precisa de duração mínima própria (2,4 s).
+- Capa Reels: mesmo padrão da FENDA (capaReels + roteiros/nova/capa-reels.json).

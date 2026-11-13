@@ -1,0 +1,26 @@
+{
+ "serie": "VALDOR",
+ "scripts": [
+  "personagens/nova/cores.js",
+  "personagens/nova/equipamento.js",
+  "personagens/nova/davi/davi.js",
+  "personagens/nova/davi/davi-jogo.js",
+  "personagens/nova/teo/teo.js",
+  "personagens/nova/teo/teo-jogo.js",
+  "personagens/nova/jogador-forte.js",
+  "cenarios/valdor-campo.js",
+  "efeitos/criaturas.js",
+  "efeitos/valdor.js"
+ ],
+ "planos": [
+  {
+   "id": "capaReels",
+   "duracao": 3,
+   "cinema": {
+    "quente": 0.05,
+    "vinheta": 0.7,
+    "bloom": 0.9
+   }
+  }
+ ]
+}

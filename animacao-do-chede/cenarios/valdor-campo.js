@@ -57,7 +57,7 @@
     const camadas = [
       { k: 1.0, alt: 620, cor: '#A9A8C6', neve: true, seed: 3, per: 1500 },
       { k: 1.0, alt: 420, cor: '#8A8AB0', neve: true, seed: 9, per: 1100 },
-      { k: 1.0, alt: 200, cor: '#5C8A55', neve: false, seed: 15, per: 800 },
+      { k: 1.0, alt: 200, cor: '#4C7848', neve: false, seed: 15, per: 800 },
     ];
     for (const c of camadas) {
       const r = rng(c.seed), picos = [];
@@ -99,7 +99,7 @@
     const zs = faixasZ(cam), X = 260;
     for (let i = 0; i < zs.length - 1; i++) {
       const a = zs[i], b = zs[i + 1] + 0.03, k = (i % 2) * 0.03;
-      face(ctx, cam, [[-X, 0, a], [X, 0, a], [X, 0, b], [-X, 0, b]], mistura('#7BB443', '#6EA83B', k), { contorno: false });
+      face(ctx, cam, [[-X, 0, a], [X, 0, a], [X, 0, b], [-X, 0, b]], mistura('#5A9233', '#50872D', k), { contorno: false });
     }
     // sombras de nuvens passando (manchas grandes) — dá profundidade e contraste
     const rn = rng(91);
@@ -107,12 +107,12 @@
       const cx = (rn() * 2 - 1) * 40, cz = 3 + rn() * 60, rx = 4 + rn() * 7, rz = 2.5 + rn() * 4, n = 14, pts = [];
       for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; pts.push([cx + Math.cos(a) * rx, 0.003, cz + Math.sin(a) * rz]); }
       if (pts.some(([, , z]) => z < cam.z + 0.5)) continue;
-      ctx.fillStyle = `rgba(34,70,30,${0.16 * (1 - cam.fator(cz))})`; ctx.fill(Cena3D.caminho(cam, pts));
+      ctx.fillStyle = `rgba(24,52,22,${0.2 * (1 - cam.fator(cz))})`; ctx.fill(Cena3D.caminho(cam, pts));
     }
     // trilha de terra serpenteando para dentro
     const pts = (lado) => { const out = []; for (const z of zs) { if (z > 90) break; const cx = Math.sin(z * 0.12) * 1.4 + 0.3, w = 0.75 + z * 0.012; out.push([cx + lado * w, 0.002, z]); } return out; };
     const e = pts(-1), d = pts(1);
-    for (let i = 0; i < e.length - 1; i++) face(ctx, cam, [e[i], d[i], d[i + 1], e[i + 1]], mistura('#C9A06A', '#BE955E', (i % 2) * 0.4), { contorno: false });
+    for (let i = 0; i < e.length - 1; i++) face(ctx, cam, [e[i], d[i], d[i + 1], e[i + 1]], mistura('#A27C50', '#967248', (i % 2) * 0.4), { contorno: false });
   }
 
 
@@ -177,7 +177,7 @@
 
   function tufo(ctx, cam, X, Z, h, fase, t) {
     const q = cam.p(X, 0, Z); if (q.dz < 0.5 || q.x < -200 || q.x > 1280) return;
-    const s = q.s, cor = cam.tom('#3F8A2E', Z), cor2 = cam.tom('#7CC24E', Z);
+    const s = q.s, cor = cam.tom('#2C6421', Z), cor2 = cam.tom('#5C9A38', Z);
     ctx.lineCap = 'round';
     for (let i = 0; i < 5; i++) {
       const dx = (i - 2) * 0.035 * s, bal = Math.sin(t * 1.6 + fase + i) * 0.04 * s, alt = h * (0.7 + 0.3 * ((i * 7) % 3) / 2) * s;
@@ -247,7 +247,7 @@
         g.lineCap = 'round';
         for (let i = 0; i < 46; i++) {
           const x = ((r() * (W + 400) + desl) % (W + 400) + W + 400) % (W + 400) - 200, alt = (180 + r() * 380) * forca, bal = Math.sin(t * 1.3 + i) * 30;
-          g.strokeStyle = i % 3 ? '#3F8A2E' : '#6CC048'; g.lineWidth = 14 + r() * 12;
+          g.strokeStyle = i % 3 ? '#2A5E20' : '#4E8E30'; g.lineWidth = 14 + r() * 12;
           g.beginPath(); g.moveTo(x, H + 20); g.quadraticCurveTo(x + bal * 0.3, H - alt * 0.6, x + bal + (r() - 0.5) * 80, H - alt); g.stroke();
         }
         // samambaias escuras nos cantos (referência de batalha)
