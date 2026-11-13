@@ -56,6 +56,7 @@
       Cenarios3D.valdor.desenhar(g, cam, { t: api.t });
       api.desfocar(camada, o.desfoque);
     } else Cenarios3D.valdor.desenhar(ctx, cam, { t: api.t });
+    if (o.desfoque) Cenarios3D.valdor.luz(ctx, cam, { t: api.t });
     return cam;
   }
   function escuroVitrine(ctx) {
@@ -338,7 +339,7 @@
     // 20) explorando: tomada girando em volta dos dois andando pela trilha
     explorar(ctx, u, d, api) {
       const T = u, zc = 4 + T * 0.9;
-      const cam = api.orbita({ alvo: [0.2, 1.0, zc], raio: chave(T, [[0, 4.2], [d, 3.4]]), ang: chave(T, [[0, -1.25], [d, -0.55]]), altura: 1.5, f: 1150, ySalvo: 1000, nevoa: Cenarios3D.valdor.nevoa });
+      const cam = api.orbita({ alvo: [0.2, 1.0, zc], raio: chave(T, [[0, 4.2], [d, 3.4]]), ang: chave(T, [[0, -1.5], [d, -1.15]]), altura: 1.5, f: 1150, ySalvo: 1000, nevoa: Cenarios3D.valdor.nevoa });
       Cenarios3D.valdor.desenhar(ctx, cam, { t: api.t });
       emOrdem(cam, [
         [-0.35, zc, () => api.personagem3d(cam, { ...DAVIJ, pose: 'parado', expressao: 'determinado' }, -0.35, zc, 1.76, { rumo: Math.PI, caminhar: api.t, luz: LUZ_CAMPO })],
@@ -349,14 +350,14 @@
 
     // 21) primeiro monstro: a gosma pula na frente deles
     gosma(ctx, u, d, api) {
-      const cam = campo(ctx, api, { x: 0.3, y: 1.1, z: 0.8 + u * 0.1, cy: 900, f: 1150, yaw: -0.04 });
+      const cam = campo(ctx, api, { x: 0.3, y: 1.1, z: 0.3 + u * 0.1, cy: 900, f: 1050, yaw: -0.02 });
       const gx = api.lerp(2.4, 0.3, api.fase(0, 1.4, 'linear')), gz = 5.6;
       emOrdem(cam, [
         [gx, gz, () => { const q = cam.p(gx, 0, gz); Valdor.gosma(ctx, q.x, q.y, 0.75 * q.s, api.t, { pulo: (u * 1.6) % 1, olhar: -1 }); }],
-        [-0.9, 3.6, () => api.personagem3d(cam, { ...DAVIJ, pose: u > 1.4 ? 'conjurando' : 'parado', expressao: u > 1.4 ? 'determinado' : 'espanto' }, -0.9, 3.6, 1.76, { olhaPara: [gx, gz], luz: LUZ_CAMPO })],
-        [1.4, 3.8, () => api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'espanto' }, 1.4, 3.8, 1.82, { olhaPara: [gx, gz], luz: LUZ_CAMPO, semente: 3 })],
+        [-0.55, 3.9, () => api.personagem3d(cam, { ...DAVIJ, pose: u > 1.4 ? 'conjurando' : 'parado', expressao: u > 1.4 ? 'determinado' : 'espanto' }, -0.55, 3.9, 1.76, { olhaPara: [gx, gz], luz: LUZ_CAMPO })],
+        [1.05, 4.1, () => api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'espanto' }, 1.05, 4.1, 1.82, { olhaPara: [gx, gz], luz: LUZ_CAMPO, semente: 3 })],
       ]);
-      if (u > 1.4) { const q = cam.p(-0.9, 0, 3.6); Valdor.circuloMagico(ctx, q.x, q.y, 0.7 * q.s, { k: api.fase(1.4, 2.0), t: api.t }); }
+      if (u > 1.4) { const q = cam.p(-0.55, 0, 3.9); Valdor.circuloMagico(ctx, q.x, q.y, 0.7 * q.s, { k: api.fase(1.4, 2.0), t: api.t }); }
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.6 });
     },
 
@@ -364,10 +365,10 @@
     golpe(ctx, u, d, api) {
       const [tx, ty] = u > 1.5 && u < 1.8 ? api.tremor(10) : [0, 0];
       ctx.save(); ctx.translate(tx, ty);
-      const cam = campo(ctx, api, { x: 0.6, y: 1.05, z: 1.6, cy: 900, f: 1250, yaw: -0.08 + u * 0.03 });
+      const cam = campo(ctx, api, { x: 0.3, y: 1.35, z: 0.6, cy: 880, f: 1100, yaw: 0.02 + u * 0.02 });
       const G = [0.4, 5.0];
-      const davX = api.lerp(-0.8, 0.0, api.fase(1.2, 1.5)), davZ = api.lerp(3.8, 4.3, api.fase(1.2, 1.5));
-      const teoX = api.lerp(1.3, 0.55, api.fase(0.6, 0.85)), teoZ = api.lerp(3.9, 4.45, api.fase(0.6, 0.85));
+      const davX = api.lerp(-0.9, -0.25, api.fase(1.2, 1.5)), davZ = api.lerp(3.9, 4.6, api.fase(1.2, 1.5));
+      const teoX = api.lerp(1.4, 1.0, api.fase(0.6, 0.85)), teoZ = api.lerp(4.0, 4.75, api.fase(0.6, 0.85));
       const est = api.fase(1.6, 2.1);
       let rigD = null;
       emOrdem(cam, [

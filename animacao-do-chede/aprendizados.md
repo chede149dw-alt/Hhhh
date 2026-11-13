@@ -137,3 +137,7 @@
 - Personagens de jogo = personagem da vida real + `equipar(def, eq)` (personagens/nova/equipamento.js): manto, capuz,
   cinto, botas, escudo, adaga; a magia nas mãos acende com `_magia` na pose.
 - Narração de prévia a 210 ppm para caber 31 planos em 75 s.
+- Luz do campo (pedido do autor, ref. imagens/cenarios/cenario-05-luz.jpg): céu azul mais forte, raios de sol diagonais do
+  alto à direita (`Cenarios3D.valdor.luz`), névoa azul-acinzentada mais fraca, verdes menos amarelos.
+- Andando: personagem anda reto, sem balançar para os lados. O motor usa o passo frontal quando a vista é de frente/costas
+  e reduz o balanço de "vida" (0,15) enquanto anda.

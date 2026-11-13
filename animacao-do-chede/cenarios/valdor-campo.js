@@ -6,7 +6,7 @@
   window.Cenarios3D = window.Cenarios3D || {};
   const { face, arvore, mistura } = Cena3D;
   const rng = (s) => () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
-  const NEVOA = '#CFE6F2';
+  const NEVOA = '#BCD3E4';
 
   // objetos fixos (gerados uma vez): árvores, pedras, tufos, flores — fora da área da ação
   const OBJ = (() => {
@@ -16,7 +16,7 @@
       arv.push([x, z, 3.2 + r() * 2.6]);
     }
     for (let i = 0; i < 26; i++) { const z = 1 + r() * 30, x = (r() * 2 - 1) * (3 + z * 0.4); if (Math.abs(x) > 1.2) ped.push([x, z, 0.18 + r() * 0.35]); }
-    for (let i = 0; i < 420; i++) { const z = 0.5 + Math.pow(r(), 1.6) * 34, x = (r() * 2 - 1) * (2 + z * 0.9); tufo.push([x, z, 0.22 + r() * 0.2, r() * 6]); }
+    for (let i = 0; i < 750; i++) { const z = 0.5 + Math.pow(r(), 1.6) * 34, x = (r() * 2 - 1) * (2 + z * 0.9); tufo.push([x, z, 0.28 + r() * 0.26, r() * 6]); }
     for (let i = 0; i < 160; i++) { const z = 0.8 + Math.pow(r(), 1.4) * 20, x = (r() * 2 - 1) * (2 + z * 0.8); flor.push([x, z, ['#FFFFFF', '#FFE27A', '#F7A8C8', '#B9A6FF'][Math.floor(r() * 4)], r() * 6]); }
     return { arv, ped, tufo, flor };
   })();
@@ -24,17 +24,17 @@
   function ceu(ctx, cam, t) {
     const W = ctx.canvas.width, hz = cam.cy;
     const g = ctx.createLinearGradient(0, hz - 1500, 0, hz + 20);
-    g.addColorStop(0, '#5FA8E0'); g.addColorStop(0.55, '#9CD0EE'); g.addColorStop(1, '#E4F3F8');
+    g.addColorStop(0, '#3C80CC'); g.addColorStop(0.55, '#86BCE4'); g.addColorStop(1, '#D3E6F0');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, hz + 80);
     // sol e feixes de luz (alto à esquerda)
     const desl = -cam.yaw * cam.f;
-    const sx = 220 + desl * 0.9, sy = hz - 1100;
+    const sx = W - 120 + desl * 0.9, sy = hz - 1150;
     const h = ctx.createRadialGradient(sx, sy, 0, sx, sy, 700);
     h.addColorStop(0, 'rgba(255,250,225,0.95)'); h.addColorStop(0.2, 'rgba(255,244,205,0.45)'); h.addColorStop(1, 'rgba(255,244,205,0)');
     ctx.fillStyle = h; ctx.fillRect(0, 0, W, hz + 80);
     ctx.save(); ctx.globalCompositeOperation = 'screen';
     for (let i = 0; i < 5; i++) {
-      const a = 0.35 + i * 0.16 + Math.sin(t * 0.2 + i) * 0.02;
+      const a = Math.PI - 0.35 - i * 0.16 + Math.sin(t * 0.2 + i) * 0.02;
       ctx.fillStyle = `rgba(255,248,220,${0.07 - i * 0.008})`;
       ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + Math.cos(a) * 2600, sy + Math.sin(a) * 2600); ctx.lineTo(sx + Math.cos(a + 0.06) * 2600, sy + Math.sin(a + 0.06) * 2600); ctx.closePath(); ctx.fill();
     }
@@ -53,9 +53,9 @@
   function montanhas(ctx, cam) {
     const W = ctx.canvas.width, hz = cam.cy, desl = -cam.yaw * cam.f;
     const camadas = [
-      { k: 1.0, alt: 620, cor: '#A9C6DE', neve: true, seed: 3, per: 1500 },
-      { k: 1.0, alt: 420, cor: '#8FB3CF', neve: true, seed: 9, per: 1100 },
-      { k: 1.0, alt: 200, cor: '#7FAE8C', neve: false, seed: 15, per: 800 },
+      { k: 1.0, alt: 620, cor: '#9AB0CC', neve: true, seed: 3, per: 1500 },
+      { k: 1.0, alt: 420, cor: '#8198BA', neve: true, seed: 9, per: 1100 },
+      { k: 1.0, alt: 200, cor: '#6E9E62', neve: false, seed: 15, per: 800 },
     ];
     for (const c of camadas) {
       const r = rng(c.seed), picos = [];
@@ -79,7 +79,7 @@
     }
     // névoa clara no pé das montanhas
     const g = ctx.createLinearGradient(0, hz - 160, 0, hz + 10);
-    g.addColorStop(0, 'rgba(228,243,248,0)'); g.addColorStop(1, 'rgba(228,243,248,0.85)');
+    g.addColorStop(0, 'rgba(210,228,240,0)'); g.addColorStop(1, 'rgba(210,228,240,0.55)');
     ctx.fillStyle = g; ctx.fillRect(0, hz - 160, W, 175);
   }
   function castelo(ctx, x, y, k) {
@@ -92,17 +92,17 @@
     ctx.restore();
   }
 
-  function faixasZ(cam, ate = 160) { const zs = []; let z = Math.max(cam.z + 0.3, -20), d = 0.5; while (z < ate) { zs.push(z); z += d; d *= 1.16; } zs.push(ate); return zs; }
+  function faixasZ(cam, ate = 160) { const zs = [cam.z - 120]; let z = cam.z - 6, d = 0.5; while (z < ate) { zs.push(z); z += d; d *= 1.16; } zs.push(ate); return zs; }
   function chao(ctx, cam) {
     const zs = faixasZ(cam), X = 260;
     for (let i = 0; i < zs.length - 1; i++) {
       const a = zs[i], b = zs[i + 1] + 0.03, k = (i % 2) * 0.03;
-      face(ctx, cam, [[-X, 0, a], [X, 0, a], [X, 0, b], [-X, 0, b]], mistura('#7CC24E', '#6BB042', k), { contorno: false });
+      face(ctx, cam, [[-X, 0, a], [X, 0, a], [X, 0, b], [-X, 0, b]], mistura('#74B444', '#68A83C', k), { contorno: false });
     }
     // trilha de terra serpenteando para dentro
     const pts = (lado) => { const out = []; for (const z of zs) { if (z > 90) break; const cx = Math.sin(z * 0.12) * 1.4 + 0.3, w = 0.75 + z * 0.012; out.push([cx + lado * w, 0.002, z]); } return out; };
     const e = pts(-1), d = pts(1);
-    for (let i = 0; i < e.length - 1; i++) face(ctx, cam, [e[i], d[i], d[i + 1], e[i + 1]], mistura('#D8B97E', '#CDAA6C', (i % 2) * 0.4), { contorno: false });
+    for (let i = 0; i < e.length - 1; i++) face(ctx, cam, [e[i], d[i], d[i + 1], e[i + 1]], mistura('#C9A06A', '#BE955E', (i % 2) * 0.4), { contorno: false });
   }
 
 
@@ -130,7 +130,7 @@
 
   function tufo(ctx, cam, X, Z, h, fase, t) {
     const q = cam.p(X, 0, Z); if (q.dz < 0.5 || q.x < -200 || q.x > 1280) return;
-    const s = q.s, cor = cam.tom('#4E9A36', Z), cor2 = cam.tom('#8FD35C', Z);
+    const s = q.s, cor = cam.tom('#3F8A2E', Z), cor2 = cam.tom('#7CC24E', Z);
     ctx.lineCap = 'round';
     for (let i = 0; i < 5; i++) {
       const dx = (i - 2) * 0.035 * s, bal = Math.sin(t * 1.6 + fase + i) * 0.04 * s, alt = h * (0.7 + 0.3 * ((i * 7) % 3) / 2) * s;
@@ -157,14 +157,14 @@
     nevoa: NEVOA,
     desenhar(ctx, cam, o = {}) {
       const t = o.t || 0;
-      cam.distNevoa = o.distNevoa || 38;
+      cam.distNevoa = o.distNevoa || 60;
       ceu(ctx, cam, t);
       montanhas(ctx, cam);
       chao(ctx, cam);
       // do mais longe para o mais perto
       const lista = [];
       if (o.espadas !== false) for (const [x, z, h, inc] of ESPADAS) lista.push([z, () => espadaGigante(ctx, cam, x, z, h, inc)]);
-      for (const [x, z, h] of OBJ.arv) lista.push([z, () => arvore(ctx, cam, x, z, h, { folha: '#8ED15A', folhaSombra: '#4C9440' })]);
+      for (const [x, z, h] of OBJ.arv) lista.push([z, () => arvore(ctx, cam, x, z, h, { folha: '#76B84A', folhaSombra: '#3E7A34' })]);
       for (const [x, z, r] of OBJ.ped) lista.push([z, () => pedra(ctx, cam, x, z, r)]);
       for (const [x, z, h, f] of OBJ.tufo) lista.push([z, () => tufo(ctx, cam, x, z, h, f, t)]);
       for (const [x, z, c, f] of OBJ.flor) lista.push([z, () => flor(ctx, cam, x, z, c, f, t)]);
@@ -172,10 +172,24 @@
       lista.sort((a, b) => dist(b[0]) - dist(a[0]));
       for (const [z, fn] of lista) if (z > cam.z + 0.4) fn();
     },
+    // luz da cena (referência do autor): raios de sol diagonais do alto à direita, ar levemente azulado embaixo
+    luz(ctx, cam, o = {}) {
+      const t = o.t || 0, W = ctx.canvas.width, H = ctx.canvas.height, desl = -(cam.yaw || 0) * cam.f * 0.5;
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'screen';
+      for (let i = 0; i < 4; i++) {
+        const x0 = W + 80 + desl - i * 170, larg = 120 + i * 40, a = 0.07 - i * 0.012 + 0.01 * Math.sin(t * 0.5 + i);
+        const g = ctx.createLinearGradient(x0, 0, x0 - 900, H); g.addColorStop(0, `rgba(255,248,225,${a})`); g.addColorStop(1, 'rgba(255,248,225,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, -10); ctx.lineTo(x0 + larg, -10); ctx.lineTo(x0 + larg - 1100, H); ctx.lineTo(x0 - 1100, H); ctx.closePath(); ctx.fill();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      const g2 = ctx.createLinearGradient(0, H * 0.55, 0, H); g2.addColorStop(0, 'rgba(30,60,40,0)'); g2.addColorStop(1, 'rgba(30,60,40,0.18)');
+      ctx.fillStyle = g2; ctx.fillRect(0, H * 0.55, W, H * 0.45);
+      ctx.restore();
+    },
     // grama alta desfocada no primeiro plano (profundidade, como na referência)
     frente(ctx, cam, o = {}) {
       const t = o.t || 0, W = ctx.canvas.width, H = ctx.canvas.height, forca = o.forca === undefined ? 1 : o.forca;
-      if (forca <= 0) return;
+      if (forca <= 0) { this.luz(ctx, cam, o); return; }
       const desl = -(cam.yaw || 0) * cam.f * 1.6 - cam.x * 260;
       Cinema.desfocado(ctx, 10, (g) => {
         const r = rng(44);
@@ -192,6 +206,7 @@
           g.fillStyle = '#F2B53A'; g.beginPath(); g.arc(x + bal, y, R * 0.24, 0, Math.PI * 2); g.fill();
         }
       });
+      this.luz(ctx, cam, o);
     },
   };
 })();

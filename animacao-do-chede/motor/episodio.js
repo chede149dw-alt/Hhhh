@@ -157,9 +157,11 @@
     const rig = new Rig(def);
     let ang = pdef ? pdef.angulos : (item.pose || {});
     if (item.pose2) { const p2 = typeof item.pose2 === 'string' ? reg[item.pose2].angulos : item.pose2; ang = misturaPoses(ang, p2, item.mistura || 0); }
-    if (o.caminhar !== undefined) ang = { ...caminhada(o.caminhar, o.velocidade) };
+    // andando: de frente/costas usa o passo frontal (de perfil o passo de lado parecia balançar para os lados)
+    if (o.caminhar !== undefined) ang = (vista === 'frente' || vista === 'costas') ? { ...caminhadaFrontal(o.caminhar, o.velocidade, vista === 'costas') } : { ...caminhada(o.caminhar, o.velocidade) };
     if (o.caminharFrontal !== undefined) ang = { ...caminhadaFrontal(o.caminharFrontal, o.velocidade, vista === 'costas') };
-    rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? 1 : o.vida));
+    const andando = o.caminhar !== undefined || o.caminharFrontal !== undefined;
+    rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida));
     const exprBase = typeof item.expressao === 'object' ? item.expressao : (def.expressoes[item.expressao || (pdef && pdef.expressao) || 'neutro']);
     rig.usarExpressao(expressaoViva(exprBase, TL.t, { voz: item.voz, semente: o.semente }));
     rig.desenhar(ctx, x, ySola, alturaPx, { espelhar: item.espelhar });
