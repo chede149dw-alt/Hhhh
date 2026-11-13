@@ -30,6 +30,10 @@ vozes de pessoas conhecidas e aparência."
 fechar na etapa 7). A cliente é **Larissa** (vizinha da rua de trás, freguesa); o apelido é **Dudu** (só a mãe
 do Eduardo usa). Atendimento pela grade de ferro; no fim ela pede para abrir com a voz da mãe dele.
 Visual dos personagens aprovado pelo responsável.
+**Gabriel é humano** (pode virar infiltrado em partes futuras; não usar o rosto estranho nele por ora).
+**Todo episódio termina** com narração + cartela "Segue e comenta pra ver a parte N" (N = próxima parte;
+campo `proxima_parte` no roteiro.json). A grade tem uma **portinhola** quadrada na altura do balcão
+(~30×30 cm) por onde passam latas e dinheiro.
 
 Fichas: `gabriel.json`, `cliente.json` (Larissa, infiltrada), `eduardo.json` (mãos em quadro), `exemplo_barba.json` (teste).
 
@@ -76,6 +80,7 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
   (coluna + peito) para não ficar "de madeira". Ordem de rotação XZY (giro no eixo do osso primeiro).
 - Poses (`animacao/poses.js`, puro): canais anatômicos com nome (frente, abre, giro, dobra...), mesmos números
   nos dois lados (espelhamento automático). `derivar`, `misturar`, `validarPose` (erro lista os nomes válidos).
+- Mão: palma + 4 dedos com 2 falanges + polegar (antes era um bloco; ficava feia em close).
 - Rosto: olhos, sobrancelhas em bloco, nariz em bloco, 4 bocas como peças planas na face frontal da cabeça. Canal `rosto.estranho`
   (0..1) faz a revelação do infiltrado: pupilas tomam o olho e a boca alarga.
 - Cinemática pura (`animacao/esqueleto.js`): única tabela de juntas (posições, eixos dos canais, ordem XZY);
@@ -128,7 +133,8 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 - O teste de determinismo usa a cena de teste; repetir com a cena real na etapa 10.
 - Boneco: peças rígidas aparecem como emendas em close extremo; cabelo longo é feito de caixas (sem
   física). Membros ainda mais finos e mãos menores que na ref3.
-- Celular em 1ª pessoa: tela ainda preta e pegada simples (a mão cobre parte); tela do alerta na etapa 6.
+- Celular (`visual/objetos/celular.js`): tela desenhada por código e emissiva (aparece no escuro); em 1ª pessoa
+  fica apoiado NA FRENTE da palma (`segurarNaFrente`) para a mão não tampar a tela (pedido do responsável).
 - Caminhada só em linha reta (+z); curvas/virar no lugar ficam para quando o diretor precisar. Com a perna 100% esticada o pé no chão fica no limite do alcance do IK: poses em pé devem ter
   `desl.y` ≈ -0,03 (joelho levemente dobrado).
 

@@ -1,11 +1,12 @@
 # INFILTRADOS · Parte 1: "Dudu"
 
 Vídeo vertical 1080x1920, ~65 s. Primeira pessoa: a câmera é o olhar do **Eduardo**.
-Distribuidora de bebidas, madrugada de sexta. A grade de ferro está fechada; atendimento pela grade.
+Distribuidora de bebidas, madrugada de sexta. A grade de ferro está fechada; o atendimento é pela
+**portinhola**: uma abertura quadrada na grade, na altura do balcão, por onde passam as latas e o dinheiro.
 
 **Personagens**
 - **Eduardo**: protagonista (só as mãos aparecem). Narra e fala.
-- **Gabriel**: amigo e sócio. Tranquilo, debochado.
+- **Gabriel**: amigo e sócio. Tranquilo, debochado. **Humano** (por enquanto).
 - **Larissa**: vizinha da rua de trás, freguesa de sempre. É uma infiltrada.
 - **Mãe do Eduardo**: só a voz, imitada pela Larissa no fim.
 
@@ -32,7 +33,7 @@ Passos na rua. A câmera vira devagar para a grade. Uma silhueta entra na luz do
 > **EDUARDO (narração):** Aí ela **apareceu**.
 
 ## Plano 4 · Larissa na grade
-Ela para do outro lado da grade, sorriso parado.
+Ela para do outro lado da grade, bem na frente da portinhola, sorriso parado.
 > **EDUARDO (narração):** Larissa. Mora na rua de trás. Compra aqui desde sempre.
 >
 > **LARISSA:** Oi, **Dudu**. Me vê duas geladas?
@@ -46,7 +47,8 @@ Close lento no rosto dela. O zumbido da geladeira cresce.
 Larissa não ri. Não pisca.
 
 ## Plano 6 · A geladeira
-A câmera vira para a geladeira e abre a porta (luz fria). As mãos do Eduardo pegam duas latas.
+A câmera vira para a geladeira e abre a porta (luz fria). As mãos do Eduardo pegam duas latas e ele
+volta para a portinhola.
 > **LARISSA** *(fora de quadro)*: Abre a grade pra mim, Dudu. Tá frio aqui fora.
 
 ## Plano 7 · O alerta
@@ -59,8 +61,9 @@ Os dois celulares **tocam** juntos, com o som de alerta. A câmera olha para o c
 > **GABRIEL:** Isso é zoeira… né?
 
 ## Plano 8 · Mais perto
-A câmera levanta os olhos. Larissa está colada na grade, mãos nas barras, cabeça inclinada demais.
-Os olhos estão maiores e sem brilho. A lâmpada pisca.
+A câmera levanta os olhos. Larissa está colada na grade, mãos nas barras dos lados da portinhola, cabeça
+inclinada demais. Os olhos estão maiores e sem brilho. A lâmpada pisca.
+*(Sugestão: a mão dela passa pela portinhola, aberta, esperando as latas.)*
 > **GABRIEL** *(levanta e vai até a grade, chave do cadeado na mão)*: É a Larissa, mano. Relaxa.
 >
 > **EDUARDO:** Gabriel… **espera**.
@@ -73,13 +76,19 @@ Corte seco para preto, batida grave.
 > **EDUARDO (narração):** Aquela não era a voz da Larissa. Era a voz da minha mãe.
 
 Cartela: **CONTINUA…**
+> **EDUARDO (narração):** Segue e comenta pra ver a parte 2.
+
+Cartela final: **SEGUE E COMENTA PRA VER A PARTE 2**
+
+*(Regra da série: todo episódio termina assim, com o número da próxima parte.)*
 
 ---
 
 ## O que este roteiro pede ao motor
 
 **Cenário `distribuidora`:** balcão, 2 geladeiras de porta de vidro com latas, engradados, prateleira de
-garrafas, letreiro de neon, grade de ferro com cadeado, calçada e rua com poste lá fora.
+garrafas, letreiro de neon, grade de ferro com cadeado e **portinhola quadrada na altura do balcão**,
+calçada e rua com poste lá fora.
 
 **Luz:** fluorescente fria por dentro (com piscar), poste alaranjado lá fora, luz fria da geladeira.
 
@@ -94,7 +103,7 @@ devagar, tremor no susto.
 | Larissa | chegar andando; parar na grade; mãos nas barras; inclinar a cabeça; revelar (estranho 0 → 0,5) |
 | Eduardo (mãos) | abrir a geladeira e pegar latas; segurar o celular; estender a mão ("espera") |
 
-**Objetos:** latas, celular com a tela do alerta (textura desenhada por código).
+**Objetos:** latas, celular com a tela do alerta (já pronto: `motor/visual/objetos/celular.js`).
 
 **Sons sintetizados:** zumbido de geladeira, chiado de neon, passos na calçada, grade de metal, lata,
 toque de alerta (tom próprio, sem copiar o oficial), batida grave, respiração.

@@ -49,7 +49,7 @@ export function estados(m, ctx = {}) {
     na_grade: null,   // preenchido abaixo (final de larissa_grade)
     no_cadeado: derivar(emPe, { coluna: { frente: 8 }, cabeca: { frente: 12 }, ombroD: { frente: 55 }, cotoveloD: { dobra: 60 }, maoD: { fecha: 80, giro: 30 } }),
     // poses de 1ª pessoa: braços "para a câmera" (mais altos que o natural, como em jogos), mãos guiadas por IK
-    olhando_celular: derivar(emPe, { cabeca: { frente: 18 }, pescoco: { frente: 6 }, ombroD: { frente: 60, abre: 10 }, cotoveloD: { dobra: 100 }, maoD: { fecha: 75, giro: 60 } }),
+    olhando_celular: derivar(emPe, { cabeca: { frente: 18 }, pescoco: { frente: 6 }, ombroD: { frente: 60, abre: 10 }, cotoveloD: { dobra: 100 }, maoD: { fecha: 18, giro: 60 } }),
     segurando_lata: derivar(emPe, { cabeca: { frente: 14 }, ombroD: { frente: 55, abre: 10 }, cotoveloD: { dobra: 100 }, maoD: { fecha: 85 } }),
     mao_estendida: derivar(emPe, { coluna: { frente: 4 }, peito: { giro: 8 }, cabeca: { giro: 14 }, ombroE: { frente: 92, abre: 6 }, cotoveloE: { dobra: 12 }, maoE: { fecha: 0, dobra: -65 } }),
     olhando: derivar(ctx.inicioPose || base || emPe, {

@@ -221,14 +221,25 @@ export function criarBoneco(ficha) {
     if (mangaLonga) malha(caixa(m.anteL * 1.12, m.anteLen * 0.16, m.anteL * 1.12, 0.35), p.camisa === 'moletom' ? camisa : camisa, co, 0, -m.anteLen * 0.9, 0);
     if (acess.includes('relogio') && lado === 'E') malha(caixa(m.anteL * 1.12, m.anteLen * 0.1, m.anteL * 1.12, 0.3), c.acessorio, co, 0, -m.anteLen * 0.86, 0);
     const mao = J['mao' + lado] = grupo('mao' + lado, co, ...POS['mao' + lado]);
-    const ml = m.maoLen, pt = m.anteL * 0.62, pw = m.anteL * 1.15;
-    malha(caixa(pt, ml * 0.52, pw, 0.35), c.pele, mao, 0, -ml * 0.26, 0);
-    const pol = malha(caixa(pt * 0.6, ml * 0.32, pt * 0.6, 0.4), c.pele, mao, -s * pt * 0.25, -ml * 0.22, pw * 0.5); pol.rotation.x = 0.45;
-    const dedos = grupo('dedos' + lado, mao, 0, -ml * 0.5, -pw * 0.1);
-    malha(caixa(pt * 0.9, ml * 0.45, pw * 0.74, 0.35), c.pele, dedos, 0, -ml * 0.2, -pw * 0.02);
-    const indic = grupo('indicador' + lado, mao, 0, -ml * 0.5, pw * 0.35);
-    malha(caixa(pt * 0.62, ml * 0.42, pt * 0.62, 0.45), c.pele, indic, 0, -ml * 0.2, 0);
-    J['dedos' + lado] = dedos; J['indicador' + lado] = indic;
+    // Mão: palma + 4 dedos com 2 falanges + polegar. Palma voltada para o corpo (+x no direito); polegar à frente (+z).
+    const ml = m.maoLen, pt = m.anteL * 0.5, pw = m.anteL * 1.0;
+    malha(caixa(pt, ml * 0.48, pw, 0.3), c.pele, mao, 0, -ml * 0.24, 0);
+    const dedos = [];
+    const DEDOS = [['indicador', 0.36, 1.0], ['medio', 0.12, 1.08], ['anelar', -0.12, 1.0], ['minimo', -0.35, 0.8]];
+    for (const [nome, z, k] of DEDOS) {
+      const lp = ml * 0.26 * k, ld = ml * 0.2 * k, w = pw * 0.21;
+      const base = grupo(nome + lado, mao, 0, -ml * 0.47, z * pw);
+      malha(caixa(pt * 0.78, lp * 1.15, w, 0.42), c.pele, base, 0, -lp / 2, 0);
+      const ponta = grupo(nome + 'Ponta' + lado, base, 0, -lp, 0);
+      malha(caixa(pt * 0.7, ld * 1.15, w * 0.92, 0.45), c.pele, ponta, 0, -ld / 2, 0);
+      dedos.push({ nome, base, ponta });
+    }
+    const pol = grupo('polegar' + lado, mao, -s * pt * 0.1, -ml * 0.12, pw * 0.48);
+    pol.rotation.set(0.55, 0, 0);
+    malha(caixa(pt * 0.75, ml * 0.26, pt * 0.75, 0.42), c.pele, pol, 0, -ml * 0.13, 0);
+    const polP = grupo('polegarPonta' + lado, pol, 0, -ml * 0.26, 0);
+    malha(caixa(pt * 0.68, ml * 0.2, pt * 0.68, 0.45), c.pele, polP, 0, -ml * 0.1, 0);
+    J['dedos' + lado] = dedos; J['polegar' + lado] = { base: pol, ponta: polP };
   }
 
   // ---------- Pernas ----------
@@ -259,8 +270,13 @@ export function criarBoneco(ficha) {
   function posar(pose = REPOUSO) {
     for (const nome of Object.keys(TIPOS)) J[nome].rotation.set(...angulos(pose, nome));
     for (const [lado, s] of [['D', -1], ['E', 1]]) {   // dedos dobram em direção à palma
-      J['dedos' + lado].rotation.set(0, 0, -s * valor(pose, 'mao' + lado, 'fecha') * Math.PI / 180);
-      J['indicador' + lado].rotation.set(0, 0, -s * valor(pose, 'mao' + lado, 'indicador') * Math.PI / 180);
+      const fecha = valor(pose, 'mao' + lado, 'fecha') * Math.PI / 180, ind = valor(pose, 'mao' + lado, 'indicador') * Math.PI / 180;
+      for (const d of J['dedos' + lado]) {
+        const a = d.nome === 'indicador' ? ind : fecha;
+        d.base.rotation.set(0, 0, -s * a); d.ponta.rotation.set(0, 0, -s * a * 0.95);
+      }
+      const p = J['polegar' + lado];
+      p.base.rotation.set(0.55 - fecha * 0.25, 0, -s * fecha * 0.35); p.ponta.rotation.set(0, 0, -s * fecha * 0.5);
     }
     const rz = raizDaPose(pose);
     raiz.position.set(...rz.pos);
