@@ -1,0 +1,101 @@
+{
+  "serie": "Infiltrados",
+  "episodio": 1,
+  "titulo": "Dudu",
+  "formato": { "largura": 1080, "altura": 1920, "fps": 60 },
+  "vozes": {
+    "eduardo": { "voz": "pt-BR-AntonioNeural" },
+    "gabriel": { "voz": "pt-BR-AntonioNeural", "tom": "-6Hz", "velocidade": "+8%" },
+    "larissa": { "voz": "pt-BR-FranciscaNeural" },
+    "mae": { "voz": "pt-BR-FranciscaNeural", "tom": "-10Hz", "velocidade": "-10%" }
+  },
+  "atores": { "gabriel": "gabriel", "larissa": "cliente", "eduardo": "eduardo" },
+  "planos": [
+    {
+      "id": 1, "cenario": "preto", "cartela": "INFILTRADOS · PARTE 1",
+      "falas": [{ "quem": "eduardo", "tipo": "narracao", "texto": "Se alguém que você conhece te chamar por um apelido que nunca usou… não responde." }],
+      "sons": ["zumbido_geladeira"]
+    },
+    {
+      "id": 2, "cenario": "distribuidora", "luz": "interior",
+      "camera": { "tipo": "subjetiva", "olhar": "gabriel", "movimento": "respiracao" },
+      "atores": [{ "id": "gabriel", "marca": "engradado", "atuacao": "sentado_celular" }],
+      "falas": [
+        { "quem": "eduardo", "tipo": "narracao", "texto": "Três da manhã. Eu e o Gabriel tomando conta da distribuidora, como toda sexta." },
+        { "quem": "gabriel", "texto": "Ninguém vai aparecer hoje não, mano. Bora fechar." }
+      ],
+      "sons": ["zumbido_geladeira", "chiado_neon"]
+    },
+    {
+      "id": 3, "cenario": "distribuidora",
+      "camera": { "tipo": "subjetiva", "olhar": "grade", "movimento": "virar" },
+      "atores": [{ "id": "larissa", "marca": "rua", "atuacao": "chegar_andando" }],
+      "falas": [{ "quem": "eduardo", "tipo": "narracao", "texto": "Aí ela apareceu." }],
+      "destaques": [{ "palavra": "apareceu", "acao": "larissa_entra_na_luz" }],
+      "sons": ["passos_calcada"]
+    },
+    {
+      "id": 4, "cenario": "distribuidora",
+      "camera": { "tipo": "subjetiva", "olhar": "larissa" },
+      "atores": [{ "id": "larissa", "marca": "grade", "atuacao": "parar_na_grade" }],
+      "falas": [
+        { "quem": "eduardo", "tipo": "narracao", "texto": "Larissa. Mora na rua de trás. Compra aqui desde sempre." },
+        { "quem": "larissa", "texto": "Oi, Dudu. Me vê duas geladas?" }
+      ],
+      "destaques": [{ "palavra": "Dudu", "acao": "tremor_leve" }]
+    },
+    {
+      "id": 5, "cenario": "distribuidora",
+      "camera": { "tipo": "subjetiva", "olhar": "larissa.rosto", "movimento": "aproximar_lento" },
+      "atores": [{ "id": "larissa", "atuacao": "olhar_fixo" }, { "id": "gabriel", "atuacao": "rir" }],
+      "falas": [
+        { "quem": "eduardo", "tipo": "narracao", "texto": "Dudu. Ninguém me chama assim. Só a minha mãe." },
+        { "quem": "gabriel", "texto": "Dudu? Desde quando cê é Dudu?" }
+      ],
+      "sons": ["zumbido_geladeira_cresce"]
+    },
+    {
+      "id": 6, "cenario": "distribuidora",
+      "camera": { "tipo": "subjetiva", "olhar": "geladeira", "movimento": "virar" },
+      "atores": [{ "id": "eduardo", "atuacao": "maos_pegar_latas" }],
+      "falas": [{ "quem": "larissa", "texto": "Abre a grade pra mim, Dudu. Tá frio aqui fora.", "fora_de_quadro": true }],
+      "sons": ["porta_geladeira", "latas"]
+    },
+    {
+      "id": 7, "cenario": "distribuidora",
+      "camera": { "tipo": "subjetiva", "olhar": "celular", "movimento": "olhar_baixo" },
+      "atores": [{ "id": "eduardo", "atuacao": "maos_celular" }],
+      "tela_celular": "ALERTA DE EMERGÊNCIA\nCuidado: criaturas estranhas estão entre nós. Imitam vozes de pessoas conhecidas e aparência.",
+      "falas": [
+        { "quem": "eduardo", "tipo": "narracao", "texto": "Os dois celulares tocaram ao mesmo tempo." },
+        { "quem": "gabriel", "texto": "Isso é zoeira… né?" }
+      ],
+      "destaques": [{ "palavra": "tocaram", "acao": "alerta_celular" }],
+      "sons": ["alerta"]
+    },
+    {
+      "id": 8, "cenario": "distribuidora", "luz": "interior_piscando",
+      "camera": { "tipo": "subjetiva", "olhar": "larissa", "movimento": "levantar_olhar" },
+      "atores": [
+        { "id": "larissa", "marca": "grade", "atuacao": "maos_na_grade_cabeca_inclinada", "rosto": { "estranho": 0.5 } },
+        { "id": "gabriel", "atuacao": "levantar_ir_ate_grade" }
+      ],
+      "falas": [
+        { "quem": "gabriel", "texto": "É a Larissa, mano. Relaxa." },
+        { "quem": "eduardo", "texto": "Gabriel… espera." }
+      ],
+      "destaques": [{ "palavra": "espera", "acao": "eduardo_estende_mao" }]
+    },
+    {
+      "id": 9, "cenario": "distribuidora",
+      "camera": { "tipo": "subjetiva", "olhar": "larissa.rosto", "movimento": "tremor" },
+      "atores": [{ "id": "larissa", "atuacao": "olhar_camera", "rosto": { "estranho": 0.7 } }],
+      "falas": [
+        { "quem": "mae", "texto": "Filho… abre pra mim.", "boca_de": "larissa" },
+        { "quem": "eduardo", "tipo": "narracao", "texto": "Aquela não era a voz da Larissa. Era a voz da minha mãe.", "sobre": "preto" }
+      ],
+      "destaques": [{ "palavra": "abre", "acao": "corte_preto_batida" }],
+      "cartela_final": "CONTINUA…"
+    }
+  ]
+}

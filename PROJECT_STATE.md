@@ -26,7 +26,12 @@ projetos/               toda saída
 uma distribuidora de madrugada. Às 3h chega uma cliente (moça conhecida) que chama Eduardo por um apelido
 que ela nunca usou. Logo depois, alerta no celular: "Cuidado: criaturas estranhas estão entre nós. Imitam
 vozes de pessoas conhecidas e aparência."
-Fichas: `gabriel.json`, `cliente.json` (infiltrada), `eduardo.json` (mãos em quadro), `exemplo_barba.json` (teste).
+**Ep. 1 "Dudu"**: roteiro em `projetos/infiltrados_ep01/roteiro.md` (+ rascunho `roteiro.json`, formato a
+fechar na etapa 7). A cliente é **Larissa** (vizinha da rua de trás, freguesa); o apelido é **Dudu** (só a mãe
+do Eduardo usa). Atendimento pela grade de ferro; no fim ela pede para abrir com a voz da mãe dele.
+Visual dos personagens aprovado pelo responsável.
+
+Fichas: `gabriel.json`, `cliente.json` (Larissa, infiltrada), `eduardo.json` (mãos em quadro), `exemplo_barba.json` (teste).
 
 **Estilo dos personagens: "blocos"** (referências em `projetos/_referencias/`):
 - ref3 (principal): corpo de caixas arredondadas, cabelo em blocos, olhos escuros ovais sem branco com brilho,
@@ -103,6 +108,7 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 
 ## Próxima etapa
 
-Etapa 4: animador por poses-chave (curvas, IK de pés e mãos, arrasto, respiração e piscar) com testes
-`node --test` e a atuação de exemplo. Para a série, trocar "ataque_salto" por uma atuação de susto da
-cliente (aproximar, inclinar a cabeça, revelar o rosto estranho), mantendo antecipação/impulso/assentamento.
+Etapa 4: animador por poses-chave (curvas, IK de pés e mãos, arrasto, respiração e piscar) + testes.
+Atuação de exemplo tirada do roteiro: Larissa na grade (chega, para, mãos nas barras, inclina a cabeça
+demais e revela o rosto estranho). Depois: etapa 5 com as atuações da tabela do roteiro, etapa 6 com o
+cenário `distribuidora`, a luz `interior` e a câmera subjetiva.
