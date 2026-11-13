@@ -70,12 +70,18 @@ Toda página renderizável deve:
 | `animacao/ik.js` | `resolver(pose, medidas, 'peD'\|'peE'\|'maoD'\|'maoE', alvo)`: IK de 2 ossos com polo. |
 | `animacao/animador.js` | `criarAnimacao(chaves, { medidas })` → `{ em(t), duracao }`; `CURVAS`; `aplicar(boneco, pose)`. |
 | `animacao/atuacoes.js` | `ATUACOES[nome] = { descricao, inicio, final, impacto, sons, objetos, cena, chaves(ctx), camada? }`; `estados(m)`, `chavesDe`, `camadasDe`, `sonsDe`, `noLugar(chaves, {x,z,giro})`. |
+| `animacao/camera.js` | `enquadrar` (geral/medio/close, raio livre, limites), `mover`, `tremor`, `respiracaoCamera`, `projetar`. |
+| `animacao/olhar.js` | `olharPara(pose, medidas, ponto)`, `erroDoOlhar`, `olharAtual`. |
+| `visual/cenarios/distribuidora.js` | `criarDistribuidora()` → `{ raiz, marcas, atualizar(t,{piscar,luzes}), limites, pos }`; `MARCAS`, `PORTINHOLA`, `CADEADO`. |
+| `visual/estilo/texturas.js` | `textura(nome, repetir)`, `texturaTexto(linhas, opções)`. |
+| `visual/objetos/celular.js` | `criarCelular({tipo, texto})` com tela desenhada; `segurarNaFrente(celular, mao, camera)`. |
 | `visual/boneco/medidas.js` | Puro: `validarFicha`, `calcularMedidas` (proporções a partir da altura). |
 | `visual/boneco/boneco.js` | `criarBoneco(ficha)` → `{ raiz, juntas, posar(pose), medidas }`; `carregarFicha(nome)`. |
 | `visual/boneco/fichas/*.json` | Fichas: nome, papel, altura, corpo (largura/peso/ombros), cores, peças (cabelo, camisa, calca, calcado, barba, acessorios); cores extras opcionais: camisa2, detalhe, sola, cinto, fivela, barba. Valores válidos em `medidas.js` (`PECAS_VALIDAS`). |
 | `visual/testes/boneco.html` | `?ficha=nome`, quadros 0-8 com `--fps 1`: 4 vistas, 4 poses e o rosto infiltrado. |
 | `visual/testes/atuacao.html` | `?atuacao=nome&ficha=x&vista=34\|frente\|lado\|costas34\|pov&rotulo=0` (t em segundos); mostra os adereços da atuação. |
 | `render/folha_atuacoes.mjs` | `node render/folha_atuacoes.mjs saida.png nome:ficha:vista ...` → 6 quadros por atuação, uma linha cada. |
+| `visual/testes/cenario.html` | Quadros 0-9 (`--fps 1`): visão geral, 1ª pessoa (Gabriel, portinhola, geladeira, alerta, luz falhando), geral/médio/close, de fora. `?seq=1`: sequência POV de 5,2 s. |
 | `visual/testes/fk.html` | Compara FK pura com o boneco three. |
 | `visual/testes/relogio.html` | Cena mínima de teste do contrato `quadro(t)`. |
 | `visual/testes/estilo.html` | 3 cubos + 1 esfera. URL: `luz=dia\|noite`, `pos=0\|neutro\|1`, `calib=1`. Expõe `window.medir()`. |
@@ -84,5 +90,6 @@ Toda página renderizável deve:
 | `testes/animador.test.mjs` | IK (pé e mão < 1e-6 m), pé plantado, interpolação, curvas, vida, arrasto. |
 | `testes/fk_three.test.mjs` | FK pura = boneco three (navegador). |
 | `testes/atuacoes.test.mjs` | Todas as atuações × 3 fichas; andar sem deslizar; noLugar. |
+| `testes/camera.test.mjs` | Enquadramentos, raio livre, limites da sala, movimentos, tremor, olharPara. |
 | `testes/poses.test.mjs` | Poses, mistura, validação e fichas. |
 | `testes/estilo.test.mjs` | Cor iluminada = cor do material (tolerância 2/255), direto e com pós neutro. |

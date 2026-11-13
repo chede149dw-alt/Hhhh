@@ -89,6 +89,8 @@ export function prepararRenderer(renderer) {
 // Luzes calibradas. 'dia': sol + ambiente. 'noite': lua + ambiente + lanterna presa à câmera (1ª pessoa).
 export const LUZES = {
   dia:   { principal: 2.0, ambiente: Math.PI - 2.0, corAmbiente: '#ffffff', corPrincipal: '#ffffff', sombra: 0.55 },
+  // interior: fluorescente de cima (luz fria), mesma conta do dia (principal + ambiente = π)
+  interior: { principal: 2.0, ambiente: Math.PI - 2.0, corAmbiente: '#f4f8ff', corPrincipal: '#f4f8ff', sombra: 0.5, posicao: [0.8, 6, 1.5] },
   noite: { principal: 0.30, ambiente: 0.30, corAmbiente: '#c4ccff', corPrincipal: '#b8c6ff', sombra: 0.0,
            lanterna: Math.PI - 0.60, corLanterna: '#ffffff', sombraLanterna: 0.8 },
 };
@@ -98,7 +100,7 @@ export function criarLuzes(cena, nome = 'dia', { camera, raioSombra = 8 } = {}) 
   if (!p) throw new Error(`Luz "${nome}" não existe. Existentes: ${Object.keys(LUZES).join(', ')}`);
   const ambiente = new THREE.AmbientLight(p.corAmbiente, p.ambiente);
   const sol = new THREE.DirectionalLight(p.corPrincipal, p.principal);
-  sol.position.set(3, 5, 4);
+  sol.position.set(...(p.posicao || [3, 5, 4]));
   if (p.sombra > 0) {
     sol.castShadow = true;
     sol.shadow.intensity = p.sombra;

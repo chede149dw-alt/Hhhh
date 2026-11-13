@@ -100,6 +100,20 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
 - 1ª pessoa: braços "para a câmera" (mais altos que o natural, como em jogos), mãos guiadas por IK até pontos
   definidos em relação aos olhos (`naFrenteDosOlhos`). No vertical o campo horizontal é estreito (~±23° com
   FOV 75): mãos precisam ficar perto do centro.
+- Cenário `distribuidora` (`visual/cenarios/distribuidora.js`): sala 4,4 × 4,2 m (teto 2,9), grade em z=1,2 com
+  portinhola (moldura + bandeja) alinhada ao balcão, portão com cadeado, porta de aço enrolada, 2 geladeiras ocas
+  com latas (instanced), prateleiras de garrafas, engradados, neon "ABERTO 24H", tabela de preços, 2 fluorescentes;
+  fora: calçada de paralelepípedo, meio-fio, rua, poste com luz laranja, casas. MARCAS: balcao, geladeira,
+  engradado, cadeado, portinhola, rua (com raio livre). `atualizar(t, {piscar})` = fluorescente falhando + neon.
+- Luz `interior`: mesma conta do dia (principal 2,0 + ambiente π−2), fria, de cima. A rua fica escura pela
+  névoa preta do pós (4,5→13 m), não por várias luzes com sombra (barato e dá o clima: a rua "some").
+- Texturas por código (`visual/estilo/texturas.js`): azulejo, concreto, pedra, madeira, grama, água, metal
+  ondulado, parede, asfalto + `texturaTexto` (cartazes/neon). Determinísticas (semente).
+- Câmera (`animacao/camera.js`, puro): `enquadrar` por tamanho de plano (geral/medio/close) → distância e FOV,
+  presa à marca do ator; respeita raio livre e os limites da sala (encurta e abre a lente). `mover` (empurrar,
+  lateral, subir), `tremor` determinístico, `respiracaoCamera`, `projetar` (testes).
+- Olhar (`animacao/olhar.js`, puro): `olharPara(pose, medidas, ponto)` — peito (se > 45°), pescoço leva o giro,
+  cabeça leva o "para baixo" (evita rolar o horizonte). É o que move a câmera subjetiva.
 - Pós (`visual/estilo/posfx.js`): um passe só (névoa por profundidade, foco raso com 16 amostras, vinheta, grão
   com semente no tempo). Alvo HalfFloat + MSAA 4x; com parâmetros zerados a cor sai idêntica.
 
@@ -122,11 +136,12 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 `projetos/_evidencias/etapa3_referencias.png` (referência × resultado),
 `projetos/_evidencias/etapa4_larissa_grade_folha.png`, `..._frente.png`, `etapa4_larissa_grade.mp4`,
 `etapa4_revelacao_estagios.png`, `etapa4_revelacao_noite.png`, `etapa5_genericas.png`, `etapa5_roteiro.png`,
-`etapa5_andar.mp4`.
+`etapa5_andar.mp4`, `etapa6_cenario_cameras.png`, `etapa6_pov_sequencia.mp4`.
 
 ## Limitações conhecidas
 
-- **Velocidade**: WebGL por software + pós ⇒ ~1,4 q/s com 4 processos (60 s de vídeo ≈ 43 min).
+- **Velocidade**: WebGL por software + pós ⇒ ~1,4 q/s com 4 processos na cena de teste; **~1,0 q/s no
+  cenário completo** (65 s a 60 fps ≈ 65 min). Prioridade da etapa 10.
   Medido: buffer intermediário c/ MSAA custa ~40%; o grão deixa o PNG com 2,4 MB e a captura ~30% mais
   lenta; reduzir amostras do desfoque não muda nada. Plano (etapa 10): capturar pixels crus e mandar direto
   ao ffmpeg (sem PNG), e opção de prévia com GPU/meia resolução.
@@ -135,13 +150,14 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
   física). Membros ainda mais finos e mãos menores que na ref3.
 - Celular (`visual/objetos/celular.js`): tela desenhada por código e emissiva (aparece no escuro); em 1ª pessoa
   fica apoiado NA FRENTE da palma (`segurarNaFrente`) para a mão não tampar a tela (pedido do responsável).
-- Caminhada só em linha reta (+z); curvas/virar no lugar ficam para quando o diretor precisar. Com a perna 100% esticada o pé no chão fica no limite do alcance do IK: poses em pé devem ter
+- Caminhada só em linha reta (+z); curvas/virar no lugar ficam para quando o diretor precisar.
+- Cenário `floresta` do roteiro original não foi feito (a série não usa); texturas grama/água já existem. Com a perna 100% esticada o pé no chão fica no limite do alcance do IK: poses em pé devem ter
   `desl.y` ≈ -0,03 (joelho levemente dobrado).
 
 ## Próxima etapa
 
-Etapa 6: cenário `distribuidora` (balcão, geladeiras com latas, engradados, prateleiras, neon, grade com
-cadeado, calçada/rua com poste), texturas por código, luz `interior` (fluorescente com piscar), área livre e
-marcas (engradado do Gabriel, grade, rua). Câmera subjetiva (olhos do Eduardo): olhar para alvo, virar,
-olhar para baixo, aproximar, tremor, respiração; + câmera de 3ª pessoa (geral/médio/close) para testes.
-Tela do celular com o alerta desenhado por código.
+Etapa 7: camada de direção. `roteiro.json` → planos → linha do tempo: cada fala vira plano que começa na
+1ª palavra; atores com atuação + marca; câmera (subjetiva com olhar para alvo / 3ª pessoa com tamanho);
+efeitos (piscar, tremor, corte para preto, cartela); palavra de destaque dispara ação; tempos "p19+0.12",
+"fim-0.3"; erros claros listando nomes válidos. Sem voz ainda: tempos de palavra estimados (a etapa 8 troca
+pelos do Edge TTS).
