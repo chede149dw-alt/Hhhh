@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Teste do estilo chapado</title>
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">
+{ "imports": { "three": "/motor/visual/lib/three/three.module.js",
+               "three/addons/": "/motor/visual/lib/three/addons/" } }
+</script>
+</head>
+<body>
+<script type="module">
+// Parâmetros na URL:
+//   luz=dia|noite   pos=0|neutro|1   calib=1 (luz principal vinda de +z: faces da frente com dotNL=1)
+import * as THREE from 'three';
+import { materialChapado, comoObjeto, comoChao, prepararRenderer, criarLuzes, VOLUME } from '../estilo/chapado.js';
+import { criarPos, POS_NEUTRO } from '../estilo/posfx.js';
+
+const q = new URLSearchParams(location.search);
+const LUZ = q.get('luz') || 'dia', POS = q.get('pos') || '1', CALIB = q.get('calib') === '1';
+const L = 1080, A = 1920;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(L, A);
+prepararRenderer(renderer);
+document.body.appendChild(renderer.domElement);
+
+const cena = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(38, L / A, 0.1, 120);
+cam.position.set(0, 1.45, 8.5);   // altura de olhos (1ª pessoa)
+cam.lookAt(0, 1.15, 0);
+
+const luzes = criarLuzes(cena, LUZ, { camera: cam });
+if (CALIB) { luzes.sol.position.set(0, 0, 10); luzes.sol.target.position.set(0, 0, 0); }
+const FUNDO = LUZ === 'noite' ? '#070a12' : '#a9bdd1';
+cena.background = new THREE.Color(FUNDO);
+if (LUZ === 'noite') { VOLUME.uRimCor.value.set('#6f86c9'); VOLUME.uRimForca.value = 0.25; }
+else { VOLUME.uRimCor.value.set('#fff4dc'); VOLUME.uRimForca.value = CALIB ? 0 : 0.12; }
+
+const chao = comoChao(new THREE.Mesh(new THREE.PlaneGeometry(60, 60), materialChapado('#7f8a7a', { volume: false })));
+chao.rotation.x = -Math.PI / 2; cena.add(chao);
+// Fileira de postes ao fundo para a névoa e o foco aparecerem
+for (let i = 0; i < 14; i++) {
+  const poste = comoObjeto(new THREE.Mesh(new THREE.BoxGeometry(0.5, 3 + (i % 3), 0.5), materialChapado('#5d6b80')));
+  poste.position.set((i % 2 ? 1 : -1) * (2.2 + (i % 3) * 0.6), (3 + (i % 3)) / 2, -4 - i * 3);
+  cena.add(poste);
+}
+
+const ALVOS = [
+  { nome: 'cubo vermelho', cor: '#e8604c', tipo: 'cubo', pos: [-0.75, 2.05, -1.0] },
+  { nome: 'cubo azul',     cor: '#4c8fe8', tipo: 'cubo', pos: [ 0.75, 2.05, -1.0] },
+  { nome: 'cubo amarelo',  cor: '#f2c14e', tipo: 'cubo', pos: [-0.75, 0.5,  1.0] },
+  { nome: 'esfera verde',  cor: '#5fbf6a', tipo: 'esfera', pos: [0.75, 0.55, 1.0] },
+];
+const basica = (cor) => new THREE.MeshBasicMaterial({ color: cor, toneMapped: false });
+for (const a of ALVOS) {
+  const geo = a.tipo === 'cubo' ? new THREE.BoxGeometry(1, 1, 1) : new THREE.SphereGeometry(0.55, 48, 24);
+  const m = comoObjeto(new THREE.Mesh(geo, materialChapado(a.cor)));
+  m.position.set(...a.pos); cena.add(m);
+  // Faixa de referência (cor pura, sem luz) colada na frente.
+  const ref = new THREE.Mesh(
+    a.tipo === 'cubo' ? new THREE.PlaneGeometry(0.22, 1) : new THREE.CircleGeometry(0.08, 24), basica(a.cor));
+  if (a.tipo === 'cubo') ref.position.set(a.pos[0] - 0.39, a.pos[1], a.pos[2] + 0.501);
+  else ref.position.set(a.pos[0] - 0.2, a.pos[1], a.pos[2] + Math.sqrt(0.55 ** 2 - 0.2 ** 2) + 0.01);
+  cena.add(ref);
+  a.pontoFace = new THREE.Vector3(a.pos[0] + (a.tipo === 'cubo' ? 0.15 : 0), a.pos[1], a.pos[2] + (a.tipo === 'cubo' ? 0.5 : 0.55));
+  a.pontoRef = ref.position.clone();
+}
+
+let pos = null;
+if (POS !== '0') {
+  const op = { msaa: +(q.get('msaa') ?? 4), taps: +(q.get('taps') ?? 16), tipo: q.get('tipo') || 'half' };
+  pos = criarPos(renderer, L, A, POS === 'neutro' ? POS_NEUTRO : (LUZ === 'noite'
+    ? { nevoaCor: '#070a12', nevoaIni: 6, nevoaFim: 30, nevoaMax: 0.95, focoDist: 8.5, focoFaixa: 2.0, desfoqueMax: 1.2, vinheta: 0.55, grao: 0.06 }
+    : { nevoaCor: FUNDO, nevoaIni: 10, nevoaFim: 50, nevoaMax: 0.85, focoDist: 8.5, focoFaixa: 2.5, desfoqueMax: 0.9, vinheta: 0.3, grao: 0.03 }), op);
+  if (q.has('grao')) pos.definir({ grao: +q.get('grao') });
+}
+
+window.quadro = (t) => {
+  if (LUZ === 'noite' && !CALIB) {   // lanterna varre devagar, como mão segurando
+    const l = luzes.lanterna;
+    l.target.position.set(Math.sin(t * 0.9) * 0.5, -0.15 + Math.sin(t * 1.7) * 0.06, -4);
+  }
+  if (pos) pos.render(cena, cam, t); else renderer.render(cena, cam);
+};
+
+// Mede a cor na tela (sRGB 8 bits) no ponto da face iluminada e na faixa de referência.
+window.medir = () => {
+  const c2 = document.createElement('canvas'); c2.width = L; c2.height = A;
+  const g = c2.getContext('2d'); g.drawImage(renderer.domElement, 0, 0);
+  const ler = (v) => {
+    const p = v.clone().project(cam);
+    const x = Math.round((p.x * 0.5 + 0.5) * L), y = Math.round((0.5 - p.y * 0.5) * A);
+    const d = g.getImageData(x, y, 1, 1).data;
+    return '#' + [d[0], d[1], d[2]].map((n) => n.toString(16).padStart(2, '0')).join('');
+  };
+  return ALVOS.map((a) => ({ nome: a.nome, esperado: a.cor, face: ler(a.pontoFace), ref: ler(a.pontoRef) }));
+};
+window.pronto = Promise.resolve();
+</script>
+</body>
+</html>

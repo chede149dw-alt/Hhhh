@@ -8,7 +8,7 @@ import { renderizar } from '../render/renderizar.mjs';
 import { RAIZ } from '../render/servidor.mjs';
 
 const md5 = (f) => crypto.createHash('md5').update(fs.readFileSync(f)).digest('hex');
-const PAGINA = 'motor/visual/teste_relogio.html';
+const PAGINA = 'motor/visual/testes/relogio.html';
 
 test('quadros 0 e 90 iguais em ordem direta e invertida', { timeout: 120000 }, async () => {
   const base = path.join(RAIZ, 'projetos/_testes/determinismo');

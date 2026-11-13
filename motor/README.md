@@ -30,10 +30,10 @@ Os caminhos de página são relativos à **raiz do repositório**.
 
 ```bash
 # quadros avulsos (número do quadro; t = quadro / fps)
-node render/renderizar.mjs motor/visual/teste_relogio.html --quadros 0,90,239 --saida ../projetos/_testes/x
+node render/renderizar.mjs motor/visual/testes/relogio.html --quadros 0,90,239 --saida ../projetos/_testes/x
 
 # intervalo, em paralelo (1 Chrome por processo)
-node render/renderizar.mjs motor/visual/teste_relogio.html --de 0 --ate 239 --processos 4 --saida ../projetos/_testes/x
+node render/renderizar.mjs motor/visual/testes/relogio.html --de 0 --ate 239 --processos 4 --saida ../projetos/_testes/x
 
 # juntar PNGs em MP4 (H.264, crf 20, yuv420p, 60 fps; --audio opcional)
 node render/juntar.mjs ../projetos/_testes/x ../projetos/_testes/x.mp4
@@ -62,5 +62,10 @@ Toda página renderizável deve:
 | `render/navegador.mjs` | Abre Chrome headless com WebGL por software (SwiftShader) para pixels determinísticos; `abrirPagina`, `capturar`. |
 | `render/renderizar.mjs` | CLI e função `renderizar()`: quadros → `quadro_NNNNN.png`, com N processos. |
 | `render/juntar.mjs` | CLI e função `juntar()`: PNGs (+ áudio) → MP4 via ffmpeg. |
-| `visual/teste_relogio.html` | Cena mínima de teste do contrato `quadro(t)`. |
+| `visual/estilo/chapado.js` | Rampa toon, `materialChapado(cor)`, `VOLUME`, `criarLuzes(cena, 'dia'\|'noite', {camera})`, `comoObjeto`/`comoChao`, `prepararRenderer`. Conta da calibração no topo do arquivo. |
+| `visual/estilo/posfx.js` | `criarPos(renderer, L, A, params, {msaa, taps})`: névoa, foco raso, vinheta, grão. `POS_NEUTRO`. |
+| `visual/testes/relogio.html` | Cena mínima de teste do contrato `quadro(t)`. |
+| `visual/testes/estilo.html` | 3 cubos + 1 esfera. URL: `luz=dia\|noite`, `pos=0\|neutro\|1`, `calib=1`. Expõe `window.medir()`. |
+| `render/medir_estilo.mjs` | Mede a cor na tela (face iluminada e faixa de referência). |
 | `testes/determinismo.test.mjs` | Renderiza 0 e 90 em ordem direta e invertida e compara md5. |
+| `testes/estilo.test.mjs` | Cor iluminada = cor do material (tolerância 2/255), direto e com pós neutro. |
