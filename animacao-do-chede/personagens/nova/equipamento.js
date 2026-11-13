@@ -119,6 +119,20 @@
       depois('antebraco_d', brac); depois('antebraco_e', brac);
     }
 
+    if (eq.magiaMaos) {
+      // mago que conjura com as mãos: quando a pose tem _magia, as palmas acendem
+      const cor = eq.magiaMaos.cor || '111,200,255';
+      const brilho = (pc, rig) => {
+        const forca = rig && rig.pose && rig.pose._magia;
+        if (!forca) return;
+        const y = 0.2;
+        for (const [r, a] of [[0.42, 0.1], [0.3, 0.18], [0.2, 0.32], [0.12, 0.6]]) pc.preencher(P((p) => p.arc(0, y, r * forca, 0, Math.PI * 2)), `rgba(${cor},${a})`);
+        pc.preencher(P((p) => p.arc(0, y, 0.06 * forca, 0, Math.PI * 2)), 'rgba(240,252,255,0.95)');
+        for (let i = 0; i < 6; i++) { const an = i * Math.PI / 3 + 0.3, r0 = 0.16 * forca, r1 = 0.3 * forca; pc.linha(P((p) => { p.moveTo(Math.cos(an) * r0, y + Math.sin(an) * r0); p.lineTo(Math.cos(an) * r1, y + Math.sin(an) * r1); }), pc.interno * 0.8, `rgba(${cor},0.8)`); }
+      };
+      depois('mao_d', brilho); depois('mao_e', brilho);
+    }
+
     if (eq.cajado) {
       // cajado de iniciante: galho de madeira com um cristal pequeno preso por cordão
       const m = eq.cajado.mao || 'd', cr = eq.cajado.cristal || '#6FC8FF';

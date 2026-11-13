@@ -1,9 +1,9 @@
 {
  "fabrica": "criarDaviJogo",
- "registroPoses": "POSES_PADRAO",
+ "registroPoses": "DAVI_JOGO_POSES",
  "opcoes": {},
  "titulo": "DAVI · NO JOGO",
- "subtitulo": "Humano · Mago (que também luta) · nível 1",
+ "subtitulo": "Humano · Mago que conjura com as mãos (e também luta) · nível 1",
  "paleta": [
   {
    "nome": "Manto",
@@ -22,7 +22,7 @@
    "cor": "#8A5A36"
   },
   {
-   "nome": "Cristal",
+   "nome": "Magia",
    "cor": "#6FC8FF"
   },
   {
@@ -100,14 +100,18 @@
    "pose": "acenando"
   },
   {
-   "nome": "Mãos na cintura",
-   "pose": "maos-na-cintura"
+   "nome": "Conjurando",
+   "pose": "conjurando"
+  },
+  {
+   "nome": "Magia na mão",
+   "pose": "magia-na-mao"
   }
  ],
  "regras": [
-  "Raça: humano. Classe: mago que também luta corpo a corpo",
-  "Manto azul com capuz e barra de runas douradas, cinto com bolsinha, botas de couro",
-  "Iniciante: cajado de galho com cristal pequeno + adaga enferrujada na cintura"
+  "Raça: humano. Classe: mago que conjura com as MÃOS (sem cajado nem varinha) e também luta corpo a corpo",
+  "Manto azul com capuz e barra de runas douradas, cinto com bolsinha, braçadeiras e botas de couro",
+  "Iniciante: magia azul fraquinha nas palmas + adaga enferrujada na cintura"
  ],
  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
 }
