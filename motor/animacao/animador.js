@@ -2,6 +2,7 @@
 //   const anim = criarAnimacao(chaves, { medidas })      chave = { t, pose?, curva?, peDAlvo?, peEAlvo?, maoDAlvo?, maoEAlvo?, pernas? }
 //   anim.em(t)               → pose final (interpolação + arrasto + vida + IK)
 //   anim.em(t, { puro: true }) → só a interpolação entre chaves
+//   opções: medidas (IK), arrasto, vida, semente (piscadas), camadas [(t) → deltas]
 //   aplicar(boneco, pose)
 // Regras:
 // - A curva de uma chave diz como se CHEGA nela a partir da anterior (padrão 'suave').
@@ -33,7 +34,7 @@ function rng(semente) {   // mulberry32
   return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 
-export function criarAnimacao(chavesIn, { medidas = null, arrasto = true, vida = true, semente = 7, respiracao = 1 } = {}) {
+export function criarAnimacao(chavesIn, { medidas = null, arrasto = true, vida = true, semente = 7, respiracao = 1, camadas = [] } = {}) {
   if (!Array.isArray(chavesIn) || chavesIn.length === 0) throw new Error('Animação sem chaves');
   const chaves = [];
   let anterior = null;
@@ -90,6 +91,12 @@ export function criarAnimacao(chavesIn, { medidas = null, arrasto = true, vida =
       if (valor(pose, 'rosto', 'estranho') < 0.3) {    // infiltrado não pisca
         const f = fechamento(t);
         if (f > 0) pose.rosto = { ...pose.rosto, olhos: valor(pose, 'rosto', 'olhos') * (1 - f) };
+      }
+    }
+    for (const camada of camadas) {   // camadas: (t) → deltas somados aos canais numéricos (ex.: balanço da caminhada)
+      for (const [g, canais] of Object.entries(camada(t) || {})) {
+        pose[g] = { ...pose[g] };
+        for (const [c, v] of Object.entries(canais)) pose[g][c] = valor(pose, g, c) + v;
       }
     }
     if (medidas) {

@@ -5,48 +5,97 @@
 <title>Teste de atuação</title>
 <style>
 html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}
-#rot{position:fixed;left:0;right:0;top:60px;text-align:center;font:700 56px/1.15 system-ui,sans-serif;color:#2b2b2b}
+#rot{position:fixed;left:0;right:0;top:60px;text-align:center;font:700 56px/1.15 system-ui,sans-serif;color:#2b2b2b;text-shadow:0 0 12px #fff8}
 </style>
 <script type="importmap">{ "imports": { "three": "/motor/visual/lib/three/three.module.js", "three/addons/": "/motor/visual/lib/three/addons/" } }</script>
 </head>
 <body>
 <div id="rot"></div>
 <script type="module">
-// ?atuacao=larissa_grade&ficha=cliente&vista=34|frente|lado&rotulo=1
+// ?atuacao=nome&ficha=x&vista=34|frente|lado|costas34|pov&rotulo=0
 import * as THREE from 'three';
 import { comoChao, comoObjeto, materialChapado, prepararRenderer, criarLuzes } from '../estilo/chapado.js';
 import { criarPos } from '../estilo/posfx.js';
 import { criarBoneco, carregarFicha } from '../boneco/boneco.js';
 import { criarAnimacao, aplicar } from '../../animacao/animador.js';
-import { ATUACOES, chavesDe } from '../../animacao/atuacoes.js';
+import { ATUACOES, chavesDe, camadasDe, ASSENTO } from '../../animacao/atuacoes.js';
 
 const q = new URLSearchParams(location.search);
 const L = 1080, A = 1920, NOME = q.get('atuacao') || 'larissa_grade', VISTA = q.get('vista') || '34';
+const AT = ATUACOES[NOME];
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1); renderer.setSize(L, A); prepararRenderer(renderer);
 document.body.appendChild(renderer.domElement);
 const cena = new THREE.Scene(); cena.background = new THREE.Color('#d8d2c6');
-const cam = new THREE.PerspectiveCamera(30, L / A, 0.1, 60);
-criarLuzes(cena, 'dia', { raioSombra: 3 });
+const cam = new THREE.PerspectiveCamera(VISTA === 'pov' ? 75 : 30, L / A, 0.05, 60);
+criarLuzes(cena, 'dia', { raioSombra: 4 });
 const chao = comoChao(new THREE.Mesh(new THREE.PlaneGeometry(30, 30), materialChapado('#c4bcae', { volume: false })));
 chao.rotation.x = -Math.PI / 2; cena.add(chao);
-// grade de ferro
-const GZ = 0.72, metal = materialChapado('#3b3f46');
-const grade = new THREE.Group(); cena.add(grade);
-for (let i = -6; i <= 6; i++) { const b = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 2.3, 8), metal); b.position.set(i * 0.12, 1.15, GZ); grade.add(b); }
-for (const y of [0.08, 1.05, 2.25]) { const b = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.04, 0.03), metal); b.position.set(0, y, GZ); grade.add(b); }
-comoObjeto(grade);
+
+// adereços declarados pela atuação
+const c = AT.cena || {}, metal = materialChapado('#3b3f46');
+if (c.grade) {
+  const g = new THREE.Group(); cena.add(g);
+  for (let i = -6; i <= 6; i++) { const b = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 2.3, 8), metal); b.position.set(i * 0.12, 1.15, c.grade.z); g.add(b); }
+  for (const y of [0.08, 1.05, 2.25]) { const b = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.04, 0.03), metal); b.position.set(0, y, c.grade.z); g.add(b); }
+  comoObjeto(g);
+}
+if (c.cadeado) { const cd = comoObjeto(new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.07, 0.03), materialChapado('#c9a640'))); cd.position.set(...c.cadeado); cena.add(cd); }
+if (c.assento) { const e = comoObjeto(new THREE.Mesh(new THREE.BoxGeometry(0.42, ASSENTO, 0.36), materialChapado('#c0392b'))); e.position.set(0, ASSENTO / 2, c.assento.z); cena.add(e); }
+if (c.geladeira) {
+  const gel = comoObjeto(new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.9, 0.7), materialChapado('#dfe6ea')));
+  gel.position.set(c.geladeira.x - 0.35, 0.95, c.geladeira.z); cena.add(gel);
+  for (let i = 0; i < 4; i++) { const l = comoObjeto(new THREE.Mesh(new THREE.CylinderGeometry(0.033, 0.033, 0.12, 14), materialChapado(i % 2 ? '#d33' : '#e8b923'))); l.position.set(c.geladeira.x + 0.03, 1.0 + (i > 1 ? 0.2 : 0), c.geladeira.z - 0.12 + (i % 2) * 0.1); cena.add(l); }
+}
 
 const ficha = await carregarFicha(q.get('ficha') || 'cliente');
 const b = criarBoneco(ficha); cena.add(b.raiz);
-const anim = criarAnimacao(chavesDe(NOME, { medidas: b.medidas }), { medidas: b.medidas });
+const ctx = { medidas: b.medidas };
+const anim = criarAnimacao(chavesDe(NOME, ctx), { medidas: b.medidas, camadas: camadasDe(NOME, ctx) });
+// objetos presos à mão
+const objetos = (AT.objetos || []).map((o) => {
+  const geo = o.id === 'celular' ? new THREE.BoxGeometry(0.075, 0.15, 0.012) : new THREE.CylinderGeometry(0.033, 0.033, 0.12, 14);
+  const mesh = comoObjeto(new THREE.Mesh(geo, materialChapado(o.id === 'celular' ? '#15161a' : '#d33')));
+  const mao = b.juntas['mao' + o.mao];
+  mesh.position.set(0, -b.medidas.maoLen * 0.55, b.medidas.anteL * 0.45);
+  if (o.id === 'celular') { mesh.position.set(0, -b.medidas.maoLen * 0.6, b.medidas.anteL * 0.7); mesh.rotation.set(0, Math.PI / 2, 0); }
+  mao.add(mesh); return { ...o, mesh };
+});
 const pos = criarPos(renderer, L, A, { nevoaMax: 0, desfoqueMax: 0, vinheta: 0.25, grao: 0 });
-const CAMS = { '34': [[2.5, 1.35, 2.6], [0, 0.95, 0.35]], frente: [[0, 1.45, 3.4], [0, 1.0, 0.3]], lado: [[3.9, 1.15, 0.5], [0, 0.95, 0.4]], costas34: [[2.2, 1.4, -2.6], [0, 1.0, 0.3]] };
-cam.position.set(...CAMS[VISTA][0]); cam.lookAt(...CAMS[VISTA][1]);
-const imp = ATUACOES[NOME].impacto;
+const H = b.medidas.H;
+const CAMS = {
+  '34': [[2.7, 1.4, 3.5], [0, 0.85, 0.2]], frente: [[0, 1.45, 3.8], [0, 0.95, 0.2]],
+  lado: [[4.4, 1.1, 0.1], [0, 0.85, 0.1]], costas34: [[2.2, 1.4, -2.6], [0, 1.0, 0.3]],
+};
+// câmeras de teste acompanham o corpo (x/z) — exceto quando a cena tem grade (enquadra a grade)
+const segue = !c.grade;
+const imp = AT.impacto;
+const olho = new THREE.Vector3(), qCab = new THREE.Quaternion(), giro180 = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
 
 window.quadro = (t) => {
-  aplicar(b, anim.em(t));
+  const pose = anim.em(t);
+  aplicar(b, pose);
+  if (VISTA !== 'pov') {
+    const ox = segue ? (pose.corpo?.x || 0) : 0, oz = segue ? (pose.corpo?.z || 0) : 0;
+    const [p0, a0] = CAMS[VISTA];
+    cam.position.set(p0[0] + ox, p0[1], p0[2] + oz); cam.lookAt(a0[0] + ox, a0[1], a0[2] + oz);
+  }
+  for (const o of objetos) o.mesh.visible = t >= (o.de ?? 0) && t <= (o.ate ?? 1e9);
+  if (VISTA === 'pov') {           // câmera nos olhos do personagem; cabeça escondida
+    b.raiz.updateMatrixWorld(true);
+    b.juntas.cabeca.visible = false;
+    olho.set(0, b.medidas.cabecaH * 0.52, b.medidas.cabecaP * 0.3);
+    b.juntas.cabeca.localToWorld(olho);
+    b.juntas.cabeca.getWorldQuaternion(qCab);
+    cam.position.copy(olho); cam.quaternion.copy(qCab).multiply(giro180);
+    cam.updateMatrixWorld();
+    for (const o of objetos) if (o.id === 'celular') {   // tela virada para os olhos
+      const pw = o.mesh.getWorldPosition(new THREE.Vector3());
+      const qPai = o.mesh.parent.getWorldQuaternion(new THREE.Quaternion());
+      const m4 = new THREE.Matrix4().lookAt(cam.position, pw, cam.up);
+      o.mesh.quaternion.setFromRotationMatrix(m4).premultiply(qPai.invert());
+    }
+  }
   if (q.get('rotulo') !== '0') document.getElementById('rot').textContent = `${NOME} · ${t.toFixed(2)} s${imp !== undefined && Math.abs(t - imp) < 0.009 ? ' · IMPACTO' : ''}`;
   pos.render(cena, cam, t);
 };

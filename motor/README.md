@@ -69,12 +69,13 @@ Toda página renderizável deve:
 | `animacao/esqueleto.js` | Tabela de juntas, canais ↔ ângulos, `fk`, `pontos` (sola/pulso no mundo), `paraMundo`/`paraLocal`. |
 | `animacao/ik.js` | `resolver(pose, medidas, 'peD'\|'peE'\|'maoD'\|'maoE', alvo)`: IK de 2 ossos com polo. |
 | `animacao/animador.js` | `criarAnimacao(chaves, { medidas })` → `{ em(t), duracao }`; `CURVAS`; `aplicar(boneco, pose)`. |
-| `animacao/atuacoes.js` | `ATUACOES[nome] = { descricao, impacto, sons, chaves(ctx) }`, `chavesDe(nome, ctx)`. |
+| `animacao/atuacoes.js` | `ATUACOES[nome] = { descricao, inicio, final, impacto, sons, objetos, cena, chaves(ctx), camada? }`; `estados(m)`, `chavesDe`, `camadasDe`, `sonsDe`, `noLugar(chaves, {x,z,giro})`. |
 | `visual/boneco/medidas.js` | Puro: `validarFicha`, `calcularMedidas` (proporções a partir da altura). |
 | `visual/boneco/boneco.js` | `criarBoneco(ficha)` → `{ raiz, juntas, posar(pose), medidas }`; `carregarFicha(nome)`. |
 | `visual/boneco/fichas/*.json` | Fichas: nome, papel, altura, corpo (largura/peso/ombros), cores, peças (cabelo, camisa, calca, calcado, barba, acessorios); cores extras opcionais: camisa2, detalhe, sola, cinto, fivela, barba. Valores válidos em `medidas.js` (`PECAS_VALIDAS`). |
 | `visual/testes/boneco.html` | `?ficha=nome`, quadros 0-8 com `--fps 1`: 4 vistas, 4 poses e o rosto infiltrado. |
-| `visual/testes/atuacao.html` | `?atuacao=nome&ficha=x&vista=34\|frente\|lado\|costas34&rotulo=0` (t em segundos). |
+| `visual/testes/atuacao.html` | `?atuacao=nome&ficha=x&vista=34\|frente\|lado\|costas34\|pov&rotulo=0` (t em segundos); mostra os adereços da atuação. |
+| `render/folha_atuacoes.mjs` | `node render/folha_atuacoes.mjs saida.png nome:ficha:vista ...` → 6 quadros por atuação, uma linha cada. |
 | `visual/testes/fk.html` | Compara FK pura com o boneco three. |
 | `visual/testes/relogio.html` | Cena mínima de teste do contrato `quadro(t)`. |
 | `visual/testes/estilo.html` | 3 cubos + 1 esfera. URL: `luz=dia\|noite`, `pos=0\|neutro\|1`, `calib=1`. Expõe `window.medir()`. |
@@ -82,5 +83,6 @@ Toda página renderizável deve:
 | `testes/determinismo.test.mjs` | Renderiza 0 e 90 em ordem direta e invertida e compara md5. |
 | `testes/animador.test.mjs` | IK (pé e mão < 1e-6 m), pé plantado, interpolação, curvas, vida, arrasto. |
 | `testes/fk_three.test.mjs` | FK pura = boneco three (navegador). |
+| `testes/atuacoes.test.mjs` | Todas as atuações × 3 fichas; andar sem deslizar; noLugar. |
 | `testes/poses.test.mjs` | Poses, mistura, validação e fichas. |
 | `testes/estilo.test.mjs` | Cor iluminada = cor do material (tolerância 2/255), direto e com pós neutro. |

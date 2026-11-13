@@ -87,6 +87,14 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
   Chave sem pose = pausa. Alvos de IK valem até mudar; `null`/`pernas: 'fk'` solta (mistura de ângulos).
   Passo com arco automático. Arrasto = amostrar cabeça/pescoço/cotovelos/mãos alguns quadros antes.
   Vida: respiração (3,8 s) + piscadas determinísticas por semente; **infiltrado (estranho ≥ 0,3) não pisca**.
+- Atuações (`animacao/atuacoes.js`): cada uma declara `inicio` e `final` (ESTADOS: em_pe, sentado,
+  sentado_celular, sentado_triste, olhar_fixo, na_grade, no_cadeado, olhando, olhando_celular, segurando_lata,
+  mao_estendida) para o diretor encadear sem salto. Escritas na origem olhando +z; `noLugar` leva à marca.
+  `andar` é gerada por parâmetros (distância, tempo do passo) + camada contínua (balanço, braços).
+  `cena` declara o que a atuação supõe (assento, grade, cadeado, geladeira); `objetos` declara adereços na mão.
+- 1ª pessoa: braços "para a câmera" (mais altos que o natural, como em jogos), mãos guiadas por IK até pontos
+  definidos em relação aos olhos (`naFrenteDosOlhos`). No vertical o campo horizontal é estreito (~±23° com
+  FOV 75): mãos precisam ficar perto do centro.
 - Pós (`visual/estilo/posfx.js`): um passe só (névoa por profundidade, foco raso com 16 amostras, vinheta, grão
   com semente no tempo). Alvo HalfFloat + MSAA 4x; com parâmetros zerados a cor sai idêntica.
 
@@ -108,7 +116,8 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 `projetos/_evidencias/etapa3_personagens.png` (Gabriel, Cliente, Eduardo, Exemplo barba),
 `projetos/_evidencias/etapa3_referencias.png` (referência × resultado),
 `projetos/_evidencias/etapa4_larissa_grade_folha.png`, `..._frente.png`, `etapa4_larissa_grade.mp4`,
-`etapa4_revelacao_estagios.png`, `etapa4_revelacao_noite.png`.
+`etapa4_revelacao_estagios.png`, `etapa4_revelacao_noite.png`, `etapa5_genericas.png`, `etapa5_roteiro.png`,
+`etapa5_andar.mp4`.
 
 ## Limitações conhecidas
 
@@ -118,13 +127,15 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
   ao ffmpeg (sem PNG), e opção de prévia com GPU/meia resolução.
 - O teste de determinismo usa a cena de teste; repetir com a cena real na etapa 10.
 - Boneco: peças rígidas aparecem como emendas em close extremo; cabelo longo é feito de caixas (sem
-  física). Membros ainda mais finos e mãos menores que na ref3. Com a perna 100% esticada o pé no chão fica no limite do alcance do IK: poses em pé devem ter
+  física). Membros ainda mais finos e mãos menores que na ref3.
+- Celular em 1ª pessoa: tela ainda preta e pegada simples (a mão cobre parte); tela do alerta na etapa 6.
+- Caminhada só em linha reta (+z); curvas/virar no lugar ficam para quando o diretor precisar. Com a perna 100% esticada o pé no chão fica no limite do alcance do IK: poses em pé devem ter
   `desl.y` ≈ -0,03 (joelho levemente dobrado).
 
 ## Próxima etapa
 
-Etapa 5: biblioteca de atuações (`animacao/atuacoes.js` já tem o formato e `larissa_grade`). Entram as do
-roteiro: Gabriel (sentado mexendo no celular, rir, levantar e andar até a grade, mão no cadeado), Larissa
-(chegar andando, parar na grade, olhar fixo, olhar para a câmera), mãos do Eduardo (pegar latas, segurar
-celular, estender a mão) + as genéricas do roteiro original (andar, acenar, assustar, sentar_triste, comemorar).
-Teste: chaves em ordem, sem pose vazia, pose final = repouso ou pausa declarada.
+Etapa 6: cenário `distribuidora` (balcão, geladeiras com latas, engradados, prateleiras, neon, grade com
+cadeado, calçada/rua com poste), texturas por código, luz `interior` (fluorescente com piscar), área livre e
+marcas (engradado do Gabriel, grade, rua). Câmera subjetiva (olhos do Eduardo): olhar para alvo, virar,
+olhar para baixo, aproximar, tremor, respiração; + câmera de 3ª pessoa (geral/médio/close) para testes.
+Tela do celular com o alerta desenhado por código.
