@@ -3,10 +3,10 @@
  "registroPoses": "POSES_PADRAO",
  "opcoes": {},
  "titulo": "DAVI · NO JOGO",
- "subtitulo": "Nível 1 · roupa de iniciante · adaga enferrujada",
+ "subtitulo": "Humano · Mago (que também luta) · nível 1",
  "paleta": [
   {
-   "nome": "Túnica",
+   "nome": "Manto",
    "cor": "#4B5D7A"
   },
   {
@@ -14,16 +14,16 @@
    "cor": "#36435A"
   },
   {
-   "nome": "Calça",
-   "cor": "#5A4636"
+   "nome": "Runas",
+   "cor": "#EBC25A"
   },
   {
-   "nome": "Botas/couro",
+   "nome": "Couro",
    "cor": "#8A5A36"
   },
   {
-   "nome": "Cinto",
-   "cor": "#4E3524"
+   "nome": "Cristal",
+   "cor": "#6FC8FF"
   },
   {
    "nome": "Pele",
@@ -105,9 +105,9 @@
   }
  ],
  "regras": [
-  "Dentro do jogo: túnica azul-ardósia com capuz, cinto com bolsinha, braçadeiras e botas de couro",
-  "Arma de iniciante: adaga curta e enferrujada",
-  "Mesmo rosto, cabelo e corpo do Davi de fora do jogo"
+  "Raça: humano. Classe: mago que também luta corpo a corpo",
+  "Manto azul com capuz e barra de runas douradas, cinto com bolsinha, botas de couro",
+  "Iniciante: cajado de galho com cristal pequeno + adaga enferrujada na cintura"
  ],
  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
 }

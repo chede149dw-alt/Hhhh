@@ -1,4 +1,4 @@
-// TÉO dentro do jogo VALDOR — nível 1, roupa de iniciante. Mesmo rosto e corpo do Téo (teo.js).
+// TÉO dentro do jogo VALDOR — raça: HOMEM-FERA (aparência humana de dia; transformação só à noite, episódio futuro) · classe: GUARDIÃO · nível 1. Mesmo rosto e corpo do Téo (teo.js).
 // Carregar: personagem-base.js, nova/cores.js, nova/equipamento.js, teo/teo.js.
 (function () {
   window.TEO_JOGO_OPCOES = {

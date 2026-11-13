@@ -54,6 +54,31 @@
       });
     }
 
+    if (eq.manto) {
+      // manto de mago até acima do joelho, com abertura na frente e barra com runas
+      const cor = T(eq.manto.cor), barra = T(eq.manto.barra || 'mostarda');
+      depois('tronco', (pc) => {
+        const y0 = hemY - 0.32 * f, y1 = 1.25 * f;
+        if (perfil) {
+          const forma = P((p) => { p.moveTo(-d - 0.02, y0); p.lineTo(d + 0.06, y0); p.lineTo(d + 0.2, y1); p.quadraticCurveTo(0, y1 + 0.05, -d - 0.12, y1); p.closePath(); });
+          pc.peca(forma, cor, { sombra: 0.12 });
+          pc.sombraDentro(forma, P((p) => p.rect(-1, y1 - 0.09, 2, 0.09)), barra.base);
+          return;
+        }
+        const a = (hw + 0.02) * k, b = (hw + 0.16) * k;
+        const forma = P((p) => { p.moveTo(-a, y0); p.lineTo(a, y0); p.lineTo(b, y1); p.quadraticCurveTo(0, y1 + 0.06, -b, y1); p.closePath(); });
+        pc.peca(forma, cor, { sombra: 0.12 });
+        pc.sombraDentro(forma, P((p) => p.rect(-1, y1 - 0.09, 2, 0.09)), barra.base);
+        if (!costas) {
+          // abertura na frente
+          pc.preencher(P((p) => { p.moveTo(cx - 0.03, y1 + 0.02); p.lineTo(cx, 0.7 * f); p.lineTo(cx + 0.03, y1 + 0.02); p.closePath(); }), cor.sombra);
+          pc.linha(P((p) => { p.moveTo(cx, 0.55 * f); p.lineTo(cx, y1); }));
+          // runas na barra
+          for (let i = -2; i <= 2; i++) if (i) pc.preencher(P((p) => { const x = cx + i * 0.16 * k, y = y1 - 0.045; p.moveTo(x, y - 0.03); p.lineTo(x + 0.025, y); p.lineTo(x, y + 0.03); p.lineTo(x - 0.025, y); p.closePath(); }), cor.sombra);
+        }
+      });
+    }
+
     if (eq.cinto) {
       const cor = T(eq.cinto.cor), fiv = T(eq.cinto.fivela || 'mostarda');
       depois('tronco', (pc) => {
@@ -92,6 +117,31 @@
         pc.linha(P((p) => { p.moveTo(-0.13, Lante - 0.2); p.lineTo(0.13, Lante - 0.2); }));
       };
       depois('antebraco_d', brac); depois('antebraco_e', brac);
+    }
+
+    if (eq.cajado) {
+      // cajado de iniciante: galho de madeira com um cristal pequeno preso por cordão
+      const m = eq.cajado.mao || 'd', cr = eq.cajado.cristal || '#6FC8FF';
+      const inc = eq.cajado.inclina ?? { frente: -0.13, tq: -0.16, perfil: -0.3, costas: -0.1 }[vista];
+      const Q = (fn) => { const a = P(fn), out = new Path2D(); out.addPath(a, new DOMMatrix([1, 0, inc, 1, 0, 0])); return out; };
+      depois('mao_' + m, (pc) => {
+        pc.peca(Q((p) => { p.moveTo(-0.04, -2.45); p.quadraticCurveTo(0.03, -0.8, -0.02, 0.8); p.lineTo(0.05, 0.8); p.quadraticCurveTo(0.09, -0.8, 0.04, -2.45); p.closePath(); }), T('madeira'), { sombra: 0.12 });
+        pc.peca(Q((p) => { p.moveTo(0.02, -2.40); p.quadraticCurveTo(-0.16, -2.52, -0.1, -2.72); p.lineTo(-0.06, -2.70); p.quadraticCurveTo(-0.1, -2.54, 0.04, -2.46); p.closePath(); }), T('madeira'), { sombra: 0.1 });
+        pc.peca(Q((p) => { p.moveTo(0.1, -2.85); p.lineTo(0.16, -2.66); p.lineTo(0.1, -2.50); p.lineTo(0.04, -2.66); p.closePath(); }), tomFixo(cr, Estilo.multiply(cr, '#7A90C8'), '#E8F7FF'), { sombra: 0.1 });
+        pc.preencher(Q((p) => p.arc(0.1, -2.67, 0.17, 0, Math.PI * 2)), cr.length === 7 ? cr + '33' : 'rgba(111,200,255,0.2)');
+        pc.peca(Q((p) => p.roundRect(-0.07, -2.52, 0.16, 0.06, 0.02)), T('caqui'), { sombra: 0, espessura: pc.interno * 0.7 });
+      });
+    }
+
+    if (eq.adagaCinto) {
+      // adaga embainhada na cintura
+      depois('tronco', (pc) => {
+        if (costas || perfil) return;
+        const x = cx - (hw - 0.05) * k, y = hemY - 0.2 * f;
+        pc.peca(P((p) => { p.moveTo(x - 0.05, y); p.lineTo(x + 0.05, y); p.lineTo(x + 0.13, y + 0.42); p.lineTo(x + 0.06, y + 0.46); p.closePath(); }), T('couroEscuro'), { sombra: 0.1 });
+        pc.peca(P((p) => p.roundRect(x - 0.1, y - 0.04, 0.2, 0.05, 0.02)), T('pedra'), { sombra: 0 });
+        pc.peca(P((p) => p.roundRect(x - 0.035, y - 0.2, 0.07, 0.17, 0.03)), T('caqui'), { sombra: 0.08 });
+      });
     }
 
     if (eq.arma) {

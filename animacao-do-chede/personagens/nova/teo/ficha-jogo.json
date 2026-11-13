@@ -3,7 +3,7 @@
  "registroPoses": "POSES_PADRAO",
  "opcoes": {},
  "titulo": "TÉO · NO JOGO",
- "subtitulo": "Nível 1 · roupa de iniciante · espada e escudo de madeira",
+ "subtitulo": "Homem-fera (só se transforma à noite) · Guardião · nível 1",
  "paleta": [
   {
    "nome": "Túnica",
@@ -105,9 +105,9 @@
   }
  ],
  "regras": [
-  "Dentro do jogo: túnica verde com peitoral de couro, cinto e botas escuras",
-  "Armas de iniciante: espada de madeira e escudo redondo de tábuas",
-  "Mesmo rosto, cabelo e corpo do Téo de fora do jogo"
+  "Raça: homem-fera. De dia parece humano, igual ao Téo de fora do jogo; a transformação só aparece à noite",
+  "Classe: guardião. Túnica verde com peitoral de couro, cinto e botas escuras",
+  "Iniciante: espada de madeira e escudo redondo de tábuas"
  ],
  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
 }
