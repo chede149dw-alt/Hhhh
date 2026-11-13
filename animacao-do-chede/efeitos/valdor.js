@@ -191,7 +191,7 @@
     // ouvido interno (labirinto) atrás do olho
     const ox = s * 0.05, oy = s * 0.1, oo = o.ouvido || 0;
     if (oo > 0) brilhoRadial(ctx, ox, oy, s * 0.35, '111,200,255', 0.6 * oo);
-    labirinto(ctx, ox, oy, s * 0.13, t, { brilho: oo });
+    if (!o.semOuvido) labirinto(ctx, ox, oy, s * 0.13, t, { brilho: oo });
     // capacete em volta (sem tocar)
     if (o.capacete) {
       ctx.strokeStyle = 'rgba(190,230,255,0.75)'; ctx.lineWidth = s * 0.05;

@@ -141,3 +141,8 @@
   alto à direita (`Cenarios3D.valdor.luz`), névoa azul-acinzentada mais fraca, verdes menos amarelos.
 - Andando: personagem anda reto, sem balançar para os lados. O motor usa o passo frontal quando a vista é de frente/costas
   e reduz o balanço de "vida" (0,15) enquanto anda.
+- Criaturas (efeitos/criaturas.js) no estilo da referência de batalha: formas angulosas com facetas, dentes, barra de vida
+  "Nome · Nv · vida/máx". A gosma foi reprovada pelo autor ("muito feia").
+- Personagem andando de lado: o `rumo` aponta para onde ele vai (andar para −X = rumo +π/2). Errado = anda de ré.
+- Cenário de Valdor: fim de tarde dourado, sol baixo à direita, sombras longas das árvores, sombras de nuvem no chão,
+  árvores com luz quente na borda, pinheiros, samambaias escuras nos cantos e vinheta (refs: ref-batalha-luz.mp4).

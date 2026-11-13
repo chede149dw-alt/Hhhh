@@ -11,6 +11,7 @@
   "personagens/nova/teo/teo-jogo.js",
   "personagens/nova/jogador-forte.js",
   "cenarios/valdor-campo.js",
+  "efeitos/criaturas.js",
   "efeitos/valdor.js"
  ],
  "legenda": {
@@ -323,12 +324,12 @@
   {
    "id": "gosma",
    "fala": {
-    "texto": "Primeiro monstro: uma gosma.",
+    "texto": "Primeiro monstro: um lobo jovem.",
     "voz": "narrador",
     "velocidade": 210
    },
    "destaque": [
-    "GOSMA."
+    "LOBO"
    ]
   },
   {
@@ -357,7 +358,7 @@
   {
    "id": "drop",
    "fala": {
-    "texto": "Ela deixou cair... dois centavos.",
+    "texto": "Ele deixou cair... dois centavos.",
     "voz": "narrador",
     "velocidade": 210
    },

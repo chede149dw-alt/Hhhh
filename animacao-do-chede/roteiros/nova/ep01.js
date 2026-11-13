@@ -9,7 +9,7 @@
   const FORTE = { fabrica: 'criarJogadorForte', registroPoses: 'POSES_PADRAO' };
   const W = 1080, H = 1920, TAU = Math.PI * 2;
   const AMARELO = '#EBC25A';
-  const LUZ_CAMPO = { lado: -1, forca: 0.45, cor: 'rgb(255,240,200)', sombra: 0.6 };
+  const LUZ_CAMPO = { lado: 1, forca: 0.9, cor: 'rgb(255,200,130)', sombra: 0.75 };
   const LUZ_QUARTO = { lado: 1, forca: 0.7, cor: 'rgb(150,190,255)', sombra: 1 };
   const alturaH = (item, vista = 'frente') => window[item.fabrica](item.opcoes || {}, vista).alturaEmH;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -348,12 +348,16 @@
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.7 });
     },
 
-    // 21) primeiro monstro: a gosma pula na frente deles
+    // 21) primeiro monstro: um lobo jovem chega rosnando (estilo da referência de batalha)
     gosma(ctx, u, d, api) {
       const cam = campo(ctx, api, { x: 0.3, y: 1.1, z: 0.3 + u * 0.1, cy: 900, f: 1050, yaw: -0.02 });
-      const gx = api.lerp(2.4, 0.3, api.fase(0, 1.4, 'linear')), gz = 5.6;
+      const anda = api.fase(0, 1.2, 'sai'), gx = api.lerp(3.2, 0.7, anda), gz = 5.8;
       emOrdem(cam, [
-        [gx, gz, () => { const q = cam.p(gx, 0, gz); Valdor.gosma(ctx, q.x, q.y, 0.75 * q.s, api.t, { pulo: (u * 1.6) % 1, olhar: -1 }); }],
+        [gx, gz, () => {
+          const q = cam.p(gx, 0, gz);
+          Criaturas.lobo(ctx, q.x, q.y, 0.95 * q.s, api.t, { espelhar: true, pose: anda < 1 ? 'andando' : 'parado', fase: u * 1.4 });
+          Criaturas.barraVida(ctx, q.x, q.y - 1.35 * q.s, 0.9 * q.s, 1, { max: 8, nome: 'Lobo jovem', nivel: 'Nv 1', h: 0.1 * q.s, alfa: api.fase(1.0, 1.3) });
+        }],
         [-0.55, 3.9, () => api.personagem3d(cam, { ...DAVIJ, pose: u > 1.4 ? 'conjurando' : 'parado', expressao: u > 1.4 ? 'determinado' : 'espanto' }, -0.55, 3.9, 1.76, { olhaPara: [gx, gz], luz: LUZ_CAMPO })],
         [1.05, 4.1, () => api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'espanto' }, 1.05, 4.1, 1.82, { olhaPara: [gx, gz], luz: LUZ_CAMPO, semente: 3 })],
       ]);
@@ -361,39 +365,47 @@
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.6 });
     },
 
-    // 22) "Faísca, escudo, adaga!": raio (3), escudo segura, adaga (5), a gosma estoura
+    // 22) "Faísca, escudo, adaga!": raio (3), o lobo pula no escudo, adaga (5), o lobo se desfaz em luz
     golpe(ctx, u, d, api) {
-      const [tx, ty] = u > 1.5 && u < 1.8 ? api.tremor(10) : [0, 0];
+      const [tx, ty] = (u > 0.85 && u < 1.05) || (u > 1.5 && u < 1.75) ? api.tremor(10) : [0, 0];
       ctx.save(); ctx.translate(tx, ty);
       const cam = campo(ctx, api, { x: 0.3, y: 1.35, z: 0.6, cy: 880, f: 1100, yaw: 0.02 + u * 0.02 });
-      const G = [0.4, 5.0];
-      const davX = api.lerp(-0.9, -0.25, api.fase(1.2, 1.5)), davZ = api.lerp(3.9, 4.6, api.fase(1.2, 1.5));
-      const teoX = api.lerp(1.4, 1.0, api.fase(0.6, 0.85)), teoZ = api.lerp(4.0, 4.75, api.fase(0.6, 0.85));
-      const est = api.fase(1.6, 2.1);
+      const pulo = api.fase(0.62, 0.92, 'linear'), volta = api.fase(0.92, 1.2);
+      const G = [api.lerp(api.lerp(0.9, 1.25, pulo), 1.6, volta), 5.2];
+      const davX = api.lerp(-0.9, 0.35, api.fase(1.2, 1.5)), davZ = api.lerp(3.9, 4.8, api.fase(1.2, 1.5));
+      const teoX = api.lerp(1.4, 0.95, api.fase(0.5, 0.7)), teoZ = api.lerp(4.0, 4.6, api.fase(0.5, 0.7));
+      const est = api.fase(1.75, 2.0);
+      const vida = u < 0.45 ? 1 : u < 1.55 ? 5 / 8 : 0;
+      const poseLobo = u > 1.55 ? 'atingido' : (u > 0.62 && u < 0.92) ? 'pulando' : (u > 0.4 && u < 0.62) || (u > 0.92 && u < 1.15) ? 'atingido' : 'parado';
       let rigD = null;
       emOrdem(cam, [
-        [G[0], G[1], () => { const q = cam.p(G[0], 0, G[1]); Valdor.gosma(ctx, q.x, q.y, 0.75 * q.s, api.t, { pulo: u < 0.9 ? (u * 1.6) % 1 : 0, amassa: u > 0.85 && u < 1.1 ? 0.4 : undefined, susto: u > 0.4, estoura: est }); }],
+        [G[0], G[1], () => {
+          const q = cam.p(G[0], 0, G[1]);
+          Criaturas.lobo(ctx, q.x, q.y, 0.95 * q.s, api.t, { espelhar: true, pose: poseLobo, fase: pulo, dissolve: est });
+          Criaturas.barraVida(ctx, q.x, q.y - 1.35 * q.s, 0.9 * q.s, vida, { max: 8, nome: 'Lobo jovem', nivel: 'Nv 1', h: 0.1 * q.s, atraso: u < 0.45 ? 1 : u < 0.8 ? 1 : u < 1.55 ? 5 / 8 : 5 / 8 * (1 - api.fase(1.6, 1.9)), alfa: 1 - est });
+        }],
         [davX, davZ, () => { rigD = api.personagem3d(cam, { ...DAVIJ, pose: u < 0.9 ? 'magia-na-mao' : 'parado', expressao: 'raiva' }, davX, davZ, 1.76, { olhaPara: G, luz: LUZ_CAMPO, vida: 1.6 }); }],
         [teoX, teoZ, () => api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'determinado' }, teoX, teoZ, 1.82, { olhaPara: G, luz: LUZ_CAMPO, semente: 3 })],
       ]);
       const qg = cam.p(G[0], 0.45, G[1]);
       if (rigD && rigD.escalaPx && u > 0.2 && u < 0.6) { const m = rigD.pontoMundo('mao_d', [0, 0.25]); Valdor.raioMagia(ctx, [m.x, m.y], [qg.x, qg.y], api.t, 1 - api.fase(0.45, 0.6)); Valdor.faisca(ctx, qg.x, qg.y, 60, api.t, 1); }
-      Valdor.dano(ctx, qg.x, qg.y - 120, '3', u - 0.4, { tam: 100 });
-      if (u > 0.85 && u < 1.15) Valdor.dano(ctx, qg.x - 120, qg.y - 60, 'BLOQUEADO', u - 0.85, { tam: 60, cor: '#BFE6FF', sobe: 50, dura: 0.5 });
-      if (u > 1.45 && u < 1.65) { ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 14; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(qg.x, qg.y, 160, -2.4, -0.6); ctx.stroke(); ctx.restore(); }
-      Valdor.dano(ctx, qg.x + 40, qg.y - 140, '5', u - 1.55, { tam: 120, cor: AMARELO });
+      Valdor.dano(ctx, qg.x, qg.y - 150, '3', u - 0.42, { tam: 100 });
+      if (u > 0.88 && u < 1.0) { const qe = cam.p(teoX - 0.25, 0.9, teoZ); Valdor.faisca(ctx, qe.x, qe.y, 70, api.t, 1); }
+      if (u > 0.88 && u < 1.4) Valdor.dano(ctx, qg.x - 140, qg.y - 70, 'BLOQUEADO', u - 0.9, { tam: 58, cor: '#BFE6FF', sobe: 50, dura: 0.5 });
+      if (u > 1.45 && u < 1.65) { ctx.save(); ctx.strokeStyle = 'rgba(255,250,235,0.95)'; ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(qg.x, qg.y, 170, -2.4, -0.4); ctx.stroke(); ctx.restore(); Valdor.faisca(ctx, qg.x, qg.y - 20, 90, api.t, 1); }
+      Valdor.dano(ctx, qg.x + 40, qg.y - 170, '5', u - 1.55, { tam: 130, cor: AMARELO });
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.5 });
       ctx.restore();
     },
 
-    // 23) a gosma deixa cair dois centavos; os dois caem na risada
+    // 23) o lobo deixa cair dois centavos; os dois caem na risada
     drop(ctx, u, d, api) {
       if (u < 1.25) {
         const cam = campo(ctx, api, { x: 0.4, y: 0.45, z: 3.6 + u * 0.1, cy: 1050, f: 1500 });
         const q = cam.p(0.4, 0, 5.0), cai = api.fase(0, 0.4, 'entra');
         const y = api.lerp(q.y - 300, q.y - 30, cai);
-        Valdor.brilhoRadial(ctx, q.x, y, 140, '90,170,255', 0.8);
-        ctx.fillStyle = '#5AAAFF'; ctx.beginPath(); ctx.moveTo(q.x, y - 50); ctx.quadraticCurveTo(q.x + 40, y, q.x, y + 30); ctx.quadraticCurveTo(q.x - 40, y, q.x, y - 50); ctx.fill();
+        Valdor.brilhoRadial(ctx, q.x, y - 30, 160, '255,210,120', 0.7);
+        Valdor.moeda(ctx, q.x, y - 30, 42, api.t * 2, 1);
         Valdor.etiqueta(ctx, q.x, y - 170, 'R$ 0,02', '#BFE6FF', api.fase(0.5, 0.8, 'volta'), { tam: 70 });
         Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.9 });
       } else {
@@ -427,7 +439,7 @@
       Valdor.raioFundo(ctx, api.t, { oy: -u * 12 });
       const seg = Math.floor(api.fase(0, d, 'linear') * 10.99);
       const pulso = (api.fase(0, d, 'linear') * 10.99) % 1;
-      Valdor.cabecaRaio(ctx, 540, 820, 320, { t: api.t, cerebro: 0.3 + 0.7 * (1 - pulso), dopamina: (u * 0.9) % 1 + 0.01 });
+      Valdor.cabecaRaio(ctx, 540, 820, 320, { t: api.t, semOuvido: true, cerebro: 0.3 + 0.7 * (1 - pulso), dopamina: (u * 0.9) % 1 + 0.01 });
       Valdor.barraXP(ctx, 600, 1600, 760, seg / 10, { segmentos: 10 });
       Valdor.dano(ctx, 540 + 300, 1520, '+1 XP', pulso * 0.8, { tam: 60, cor: AMARELO, sobe: 80, dura: 0.8 });
       Valdor.texto(ctx, 'DOPAMINA', 540, 1760, 60, '#FFD45A', { peso: 900 });
@@ -454,7 +466,7 @@
       Valdor.texto(ctx, 'GRANDE', 820, 1310, 58, 'rgba(200,210,230,0.6)', { peso: 900 });
       Valdor.texto(ctx, '+ RARO', 820, 1375, 50, 'rgba(200,210,230,0.6)', { peso: 900 });
       // cérebro pequeno embaixo, aceso do lado esquerdo
-      Valdor.cabecaRaio(ctx, 560, 1640, 140, { t: api.t, cerebro: 0.6, dopamina: (u * 1.2) % 1 + 0.01 });
+      Valdor.cabecaRaio(ctx, 560, 1640, 140, { t: api.t, semOuvido: true, cerebro: 0.6, dopamina: (u * 1.2) % 1 + 0.01 });
     },
 
     // 27) passa um jogador nível 80 (Adaga Eclipse na cintura); Davi e Téo olham
@@ -464,7 +476,7 @@
       Cenarios3D.valdor.desenhar(ctx, cam, { t: api.t });
       let rigF = null;
       emOrdem(cam, [
-        [fx, fz, () => { rigF = api.personagem3d(cam, { ...FORTE, pose: 'parado', expressao: 'serio' }, fx, fz, 1.9, { rumo: -Math.PI / 2, caminhar: api.t * 0.9, velocidade: 0.8, luz: LUZ_CAMPO }); }],
+        [fx, fz, () => { rigF = api.personagem3d(cam, { ...FORTE, pose: 'parado', expressao: 'serio' }, fx, fz, 1.9, { rumo: Math.PI / 2, caminhar: api.t * 0.9, velocidade: 0.8, luz: LUZ_CAMPO }); }],
         [-1.3, 3.6, () => api.personagem3d(cam, { ...DAVIJ, pose: 'parado', expressao: 'espanto' }, -1.3, 3.6, 1.76, { olhaPara: [fx, fz], luz: LUZ_CAMPO })],
         [-0.25, 3.3, () => api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'espanto' }, -0.25, 3.3, 1.82, { olhaPara: [fx, fz], luz: LUZ_CAMPO, semente: 3 })],
       ]);

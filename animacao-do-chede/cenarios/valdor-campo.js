@@ -1,4 +1,5 @@
-// Cenário em perspectiva: CAMPO DE VALDOR (série nova). Dia claro, cores vivas, névoa azulada ao longe,
+// Cenário em perspectiva: CAMPO DE VALDOR (série nova). Fim de tarde dourado (referências do autor): sol baixo à direita,
+// raios quentes, sombras longas das árvores, névoa quente ao longe,
 // montanhas com neve e um castelo, trilha de terra, árvores redondas, tufos de grama e flores.
 // Mundo em metros: chão y = 0; trilha ao longo de Z em x ≈ 0; área da ação: x de −3 a 3, z de 2 a 10.
 // Uso: Cenarios3D.valdor.desenhar(ctx, cam, { t })  → personagens →  Cenarios3D.valdor.frente(ctx, cam, { t, forca })
@@ -6,14 +7,15 @@
   window.Cenarios3D = window.Cenarios3D || {};
   const { face, arvore, mistura } = Cena3D;
   const rng = (s) => () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
-  const NEVOA = '#BCD3E4';
+  const NEVOA = '#E4CFB6';
+  const SOL = { dx: -0.8, dz: -0.55 }; // direção da sombra no chão (sol atrás, à direita)
 
   // objetos fixos (gerados uma vez): árvores, pedras, tufos, flores — fora da área da ação
   const OBJ = (() => {
     const r = rng(2026), arv = [], ped = [], tufo = [], flor = [];
     for (let i = 0; i < 70; i++) {
       const z = 4 + r() * 70, lado = r() < 0.5 ? -1 : 1, x = lado * (4.5 + r() * (6 + z * 0.6));
-      arv.push([x, z, 3.2 + r() * 2.6]);
+      arv.push([x, z, 3.2 + r() * 2.6, r() < 0.3 ? 'pinheiro' : 'copa', r() * 1000]);
     }
     for (let i = 0; i < 26; i++) { const z = 1 + r() * 30, x = (r() * 2 - 1) * (3 + z * 0.4); if (Math.abs(x) > 1.2) ped.push([x, z, 0.18 + r() * 0.35]); }
     for (let i = 0; i < 750; i++) { const z = 0.5 + Math.pow(r(), 1.6) * 34, x = (r() * 2 - 1) * (2 + z * 0.9); tufo.push([x, z, 0.28 + r() * 0.26, r() * 6]); }
@@ -24,18 +26,18 @@
   function ceu(ctx, cam, t) {
     const W = ctx.canvas.width, hz = cam.cy;
     const g = ctx.createLinearGradient(0, hz - 1500, 0, hz + 20);
-    g.addColorStop(0, '#3C80CC'); g.addColorStop(0.55, '#86BCE4'); g.addColorStop(1, '#D3E6F0');
+    g.addColorStop(0, '#3A74BC'); g.addColorStop(0.5, '#8DB9DE'); g.addColorStop(0.82, '#F2D8B6'); g.addColorStop(1, '#FBC48A');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, hz + 80);
     // sol e feixes de luz (alto à esquerda)
     const desl = -cam.yaw * cam.f;
-    const sx = W - 120 + desl * 0.9, sy = hz - 1150;
-    const h = ctx.createRadialGradient(sx, sy, 0, sx, sy, 700);
-    h.addColorStop(0, 'rgba(255,250,225,0.95)'); h.addColorStop(0.2, 'rgba(255,244,205,0.45)'); h.addColorStop(1, 'rgba(255,244,205,0)');
+    const sx = W * 0.8 + desl * 0.9, sy = hz - 420;
+    const h = ctx.createRadialGradient(sx, sy, 0, sx, sy, 950);
+    h.addColorStop(0, 'rgba(255,246,214,1)'); h.addColorStop(0.12, 'rgba(255,224,160,0.7)'); h.addColorStop(0.45, 'rgba(255,200,130,0.22)'); h.addColorStop(1, 'rgba(255,200,130,0)');
     ctx.fillStyle = h; ctx.fillRect(0, 0, W, hz + 80);
     ctx.save(); ctx.globalCompositeOperation = 'screen';
     for (let i = 0; i < 5; i++) {
-      const a = Math.PI - 0.35 - i * 0.16 + Math.sin(t * 0.2 + i) * 0.02;
-      ctx.fillStyle = `rgba(255,248,220,${0.07 - i * 0.008})`;
+      const a = Math.PI * 0.55 + i * 0.13 + Math.sin(t * 0.2 + i) * 0.02;
+      ctx.fillStyle = `rgba(255,224,170,${0.06 - i * 0.008})`;
       ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + Math.cos(a) * 2600, sy + Math.sin(a) * 2600); ctx.lineTo(sx + Math.cos(a + 0.06) * 2600, sy + Math.sin(a + 0.06) * 2600); ctx.closePath(); ctx.fill();
     }
     ctx.restore();
@@ -43,9 +45,9 @@
     const r = rng(7);
     for (let i = 0; i < 7; i++) {
       const w = 260 + r() * 260, y = hz - 700 - r() * 700, x = ((r() * 2400 + t * (8 + r() * 10) + desl * 0.95) % 2600 + 2600) % 2600 - 760;
-      ctx.fillStyle = 'rgba(255,255,255,0.88)';
+      ctx.fillStyle = 'rgba(255,246,238,0.92)';
       for (const [dx, dy, k] of [[0, 0, 0.32], [0.25, -0.12, 0.26], [-0.25, -0.05, 0.24], [0.45, 0.02, 0.18], [-0.45, 0.04, 0.16]]) { ctx.beginPath(); ctx.ellipse(x + dx * w, y + dy * w, k * w, k * w * 0.62, 0, 0, Math.PI * 2); ctx.fill(); }
-      ctx.fillStyle = 'rgba(190,215,235,0.35)'; ctx.beginPath(); ctx.ellipse(x, y + 0.1 * w, 0.5 * w, 0.08 * w, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(246,190,150,0.55)'; ctx.beginPath(); ctx.ellipse(x, y + 0.1 * w, 0.52 * w, 0.1 * w, 0, 0, Math.PI * 2); ctx.fill();
     }
   }
 
@@ -53,9 +55,9 @@
   function montanhas(ctx, cam) {
     const W = ctx.canvas.width, hz = cam.cy, desl = -cam.yaw * cam.f;
     const camadas = [
-      { k: 1.0, alt: 620, cor: '#9AB0CC', neve: true, seed: 3, per: 1500 },
-      { k: 1.0, alt: 420, cor: '#8198BA', neve: true, seed: 9, per: 1100 },
-      { k: 1.0, alt: 200, cor: '#6E9E62', neve: false, seed: 15, per: 800 },
+      { k: 1.0, alt: 620, cor: '#A9A8C6', neve: true, seed: 3, per: 1500 },
+      { k: 1.0, alt: 420, cor: '#8A8AB0', neve: true, seed: 9, per: 1100 },
+      { k: 1.0, alt: 200, cor: '#5C8A55', neve: false, seed: 15, per: 800 },
     ];
     for (const c of camadas) {
       const r = rng(c.seed), picos = [];
@@ -79,7 +81,7 @@
     }
     // névoa clara no pé das montanhas
     const g = ctx.createLinearGradient(0, hz - 160, 0, hz + 10);
-    g.addColorStop(0, 'rgba(210,228,240,0)'); g.addColorStop(1, 'rgba(210,228,240,0.55)');
+    g.addColorStop(0, 'rgba(246,214,176,0)'); g.addColorStop(1, 'rgba(246,214,176,0.6)');
     ctx.fillStyle = g; ctx.fillRect(0, hz - 160, W, 175);
   }
   function castelo(ctx, x, y, k) {
@@ -97,7 +99,15 @@
     const zs = faixasZ(cam), X = 260;
     for (let i = 0; i < zs.length - 1; i++) {
       const a = zs[i], b = zs[i + 1] + 0.03, k = (i % 2) * 0.03;
-      face(ctx, cam, [[-X, 0, a], [X, 0, a], [X, 0, b], [-X, 0, b]], mistura('#74B444', '#68A83C', k), { contorno: false });
+      face(ctx, cam, [[-X, 0, a], [X, 0, a], [X, 0, b], [-X, 0, b]], mistura('#7BB443', '#6EA83B', k), { contorno: false });
+    }
+    // sombras de nuvens passando (manchas grandes) — dá profundidade e contraste
+    const rn = rng(91);
+    for (let i = 0; i < 14; i++) {
+      const cx = (rn() * 2 - 1) * 40, cz = 3 + rn() * 60, rx = 4 + rn() * 7, rz = 2.5 + rn() * 4, n = 14, pts = [];
+      for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; pts.push([cx + Math.cos(a) * rx, 0.003, cz + Math.sin(a) * rz]); }
+      if (pts.some(([, , z]) => z < cam.z + 0.5)) continue;
+      ctx.fillStyle = `rgba(34,70,30,${0.16 * (1 - cam.fator(cz))})`; ctx.fill(Cena3D.caminho(cam, pts));
     }
     // trilha de terra serpenteando para dentro
     const pts = (lado) => { const out = []; for (const z of zs) { if (z > 90) break; const cx = Math.sin(z * 0.12) * 1.4 + 0.3, w = 0.75 + z * 0.012; out.push([cx + lado * w, 0.002, z]); } return out; };
@@ -126,7 +136,44 @@
     // monte de terra na base
     ctx.fillStyle = tom('#5E9A3E'); ctx.beginPath(); ctx.ellipse(base.x, base.y, alt * 0.12 * s, alt * 0.03 * s, 0, Math.PI, 0); ctx.fill();
   }
-  const ESPADAS = [[-14, 42, 26, -0.18], [22, 60, 34, 0.14], [-30, 75, 22, 0.25], [9, 95, 18, -0.08], [-6, 28, 12, 0.1]];
+  const ESPADAS = [[-16, 46, 26, -0.18], [24, 62, 34, 0.14], [-34, 80, 22, 0.25], [10, 98, 18, -0.08]];
+
+
+  // árvore com volume: copa em cachos com sombra embaixo/à esquerda e luz quente em cima/à direita (sol)
+  function arvoreBonita(ctx, cam, X, Z, alt, tipo, sem) {
+    const base = cam.p(X, 0, Z); if (base.dz < alt * 0.3) return;
+    const s = base.s, k = alt * s, tom = (c) => cam.tom(c, Z), r = rng(Math.floor(sem) + 1);
+    if (base.x < -k || base.x > ctx.canvas.width + k) return;
+    // tronco
+    ctx.fillStyle = tom('#4E3628'); ctx.beginPath(); ctx.moveTo(base.x - 0.05 * k, base.y); ctx.lineTo(base.x - 0.03 * k, base.y - 0.5 * k); ctx.lineTo(base.x + 0.03 * k, base.y - 0.5 * k); ctx.lineTo(base.x + 0.05 * k, base.y); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = tom('#8A6040'); ctx.fillRect(base.x + 0.005 * k, base.y - 0.5 * k, 0.025 * k, 0.5 * k);
+    if (tipo === 'pinheiro') {
+      for (let i = 0; i < 4; i++) {
+        const y0 = base.y - (0.25 + i * 0.18) * k, w = (0.32 - i * 0.06) * k, h = 0.34 * k;
+        ctx.fillStyle = tom('#2C5A33'); ctx.beginPath(); ctx.moveTo(base.x, y0 - h); ctx.lineTo(base.x + w, y0); ctx.lineTo(base.x - w, y0); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = tom('#4F8A44'); ctx.beginPath(); ctx.moveTo(base.x, y0 - h); ctx.lineTo(base.x + w, y0); ctx.lineTo(base.x + w * 0.2, y0 - h * 0.1); ctx.closePath(); ctx.fill();
+      }
+      return;
+    }
+    const cachos = [];
+    for (let i = 0; i < 9; i++) { const a = r() * Math.PI * 2, d = r() * 0.24; cachos.push([Math.cos(a) * d * 1.2, 0.72 + Math.sin(a) * d * 0.8, 0.16 + r() * 0.12]); }
+    cachos.sort((a, b) => a[1] - b[1]);
+    for (const [dx, dy, rr] of cachos) { ctx.fillStyle = tom('#2E6232'); ctx.beginPath(); ctx.arc(base.x + dx * k, base.y - (dy - 0.03) * k, rr * k, 0, Math.PI * 2); ctx.fill(); }
+    for (const [dx, dy, rr] of cachos) { ctx.fillStyle = tom('#5C9A42'); ctx.beginPath(); ctx.arc(base.x + (dx + 0.02) * k, base.y - (dy + 0.02) * k, rr * 0.86 * k, 0, Math.PI * 2); ctx.fill(); }
+    for (const [dx, dy, rr] of cachos) { ctx.fillStyle = tom('#A6CF62'); ctx.beginPath(); ctx.arc(base.x + (dx + 0.06) * k, base.y - (dy + 0.07) * k, rr * 0.42 * k, 0, Math.PI * 2); ctx.fill(); }
+    // brilho quente da borda do lado do sol
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = 'rgba(255,190,110,0.22)';
+    for (const [dx, dy, rr] of cachos) if (dx > 0) { ctx.beginPath(); ctx.arc(base.x + (dx + 0.08) * k, base.y - (dy + 0.05) * k, rr * 0.5 * k, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
+  // sombra longa da árvore no chão (o sol está atrás e à direita)
+  function sombraArvore(ctx, cam, X, Z, alt) {
+    const L = alt * 1.4, w = alt * 0.22;
+    const pts = [[X - w, 0.004, Z], [X + w, 0.004, Z], [X + SOL.dx * L + w * 1.4, 0.004, Z + SOL.dz * L], [X + SOL.dx * L - w * 1.4, 0.004, Z + SOL.dz * L]];
+    if (pts.some(([x, , z]) => z < cam.z + 0.5)) return;
+    const p = Cena3D.caminho(cam, pts);
+    ctx.fillStyle = `rgba(30,60,30,${0.22 * (1 - cam.fator(Z))})`; ctx.fill(p);
+  }
 
   function tufo(ctx, cam, X, Z, h, fase, t) {
     const q = cam.p(X, 0, Z); if (q.dz < 0.5 || q.x < -200 || q.x > 1280) return;
@@ -164,7 +211,8 @@
       // do mais longe para o mais perto
       const lista = [];
       if (o.espadas !== false) for (const [x, z, h, inc] of ESPADAS) lista.push([z, () => espadaGigante(ctx, cam, x, z, h, inc)]);
-      for (const [x, z, h] of OBJ.arv) lista.push([z, () => arvore(ctx, cam, x, z, h, { folha: '#76B84A', folhaSombra: '#3E7A34' })]);
+      for (const [x, z, h] of OBJ.arv) if (z > cam.z + 1) sombraArvore(ctx, cam, x, z, h);
+      for (const [x, z, h, tipo, sem] of OBJ.arv) lista.push([z, () => arvoreBonita(ctx, cam, x, z, h, tipo, sem)]);
       for (const [x, z, r] of OBJ.ped) lista.push([z, () => pedra(ctx, cam, x, z, r)]);
       for (const [x, z, h, f] of OBJ.tufo) lista.push([z, () => tufo(ctx, cam, x, z, h, f, t)]);
       for (const [x, z, c, f] of OBJ.flor) lista.push([z, () => flor(ctx, cam, x, z, c, f, t)]);
@@ -176,14 +224,17 @@
     luz(ctx, cam, o = {}) {
       const t = o.t || 0, W = ctx.canvas.width, H = ctx.canvas.height, desl = -(cam.yaw || 0) * cam.f * 0.5;
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'screen';
-      for (let i = 0; i < 4; i++) {
-        const x0 = W + 80 + desl - i * 170, larg = 120 + i * 40, a = 0.07 - i * 0.012 + 0.01 * Math.sin(t * 0.5 + i);
-        const g = ctx.createLinearGradient(x0, 0, x0 - 900, H); g.addColorStop(0, `rgba(255,248,225,${a})`); g.addColorStop(1, 'rgba(255,248,225,0)');
-        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, -10); ctx.lineTo(x0 + larg, -10); ctx.lineTo(x0 + larg - 1100, H); ctx.lineTo(x0 - 1100, H); ctx.closePath(); ctx.fill();
+      for (let i = 0; i < 5; i++) {
+        const x0 = W * 0.85 + desl - i * 150, larg = 90 + i * 45, a = 0.05 - i * 0.008 + 0.008 * Math.sin(t * 0.5 + i);
+        const g = ctx.createLinearGradient(x0, 0, x0 - 900, H); g.addColorStop(0, `rgba(255,214,150,${a})`); g.addColorStop(1, 'rgba(255,214,150,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, -10); ctx.lineTo(x0 + larg, -10); ctx.lineTo(x0 + larg - 1000, H); ctx.lineTo(x0 - 1000, H); ctx.closePath(); ctx.fill();
       }
+      // calor geral do fim de tarde
+      ctx.fillStyle = 'rgba(255,170,90,0.07)'; ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = 'source-over';
-      const g2 = ctx.createLinearGradient(0, H * 0.55, 0, H); g2.addColorStop(0, 'rgba(30,60,40,0)'); g2.addColorStop(1, 'rgba(30,60,40,0.18)');
-      ctx.fillStyle = g2; ctx.fillRect(0, H * 0.55, W, H * 0.45);
+      const v = ctx.createRadialGradient(W * 0.55, H * 0.42, H * 0.3, W * 0.5, H * 0.5, H * 0.78);
+      v.addColorStop(0, 'rgba(40,24,30,0)'); v.addColorStop(1, 'rgba(40,24,30,0.45)');
+      ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
       ctx.restore();
     },
     // grama alta desfocada no primeiro plano (profundidade, como na referência)
@@ -198,6 +249,17 @@
           const x = ((r() * (W + 400) + desl) % (W + 400) + W + 400) % (W + 400) - 200, alt = (180 + r() * 380) * forca, bal = Math.sin(t * 1.3 + i) * 30;
           g.strokeStyle = i % 3 ? '#3F8A2E' : '#6CC048'; g.lineWidth = 14 + r() * 12;
           g.beginPath(); g.moveTo(x, H + 20); g.quadraticCurveTo(x + bal * 0.3, H - alt * 0.6, x + bal + (r() - 0.5) * 80, H - alt); g.stroke();
+        }
+        // samambaias escuras nos cantos (referência de batalha)
+        for (const [cx, ang, esc] of [[-40, -0.5, 1], [W + 40, -2.6, 0.9], [W * 0.3, -1.2, 0.6]]) {
+          g.save(); g.translate(cx + desl * 0.3, H + 30); g.rotate(ang + Math.sin(t * 0.9 + cx) * 0.03); g.scale(esc * forca, esc * forca);
+          for (let f = -2; f <= 2; f++) {
+            g.save(); g.rotate(f * 0.28);
+            g.strokeStyle = '#1F4A26'; g.lineWidth = 10; g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(260, -40, 520, 30); g.stroke();
+            for (let i = 1; i < 14; i++) { const px = i * 36, py = -Math.sin(i / 14 * Math.PI) * 30 + i * 2, l = 70 * (1 - i / 16); g.fillStyle = i % 2 ? '#2D6A32' : '#245A2A'; for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(px, py + sd * l * 0.5, l * 0.55, 14, sd * 0.9, 0, Math.PI * 2); g.fill(); } }
+            g.restore();
+          }
+          g.restore();
         }
         // margaridas grandes desfocadas (referência cenario-01)
         for (let i = 0; i < 7; i++) {
