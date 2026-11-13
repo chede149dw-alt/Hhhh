@@ -1,0 +1,113 @@
+{
+ "fabrica": "criarDaviJogo",
+ "registroPoses": "POSES_PADRAO",
+ "opcoes": {},
+ "titulo": "DAVI · NO JOGO",
+ "subtitulo": "Nível 1 · roupa de iniciante · adaga enferrujada",
+ "paleta": [
+  {
+   "nome": "Túnica",
+   "cor": "#4B5D7A"
+  },
+  {
+   "nome": "Capuz",
+   "cor": "#36435A"
+  },
+  {
+   "nome": "Calça",
+   "cor": "#5A4636"
+  },
+  {
+   "nome": "Botas/couro",
+   "cor": "#8A5A36"
+  },
+  {
+   "nome": "Cinto",
+   "cor": "#4E3524"
+  },
+  {
+   "nome": "Pele",
+   "cor": "#8F5B3E"
+  }
+ ],
+ "vistas": [
+  {
+   "nome": "Frente",
+   "vista": "frente",
+   "pose": "parado"
+  },
+  {
+   "nome": "3/4",
+   "vista": "tq",
+   "pose": "tq"
+  },
+  {
+   "nome": "Perfil",
+   "vista": "perfil",
+   "pose": "perfil"
+  },
+  {
+   "nome": "Costas",
+   "vista": "costas",
+   "pose": "costas"
+  }
+ ],
+ "expressoes": [
+  {
+   "nome": "Neutro",
+   "expressao": "neutro"
+  },
+  {
+   "nome": "Feliz",
+   "expressao": "feliz"
+  },
+  {
+   "nome": "Espanto",
+   "expressao": "espanto"
+  },
+  {
+   "nome": "Medo",
+   "expressao": "medo"
+  },
+  {
+   "nome": "Raiva",
+   "expressao": "raiva"
+  },
+  {
+   "nome": "Preocupado",
+   "expressao": "preocupado"
+  },
+  {
+   "nome": "Cansado",
+   "expressao": "cansado"
+  },
+  {
+   "nome": "Rindo",
+   "expressao": "rindo"
+  }
+ ],
+ "poses": [
+  {
+   "nome": "Parado",
+   "pose": "parado"
+  },
+  {
+   "nome": "Andando",
+   "pose": "andando"
+  },
+  {
+   "nome": "Acenando",
+   "pose": "acenando"
+  },
+  {
+   "nome": "Mãos na cintura",
+   "pose": "maos-na-cintura"
+  }
+ ],
+ "regras": [
+  "Dentro do jogo: túnica azul-ardósia com capuz, cinto com bolsinha, braçadeiras e botas de couro",
+  "Arma de iniciante: adaga curta e enferrujada",
+  "Mesmo rosto, cabelo e corpo do Davi de fora do jogo"
+ ],
+ "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}
