@@ -355,6 +355,7 @@
       emOrdem(cam, [
         [gx, gz, () => {
           const q = cam.p(gx, 0, gz);
+          api.rosto(q.x, q.y - 0.55 * q.s, 0.75 * q.s);
           Criaturas.lobo(ctx, q.x, q.y, 0.95 * q.s, api.t, { espelhar: true, pose: anda < 1 ? 'andando' : 'parado', fase: u * 1.4 });
           Criaturas.barraVida(ctx, q.x, q.y - 1.35 * q.s, 0.9 * q.s, 1, { max: 8, nome: 'Lobo jovem', nivel: 'Nv 1', h: 0.1 * q.s, alfa: api.fase(1.0, 1.3) });
         }],
@@ -381,6 +382,7 @@
       emOrdem(cam, [
         [G[0], G[1], () => {
           const q = cam.p(G[0], 0, G[1]);
+          api.rosto(q.x, q.y - 0.55 * q.s, 0.75 * q.s);
           Criaturas.lobo(ctx, q.x, q.y, 0.95 * q.s, api.t, { espelhar: true, pose: poseLobo, fase: pulo, dissolve: est });
           Criaturas.barraVida(ctx, q.x, q.y - 1.35 * q.s, 0.9 * q.s, vida, { max: 8, nome: 'Lobo jovem', nivel: 'Nv 1', h: 0.1 * q.s, atraso: u < 0.45 ? 1 : u < 0.8 ? 1 : u < 1.55 ? 5 / 8 : 5 / 8 * (1 - api.fase(1.6, 1.9)), alfa: 1 - est });
         }],

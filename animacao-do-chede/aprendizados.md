@@ -146,3 +146,5 @@
 - Personagem andando de lado: o `rumo` aponta para onde ele vai (andar para −X = rumo +π/2). Errado = anda de ré.
 - Cenário de Valdor: fim de tarde dourado, sol baixo à direita, sombras longas das árvores, sombras de nuvem no chão,
   árvores com luz quente na borda, pinheiros, samambaias escuras nos cantos e vinheta (refs: ref-batalha-luz.mp4).
+- De costas, pose feita de frente cruzava os braços nas costas (print do autor). O motor agora inverte os ângulos dos braços
+  na vista de costas (menos em poses feitas para costas e nas caminhadas).

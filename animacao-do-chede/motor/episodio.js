@@ -161,6 +161,9 @@
     if (o.caminhar !== undefined) ang = (vista === 'frente' || vista === 'costas') ? { ...caminhadaFrontal(o.caminhar, o.velocidade, vista === 'costas') } : { ...caminhada(o.caminhar, o.velocidade) };
     if (o.caminharFrontal !== undefined) ang = { ...caminhadaFrontal(o.caminharFrontal, o.velocidade, vista === 'costas') };
     const andando = o.caminhar !== undefined || o.caminharFrontal !== undefined;
+    // de costas, os braços ficam espelhados: uma pose feita de frente (ex.: braços abertos) cruzava os braços nas costas.
+    // Inverte os ângulos dos braços, menos nas poses feitas para a vista de costas e nas caminhadas (que já tratam isso).
+    if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
     rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida));
     const exprBase = typeof item.expressao === 'object' ? item.expressao : (def.expressoes[item.expressao || (pdef && pdef.expressao) || 'neutro']);
     rig.usarExpressao(expressaoViva(exprBase, TL.t, { voz: item.voz, semente: o.semente }));
