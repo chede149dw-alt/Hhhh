@@ -432,6 +432,125 @@
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.6 });
     },
 
+    // 21b) "O lobo deu o bote... e o Davi saltou pra trás num borrão." — câmera baixa, quase no chão (referência de batalha)
+    bote(ctx, u, d, api) {
+      const tre = u > 1.45 && u < 1.75 ? api.tremor(12) : [0, 0];
+      ctx.save(); ctx.translate(tre[0], tre[1]);
+      const cam = campo(ctx, api, { x: -0.55 - api.clamp((u - 1.3) / 0.6, 0, 1) * 0.35, y: 0.6, z: 0.9, cy: 1020, f: 1050, yaw: 0.02 });
+      // Davi salta para trás em 0,25 s (borrão), o lobo pousa onde ele estava e morde o ar
+      const salto = api.ease.entra(api.clamp((u - 1.3) / 0.28, 0, 1));
+      const dX = api.lerp(-0.2, -1.75, salto), dZ = api.lerp(4.4, 4.0, salto);
+      const pulo = api.clamp((u - 0.45) / 1.0, 0, 1);
+      const lx = u < 0.45 ? 1.9 : api.lerp(1.9, 0.15, api.ease.suave(pulo)), lz = 4.6;
+      const ly = Math.sin(pulo * Math.PI) * 0.55;
+      const posePulo = u < 0.45 ? 'parado' : pulo < 1 ? 'pulando' : 'parado';
+      const poseDavi = salto > 0 && salto < 1 ? { tronco: -14, cabeca: 8, braco_d: 55, antebraco_d: 30, braco_e: -60, antebraco_e: -20, coxa_d: -35, canela_d: 40, coxa_e: 25, canela_e: 20, _desloca: [0, -0.15] } : (u < 1.3 ? 'parado' : { tronco: 8, braco_d: 25, antebraco_d: 40, braco_e: -25, antebraco_e: -40, coxa_d: -18, canela_d: 30, coxa_e: 18, canela_e: 30, _desloca: [0, 0.06] });
+      emOrdem(cam, [
+        [lx, lz, () => {
+          const q = cam.p(lx, ly, lz), qc = cam.p(lx, 0, lz);
+          Cena3D.sombraChao(ctx, cam, lx, lz, 0.6, 1.6);
+          api.rosto(q.x, q.y - 0.55 * q.s, 0.75 * q.s);
+          Criaturas.lobo(ctx, q.x, q.y, 0.95 * q.s, api.t, { espelhar: true, pose: posePulo, fase: pulo, boca: pulo >= 1 ? 0.2 + 0.8 * Math.abs(Math.sin(u * 14)) : undefined });
+        }],
+        [dX, dZ, () => {
+          // rastro do borrão: cópias transparentes no caminho do salto
+          if (salto > 0.05 && salto < 1) for (let k = 3; k >= 1; k--) {
+            const sk = Math.max(0, salto - k * 0.18), gx = api.lerp(-0.2, -1.75, sk);
+            ctx.save(); ctx.globalAlpha = 0.18 * (4 - k) / 3; api.personagem3d(cam, { ...DAVIJ, pose: poseDavi, expressao: 'espanto' }, gx, dZ, 1.76, { olhaPara: [lx, lz], semRosto: true, vida: 0 }); ctx.restore();
+          }
+          api.personagem3d(cam, { ...DAVIJ, pose: poseDavi, expressao: u < 1.3 ? 'espanto' : 'medo' }, dX, dZ, 1.76, { olhaPara: [lx, lz], luz: LUZ_CAMPO, vida: 0.4 });
+          // poeira levantada no salto e no pouso do lobo
+          for (const [px, t0] of [[-0.2, 1.3], [0.15, 1.45]]) {
+            const k = api.clamp((u - t0) / 0.6, 0, 1); if (k <= 0 || k >= 1) continue;
+            const q = cam.p(px, 0, dZ + 0.3);
+            for (let i = 0; i < 9; i++) { const a = i * 0.7, r = q.s * (0.15 + 0.5 * k); ctx.fillStyle = `rgba(190,160,120,${0.5 * (1 - k)})`; ctx.beginPath(); ctx.arc(q.x + Math.cos(a) * r, q.y - Math.abs(Math.sin(a)) * r * 0.5, q.s * 0.12 * (0.6 + k), 0, Math.PI * 2); ctx.fill(); }
+          }
+        }],
+      ]);
+      // linhas de velocidade no salto
+      if (salto > 0 && salto < 1) { ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 6; ctx.lineCap = 'round'; for (let i = 0; i < 9; i++) { const y = 700 + i * 80, x = 200 + ((i * 137) % 600); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 260, y); ctx.stroke(); } ctx.restore(); }
+      Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.7 });
+      ctx.restore();
+    },
+
+    // 21c) "Mas o segundo bote pegou a perna dele, e o lobo arrastou ele pelo chão." — close na perna (mordida, mastigando,
+    //      puxando) e depois o arrasto pelo chão, com a vida do Davi caindo e o aviso LENTO (referência de batalha)
+    mordida(ctx, u, d, api) {
+      const vidaD = u < 0.1 ? 1 : u < 0.7 ? 0.8 : u < 1.3 ? 0.6 : u < 1.9 ? 0.45 : api.lerp(0.45, 0.3, api.clamp((u - 1.9) / 1.5, 0, 1));
+      if (u < 1.9) {
+        // close (nível da referência ref-mordida-nivel.jpg): fundo escuro desfocado, perna do Davi com costuras e marcas
+        // de dente, bota com fivelas; a cabeça do lobo crava os dentes na panturrilha, mastiga e puxa.
+        campo(ctx, api, { x: 0.3, y: 0.35, z: 2.6, cy: 1240, f: 1400 }, { desfoque: 18 });
+        ctx.fillStyle = 'rgba(14,10,18,0.62)'; ctx.fillRect(0, 0, W, H);
+        const vg = ctx.createRadialGradient(560, 900, 200, 560, 900, 1100); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.6)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+        const chew = Math.sin(u * 20), puxa = Math.sin(u * 8.5) * 26 - api.clamp((u - 0.2) / 1.5, 0, 1) * 40;
+        const sh = Math.sin(u * 37) * 6 + puxa * 0.35, ang = 0.06 + puxa * 0.0012;
+        const legX = 640 + sh;
+        // perna (calça) — atravessa a tela de cima até a bota
+        const perna = () => {
+          ctx.save(); ctx.translate(legX, 0); ctx.rotate(ang);
+          const g = ctx.createLinearGradient(-130, 0, 130, 0); g.addColorStop(0, '#6E5846'); g.addColorStop(0.55, '#5A4636'); g.addColorStop(1, '#3A2C22');
+          ctx.fillStyle = g; ctx.strokeStyle = '#1E140F'; ctx.lineWidth = 9;
+          ctx.beginPath(); ctx.moveTo(-150, -80); ctx.lineTo(150, -80); ctx.quadraticCurveTo(160, 600, 120, 1180); ctx.lineTo(-115, 1180); ctx.quadraticCurveTo(-150, 600, -150, -80); ctx.closePath(); ctx.fill(); ctx.stroke();
+          ctx.strokeStyle = '#C9A24A'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(-118, 80); ctx.quadraticCurveTo(-128, 600, -98, 1170); ctx.stroke();
+          ctx.setLineDash([16, 12]); ctx.strokeStyle = 'rgba(230,210,180,0.45)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(60, -60); ctx.quadraticCurveTo(80, 600, 50, 1170); ctx.stroke(); ctx.setLineDash([]);
+          // marcas de dente / pano rasgado
+          ctx.strokeStyle = 'rgba(30,20,15,0.85)'; ctx.lineWidth = 6;
+          for (const [a, b, c] of [[-60, 760, 0.5], [-30, 840, 0.4], [10, 800, 0.6], [-80, 900, 0.3], [30, 900, 0.5]]) { ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(a + 70 * c + 40, b + 30 * c); ctx.stroke(); }
+          // bota de couro com fivelas e pena roxa
+          ctx.fillStyle = '#7A4E2E'; ctx.strokeStyle = '#1E140F'; ctx.lineWidth = 9;
+          ctx.beginPath(); ctx.moveTo(-140, 1120); ctx.lineTo(140, 1110); ctx.lineTo(150, 1470); ctx.quadraticCurveTo(330, 1490, 360, 1560); ctx.lineTo(-150, 1570); ctx.closePath(); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = '#5E3A20'; ctx.fillRect(-150, 1100, 300, 70); ctx.strokeRect(-150, 1100, 300, 70);
+          for (const yb of [1260, 1380]) { ctx.fillStyle = '#3E2A1C'; ctx.fillRect(-150, yb, 300, 34); ctx.strokeStyle = '#C8CCD8'; ctx.lineWidth = 6; ctx.strokeRect(40, yb - 4, 44, 42); }
+          ctx.setLineDash([12, 10]); ctx.strokeStyle = 'rgba(240,220,190,0.5)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-110, 1180); ctx.lineTo(-110, 1540); ctx.stroke(); ctx.setLineDash([]);
+          for (let k = 0; k < 3; k++) { ctx.fillStyle = k % 2 ? '#B48CFF' : '#8E5BE8'; ctx.save(); ctx.translate(150, 1110); ctx.rotate(0.5 + k * 0.35); ctx.beginPath(); ctx.ellipse(0, -60, 22, 70, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+          ctx.fillStyle = '#1E140F'; ctx.fillRect(-155, 1560, 530, 32);
+          ctx.restore();
+        };
+        // sombra no chão
+        ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.beginPath(); ctx.ellipse(700, 1600, 420, 50, 0, 0, Math.PI * 2); ctx.fill();
+        // lobo: cabeça grande à esquerda com a boca na panturrilha (camada de trás → perna → ponta por cima)
+        const s = 540, hx = legX - 145 - 0.66 * s + Math.sin(u * 8.5) * 14, hy = 880 + chew * 12, giro = -0.04 + Math.sin(u * 8.5) * 0.05;
+        const boca = 0.32 + 0.22 * (chew * 0.5 + 0.5);
+        perna();
+        Criaturas.cabecaLobo(ctx, hx, hy, s, api.t, { boca, giro });
+        api.rosto(hx, hy - 120, 330);
+        // baba e pedacinhos de pano voando na mastigada
+        for (let i = 0; i < 7; i++) { const k = ((u * 2.4 + i / 7) % 1); ctx.fillStyle = i % 2 ? `rgba(90,70,54,${1 - k})` : `rgba(225,235,255,${0.75 * (1 - k)})`; ctx.beginPath(); ctx.arc(legX - 120 + Math.cos(i * 2.3) * k * 190, 880 - k * 140 + k * k * 300, 9 * (1 - k * 0.5), 0, Math.PI * 2); ctx.fill(); }
+        // impactos da mordida e dano
+        for (const [t0, dano] of [[0.08, '-4'], [0.68, '-4'], [1.28, '-3']]) {
+          const k = u - t0;
+          if (k > 0 && k < 0.18) { Valdor.brilhoRadial(ctx, legX - 110, 880, 300, '255,80,60', 0.75 * (1 - k / 0.18)); const [tx, ty] = api.tremor(14); ctx.translate(tx * 0.3, ty * 0.3); }
+          Valdor.dano(ctx, legX + 230, 700, dano, k, { tam: 120, cor: '#FF6B5E', dura: 0.6 });
+        }
+      } else {
+        // arrasto: câmera baixa, o lobo anda de ré puxando o Davi deitado pela perna; poeira atrás
+        const v = u - 1.9;
+        const lx = 0.6 + v * 0.75, lz = 4.6;
+        const cam = campo(ctx, api, { x: lx - 1.15, y: 0.7, z: 2.0, cy: 1000, f: 980, yaw: -0.03 });
+        const qL = cam.p(lx, 0, lz);
+        // Davi deitado: pés junto da boca do lobo, cabeça para a esquerda
+        const pes = cam.p(lx - 0.62, 0.32, lz);
+        ctx.save(); ctx.translate(pes.x, pes.y); ctx.rotate(-Math.PI / 2 + 0.06 * Math.sin(api.t * 18));
+        api.personagem({ ...DAVIJ, pose: { braco_d: 160, antebraco_d: 10, braco_e: -165, antebraco_e: -10, coxa_d: -6, coxa_e: 4 }, expressao: 'medo', vista: 'perfil' }, 0, 0, 1.76 * pes.s, { vida: 0.3, semRosto: true });
+        ctx.restore();
+        api.rosto(pes.x - 1.4 * pes.s, pes.y, 0.4 * pes.s);
+        // poeira e marcas no chão
+        for (let i = 0; i < 12; i++) { const k = ((api.t * 2 + i / 12) % 1), q = cam.p(lx - 0.8 - k * 1.8, 0.05 + k * 0.25, lz + (i % 3 - 1) * 0.15); ctx.fillStyle = `rgba(185,155,115,${0.45 * (1 - k)})`; ctx.beginPath(); ctx.arc(q.x, q.y, q.s * (0.08 + k * 0.18), 0, Math.PI * 2); ctx.fill(); }
+        Criaturas.lobo(ctx, qL.x, qL.y, 0.95 * qL.s, api.t, { espelhar: true, pose: 'andando', fase: -v * 2.2, boca: 0.35 });
+        api.rosto(qL.x - 0.55 * qL.s, qL.y - 0.6 * qL.s, 0.6 * qL.s);
+        // Téo correndo para ajudar, entrando pela esquerda
+        if (v > 0.6) api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'raiva' }, api.lerp(-2.6, -1.2, api.clamp((v - 0.6) / 1.4, 0, 1)), 4.2, 1.82, { rumo: -Math.PI / 2, caminhar: api.t * 1.6, velocidade: 1.4, luz: LUZ_CAMPO, semente: 3 });
+        Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.6 });
+        // aviso LENTO
+        const k = api.fase(2.2, 2.45, 'volta');
+        if (k > 0) { ctx.save(); ctx.translate(540, 420); ctx.scale(k, k); ctx.fillStyle = 'rgba(20,14,20,0.85)'; ctx.beginPath(); ctx.roundRect(-110, -34, 220, 68, 18); ctx.fill(); ctx.strokeStyle = '#7FB8FF'; ctx.lineWidth = 4; ctx.stroke(); Valdor.texto(ctx, 'LENTO', 0, 2, 40, '#BFE0FF', { peso: 900 }); ctx.restore(); }
+      }
+      // barra de vida do Davi (verde → vermelha)
+      const cores = vidaD > 0.5 ? ['#8FF09A', '#2FA35A'] : vidaD > 0.35 ? ['#FFD36A', '#E09A2A'] : ['#FF7A7A', '#D23A42'];
+      Criaturas.barraVida(ctx, 540, 300, 420, vidaD, { max: 20, nome: 'Davi', nivel: 'Nv 1', h: 34, cores });
+    },
+
     // 22) "O Davi se preparou e lançou um feitiço de eletricidade, enquanto o Téo bloqueou. E finalizou com um corte seco!"
     //     0–1,4 s: Davi carrega a magia (círculo de runas + esfera na mão) · 1,4–2,3: raio de eletricidade no lobo (3)
     //     2,6–3,1: o lobo pula e o Téo bloqueia · 4,1–4,75: Davi avança e dá o corte seco (5) · 5,0: o lobo vira luz

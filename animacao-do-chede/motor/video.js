@@ -129,6 +129,11 @@ for (const p of planos) {
   for (const b of p.batidas) addSfx(sfxArq.coracao, p.inicio + b, 1.1);
   for (const s of p.sfx) {
     if (s.tipo === 'impacto') addSfx(sfxArq.impacto, p.inicio + (s.em || 0), s.volume || 1.0);
+    // efeito sonoro de arquivo (audio/<serie>/<arquivo>), ex.: { "tipo": "arquivo", "arquivo": "sfx/rosnado.mp3", "em": 0.4, "volume": 0.8, "corte": 1.2 }
+    if (s.tipo === 'arquivo') {
+      const corte = s.corte ? `atrim=0:${s.corte},afade=t=out:st=${Math.max(0, s.corte - 0.2).toFixed(2)}:d=0.2,` : '';
+      addSfx(path.join(raiz, 'audio', serie, s.arquivo), p.inicio + (s.em || 0), s.volume || 1.0, `aresample=48000,aformat=channel_layouts=mono,${corte}`);
+    }
     if (s.tipo === 'ronco') {
       const de = s.de || 0, ate = Math.min(p.fim - p.inicio, s.ate === undefined ? p.fim - p.inicio : s.ate), d = ate - de;
       const arq = path.join(pastaAudio, `sfx-ronco-${p.id}.wav`);
@@ -136,6 +141,15 @@ for (const p of planos) {
       addSfx(arq, p.inicio + de, s.volume || 1.4);
     }
   }
+}
+// trilha sonora (roteiro.trilha = { arquivo, volume }): abaixa sozinha quando o narrador fala (sidechain)
+if (roteiro.trilha && falas.length) {
+  const voz = falas.map((_, i) => `[f${i}]`).join('');
+  filtros.push(`${voz}amix=inputs=${falas.length}:normalize=0,asplit=2[vz1][vz2]`);
+  const k = entradas.length / 2; entradas.push('-i', path.join(raiz, 'audio', serie, roteiro.trilha.arquivo));
+  filtros.push(`[${k}]aresample=48000,aformat=channel_layouts=mono,volume=${roteiro.trilha.volume || 0.5},apad[mu]`);
+  filtros.push(`[mu][vz2]sidechaincompress=threshold=0.02:ratio=5:attack=15:release=450[mud]`);
+  mix = mix.replace(voz, '') + '[vz1][mud]';
 }
 const n = mix.match(/\[/g).length;
 filtros.push(`${mix}amix=inputs=${n}:normalize=0,apad,atrim=0:${total.toFixed(3)},loudnorm=I=-16:TP=-1.5[a]`);

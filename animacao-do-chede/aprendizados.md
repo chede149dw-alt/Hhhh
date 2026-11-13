@@ -152,3 +152,12 @@
   Com voz real deu 92 s: acelerei 1,2× (atempo) e cortei 1 plano repetido ("progresso") para fechar em 74,8 s.
   Plano com animação longa (visor) precisa de duração mínima própria (2,4 s).
 - Capa Reels: mesmo padrão da FENDA (capaReels + roteiros/nova/capa-reels.json).
+- Som (14/11): efeitos sonoros do ElevenLabs (eleven_text_to_sound_v2, ~17 créditos cada) em audio/nova/sfx/, chamados
+  por plano no roteiro com { "tipo": "arquivo", "arquivo": "sfx/x.mp3", "em", "volume", "corte" }. Trilha original
+  sintetizada por código (roteiros/nova/trilha-ep01.py, climas por plano) e mixada com "trilha": { arquivo, volume }:
+  abaixa sozinha quando o narrador fala (sidechain). O conector ElevenLabs restrito não gera música.
+- Batalha no estilo das referências (ref-batalha-2..6): câmera baixa, bote do monstro, salto para trás em borrão
+  (cópias transparentes + linhas de velocidade + poeira), close da mordida na perna (Criaturas.cabecaLobo, contorno
+  escuro, cicatriz costurada; a cabeça é desenhada POR CIMA da perna, só o focinho e as presas cobrem a borda), arrasto
+  com o personagem deitado (rotacionado -90°), barra de vida do herói (verde → amarelo → vermelho) e aviso LENTO.
+- Exceção do autor: a Parte 1 pode ter até 80 s (luta completa).

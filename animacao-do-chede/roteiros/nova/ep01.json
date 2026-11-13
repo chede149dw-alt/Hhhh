@@ -36,7 +36,7 @@
    "destaque": [
     "ALUGUEL?"
    ],
-   "duracao": 3.0,
+   "duracao": 2.6,
    "cinema": {
     "quente": 0.0,
     "vinheta": 0.95,
@@ -61,7 +61,15 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 2.24
+   "duracao": 2.21,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.3,
+     "volume": 0.45
+    }
+   ]
   },
   {
    "id": "comprar",
@@ -81,14 +89,15 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
+   "duracao": 2.66,
    "sfx": [
     {
-     "tipo": "impacto",
-     "em": 1.0,
-     "volume": 0.5
+     "tipo": "arquivo",
+     "arquivo": "sfx/compra.mp3",
+     "em": 0.85,
+     "volume": 0.9
     }
-   ],
-   "duracao": 2.69
+   ]
   },
   {
    "id": "mae",
@@ -128,7 +137,27 @@
     "vinheta": 0.9,
     "bloom": 0.8
    },
-   "duracao": 2.56
+   "duracao": 2.53,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.0,
+     "volume": 0.5
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.55,
+     "volume": 0.5
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.1,
+     "volume": 0.6
+    }
+   ]
   },
   {
    "id": "precos",
@@ -148,7 +177,15 @@
     "vinheta": 0.9,
     "bloom": 0.8
    },
-   "duracao": 1.85
+   "duracao": 1.82,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/moeda.mp3",
+     "em": 0.9,
+     "volume": 0.6
+    }
+   ]
   },
   {
    "id": "raro",
@@ -169,7 +206,15 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.87
+   "duracao": 2.84,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.45,
+     "volume": 0.7
+    }
+   ]
   },
   {
    "id": "teo",
@@ -189,7 +234,7 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 2.42
+   "duracao": 2.39
   },
   {
    "id": "novatos",
@@ -209,7 +254,15 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 1.94
+   "duracao": 1.91,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/visor.mp3",
+     "em": 1.25,
+     "volume": 0.6
+    }
+   ]
   },
   {
    "id": "ouvido",
@@ -229,7 +282,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.59
+   "duracao": 2.56
   },
   {
    "id": "pulso",
@@ -250,7 +303,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.74
+   "duracao": 2.71
   },
   {
    "id": "cerebro",
@@ -271,7 +324,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.2
+   "duracao": 2.17
   },
   {
    "id": "visor",
@@ -286,7 +339,15 @@
    "destaque": [
     "VALDOR."
    ],
-   "duracao": 2.4
+   "duracao": 2.2,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/visor.mp3",
+     "em": 0.05,
+     "volume": 1.0
+    }
+   ]
   },
   {
    "id": "raca",
@@ -301,7 +362,15 @@
    "destaque": [
     "RAÇA."
    ],
-   "duracao": 1.9
+   "duracao": 1.87,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.3,
+     "volume": 0.6
+    }
+   ]
   },
   {
    "id": "fera",
@@ -316,7 +385,21 @@
    "destaque": [
     "HOMEM-FERA,"
    ],
-   "duracao": 2.95
+   "duracao": 2.92,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.9,
+     "volume": 0.5
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 1.45,
+     "volume": 0.35
+    }
+   ]
   },
   {
    "id": "classe",
@@ -331,7 +414,22 @@
    "destaque": [
     "MAGO."
    ],
-   "duracao": 2.76
+   "duracao": 2.73,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.9,
+     "volume": 0.7
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/nivel.mp3",
+     "em": 1.22,
+     "volume": 0.45,
+     "corte": 1.6
+    }
+   ]
   },
   {
    "id": "guardiao",
@@ -346,7 +444,16 @@
    "destaque": [
     "GUARDIÃO."
    ],
-   "duracao": 1.8
+   "duracao": 1.8,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 0.42,
+     "volume": 0.5,
+     "corte": 0.8
+    }
+   ]
   },
   {
    "id": "nivel",
@@ -362,7 +469,22 @@
     "UM:",
     "MADEIRA."
    ],
-   "duracao": 3.29
+   "duracao": 3.26,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 0.3,
+     "volume": 0.25
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 1.42,
+     "volume": 0.35,
+     "corte": 0.6
+    }
+   ]
   },
   {
    "id": "explorar",
@@ -377,7 +499,7 @@
    "destaque": [
     "FORTES."
    ],
-   "duracao": 2.97
+   "duracao": 2.94
   },
   {
    "id": "gosma",
@@ -392,7 +514,119 @@
    "destaque": [
     "LOBO"
    ],
-   "duracao": 2.2
+   "duracao": 2.17,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 0.7,
+     "volume": 0.9
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 1.4,
+     "volume": 0.5
+    }
+   ]
+  },
+  {
+   "id": "bote",
+   "fala": {
+    "texto": "O lobo deu o bote... e o Davi saltou pra trás num borrão.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/bote.wav"
+    }
+   },
+   "destaque": [
+    "BOTE...",
+    "BORRÃO."
+   ],
+   "duracao": 3.43,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 0.0,
+     "volume": 0.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 0.45,
+     "volume": 0.7,
+     "corte": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 1.3,
+     "volume": 1.0,
+     "corte": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 1.55,
+     "volume": 0.55
+    }
+   ]
+  },
+  {
+   "id": "mordida",
+   "fala": {
+    "texto": "Mas o segundo bote pegou a perna dele, e o lobo arrastou ele pelo chão.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/mordida.wav"
+    }
+   },
+   "destaque": [
+    "PERNA",
+    "ARRASTOU"
+   ],
+   "duracao": 3.96,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 0.05,
+     "volume": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 0.65,
+     "volume": 0.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 1.25,
+     "volume": 0.75
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/arrasta.mp3",
+     "em": 1.9,
+     "volume": 1.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/arrasta.mp3",
+     "em": 2.9,
+     "volume": 1.6
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 2.3,
+     "volume": 0.7
+    }
+   ]
   },
   {
    "id": "golpe",
@@ -409,19 +643,60 @@
     "BLOQUEOU.",
     "SECO!"
    ],
+   "duracao": 5.6,
    "sfx": [
     {
-     "tipo": "impacto",
-     "em": 0.4,
-     "volume": 0.6
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.2,
+     "volume": 0.8
     },
     {
-     "tipo": "impacto",
-     "em": 1.55,
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.7,
      "volume": 0.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 1.4,
+     "volume": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 1.6,
+     "volume": 0.7
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 3.0,
+     "volume": 1.0,
+     "corte": 1.2
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 4.35,
+     "volume": 0.6,
+     "corte": 0.6
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/corte.mp3",
+     "em": 4.7,
+     "volume": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/desfaz.mp3",
+     "em": 5.0,
+     "volume": 0.8,
+     "corte": 2.2
     }
-   ],
-   "duracao": 5.6
+   ]
   },
   {
    "id": "drop",
@@ -436,7 +711,15 @@
    "destaque": [
     "CENTAVOS."
    ],
-   "duracao": 2.78
+   "duracao": 2.75,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/moeda.mp3",
+     "em": 0.35,
+     "volume": 1.0
+    }
+   ]
   },
   {
    "id": "nivel2",
@@ -451,7 +734,16 @@
    "destaque": [
     "DOIS!"
    ],
-   "duracao": 1.8
+   "duracao": 1.8,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/nivel.mp3",
+     "em": 0.45,
+     "volume": 0.9,
+     "corte": 2.0
+    }
+   ]
   },
   {
    "id": "xp",
@@ -471,7 +763,27 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.65
+   "duracao": 2.62,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.4,
+     "volume": 0.3
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.2,
+     "volume": 0.3
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 2.0,
+     "volume": 0.3
+    }
+   ]
   },
   {
    "id": "forte",
@@ -486,7 +798,7 @@
    "destaque": [
     "OITENTA."
    ],
-   "duracao": 1.94
+   "duracao": 1.91
   },
   {
    "id": "adaga",
@@ -502,7 +814,15 @@
     "ÉPICA.",
     "QUINZE"
    ],
-   "duracao": 3.57
+   "duracao": 3.54,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.15,
+     "volume": 0.5
+    }
+   ]
   },
   {
    "id": "aluguel",
@@ -522,7 +842,15 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 2.02
+   "duracao": 1.99,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.2,
+     "volume": 0.35
+    }
+   ]
   },
   {
    "id": "trinta",
@@ -537,7 +865,7 @@
    "destaque": [
     "TRINTA"
    ],
-   "duracao": 1.96
+   "duracao": 1.93
   },
   {
    "id": "parte",
@@ -550,7 +878,19 @@
     }
    },
    "destaque": [],
-   "duracao": 2.8
+   "duracao": 2.4,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.9,
+     "volume": 0.5
+    }
+   ]
   }
- ]
+ ],
+ "trilha": {
+  "arquivo": "ep01/trilha.wav",
+  "volume": 0.55
+ }
 }

@@ -124,7 +124,7 @@
     ctx.strokeText(txt, x, y - h * 1.15); ctx.fillStyle = '#FFFFFF'; ctx.fillText(txt, x, y - h * 1.15);
     ctx.fillStyle = 'rgba(20,14,20,0.8)'; ctx.beginPath(); ctx.roundRect(x - w / 2 - 4, y - h / 2 - 4, w + 8, h + 8, (h + 8) / 2); ctx.fill();
     if (o.atraso !== undefined && o.atraso > frac) { ctx.fillStyle = '#F2D9A0'; ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w * clamp(o.atraso, 0, 1), h, h / 2); ctx.fill(); }
-    const g = ctx.createLinearGradient(0, y - h / 2, 0, y + h / 2); g.addColorStop(0, '#FF7A7A'); g.addColorStop(1, '#D23A42');
+    const cores = o.cores || ['#FF7A7A', '#D23A42']; const g = ctx.createLinearGradient(0, y - h / 2, 0, y + h / 2); g.addColorStop(0, cores[0]); g.addColorStop(1, cores[1]);
     ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, Math.max(0, w * clamp(frac, 0, 1)), h, h / 2); ctx.fill();
     if (o.nome) {
       ctx.font = `800 ${h * 0.75}px Inter`; const tw = ctx.measureText(o.nome + '   ' + (o.nivel || '')).width + h;
@@ -135,5 +135,67 @@
     ctx.restore();
   }
 
-  window.Criaturas = { lobo, barraVida };
+
+  // CABEÇA DE LOBO PARA CLOSE (nível da referência ref-mordida-nivel.jpg): contorno escuro grosso, pelo em camadas,
+  // cicatriz costurada no focinho, olho âmbar, boca aberta com língua e presas. Olha para a DIREITA.
+  // (x, y) = centro do crânio; s = tamanho em px (focinho até a nuca ≈ 1,4 s); o.boca 0..1; o.parte: 'tudo' | 'ponta'
+  // 'ponta' redesenha só nariz e presas, para ficar POR CIMA de algo que está sendo mordido.
+  function cabecaLobo(ctx, x, y, s, t, o = {}) {
+    const P = { ...PELE_LOBO, ...(o.pelagem || {}) }, ab = (o.boca === undefined ? 0.5 : o.boca) * 0.16;
+    const L = '#1E140F', lw = 0.022;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(o.giro || 0); ctx.scale(s, s);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const forma = (pts, cor, borda = true, curva = true) => {
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for (let i = 1; i < pts.length; i++) { const [px, py] = pts[i - 1], [qx, qy] = pts[i]; if (curva) ctx.quadraticCurveTo(px, py, (px + qx) / 2, (py + qy) / 2); else ctx.lineTo(qx, qy); }
+      ctx.closePath(); ctx.fillStyle = cor; ctx.fill(); if (borda) { ctx.strokeStyle = L; ctx.lineWidth = lw; ctx.stroke(); }
+    };
+    const presas = () => {
+      ctx.fillStyle = '#F6F1E4'; ctx.strokeStyle = L; ctx.lineWidth = lw * 0.7;
+      for (const [fx, fy, h] of [[0.66, 0.035, 0.12], [0.5, 0.06, 0.08]]) { ctx.beginPath(); ctx.moveTo(fx - 0.035, fy); ctx.lineTo(fx + 0.03, fy); ctx.lineTo(fx - 0.005, fy + h); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      for (const [fx, h] of [[0.62, 0.1], [0.48, 0.07]]) { const fy = 0.2 + ab; ctx.beginPath(); ctx.moveTo(fx - 0.03, fy); ctx.lineTo(fx + 0.03, fy); ctx.lineTo(fx, fy - h); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+    };
+    const nariz = () => {
+      ctx.fillStyle = '#15100D'; ctx.beginPath(); ctx.ellipse(0.83, -0.1, 0.075, 0.06, -0.2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.beginPath(); ctx.ellipse(0.8, -0.125, 0.025, 0.015, -0.3, 0, Math.PI * 2); ctx.fill();
+    };
+    if (o.parte === 'ponta') { ctx.beginPath(); ctx.rect(o.corte === undefined ? 0.5 : o.corte, -0.7, 1.2, 1.4); ctx.clip(); }
+    // juba do pescoço (atrás)
+    forma([[-0.2, 0.15], [-0.75, 0.05], [-0.95, 0.5], [-0.75, 0.62], [-0.85, 0.85], [-0.45, 0.75], [-0.4, 0.98], [-0.05, 0.62], [0.12, 0.45]], P.costas, true, false);
+    forma([[-0.15, 0.25], [-0.55, 0.45], [-0.5, 0.7], [-0.25, 0.62], [-0.18, 0.85], [0.05, 0.55], [0.15, 0.38]], P.barriga, true, false);
+    // orelha de trás
+    forma([[-0.12, -0.3], [-0.1, -0.78], [0.12, -0.36]], P.costas, true, false);
+    // mandíbula de baixo + boca por dentro
+    forma([[0.05, 0.12], [0.3, 0.15], [0.7, 0.1 + ab], [0.72, 0.19 + ab], [0.4, 0.27 + ab], [0.08, 0.3]], P.focinho);
+    forma([[0.12, 0.1], [0.68, 0.06], [0.66, 0.11 + ab], [0.3, 0.2 + ab * 0.8], [0.12, 0.2]], '#7E2430', false);
+    forma([[0.2, 0.16 + ab * 0.4], [0.55, 0.11 + ab * 0.8], [0.58, 0.16 + ab * 0.9], [0.25, 0.22 + ab * 0.6]], '#D9707A', false);
+    // crânio e focinho
+    forma([[-0.6, 0.15], [-0.62, -0.2], [-0.35, -0.42], [0.05, -0.42], [0.35, -0.3], [0.6, -0.2], [0.86, -0.16], [0.9, -0.06], [0.78, 0.04], [0.45, 0.07], [0.15, 0.1], [-0.15, 0.28], [-0.45, 0.3]], P.base);
+    // máscara clara do focinho e bochecha
+    forma([[0.1, -0.12], [0.45, -0.17], [0.82, -0.1], [0.78, 0.03], [0.4, 0.07], [0.12, 0.12], [-0.12, 0.25], [-0.25, 0.12], [-0.05, 0.0]], P.barriga, false);
+    // topo escuro da cabeça (sela)
+    forma([[-0.6, -0.05], [-0.6, -0.22], [-0.35, -0.42], [0.05, -0.42], [0.32, -0.31], [0.12, -0.24], [-0.15, -0.22], [-0.4, -0.08]], P.costas, false);
+    // orelha da frente
+    forma([[-0.42, -0.3], [-0.5, -0.92], [-0.08, -0.38]], P.base, true, false);
+    forma([[-0.38, -0.36], [-0.44, -0.78], [-0.16, -0.4]], '#4A2E26', false, false);
+    ctx.strokeStyle = 'rgba(230,207,166,0.8)'; ctx.lineWidth = 0.012;
+    for (const [a, b] of [[[-0.36, -0.42], [-0.42, -0.66]], [[-0.3, -0.42], [-0.32, -0.6]], [[-0.24, -0.41], [-0.22, -0.56]]]) { ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke(); }
+    // olho âmbar com pálpebra brava
+    ctx.fillStyle = '#2A1C16'; ctx.beginPath(); ctx.ellipse(0.22, -0.2, 0.1, 0.055, -0.15, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#F2A33A'; ctx.beginPath(); ctx.ellipse(0.23, -0.195, 0.07, 0.04, -0.15, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#120C09'; ctx.beginPath(); ctx.ellipse(0.24, -0.195, 0.022, 0.035, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.beginPath(); ctx.arc(0.215, -0.21, 0.012, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = L; ctx.lineWidth = 0.03; ctx.beginPath(); ctx.moveTo(0.1, -0.27); ctx.quadraticCurveTo(0.22, -0.28, 0.33, -0.22); ctx.stroke();
+    // cicatriz costurada atravessando o focinho
+    ctx.strokeStyle = '#E8D3B0'; ctx.lineWidth = 0.022; ctx.beginPath(); ctx.moveTo(0.42, -0.3); ctx.lineTo(0.54, -0.02); ctx.stroke();
+    ctx.strokeStyle = '#8A5A40'; ctx.lineWidth = 0.012;
+    for (let i = 0; i < 4; i++) { const k = 0.15 + i * 0.22, cx = 0.42 + 0.12 * k, cy = -0.3 + 0.28 * k; ctx.beginPath(); ctx.moveTo(cx - 0.035, cy - 0.01); ctx.lineTo(cx + 0.035, cy + 0.01); ctx.stroke(); }
+    // pontinhos dos bigodes e linha da boca
+    ctx.fillStyle = '#6A4A36'; for (const [bx, by] of [[0.62, -0.04], [0.67, -0.02], [0.72, -0.05], [0.66, -0.07]]) { ctx.beginPath(); ctx.arc(bx, by, 0.009, 0, Math.PI * 2); ctx.fill(); }
+    ctx.strokeStyle = L; ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(0.12, 0.11); ctx.quadraticCurveTo(0.4, 0.08, 0.72, 0.04); ctx.stroke();
+    presas(); nariz();
+    ctx.restore();
+  }
+
+  window.Criaturas = { lobo, barraVida, cabecaLobo };
 })();
