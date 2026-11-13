@@ -243,8 +243,7 @@
           "palavra": "tocaram",
           "acao": "alerta_celular"
         }
-      ],
-      "legenda": "alto"
+      ]
     },
     {
       "id": 8,
@@ -345,5 +344,25 @@
       "gabriel",
       "Rá, rá, rá, rá, rá!"
     ]
-  }
+  },
+  "fortes": [
+    "Três",
+    "manhã",
+    "apelido",
+    "responde",
+    "Larissa",
+    "Dudu",
+    "mãe",
+    "Ninguém",
+    "criaturas",
+    "estranhas",
+    "vozes",
+    "aparência",
+    "zoeira",
+    "espera",
+    "abre",
+    "Filho",
+    "voz",
+    "parte"
+  ]
 }

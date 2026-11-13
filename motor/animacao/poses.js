@@ -9,7 +9,8 @@
 //   pe: dobra (ponta p/ cima), lado
 // corpo: posição (m), giro (graus) e estica (amassa < 0 < estica, volume constante) do boneco inteiro. desl: deslocamento do quadril (m), p/ sentar, agachar.
 // rosto: boca ('neutra'|'sorriso'|'triste'|'aberta'), olhos (abertura, 1 = normal), sobrancelha (-1 brava .. 1 preocupada),
-//        olharX, olharY (-1..1), estranho (0..1: olhos negros, boca larga — o infiltrado).
+//        olharX, olharY (-1..1), estranho (0..1: olhos negros, boca larga — o infiltrado),
+//        abertura (0..1: boca abrindo ao falar; sobrepõe a forma da boca).
 
 export const TIPOS = {
   quadril: 'tronco', coluna: 'tronco', peito: 'tronco', pescoco: 'tronco', cabeca: 'tronco',
@@ -26,7 +27,7 @@ export const BOCAS = ['neutra', 'sorriso', 'triste', 'aberta'];
 const EXTRAS = {
   corpo: { x: 0, y: 0, z: 0, giro: 0, estica: 0 },
   desl: { x: 0, y: 0, z: 0 },
-  rosto: { boca: 'neutra', olhos: 1, sobrancelha: 0, olharX: 0, olharY: 0, estranho: 0 },
+  rosto: { boca: 'neutra', olhos: 1, sobrancelha: 0, olharX: 0, olharY: 0, estranho: 0, abertura: 0 },
 };
 export const GRUPOS = [...JUNTAS, ...Object.keys(EXTRAS)];
 

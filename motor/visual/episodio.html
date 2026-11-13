@@ -9,9 +9,9 @@ html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
 canvas{display:block}
 #camadas{position:fixed;inset:0;pointer-events:none;font-family:'Luckiest',sans-serif}
 #selo{position:absolute;left:50%;top:250px;transform:translateX(-50%);background:#2ee87f;color:#0b1a12;font-size:78px;line-height:1;padding:22px 34px 12px;border-radius:14px;box-shadow:0 8px 0 #148a46;letter-spacing:2px}
-#legenda{position:absolute;left:40px;right:40px;text-align:center;font-size:104px;line-height:1.05;color:#ffd23a;
-  -webkit-text-stroke:14px #1a1206;paint-order:stroke fill;text-shadow:0 10px 0 rgba(0,0,0,.35);transform-origin:50% 50%}
-#legenda .dq{color:#ff4b3a}
+#legenda{position:absolute;left:40px;right:40px;text-align:center;font-size:118px;line-height:1.05;color:#ffffff;
+  -webkit-text-stroke:16px #0d0d0d;paint-order:stroke fill;text-shadow:0 8px 14px rgba(0,0,0,.55);transform-origin:50% 50%;letter-spacing:1px}
+#legenda .forte{color:#ffd23a}
 #cartela{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;text-align:center}
 #cartela .tit{font-size:150px;color:#ffd23a;-webkit-text-stroke:16px #1a1206;paint-order:stroke fill;letter-spacing:4px}
 #cartela .sub{background:#2ee87f;color:#0b1a12;font-size:96px;padding:26px 44px 14px;border-radius:18px;box-shadow:0 10px 0 #148a46}
@@ -101,11 +101,22 @@ for (const f of TL.falas) {
   if (!B[dono] || TL.atoresDef[dono]?.camera || f.tipo === 'narracao') continue;
   (bocaDe[dono] ||= []).push(...TL.palavras.filter((w) => w.fala === f.indice));
 }
-function falando(id, t) {
-  const w = (bocaDe[id] || []).find((x) => t >= x.ini && t <= x.fim + 0.05);
-  if (!w) return null;
-  return Math.sin((t - w.ini) * 2 * Math.PI * 6.5) > -0.3 ? 'aberta' : 'neutra';
+// abertura contínua: abre e fecha uma vez por sílaba (grupos de vogais) dentro de cada palavra
+const silabas = (w) => Math.max(1, (w.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().match(/[aeiouy]+/g) || []).length);
+function abertura(id, t) {
+  const w = (bocaDe[id] || []).find((x) => t >= x.ini - 0.03 && t <= x.fim + 0.04);
+  if (!w) return 0;
+  const n = silabas(w.texto), d = Math.max(0.05, w.fim - w.ini), f = Math.min(1, Math.max(0, (t - w.ini) / d));
+  return 0.12 + 0.88 * Math.abs(Math.sin(Math.PI * n * f));
 }
+// janelas de fala por ator (para olhar para o Eduardo enquanto fala)
+const janelas = {};
+for (const [id, ws] of Object.entries(bocaDe)) {
+  const porFala = {}; for (const w of ws) (porFala[w.fala] ||= []).push(w);
+  janelas[id] = Object.values(porFala).map((l) => [l[0].ini, l.at(-1).fim]);
+}
+const pesoOlhar = (id, t) => Math.max(0, ...(janelas[id] || []).map(([a, b]) => Math.min(sm(a - 0.45, a - 0.05, t), 1 - sm(b + 0.3, b + 0.8, t))));
+const olhoEduardo = (t) => { const e = ativa('eduardo', t); return [e.lugar.x, B.eduardo.medidas.olhosY - 0.03, e.lugar.z]; };
 
 // ---------- objetos ----------
 const TEXTO_ALERTA = 'Cuidado: criaturas estranhas estão entre nós. Imitam vozes de pessoas conhecidas e aparência.';
@@ -162,20 +173,17 @@ function cameraSubjetiva(t) {
 const GRUPOS = [];
 { let atual = [];
   const fecha = () => { if (atual.length) GRUPOS.push(atual); atual = []; };
-  TL.palavras.forEach((w, i) => {
-    const prox = TL.palavras[i + 1];
-    atual.push(w);
-    if (atual.length >= 3 || /[.!?…,]$/.test(w.texto) || !prox || prox.fala !== w.fala) fecha();
-  });
-  GRUPOS.forEach((g, i) => { const prox = GRUPOS[i + 1]; g.ini = g[0].ini - 0.05; g.fim = prox && prox[0].fala === g[0].fala ? prox[0].ini - 0.05 : g.at(-1).fim + 0.35; });
+  // uma palavra por vez (estilo profissional); some na pausa entre frases
+  TL.palavras.forEach((w) => { atual.push(w); fecha(); });
+  GRUPOS.forEach((g, i) => { const prox = GRUPOS[i + 1]; g.ini = g[0].ini - 0.03;
+    const fimNatural = g[0].fim + 0.25; g.fim = prox && prox[0].fala === g[0].fala && prox[0].ini - g[0].fim < 0.6 ? prox[0].ini - 0.03 : fimNatural; });
 }
 window.__grupos = GRUPOS.map((g) => ({ ini: g.ini, fim: g.fim }));
 const elLeg = document.getElementById('legenda'), elSelo = document.getElementById('selo'), elCart = document.getElementById('cartela');
 let legAtual = null, cartAtual = null;
 function camadas(t, preto) {
-  elSelo.textContent = `PARTE ${TL.episodio}`;
   const cart = TL.cartelas.find((c) => t >= c.ini && t < c.fim);
-  elSelo.style.display = cart ? 'none' : 'block';
+  elSelo.style.display = 'none';
   if (cart !== cartAtual) {
     cartAtual = cart;
     elCart.innerHTML = !cart ? '' : cart.estilo === 'final' ? `<div class="final1">${cart.texto}</div><div class="final2">${cart.sub}</div>` : `<div class="tit">${cart.texto}</div><div class="sub">${cart.sub}</div>`;
@@ -184,16 +192,17 @@ function camadas(t, preto) {
   const g = q.get('semlegenda') || cart?.estilo === 'final' ? null : GRUPOS.find((x) => t >= x.ini && t < x.fim);
   if (g !== legAtual) {
     legAtual = g;
-    elLeg.innerHTML = g ? g.map((w) => `<span class="${w.destaque ? 'dq' : ''}">${w.texto.toUpperCase()}</span>`).join(' ') : '';
+    elLeg.innerHTML = g ? g.map((w) => `<span class="${w.forte || w.destaque ? 'forte' : ''}">${w.texto.replace(/[,;:]$/, '').toUpperCase()}</span>`).join(' ') : '';
   }
   if (g) {
-    const k = sm(g.ini, g.ini + 0.12, t);
-    elLeg.style.transform = `scale(${0.82 + 0.18 * k})`;
+    const k = (t - g.ini) / 0.14, forte = g.some((w) => w.forte || w.destaque);   // pulo: 0,7 → 1,08 → 1
+    const esc = k >= 1 ? 1 : k < 0.6 ? 0.7 + (1.08 - 0.7) * (k / 0.6) : 1.08 - 0.08 * ((k - 0.6) / 0.4);
+    elLeg.style.transform = `scale(${esc * (forte ? 1.15 : 1)})`;
     const pl = TL.planos.find((p) => t >= p.ini && t < p.fim);
     const y = cart ? 0.8 : (pl?.legenda === 'alto' ? 0.33 : pl?.legenda === 'baixo' ? 0.78 : 0.66);
     elLeg.style.top = `${Math.round(A * y - 60)}px`;
   }
-  if (q.get('rotulo')) elSelo.textContent = `PARTE ${TL.episodio} · ${t.toFixed(2)}s`;
+  if (q.get('rotulo')) { elSelo.style.display = 'block'; elSelo.textContent = `${t.toFixed(2)}s`; }
 }
 
 // ---------- quadro ----------
@@ -202,7 +211,10 @@ window.quadro = (t) => {
   for (const id of Object.keys(B)) {
     if (TL.atoresDef[id].camera) continue;
     let p = poseDe(id, t);
-    const bo = falando(id, t); if (bo) p = { ...p, rosto: { ...p.rosto, boca: bo } };
+    const k = pesoOlhar(id, t);                                     // quem fala olha para o Eduardo
+    if (k > 0.001 && B.eduardo) p = misturar(p, olharPara(p, B[id].medidas, olhoEduardo(t), { usarPeito: false }), k);
+    const ab = abertura(id, t);
+    if (ab > 0) p = { ...p, rosto: { ...p.rosto, abertura: ab }, cabeca: { ...p.cabeca, frente: valor(p, 'cabeca', 'frente') + 3 * ab - 1.5 } };
     B[id].posar(p);
   }
   cameraSubjetiva(t);

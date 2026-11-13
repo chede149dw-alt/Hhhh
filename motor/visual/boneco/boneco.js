@@ -289,12 +289,15 @@ export function criarBoneco(ficha) {
     const sm = (a, b, x) => { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
     const e1 = sm(0.25, 0.6, estr), e2 = sm(0.55, 0.9, estr);
     const monstro = e2 >= 0.5;
-    for (const [k, b] of Object.entries(bocas)) b.visible = !monstro && k === forma;
+    const abr = valor(pose, 'rosto', 'abertura');           // fala: boca abre e fecha por sílaba
+    const formaV = abr > 0.04 ? 'aberta' : forma;
+    for (const [k, b] of Object.entries(bocas)) b.visible = !monstro && k === formaV;
+    if (abr > 0.04 && !monstro) bocas.aberta.scale.set(0.95 + 0.25 * abr, 0.2 + 1.0 * abr, 1); else bocas.aberta.scale.set(1.1, 0.85, 1);
     bocaG.scale.set(1 + e1 * (forma === 'sorriso' ? 1.6 : 0.8), 1 - e1 * 0.25, 1);    // sorriso largo demais
     bocaM.visible = monstro;
     if (monstro) {
-      const aberta = forma === 'aberta';
-      const W = hl * (0.44 + 0.24 * e2), H = aberta ? hh * (0.14 + 0.2 * e2) : hh * 0.075;
+      const aberta = forma === 'aberta' || abr > 0.04;
+      const W = hl * (0.44 + 0.24 * e2), H = !aberta ? hh * 0.075 : forma === 'aberta' ? hh * (0.14 + 0.2 * e2) : hh * (0.075 + (0.08 + 0.2 * e2) * abr);
       bocaM.position.set(0, -hh * 0.25 - (aberta ? hh * 0.07 * e2 : 0), 0);
       fundoM.scale.set(W, H, 1);
       const dl = W / (N_DENTES + 1), comp = Math.min(aberta ? hh * 0.06 : H * 0.62, hh * 0.06);

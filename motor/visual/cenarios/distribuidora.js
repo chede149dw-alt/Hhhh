@@ -155,7 +155,7 @@ export function criarDistribuidora({ semente = 11 } = {}) {
     }
     const h = halo('#e6fff2', 2.2, x, SALA.teto - 0.15, z, 0.3); h.scale.set(1.2, 2.4, 1);
     const item = { tubo: { material: { color: new THREE.Color() } }, halo: h, luz: { intensity: 0 }, base: 0 };
-    if (comLuz) { const pl = new THREE.PointLight('#c2ffdc', 1.3, 7.5, 1.3); pl.position.set(x, SALA.teto - 0.3, z); add(pl); item.luz = pl; item.base = pl.intensity; }
+    if (comLuz) { const pl = new THREE.PointLight('#c2ffdc', 1.1, 7.5, 1.3); pl.position.set(x, SALA.teto - 0.3, z); add(pl); item.luz = pl; item.base = pl.intensity; }
     tubos.push(item);
   }
 

@@ -126,12 +126,13 @@ export function compilar(roteiro, { palavras, falas }, { marcas, medidas, folgaF
     cartelas.push({ texto: 'SEGUE E COMENTA', sub: `PRA VER A PARTE ${roteiro.proxima_parte}`, ini: Math.max(ult.ini, duracao - 2.6), fim: duracao, estilo: 'final' });
   }
   const destaquesPalavras = new Set(planos.flatMap((pl) => (pl.destaques || []).map((d) => limpar(d.palavra))));
+  const fortes = new Set([...destaquesPalavras, ...(roteiro.fortes || []).map(limpar)]);
   return {
     titulo: roteiro.titulo, serie: roteiro.serie, episodio: roteiro.episodio, duracao, fps: roteiro.formato?.fps || 60,
     planos: planos.map(({ _ws, atores: _a, ...p }) => p),
     atores, atoresDef, cameras, efeitos, cartelas, eventos,
     sons: sons.sort((a, b) => a.t - b.t),
-    falas, palavras: palavras.map((w) => ({ ...w, destaque: destaquesPalavras.has(limpar(w.texto)) })),
+    falas, palavras: palavras.map((w) => ({ ...w, destaque: destaquesPalavras.has(limpar(w.texto)), forte: fortes.has(limpar(w.texto)) })),
   };
 }
 

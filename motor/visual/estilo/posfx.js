@@ -142,6 +142,6 @@ export const POS_NEUTRO = { nevoaMax: 0, desfoqueMax: 0, vinheta: 0, grao: 0, cu
 
 // Visual "câmera verde" (referência do responsável): tom verde-água, lente olho de peixe, franja colorida.
 export const VISUAL_VERDE = {
-  tomSombras: '#03201a', tomLuzes: '#d6ffe8', tomForca: 0.36, saturacao: 1.05, contraste: 0.1,
+  tomSombras: '#03201a', tomLuzes: '#c9f3dc', tomForca: 0.36, saturacao: 1.05, contraste: 0.07,
   curvatura: 0.45, aberracao: 0.045, vinheta: 0.38, grao: 0.03,
 };

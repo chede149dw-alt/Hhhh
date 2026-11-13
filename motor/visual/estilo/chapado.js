@@ -92,7 +92,7 @@ export const LUZES = {
   // interior: luz principal de dentro para fora (sombras caem para a rua) + ambiente + lâmpadas do cenário
   // (pontuais). Perto das lâmpadas: 1,6 + 0,85 + ~0,7 ≈ π (fluorescente clara e esverdeada, como na referência;
   // o medo vem da cor do pós, não do escuro). Cantos mais escuros; sombra forte (0,8) e nítida (mapa 3072).
-  interior: { principal: 1.6, ambiente: 0.85, corAmbiente: '#bfeed6', corPrincipal: '#d2fbe4', sombra: 0.8, mapa: 3072, raioPCF: 1.5, posicao: [0.3, 5.5, -2.8], alvo: [0, 0, 1.0] },
+  interior: { principal: 1.45, ambiente: 0.75, corAmbiente: '#bfeed6', corPrincipal: '#d2fbe4', sombra: 0.8, mapa: 3072, raioPCF: 1.5, posicao: [0.3, 5.5, -2.8], alvo: [0, 0, 1.0] },
   noite: { principal: 0.30, ambiente: 0.30, corAmbiente: '#c4ccff', corPrincipal: '#b8c6ff', sombra: 0.0,
            lanterna: Math.PI - 0.60, corLanterna: '#ffffff', sombraLanterna: 0.8 },
 };
