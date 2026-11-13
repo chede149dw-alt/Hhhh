@@ -70,14 +70,14 @@ const permitido = (i) => tl.efeitos.some((e) => e.tipo === 'preto' && i / fps >=
 for (let i = 0; i < nq; i++) {
   const f = bruto.subarray(i * W * H, (i + 1) * W * H);
   let max = 0; for (const v of f) if (v > max) max = v;
-  if (max < 12) pretos++;
+  if (max < 12 && !permitido(i)) pretos++;
   if (i > 0) {
     const g = bruto.subarray((i - 1) * W * H, i * W * H); let d = 0;
     for (let k = 0; k < f.length; k++) d += Math.abs(f[k] - g[k]);
     if (d / f.length < 0.35 && !permitido(i)) { if (!parado) iniParado = i; parado++; if (parado > maiorParado) { maiorParado = parado; ondeParado = iniParado; } } else parado = 0;
   }
 }
-checar('nenhum quadro totalmente preto', pretos === 0, `${pretos} de ${nq}`);
+checar('nenhum quadro totalmente preto (fora do preto declarado)', pretos === 0, `${pretos} de ${nq}`);
 checar('nenhum trecho parado > 1 s (fora de pausa/preto declarado)', maiorParado <= fps, `maior: ${(maiorParado / fps).toFixed(2)} s${maiorParado ? ` em ${(ondeParado / fps).toFixed(2)} s` : ''}`);
 // sincronia: cada evento (palavra marcada) vs. o som no áudio (início de energia) — tolerância 2 quadros
 const W8 = JSON.parse(fs.readFileSync(path.join(pasta, 'words.json')));
@@ -87,14 +87,15 @@ for (const ev of tl.eventos) {
   const esperado = ev.acao === 'corte_preto_batida' ? w.fim + 0.8 : w.ini;
   piorSync = Math.max(piorSync, Math.abs(ev.t - esperado));
 }
-const sonsEv = tl.sons.filter((s) => ['batida', 'alerta', 'tensao'].includes(s.som));
+const sonsEv = tl.sons.filter((s) => ['batida', 'grade_impacto', 'estalo_pescoco'].includes(s.som));   // sons de ataque seco
 const audio = execFileSync('ffmpeg', ['-v', 'error', '-i', path.join(pasta, 'audio.wav'), '-ac', '1', '-ar', '1000', '-f', 's16le', '-'], { maxBuffer: 1 << 28 });
 const amp = new Int16Array(audio.buffer, audio.byteOffset, audio.length / 2);
 let piorAudio = 0;
-for (const s of sonsEv) {   // instante (1 ms) de maior subida de energia numa janela de ±150 ms
-  const c = Math.round(s.t * 1000); let melhor = -1, onde = c;
-  for (let i = c - 150; i < c + 150; i++) { let e1 = 0, e0 = 0; for (let k = 0; k < 20; k++) { e1 += Math.abs(amp[i + k] || 0); e0 += Math.abs(amp[i - 20 + k] || 0); } if (e1 - e0 > melhor) { melhor = e1 - e0; onde = i; } }
-  piorAudio = Math.max(piorAudio, Math.abs(onde - c) / 1000);
+for (const s of sonsEv) {   // ataque: 1º ms em ±100 ms onde a energia de 10 ms passa 4x a dos 30 ms anteriores
+  const c = Math.round(s.t * 1000); let onde = null;
+  const e = (a, n) => { let x = 0; for (let k = 0; k < n; k++) x += Math.abs(amp[a + k] || 0); return x / n; };
+  for (let i = c - 100; i < c + 100 && onde === null; i++) if (e(i, 10) > 4 * e(i - 30, 30) + 200) onde = i;
+  piorAudio = Math.max(piorAudio, onde === null ? 1 : Math.abs(onde - c) / 1000);
 }
 checar('sincronia: ação na palavra marcada (≤ 2 quadros)', piorSync <= 2 / fps, `pior ${(piorSync * 1000).toFixed(0)} ms em ${tl.eventos.length} eventos`);
 checar('sincronia: som do impacto no instante marcado (≤ 2 quadros)', piorAudio <= 2 / fps, `pior ${(piorAudio * 1000).toFixed(0)} ms em ${sonsEv.length} sons`);

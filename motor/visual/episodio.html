@@ -125,7 +125,8 @@ let telaEdu = 'bloqueio';
 const luzCel = new THREE.PointLight('#bcd6ff', 0.25, 0.4, 0); cena.add(luzCel);
 let celGab = null;
 if (B.gabriel) { celGab = criarCelular({ tipo: 'bloqueio' }); B.gabriel.juntas.maoD.add(celGab.raiz); celGab.raiz.position.set(0, -B.gabriel.medidas.maoLen * 0.62, 0); brilhoDaTela(celGab); }
-const comObjeto = (id, t, obj) => { const e = ativa(id, t); return e.atuacao && (ATUACOES[e.atuacao].objetos || []).some((o) => o.id === obj && t - e.ini >= (o.de ?? 0)); };
+// sempre booleano: o three só esconde com visible === false (null deixava o celular aparecer fora de hora)
+const comObjeto = (id, t, obj) => { const e = ativa(id, t); return !!e.atuacao && (ATUACOES[e.atuacao].objetos || []).some((o) => o.id === obj && t - e.ini >= (o.de ?? 0)); };
 
 // ---------- câmera subjetiva ----------
 const olhoDe = (b) => { b.raiz.updateMatrixWorld(true); return b.juntas.cabeca.localToWorld(new THREE.Vector3(0, b.medidas.cabecaH * 0.52, b.medidas.cabecaP * 0.3)).toArray(); };
@@ -160,6 +161,9 @@ function cameraSubjetiva(t) {
   const extra = ev && ev.acao === 'corte_preto_batida' ? 0.03 : 0;
   const r = respiracaoCamera(t), tt = tremor(t, forca + extra);
   cam.position.add(new THREE.Vector3(r.d[0] + tt.d[0], r.d[1] + tt.d[1], 0)); cam.rotateZ(r.rolar + tt.rolar);
+  // câmera na mão: deriva lenta (nunca fica 100% parada)
+  const mao = (f, fase) => Math.sin(t * f + fase) * 0.6 + Math.sin(t * f * 2.3 + fase * 1.7) * 0.4;
+  cam.rotateY(mao(0.9, 0.4) * 0.006); cam.rotateX(mao(0.7, 2.1) * 0.005);
   // lente: aberta no ambiente; fecha quando encara um rosto (transição suave entre planos)
   const fovDe = (cc) => (!cc ? 84 : cc.olhar === 'larissa.rosto' ? 56 : cc.olhar === 'gabriel' ? 72 : 84);
   let fov = fovDe(ant) + (fovDe(c) - fovDe(ant)) * sm(c.ini, c.ini + 0.6, t);
@@ -197,7 +201,10 @@ function camadas(t, preto) {
   if (g) {
     const k = (t - g.ini) / 0.14, forte = g.some((w) => w.forte || w.destaque);   // pulo: 0,7 → 1,08 → 1
     const esc = k >= 1 ? 1 : k < 0.6 ? 0.7 + (1.08 - 0.7) * (k / 0.6) : 1.08 - 0.08 * ((k - 0.6) / 0.4);
-    elLeg.style.transform = `scale(${esc * (forte ? 1.15 : 1)})`;
+    elLeg.style.fontSize = '118px';
+    const largura = elLeg.scrollWidth > elLeg.clientWidth ? elLeg.scrollWidth : Math.max(...[...elLeg.querySelectorAll('span')].map((s) => s.offsetWidth)) + 40;
+    const caber = Math.min(1, 940 / (largura * (forte ? 1.15 : 1)));
+    elLeg.style.transform = `scale(${esc * (forte ? 1.15 : 1) * caber})`;
     const pl = TL.planos.find((p) => t >= p.ini && t < p.fim);
     const y = cart ? 0.8 : (pl?.legenda === 'alto' ? 0.33 : pl?.legenda === 'baixo' ? 0.78 : 0.66);
     elLeg.style.top = `${Math.round(A * y - 60)}px`;
