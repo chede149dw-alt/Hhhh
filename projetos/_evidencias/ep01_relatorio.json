@@ -1,0 +1,47 @@
+{
+  "projeto": "infiltrados_ep01",
+  "checagens": [
+    {
+      "nome": "duração bate com o roteiro (±0,5 s)",
+      "ok": true,
+      "detalhe": "vídeo 71.48 s, roteiro 71.48 s"
+    },
+    {
+      "nome": "loudness entre -14,5 e -13,5 LUFS",
+      "ok": true,
+      "detalhe": "-13.9 LUFS"
+    },
+    {
+      "nome": "nenhum quadro totalmente preto (fora do preto declarado)",
+      "ok": true,
+      "detalhe": "0 de 4289"
+    },
+    {
+      "nome": "nenhum trecho parado > 1 s (fora de pausa/preto declarado)",
+      "ok": true,
+      "detalhe": "maior: 0.22 s em 45.67 s"
+    },
+    {
+      "nome": "sincronia: ação na palavra marcada (≤ 2 quadros)",
+      "ok": true,
+      "detalhe": "pior 0 ms em 5 eventos"
+    },
+    {
+      "nome": "sincronia: som do impacto no instante marcado (≤ 2 quadros)",
+      "ok": true,
+      "detalhe": "pior 0 ms em 2 sons"
+    },
+    {
+      "nome": "determinismo: quadros repetidos fora de ordem dão o mesmo md5",
+      "ok": true,
+      "detalhe": "1501: ec23db6e=ec23db6e · 3002: 8123193c=8123193c"
+    },
+    {
+      "nome": "legendas dentro da tela 1080x1920",
+      "ok": true,
+      "detalhe": "124 grupos, pior estouro 0 px"
+    }
+  ],
+  "ok": true,
+  "minutos": 1.9
+}

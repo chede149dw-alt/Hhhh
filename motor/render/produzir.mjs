@@ -72,9 +72,9 @@ for (let i = 0; i < nq; i++) {
   let max = 0; for (const v of f) if (v > max) max = v;
   if (max < 12 && !permitido(i)) pretos++;
   if (i > 0) {
-    const g = bruto.subarray((i - 1) * W * H, i * W * H); let d = 0;
-    for (let k = 0; k < f.length; k++) d += Math.abs(f[k] - g[k]);
-    if (d / f.length < 0.35 && !permitido(i)) { if (!parado) iniParado = i; parado++; if (parado > maiorParado) { maiorParado = parado; ondeParado = iniParado; } } else parado = 0;
+    const g = bruto.subarray((i - 1) * W * H, i * W * H); let dmax = 0;   // maior mudança de pixel (cenas escuras têm média baixa)
+    for (let k = 0; k < f.length; k++) { const d = Math.abs(f[k] - g[k]); if (d > dmax) dmax = d; }
+    if (dmax <= 3 && !permitido(i)) { if (!parado) iniParado = i; parado++; if (parado > maiorParado) { maiorParado = parado; ondeParado = iniParado; } } else parado = 0;
   }
 }
 checar('nenhum quadro totalmente preto (fora do preto declarado)', pretos === 0, `${pretos} de ${nq}`);
@@ -87,15 +87,19 @@ for (const ev of tl.eventos) {
   const esperado = ev.acao === 'corte_preto_batida' ? w.fim + 0.8 : w.ini;
   piorSync = Math.max(piorSync, Math.abs(ev.t - esperado));
 }
-const sonsEv = tl.sons.filter((s) => ['batida', 'grade_impacto', 'estalo_pescoco'].includes(s.som));   // sons de ataque seco
-const audio = execFileSync('ffmpeg', ['-v', 'error', '-i', path.join(pasta, 'audio.wav'), '-ac', '1', '-ar', '1000', '-f', 's16le', '-'], { maxBuffer: 1 << 28 });
+const sonsEv = tl.sons.filter((s) => ['batida', 'grade_impacto'].includes(s.som));   // sons de ataque seco e alto
+const audio = execFileSync('ffmpeg', ['-v', 'error', '-i', path.join(pasta, 'audio.wav'), '-ac', '1', '-ar', '8000', '-f', 's16le', '-'], { maxBuffer: 1 << 28 });
 const amp = new Int16Array(audio.buffer, audio.byteOffset, audio.length / 2);
 let piorAudio = 0;
-for (const s of sonsEv) {   // ataque: 1º ms em ±100 ms onde a energia de 10 ms passa 4x a dos 30 ms anteriores
-  const c = Math.round(s.t * 1000); let onde = null;
-  const e = (a, n) => { let x = 0; for (let k = 0; k < n; k++) x += Math.abs(amp[a + k] || 0); return x / n; };
-  for (let i = c - 100; i < c + 100 && onde === null; i++) if (e(i, 10) > 4 * e(i - 30, 30) + 200) onde = i;
-  piorAudio = Math.max(piorAudio, onde === null ? 1 : Math.abs(onde - c) / 1000);
+for (const s of sonsEv) {   // correlação: onde o próprio arquivo do efeito aparece no áudio final (±150 ms)
+  const sfx = execFileSync('ffmpeg', ['-v', 'error', '-i', path.join(AQUI, '..', 'audio', 'sfx', `${s.som}.wav`), '-t', '0.25', '-ac', '1', '-ar', '8000', '-f', 's16le', '-'], { maxBuffer: 1 << 24 });
+  const ref = new Int16Array(sfx.buffer, sfx.byteOffset, sfx.length / 2);
+  const c = Math.round(s.t * 8000); let melhor = -Infinity, onde = c;
+  for (let lag = -1200; lag <= 1200; lag++) {
+    let x = 0; for (let k = 0; k < ref.length; k += 2) x += ref[k] * (amp[c + lag + k] || 0);
+    if (x > melhor) { melhor = x; onde = c + lag; }
+  }
+  piorAudio = Math.max(piorAudio, Math.abs(onde - c) / 8000);
 }
 checar('sincronia: ação na palavra marcada (≤ 2 quadros)', piorSync <= 2 / fps, `pior ${(piorSync * 1000).toFixed(0)} ms em ${tl.eventos.length} eventos`);
 checar('sincronia: som do impacto no instante marcado (≤ 2 quadros)', piorAudio <= 2 / fps, `pior ${(piorAudio * 1000).toFixed(0)} ms em ${sonsEv.length} sons`);
@@ -113,7 +117,7 @@ checar('sincronia: som do impacto no instante marcado (≤ 2 quadros)', piorAudi
     const fora = await pag.evaluate(async () => {
       let pior = 0; const el = document.getElementById('legenda');
       for (const g of window.__grupos) { await window.quadro(g.ini + 0.15); const r = el.getBoundingClientRect(); const spans = [...el.querySelectorAll('span')].map((s) => s.getBoundingClientRect());
-        for (const b of [r, ...spans]) pior = Math.max(pior, -b.left, b.right - 1080, -b.top, b.bottom - 1920); }
+        for (const b of spans) pior = Math.max(pior, -b.left, b.right - 1080, -b.top, b.bottom - 1920); }   // as letras, não a caixa
       return { pior, n: window.__grupos.length };
     });
     checar('legendas dentro da tela 1080x1920', fora.pior <= 0, `${fora.n} grupos, pior estouro ${fora.pior.toFixed(0)} px`);

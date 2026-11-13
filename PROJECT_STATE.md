@@ -145,6 +145,10 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
 - Legendas: grupos de 1–3 palavras sem atravessar frase; destaques em vermelho; entrada com escala; fonte Luckiest
   Guy (OFL, cópia em `visual/lib/fontes`); amarela com contorno escuro; selo verde "PARTE N" (ref4); escondidas na
   cartela final. Posição por plano (`legenda`: alto/meio/baixo).
+- Visibilidade de objetos SEMPRE booleana (o three só esconde com `visible === false`; `null` quebrava o
+  determinismo: o celular aparecia na última posição). Câmera na mão (deriva lenta) evita trecho 100% parado.
+- Checagens: preto permitido onde o roteiro declara; "parado" pela maior mudança de pixel (cenas escuras);
+  sincronia de som por correlação com o próprio arquivo do efeito; legendas medidas pelas letras.
 - Render final: cena em 75% da resolução (ampliada no passe da lente) + captura JPEG q95 ⇒ ~2,2× mais rápido.
 - Pós (`visual/estilo/posfx.js`): um passe só (névoa por profundidade, foco raso com 16 amostras, vinheta, grão
   com semente no tempo). Alvo HalfFloat + MSAA 4x; com parâmetros zerados a cor sai idêntica.
@@ -189,5 +193,6 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 
 ## Próxima etapa
 
-Publicar o episódio 1. Depois: risada e efeitos mais ricos, caminhada com curvas, Gabriel indo até o portão
-em quadro, IK de mãos segurando objetos (latas passando pela portinhola), parte 2 do roteiro.
+Episódio 1 pronto (`projetos/infiltrados_ep01/final.mp4`, fora do git). Próximo: parte 2 do roteiro; melhorias
+anotadas: risada mais natural, caminhada com curvas, latas passando pela portinhola, Gabriel em quadro no portão,
+render mais rápido (GPU ou captura crua).
