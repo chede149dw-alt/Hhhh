@@ -61,7 +61,7 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 2.31
+   "duracao": 2.24
   },
   {
    "id": "comprar",
@@ -88,7 +88,7 @@
      "volume": 0.5
     }
    ],
-   "duracao": 2.76
+   "duracao": 2.69
   },
   {
    "id": "mae",
@@ -128,7 +128,7 @@
     "vinheta": 0.9,
     "bloom": 0.8
    },
-   "duracao": 2.63
+   "duracao": 2.56
   },
   {
    "id": "precos",
@@ -148,27 +148,7 @@
     "vinheta": 0.9,
     "bloom": 0.8
    },
-   "duracao": 1.92
-  },
-  {
-   "id": "capsulas",
-   "fala": {
-    "texto": "Tem gente pagando a faculdade jogando.",
-    "voz": "narrador",
-    "velocidade": 210,
-    "voz_final": {
-     "arquivo": "vozes/final/capsulas.wav"
-    }
-   },
-   "destaque": [
-    "FACULDADE"
-   ],
-   "cinema": {
-    "quente": 0.0,
-    "vinheta": 0.95,
-    "bloom": 0.5
-   },
-   "duracao": 2.21
+   "duracao": 1.85
   },
   {
    "id": "raro",
@@ -189,7 +169,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.94
+   "duracao": 2.87
   },
   {
    "id": "teo",
@@ -209,7 +189,7 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 2.49
+   "duracao": 2.42
   },
   {
    "id": "novatos",
@@ -229,7 +209,7 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 2.01
+   "duracao": 1.94
   },
   {
    "id": "ouvido",
@@ -249,7 +229,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.66
+   "duracao": 2.59
   },
   {
    "id": "pulso",
@@ -270,7 +250,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.81
+   "duracao": 2.74
   },
   {
    "id": "cerebro",
@@ -291,7 +271,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.27
+   "duracao": 2.2
   },
   {
    "id": "visor",
@@ -321,7 +301,7 @@
    "destaque": [
     "RAÇA."
    ],
-   "duracao": 1.97
+   "duracao": 1.9
   },
   {
    "id": "fera",
@@ -336,7 +316,7 @@
    "destaque": [
     "HOMEM-FERA,"
    ],
-   "duracao": 3.02
+   "duracao": 2.95
   },
   {
    "id": "classe",
@@ -351,7 +331,7 @@
    "destaque": [
     "MAGO."
    ],
-   "duracao": 2.83
+   "duracao": 2.76
   },
   {
    "id": "guardiao",
@@ -382,7 +362,7 @@
     "UM:",
     "MADEIRA."
    ],
-   "duracao": 3.36
+   "duracao": 3.29
   },
   {
    "id": "explorar",
@@ -397,7 +377,7 @@
    "destaque": [
     "FORTES."
    ],
-   "duracao": 3.04
+   "duracao": 2.97
   },
   {
    "id": "gosma",
@@ -412,12 +392,12 @@
    "destaque": [
     "LOBO"
    ],
-   "duracao": 2.27
+   "duracao": 2.2
   },
   {
    "id": "golpe",
    "fala": {
-    "texto": "Faísca, escudo, adaga!",
+    "texto": "O Davi se preparou e lançou um feitiço de eletricidade, enquanto o Téo bloqueou. E finalizou com um corte seco!",
     "voz": "narrador",
     "velocidade": 210,
     "voz_final": {
@@ -425,7 +405,9 @@
     }
    },
    "destaque": [
-    "ADAGA!"
+    "ELETRICIDADE,",
+    "BLOQUEOU.",
+    "SECO!"
    ],
    "sfx": [
     {
@@ -439,7 +421,7 @@
      "volume": 0.8
     }
    ],
-   "duracao": 2.38
+   "duracao": 5.6
   },
   {
    "id": "drop",
@@ -454,7 +436,7 @@
    "destaque": [
     "CENTAVOS."
    ],
-   "duracao": 2.85
+   "duracao": 2.78
   },
   {
    "id": "nivel2",
@@ -489,7 +471,7 @@
     "vinheta": 0.8,
     "bloom": 0.75
    },
-   "duracao": 2.72
+   "duracao": 2.65
   },
   {
    "id": "forte",
@@ -504,7 +486,7 @@
    "destaque": [
     "OITENTA."
    ],
-   "duracao": 2.01
+   "duracao": 1.94
   },
   {
    "id": "adaga",
@@ -520,7 +502,7 @@
     "ÉPICA.",
     "QUINZE"
    ],
-   "duracao": 3.64
+   "duracao": 3.57
   },
   {
    "id": "aluguel",
@@ -540,7 +522,7 @@
     "vinheta": 0.95,
     "bloom": 0.5
    },
-   "duracao": 2.09
+   "duracao": 2.02
   },
   {
    "id": "trinta",
@@ -555,7 +537,7 @@
    "destaque": [
     "TRINTA"
    ],
-   "duracao": 2.03
+   "duracao": 1.96
   },
   {
    "id": "parte",

@@ -432,36 +432,46 @@
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.6 });
     },
 
-    // 22) "Faísca, escudo, adaga!": raio (3), o lobo pula no escudo, adaga (5), o lobo se desfaz em luz
-    golpe(ctx, u, d, api) {
-      const [tx, ty] = (u > 0.85 && u < 1.05) || (u > 1.5 && u < 1.75) ? api.tremor(10) : [0, 0];
+    // 22) "O Davi se preparou e lançou um feitiço de eletricidade, enquanto o Téo bloqueou. E finalizou com um corte seco!"
+    //     0–1,4 s: Davi carrega a magia (círculo de runas + esfera na mão) · 1,4–2,3: raio de eletricidade no lobo (3)
+    //     2,6–3,1: o lobo pula e o Téo bloqueia · 4,1–4,75: Davi avança e dá o corte seco (5) · 5,0: o lobo vira luz
+    golpe(ctx, u0, d, api) {
+      const mapa = [[0, 0], [1.4, 0.2], [1.7, 0.45], [2.3, 0.6], [2.6, 0.62], [3.1, 0.92], [3.6, 1.15], [4.1, 1.2], [4.5, 1.5], [4.75, 1.55], [5.0, 1.75], [5.4, 2.0], [9, 2.4]];
+      let u = 0; for (let k = 0; k < mapa.length - 1; k++) { const [a, va] = mapa[k], [b, vb] = mapa[k + 1]; if (u0 <= b) { u = va + (vb - va) * (u0 - a) / (b - a); break; } }
+      const [tx, ty] = (u > 0.85 && u < 1.05) || (u > 1.5 && u < 1.75) || (u > 0.42 && u < 0.55) ? api.tremor(10) : [0, 0];
       ctx.save(); ctx.translate(tx, ty);
-      const cam = campo(ctx, api, { x: 0.3, y: 1.35, z: 0.6, cy: 880, f: 1100, yaw: 0.02 + u * 0.02 });
-      const pulo = api.fase(0.62, 0.92, 'linear'), volta = api.fase(0.92, 1.2);
+      const cam = campo(ctx, api, { x: 0.3 - u0 * 0.04, y: 1.35, z: 0.6 + u0 * 0.06, cy: 880, f: 1100, yaw: 0.02 + u0 * 0.01 });
+      const pulo = api.clamp((u - 0.62) / 0.3, 0, 1), volta = api.clamp((u - 0.92) / 0.28, 0, 1);
       const G = [api.lerp(api.lerp(0.9, 1.25, pulo), 1.6, volta), 5.2];
-      const davX = api.lerp(-0.9, 0.35, api.fase(1.2, 1.5)), davZ = api.lerp(3.9, 4.8, api.fase(1.2, 1.5));
-      const teoX = api.lerp(1.4, 0.95, api.fase(0.5, 0.7)), teoZ = api.lerp(4.0, 4.6, api.fase(0.5, 0.7));
-      const est = api.fase(1.75, 2.0);
+      const anda = api.ease.suave(api.clamp((u - 1.2) / 0.3, 0, 1));
+      const davX = api.lerp(-0.9, 0.35, anda), davZ = api.lerp(3.9, 4.8, anda);
+      const tf = api.ease.suave(api.clamp((u - 0.5) / 0.2, 0, 1)), teoX = api.lerp(1.4, 0.95, tf), teoZ = api.lerp(4.0, 4.6, tf);
+      const est = api.clamp((u - 1.75) / 0.25, 0, 1);
       const vida = u < 0.45 ? 1 : u < 1.55 ? 5 / 8 : 0;
       const poseLobo = u > 1.55 ? 'atingido' : (u > 0.62 && u < 0.92) ? 'pulando' : (u > 0.4 && u < 0.62) || (u > 0.92 && u < 1.15) ? 'atingido' : 'parado';
+      const carrega = api.clamp(u0 / 1.3, 0, 1) * (u0 < 2.3 ? 1 : 0);
       let rigD = null;
       emOrdem(cam, [
         [G[0], G[1], () => {
           const q = cam.p(G[0], 0, G[1]);
           api.rosto(q.x, q.y - 0.55 * q.s, 0.75 * q.s);
           Criaturas.lobo(ctx, q.x, q.y, 0.95 * q.s, api.t, { espelhar: true, pose: poseLobo, fase: pulo, dissolve: est });
-          Criaturas.barraVida(ctx, q.x, q.y - 1.35 * q.s, 0.9 * q.s, vida, { max: 8, nome: 'Lobo jovem', nivel: 'Nv 1', h: 0.1 * q.s, atraso: u < 0.45 ? 1 : u < 0.8 ? 1 : u < 1.55 ? 5 / 8 : 5 / 8 * (1 - api.fase(1.6, 1.9)), alfa: 1 - est });
+          Criaturas.barraVida(ctx, q.x, q.y - 1.35 * q.s, 0.9 * q.s, vida, { max: 8, nome: 'Lobo jovem', nivel: 'Nv 1', h: 0.1 * q.s, atraso: u < 1.55 ? Math.max(vida, 1 - api.clamp((u - 0.5) / 0.3, 0, 1) * 3 / 8) : 5 / 8 * (1 - api.clamp((u - 1.6) / 0.3, 0, 1)), alfa: 1 - est });
         }],
-        [davX, davZ, () => { rigD = api.personagem3d(cam, { ...DAVIJ, pose: u < 0.9 ? 'magia-na-mao' : 'parado', expressao: 'raiva' }, davX, davZ, 1.76, { olhaPara: G, luz: LUZ_CAMPO, vida: 1.6 }); }],
+        [davX, davZ, () => {
+          if (carrega > 0) { const q = cam.p(davX, 0, davZ); Valdor.circuloMagico(ctx, q.x, q.y, 0.75 * q.s, { k: carrega, t: api.t }); }
+          rigD = api.personagem3d(cam, { ...DAVIJ, pose: u < 0.9 ? 'magia-na-mao' : 'parado', expressao: u0 < 1.3 ? 'determinado' : 'raiva' }, davX, davZ, 1.76, { olhaPara: G, luz: LUZ_CAMPO, vida: 1.6 });
+        }],
         [teoX, teoZ, () => api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'determinado' }, teoX, teoZ, 1.82, { olhaPara: G, luz: LUZ_CAMPO, semente: 3 })],
       ]);
       const qg = cam.p(G[0], 0.45, G[1]);
-      if (rigD && rigD.escalaPx && u > 0.2 && u < 0.6) { const m = rigD.pontoMundo('mao_d', [0, 0.25]); Valdor.raioMagia(ctx, [m.x, m.y], [qg.x, qg.y], api.t, 1 - api.fase(0.45, 0.6)); Valdor.faisca(ctx, qg.x, qg.y, 60, api.t, 1); }
-      Valdor.dano(ctx, qg.x, qg.y - 150, '3', u - 0.42, { tam: 100 });
+      if (rigD && rigD.escalaPx && u0 < 1.45) { const m = rigD.pontoMundo('mao_d', [0, 0.25]); Valdor.esferaEnergia(ctx, m.x, m.y, 18 + 34 * carrega, api.t, 0.4 + 0.6 * carrega); }
+      if (rigD && rigD.escalaPx && u > 0.2 && u < 0.6) { const m = rigD.pontoMundo('mao_d', [0, 0.25]); Valdor.raioMagia(ctx, [m.x, m.y], [qg.x, qg.y], api.t, 1 - api.clamp((u - 0.45) / 0.15, 0, 1)); Valdor.faisca(ctx, qg.x, qg.y, 70, api.t, 1); }
+      Valdor.dano(ctx, qg.x, qg.y - 150, '3', u0 - 1.7, { tam: 100 });
       if (u > 0.88 && u < 1.0) { const qe = cam.p(teoX - 0.25, 0.9, teoZ); Valdor.faisca(ctx, qe.x, qe.y, 70, api.t, 1); }
-      if (u > 0.88 && u < 1.4) Valdor.dano(ctx, qg.x - 140, qg.y - 70, 'BLOQUEADO', u - 0.9, { tam: 58, cor: '#BFE6FF', sobe: 50, dura: 0.5 });
-      if (u > 1.45 && u < 1.65) { ctx.save(); ctx.strokeStyle = 'rgba(255,250,235,0.95)'; ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(qg.x, qg.y, 170, -2.4, -0.4); ctx.stroke(); ctx.restore(); Valdor.faisca(ctx, qg.x, qg.y - 20, 90, api.t, 1); }
-      Valdor.dano(ctx, qg.x + 40, qg.y - 170, '5', u - 1.55, { tam: 130, cor: AMARELO });
+      Valdor.dano(ctx, qg.x - 140, qg.y - 70, 'BLOQUEADO', u0 - 3.1, { tam: 58, cor: '#BFE6FF', sobe: 50, dura: 0.7 });
+      if (u > 1.5 && u < 1.62) { ctx.save(); ctx.strokeStyle = 'rgba(255,250,235,0.95)'; ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(qg.x, qg.y, 170, -2.4, -0.4); ctx.stroke(); ctx.restore(); Valdor.faisca(ctx, qg.x, qg.y - 20, 90, api.t, 1); }
+      Valdor.dano(ctx, qg.x + 40, qg.y - 170, '5', u0 - 4.75, { tam: 130, cor: AMARELO });
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.5 });
       ctx.restore();
     },
