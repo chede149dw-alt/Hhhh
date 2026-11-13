@@ -1,0 +1,38 @@
+[   0.0-   4.2] E se você pudesse sentar em uma cadeira e entrar num jogo onde dá pra fazer um impossível
+[   4.2-   5.2] 2050?
+[   5.2-   8.3] Lá fora, emprego quase não existe.
+[   8.3-  10.7] Então as pessoas trabalham dentro de um jogo.
+[  10.7-  15.8] Cada espada, cada anel, cada armadura lá dentro vale dinheiro de verdade aqui fora.
+[  15.8-  17.8] O Gabi já zerou tudo o que é jogo.
+[  17.8-  21.3] Acabou de se mudar e gastou a economia inteira num só.
+[  21.3-  25.4] Antes de qualquer músculo mexer, o cérebro manda um sinal elétrico pra ele.
+[  25.4-  29.6] A cadeira lê esse sinal na pele e o boneco se mexe antes do corpo.
+[  29.6-  30.6] O visor acendeu.
+[  30.6-  33.3] Bem-vindo ao Ether 2050.
+[  33.3-  37.4] Ele sentiu vento, ouviu um rio e sentiu cheiro de grama molhada.
+[  37.4-  41.4] O cheiro é o único sentido que vai direto pra parte do cérebro que guarda memória.
+[  41.4-  42.4] O visor acendeu.
+[  42.4-  45.1] Bem-vindo ao Ether 2050.
+[  45.1-  49.3] Ele sentiu vento, ouviu um rio e sentiu cheiro de grama molhada.
+[  49.3-  53.6] O cheiro é o único sentido que vai direto pra parte do cérebro que guarda memória.
+[  53.6-  56.4] Por isso, nada parece tão real quanto ele.
+[  56.4-  58.2] Só uma coisa não atravessa.
+[  58.2-  59.2] A dor.
+[  59.2-  62.2] Ela anda por nevos próprios e o capacete não toca.
+[  62.2-  63.2] Escolha de classe.
+[  63.2-  64.2] Paladino.
+[  64.2-  65.2] Bárbaro.
+[  65.2-  66.2] Guerreiro.
+[  66.2-  67.2] Mago.
+[  67.2-  68.2] Ninja.
+[  68.2-  69.2] Assassino.
+[  69.2-  70.2] Arqueiro.
+[  70.2-  71.2] Monge.
+[  71.2-  72.2] O Gabi escolheu assassino.
+[  72.2-  73.2] Cinco pontos pra distribuir.
+[  73.2-  74.2] Destreza.
+[  74.2-  75.2] Força.
+[  75.2-  76.2] Velocidade.
+[  76.2-  77.9] Ele botou cinco em sorte.
+[  77.9-  79.3] Todo mundo mira no dano.
+[  79.3-  82.2] Mas se um item é salário, sorte é aumento.
