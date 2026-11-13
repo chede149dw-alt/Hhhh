@@ -1,0 +1,113 @@
+{
+ "fabrica": "criarDavi",
+ "registroPoses": "POSES_PADRAO",
+ "opcoes": {},
+ "titulo": "DAVI",
+ "subtitulo": "Protagonista · gastou tudo no jogo",
+ "paleta": [
+  {
+   "nome": "Moletom",
+   "cor": "#5D6470"
+  },
+  {
+   "nome": "Calça",
+   "cor": "#34313A"
+  },
+  {
+   "nome": "Tênis",
+   "cor": "#F2EDE6"
+  },
+  {
+   "nome": "Detalhe",
+   "cor": "#D8434B"
+  },
+  {
+   "nome": "Pele",
+   "cor": "#8F5B3E"
+  },
+  {
+   "nome": "Cabelo",
+   "cor": "#2C2936"
+  }
+ ],
+ "vistas": [
+  {
+   "nome": "Frente",
+   "vista": "frente",
+   "pose": "parado"
+  },
+  {
+   "nome": "3/4",
+   "vista": "tq",
+   "pose": "tq"
+  },
+  {
+   "nome": "Perfil",
+   "vista": "perfil",
+   "pose": "perfil"
+  },
+  {
+   "nome": "Costas",
+   "vista": "costas",
+   "pose": "costas"
+  }
+ ],
+ "expressoes": [
+  {
+   "nome": "Neutro",
+   "expressao": "neutro"
+  },
+  {
+   "nome": "Feliz",
+   "expressao": "feliz"
+  },
+  {
+   "nome": "Espanto",
+   "expressao": "espanto"
+  },
+  {
+   "nome": "Medo",
+   "expressao": "medo"
+  },
+  {
+   "nome": "Raiva",
+   "expressao": "raiva"
+  },
+  {
+   "nome": "Preocupado",
+   "expressao": "preocupado"
+  },
+  {
+   "nome": "Cansado",
+   "expressao": "cansado"
+  },
+  {
+   "nome": "Rindo",
+   "expressao": "rindo"
+  }
+ ],
+ "poses": [
+  {
+   "nome": "Parado",
+   "pose": "parado"
+  },
+  {
+   "nome": "Andando",
+   "pose": "andando"
+  },
+  {
+   "nome": "Acenando",
+   "pose": "acenando"
+  },
+  {
+   "nome": "Mãos na cintura",
+   "pose": "maos-na-cintura"
+  }
+ ],
+ "regras": [
+  "Sempre moletom cinza com capuz, calça larga carvão e tênis branco de cano alto com detalhe vermelho",
+  "Pele escura, cabelo preto curto e bagunçado",
+  "No jogo: classe Ladino, procura a adaga épica"
+ ],
+ "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}
