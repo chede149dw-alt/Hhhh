@@ -1,0 +1,113 @@
+{
+  "fabrica": "criarChede",
+  "registroPoses": "POSES_PADRAO",
+  "opcoes": {},
+  "titulo": "CHEDE",
+  "subtitulo": "Protagonista · fenda dimensional na mão",
+  "paleta": [
+    {
+      "nome": "Camiseta",
+      "cor": "#F07C28"
+    },
+    {
+      "nome": "Bermuda",
+      "cor": "#2A2830"
+    },
+    {
+      "nome": "Pele",
+      "cor": "#8F5B3E"
+    },
+    {
+      "nome": "Cabelo",
+      "cor": "#2C2936"
+    },
+    {
+      "nome": "Tênis",
+      "cor": "#F2EDE6"
+    },
+    {
+      "nome": "Poder",
+      "cor": "#7B4DFF"
+    }
+  ],
+  "vistas": [
+    {
+      "nome": "Frente",
+      "vista": "frente",
+      "pose": "parado"
+    },
+    {
+      "nome": "3/4",
+      "vista": "tq",
+      "pose": "tq"
+    },
+    {
+      "nome": "Perfil",
+      "vista": "perfil",
+      "pose": "perfil"
+    },
+    {
+      "nome": "Costas",
+      "vista": "costas",
+      "pose": "costas"
+    }
+  ],
+  "expressoes": [
+    {
+      "nome": "Neutro",
+      "expressao": "neutro"
+    },
+    {
+      "nome": "Feliz",
+      "expressao": "feliz"
+    },
+    {
+      "nome": "Espanto",
+      "expressao": "espanto"
+    },
+    {
+      "nome": "Medo",
+      "expressao": "medo"
+    },
+    {
+      "nome": "Raiva",
+      "expressao": "raiva"
+    },
+    {
+      "nome": "Preocupado",
+      "expressao": "preocupado"
+    },
+    {
+      "nome": "Cansado",
+      "expressao": "cansado"
+    },
+    {
+      "nome": "Rindo",
+      "expressao": "rindo"
+    }
+  ],
+  "poses": [
+    {
+      "nome": "Parado",
+      "pose": "parado"
+    },
+    {
+      "nome": "Andando",
+      "pose": "andando"
+    },
+    {
+      "nome": "Acenando",
+      "pose": "acenando"
+    },
+    {
+      "nome": "Mãos na cintura",
+      "pose": "maos-na-cintura"
+    }
+  ],
+  "regras": [
+    "Sempre camiseta laranja com bolso, bermuda preta e tênis branco",
+    "Cabelo preto cacheado e volumoso",
+    "Poder: fenda dimensional roxa na palma da mão"
+  ],
+  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}
