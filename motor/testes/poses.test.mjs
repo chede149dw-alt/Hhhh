@@ -44,7 +44,7 @@ test('fichas válidas e medidas coerentes', () => {
     const f = JSON.parse(fs.readFileSync(new URL(a, dir)));
     assert.deepEqual(validarFicha(f), [], a);
     const m = calcularMedidas(f);
-    const topo = m.olhosY + m.cabecaR * 1.05;
+    const topo = m.topo;
     assert.ok(Math.abs(topo - m.H) / m.H < 0.06, `${a}: topo da cabeça ${topo.toFixed(2)} vs altura ${m.H}`);
   }
   assert.match(validarFicha({ nome: 'x', altura: 3, cores: {}, pecas: { chapeu: 'x' } }).join('|'), /altura 3.*pele.*chapeu/);

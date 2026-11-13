@@ -1,11 +1,12 @@
 {
   "nome": "Gabriel",
   "papel": "amigo de Eduardo, sócio da distribuidora",
+  "referencia": "imagem 3 (boneco de blocos: camisa branca de botão, calça azul, cinto, relógio)",
   "altura": 1.76,
-  "corpo": { "largura": 1.05, "peso": 1.08, "ombros": 1.05 },
+  "corpo": { "largura": 1.05, "peso": 1.05, "ombros": 1.05 },
   "cores": {
-    "pele": "#b97a56", "cabelo": "#17110d", "sobrancelha": "#17110d", "olhos": "#2a1a10", "boca": "#7d4134",
-    "camisa": "#c8372d", "calca": "#2c3a52", "calcado": "#f1f1ee", "sola": "#bdbdb8", "acessorio": "#1e1e22"
+    "pele": "#b97a56", "cabelo": "#1b1410", "sobrancelha": "#1b1410", "olhos": "#1b120c", "boca": "#6e3a2f",
+    "camisa": "#f2f0ea", "calca": "#34466e", "calcado": "#2a2a2c", "cinto": "#1f1f22", "fivela": "#b9bcc2", "acessorio": "#1e1e22"
   },
-  "pecas": { "cabelo": "raspado", "camisa": "manga_curta", "calca": "bermuda", "calcado": "tenis", "acessorios": ["bone", "relogio"] }
+  "pecas": { "cabelo": "curto", "camisa": "camisa_social", "calca": "comprida", "calcado": "sapato", "barba": "nenhuma", "acessorios": ["cinto", "relogio"] }
 }

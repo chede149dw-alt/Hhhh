@@ -2,10 +2,10 @@
   "nome": "Cliente",
   "papel": "moça que chega às 3h; infiltrada (imita aparência e voz de conhecidos)",
   "altura": 1.63,
-  "corpo": { "largura": 0.9, "peso": 0.92, "ombros": 0.9 },
+  "corpo": { "largura": 0.9, "peso": 0.9, "ombros": 0.88 },
   "cores": {
-    "pele": "#d9a07c", "cabelo": "#241713", "sobrancelha": "#241713", "olhos": "#2a1a12", "boca": "#a3454a",
-    "camisa": "#6b5a7a", "calca": "#1f2433", "calcado": "#d9d4cc", "sola": "#f2f2ee", "acessorio": "#d4b25a"
+    "pele": "#d9a07c", "cabelo": "#241713", "sobrancelha": "#241713", "olhos": "#1a100b", "boca": "#9c4146",
+    "camisa": "#5d4d6e", "calca": "#1f2433", "calcado": "#d9d4cc", "sola": "#f2f2ee", "acessorio": "#d4b25a"
   },
-  "pecas": { "cabelo": "longo", "camisa": "jaqueta", "calca": "comprida", "calcado": "tenis", "acessorios": ["colar"] }
+  "pecas": { "cabelo": "longo", "camisa": "jaqueta", "calca": "justa", "calcado": "tenis", "barba": "nenhuma", "acessorios": ["colar", "cilios"] }
 }

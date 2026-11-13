@@ -1,0 +1,12 @@
+{
+  "nome": "Exemplo barba",
+  "papel": "teste das peças da referência 1 (cabelo volumoso e barba facetados, óculos)",
+  "referencia": "imagem 1 (estudioso low-poly)",
+  "altura": 1.74,
+  "corpo": { "largura": 1.0, "peso": 1.05 },
+  "cores": {
+    "pele": "#d29b7a", "cabelo": "#8c8c8a", "sobrancelha": "#6d6d6b", "barba": "#7d7d7b", "olhos": "#1b120c", "boca": "#6e3a2f",
+    "camisa": "#7a5236", "calca": "#4a3424", "calcado": "#5b3a24", "sola": "#3a2416", "cinto": "#3a2416", "fivela": "#c7a24a", "acessorio": "#2a2220"
+  },
+  "pecas": { "cabelo": "volumoso", "camisa": "manga_longa", "calca": "comprida", "calcado": "coturno", "barba": "cheia", "acessorios": ["cinto", "oculos"] }
+}

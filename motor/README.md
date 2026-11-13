@@ -6,7 +6,7 @@ Motor audiovisual local: vídeos verticais 1080x1920 a 60 fps, 3D chapado, tudo 
 
 | Peça | Versão | Onde |
 |---|---|---|
-| three.js | **0.186.1** | `visual/lib/three/` (cópia local: `three.module.js`, `three.core.js`, `addons/` com postprocessing, shaders, math, utils) |
+| three.js | **0.186.1** | `visual/lib/three/` (cópia local: `three.module.js`, `three.core.js`, `addons/` com postprocessing, shaders, math, utils, geometries/RoundedBoxGeometry) |
 | puppeteer-core | 25.15.0 | `node_modules` (só controla o Chrome) |
 | Node | 22.x | — |
 | ffmpeg | 6.x | sistema |
@@ -67,7 +67,7 @@ Toda página renderizável deve:
 | `animacao/poses.js` | Puro (Node + navegador): juntas, canais, `REPOUSO`, `POSES` (acenar, apontar, sentar, assustado), `derivar`, `misturar`, `validarPose`. |
 | `visual/boneco/medidas.js` | Puro: `validarFicha`, `calcularMedidas` (proporções a partir da altura). |
 | `visual/boneco/boneco.js` | `criarBoneco(ficha)` → `{ raiz, juntas, posar(pose), medidas }`; `carregarFicha(nome)`. |
-| `visual/boneco/fichas/*.json` | Fichas: nome, papel, altura, corpo (largura/peso/ombros), cores, peças (cabelo, camisa, calca, calcado, acessorios). |
+| `visual/boneco/fichas/*.json` | Fichas: nome, papel, altura, corpo (largura/peso/ombros), cores, peças (cabelo, camisa, calca, calcado, barba, acessorios); cores extras opcionais: camisa2, detalhe, sola, cinto, fivela, barba. Valores válidos em `medidas.js` (`PECAS_VALIDAS`). |
 | `visual/testes/boneco.html` | `?ficha=nome`, quadros 0-8 com `--fps 1`: 4 vistas, 4 poses e o rosto infiltrado. |
 | `visual/testes/relogio.html` | Cena mínima de teste do contrato `quadro(t)`. |
 | `visual/testes/estilo.html` | 3 cubos + 1 esfera. URL: `luz=dia\|noite`, `pos=0\|neutro\|1`, `calib=1`. Expõe `window.medir()`. |

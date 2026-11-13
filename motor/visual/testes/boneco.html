@@ -54,8 +54,8 @@ window.quadro = (t) => {
   const sentado = nome === 'sentar';
   banco.position.set(Math.sin(giro * Math.PI / 180) * -0.1, 0.225, Math.cos(giro * Math.PI / 180) * -0.1);
   const close = nome === 'infiltrado';
-  const alvoY = close ? b.medidas.olhosY : H * (sentado ? 0.36 : 0.5);
-  const dist = close ? 1.7 : H * 2.55;
+  const alvoY = close ? b.medidas.olhosY - 0.05 : H * (sentado ? 0.36 : 0.5);
+  const dist = close ? 1.5 : H * 2.55;
   cam.position.set(0, alvoY + (close ? 0 : H * 0.05), dist); cam.lookAt(0, alvoY, 0);
   document.getElementById('rot').textContent = `${ficha.nome} · ${nome}`;
   pos.render(cena, cam, t);

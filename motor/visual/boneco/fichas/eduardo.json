@@ -1,11 +1,13 @@
 {
   "nome": "Eduardo",
   "papel": "protagonista; a câmera é o olhar dele (mãos em quadro)",
+  "referencia": "imagem 2 (moletom largo preto/branco com detalhe laranja, gola alta, calça justa, coturno)",
   "altura": 1.72,
-  "corpo": { "largura": 1.0, "peso": 0.98 },
+  "corpo": { "largura": 0.97, "peso": 0.95 },
   "cores": {
-    "pele": "#e0ac85", "cabelo": "#4a2f1d", "sobrancelha": "#3a2416", "olhos": "#3b2a1a", "boca": "#9a5545",
-    "camisa": "#3d4a3c", "calca": "#262a33", "calcado": "#2d2d2d", "sola": "#e6e6e0", "acessorio": "#c9c9c9"
+    "pele": "#8a5a3e", "cabelo": "#2b1d14", "sobrancelha": "#22160f", "olhos": "#160e09", "boca": "#5e3027",
+    "camisa": "#26272b", "camisa2": "#e8e6e1", "detalhe": "#f07a1a",
+    "calca": "#1c1d21", "calcado": "#151517", "sola": "#202022"
   },
-  "pecas": { "cabelo": "curto", "camisa": "moletom", "calca": "comprida", "calcado": "tenis", "acessorios": [] }
+  "pecas": { "cabelo": "curto", "camisa": "moletom", "calca": "justa", "calcado": "coturno", "barba": "nenhuma", "acessorios": [] }
 }

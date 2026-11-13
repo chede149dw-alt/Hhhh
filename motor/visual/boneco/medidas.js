@@ -1,10 +1,12 @@
-// Ficha → medidas (puro, sem three). Proporções de desenho animado (~6,5 cabeças).
+// Ficha → medidas (puro, sem three). Estilo "blocos" (referências em projetos/_referencias):
+// cabeça caixa arredondada, ombros largos, mãos e calçados grandes.
 export const PECAS_VALIDAS = {
-  cabelo: ['curto', 'raspado', 'longo', 'coque', 'nenhum'],
-  camisa: ['manga_curta', 'manga_longa', 'moletom', 'jaqueta'],
-  calca: ['comprida', 'bermuda'],
-  calcado: ['tenis', 'chinelo'],
-  acessorios: ['bone', 'relogio', 'colar'],
+  cabelo: ['curto', 'raspado', 'longo', 'coque', 'volumoso', 'nenhum'],
+  camisa: ['manga_curta', 'camisa_social', 'manga_longa', 'moletom', 'jaqueta'],
+  calca: ['comprida', 'bermuda', 'justa'],
+  calcado: ['tenis', 'coturno', 'sapato', 'chinelo'],
+  barba: ['nenhuma', 'bigode', 'cavanhaque', 'cheia'],
+  acessorios: ['bone', 'relogio', 'colar', 'cinto', 'oculos', 'cilios'],
 };
 const CORES_OBRIG = ['pele', 'cabelo', 'camisa', 'calca', 'calcado'];
 const HEX = /^#[0-9a-fA-F]{6}$/;
@@ -30,22 +32,26 @@ export function calcularMedidas(f) {
   if (erros.length) throw new Error(`Ficha "${f?.nome}" inválida:\n- ` + erros.join('\n- '));
   const H = f.altura ?? 1.6;
   const larg = f.corpo?.largura ?? 1, peso = f.corpo?.peso ?? 1, omb = f.corpo?.ombros ?? 1;
+  const largo = f.pecas?.camisa === 'moletom' ? 1.1 : 1;     // roupa folgada
+  const justa = f.pecas?.calca === 'justa' ? 0.82 : 1;
   const m = {
     H,
-    cabecaR: 0.09 * H,
-    pescocoH: 0.04 * H, pescocoR: 0.028 * H * peso,
-    colunaH: 0.125 * H, peitoH: 0.165 * H,
-    abdomenL: 0.165 * H * larg * peso, abdomenP: 0.11 * H * peso,
-    peitoL: 0.205 * H * larg * omb, peitoP: 0.12 * H * peso,
-    quadrilL: 0.17 * H * larg * peso, quadrilH: 0.08 * H,
-    ombros: 0.245 * H * larg * omb,
-    bracoLen: 0.175 * H, anteLen: 0.155 * H, maoLen: 0.085 * H,
-    bracoR: 0.03 * H * peso, anteR: 0.026 * H * peso,
-    pernasDist: 0.105 * H * larg,
-    coxaLen: 0.205 * H, canelaLen: 0.2 * H, peAlt: 0.045 * H, peComp: 0.15 * H,
-    coxaR: 0.043 * H * peso, canelaR: 0.032 * H * peso,
+    cabecaL: 0.14 * H, cabecaH: 0.165 * H, cabecaP: 0.145 * H,
+    pescocoH: 0.035 * H, pescocoL: 0.055 * H * peso,
+    colunaH: 0.125 * H, peitoH: 0.17 * H,
+    abdomenL: 0.17 * H * larg * peso * largo, abdomenP: 0.11 * H * peso * largo,
+    peitoL: 0.215 * H * larg * omb * largo, peitoP: 0.12 * H * peso * largo,
+    quadrilL: 0.17 * H * larg * peso, quadrilH: 0.075 * H,
+    ombros: 0.25 * H * larg * omb * largo,
+    bracoLen: 0.17 * H, anteLen: 0.15 * H, maoLen: 0.095 * H,
+    bracoL: 0.062 * H * peso * largo, anteL: 0.05 * H * peso * largo,
+    pernasDist: 0.09 * H * larg,
+    coxaLen: 0.205 * H, canelaLen: 0.2 * H, peAlt: 0.045 * H, peComp: 0.16 * H,
+    coxaL: 0.08 * H * peso * justa, canelaL: 0.068 * H * peso * justa,
   };
   m.pernaComp = m.coxaLen + m.canelaLen + m.peAlt;   // altura do pivô do quadril
-  m.olhosY = m.pernaComp + 0.02 * H + m.colunaH + m.peitoH + m.pescocoH + m.cabecaR * 0.95;
+  const baseCabeca = m.pernaComp + 0.02 * H + m.colunaH + m.peitoH + m.pescocoH;
+  m.olhosY = baseCabeca + m.cabecaH * 0.52;
+  m.topo = baseCabeca + m.cabecaH;
   return { ...m, ...(f.medidas || {}) };
 }

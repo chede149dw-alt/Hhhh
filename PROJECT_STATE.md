@@ -26,7 +26,14 @@ projetos/               toda saída
 uma distribuidora de madrugada. Às 3h chega uma cliente (moça conhecida) que chama Eduardo por um apelido
 que ela nunca usou. Logo depois, alerta no celular: "Cuidado: criaturas estranhas estão entre nós. Imitam
 vozes de pessoas conhecidas e aparência."
-Fichas: `gabriel.json`, `cliente.json` (infiltrada), `eduardo.json` (mãos em quadro).
+Fichas: `gabriel.json`, `cliente.json` (infiltrada), `eduardo.json` (mãos em quadro), `exemplo_barba.json` (teste).
+
+**Estilo dos personagens: "blocos"** (referências em `projetos/_referencias/`):
+- ref3 (principal): corpo de caixas arredondadas, cabelo em blocos, olhos escuros ovais sem branco com brilho,
+  nariz em bloco, bigode, colarinho/botões/bolso, cinto, relógio, sapato → Gabriel.
+- ref2: moletom largo cor-bloco (pala escura em V, detalhe laranja), gola alta com zíper, calça justa, coturno → Eduardo.
+- ref1: cabelo volumoso e barba facetados (flatShading), óculos → peças disponíveis (exemplo_barba).
+- Infiltrado (`rosto.estranho`): olhos crescem e perdem o brilho ("olhar morto"), boca alarga.
 Cenário principal previsto: distribuidora (balcão, geladeiras, porta de aço, letreiro, rua às 3h).
 Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`/lanterna.
 
@@ -55,12 +62,13 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
   Dia: sol 2,0 + ambiente 1,1416. Noite: lua 0,30 + ambiente 0,30 + lanterna 2,5416 (decay 0, cone 0,24 rad).
   Tone mapping desligado. Objetos projetam sombra e não recebem; só o chão recebe (`comoObjeto`/`comoChao`).
 - Volume via onBeforeCompile: escurece até 22% o que aponta para baixo + contorno de luz (fresnel), global (`VOLUME`).
-- Boneco (`visual/boneco/boneco.js`): juntas = grupos (quadril → coluna → peito → pescoço → cabeça; peito →
+- Boneco (`visual/boneco/boneco.js`): peças = `RoundedBoxGeometry` (addon copiado para lib/three) e blocos
+  facetados (icosaedro achatado + flatShading) para cabelo/barba. Juntas = grupos (quadril → coluna → peito → pescoço → cabeça; peito →
   ombros → cotovelos → mãos (+ dedos e indicador); quadril → coxas → joelhos → pés). Coluna em 2 juntas
   (coluna + peito) para não ficar "de madeira". Ordem de rotação XZY (giro no eixo do osso primeiro).
 - Poses (`animacao/poses.js`, puro): canais anatômicos com nome (frente, abre, giro, dobra...), mesmos números
   nos dois lados (espelhamento automático). `derivar`, `misturar`, `validarPose` (erro lista os nomes válidos).
-- Rosto: olhos, sobrancelhas, nariz, 4 bocas como peças planas tangentes à esfera. Canal `rosto.estranho`
+- Rosto: olhos, sobrancelhas em bloco, nariz em bloco, 4 bocas como peças planas na face frontal da cabeça. Canal `rosto.estranho`
   (0..1) faz a revelação do infiltrado: pupilas tomam o olho e a boca alarga.
 - Pós (`visual/estilo/posfx.js`): um passe só (névoa por profundidade, foco raso com 16 amostras, vinheta, grão
   com semente no tempo). Alvo HalfFloat + MSAA 4x; com parâmetros zerados a cor sai idêntica.
@@ -76,11 +84,12 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
 | 2 | `npm test`: cor medida na face = cor do material (4 cores), render direto e com pós neutro | ✅ exato, diferença 0 |
 | 2 | Velocidade cena de teste noite + pós completo, 4 processos | ⚠️ 1,4 q/s |
 | 3 | `npm test`: misturar (extremos, média, boca), padrões, derivar imutável, nomes errados recusados, 3 fichas válidas e altura coerente (±6%) | ✅ |
-| 3 | Folha visual: 3 personagens × (4 vistas + acenar, apontar, sentar, assustado + infiltrado) | ✅ aprovação pendente |
+| 3 | Folha visual: 4 personagens (estilo blocos) × (4 vistas + acenar, apontar, sentar, assustado + infiltrado) | ✅ aprovação pendente |
 
 Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etapa2_estilo.png`
 (calibração com faixa de referência invisível | dia com pós | noite com lanterna, 2 instantes),
-`projetos/_evidencias/etapa3_personagens.png` (Gabriel, Cliente, Eduardo).
+`projetos/_evidencias/etapa3_personagens.png` (Gabriel, Cliente, Eduardo, Exemplo barba),
+`projetos/_evidencias/etapa3_referencias.png` (referência × resultado).
 
 ## Limitações conhecidas
 
@@ -90,7 +99,7 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
   ao ffmpeg (sem PNG), e opção de prévia com GPU/meia resolução.
 - O teste de determinismo usa a cena de teste; repetir com a cena real na etapa 10.
 - Boneco: peças rígidas aparecem como emendas em close extremo; cabelo longo é feito de caixas (sem
-  física). Sentar depende de `desl.y` manual até existir IK dos pés (etapa 4).
+  física). Membros ainda mais finos e mãos menores que na ref3. Sentar depende de `desl.y` manual até existir IK dos pés (etapa 4).
 
 ## Próxima etapa
 
