@@ -91,7 +91,8 @@ export function virarTelaPara(celular, ponto) {
 }
 
 // Brilho da tela (luz fraca que acende o rosto de quem olha).
-export function brilhoDaTela(celular, { cor = '#cfe2ff', intensidade = 0.6, alcance = 0.8 } = {}) {
-  const l = new THREE.PointLight(cor, intensidade, alcance, 2);
+// Sem queda quadrática (decay 0): perto da tela uma luz 1/d² estoura tudo; aqui é constante e some no alcance.
+export function brilhoDaTela(celular, { cor = '#cfe2ff', intensidade = 0.22, alcance = 0.35 } = {}) {
+  const l = new THREE.PointLight(cor, intensidade, alcance, 0);
   l.position.set(0, 0, 0.06); celular.raiz.add(l); return l;
 }

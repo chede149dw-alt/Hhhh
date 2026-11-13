@@ -111,7 +111,7 @@ function falando(id, t) {
 const TEXTO_ALERTA = 'Cuidado: criaturas estranhas estão entre nós. Imitam vozes de pessoas conhecidas e aparência.';
 const celEdu = criarCelular({ tipo: 'bloqueio', texto: TEXTO_ALERTA }); cena.add(celEdu.raiz);
 let telaEdu = 'bloqueio';
-const luzCel = new THREE.PointLight('#bcd6ff', 0.9, 0.9, 2); cena.add(luzCel);
+const luzCel = new THREE.PointLight('#bcd6ff', 0.25, 0.4, 0); cena.add(luzCel);
 let celGab = null;
 if (B.gabriel) { celGab = criarCelular({ tipo: 'bloqueio' }); B.gabriel.juntas.maoD.add(celGab.raiz); celGab.raiz.position.set(0, -B.gabriel.medidas.maoLen * 0.62, 0); brilhoDaTela(celGab); }
 const comObjeto = (id, t, obj) => { const e = ativa(id, t); return e.atuacao && (ATUACOES[e.atuacao].objetos || []).some((o) => o.id === obj && t - e.ini >= (o.de ?? 0)); };

@@ -159,6 +159,7 @@
      "acao": "alerta_celular"
     }
    ],
+   "legenda": "alto",
    "ini": 45.908,
    "fim": 52.327
   },

@@ -6,7 +6,7 @@
   "corpo": { "largura": 1.05, "peso": 1.05, "ombros": 1.05 },
   "cores": {
     "pele": "#b97a56", "cabelo": "#1b1410", "sobrancelha": "#1b1410", "olhos": "#1b120c", "boca": "#6e3a2f",
-    "camisa": "#f2f0ea", "calca": "#34466e", "calcado": "#2a2a2c", "cinto": "#1f1f22", "fivela": "#b9bcc2", "acessorio": "#1e1e22"
+    "camisa": "#dedcd4", "calca": "#34466e", "calcado": "#2a2a2c", "cinto": "#1f1f22", "fivela": "#b9bcc2", "acessorio": "#1e1e22"
   },
   "pecas": { "cabelo": "curto", "camisa": "camisa_social", "calca": "comprida", "calcado": "sapato", "barba": "nenhuma", "acessorios": ["cinto", "relogio"] }
 }

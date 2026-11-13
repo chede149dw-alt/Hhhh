@@ -243,7 +243,8 @@
           "palavra": "tocaram",
           "acao": "alerta_celular"
         }
-      ]
+      ],
+      "legenda": "alto"
     },
     {
       "id": 8,
