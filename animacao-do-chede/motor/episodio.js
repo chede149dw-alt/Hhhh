@@ -262,7 +262,8 @@
   function legenda(ctx, t) {
     const bloco = TL.legendas.find((b) => t >= b.inicio && t < b.fim);
     if (!bloco) return;
-    const faixas = [380, 1500, 1180, 700];
+    // faixas da legenda (y): padrão no alto; o roteiro pode trocar ("legenda": { "faixas": [...] }), ex.: no meio da tela
+    const faixas = TL.legendaFaixas || [380, 1500, 1180, 700];
     const dist = (y) => { let d = 1e9; for (const r of rostos) d = Math.min(d, Math.abs(r.y - y) - r.r); return rostos.length ? d : 1e9; };
     let melhor = faixas[0], melhorD = -1;
     for (const y of faixas) {

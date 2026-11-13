@@ -129,3 +129,11 @@
   (por cima do ombro → no outro personagem → volta pelo lado).
 - Capa: `motor/quadro.js` + plano `capaReels`; personagem com vista FIXA (com órbita, um ângulo perto de 22,5° mistura
   duas vistas e ele fica transparente); título no terço de cima com faixa escura atrás; selo PARTE X.
+
+## Série nova VALDOR (13/11)
+- Formato do vídeo de referência: corte a cada 2–3 s, câmera sempre andando, ciência em raio-X, legenda NO MEIO
+  (`"legenda": { "faixas": [1180, 1400, 760, 420] }` no roteiro). Textos/etiquetas de infográfico ficam abaixo de y ≈ 1300.
+- O roteiro pode carregar arquivos próprios da série com `"scripts": [...]` (personagens, cenário, efeitos).
+- Personagens de jogo = personagem da vida real + `equipar(def, eq)` (personagens/nova/equipamento.js): manto, capuz,
+  cinto, botas, escudo, adaga; a magia nas mãos acende com `_magia` na pose.
+- Narração de prévia a 210 ppm para caber 31 planos em 75 s.

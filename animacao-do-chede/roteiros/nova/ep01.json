@@ -1,0 +1,474 @@
+{
+ "serie": "VALDOR",
+ "episodio": 1,
+ "parte": 1,
+ "scripts": [
+  "personagens/nova/cores.js",
+  "personagens/nova/equipamento.js",
+  "personagens/nova/davi/davi.js",
+  "personagens/nova/davi/davi-jogo.js",
+  "personagens/nova/teo/teo.js",
+  "personagens/nova/teo/teo-jogo.js",
+  "personagens/nova/jogador-forte.js",
+  "cenarios/valdor-campo.js",
+  "efeitos/valdor.js"
+ ],
+ "legenda": {
+  "faixas": [
+   1180,
+   1400,
+   760,
+   420
+  ]
+ },
+ "planos": [
+  {
+   "id": "capa",
+   "fala": {
+    "texto": "E se um videogame pagasse o seu aluguel?",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "ALUGUEL?"
+   ],
+   "duracao": 3.0,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "saldo",
+   "fala": {
+    "texto": "O Davi juntou dinheiro por dois anos...",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "DINHEIRO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "comprar",
+   "fala": {
+    "texto": "e gastou tudo numa cadeira de realidade virtual.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "TUDO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   },
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 1.0,
+     "volume": 0.5
+    }
+   ]
+  },
+  {
+   "id": "mae",
+   "fala": {
+    "texto": "A mãe dele ainda não sabe.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "MÃE"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "itens",
+   "fala": {
+    "texto": "Porque em Valdor, tudo que você pega lá dentro",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "VALDOR,"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.8
+   }
+  },
+  {
+   "id": "precos",
+   "fala": {
+    "texto": "vale dinheiro de verdade aqui fora.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "DINHEIRO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.8
+   }
+  },
+  {
+   "id": "capsulas",
+   "fala": {
+    "texto": "Tem gente pagando a faculdade jogando.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "FACULDADE"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "raro",
+   "fala": {
+    "texto": "Um item épico cai uma vez a cada mil monstros.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "ÉPICO",
+    "MIL"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   }
+  },
+  {
+   "id": "teo",
+   "fala": {
+    "texto": "E o Téo, melhor amigo dele, comprou junto.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "TÉO,"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "novatos",
+   "fala": {
+    "texto": "Nenhum dos dois tinha jogado antes.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "ANTES."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "ouvido",
+   "fala": {
+    "texto": "O corpo fica parado, mas o ouvido não sabe.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "OUVIDO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   }
+  },
+  {
+   "id": "pulso",
+   "fala": {
+    "texto": "O capacete manda um pulso pro labirinto do ouvido,",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "PULSO",
+    "LABIRINTO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   }
+  },
+  {
+   "id": "cerebro",
+   "fala": {
+    "texto": "e o cérebro jura que você está andando.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "CÉREBRO",
+    "ANDANDO."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   }
+  },
+  {
+   "id": "visor",
+   "fala": {
+    "texto": "Bem-vindos a Valdor.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "VALDOR."
+   ],
+   "duracao": 2.6
+  },
+  {
+   "id": "raca",
+   "fala": {
+    "texto": "Primeiro, escolha sua raça.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "RAÇA."
+   ]
+  },
+  {
+   "id": "fera",
+   "fala": {
+    "texto": "O Téo escolheu homem-fera, e não contou por quê.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "HOMEM-FERA,"
+   ]
+  },
+  {
+   "id": "classe",
+   "fala": {
+    "texto": "Depois, a classe. O Davi virou mago.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "MAGO."
+   ]
+  },
+  {
+   "id": "guardiao",
+   "fala": {
+    "texto": "E o Téo, guardião.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "GUARDIÃO."
+   ]
+  },
+  {
+   "id": "nivel",
+   "fala": {
+    "texto": "Nível um: magia fraca e espada de madeira.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "UM:",
+    "MADEIRA."
+   ]
+  },
+  {
+   "id": "explorar",
+   "fala": {
+    "texto": "Antes de sonhar alto, eles precisavam ficar fortes.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "FORTES."
+   ]
+  },
+  {
+   "id": "gosma",
+   "fala": {
+    "texto": "Primeiro monstro: uma gosma.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "GOSMA."
+   ]
+  },
+  {
+   "id": "golpe",
+   "fala": {
+    "texto": "Faísca, escudo, adaga!",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "ADAGA!"
+   ],
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 0.4,
+     "volume": 0.6
+    },
+    {
+     "tipo": "impacto",
+     "em": 1.55,
+     "volume": 0.8
+    }
+   ]
+  },
+  {
+   "id": "drop",
+   "fala": {
+    "texto": "Ela deixou cair... dois centavos.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "CENTAVOS."
+   ]
+  },
+  {
+   "id": "nivel2",
+   "fala": {
+    "texto": "Nível dois!",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "DOIS!"
+   ],
+   "duracao": 2.2
+  },
+  {
+   "id": "xp",
+   "fala": {
+    "texto": "A barra de experiência foi feita pra prender você.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "PRENDER"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   }
+  },
+  {
+   "id": "progresso",
+   "fala": {
+    "texto": "O cérebro ama progresso pequeno e frequente.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "PEQUENO",
+    "FREQUENTE."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   }
+  },
+  {
+   "id": "forte",
+   "fala": {
+    "texto": "Aí passou um jogador nível oitenta.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "OITENTA."
+   ]
+  },
+  {
+   "id": "adaga",
+   "fala": {
+    "texto": "Na cintura, uma adaga épica. Quinze mil reais.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "ÉPICA.",
+    "QUINZE"
+   ]
+  },
+  {
+   "id": "aluguel",
+   "fala": {
+    "texto": "Só que o Davi tinha sete reais...",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "SETE"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "trinta",
+   "fala": {
+    "texto": "e o aluguel vencia em trinta dias.",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [
+    "TRINTA"
+   ]
+  },
+  {
+   "id": "parte",
+   "fala": {
+    "texto": "Segue pra ver a parte dois!",
+    "voz": "narrador",
+    "velocidade": 210
+   },
+   "destaque": [],
+   "duracao": 2.8
+  }
+ ]
+}

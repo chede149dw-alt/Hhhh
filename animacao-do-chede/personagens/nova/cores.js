@@ -7,3 +7,4 @@
     roxoEpico: '#9B5CFF', azulRaro: '#3E8EF0', ouroLendario: '#F2B53A',
   });
 })();
+(function () { Object.assign(Estilo.base, { armaduraEscura: '#3B3654', armaduraLuz: '#5C5680', mantoRoxo: '#4A2E7A', prata: '#C8CCD8' }); })();

@@ -152,6 +152,15 @@
       depois('tronco', (pc) => {
         if (costas || perfil) return;
         const x = cx - (hw - 0.05) * k, y = hemY - 0.2 * f;
+        if (eq.adagaCinto && eq.adagaCinto.epica) {
+          // Adaga Eclipse (épica): lâmina roxa à mostra, brilhando
+          const pul = 1;
+          pc.preencher(P((p) => p.ellipse(x + 0.08, y + 0.28, 0.22, 0.34, -0.3, 0, Math.PI * 2)), `rgba(155,92,255,${0.28 * pul})`);
+          pc.peca(P((p) => { p.moveTo(x - 0.05, y); p.lineTo(x + 0.05, y); p.quadraticCurveTo(x + 0.14, y + 0.25, x + 0.12, y + 0.55); p.quadraticCurveTo(x + 0.02, y + 0.3, x - 0.05, y); p.closePath(); }), { base: '#9B5CFF', sombra: '#5B2DB8', luz: '#D9C2FF' }, { sombra: 0.15 });
+          pc.peca(P((p) => p.roundRect(x - 0.12, y - 0.04, 0.24, 0.05, 0.02)), T('mostarda'), { sombra: 0 });
+          pc.peca(P((p) => p.roundRect(x - 0.035, y - 0.2, 0.07, 0.17, 0.03)), T('carvao'), { sombra: 0.08 });
+          return;
+        }
         pc.peca(P((p) => { p.moveTo(x - 0.05, y); p.lineTo(x + 0.05, y); p.lineTo(x + 0.13, y + 0.42); p.lineTo(x + 0.06, y + 0.46); p.closePath(); }), T('couroEscuro'), { sombra: 0.1 });
         pc.peca(P((p) => p.roundRect(x - 0.1, y - 0.04, 0.2, 0.05, 0.02)), T('pedra'), { sombra: 0 });
         pc.peca(P((p) => p.roundRect(x - 0.035, y - 0.2, 0.07, 0.17, 0.03)), T('caqui'), { sombra: 0.08 });
