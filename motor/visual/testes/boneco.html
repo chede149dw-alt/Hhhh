@@ -30,7 +30,9 @@ renderer.setPixelRatio(1); renderer.setSize(L, A); prepararRenderer(renderer);
 document.body.appendChild(renderer.domElement);
 const cena = new THREE.Scene(); cena.background = new THREE.Color('#d8d2c6');
 const cam = new THREE.PerspectiveCamera(28, L / A, 0.1, 50);
-criarLuzes(cena, 'dia', { raioSombra: 3 });
+const NOITE = q.get('luz') === 'noite';
+criarLuzes(cena, NOITE ? 'noite' : 'dia', { raioSombra: 3, camera: cam });
+if (NOITE) cena.background.set('#06080d');
 const chao = comoChao(new THREE.Mesh(new THREE.PlaneGeometry(30, 30), materialChapado('#c4bcae', { volume: false })));
 chao.rotation.x = -Math.PI / 2; cena.add(chao);
 const banco = comoObjeto(new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.45, 0.45), materialChapado('#7a5a3c')));
@@ -45,6 +47,13 @@ const VISTAS = [
   ['frente', 0, POSES.repouso], ['lado direito', -90, POSES.repouso], ['costas', 180, POSES.repouso], ['lado esquerdo', 90, POSES.repouso],
   ['acenar', 20, POSES.acenar], ['apontar', 35, POSES.apontar], ['sentar', 30, POSES.sentar], ['assustado', 15, POSES.assustado],
   ['infiltrado', 0, derivar(POSES.repouso, { rosto: { estranho: 1, boca: 'aberta', sobrancelha: -0.3 }, cabeca: { lado: -12 } })],
+  // 9-14: estágios da revelação (close)
+  ['estranho 0', 0, derivar(POSES.repouso, { rosto: { boca: 'sorriso' } })],
+  ['estranho 0,3', 0, derivar(POSES.repouso, { rosto: { boca: 'sorriso', estranho: 0.3 }, cabeca: { lado: 8 } })],
+  ['estranho 0,5', 0, derivar(POSES.repouso, { rosto: { boca: 'sorriso', estranho: 0.5 }, cabeca: { lado: 16 } })],
+  ['estranho 0,7', 0, derivar(POSES.repouso, { rosto: { boca: 'sorriso', estranho: 0.7 }, cabeca: { lado: 24 } })],
+  ['estranho 0,85', 0, derivar(POSES.repouso, { rosto: { boca: 'sorriso', estranho: 0.85 }, cabeca: { lado: 30 } })],
+  ['estranho 1 · boca aberta', 0, derivar(POSES.repouso, { rosto: { boca: 'aberta', estranho: 1 }, cabeca: { lado: 34, frente: -6 } })],
 ];
 window.quadro = (t) => {
   const k = Math.min(VISTAS.length - 1, Math.round(t));
@@ -53,11 +62,12 @@ window.quadro = (t) => {
   banco.visible = nome === 'sentar';
   const sentado = nome === 'sentar';
   banco.position.set(Math.sin(giro * Math.PI / 180) * -0.1, 0.225, Math.cos(giro * Math.PI / 180) * -0.1);
-  const close = nome === 'infiltrado';
+  const close = nome === 'infiltrado' || nome.startsWith('estranho');
   const alvoY = close ? b.medidas.olhosY - 0.05 : H * (sentado ? 0.36 : 0.5);
   const dist = close ? 1.5 : H * 2.55;
   cam.position.set(0, alvoY + (close ? 0 : H * 0.05), dist); cam.lookAt(0, alvoY, 0);
   document.getElementById('rot').textContent = `${ficha.nome} · ${nome}`;
+  document.getElementById('rot').style.color = NOITE ? '#c9c9c9' : '#2b2b2b';
   pos.render(cena, cam, t);
 };
 window.pronto = Promise.resolve();

@@ -39,7 +39,7 @@ export function criarBoneco(ficha) {
   const mats = {};
   const mat = (cor, o = {}) => (mats[cor + JSON.stringify(o)] ??= materialChapado(cor, o));
   const malha = (geo, cor, pai, x = 0, y = 0, z = 0, o = {}) => {
-    const obj = new THREE.Mesh(geo, mat(cor, o));
+    const obj = new THREE.Mesh(geo, cor.isMaterial ? cor : mat(cor, o));
     obj.position.set(x, y, z); obj.castShadow = true; obj.receiveShadow = false; pai.add(obj); return obj;
   };
   const faceta = { flatShading: true };
@@ -101,8 +101,9 @@ export function criarBoneco(ficha) {
   // ---------- Cabeça ----------
   J.cabeca = grupo('cabeca', J.pescoco, ...POS.cabeca);
   const hl = m.cabecaL, hh = m.cabecaH, hp = m.cabecaP, cy = hh * 0.5, zf = hp / 2;
-  malha(caixa(hl, hh, hp, 0.34), c.pele, J.cabeca, 0, cy, 0);
-  for (const s of [-1, 1]) malha(caixa(hl * 0.12, hh * 0.22, hp * 0.2, 0.4), c.pele, J.cabeca, s * hl * 0.5, cy - hh * 0.02, -hp * 0.04);
+  const peleRosto = materialChapado(c.pele);   // material próprio: empalidece na revelação
+  malha(caixa(hl, hh, hp, 0.34), peleRosto, J.cabeca, 0, cy, 0);
+  for (const s of [-1, 1]) malha(caixa(hl * 0.12, hh * 0.22, hp * 0.2, 0.4), peleRosto, J.cabeca, s * hl * 0.5, cy - hh * 0.02, -hp * 0.04);
 
   // Cabelo: blocos facetados
   const cab = (geo, x, y, z, rx = 0, ry = 0, rz = 0) => { const o = malha(geo, c.cabelo, J.cabeca, x, y, z, faceta); o.rotation.set(rx, ry, rz); return o; };
@@ -155,7 +156,33 @@ export function criarBoneco(ficha) {
     sb.add(new THREE.Mesh(caixa(hl * 0.2, hh * 0.045, hl * 0.04, 0.3), mat(c.sobrancelha, plano)));
     sobr.push(sb);
   }
-  malha(caixa(hl * 0.14, hh * 0.15, hl * 0.12, 0.35), c.pele, rosto, 0, -hh * 0.07, hl * 0.035);          // nariz
+  malha(caixa(hl * 0.14, hh * 0.15, hl * 0.12, 0.35), peleRosto, rosto, 0, -hh * 0.07, hl * 0.035);       // nariz
+  // ---- Peças do infiltrado (escondidas até a revelação) ----
+  const corOlheira = new THREE.Color(c.pele).multiplyScalar(0.28).lerp(new THREE.Color('#2a1830'), 0.4).getStyle();
+  const olheiras = [], pupilas = [], veias = [];
+  for (const [i, o] of olhos.entries()) {
+    const ol = new THREE.Mesh(new THREE.CircleGeometry(hl * 0.1, 20), mat(corOlheira, plano));
+    ol.position.set(o.position.x, o.position.y - hh * 0.02, -0.0008); ol.scale.set(1, 1.25, 1); rosto.add(ol); olheiras.push(ol);
+    const pu = new THREE.Mesh(new THREE.CircleGeometry(hl * 0.0085, 10), new THREE.MeshBasicMaterial({ color: '#ff3326' }));
+    pu.position.z = 0.0012; o.add(pu); pupilas.push(pu);   // pupila vermelha minúscula: brilha no escuro
+    const vs = new THREE.Group(); vs.position.set(o.position.x, o.position.y - hh * 0.09, -0.0004); rosto.add(vs);
+    for (const [dx, ang, l] of [[-0.03, 0.25, 1], [0.0, 0.0, 1.3], [0.035, -0.3, 0.85]]) {   // veias escorrendo
+      const v = new THREE.Mesh(new THREE.PlaneGeometry(hl * 0.009, hh * 0.13 * l), mat(corOlheira, plano));
+      v.position.set(dx * hl, -hh * 0.065 * l, 0); v.rotation.z = ang; vs.add(v);
+    }
+    veias.push(vs);
+  }
+  const bocaM = new THREE.Group(); rosto.add(bocaM);
+  const fundoM = new THREE.Mesh(new THREE.CircleGeometry(0.5, 32), mat('#160404', plano)); bocaM.add(fundoM);
+  const triDente = new THREE.BufferGeometry();
+  triDente.setAttribute('position', new THREE.Float32BufferAttribute([-0.5, 0, 0, 0, -1, 0, 0.5, 0, 0], 3)); triDente.computeVertexNormals();
+  const matDente = mat('#ece5cc', plano);
+  const N_DENTES = 11, dentesC = [], dentesB = [];
+  for (let i = 0; i < N_DENTES; i++) {
+    const dc = new THREE.Mesh(triDente, matDente); dc.position.z = 0.0006; bocaM.add(dc); dentesC.push(dc);
+    const db = new THREE.Mesh(triDente, matDente); db.position.z = 0.0007; db.rotation.z = Math.PI; bocaM.add(db); dentesB.push(db);
+  }
+  const corPele = new THREE.Color(c.pele), corPalida = new THREE.Color('#b9bdb0');
   const bocaG = new THREE.Group(); bocaG.position.set(0, -hh * 0.25, 0); rosto.add(bocaG);
   const bocas = {
     neutra: new THREE.Mesh(new THREE.PlaneGeometry(hl * 0.22, hh * 0.028), mat(c.boca, plano)),
@@ -241,19 +268,45 @@ export function criarBoneco(ficha) {
     raiz.scale.set(...rz.esc);
     J.quadril.position.set(POS.quadril[0] + valor(pose, 'desl', 'x'), POS.quadril[1] + valor(pose, 'desl', 'y'), POS.quadril[2] + valor(pose, 'desl', 'z'));
     // Rosto
+    // Revelação do infiltrado em etapas: e1 = olhos/pele (0,25→0,6), e2 = boca de dentes (0,55→0,9)
     const forma = valor(pose, 'rosto', 'boca'), estr = valor(pose, 'rosto', 'estranho');
-    for (const [k, b] of Object.entries(bocas)) b.visible = k === forma;
-    bocaG.scale.set(1 + estr * 1.1, 1 + estr * 0.5, 1);
+    const sm = (a, b, x) => { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
+    const e1 = sm(0.25, 0.6, estr), e2 = sm(0.55, 0.9, estr);
+    const monstro = e2 >= 0.5;
+    for (const [k, b] of Object.entries(bocas)) b.visible = !monstro && k === forma;
+    bocaG.scale.set(1 + e1 * (forma === 'sorriso' ? 1.6 : 0.8), 1 - e1 * 0.25, 1);    // sorriso largo demais
+    bocaM.visible = monstro;
+    if (monstro) {
+      const aberta = forma === 'aberta';
+      const W = hl * (0.44 + 0.24 * e2), H = aberta ? hh * (0.14 + 0.2 * e2) : hh * 0.075;
+      bocaM.position.set(0, -hh * 0.25 - (aberta ? hh * 0.07 * e2 : 0), 0);
+      fundoM.scale.set(W, H, 1);
+      const dl = W / (N_DENTES + 1), comp = Math.min(aberta ? hh * 0.06 : H * 0.62, hh * 0.06);
+      for (let i = 0; i < N_DENTES; i++) {
+        const x = (i - (N_DENTES - 1) / 2) * dl, borda = Math.sqrt(Math.max(0, 1 - (x / (W / 2)) ** 2));
+        const lc = comp * (0.55 + 0.45 * borda) * (i % 2 ? 0.8 : 1.15);      // irregulares
+        dentesC[i].position.set(x, (H / 2) * borda * 0.96, dentesC[i].position.z); dentesC[i].scale.set(dl * 0.95, lc, 1);
+        dentesB[i].position.set(x + dl * 0.5, -(H / 2) * borda * 0.96, dentesB[i].position.z); dentesB[i].scale.set(dl * 0.9, lc * 0.9, 1);
+        dentesB[i].visible = i < N_DENTES - 1;
+      }
+    }
+    peleRosto.color.copy(corPele).lerp(corPalida, 0.5 * e1);
     const ab = valor(pose, 'rosto', 'olhos');
     const ox = valor(pose, 'rosto', 'olharX'), oy = valor(pose, 'rosto', 'olharY');
     olhos.forEach((o, i) => {
-      const s = i ? 1 : -1;
-      o.scale.set(1 + estr * 0.7, Math.max(0.06, ab) * (1 + estr * 0.9), 1);   // infiltrado: olhos maiores...
-      o.position.set(s * hl * 0.2 + ox * hl * 0.03, hh * 0.04 + oy * hh * 0.025, 0);
+      const s = i ? 1 : -1, torto = i === 0 ? 1 + 0.25 * e1 : 1;                   // um olho maior que o outro
+      o.scale.set((1 + 0.9 * e1) * torto, Math.max(0.06, ab) * (1 + 1.25 * e1) * torto, 1);
+      o.position.set(s * hl * (0.2 + 0.015 * e1) + ox * hl * 0.03, hh * 0.04 + oy * hh * 0.025 - (i === 1 ? hh * 0.025 * e1 : 0), 0);
+      olheiras[i].position.set(o.position.x, o.position.y - hh * 0.02, -0.0008);
+      olheiras[i].scale.set(e1 * 1.45 * torto, e1 * 1.9 * torto, 1); olheiras[i].visible = e1 > 0.01;
+      pupilas[i].visible = e2 > 0.05 && ab > 0.3;
+      veias[i].position.set(o.position.x, o.position.y - hh * 0.09, -0.0004);
+      veias[i].scale.set(1, e2, 1); veias[i].visible = e2 > 0.02;
+      pupilas[i].position.set(ox * hl * 0.02, oy * hl * 0.02, 0.0012);
     });
-    for (const b of brilhos) b.visible = estr < 0.35 && ab > 0.3;          // ...e sem brilho (olhar morto)
-    const sv = valor(pose, 'rosto', 'sobrancelha');
-    for (const sb of sobr) { sb.rotation.z = -sb.userData.lado * sv * 0.35; sb.position.y = hh * (0.18 + 0.025 * sv); }
+    for (const b of brilhos) b.visible = estr < 0.35 && ab > 0.3;          // olhar morto: sem brilho
+    const sv = valor(pose, 'rosto', 'sobrancelha') * (1 - e2) - 0.9 * e2;    // sobrancelhas viram
+    for (const sb of sobr) { sb.rotation.z = -sb.userData.lado * sv * 0.35; sb.position.y = hh * (0.18 + 0.025 * sv + 0.03 * e1); }
   }
 
   posar(REPOUSO);

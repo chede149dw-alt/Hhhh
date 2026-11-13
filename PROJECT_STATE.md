@@ -38,7 +38,10 @@ Fichas: `gabriel.json`, `cliente.json` (Larissa, infiltrada), `eduardo.json` (m�
   nariz em bloco, bigode, colarinho/botões/bolso, cinto, relógio, sapato → Gabriel.
 - ref2: moletom largo cor-bloco (pala escura em V, detalhe laranja), gola alta com zíper, calça justa, coturno → Eduardo.
 - ref1: cabelo volumoso e barba facetados (flatShading), óculos → peças disponíveis (exemplo_barba).
-- Infiltrado (`rosto.estranho`): olhos crescem e perdem o brilho ("olhar morto"), boca alarga.
+- Infiltrado (`rosto.estranho`), em etapas: até 0,3 sem brilho e sem piscar; 0,3–0,6 olhos pretos crescem e
+  ficam tortos (um maior e mais baixo), órbitas fundas, pele pálida, sorriso largo demais; 0,6–1 boca de
+  orelha a orelha com dentes pontudos irregulares, pupila vermelha minúscula que brilha no escuro, veias
+  descendo dos olhos, sobrancelhas viram. Com `boca: 'aberta'` o queixo desce e a bocarra abre.
 Cenário principal previsto: distribuidora (balcão, geladeiras, porta de aço, letreiro, rua às 3h).
 Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`/lanterna.
 
@@ -104,7 +107,8 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 (calibração com faixa de referência invisível | dia com pós | noite com lanterna, 2 instantes),
 `projetos/_evidencias/etapa3_personagens.png` (Gabriel, Cliente, Eduardo, Exemplo barba),
 `projetos/_evidencias/etapa3_referencias.png` (referência × resultado),
-`projetos/_evidencias/etapa4_larissa_grade_folha.png`, `..._frente.png`, `etapa4_larissa_grade.mp4`.
+`projetos/_evidencias/etapa4_larissa_grade_folha.png`, `..._frente.png`, `etapa4_larissa_grade.mp4`,
+`etapa4_revelacao_estagios.png`, `etapa4_revelacao_noite.png`.
 
 ## Limitações conhecidas
 
