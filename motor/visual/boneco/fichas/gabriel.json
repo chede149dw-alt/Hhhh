@@ -1,0 +1,11 @@
+{
+  "nome": "Gabriel",
+  "papel": "amigo de Eduardo, sócio da distribuidora",
+  "altura": 1.76,
+  "corpo": { "largura": 1.05, "peso": 1.08, "ombros": 1.05 },
+  "cores": {
+    "pele": "#b97a56", "cabelo": "#17110d", "sobrancelha": "#17110d", "olhos": "#2a1a10", "boca": "#7d4134",
+    "camisa": "#c8372d", "calca": "#2c3a52", "calcado": "#f1f1ee", "sola": "#bdbdb8", "acessorio": "#1e1e22"
+  },
+  "pecas": { "cabelo": "raspado", "camisa": "manga_curta", "calca": "bermuda", "calcado": "tenis", "acessorios": ["bone", "relogio"] }
+}

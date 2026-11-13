@@ -1,0 +1,11 @@
+{
+  "nome": "Eduardo",
+  "papel": "protagonista; a câmera é o olhar dele (mãos em quadro)",
+  "altura": 1.72,
+  "corpo": { "largura": 1.0, "peso": 0.98 },
+  "cores": {
+    "pele": "#e0ac85", "cabelo": "#4a2f1d", "sobrancelha": "#3a2416", "olhos": "#3b2a1a", "boca": "#9a5545",
+    "camisa": "#3d4a3c", "calca": "#262a33", "calcado": "#2d2d2d", "sola": "#e6e6e0", "acessorio": "#c9c9c9"
+  },
+  "pecas": { "cabelo": "curto", "camisa": "moletom", "calca": "comprida", "calcado": "tenis", "acessorios": [] }
+}

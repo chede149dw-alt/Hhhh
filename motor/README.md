@@ -64,8 +64,14 @@ Toda página renderizável deve:
 | `render/juntar.mjs` | CLI e função `juntar()`: PNGs (+ áudio) → MP4 via ffmpeg. |
 | `visual/estilo/chapado.js` | Rampa toon, `materialChapado(cor)`, `VOLUME`, `criarLuzes(cena, 'dia'\|'noite', {camera})`, `comoObjeto`/`comoChao`, `prepararRenderer`. Conta da calibração no topo do arquivo. |
 | `visual/estilo/posfx.js` | `criarPos(renderer, L, A, params, {msaa, taps})`: névoa, foco raso, vinheta, grão. `POS_NEUTRO`. |
+| `animacao/poses.js` | Puro (Node + navegador): juntas, canais, `REPOUSO`, `POSES` (acenar, apontar, sentar, assustado), `derivar`, `misturar`, `validarPose`. |
+| `visual/boneco/medidas.js` | Puro: `validarFicha`, `calcularMedidas` (proporções a partir da altura). |
+| `visual/boneco/boneco.js` | `criarBoneco(ficha)` → `{ raiz, juntas, posar(pose), medidas }`; `carregarFicha(nome)`. |
+| `visual/boneco/fichas/*.json` | Fichas: nome, papel, altura, corpo (largura/peso/ombros), cores, peças (cabelo, camisa, calca, calcado, acessorios). |
+| `visual/testes/boneco.html` | `?ficha=nome`, quadros 0-8 com `--fps 1`: 4 vistas, 4 poses e o rosto infiltrado. |
 | `visual/testes/relogio.html` | Cena mínima de teste do contrato `quadro(t)`. |
 | `visual/testes/estilo.html` | 3 cubos + 1 esfera. URL: `luz=dia\|noite`, `pos=0\|neutro\|1`, `calib=1`. Expõe `window.medir()`. |
 | `render/medir_estilo.mjs` | Mede a cor na tela (face iluminada e faixa de referência). |
 | `testes/determinismo.test.mjs` | Renderiza 0 e 90 em ordem direta e invertida e compara md5. |
+| `testes/poses.test.mjs` | Poses, mistura, validação e fichas. |
 | `testes/estilo.test.mjs` | Cor iluminada = cor do material (tolerância 2/255), direto e com pós neutro. |

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Teste do boneco</title>
+<style>
+html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}
+#rot{position:fixed;left:0;right:0;top:70px;text-align:center;font:700 64px/1.1 system-ui,sans-serif;color:#2b2b2b}
+</style>
+<script type="importmap">
+{ "imports": { "three": "/motor/visual/lib/three/three.module.js",
+               "three/addons/": "/motor/visual/lib/three/addons/" } }
+</script>
+</head>
+<body>
+<div id="rot"></div>
+<script type="module">
+// ?ficha=gabriel. Quadro k (use --fps 1): 0-3 = repouso frente/lado direito/costas/lado esquerdo;
+// 4-7 = acenar, apontar, sentar, assustado; 8 = infiltrado (rosto estranho).
+import * as THREE from 'three';
+import { comoChao, comoObjeto, materialChapado, prepararRenderer, criarLuzes } from '../estilo/chapado.js';
+import { criarPos } from '../estilo/posfx.js';
+import { criarBoneco, carregarFicha } from '../boneco/boneco.js';
+import { POSES, derivar } from '../../animacao/poses.js';
+
+const q = new URLSearchParams(location.search);
+const L = 1080, A = 1920;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(L, A); prepararRenderer(renderer);
+document.body.appendChild(renderer.domElement);
+const cena = new THREE.Scene(); cena.background = new THREE.Color('#d8d2c6');
+const cam = new THREE.PerspectiveCamera(28, L / A, 0.1, 50);
+criarLuzes(cena, 'dia', { raioSombra: 3 });
+const chao = comoChao(new THREE.Mesh(new THREE.PlaneGeometry(30, 30), materialChapado('#c4bcae', { volume: false })));
+chao.rotation.x = -Math.PI / 2; cena.add(chao);
+const banco = comoObjeto(new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.45, 0.45), materialChapado('#7a5a3c')));
+cena.add(banco);
+const pos = criarPos(renderer, L, A, { nevoaMax: 0, desfoqueMax: 0, vinheta: 0.25, grao: 0.0 });
+
+const ficha = await carregarFicha(q.get('ficha') || 'gabriel');
+const b = criarBoneco(ficha); cena.add(b.raiz);
+const H = b.medidas.H;
+
+const VISTAS = [
+  ['frente', 0, POSES.repouso], ['lado direito', -90, POSES.repouso], ['costas', 180, POSES.repouso], ['lado esquerdo', 90, POSES.repouso],
+  ['acenar', 20, POSES.acenar], ['apontar', 35, POSES.apontar], ['sentar', 30, POSES.sentar], ['assustado', 15, POSES.assustado],
+  ['infiltrado', 0, derivar(POSES.repouso, { rosto: { estranho: 1, boca: 'aberta', sobrancelha: -0.3 }, cabeca: { lado: -12 } })],
+];
+window.quadro = (t) => {
+  const k = Math.min(VISTAS.length - 1, Math.round(t));
+  const [nome, giro, pose] = VISTAS[k];
+  b.posar(derivar(pose, { corpo: { giro } }));
+  banco.visible = nome === 'sentar';
+  const sentado = nome === 'sentar';
+  banco.position.set(Math.sin(giro * Math.PI / 180) * -0.1, 0.225, Math.cos(giro * Math.PI / 180) * -0.1);
+  const close = nome === 'infiltrado';
+  const alvoY = close ? b.medidas.olhosY : H * (sentado ? 0.36 : 0.5);
+  const dist = close ? 1.7 : H * 2.55;
+  cam.position.set(0, alvoY + (close ? 0 : H * 0.05), dist); cam.lookAt(0, alvoY, 0);
+  document.getElementById('rot').textContent = `${ficha.nome} · ${nome}`;
+  pos.render(cena, cam, t);
+};
+window.pronto = Promise.resolve();
+</script>
+</body>
+</html>
