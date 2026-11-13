@@ -9,7 +9,7 @@ import path from 'node:path';
 import { iniciarServidor, RAIZ } from './servidor.mjs';
 import { abrirNavegador, abrirPagina, capturar } from './navegador.mjs';
 
-export async function renderizar({ pagina, quadros, saida, fps = 60, processos = 1, largura = 1080, altura = 1920, aoQuadro }) {
+export async function renderizar({ pagina, quadros, saida, fps = 60, processos = 1, largura = 1080, altura = 1920, aoQuadro, formato = 'png' }) {
   fs.mkdirSync(saida, { recursive: true });
   const srv = await iniciarServidor();
   const url = `${srv.url}/${pagina.replace(/^\/+/, '')}`;
@@ -24,8 +24,8 @@ export async function renderizar({ pagina, quadros, saida, fps = 60, processos =
       try {
         const pag = await abrirPagina(nav, url, { largura, altura });
         for (const q of bloco) {
-          const png = await capturar(pag, q / fps);
-          fs.writeFileSync(path.join(saida, `quadro_${String(q).padStart(5, '0')}.png`), png);
+          const img = await capturar(pag, q / fps, formato);
+          fs.writeFileSync(path.join(saida, `quadro_${String(q).padStart(5, '0')}.${formato === 'jpeg' ? 'jpg' : 'png'}`), img);
           aoQuadro?.(q);
         }
       } finally {

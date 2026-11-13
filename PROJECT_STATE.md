@@ -126,6 +126,26 @@ Luz prevista: preset `interior` (fluorescente fria, com piscar) além de `noite`
   lateral, subir), `tremor` determinístico, `respiracaoCamera`, `projetar` (testes).
 - Olhar (`animacao/olhar.js`, puro): `olharPara(pose, medidas, ponto)` — peito (se > 45°), pescoço leva o giro,
   cabeça leva o "para baixo" (evita rolar o horizonte). É o que move a câmera subjetiva.
+- Direção (`direcao/diretor.js`, puro): roteiro.json + words.json → timeline.json (planos com início/fim,
+  entradas de atuação por ator com lugar resolvido, câmeras, efeitos, cartelas, eventos, sons, falas e palavras).
+  Plano começa na 1ª palavra. Tempos: 0.8, "ini+0.5", "fim-0.3", "p19+0.12", "palavra:Dudu". `andar` com
+  `de`/`ate` calcula distância e direção. Destaques: tensao, tremor_leve, alerta_celular, eduardo_estende_mao,
+  corte_preto_batida. Erros listam nomes válidos. Marcas do cenário em `distribuidora_dados.js` (puro).
+- Episódio (`visual/episodio.html?projeto=`): monta cena e atores uma vez; `quadro(t)` avalia a entrada ativa de
+  cada ator (com transição de 0,35 s entre atuações), sincronia de boca (abre/fecha nas palavras de quem fala ou
+  de quem "empresta a boca"), câmera subjetiva (olharPara com transição; lente 84° no ambiente e 56° em rostos;
+  aproximar lento; tremor; respiração), celulares (alerta a partir de "tocaram"), luz piscando, legendas e cartelas.
+- Voz (`audio/voz.py`): Edge TTS por fala (voz/tom/velocidade por personagem), WordBoundary → words.json; pausas
+  0,35 s (fala) / 0,6 s (plano) + `pausa_antes`; tratamento: compressão + EQ; "mãe" grave com eco (a criatura).
+  No ambiente da nuvem, o SSL do edge-tts usa o certificado do proxy (/root/.ccr/ca-bundle.crt).
+- Efeitos (`audio/sfx.py`): zumbido, drone, passos, tensão, alerta, batida, grade, estalo, porta, lata, cadeado,
+  rua — sintetizados em numpy/scipy (sem arquivos de terceiros). `sons_de_voz` (risada) via TTS.
+- Mixagem (`audio/mixar.py`): narração seca; diálogos com sala; Larissa abafada (lado de fora); ducking de 8 dB do
+  fundo; drone sobe na reta final; loudnorm em 2 passes → -14 LUFS / -1,5 dBTP.
+- Legendas: grupos de 1–3 palavras sem atravessar frase; destaques em vermelho; entrada com escala; fonte Luckiest
+  Guy (OFL, cópia em `visual/lib/fontes`); amarela com contorno escuro; selo verde "PARTE N" (ref4); escondidas na
+  cartela final. Posição por plano (`legenda`: alto/meio/baixo).
+- Render final: cena em 75% da resolução (ampliada no passe da lente) + captura JPEG q95 ⇒ ~2,2× mais rápido.
 - Pós (`visual/estilo/posfx.js`): um passe só (névoa por profundidade, foco raso com 16 amostras, vinheta, grão
   com semente no tempo). Alvo HalfFloat + MSAA 4x; com parâmetros zerados a cor sai idêntica.
 
@@ -153,7 +173,7 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 
 ## Limitações conhecidas
 
-- **Velocidade**: WebGL por software + pós ⇒ ~1,4 q/s com 4 processos na cena de teste; **~0,8 q/s no
+- **Velocidade** (antes da otimização da etapa 10): WebGL por software + pós ⇒ ~1,4 q/s com 4 processos na cena de teste; **~0,8 q/s no
   cenário completo com luzes e pós em 2 passes** (65 s a 60 fps ≈ 80 min). Prioridade da etapa 10.
   Medido: buffer intermediário c/ MSAA custa ~40%; o grão deixa o PNG com 2,4 MB e a captura ~30% mais
   lenta; reduzir amostras do desfoque não muda nada. Plano (etapa 10): capturar pixels crus e mandar direto
@@ -169,8 +189,5 @@ Evidências: `projetos/_evidencias/etapa1_folha.png`, `projetos/_evidencias/etap
 
 ## Próxima etapa
 
-Etapa 7: camada de direção. `roteiro.json` → planos → linha do tempo: cada fala vira plano que começa na
-1ª palavra; atores com atuação + marca; câmera (subjetiva com olhar para alvo / 3ª pessoa com tamanho);
-efeitos (piscar, tremor, corte para preto, cartela); palavra de destaque dispara ação; tempos "p19+0.12",
-"fim-0.3"; erros claros listando nomes válidos. Sem voz ainda: tempos de palavra estimados (a etapa 8 troca
-pelos do Edge TTS).
+Publicar o episódio 1. Depois: risada e efeitos mais ricos, caminhada com curvas, Gabriel indo até o portão
+em quadro, IK de mãos segurando objetos (latas passando pela portinhola), parte 2 do roteiro.

@@ -48,7 +48,8 @@ export async function abrirPagina(nav, url, { largura = 1080, altura = 1920 } = 
 }
 
 // Posiciona a cena no instante t (segundos) e devolve o PNG do quadro.
-export async function capturar(pag, t) {
+// formato: 'png' (sem perda) ou 'jpeg' (qualidade 95: ~8x mais rápido de capturar; o H.264 final comprime de qualquer jeito)
+export async function capturar(pag, t, formato = 'png') {
   await pag.evaluate(async (t) => { await window.quadro(t); }, t);
-  return pag.screenshot({ type: 'png', captureBeyondViewport: false });
+  return formato === 'jpeg' ? pag.screenshot({ type: 'jpeg', quality: 95 }) : pag.screenshot({ type: 'png', captureBeyondViewport: false });
 }

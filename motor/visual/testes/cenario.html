@@ -23,7 +23,7 @@ import { derivar } from '../../animacao/poses.js';
 import { olharPara } from '../../animacao/olhar.js';
 import { enquadrar, tremor, respiracaoCamera } from '../../animacao/camera.js';
 import { criarDistribuidora, MARCAS, PORTINHOLA, GRADE_Z } from '../cenarios/distribuidora.js';
-import { criarCelular, segurarNaFrente } from '../objetos/celular.js';
+import { criarCelular, segurarNaFrente, virarTelaPara, brilhoDaTela } from '../objetos/celular.js';
 import { criarSombraContato } from '../estilo/sombras.js';
 
 const q = new URLSearchParams(location.search);
@@ -47,7 +47,8 @@ const luzCel = new THREE.PointLight('#bcd6ff', 0.9, 0.9, 2); cena.add(luzCel);  
 const celular = criarCelular({ tipo: 'alerta', texto: 'Cuidado: criaturas estranhas estão entre nós. Imitam vozes de pessoas conhecidas e aparência.' });
 cena.add(celular.raiz); celular.raiz.visible = false;
 const celGab = criarCelular({ tipo: 'bloqueio' }); gab.juntas.maoD.add(celGab.raiz);
-celGab.raiz.position.set(0, -gab.medidas.maoLen * 0.6, gab.medidas.anteL * 0.75); celGab.raiz.rotation.set(0, Math.PI / 2, 0);
+celGab.raiz.position.set(0, -gab.medidas.maoLen * 0.62, 0); brilhoDaTela(celGab);
+const olhoGab = () => { gab.raiz.updateMatrixWorld(true); return gab.juntas.cabeca.localToWorld(new THREE.Vector3(0, gab.medidas.cabecaH * 0.52, gab.medidas.cabecaP * 0.3)); };
 
 // pose final de uma atuação, posta na marca
 const poseFinal = (b, nome, marca, t) => {
@@ -123,6 +124,7 @@ function sequencia(t) {
   const piscar = t > 3.9 ? 1 : 0;
   cenario.atualizar(t, { piscar, luzes });
   posfx.definir({ focoDist: k > 0.5 ? 1.5 : 2.1, focoFaixa: 0.8 });
+  virarTelaPara(celGab, olhoGab());
   for (const sc of sombras) sc.atualizar(); luzCel.visible = false;
   document.getElementById('rot').textContent = '';
   posfx.render(cena, cam, t);
@@ -138,6 +140,7 @@ window.quadro = (t) => {
   if (r.piscar) { luzes.sol.intensity = luzes._base.sol * 0.18; luzes.ambiente.intensity = luzes._base.amb * 0.3; }
   if (r.apagar) { cenario.atualizar(0, { piscar: 1, luzes }); luzes.sol.intensity = 0; luzes.ambiente.intensity = luzes._base.amb * 0.12; cenario.apagarLampadas?.(); }
   posfx.definir({ focoDist: r.foco ?? 2, focoFaixa: r.faixa ?? 0.8 });
+  virarTelaPara(celGab, olhoGab());
   for (const sc of sombras) sc.atualizar();
   luzCel.visible = celular.raiz.visible; if (luzCel.visible) luzCel.position.copy(celular.raiz.position).add(new THREE.Vector3(0, 0, 0).subVectors(cam.position, celular.raiz.position).multiplyScalar(0.25));
   document.getElementById('rot').textContent = q.get('rotulo') === '0' ? '' : nome;

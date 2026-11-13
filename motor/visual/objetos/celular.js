@@ -76,3 +76,22 @@ export function segurarNaFrente(celular, mao, camera, { acima = 0.09, frente = 0
   celular.raiz.rotateX(-inclina);                                     // leve inclinação, como na mão
   celular.raiz.updateMatrixWorld();
 }
+
+// Vira a tela para um ponto do mundo (ex.: os olhos de quem segura). Mantém o celular preso à mão.
+const _m4 = new THREE.Matrix4(), _q = new THREE.Quaternion(), _p = new THREE.Vector3(), _alvo = new THREE.Vector3();
+export function virarTelaPara(celular, ponto) {
+  const o = celular.raiz;
+  o.updateMatrixWorld();
+  o.getWorldPosition(_p);
+  _alvo.fromArray(ponto.toArray ? ponto.toArray() : ponto);
+  _m4.lookAt(_alvo, _p, new THREE.Vector3(0, 1, 0));            // +z do celular aponta para o ponto
+  o.quaternion.setFromRotationMatrix(_m4);
+  if (o.parent) { o.parent.getWorldQuaternion(_q); o.quaternion.premultiply(_q.invert()); }
+  o.updateMatrixWorld();
+}
+
+// Brilho da tela (luz fraca que acende o rosto de quem olha).
+export function brilhoDaTela(celular, { cor = '#cfe2ff', intensidade = 0.6, alcance = 0.8 } = {}) {
+  const l = new THREE.PointLight(cor, intensidade, alcance, 2);
+  l.position.set(0, 0, 0.06); celular.raiz.add(l); return l;
+}

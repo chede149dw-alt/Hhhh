@@ -6,21 +6,8 @@ import { materialChapado, comoChao, comoObjeto } from '../estilo/chapado.js';
 import { textura, texturaTexto } from '../estilo/texturas.js';
 import { ASSENTO } from '../../animacao/atuacoes.js';
 
-export const SALA = { x0: -2.2, x1: 2.2, z0: -3.0, z1: 1.2, teto: 2.9 };
-export const GRADE_Z = 1.2;
-export const PORTINHOLA = { x: -0.55, base: 1.0, l: 0.3, a: 0.3 };
-export const BALCAO = { x0: -1.6, x1: 0.5, z0: 0.62, z1: 1.1, altura: 1.0 };
-
-// Marcas: onde os atores ficam (x, z, giro em graus; giro 0 = olhando para +z).
-export const MARCAS = {
-  balcao: { x: PORTINHOLA.x, z: 0.3, giro: 0, livre: 0.5, desc: 'Eduardo atrás do balcão, de frente para a portinhola' },
-  geladeira: { x: -0.92, z: 0.05, giro: 0, livre: 0.6, desc: 'Eduardo diante da geladeira (à direita dele)' },
-  engradado: { x: 1.3, z: -0.6, giro: -63, livre: 1.6, desc: 'Gabriel sentado no engradado, virado para o balcão' },
-  cadeado: { x: 0.74, z: 0.73, giro: 0, livre: 1.0, desc: 'Gabriel em pé no portão, mão no cadeado' },
-  portinhola: { x: PORTINHOLA.x, z: GRADE_Z + 0.72, giro: 180, livre: 2.5, desc: 'Cliente do lado de fora, na frente da portinhola' },
-  rua: { x: PORTINHOLA.x + 0.3, z: 9.5, giro: 180, livre: 3, desc: 'Cliente longe, no escuro da rua' },
-};
-export const CADEADO = [0.66, 1.02, GRADE_Z - 0.03];
+import { SALA, GRADE_Z, PORTINHOLA, BALCAO, MARCAS, CADEADO } from './distribuidora_dados.js';
+export { SALA, GRADE_Z, PORTINHOLA, BALCAO, MARCAS, CADEADO };
 
 function rng(semente) { let a = semente >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -146,6 +133,12 @@ export function criarDistribuidora({ semente = 11 } = {}) {
   neon.position.set(SALA.x1 - 0.02, 2.15, -1.1); neon.rotation.y = -Math.PI / 2; add(neon);
   const neonHalo = halo('#ff2a2a', 1.8, SALA.x1 - 0.25, 2.15, -1.1, 0.35);
   const luzNeon = new THREE.PointLight('#ff2f2f', 1.6, 3.2, 2); luzNeon.position.set(SALA.x1 - 0.35, 2.05, -1.1); add(luzNeon);
+  // placa de neon VERDE na frente da loja (por dentro, acima da grade): é ela que tinge o ambiente de verde
+  const verdeTex = texturaTexto([['GELADA', '900 120px sans-serif', '#3dff8a']], { largura: 640, altura: 180, fundo: null });
+  const placaVerde = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.37), new THREE.MeshBasicMaterial({ map: verdeTex, transparent: true, toneMapped: false, depthWrite: false }));
+  placaVerde.position.set(0.15, 2.58, GRADE_Z - 0.02); placaVerde.rotation.y = Math.PI; add(placaVerde);
+  const haloVerde = halo('#38ff7e', 2.6, 0.15, 2.58, GRADE_Z - 0.2, 0.4);
+  const luzVerde = new THREE.PointLight('#3dff8a', 2.2, 6.5, 1.4); luzVerde.position.set(0.15, 2.45, GRADE_Z - 0.4); add(luzVerde);
   const cartaz = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.95), materialChapado('#ffffff', { volume: false, map: texturaTexto([
     ['TABELA', '900 64px sans-serif', '#c62828'], ['LATA ........ 5,00', '700 40px monospace', '#111'], ['LONG NECK ... 8,00', '700 40px monospace', '#111'],
     ['GARRAFA ..... 12,00', '700 40px monospace', '#111'], ['GELO ........ 10,00', '700 40px monospace', '#111'], ['CIGARRO ..... 14,00', '700 40px monospace', '#111']], { largura: 512, altura: 700, fundo: '#fff7d6' }) }));
@@ -314,6 +307,7 @@ export function criarDistribuidora({ semente = 11 } = {}) {
     }
     const fn = hash(Math.floor(t * 9) + 77) < neonFalha ? 0.35 : 1;
     neon.material.opacity = fn; neonHalo.material.opacity = 0.35 * fn; luzNeon.intensity = 1.6 * fn;
+    const fv = hash(Math.floor(t * 7) + 31) < 0.06 ? 0.4 : 1; placaVerde.material.opacity = fv; haloVerde.material.opacity = 0.4 * fv; luzVerde.intensity = 2.2 * fv;
     return f;
   }
 

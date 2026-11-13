@@ -40,6 +40,15 @@ node render/juntar.mjs ../projetos/_testes/x ../projetos/_testes/x.mp4
 
 # testes automáticos
 npm test
+
+# EPISÓDIO COMPLETO (voz → planos → áudio → quadros → MP4 → folha → checagens)
+pip install edge-tts numpy scipy
+node render/produzir.mjs ../projetos/infiltrados_ep01 --processos 4
+#   --sem-voz (reaproveita words.json)   --so-checar (só refaz as checagens)
+# partes avulsas:
+python3 audio/voz.py ../projetos/infiltrados_ep01      # voz + words.json
+node direcao/compilar.mjs ../projetos/infiltrados_ep01  # timeline.json
+python3 audio/sfx.py && python3 audio/mixar.py ../projetos/infiltrados_ep01   # audio.wav (-14 LUFS)
 ```
 
 Opções do renderizador: `--fps 60`, `--largura 1080`, `--altura 1920`, `--processos N`.
@@ -76,6 +85,15 @@ Toda página renderizável deve:
 | `visual/cenarios/distribuidora.js` | `criarDistribuidora()` → `{ raiz, marcas, atualizar(t,{piscar,luzes}), limites, pos }`; `MARCAS`, `PORTINHOLA`, `CADEADO`. |
 | `visual/estilo/texturas.js` | `textura(nome, repetir)`, `texturaTexto(linhas, opções)`. |
 | `visual/objetos/celular.js` | `criarCelular({tipo, texto})` com tela desenhada; `segurarNaFrente(celular, mao, camera)`. |
+| `direcao/diretor.js` | `compilar(roteiro, palavras, {marcas, medidas})` → linha do tempo. |
+| `direcao/palavras.js` | `estimarPalavras` (antes da voz), `limpar`. |
+| `direcao/compilar.mjs` | CLI: roteiro.json (+ words.json) → timeline.json. |
+| `visual/episodio.html` | `?projeto=nome` (`&escala=0.75`, `&semlegenda=1`, `&rotulo=1`): renderiza o episódio pela timeline. |
+| `visual/cenarios/distribuidora_dados.js` | Marcas, sala, grade, portinhola (puro). |
+| `audio/voz.py` | Edge TTS → voz/*.wav, words.json, voz.wav. |
+| `audio/sfx.py` | Efeitos sintetizados → audio/sfx/*.wav. |
+| `audio/mixar.py` | Mixagem com ducking + loudnorm 2 passes → audio.wav. |
+| `render/produzir.mjs` | Comando único com checagens (preto, parado, sincronia, determinismo, duração, LUFS, legendas). |
 | `visual/boneco/medidas.js` | Puro: `validarFicha`, `calcularMedidas` (proporções a partir da altura). |
 | `visual/boneco/boneco.js` | `criarBoneco(ficha)` → `{ raiz, juntas, posar(pose), medidas }`; `carregarFicha(nome)`. |
 | `visual/boneco/fichas/*.json` | Fichas: nome, papel, altura, corpo (largura/peso/ombros), cores, peças (cabelo, camisa, calca, calcado, barba, acessorios); cores extras opcionais: camisa2, detalhe, sola, cinto, fivela, barba. Valores válidos em `medidas.js` (`PECAS_VALIDAS`). |
@@ -92,5 +110,6 @@ Toda página renderizável deve:
 | `testes/fk_three.test.mjs` | FK pura = boneco three (navegador). |
 | `testes/atuacoes.test.mjs` | Todas as atuações × 3 fichas; andar sem deslizar; noLugar. |
 | `testes/camera.test.mjs` | Enquadramentos, raio livre, limites da sala, movimentos, tremor, olharPara. |
+| `testes/direcao.test.mjs` | Diretor: tempos, erros, roteiro real. |
 | `testes/poses.test.mjs` | Poses, mistura, validação e fichas. |
 | `testes/estilo.test.mjs` | Cor iluminada = cor do material (tolerância 2/255), direto e com pós neutro. |

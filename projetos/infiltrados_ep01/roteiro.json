@@ -2,39 +2,69 @@
   "serie": "Infiltrados",
   "episodio": 1,
   "titulo": "Dudu",
+  "proxima_parte": 2,
   "formato": {
     "largura": 1080,
     "altura": 1920,
     "fps": 60
   },
+  "cenario": "distribuidora",
   "vozes": {
     "eduardo": {
-      "voz": "pt-BR-AntonioNeural"
+      "voz": "pt-BR-AntonioNeural",
+      "velocidade": "+4%"
     },
     "gabriel": {
       "voz": "pt-BR-AntonioNeural",
-      "tom": "-6Hz",
-      "velocidade": "+8%"
+      "tom": "-7Hz",
+      "velocidade": "+12%"
     },
     "larissa": {
-      "voz": "pt-BR-FranciscaNeural"
+      "voz": "pt-BR-FranciscaNeural",
+      "velocidade": "-4%"
     },
     "mae": {
       "voz": "pt-BR-FranciscaNeural",
-      "tom": "-10Hz",
-      "velocidade": "-10%"
+      "tom": "-14Hz",
+      "velocidade": "-18%"
     }
   },
   "atores": {
-    "gabriel": "gabriel",
-    "larissa": "cliente",
-    "eduardo": "eduardo"
+    "gabriel": {
+      "ficha": "gabriel"
+    },
+    "larissa": {
+      "ficha": "cliente"
+    },
+    "eduardo": {
+      "ficha": "eduardo",
+      "camera": true
+    }
+  },
+  "inicio": {
+    "gabriel": {
+      "marca": "engradado",
+      "estado": "sentado"
+    },
+    "larissa": {
+      "marca": "rua",
+      "estado": "em_pe"
+    },
+    "eduardo": {
+      "marca": "balcao",
+      "estado": "em_pe"
+    }
   },
   "planos": [
     {
       "id": 1,
-      "cenario": "preto",
-      "cartela": "INFILTRADOS · PARTE 1",
+      "cena": "preto",
+      "cartela": {
+        "texto": "INFILTRADOS",
+        "sub": "PARTE 1",
+        "ini": 0,
+        "fim": "fim"
+      },
       "falas": [
         {
           "quem": "eduardo",
@@ -43,25 +73,30 @@
         }
       ],
       "sons": [
-        "zumbido_geladeira"
+        {
+          "som": "zumbido_geladeira",
+          "ini": 0,
+          "ate": 999
+        },
+        {
+          "som": "drone",
+          "ini": 0,
+          "ate": 999
+        }
       ]
     },
     {
       "id": 2,
-      "cenario": "distribuidora",
-      "luz": "interior",
       "camera": {
-        "tipo": "subjetiva",
-        "olhar": "gabriel",
-        "movimento": "respiracao"
+        "olhar": "gabriel"
       },
-      "atores": [
-        {
-          "id": "gabriel",
+      "atores": {
+        "gabriel": {
+          "atuacao": "sentado_celular",
           "marca": "engradado",
-          "atuacao": "sentado_celular"
+          "ini": "ini-0.4"
         }
-      ],
+      },
       "falas": [
         {
           "quem": "eduardo",
@@ -72,27 +107,25 @@
           "quem": "gabriel",
           "texto": "Ninguém vai aparecer hoje não, mano. Bora fechar."
         }
-      ],
-      "sons": [
-        "zumbido_geladeira",
-        "chiado_neon"
       ]
     },
     {
       "id": 3,
-      "cenario": "distribuidora",
       "camera": {
-        "tipo": "subjetiva",
-        "olhar": "grade",
+        "olhar": "portinhola",
         "movimento": "virar"
       },
-      "atores": [
-        {
-          "id": "larissa",
-          "marca": "rua",
-          "atuacao": "chegar_andando"
+      "atores": {
+        "larissa": {
+          "atuacao": "andar",
+          "de": "rua",
+          "ate": "portinhola",
+          "ini": "ini-3.2",
+          "params": {
+            "tempoPasso": 0.55
+          }
         }
-      ],
+      },
       "falas": [
         {
           "quem": "eduardo",
@@ -103,27 +136,22 @@
       "destaques": [
         {
           "palavra": "apareceu",
-          "acao": "larissa_entra_na_luz"
+          "acao": "tensao"
         }
-      ],
-      "sons": [
-        "passos_calcada"
       ]
     },
     {
       "id": 4,
-      "cenario": "distribuidora",
       "camera": {
-        "tipo": "subjetiva",
-        "olhar": "larissa"
+        "olhar": "larissa.rosto"
       },
-      "atores": [
-        {
-          "id": "larissa",
+      "atores": {
+        "larissa": {
+          "atuacao": "olhar_fixo",
           "marca": "portinhola",
-          "atuacao": "parar_na_grade"
+          "ini": "palavra:Oi-0.6"
         }
-      ],
+      },
       "falas": [
         {
           "quem": "eduardo",
@@ -144,22 +172,17 @@
     },
     {
       "id": 5,
-      "cenario": "distribuidora",
       "camera": {
-        "tipo": "subjetiva",
         "olhar": "larissa.rosto",
         "movimento": "aproximar_lento"
       },
-      "atores": [
-        {
-          "id": "larissa",
-          "atuacao": "olhar_fixo"
-        },
-        {
-          "id": "gabriel",
-          "atuacao": "rir"
+      "atores": {
+        "gabriel": {
+          "atuacao": "rir_sentado",
+          "marca": "engradado",
+          "ini": "palavra:Desde-0.6"
         }
-      ],
+      },
       "falas": [
         {
           "quem": "eduardo",
@@ -170,52 +193,40 @@
           "quem": "gabriel",
           "texto": "Dudu? Desde quando cê é Dudu?"
         }
-      ],
-      "sons": [
-        "zumbido_geladeira_cresce"
       ]
     },
     {
       "id": 6,
-      "cenario": "distribuidora",
       "camera": {
-        "tipo": "subjetiva",
         "olhar": "geladeira",
         "movimento": "virar"
       },
-      "atores": [
-        {
-          "id": "eduardo",
-          "atuacao": "maos_pegar_latas"
+      "atores": {
+        "eduardo": {
+          "atuacao": "pegar_latas",
+          "marca": "geladeira",
+          "ini": "ini"
         }
-      ],
+      },
       "falas": [
         {
           "quem": "larissa",
-          "texto": "Abre a grade pra mim, Dudu. Tá frio aqui fora.",
-          "fora_de_quadro": true
+          "texto": "Abre a grade pra mim, Dudu. Tá frio aqui fora."
         }
-      ],
-      "sons": [
-        "porta_geladeira",
-        "latas"
       ]
     },
     {
       "id": 7,
-      "cenario": "distribuidora",
       "camera": {
-        "tipo": "subjetiva",
-        "olhar": "celular",
-        "movimento": "olhar_baixo"
+        "olhar": "celular"
       },
-      "atores": [
-        {
-          "id": "eduardo",
-          "atuacao": "maos_celular"
+      "atores": {
+        "eduardo": {
+          "atuacao": "segurar_celular",
+          "marca": "balcao",
+          "ini": "ini"
         }
-      ],
-      "tela_celular": "ALERTA DE EMERGÊNCIA\nCuidado: criaturas estranhas estão entre nós. Imitam vozes de pessoas conhecidas e aparência.",
+      },
       "falas": [
         {
           "quem": "eduardo",
@@ -232,34 +243,37 @@
           "palavra": "tocaram",
           "acao": "alerta_celular"
         }
-      ],
-      "sons": [
-        "alerta"
       ]
     },
     {
       "id": 8,
-      "cenario": "distribuidora",
-      "luz": "interior_piscando",
+      "luz": "piscando",
       "camera": {
-        "tipo": "subjetiva",
-        "olhar": "larissa",
+        "olhar": "larissa.rosto",
         "movimento": "levantar_olhar"
       },
-      "atores": [
-        {
-          "id": "larissa",
-          "marca": "grade",
-          "atuacao": "maos_na_grade_cabeca_inclinada",
-          "rosto": {
-            "estranho": 0.5
-          }
+      "atores": {
+        "larissa": {
+          "atuacao": "larissa_grade",
+          "marca": "portinhola",
+          "ini": "ini-1.3"
         },
-        {
-          "id": "gabriel",
-          "atuacao": "levantar_ir_ate_grade"
-        }
-      ],
+        "gabriel": [
+          {
+            "atuacao": "levantar",
+            "marca": "engradado",
+            "ini": "ini"
+          },
+          {
+            "atuacao": "andar",
+            "ate": "cadeado",
+            "ini": "ini+1.4",
+            "params": {
+              "tempoPasso": 0.45
+            }
+          }
+        ]
+      },
       "falas": [
         {
           "quem": "gabriel",
@@ -279,32 +293,36 @@
     },
     {
       "id": 9,
-      "cenario": "distribuidora",
+      "luz": "piscando",
       "camera": {
-        "tipo": "subjetiva",
         "olhar": "larissa.rosto",
-        "movimento": "tremor"
+        "movimento": "aproximar_lento"
       },
-      "atores": [
-        {
-          "id": "larissa",
-          "atuacao": "olhar_camera",
-          "rosto": {
-            "estranho": 0.7
-          }
+      "atores": {
+        "larissa": {
+          "atuacao": "revelar_na_grade",
+          "marca": "portinhola",
+          "ini": "ini-0.2"
+        },
+        "gabriel": {
+          "atuacao": "mao_no_cadeado",
+          "marca": "cadeado",
+          "ini": "ini"
         }
-      ],
+      },
       "falas": [
         {
           "quem": "mae",
           "texto": "Filho… abre pra mim.",
-          "boca_de": "larissa"
+          "boca_de": "larissa",
+          "pausa_antes": 0.6
         },
         {
           "quem": "eduardo",
           "tipo": "narracao",
           "texto": "Aquela não era a voz da Larissa. Era a voz da minha mãe.",
-          "sobre": "preto"
+          "sobre": "preto",
+          "pausa_antes": 1.5
         },
         {
           "quem": "eduardo",
@@ -315,21 +333,16 @@
       ],
       "destaques": [
         {
-          "palavra": "abre",
+          "palavra": "mim",
           "acao": "corte_preto_batida"
         }
-      ],
-      "cartela_final": "SEGUE E COMENTA PRA VER A PARTE 2"
+      ]
     }
   ],
-  "proxima_parte": 2,
-  "cena_padrao": {
-    "grade": {
-      "portinhola": {
-        "largura": 0.3,
-        "altura": 0.3,
-        "base": 0.95
-      }
-    }
+  "sons_de_voz": {
+    "risada": [
+      "gabriel",
+      "Rá, rá, rá, rá, rá!"
+    ]
   }
 }

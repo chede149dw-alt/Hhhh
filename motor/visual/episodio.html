@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Episódio</title>
+<style>
+@font-face { font-family: 'Luckiest'; src: url('/motor/visual/lib/fontes/LuckiestGuy.woff2') format('woff2'); font-display: block; }
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+canvas{display:block}
+#camadas{position:fixed;inset:0;pointer-events:none;font-family:'Luckiest',sans-serif}
+#selo{position:absolute;left:50%;top:250px;transform:translateX(-50%);background:#2ee87f;color:#0b1a12;font-size:78px;line-height:1;padding:22px 34px 12px;border-radius:14px;box-shadow:0 8px 0 #148a46;letter-spacing:2px}
+#legenda{position:absolute;left:40px;right:40px;text-align:center;font-size:104px;line-height:1.05;color:#ffd23a;
+  -webkit-text-stroke:14px #1a1206;paint-order:stroke fill;text-shadow:0 10px 0 rgba(0,0,0,.35);transform-origin:50% 50%}
+#legenda .dq{color:#ff4b3a}
+#cartela{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;text-align:center}
+#cartela .tit{font-size:150px;color:#ffd23a;-webkit-text-stroke:16px #1a1206;paint-order:stroke fill;letter-spacing:4px}
+#cartela .sub{background:#2ee87f;color:#0b1a12;font-size:96px;padding:26px 44px 14px;border-radius:18px;box-shadow:0 10px 0 #148a46}
+#cartela .final1{font-size:116px;color:#fff;-webkit-text-stroke:14px #1a1206;paint-order:stroke fill}
+#cartela .final2{background:#2ee87f;color:#0b1a12;font-size:84px;padding:24px 40px 12px;border-radius:18px;box-shadow:0 10px 0 #148a46}
+</style>
+<script type="importmap">{ "imports": { "three": "/motor/visual/lib/three/three.module.js", "three/addons/": "/motor/visual/lib/three/addons/" } }</script>
+</head>
+<body>
+<div id="camadas"><div id="selo"></div><div id="legenda"></div><div id="cartela"></div></div>
+<script type="module">
+// Renderiza um episódio a partir de projetos/<projeto>/timeline.json. window.quadro(t) posiciona tudo no instante t.
+// ?projeto=infiltrados_ep01  &rotulo=1 (mostra plano/tempo)  &semlegenda=1
+import * as THREE from 'three';
+import { prepararRenderer, criarLuzes, VOLUME } from './estilo/chapado.js';
+import { criarPos, VISUAL_VERDE } from './estilo/posfx.js';
+import { criarSombraContato } from './estilo/sombras.js';
+import { criarBoneco, carregarFicha } from './boneco/boneco.js';
+import { criarAnimacao } from '../animacao/animador.js';
+import { chavesDe, camadasDe, noLugar, estados, ATUACOES } from '../animacao/atuacoes.js';
+import { misturar, derivar, valor } from '../animacao/poses.js';
+import { pontos } from '../animacao/esqueleto.js';
+import { olharPara } from '../animacao/olhar.js';
+import { tremor, respiracaoCamera } from '../animacao/camera.js';
+import { criarDistribuidora, PORTINHOLA, GRADE_Z } from './cenarios/distribuidora.js';
+import { criarCelular, segurarNaFrente, virarTelaPara, brilhoDaTela } from './objetos/celular.js';
+import { limpar } from '../direcao/palavras.js';
+
+const q = new URLSearchParams(location.search);
+const PROJ = q.get('projeto') || 'infiltrados_ep01';
+const TL = await (await fetch(`/projetos/${PROJ}/timeline.json`)).json();
+await document.fonts.load('100px Luckiest');
+const L = 1080, A = 1920;
+const sm = (a, b, x) => { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
+
+// ---------- cena ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(L, A); prepararRenderer(renderer);
+document.body.prepend(renderer.domElement);
+const cena = new THREE.Scene(); cena.background = new THREE.Color('#04050a');
+const cam = new THREE.PerspectiveCamera(84, L / A, 0.05, 80);
+const cenario = criarDistribuidora(); cena.add(cenario.raiz);
+VOLUME.uRimCor.value.set('#bfffe0'); VOLUME.uRimForca.value = 0.12;
+const luzes = criarLuzes(cena, 'interior', { raioSombra: 5.5 });
+luzes.sol.shadow.camera.far = 30;
+luzes._base = { sol: luzes.sol.intensity, amb: luzes.ambiente.intensity };
+const ESCALA = +(q.get('escala') || 0.75);
+const posfx = criarPos(renderer, L, A, { ...cenario.pos, focoDist: 2.0, focoFaixa: 1.2, desfoqueMax: 2.2, vinheta: 0.5, grao: 0.03, ...VISUAL_VERDE }, { escala: ESCALA });
+
+// ---------- atores ----------
+const B = {}, ANIM = {}, SOMB = [];
+for (const [id, def] of Object.entries(TL.atoresDef)) {
+  B[id] = criarBoneco(await carregarFicha(def.ficha)); cena.add(B[id].raiz);
+  if (!def.camera) { const s = criarSombraContato(B[id]); cena.add(s.malha); SOMB.push(s); }
+}
+const semente = (id) => [...id].reduce((a, c) => a + c.charCodeAt(0), 0);
+for (const [id, lst] of Object.entries(TL.atores)) {
+  const m = B[id].medidas;
+  ANIM[id] = lst.map((e, k) => {
+    let chaves, camadas = [];
+    if (e.atuacao) {
+      const ctx = { medidas: m, ...e.params };
+      chaves = noLugar(chavesDe(e.atuacao, ctx), e.lugar); camadas = camadasDe(e.atuacao, ctx);
+    } else {   // estado parado na marca, com pés no chão
+      const p0 = estados(m)[e.estado], pt = pontos(p0, m);
+      chaves = noLugar([{ t: 0, pose: p0, peDAlvo: [pt.peD[0], 0, pt.peD[2]], peEAlvo: [pt.peE[0], 0, pt.peE[2]] }], e.lugar);
+    }
+    return { ...e, anim: criarAnimacao(chaves, { medidas: m, camadas, semente: semente(id) + k }) };
+  });
+}
+const FADE = 0.35;
+function poseDe(id, t) {
+  const lst = ANIM[id]; let i = lst.length - 1;
+  while (i > 0 && lst[i].ini > t) i--;
+  const e = lst[i], p = e.anim.em(Math.max(0, t - e.ini));
+  if (i > 0 && t - e.ini < FADE) { const a = lst[i - 1]; return misturar(a.anim.em(Math.max(0, t - a.ini)), p, sm(0, FADE, t - e.ini)); }
+  return p;
+}
+const ativa = (id, t) => { const lst = ANIM[id]; let i = lst.length - 1; while (i > 0 && lst[i].ini > t) i--; return lst[i]; };
+
+// sincronia de boca: abre/fecha nas palavras de quem fala (ou de quem "empresta" a boca)
+const bocaDe = {};
+for (const f of TL.falas) {
+  const pl = TL.planos.find((p) => p.id === f.plano);
+  const def = (pl.falas || []).find((x) => x.texto === f.texto);
+  const dono = def?.boca_de || f.quem;
+  if (!B[dono] || TL.atoresDef[dono]?.camera || f.tipo === 'narracao') continue;
+  (bocaDe[dono] ||= []).push(...TL.palavras.filter((w) => w.fala === f.indice));
+}
+function falando(id, t) {
+  const w = (bocaDe[id] || []).find((x) => t >= x.ini && t <= x.fim + 0.05);
+  if (!w) return null;
+  return Math.sin((t - w.ini) * 2 * Math.PI * 6.5) > -0.3 ? 'aberta' : 'neutra';
+}
+
+// ---------- objetos ----------
+const TEXTO_ALERTA = 'Cuidado: criaturas estranhas estão entre nós. Imitam vozes de pessoas conhecidas e aparência.';
+const celEdu = criarCelular({ tipo: 'bloqueio', texto: TEXTO_ALERTA }); cena.add(celEdu.raiz);
+let telaEdu = 'bloqueio';
+const luzCel = new THREE.PointLight('#bcd6ff', 0.9, 0.9, 2); cena.add(luzCel);
+let celGab = null;
+if (B.gabriel) { celGab = criarCelular({ tipo: 'bloqueio' }); B.gabriel.juntas.maoD.add(celGab.raiz); celGab.raiz.position.set(0, -B.gabriel.medidas.maoLen * 0.62, 0); brilhoDaTela(celGab); }
+const comObjeto = (id, t, obj) => { const e = ativa(id, t); return e.atuacao && (ATUACOES[e.atuacao].objetos || []).some((o) => o.id === obj && t - e.ini >= (o.de ?? 0)); };
+
+// ---------- câmera subjetiva ----------
+const olhoDe = (b) => { b.raiz.updateMatrixWorld(true); return b.juntas.cabeca.localToWorld(new THREE.Vector3(0, b.medidas.cabecaH * 0.52, b.medidas.cabecaP * 0.3)).toArray(); };
+const ALVOS = {
+  gabriel: () => olhoDe(B.gabriel), larissa: () => { const o = olhoDe(B.larissa); return [o[0], o[1] - 0.35, o[2]]; },
+  'larissa.rosto': () => olhoDe(B.larissa), portinhola: () => [PORTINHOLA.x, 1.3, GRADE_Z + 0.5], grade: () => [0, 1.4, GRADE_Z + 1],
+  geladeira: () => [-1.65, 1.05, 0.2], frente: () => null, celular: () => null,
+};
+const camAtiva = (t) => TL.cameras.filter((c) => c.ini <= t).at(-1) || TL.cameras[0];
+const camAnterior = (c) => TL.cameras[TL.cameras.indexOf(c) - 1];
+const efeito = (tipo, t) => TL.efeitos.find((e) => e.tipo === tipo && t >= e.ini && t < e.fim);
+const olho = new THREE.Vector3(), qCab = new THREE.Quaternion(), giro180 = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
+
+function cameraSubjetiva(t) {
+  const edu = B.eduardo, m = edu.medidas;
+  let p = poseDe('eduardo', t);
+  const c = camAtiva(t), ant = camAnterior(c);
+  const dur = c.movimento === 'corte' ? 0.001 : (c.movimento === 'virar' || c.movimento === 'levantar_olhar') ? 0.75 : 0.4;
+  const k = sm(c.ini, c.ini + dur, t);
+  const alvo = ALVOS[c.olhar](), alvoAnt = ant ? ALVOS[ant.olhar]() : null;
+  const comOlhar = (pp, a) => (a ? olharPara(pp, m, a) : pp);
+  if (k < 1 && ant) {
+    if (alvo && alvoAnt) p = comOlhar(p, alvoAnt.map((v, i) => v + (alvo[i] - v) * k));
+    else p = misturar(comOlhar(p, alvoAnt), comOlhar(p, alvo), k);
+  } else p = comOlhar(p, alvo);
+  edu.posar(p); edu.raiz.updateMatrixWorld(true); edu.juntas.cabeca.visible = false;
+  olho.set(0, m.cabecaH * 0.52, m.cabecaP * 0.3); edu.juntas.cabeca.localToWorld(olho);
+  edu.juntas.cabeca.getWorldQuaternion(qCab);
+  cam.position.copy(olho); cam.quaternion.copy(qCab).multiply(giro180);
+  const tr = efeito('tremor', t), forca = tr ? (tr.forca ?? 0.015) * (1 - sm(tr.ini, tr.fim, t)) : 0;
+  const ev = TL.eventos.filter((e) => e.t <= t && t - e.t < 0.6).at(-1);
+  const extra = ev && ev.acao === 'corte_preto_batida' ? 0.03 : 0;
+  const r = respiracaoCamera(t), tt = tremor(t, forca + extra);
+  cam.position.add(new THREE.Vector3(r.d[0] + tt.d[0], r.d[1] + tt.d[1], 0)); cam.rotateZ(r.rolar + tt.rolar);
+  // lente: aberta no ambiente; fecha quando encara um rosto (transição suave entre planos)
+  const fovDe = (cc) => (!cc ? 84 : cc.olhar === 'larissa.rosto' ? 56 : cc.olhar === 'gabriel' ? 72 : 84);
+  let fov = fovDe(ant) + (fovDe(c) - fovDe(ant)) * sm(c.ini, c.ini + 0.6, t);
+  if (c.movimento === 'aproximar_lento') fov -= 12 * sm(c.ini, c.fim, t);
+  cam.fov = fov;
+  cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+  return c;
+}
+
+// ---------- legendas ----------
+const GRUPOS = [];
+{ let atual = [];
+  const fecha = () => { if (atual.length) GRUPOS.push(atual); atual = []; };
+  TL.palavras.forEach((w, i) => {
+    const prox = TL.palavras[i + 1];
+    atual.push(w);
+    if (atual.length >= 3 || /[.!?…,]$/.test(w.texto) || !prox || prox.fala !== w.fala) fecha();
+  });
+  GRUPOS.forEach((g, i) => { const prox = GRUPOS[i + 1]; g.ini = g[0].ini - 0.05; g.fim = prox && prox[0].fala === g[0].fala ? prox[0].ini - 0.05 : g.at(-1).fim + 0.35; });
+}
+window.__grupos = GRUPOS.map((g) => ({ ini: g.ini, fim: g.fim }));
+const elLeg = document.getElementById('legenda'), elSelo = document.getElementById('selo'), elCart = document.getElementById('cartela');
+let legAtual = null, cartAtual = null;
+function camadas(t, preto) {
+  elSelo.textContent = `PARTE ${TL.episodio}`;
+  const cart = TL.cartelas.find((c) => t >= c.ini && t < c.fim);
+  elSelo.style.display = cart ? 'none' : 'block';
+  if (cart !== cartAtual) {
+    cartAtual = cart;
+    elCart.innerHTML = !cart ? '' : cart.estilo === 'final' ? `<div class="final1">${cart.texto}</div><div class="final2">${cart.sub}</div>` : `<div class="tit">${cart.texto}</div><div class="sub">${cart.sub}</div>`;
+  }
+  if (cart) { const k = sm(cart.ini, cart.ini + 0.25, t); elCart.style.opacity = k; elCart.style.transform = `scale(${0.9 + 0.1 * k})`; }
+  const g = q.get('semlegenda') || cart?.estilo === 'final' ? null : GRUPOS.find((x) => t >= x.ini && t < x.fim);
+  if (g !== legAtual) {
+    legAtual = g;
+    elLeg.innerHTML = g ? g.map((w) => `<span class="${w.destaque ? 'dq' : ''}">${w.texto.toUpperCase()}</span>`).join(' ') : '';
+  }
+  if (g) {
+    const k = sm(g.ini, g.ini + 0.12, t);
+    elLeg.style.transform = `scale(${0.82 + 0.18 * k})`;
+    const pl = TL.planos.find((p) => t >= p.ini && t < p.fim);
+    const y = cart ? 0.8 : (pl?.legenda === 'alto' ? 0.33 : pl?.legenda === 'baixo' ? 0.78 : 0.66);
+    elLeg.style.top = `${Math.round(A * y - 60)}px`;
+  }
+  if (q.get('rotulo')) elSelo.textContent = `PARTE ${TL.episodio} · ${t.toFixed(2)}s`;
+}
+
+// ---------- quadro ----------
+window.quadro = (t) => {
+  const preto = efeito('preto', t);
+  for (const id of Object.keys(B)) {
+    if (TL.atoresDef[id].camera) continue;
+    let p = poseDe(id, t);
+    const bo = falando(id, t); if (bo) p = { ...p, rosto: { ...p.rosto, boca: bo } };
+    B[id].posar(p);
+  }
+  cameraSubjetiva(t);
+  // celulares
+  const eduCel = comObjeto('eduardo', t, 'celular');
+  celEdu.raiz.visible = eduCel; luzCel.visible = eduCel;
+  if (eduCel) {
+    const tela = efeito('alerta', t) ? 'alerta' : 'bloqueio';
+    if (tela !== telaEdu) { celEdu.definirTela({ tipo: tela }); telaEdu = tela; }
+    segurarNaFrente(celEdu, B.eduardo.juntas.maoD, cam);
+    luzCel.position.copy(celEdu.raiz.position).lerp(cam.position, 0.25);
+  }
+  if (celGab) { celGab.raiz.visible = comObjeto('gabriel', t, 'celular'); if (celGab.raiz.visible) virarTelaPara(celGab, olhoDe(B.gabriel)); }
+  for (const s of SOMB) s.atualizar();
+  // luz
+  const pisc = efeito('piscar', t);
+  cenario.atualizar(t, { piscar: pisc ? 0.8 : 0, luzes });
+  if (efeito('apagar', t)) { luzes.sol.intensity = 0; luzes.ambiente.intensity = luzes._base.amb * 0.12; cenario.apagarLampadas(); }
+  // foco: o que o olhar mira
+  const c = camAtiva(t), a = ALVOS[c.olhar]?.();
+  posfx.definir({ focoDist: a ? Math.max(0.4, cam.position.distanceTo(new THREE.Vector3(...a))) : 0.45, focoFaixa: a ? 0.9 : 0.25 });
+  if (preto) { renderer.setRenderTarget(null); renderer.setClearColor('#000'); renderer.clear(); }
+  else posfx.render(cena, cam, t);
+  camadas(t, preto);
+};
+window.duracao = TL.duracao;
+window.pronto = Promise.resolve();
+</script>
+</body>
+</html>

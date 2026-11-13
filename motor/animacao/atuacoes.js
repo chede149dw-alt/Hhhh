@@ -57,10 +57,13 @@ export function estados(m, ctx = {}) {
       rosto: { estranho: ctx.estranho ?? 0.7, boca: 'sorriso' },
     }),
   };
+  E.revelada = null;
   E.na_grade = derivar(emPe, {
     corpo: { z: 0.16 }, desl: { y: -0.04, z: 0.04 }, coluna: { frente: 6 }, peito: { frente: 5, lado: -4 }, pescoco: { lado: 10 },
     cabeca: { lado: 34, frente: 6, giro: -6 }, ...bracos(70, 15, 40, 85), rosto: { boca: 'neutra', estranho: 0.6, olharY: 0.1 },
   });
+  E.revelada = derivar(E.na_grade, { coluna: { frente: 12 }, peito: { frente: 7, lado: 0 }, pescoco: { lado: 4 }, cabeca: { lado: 22, frente: -4, giro: 0 },
+    corpo: { z: 0.2 }, rosto: { boca: 'sorriso', estranho: 0.9, olharY: 0 } });
   return E;
 }
 export const estado = (nome, m, ctx) => {
@@ -299,6 +302,22 @@ export const ATUACOES = {
           ...bracos(70, 15, 40, 85), rosto: { boca: 'sorriso', estranho: 0.3 } }) },
         { t: 3.7, curva: 'suave', pose: E.na_grade },                      // inclinada demais, olhar morto
         { t: 4.2 },
+      ];
+    },
+  },
+
+  revelar_na_grade: {
+    descricao: 'Agarrada na grade, endireita a cabeça num estalo encarando a câmera e o rosto se revela.',
+    inicio: 'na_grade', final: 'revelada', impacto: 0.35, sons: [{ t: 0.35, som: 'estalo_pescoco' }],
+    cena: { grade: { z: 0.72 } },
+    chaves(ctx) {
+      const m = ctx.medidas, E = estados(m), b = E.na_grade;
+      const s = solas(derivar(E.em_pe, {}), m);
+      return [
+        { t: 0, pose: b, peDAlvo: [s.peDAlvo[0], 0, s.peDAlvo[2] + 0.24], peEAlvo: s.peEAlvo, maoDAlvo: [-0.2, 1.16, 0.685], maoEAlvo: [0.2, 1.16, 0.685] },
+        { t: 0.2, curva: 'suave', pose: derivar(b, { cabeca: { lado: 40, frente: 8 } }) },
+        { t: 0.35, curva: 'estalo', pose: derivar(E.revelada, { rosto: { estranho: 0.75 } }) },
+        { t: 2.2, curva: 'suave', pose: E.revelada },
       ];
     },
   },

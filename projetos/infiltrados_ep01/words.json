@@ -1,0 +1,1283 @@
+{
+ "palavras": [
+  {
+   "i": 1,
+   "texto": "Se",
+   "ini": 0.698,
+   "fim": 0.89,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 2,
+   "texto": "alguém",
+   "ini": 0.902,
+   "fim": 1.215,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 3,
+   "texto": "que",
+   "ini": 1.227,
+   "fim": 1.311,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 4,
+   "texto": "você",
+   "ini": 1.323,
+   "fim": 1.575,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 5,
+   "texto": "conhece",
+   "ini": 1.587,
+   "fim": 2.068,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 6,
+   "texto": "te",
+   "ini": 2.08,
+   "fim": 2.164,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 7,
+   "texto": "chamar",
+   "ini": 2.176,
+   "fim": 2.573,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 8,
+   "texto": "por",
+   "ini": 2.585,
+   "fim": 2.741,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 9,
+   "texto": "um",
+   "ini": 2.753,
+   "fim": 2.837,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 10,
+   "texto": "apelido",
+   "ini": 2.849,
+   "fim": 3.282,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 11,
+   "texto": "que",
+   "ini": 3.294,
+   "fim": 3.414,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 12,
+   "texto": "nunca",
+   "ini": 3.426,
+   "fim": 3.823,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 13,
+   "texto": "usou…",
+   "ini": 3.835,
+   "fim": 4.148,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 14,
+   "texto": "não",
+   "ini": 4.412,
+   "fim": 4.652,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 15,
+   "texto": "responde.",
+   "ini": 4.664,
+   "fim": 5.253,
+   "fala": 0,
+   "plano": 1,
+   "quem": "eduardo"
+  },
+  {
+   "i": 16,
+   "texto": "Três",
+   "ini": 6.794,
+   "fim": 7.107,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 17,
+   "texto": "da",
+   "ini": 7.119,
+   "fim": 7.215,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 18,
+   "texto": "manhã.",
+   "ini": 7.227,
+   "fim": 7.587,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 19,
+   "texto": "Eu",
+   "ini": 8.415,
+   "fim": 8.631,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 20,
+   "texto": "e",
+   "ini": 8.643,
+   "fim": 8.703,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 21,
+   "texto": "o",
+   "ini": 8.715,
+   "fim": 8.751,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 22,
+   "texto": "Gabriel",
+   "ini": 8.763,
+   "fim": 9.16,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 23,
+   "texto": "tomando",
+   "ini": 9.172,
+   "fim": 9.569,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 24,
+   "texto": "conta",
+   "ini": 9.581,
+   "fim": 9.881,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 25,
+   "texto": "da",
+   "ini": 9.893,
+   "fim": 9.989,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 26,
+   "texto": "distribuidora,",
+   "ini": 10.001,
+   "fim": 10.734,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 27,
+   "texto": "como",
+   "ini": 11.011,
+   "fim": 11.287,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 28,
+   "texto": "toda",
+   "ini": 11.299,
+   "fim": 11.612,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 29,
+   "texto": "sexta.",
+   "ini": 11.624,
+   "fim": 12.069,
+   "fala": 1,
+   "plano": 2,
+   "quem": "eduardo"
+  },
+  {
+   "i": 30,
+   "texto": "Ninguém",
+   "ini": 13.357,
+   "fim": 13.77,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 31,
+   "texto": "vai",
+   "ini": 13.781,
+   "fim": 13.915,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 32,
+   "texto": "aparecer",
+   "ini": 13.926,
+   "fim": 14.372,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 33,
+   "texto": "hoje",
+   "ini": 14.383,
+   "fim": 14.584,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 34,
+   "texto": "não,",
+   "ini": 14.595,
+   "fim": 14.841,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 35,
+   "texto": "mano.",
+   "ini": 15.008,
+   "fim": 15.332,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 36,
+   "texto": "Bora",
+   "ini": 16.097,
+   "fim": 16.432,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 37,
+   "texto": "fechar.",
+   "ini": 16.443,
+   "fim": 16.845,
+   "fala": 2,
+   "plano": 2,
+   "quem": "gabriel"
+  },
+  {
+   "i": 38,
+   "texto": "Aí",
+   "ini": 18.328,
+   "fim": 18.677,
+   "fala": 3,
+   "plano": 3,
+   "quem": "eduardo"
+  },
+  {
+   "i": 39,
+   "texto": "ela",
+   "ini": 18.689,
+   "fim": 18.869,
+   "fala": 3,
+   "plano": 3,
+   "quem": "eduardo"
+  },
+  {
+   "i": 40,
+   "texto": "apareceu.",
+   "ini": 18.881,
+   "fim": 19.53,
+   "fala": 3,
+   "plano": 3,
+   "quem": "eduardo"
+  },
+  {
+   "i": 41,
+   "texto": "Larissa.",
+   "ini": 21.064,
+   "fim": 21.701,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 42,
+   "texto": "Mora",
+   "ini": 22.529,
+   "fim": 22.853,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 43,
+   "texto": "na",
+   "ini": 22.865,
+   "fim": 22.985,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 44,
+   "texto": "rua",
+   "ini": 22.997,
+   "fim": 23.25,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 45,
+   "texto": "de",
+   "ini": 23.262,
+   "fim": 23.394,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 46,
+   "texto": "trás.",
+   "ini": 23.406,
+   "fim": 23.839,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 47,
+   "texto": "Compra",
+   "ini": 24.668,
+   "fim": 25.004,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 48,
+   "texto": "aqui",
+   "ini": 25.017,
+   "fim": 25.209,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 49,
+   "texto": "desde",
+   "ini": 25.221,
+   "fim": 25.557,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 50,
+   "texto": "sempre.",
+   "ini": 25.569,
+   "fim": 26.05,
+   "fala": 4,
+   "plano": 4,
+   "quem": "eduardo"
+  },
+  {
+   "i": 51,
+   "texto": "Oi,",
+   "ini": 27.346,
+   "fim": 27.685,
+   "fala": 5,
+   "plano": 4,
+   "quem": "larissa"
+  },
+  {
+   "i": 52,
+   "texto": "Dudu.",
+   "ini": 27.737,
+   "fim": 28.205,
+   "fala": 5,
+   "plano": 4,
+   "quem": "larissa"
+  },
+  {
+   "i": 53,
+   "texto": "Me",
+   "ini": 28.481,
+   "fim": 28.676,
+   "fala": 5,
+   "plano": 4,
+   "quem": "larissa"
+  },
+  {
+   "i": 54,
+   "texto": "vê",
+   "ini": 28.689,
+   "fim": 28.872,
+   "fala": 5,
+   "plano": 4,
+   "quem": "larissa"
+  },
+  {
+   "i": 55,
+   "texto": "duas",
+   "ini": 28.885,
+   "fim": 29.158,
+   "fala": 5,
+   "plano": 4,
+   "quem": "larissa"
+  },
+  {
+   "i": 56,
+   "texto": "geladas?",
+   "ini": 29.171,
+   "fim": 29.913,
+   "fala": 5,
+   "plano": 4,
+   "quem": "larissa"
+  },
+  {
+   "i": 57,
+   "texto": "Dudu.",
+   "ini": 31.518,
+   "fim": 31.963,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 58,
+   "texto": "Ninguém",
+   "ini": 32.79,
+   "fim": 33.235,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 59,
+   "texto": "me",
+   "ini": 33.247,
+   "fim": 33.343,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 60,
+   "texto": "chama",
+   "ini": 33.355,
+   "fim": 33.68,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 61,
+   "texto": "assim.",
+   "ini": 33.692,
+   "fim": 34.076,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 62,
+   "texto": "Só",
+   "ini": 34.906,
+   "fim": 35.23,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 63,
+   "texto": "a",
+   "ini": 35.242,
+   "fim": 35.266,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 64,
+   "texto": "minha",
+   "ini": 35.278,
+   "fim": 35.519,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 65,
+   "texto": "mãe.",
+   "ini": 35.531,
+   "fim": 35.843,
+   "fala": 6,
+   "plano": 5,
+   "quem": "eduardo"
+  },
+  {
+   "i": 66,
+   "texto": "Dudu?",
+   "ini": 37.121,
+   "fim": 37.5,
+   "fala": 7,
+   "plano": 5,
+   "quem": "gabriel"
+  },
+  {
+   "i": 67,
+   "texto": "Desde",
+   "ini": 38.265,
+   "fim": 38.667,
+   "fala": 7,
+   "plano": 5,
+   "quem": "gabriel"
+  },
+  {
+   "i": 68,
+   "texto": "quando",
+   "ini": 38.678,
+   "fim": 38.957,
+   "fala": 7,
+   "plano": 5,
+   "quem": "gabriel"
+  },
+  {
+   "i": 69,
+   "texto": "cê",
+   "ini": 38.968,
+   "fim": 39.113,
+   "fala": 7,
+   "plano": 5,
+   "quem": "gabriel"
+  },
+  {
+   "i": 70,
+   "texto": "é",
+   "ini": 39.124,
+   "fim": 39.191,
+   "fala": 7,
+   "plano": 5,
+   "quem": "gabriel"
+  },
+  {
+   "i": 71,
+   "texto": "Dudu?",
+   "ini": 39.202,
+   "fim": 39.526,
+   "fala": 7,
+   "plano": 5,
+   "quem": "gabriel"
+  },
+  {
+   "i": 72,
+   "texto": "Abre",
+   "ini": 41.016,
+   "fim": 41.276,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 73,
+   "texto": "a",
+   "ini": 41.29,
+   "fim": 41.355,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 74,
+   "texto": "grade",
+   "ini": 41.368,
+   "fim": 41.745,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 75,
+   "texto": "pra",
+   "ini": 41.758,
+   "fim": 41.915,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 76,
+   "texto": "mim,",
+   "ini": 41.928,
+   "fim": 42.175,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 77,
+   "texto": "Dudu.",
+   "ini": 42.474,
+   "fim": 42.878,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 78,
+   "texto": "Tá",
+   "ini": 43.154,
+   "fim": 43.284,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 79,
+   "texto": "frio",
+   "ini": 43.297,
+   "fim": 43.583,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 80,
+   "texto": "aqui",
+   "ini": 43.596,
+   "fim": 43.831,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 81,
+   "texto": "fora.",
+   "ini": 43.844,
+   "fim": 44.286,
+   "fala": 8,
+   "plano": 6,
+   "quem": "larissa"
+  },
+  {
+   "i": 82,
+   "texto": "Os",
+   "ini": 45.908,
+   "fim": 46.076,
+   "fala": 9,
+   "plano": 7,
+   "quem": "eduardo"
+  },
+  {
+   "i": 83,
+   "texto": "dois",
+   "ini": 46.088,
+   "fim": 46.377,
+   "fala": 9,
+   "plano": 7,
+   "quem": "eduardo"
+  },
+  {
+   "i": 84,
+   "texto": "celulares",
+   "ini": 46.389,
+   "fim": 46.99,
+   "fala": 9,
+   "plano": 7,
+   "quem": "eduardo"
+  },
+  {
+   "i": 85,
+   "texto": "tocaram",
+   "ini": 47.002,
+   "fim": 47.435,
+   "fala": 9,
+   "plano": 7,
+   "quem": "eduardo"
+  },
+  {
+   "i": 86,
+   "texto": "ao",
+   "ini": 47.447,
+   "fim": 47.555,
+   "fala": 9,
+   "plano": 7,
+   "quem": "eduardo"
+  },
+  {
+   "i": 87,
+   "texto": "mesmo",
+   "ini": 47.567,
+   "fim": 47.927,
+   "fala": 9,
+   "plano": 7,
+   "quem": "eduardo"
+  },
+  {
+   "i": 88,
+   "texto": "tempo.",
+   "ini": 47.939,
+   "fim": 48.288,
+   "fala": 9,
+   "plano": 7,
+   "quem": "eduardo"
+  },
+  {
+   "i": 89,
+   "texto": "Isso",
+   "ini": 49.567,
+   "fim": 49.868,
+   "fala": 10,
+   "plano": 7,
+   "quem": "gabriel"
+  },
+  {
+   "i": 90,
+   "texto": "é",
+   "ini": 49.879,
+   "fim": 49.946,
+   "fala": 10,
+   "plano": 7,
+   "quem": "gabriel"
+  },
+  {
+   "i": 91,
+   "texto": "zoeira…",
+   "ini": 49.957,
+   "fim": 50.348,
+   "fala": 10,
+   "plano": 7,
+   "quem": "gabriel"
+  },
+  {
+   "i": 92,
+   "texto": "né?",
+   "ini": 50.582,
+   "fim": 50.85,
+   "fala": 10,
+   "plano": 7,
+   "quem": "gabriel"
+  },
+  {
+   "i": 93,
+   "texto": "É",
+   "ini": 52.327,
+   "fim": 52.472,
+   "fala": 11,
+   "plano": 8,
+   "quem": "gabriel"
+  },
+  {
+   "i": 94,
+   "texto": "a",
+   "ini": 52.483,
+   "fim": 52.505,
+   "fala": 11,
+   "plano": 8,
+   "quem": "gabriel"
+  },
+  {
+   "i": 95,
+   "texto": "Larissa,",
+   "ini": 52.516,
+   "fim": 53.03,
+   "fala": 11,
+   "plano": 8,
+   "quem": "gabriel"
+  },
+  {
+   "i": 96,
+   "texto": "mano.",
+   "ini": 53.22,
+   "fim": 53.554,
+   "fala": 11,
+   "plano": 8,
+   "quem": "gabriel"
+  },
+  {
+   "i": 97,
+   "texto": "Relaxa.",
+   "ini": 54.319,
+   "fim": 54.899,
+   "fala": 11,
+   "plano": 8,
+   "quem": "gabriel"
+  },
+  {
+   "i": 98,
+   "texto": "Gabriel…",
+   "ini": 56.136,
+   "fim": 56.749,
+   "fala": 12,
+   "plano": 8,
+   "quem": "eduardo"
+  },
+  {
+   "i": 99,
+   "texto": "espera.",
+   "ini": 56.989,
+   "fim": 57.53,
+   "fala": 12,
+   "plano": 8,
+   "quem": "eduardo"
+  },
+  {
+   "i": 100,
+   "texto": "Filho…",
+   "ini": 59.677,
+   "fim": 60.15,
+   "fala": 13,
+   "plano": 9,
+   "quem": "mae"
+  },
+  {
+   "i": 101,
+   "texto": "abre",
+   "ini": 60.226,
+   "fim": 60.593,
+   "fala": 13,
+   "plano": 9,
+   "quem": "mae"
+  },
+  {
+   "i": 102,
+   "texto": "pra",
+   "ini": 60.608,
+   "fim": 60.806,
+   "fala": 13,
+   "plano": 9,
+   "quem": "mae"
+  },
+  {
+   "i": 103,
+   "texto": "mim.",
+   "ini": 60.822,
+   "fim": 61.157,
+   "fala": 13,
+   "plano": 9,
+   "quem": "mae"
+  },
+  {
+   "i": 104,
+   "texto": "Aquela",
+   "ini": 62.956,
+   "fim": 63.353,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 105,
+   "texto": "não",
+   "ini": 63.365,
+   "fim": 63.569,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 106,
+   "texto": "era",
+   "ini": 63.581,
+   "fim": 63.774,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 107,
+   "texto": "a",
+   "ini": 63.786,
+   "fim": 63.834,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 108,
+   "texto": "voz",
+   "ini": 63.846,
+   "fim": 64.098,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 109,
+   "texto": "da",
+   "ini": 64.11,
+   "fim": 64.194,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 110,
+   "texto": "Larissa.",
+   "ini": 64.206,
+   "fim": 64.723,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 111,
+   "texto": "Era",
+   "ini": 65.55,
+   "fim": 65.815,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 112,
+   "texto": "a",
+   "ini": 65.827,
+   "fim": 65.875,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 113,
+   "texto": "voz",
+   "ini": 65.887,
+   "fim": 66.175,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 114,
+   "texto": "da",
+   "ini": 66.188,
+   "fim": 66.272,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 115,
+   "texto": "minha",
+   "ini": 66.284,
+   "fim": 66.488,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 116,
+   "texto": "mãe.",
+   "ini": 66.5,
+   "fim": 66.801,
+   "fala": 14,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 117,
+   "texto": "Segue",
+   "ini": 68.082,
+   "fim": 68.503,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 118,
+   "texto": "e",
+   "ini": 68.515,
+   "fim": 68.563,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 119,
+   "texto": "comenta",
+   "ini": 68.575,
+   "fim": 69.068,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 120,
+   "texto": "pra",
+   "ini": 69.08,
+   "fim": 69.248,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 121,
+   "texto": "ver",
+   "ini": 69.26,
+   "fim": 69.44,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 122,
+   "texto": "a",
+   "ini": 69.452,
+   "fim": 69.525,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 123,
+   "texto": "parte",
+   "ini": 69.537,
+   "fim": 69.861,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  },
+  {
+   "i": 124,
+   "texto": "2.",
+   "ini": 69.873,
+   "fim": 70.282,
+   "fala": 15,
+   "plano": 9,
+   "quem": "eduardo"
+  }
+ ],
+ "falas": [
+  {
+   "indice": 0,
+   "plano": 1,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Se alguém que você conhece te chamar por um apelido que nunca usou… não responde.",
+   "ini": 0.6,
+   "fim": 6.096,
+   "arquivo": "voz/fala_00_8db7e233.wav"
+  },
+  {
+   "indice": 1,
+   "plano": 2,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Três da manhã. Eu e o Gabriel tomando conta da distribuidora, como toda sexta.",
+   "ini": 6.696,
+   "fim": 12.912,
+   "arquivo": "voz/fala_01_ec1d234f.wav"
+  },
+  {
+   "indice": 2,
+   "plano": 2,
+   "quem": "gabriel",
+   "tipo": "fala",
+   "texto": "Ninguém vai aparecer hoje não, mano. Bora fechar.",
+   "ini": 13.262,
+   "fim": 17.63,
+   "arquivo": "voz/fala_02_3b54919c.wav"
+  },
+  {
+   "indice": 3,
+   "plano": 3,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Aí ela apareceu.",
+   "ini": 18.23,
+   "fim": 20.366,
+   "arquivo": "voz/fala_03_0c07f985.wav"
+  },
+  {
+   "indice": 4,
+   "plano": 4,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Larissa. Mora na rua de trás. Compra aqui desde sempre.",
+   "ini": 20.966,
+   "fim": 26.894,
+   "arquivo": "voz/fala_04_8a260189.wav"
+  },
+  {
+   "indice": 5,
+   "plano": 4,
+   "quem": "larissa",
+   "tipo": "fala",
+   "texto": "Oi, Dudu. Me vê duas geladas?",
+   "ini": 27.244,
+   "fim": 30.82,
+   "arquivo": "voz/fala_05_14ef76b0.wav"
+  },
+  {
+   "indice": 6,
+   "plano": 5,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Dudu. Ninguém me chama assim. Só a minha mãe.",
+   "ini": 31.42,
+   "fim": 36.676,
+   "arquivo": "voz/fala_06_46aa7beb.wav"
+  },
+  {
+   "indice": 7,
+   "plano": 5,
+   "quem": "gabriel",
+   "tipo": "fala",
+   "texto": "Dudu? Desde quando cê é Dudu?",
+   "ini": 37.026,
+   "fim": 40.314,
+   "arquivo": "voz/fala_07_155c4219.wav"
+  },
+  {
+   "indice": 8,
+   "plano": 6,
+   "quem": "larissa",
+   "tipo": "fala",
+   "texto": "Abre a grade pra mim, Dudu. Tá frio aqui fora.",
+   "ini": 40.914,
+   "fim": 45.21,
+   "arquivo": "voz/fala_08_b9a96cc7.wav"
+  },
+  {
+   "indice": 9,
+   "plano": 7,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Os dois celulares tocaram ao mesmo tempo.",
+   "ini": 45.81,
+   "fim": 49.122,
+   "arquivo": "voz/fala_09_f74692e0.wav"
+  },
+  {
+   "indice": 10,
+   "plano": 7,
+   "quem": "gabriel",
+   "tipo": "fala",
+   "texto": "Isso é zoeira… né?",
+   "ini": 49.472,
+   "fim": 51.632,
+   "arquivo": "voz/fala_10_b391aac9.wav"
+  },
+  {
+   "indice": 11,
+   "plano": 8,
+   "quem": "gabriel",
+   "tipo": "fala",
+   "texto": "É a Larissa, mano. Relaxa.",
+   "ini": 52.232,
+   "fim": 55.688,
+   "arquivo": "voz/fala_11_63e178fa.wav"
+  },
+  {
+   "indice": 12,
+   "plano": 8,
+   "quem": "eduardo",
+   "tipo": "fala",
+   "texto": "Gabriel… espera.",
+   "ini": 56.038,
+   "fim": 58.366,
+   "arquivo": "voz/fala_12_82018f2c.wav"
+  },
+  {
+   "indice": 13,
+   "plano": 9,
+   "quem": "mae",
+   "tipo": "fala",
+   "texto": "Filho… abre pra mim.",
+   "ini": 59.566,
+   "fim": 61.008,
+   "arquivo": "voz/fala_13_18bb0e05.wav"
+  },
+  {
+   "indice": 14,
+   "plano": 9,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Aquela não era a voz da Larissa. Era a voz da minha mãe.",
+   "ini": 62.858,
+   "fim": 67.634,
+   "arquivo": "voz/fala_14_cfacbb92.wav"
+  },
+  {
+   "indice": 15,
+   "plano": 9,
+   "quem": "eduardo",
+   "tipo": "narracao",
+   "texto": "Segue e comenta pra ver a parte 2.",
+   "ini": 67.984,
+   "fim": 71.128,
+   "arquivo": "voz/fala_15_d8e1ea9a.wav"
+  }
+ ],
+ "estimado": false
+}

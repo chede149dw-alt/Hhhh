@@ -25,7 +25,7 @@ const FRAG1 = `
 varying vec2 vUv;
 uniform sampler2D tCor, tProf;
 uniform float perto, longe;
-uniform vec2 res;
+uniform vec2 resInt;
 uniform vec3 nevoaCor; uniform float nevoaIni, nevoaFim, nevoaMax;
 uniform float focoDist, focoFaixa, desfoqueMax, desfoqueTeto;
 
@@ -45,9 +45,9 @@ void main(){
     const int N = TAPS;
     for (int i = 0; i < N; i++) {
       float fi = float(i);
-      float ri = r * sqrt((fi + 0.5) / float(N));
+      float ri = r * (resInt.y / 1920.0) * sqrt((fi + 0.5) / float(N));
       float a = fi * 2.39996323;
-      vec2 uv = vUv + vec2(cos(a), sin(a)) * ri / res;
+      vec2 uv = vUv + vec2(cos(a), sin(a)) * ri / resInt;
       float dS = dist(uv);
       float w = clamp(coc(dS) - ri + 1.0, 0.0, 1.0);   // amostra nítida não vaza para trás
       soma += corNevoa(uv, dS) * w; peso += w;
@@ -105,17 +105,19 @@ function telaCheia(mat) {
   const cena = new THREE.Scene(); cena.add(m); return cena;
 }
 
-export function criarPos(renderer, largura, altura, params = {}, { msaa = 4, taps = 16, tipo = 'half' } = {}) {
-  const prof = new THREE.DepthTexture(largura, altura);
+// escala: resolução interna da cena (ex.: 0.75 = desenha em 75% e amplia no passe da lente — bem mais rápido).
+export function criarPos(renderer, largura, altura, params = {}, { msaa = 4, taps = 16, tipo = 'half', escala = 1 } = {}) {
+  const LI = Math.round(largura * escala), AI = Math.round(altura * escala);
+  const prof = new THREE.DepthTexture(LI, AI);
   const tipoT = tipo === 'half' ? THREE.HalfFloatType : THREE.UnsignedByteType;
-  const alvo = new THREE.WebGLRenderTarget(largura, altura, { type: tipoT, samples: msaa, depthTexture: prof, colorSpace: THREE.LinearSRGBColorSpace });
-  const alvo2 = new THREE.WebGLRenderTarget(largura, altura, { type: tipoT, depthBuffer: false, colorSpace: THREE.LinearSRGBColorSpace });
+  const alvo = new THREE.WebGLRenderTarget(LI, AI, { type: tipoT, samples: msaa, depthTexture: prof, colorSpace: THREE.LinearSRGBColorSpace });
+  const alvo2 = new THREE.WebGLRenderTarget(LI, AI, { type: tipoT, depthBuffer: false, colorSpace: THREE.LinearSRGBColorSpace });
   const p = { ...POS_PADRAO, ...params };
   const COR = ['nevoaCor', 'tomSombras', 'tomLuzes'];
   const u = {
     tCor: { value: alvo.texture }, tProf: { value: prof }, tCena: { value: alvo2.texture },
     perto: { value: 0.1 }, longe: { value: 100 }, tempo: { value: 0 },
-    res: { value: new THREE.Vector2(largura, altura) },
+    res: { value: new THREE.Vector2(largura, altura) }, resInt: { value: new THREE.Vector2(LI, AI) },
   };
   for (const [k, v] of Object.entries(p)) u[k] = { value: COR.includes(k) ? new THREE.Color(v) : v };
   const opc = { uniforms: u, vertexShader: VERT, depthTest: false, depthWrite: false };

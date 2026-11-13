@@ -27,3 +27,7 @@ build/
 projetos/_testes/
 projetos/_quadros/
 projetos/**/quadros/
+motor/audio/sfx/
+projetos/**/voz/*.wav
+projetos/**/audio.wav
+projetos/**/final.mp4
