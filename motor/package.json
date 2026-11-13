@@ -1,0 +1,18 @@
+{
+  "name": "motor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Motor audiovisual local: vídeos verticais 3D chapados por código",
+  "scripts": {
+    "quadros": "node render/renderizar.mjs",
+    "juntar": "node render/juntar.mjs",
+    "test": "node --test \"testes/**/*.test.mjs\""
+  },
+  "dependencies": {
+    "puppeteer-core": "25.15.0"
+  },
+  "devDependencies": {
+    "three": "0.186.1"
+  }
+}

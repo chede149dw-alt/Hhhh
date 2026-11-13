@@ -22,3 +22,8 @@ build/
 
 # Logs
 *.log
+
+# Saídas geradas pelo motor (regeráveis). Evidências pequenas ficam em projetos/_evidencias/
+projetos/_testes/
+projetos/_quadros/
+projetos/**/quadros/
