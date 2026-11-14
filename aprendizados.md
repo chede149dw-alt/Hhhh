@@ -181,9 +181,9 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   - selo "PARTE N" em moldura hexagonal com linhas laterais.
   Modelo pronto: plano `capaReels` em `animacao-do-chede/roteiros/chede/ep06.js`; gerar com `node motor/quadro.js roteiros/chede/capa-reels.json roteiros/chede/ep06.js capaReels <saida.png>`.
 - **Voz final no motor da skill:** gerar a narração inteira de uma vez (tom igual), alinhar com `estudio/scripts/alinhar.py` e cortar por fala em `animacao-do-chede/audio/<serie>/<ep>/vozes/final/<id>.wav`. Não usar `afade=t=out:st=0` no corte (deixa o arquivo mudo). Falas maiores que 3 s ganham `duracao` = fala + 0,25 s.
-- **Nome da série: FENDA** (escolha do usuário, 12/11). Daqui pra frente:
-  - na capa, o logo "FENDA" fica no alto (y ≈ 330), com o rasgo roxo atrás do texto, nunca cobrindo as letras;
-  - na descrição, o título começa com "🌀 FENDA ·" e a hashtag #Fenda entra primeiro.
+- **Nome da série: A FENDA** (escolha do usuário em 12/11, ajustado para "A FENDA" em 14/11). Daqui pra frente:
+  - na capa, o logo "A FENDA" fica no alto (y ≈ 330), com o rasgo roxo atrás do texto, nunca cobrindo as letras;
+  - na descrição, o título começa com "🌀 A FENDA ·" e a hashtag #AFenda entra primeiro.
 - **Skill "Animação do Chede" atualizada** (usuário, 12/11: "atualiza a skill e me passa"). A versão nova fica em `skill-animacao-do-chede/` e no zip `prontos/skill-animacao-do-chede.zip`. Ela traz:
   - o motor com as correções (troca de vista direta, bermuda, cacheado, bolso, faixa);
   - Chede, Kaik e Lia com fichas, e o efeito `fenda`;

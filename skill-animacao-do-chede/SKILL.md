@@ -1,6 +1,6 @@
 ---
 name: animacao-do-chede
-description: Estilo "Animação do Chede" — o motor 2D do autor (recorte, modo suave, cenários em perspectiva) para criar vídeos verticais animados 9:16 (1080×1920) por código. Tem a série FENDA (Chede, Kaik e Lia, poder da fenda roxa e super velocidade) e a série da terra (Lucas, Mãe e Rafael), voz de prévia grátis, voz final ElevenLabs, legendas de até 3 palavras, capa no padrão do autor e cartela "PARTE X". Use sempre que o usuário pedir "animação do chede", "estilo do chede", "o primeiro design", "o motor 2D", a série FENDA, um episódio com Chede, Kaik, Lia ou Lucas, roteiro animado para Reels/TikTok/Shorts nesse estilo, ou quiser continuar "E se você acordasse controlando a terra?" — mesmo que não diga a palavra "skill".
+description: Estilo "Animação do Chede" — o motor 2D do autor (recorte, modo suave, cenários em perspectiva) para criar vídeos verticais animados 9:16 (1080×1920) por código. Tem a série A FENDA (Chede, Kaik e Lia, poder da fenda roxa e super velocidade) e a série da terra (Lucas, Mãe e Rafael), voz de prévia grátis, voz final ElevenLabs, legendas de até 3 palavras, capa no padrão do autor e cartela "PARTE X". Use sempre que o usuário pedir "animação do chede", "estilo do chede", "o primeiro design", "o motor 2D", a série A FENDA, um episódio com Chede, Kaik, Lia ou Lucas, roteiro animado para Reels/TikTok/Shorts nesse estilo, ou quiser continuar "E se você acordasse controlando a terra?" — mesmo que não diga a palavra "skill".
 ---
 
 # Animação do Chede (motor 2D, estilo suave)
@@ -56,12 +56,12 @@ Leia o `guia-de-estilo.md` antes de criar personagem, cenário ou efeito novo.
    - protagonista grande no centro, olhando para a câmera, com o poder na mão vindo para a frente;
    - dois personagens atrás, nas laterais, menores e mais escuros;
    - fundo roxo dramático com círculo de runas e silhueta da cidade;
-   - logo da série no alto (ex.: "FENDA"), com o efeito atrás das letras, nunca por cima;
+   - logo da série no alto (ex.: "A FENDA"), com o efeito atrás das letras, nunca por cima;
    - título grande embaixo em letras metálicas (prata, com a palavra-chave em dourado) e brilho roxo;
    - selo "PARTE N" em moldura hexagonal com linhas laterais. Gerar: `node motor/quadro.js roteiros/<serie>/capa-reels.json roteiros/<serie>/<ep>.js capaReels prontos/capa-<ep>.png`.
    Título e rosto entre y 280 e 1640 (a grade corta em 4:5 no Instagram e 3:4 no TikTok); personagem com vista fixa.
 9. **Descrição:** `prontos/descricao-<ep>.txt` — título "🌀 <SÉRIE> · <PREMISSA> | PARTE X", dois parágrafos de
-   resumo sem entregar o final, pergunta com 🔥, "Segue pra ver a parte X+1!" e 5 hashtags (a da série primeiro, ex.: #Fenda).
+   resumo sem entregar o final, pergunta com 🔥, "Segue pra ver a parte X+1!" e 5 hashtags (a da série primeiro, ex.: #AFenda).
 10. Anote em `aprendizados.md` o que funcionou ou não.
 
 Para conferir um vídeo: `ffmpeg -i v.mp4 -vf freezedetect=n=-60dB:d=1 -f null -` (nada parado >1 s) e
@@ -120,7 +120,7 @@ Para conferir um vídeo: `ffmpeg -i v.mp4 -vf freezedetect=n=-60dB:d=1 -f null -
 - `references/roteiro-e-planos.md` — formato do roteiro, a `api` dos planos, cenários, efeitos, poses, receitas de
   câmera e de reação. **Leia antes de escrever planos.**
 - `assets/motor2d/` — o motor completo (é copiado pelo `preparar.sh`).
-- `assets/motor2d/roteiros/chede/` — Parte 6 da série FENDA (`ep06.*`): estrada de manhã, tomadas contínuas com
+- `assets/motor2d/roteiros/chede/` — Parte 6 da série A FENDA (`ep06.*`): estrada de manhã, tomadas contínuas com
   `emOrdem`, fenda, gato, infográficos e a capa no padrão do autor (`capaReels` + `capa-reels.json`).
 - `assets/motor2d/roteiros/terra/` — episódio 1 da série da terra: `ep01.*` (primeira versão) e `ep01-dramatico.*`
   (versão final, modelo de tomadas contínuas, voz final, capa `capaReels`).

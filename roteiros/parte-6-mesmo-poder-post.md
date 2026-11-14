@@ -1,4 +1,4 @@
-🌀 FENDA · E SE ALGUÉM TIVESSE O MESMO PODER QUE VOCÊ? | PARTE 6
+🌀 A FENDA · E SE ALGUÉM TIVESSE O MESMO PODER QUE VOCÊ? | PARTE 6
 
 Na estrada, uma garota de moletom verde esperava o Chede e o Kaik. O gato preto que voltou da fenda era dela: a Lia, a terceira ficha "NÃO ABORDAR". E ela abre a mesma fenda roxa que o Chede.
 
@@ -8,4 +8,4 @@ Quando os dois abriram as fendas juntos, elas se puxaram como ímã, com vento d
 
 Segue pra ver a parte 7!
 
-#Fenda #Superpoderes #Animação #OutraDimensão #MesmoPoder
+#AFenda #Superpoderes #Animação #OutraDimensão #MesmoPoder

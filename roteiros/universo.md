@@ -1,4 +1,4 @@
-# Universo das séries (bíblia) · nome da série: **FENDA**
+# Universo das séries (bíblia) · nome da série: **A FENDA**
 
 Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer episódio novo.
 

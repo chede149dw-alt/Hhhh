@@ -89,7 +89,7 @@ O rig devolvido tem `rig.pontoMundo('mao_d', [0, 0.3])` (ponto da mão, para pô
 
 ## 3. Personagens
 
-- **Chede / Kaik / Lia** (série FENDA): `POSES_PADRAO` e `EXPRESSOES_PADRAO`. Fábricas `criarChede`, `criarKaik`, `criarLia`.
+- **Chede / Kaik / Lia** (série A FENDA): `POSES_PADRAO` e `EXPRESSOES_PADRAO`. Fábricas `criarChede`, `criarKaik`, `criarLia`.
 - Opções novas da base (`motor/personagem-base.js`): `cabelo.estilo: 'cacheado'`, `calca.tipo: 'bermuda'`,
   `top.bolso: true` (bolso no peito), `top.listra: '<cor>'` (faixa larga no peito). Cores novas no guia: `laranja`,
   `azulKaik`, `vermelhoKaik`, `pretoBermuda`, `musgo`, `jeansClaro`.
@@ -121,7 +121,7 @@ Objetos 2D extras em `cenarios/objetos/` (cama, despertador, mochila).
 - `Efeitos.invisibilidade` e `Efeitos['poder-energia']` (de outras séries).
 Cores da terra (guia): terra `#8B5E3C`, pedra `#7A7480`, rachadura `#FFB347` com miolo `#FFE2B0`.
 
-- `Efeitos.fenda(ctx, x, y, larguraPx, { t, abre (0..1), achata (0..1), semente })`: fenda roxa da série FENDA (rasgo
+- `Efeitos.fenda(ctx, x, y, larguraPx, { t, abre (0..1), achata (0..1), semente })`: fenda roxa da série A FENDA (rasgo
   escuro com estrelas, borda violeta/ciano, halo, anéis e partículas sugadas).
 
 ## 6. Receitas

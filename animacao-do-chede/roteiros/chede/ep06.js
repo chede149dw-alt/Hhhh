@@ -243,15 +243,15 @@
       const rig = close(api, { ...CHEDE, pose: { braco_d: 68, antebraco_d: 20, braco_e: -8, antebraco_e: 4 }, expressao: 'determinado' }, 560, 640, 430, { parado: true, luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.9 } });
       const m = rig && rig.pontoMundo ? rig.pontoMundo('mao_d', [0, 0.25]) : { x: 300, y: 1050 };
       Efeitos.fenda(ctx, Math.max(260, m.x), m.y - 20, 420, { t: 1.3, abre: 1, semente: 9 });
-      // logo da série: FENDA (com o rasgo roxo atravessando o meio)
+      // logo da série: A FENDA (com o rasgo roxo atravessando o meio)
       Efeitos.fenda(ctx, 540, 336, 760, { t: 0.4, abre: 0.3, semente: 2 });
       ctx.save(); ctx.translate(540, 330);
-      ctx.font = '900 150px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = '900 140px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.shadowColor = 'rgba(167,121,255,0.95)'; ctx.shadowBlur = 40;
-      ctx.lineJoin = 'round'; ctx.strokeStyle = '#140826'; ctx.lineWidth = 22; ctx.strokeText('FENDA', 0, 0);
+      ctx.lineJoin = 'round'; ctx.strokeStyle = '#140826'; ctx.lineWidth = 22; ctx.strokeText('A FENDA', 0, 0);
       ctx.shadowBlur = 0;
       const lg = ctx.createLinearGradient(0, -70, 0, 70); lg.addColorStop(0, '#F3EBFF'); lg.addColorStop(0.5, '#C9A6FF'); lg.addColorStop(1, '#7B4DFF');
-      ctx.fillStyle = lg; ctx.fillText('FENDA', 0, 0);
+      ctx.fillStyle = lg; ctx.fillText('A FENDA', 0, 0);
       ctx.restore();
       // faixa escura atrás do título
       const f = ctx.createLinearGradient(0, 1150, 0, 1700); f.addColorStop(0, 'rgba(12,6,32,0)'); f.addColorStop(0.35, 'rgba(12,6,32,0.8)'); f.addColorStop(1, 'rgba(12,6,32,0.95)');

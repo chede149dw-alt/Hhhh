@@ -96,4 +96,4 @@
 - [x] Engajamento: dois selos no meio e chamada no fim ("temporada 2")
 - [x] O Regente não aparece (só o anel dourado na mulher do governo)
 - [x] Gancho para a 2ª temporada: o Chede está vivo lá dentro? A luz roxa na mão da Lia? Quem mandou o governo pedir ajuda?
-- [ ] Aprovado pelo usuário
+- [x] **Aprovado pelo usuário (14/11)**: "Ss A FENDA".
