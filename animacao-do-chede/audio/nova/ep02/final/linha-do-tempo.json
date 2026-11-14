@@ -1,0 +1,1873 @@
+{
+  "fps": 30,
+  "total": 71.50999999999999,
+  "planos": [
+    {
+      "id": "capa",
+      "inicio": 0,
+      "fim": 3.76,
+      "semLegenda": true,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0.45,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 0.4,
+          "volume": 0.4
+        }
+      ]
+    },
+    {
+      "id": "lembra",
+      "inicio": 3.76,
+      "fim": 7.97,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 1.2,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 2.3,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "farmar",
+      "inicio": 7.97,
+      "fim": 12.2,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0.45,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 0.25,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 1.2,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 2.1,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 2.9,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "loot",
+      "inicio": 12.2,
+      "fim": 15.299999999999999,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.15,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.65,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 1.15,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 1.65,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "vender",
+      "inicio": 15.299999999999999,
+      "fim": 17.2,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.2,
+          "volume": 0.6
+        }
+      ]
+    },
+    {
+      "id": "equipar",
+      "inicio": 17.2,
+      "fim": 19.61,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0.45,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/compra.mp3",
+          "em": 0.4,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 0.65,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/escudo.mp3",
+          "em": 0.75,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 1,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "cerebro",
+      "inicio": 19.61,
+      "fim": 22.86,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": []
+    },
+    {
+      "id": "mielina",
+      "inicio": 22.86,
+      "fim": 27.24,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": []
+    },
+    {
+      "id": "rapido",
+      "inicio": 27.24,
+      "fim": 30.11,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.5,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "noite",
+      "inicio": 30.11,
+      "fim": 33.92,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/noite-ambiente-20s.mp3",
+          "em": 0,
+          "volume": 0.45
+        }
+      ]
+    },
+    {
+      "id": "tremer",
+      "inicio": 33.92,
+      "fim": 36.25,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rosnado.mp3",
+          "em": 1.1,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "olho",
+      "inicio": 36.25,
+      "fim": 41.269999999999996,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 1.4,
+          "volume": 0.4
+        }
+      ]
+    },
+    {
+      "id": "nome",
+      "inicio": 41.269999999999996,
+      "fim": 44.66,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/transformacao.mp3",
+          "em": 0,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.45,
+          "volume": 0.6
+        }
+      ]
+    },
+    {
+      "id": "davi",
+      "inicio": 44.66,
+      "fim": 47.16,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 0.5,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "sozinhos",
+      "inicio": 47.16,
+      "fim": 49.54,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/noite-ambiente-20s.mp3",
+          "em": 0,
+          "volume": 0.4
+        }
+      ]
+    },
+    {
+      "id": "rara",
+      "inicio": 49.54,
+      "fim": 52.66,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": []
+    },
+    {
+      "id": "fortuna",
+      "inicio": 52.66,
+      "fim": 55.29,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": []
+    },
+    {
+      "id": "terminou",
+      "inicio": 55.29,
+      "fim": 58.41,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rugido.mp3",
+          "em": 0.55,
+          "volume": 1
+        }
+      ]
+    },
+    {
+      "id": "ataca",
+      "inicio": 58.41,
+      "fim": 60.72,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.15,
+          "volume": 0.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 0.58,
+          "volume": 0.9
+        }
+      ]
+    },
+    {
+      "id": "luta",
+      "inicio": 60.72,
+      "fim": 63.92,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.2,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/escudo.mp3",
+          "em": 0.9,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 1.7,
+          "volume": 0.8
+        }
+      ]
+    },
+    {
+      "id": "lider",
+      "inicio": 63.92,
+      "fim": 66.38,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 0.2,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "conhecia",
+      "inicio": 66.38,
+      "fim": 69.08999999999999,
+      "semLegenda": false,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 0.1,
+          "volume": 0.6
+        }
+      ]
+    },
+    {
+      "id": "parte",
+      "inicio": 69.08999999999999,
+      "fim": 71.50999999999999,
+      "semLegenda": true,
+      "semCinema": false,
+      "cinema": {
+        "quente": 0,
+        "vinheta": 0.9,
+        "bloom": 0.7
+      },
+      "batidas": [],
+      "sfx": []
+    }
+  ],
+  "falas": [
+    {
+      "id": "capa",
+      "voz": "narrador",
+      "inicio": 0.15,
+      "fim": 3.207,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/capa.wav"
+    },
+    {
+      "id": "lembra",
+      "voz": "narrador",
+      "inicio": 3.84,
+      "fim": 7.350042,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/lembra.wav"
+    },
+    {
+      "id": "farmar",
+      "voz": "narrador",
+      "inicio": 8.049999999999999,
+      "fim": 11.476104,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/farmar.wav"
+    },
+    {
+      "id": "loot",
+      "voz": "narrador",
+      "inicio": 12.28,
+      "fim": 14.68325,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/loot.wav"
+    },
+    {
+      "id": "vender",
+      "voz": "narrador",
+      "inicio": 15.379999999999999,
+      "fim": 16.357353999999997,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/vender.wav"
+    },
+    {
+      "id": "equipar",
+      "voz": "narrador",
+      "inicio": 17.279999999999998,
+      "fim": 18.292457999999996,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/equipar.wav"
+    },
+    {
+      "id": "cerebro",
+      "voz": "narrador",
+      "inicio": 19.689999999999998,
+      "fim": 22.342563,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/cerebro.wav"
+    },
+    {
+      "id": "mielina",
+      "voz": "narrador",
+      "inicio": 22.939999999999998,
+      "fim": 26.718853999999997,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/mielina.wav"
+    },
+    {
+      "id": "rapido",
+      "voz": "narrador",
+      "inicio": 27.319999999999997,
+      "fim": 29.590603999999995,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/rapido.wav"
+    },
+    {
+      "id": "noite",
+      "voz": "narrador",
+      "inicio": 30.189999999999998,
+      "fim": 33.104729,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/noite.wav"
+    },
+    {
+      "id": "tremer",
+      "voz": "narrador",
+      "inicio": 34,
+      "fim": 35.428146,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/tremer.wav"
+    },
+    {
+      "id": "olho",
+      "voz": "narrador",
+      "inicio": 36.33,
+      "fim": 40.246292,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/olho.wav"
+    },
+    {
+      "id": "nome",
+      "voz": "narrador",
+      "inicio": 41.349999999999994,
+      "fim": 43.136207999999996,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/nome.wav"
+    },
+    {
+      "id": "davi",
+      "voz": "davi",
+      "inicio": 44.739999999999995,
+      "fim": 46.33708299999999,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/davi.wav"
+    },
+    {
+      "id": "sozinhos",
+      "voz": "narrador",
+      "inicio": 47.239999999999995,
+      "fim": 48.822416999999994,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/sozinhos.wav"
+    },
+    {
+      "id": "rara",
+      "voz": "narrador",
+      "inicio": 49.62,
+      "fim": 52.036896,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/rara.wav"
+    },
+    {
+      "id": "fortuna",
+      "voz": "narrador",
+      "inicio": 52.739999999999995,
+      "fim": 54.769645999999995,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/fortuna.wav"
+    },
+    {
+      "id": "terminou",
+      "voz": "narrador",
+      "inicio": 55.37,
+      "fim": 57.289187999999996,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/terminou.wav"
+    },
+    {
+      "id": "ataca",
+      "voz": "narrador",
+      "inicio": 58.489999999999995,
+      "fim": 60.000333,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/ataca.wav"
+    },
+    {
+      "id": "lider",
+      "voz": "narrador",
+      "inicio": 64,
+      "fim": 65.660479,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/lider.wav"
+    },
+    {
+      "id": "conhecia",
+      "voz": "narrador",
+      "inicio": 66.46,
+      "fim": 68.17343799999999,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/conhecia.wav"
+    },
+    {
+      "id": "parte",
+      "voz": "narrador",
+      "inicio": 69.16999999999999,
+      "fim": 70.49218799999998,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/parte.wav"
+    }
+  ],
+  "legendas": [
+    {
+      "inicio": 3.84,
+      "fim": 4.567691634146342,
+      "palavras": [
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 3.84
+        },
+        {
+          "texto": "DAVI",
+          "destaque": false,
+          "inicio": 3.9684161707317074
+        },
+        {
+          "texto": "GASTOU",
+          "destaque": false,
+          "inicio": 4.225248512195122
+        }
+      ]
+    },
+    {
+      "inicio": 4.567691634146342,
+      "fim": 5.295383268292683,
+      "palavras": [
+        {
+          "texto": "TUDO",
+          "destaque": false,
+          "inicio": 4.567691634146342
+        },
+        {
+          "texto": "NUM",
+          "destaque": false,
+          "inicio": 4.824523975609756
+        },
+        {
+          "texto": "JOGO",
+          "destaque": false,
+          "inicio": 5.038550926829268
+        }
+      ]
+    },
+    {
+      "inicio": 5.295383268292683,
+      "fim": 6.023074902439026,
+      "palavras": [
+        {
+          "texto": "ONDE",
+          "destaque": false,
+          "inicio": 5.295383268292683
+        },
+        {
+          "texto": "OS",
+          "destaque": false,
+          "inicio": 5.552215609756098
+        },
+        {
+          "texto": "ITENS",
+          "destaque": false,
+          "inicio": 5.723437170731708
+        }
+      ]
+    },
+    {
+      "inicio": 6.023074902439026,
+      "fim": 6.921988097560978,
+      "palavras": [
+        {
+          "texto": "VALEM",
+          "destaque": false,
+          "inicio": 6.023074902439026
+        },
+        {
+          "texto": "DINHEIRO",
+          "destaque": true,
+          "inicio": 6.3227126341463435
+        },
+        {
+          "texto": "DE",
+          "destaque": false,
+          "inicio": 6.750766536585368
+        }
+      ]
+    },
+    {
+      "inicio": 6.921988097560978,
+      "fim": 7.500042000000002,
+      "palavras": [
+        {
+          "texto": "VERDADE.",
+          "destaque": false,
+          "inicio": 6.921988097560978
+        }
+      ]
+    },
+    {
+      "inicio": 8.049999999999999,
+      "fim": 8.870334760563379,
+      "palavras": [
+        {
+          "texto": "ENTÃO",
+          "destaque": false,
+          "inicio": 8.049999999999999
+        },
+        {
+          "texto": "OS",
+          "destaque": false,
+          "inicio": 8.38778490140845
+        },
+        {
+          "texto": "DOIS",
+          "destaque": false,
+          "inicio": 8.580804845070421
+        }
+      ]
+    },
+    {
+      "inicio": 8.870334760563379,
+      "fim": 9.690669521126758,
+      "palavras": [
+        {
+          "texto": "FIZERAM",
+          "destaque": false,
+          "inicio": 8.870334760563379
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 9.304629633802815
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 9.449394591549293
+        }
+      ]
+    },
+    {
+      "inicio": 9.690669521126758,
+      "fim": 10.752279211267602,
+      "palavras": [
+        {
+          "texto": "TODO",
+          "destaque": false,
+          "inicio": 9.690669521126758
+        },
+        {
+          "texto": "JOGADOR",
+          "destaque": false,
+          "inicio": 9.980199436619715
+        },
+        {
+          "texto": "POBRE",
+          "destaque": false,
+          "inicio": 10.414494309859151
+        }
+      ]
+    },
+    {
+      "inicio": 10.752279211267602,
+      "fim": 11.626103999999996,
+      "palavras": [
+        {
+          "texto": "FAZ:",
+          "destaque": false,
+          "inicio": 10.752279211267602
+        },
+        {
+          "texto": "FARMAR.",
+          "destaque": true,
+          "inicio": 11.04180912676056
+        }
+      ]
+    },
+    {
+      "inicio": 12.28,
+      "fim": 12.80952966101695,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 12.28
+        },
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 12.402199152542373
+        },
+        {
+          "texto": "ADAGA",
+          "destaque": false,
+          "inicio": 12.524398305084746
+        }
+      ]
+    },
+    {
+      "inicio": 12.80952966101695,
+      "fim": 13.257593220338984,
+      "palavras": [
+        {
+          "texto": "NÃO",
+          "destaque": false,
+          "inicio": 12.80952966101695
+        },
+        {
+          "texto": "É",
+          "destaque": false,
+          "inicio": 13.013194915254237
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 13.13539406779661
+        }
+      ]
+    },
+    {
+      "inicio": 13.257593220338984,
+      "fim": 13.99078813559322,
+      "palavras": [
+        {
+          "texto": "ÚNICO",
+          "destaque": false,
+          "inicio": 13.257593220338984
+        },
+        {
+          "texto": "ITEM",
+          "destaque": false,
+          "inicio": 13.542724576271187
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 13.787122881355932
+        }
+      ]
+    },
+    {
+      "inicio": 13.99078813559322,
+      "fim": 14.83325,
+      "palavras": [
+        {
+          "texto": "VALE",
+          "destaque": false,
+          "inicio": 13.99078813559322
+        },
+        {
+          "texto": "DINHEIRO.",
+          "destaque": true,
+          "inicio": 14.235186440677966
+        }
+      ]
+    },
+    {
+      "inicio": 15.379999999999999,
+      "fim": 15.973393499999998,
+      "palavras": [
+        {
+          "texto": "TEM",
+          "destaque": false,
+          "inicio": 15.379999999999999
+        },
+        {
+          "texto": "COISA",
+          "destaque": false,
+          "inicio": 15.554527499999999
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 15.798865999999999
+        }
+      ]
+    },
+    {
+      "inicio": 15.973393499999998,
+      "fim": 16.507353999999996,
+      "palavras": [
+        {
+          "texto": "VENDER",
+          "destaque": true,
+          "inicio": 15.973393499999998
+        }
+      ]
+    },
+    {
+      "inicio": 17.279999999999998,
+      "fim": 17.93086585714285,
+      "palavras": [
+        {
+          "texto": "...E",
+          "destaque": false,
+          "inicio": 17.279999999999998
+        },
+        {
+          "texto": "COISA",
+          "destaque": false,
+          "inicio": 17.496955285714282
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 17.75006978571428
+        }
+      ]
+    },
+    {
+      "inicio": 17.93086585714285,
+      "fim": 18.442457999999995,
+      "palavras": [
+        {
+          "texto": "EQUIPAR.",
+          "destaque": true,
+          "inicio": 17.93086585714285
+        }
+      ]
+    },
+    {
+      "inicio": 19.689999999999998,
+      "fim": 20.574187666666667,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 19.689999999999998
+        },
+        {
+          "texto": "REPETIR",
+          "destaque": false,
+          "inicio": 19.846033117647057
+        },
+        {
+          "texto": "CEM",
+          "destaque": false,
+          "inicio": 20.314132470588234
+        }
+      ]
+    },
+    {
+      "inicio": 20.574187666666667,
+      "fim": 21.458375333333333,
+      "palavras": [
+        {
+          "texto": "VEZES",
+          "destaque": false,
+          "inicio": 20.574187666666667
+        },
+        {
+          "texto": "MUDOU",
+          "destaque": false,
+          "inicio": 20.93826494117647
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 21.302342215686274
+        }
+      ]
+    },
+    {
+      "inicio": 21.458375333333333,
+      "fim": 22.492562999999997,
+      "palavras": [
+        {
+          "texto": "CÉREBRO",
+          "destaque": true,
+          "inicio": 21.458375333333333
+        },
+        {
+          "texto": "DELES.",
+          "destaque": false,
+          "inicio": 21.92647468627451
+        }
+      ]
+    },
+    {
+      "inicio": 22.939999999999998,
+      "fim": 23.97059654545454,
+      "palavras": [
+        {
+          "texto": "CADA",
+          "destaque": false,
+          "inicio": 22.939999999999998
+        },
+        {
+          "texto": "REPETIÇÃO",
+          "destaque": false,
+          "inicio": 23.197649136363633
+        },
+        {
+          "texto": "COBRE",
+          "destaque": false,
+          "inicio": 23.670005886363633
+        }
+      ]
+    },
+    {
+      "inicio": 23.97059654545454,
+      "fim": 24.657660909090907,
+      "palavras": [
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 23.97059654545454
+        },
+        {
+          "texto": "CAMINHO",
+          "destaque": false,
+          "inicio": 24.09942111363636
+        },
+        {
+          "texto": "DO",
+          "destaque": false,
+          "inicio": 24.485894818181816
+        }
+      ]
+    },
+    {
+      "inicio": 24.657660909090907,
+      "fim": 25.559432886363634,
+      "palavras": [
+        {
+          "texto": "MOVIMENTO",
+          "destaque": false,
+          "inicio": 24.657660909090907
+        },
+        {
+          "texto": "COM",
+          "destaque": false,
+          "inicio": 25.130017659090907
+        },
+        {
+          "texto": "UMA",
+          "destaque": false,
+          "inicio": 25.34472527272727
+        }
+      ]
+    },
+    {
+      "inicio": 25.559432886363634,
+      "fim": 26.868853999999995,
+      "palavras": [
+        {
+          "texto": "CAPA",
+          "destaque": false,
+          "inicio": 25.559432886363634
+        },
+        {
+          "texto": "CHAMADA",
+          "destaque": false,
+          "inicio": 25.81708202272727
+        },
+        {
+          "texto": "MIELINA",
+          "destaque": true,
+          "inicio": 26.203555727272725
+        }
+      ]
+    },
+    {
+      "inicio": 27.319999999999997,
+      "fim": 27.98053934545454,
+      "palavras": [
+        {
+          "texto": "...E",
+          "destaque": false,
+          "inicio": 27.319999999999997
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 27.567702254545452
+        },
+        {
+          "texto": "SINAL",
+          "destaque": false,
+          "inicio": 27.691553381818178
+        }
+      ]
+    },
+    {
+      "inicio": 27.98053934545454,
+      "fim": 28.6823624,
+      "palavras": [
+        {
+          "texto": "PASSA",
+          "destaque": false,
+          "inicio": 27.98053934545454
+        },
+        {
+          "texto": "ATÉ",
+          "destaque": false,
+          "inicio": 28.269525309090906
+        },
+        {
+          "texto": "CEM",
+          "destaque": false,
+          "inicio": 28.475943854545452
+        }
+      ]
+    },
+    {
+      "inicio": 28.6823624,
+      "fim": 29.740603999999998,
+      "palavras": [
+        {
+          "texto": "VEZES",
+          "destaque": false,
+          "inicio": 28.6823624
+        },
+        {
+          "texto": "MAIS",
+          "destaque": false,
+          "inicio": 28.971348363636363
+        },
+        {
+          "texto": "RÁPIDO.",
+          "destaque": true,
+          "inicio": 29.219050618181818
+        }
+      ]
+    },
+    {
+      "inicio": 30.189999999999998,
+      "fim": 30.450243660714282,
+      "palavras": [
+        {
+          "texto": "AÍ,",
+          "destaque": false,
+          "inicio": 30.189999999999998
+        }
+      ]
+    },
+    {
+      "inicio": 30.450243660714282,
+      "fim": 31.595315767857137,
+      "palavras": [
+        {
+          "texto": "PELA",
+          "destaque": false,
+          "inicio": 30.450243660714282
+        },
+        {
+          "texto": "PRIMEIRA",
+          "destaque": false,
+          "inicio": 30.762536053571424
+        },
+        {
+          "texto": "VEZ,",
+          "destaque": false,
+          "inicio": 31.283023374999996
+        }
+      ]
+    },
+    {
+      "inicio": 31.595315767857137,
+      "fim": 32.42809548214286,
+      "palavras": [
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 31.595315767857137
+        },
+        {
+          "texto": "NOITE",
+          "destaque": true,
+          "inicio": 31.75146196428571
+        },
+        {
+          "texto": "CAIU",
+          "destaque": false,
+          "inicio": 32.11580308928571
+        }
+      ]
+    },
+    {
+      "inicio": 32.42809548214286,
+      "fim": 33.254729,
+      "palavras": [
+        {
+          "texto": "EM",
+          "destaque": false,
+          "inicio": 32.42809548214286
+        },
+        {
+          "texto": "VALDOR.",
+          "destaque": false,
+          "inicio": 32.63629041071429
+        }
+      ]
+    },
+    {
+      "inicio": 34,
+      "fim": 34.4909251875,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 34
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 34.1338886875
+        },
+        {
+          "texto": "TÉO",
+          "destaque": false,
+          "inicio": 34.267777374999994
+        }
+      ]
+    },
+    {
+      "inicio": 34.4909251875,
+      "fim": 35.57814599999999,
+      "palavras": [
+        {
+          "texto": "COMEÇOU",
+          "destaque": false,
+          "inicio": 34.4909251875
+        },
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 34.892591249999995
+        },
+        {
+          "texto": "TREMER.",
+          "destaque": true,
+          "inicio": 35.02647993749999
+        }
+      ]
+    },
+    {
+      "inicio": 36.33,
+      "fim": 37.17931633734939,
+      "palavras": [
+        {
+          "texto": "BICHO",
+          "destaque": false,
+          "inicio": 36.33
+        },
+        {
+          "texto": "DA",
+          "destaque": false,
+          "inicio": 36.660289686746985
+        },
+        {
+          "texto": "NOITE",
+          "destaque": false,
+          "inicio": 36.849026650602404
+        }
+      ]
+    },
+    {
+      "inicio": 37.17931633734939,
+      "fim": 38.028632674698784,
+      "palavras": [
+        {
+          "texto": "TEM",
+          "destaque": false,
+          "inicio": 37.17931633734939
+        },
+        {
+          "texto": "UM",
+          "destaque": false,
+          "inicio": 37.41523754216867
+        },
+        {
+          "texto": "ESPELHO",
+          "destaque": true,
+          "inicio": 37.60397450602409
+        }
+      ]
+    },
+    {
+      "inicio": 38.028632674698784,
+      "fim": 38.87794901204818,
+      "palavras": [
+        {
+          "texto": "ATRÁS",
+          "destaque": false,
+          "inicio": 38.028632674698784
+        },
+        {
+          "texto": "DO",
+          "destaque": false,
+          "inicio": 38.35892236144577
+        },
+        {
+          "texto": "OLHO:",
+          "destaque": false,
+          "inicio": 38.54765932530119
+        }
+      ]
+    },
+    {
+      "inicio": 38.87794901204818,
+      "fim": 39.58571262650601,
+      "palavras": [
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 38.87794901204818
+        },
+        {
+          "texto": "LUZ",
+          "destaque": false,
+          "inicio": 39.019501734939745
+        },
+        {
+          "texto": "PASSA",
+          "destaque": false,
+          "inicio": 39.25542293975902
+        }
+      ]
+    },
+    {
+      "inicio": 39.58571262650601,
+      "fim": 40.39629199999999,
+      "palavras": [
+        {
+          "texto": "DUAS",
+          "destaque": false,
+          "inicio": 39.58571262650601
+        },
+        {
+          "texto": "VEZES.",
+          "destaque": false,
+          "inicio": 39.868818072289145
+        }
+      ]
+    },
+    {
+      "inicio": 41.349999999999994,
+      "fim": 42.37069028571428,
+      "palavras": [
+        {
+          "texto": "HOMEM-FERA",
+          "destaque": true,
+          "inicio": 41.349999999999994
+        },
+        {
+          "texto": "NÃO",
+          "destaque": false,
+          "inicio": 41.96241417142856
+        },
+        {
+          "texto": "É",
+          "destaque": false,
+          "inicio": 42.21758674285714
+        }
+      ]
+    },
+    {
+      "inicio": 42.37069028571428,
+      "fim": 43.286207999999995,
+      "palavras": [
+        {
+          "texto": "SÓ",
+          "destaque": false,
+          "inicio": 42.37069028571428
+        },
+        {
+          "texto": "UM",
+          "destaque": false,
+          "inicio": 42.57482834285714
+        },
+        {
+          "texto": "NOME.",
+          "destaque": false,
+          "inicio": 42.778966399999995
+        }
+      ]
+    },
+    {
+      "inicio": 44.739999999999995,
+      "fim": 46.48708299999999,
+      "palavras": [
+        {
+          "texto": "TÉO...?",
+          "destaque": true,
+          "inicio": 44.739999999999995
+        }
+      ]
+    },
+    {
+      "inicio": 47.239999999999995,
+      "fim": 47.943296444444435,
+      "palavras": [
+        {
+          "texto": "MAS",
+          "destaque": false,
+          "inicio": 47.239999999999995
+        },
+        {
+          "texto": "ELES",
+          "destaque": false,
+          "inicio": 47.45978013888888
+        },
+        {
+          "texto": "NÃO",
+          "destaque": false,
+          "inicio": 47.72351630555555
+        }
+      ]
+    },
+    {
+      "inicio": 47.943296444444435,
+      "fim": 48.972416999999986,
+      "palavras": [
+        {
+          "texto": "ESTAVAM",
+          "destaque": false,
+          "inicio": 47.943296444444435
+        },
+        {
+          "texto": "SOZINHOS.",
+          "destaque": true,
+          "inicio": 48.33890069444443
+        }
+      ]
+    },
+    {
+      "inicio": 49.62,
+      "fim": 50.47302211764706,
+      "palavras": [
+        {
+          "texto": "HOMEM-FERA",
+          "destaque": false,
+          "inicio": 49.62
+        },
+        {
+          "texto": "É",
+          "destaque": false,
+          "inicio": 50.188681411764705
+        },
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 50.33085176470588
+        }
+      ]
+    },
+    {
+      "inicio": 50.47302211764706,
+      "fim": 51.32604423529411,
+      "palavras": [
+        {
+          "texto": "RAÇA",
+          "destaque": false,
+          "inicio": 50.47302211764706
+        },
+        {
+          "texto": "MAIS",
+          "destaque": false,
+          "inicio": 50.75736282352941
+        },
+        {
+          "texto": "RARA",
+          "destaque": true,
+          "inicio": 51.04170352941176
+        }
+      ]
+    },
+    {
+      "inicio": 51.32604423529411,
+      "fim": 52.18689599999999,
+      "palavras": [
+        {
+          "texto": "DE",
+          "destaque": false,
+          "inicio": 51.32604423529411
+        },
+        {
+          "texto": "VALDOR",
+          "destaque": false,
+          "inicio": 51.515604705882346
+        }
+      ]
+    },
+    {
+      "inicio": 52.739999999999995,
+      "fim": 53.41654866666666,
+      "palavras": [
+        {
+          "texto": "...E",
+          "destaque": false,
+          "inicio": 52.739999999999995
+        },
+        {
+          "texto": "VALE",
+          "destaque": false,
+          "inicio": 52.97878188235293
+        },
+        {
+          "texto": "UMA",
+          "destaque": false,
+          "inicio": 53.21756376470587
+        }
+      ]
+    },
+    {
+      "inicio": 53.41654866666666,
+      "fim": 54.212488274509795,
+      "palavras": [
+        {
+          "texto": "FORTUNA",
+          "destaque": true,
+          "inicio": 53.41654866666666
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 53.77472149019607
+        },
+        {
+          "texto": "QUEM",
+          "destaque": false,
+          "inicio": 53.973706392156856
+        }
+      ]
+    },
+    {
+      "inicio": 54.212488274509795,
+      "fim": 54.91964599999999,
+      "palavras": [
+        {
+          "texto": "CAPTURA",
+          "destaque": false,
+          "inicio": 54.212488274509795
+        },
+        {
+          "texto": "UM.",
+          "destaque": false,
+          "inicio": 54.57066109803921
+        }
+      ]
+    },
+    {
+      "inicio": 55.37,
+      "fim": 55.84000522448979,
+      "palavras": [
+        {
+          "texto": "SÓ",
+          "destaque": false,
+          "inicio": 55.37
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 55.52666840816326
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 55.722503918367345
+        }
+      ]
+    },
+    {
+      "inicio": 55.84000522448979,
+      "fim": 56.5841801632653,
+      "palavras": [
+        {
+          "texto": "TÉO",
+          "destaque": false,
+          "inicio": 55.84000522448979
+        },
+        {
+          "texto": "TERMINOU",
+          "destaque": false,
+          "inicio": 56.03584073469388
+        },
+        {
+          "texto": "DE",
+          "destaque": false,
+          "inicio": 56.42751175510204
+        }
+      ]
+    },
+    {
+      "inicio": 56.5841801632653,
+      "fim": 57.439187999999994,
+      "palavras": [
+        {
+          "texto": "SE",
+          "destaque": false,
+          "inicio": 56.5841801632653
+        },
+        {
+          "texto": "TRANSFORMAR.",
+          "destaque": true,
+          "inicio": 56.740848571428565
+        }
+      ]
+    },
+    {
+      "inicio": 58.489999999999995,
+      "fim": 59.29551093333333,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 58.489999999999995
+        },
+        {
+          "texto": "PARTIU",
+          "destaque": false,
+          "inicio": 58.6410333
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 59.043788766666665
+        }
+      ]
+    },
+    {
+      "inicio": 59.29551093333333,
+      "fim": 60.150333,
+      "palavras": [
+        {
+          "texto": "CIMA",
+          "destaque": true,
+          "inicio": 59.29551093333333
+        },
+        {
+          "texto": "DELES!",
+          "destaque": false,
+          "inicio": 59.597577533333336
+        }
+      ]
+    },
+    {
+      "inicio": 64,
+      "fim": 64.52649334146341,
+      "palavras": [
+        {
+          "texto": "ATÉ",
+          "destaque": false,
+          "inicio": 64
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 64.20249743902438
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 64.40499487804877
+        }
+      ]
+    },
+    {
+      "inicio": 64.52649334146341,
+      "fim": 65.29598360975608,
+      "palavras": [
+        {
+          "texto": "LÍDER",
+          "destaque": false,
+          "inicio": 64.52649334146341
+        },
+        {
+          "texto": "SACOU",
+          "destaque": false,
+          "inicio": 64.80998975609755
+        },
+        {
+          "texto": "UMA",
+          "destaque": false,
+          "inicio": 65.0934861707317
+        }
+      ]
+    },
+    {
+      "inicio": 65.29598360975608,
+      "fim": 65.81047899999999,
+      "palavras": [
+        {
+          "texto": "ARMA",
+          "destaque": false,
+          "inicio": 65.29598360975608
+        }
+      ]
+    },
+    {
+      "inicio": 66.46,
+      "fim": 67.18821115,
+      "palavras": [
+        {
+          "texto": "...QUE",
+          "destaque": false,
+          "inicio": 66.46
+        },
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 66.8026876
+        },
+        {
+          "texto": "DAVI",
+          "destaque": false,
+          "inicio": 66.93119545
+        }
+      ]
+    },
+    {
+      "inicio": 67.18821115,
+      "fim": 68.323438,
+      "palavras": [
+        {
+          "texto": "CONHECIA",
+          "destaque": false,
+          "inicio": 67.18821115
+        },
+        {
+          "texto": "MUITO",
+          "destaque": false,
+          "inicio": 67.61657065
+        },
+        {
+          "texto": "BEM.",
+          "destaque": true,
+          "inicio": 67.9164223
+        }
+      ]
+    },
+    {
+      "inicio": 69.16999999999999,
+      "fim": 69.83109399999998,
+      "palavras": [
+        {
+          "texto": "SEGUE",
+          "destaque": false,
+          "inicio": 69.16999999999999
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 69.44221517647057
+        },
+        {
+          "texto": "VER",
+          "destaque": false,
+          "inicio": 69.63665458823527
+        }
+      ]
+    },
+    {
+      "inicio": 69.83109399999998,
+      "fim": 70.49218799999997,
+      "palavras": [
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 69.83109399999998
+        },
+        {
+          "texto": "PARTE",
+          "destaque": false,
+          "inicio": 69.94775764705881
+        },
+        {
+          "texto": "TRÊS!",
+          "destaque": true,
+          "inicio": 70.21997282352939
+        }
+      ]
+    }
+  ],
+  "legendaFaixas": [
+    1180,
+    1400,
+    760,
+    420
+  ]
+}
