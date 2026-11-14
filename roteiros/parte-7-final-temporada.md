@@ -1,8 +1,8 @@
-# FENDA · "E se você tivesse que se trancar dentro do seu poder?" · Parte 7 — FINAL DA 1ª TEMPORADA
+# A FENDA · PARTE FINAL (Parte 7, final da 1ª temporada)
 
 - **Motor:** skill "Animação do Chede" (`animacao-do-chede/`), com Chede, Kaik e Lia.
 - **Duração:** **2min40 a 3min** (liberada pelo usuário em 14/11 para o final da temporada), ≈480 palavras.
-- **Capa:** logo "FENDA" + "E SE VOCÊ TIVESSE QUE" / "SE TRANCAR DENTRO DO SEU **PODER**?" + selo "PARTE 7 · FINAL".
+- **Título (usuário, 14/11):** "A FENDA · PARTE FINAL". A capa traz só isso: "A FENDA" grande e o selo "PARTE FINAL".
 - **Liga com:** Parte 6, em que as marcas de mão pretas iam para a cidade.
 - **Ideia do usuário (14/11):**
   - a criatura destrói a cidade e eles tentam enfrentar;
@@ -25,7 +25,7 @@
 
 | # | Narração | Cena |
 |---|---|---|
-| 0 | E se você tivesse que se trancar dentro do seu **poder**? | Capa: cidade à noite, criatura gigante ao fundo; Chede de traje com a fenda na mão; Lia e Kaik atrás. |
+| 0 | A Fenda. Parte **final**. | Capa: "A FENDA" + "PARTE FINAL"; cidade à noite, criatura gigante ao fundo; Chede de traje com a fenda na mão; Lia e Kaik atrás. |
 | **ATO 1 · A CRIATURA** | | |
 | 1 | As marcas pretas iam até o centro. E a cidade estava **apagando**. | Rua à noite; postes apagando um atrás do outro em direção à câmera. |
 | 2 | Bairro por bairro, as luzes iam **sumindo**. | Vista do alto da cidade; manchas escuras se espalhando. |
@@ -88,7 +88,7 @@
 - **Hospital:** cama, monitor, janela e Kaik de tipoia.
 
 ## Checklist
-- [x] Primeira frase é a premissa
+- [x] Abertura com o título "A FENDA · PARTE FINAL" (pedido do usuário)
 - [x] Frases curtas
 - [x] Novidade a cada 3–5 s, em 4 atos
 - [x] Todo poder com lógica e custo: a criatura cresce comendo energia; os trajes resolvem os custos antigos; o soco de 3 caminhões quebra o braço; fendas juntas ficam gigantes; só fecha por dentro; o Chede desmaia; a Lia entra em coma
