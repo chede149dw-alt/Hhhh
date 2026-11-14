@@ -12,7 +12,7 @@ const raiz = process.argv[2], saida = process.argv[3];
     const fundo = (x, y, w, h) => { const gr = g.createLinearGradient(0, y, 0, y + h); gr.addColorStop(0, '#0B1028'); gr.addColorStop(0.6, '#1B2550'); gr.addColorStop(1, '#090C1C'); g.fillStyle = gr; g.fillRect(x, y, w, h); };
     const lua = (x, y, r) => { Valdor.brilhoRadial(g, x, y, r * 3.4, '200,220,255', 0.45); g.fillStyle = '#F4F1E2'; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); g.fillStyle = 'rgba(190,185,165,0.5)'; for (const [a, b2, rr] of [[-0.3, -0.2, 0.18], [0.25, 0.1, 0.13], [-0.05, 0.35, 0.1]]) { g.beginPath(); g.arc(x + a * r, y + b2 * r, rr * r, 0, Math.PI * 2); g.fill(); } };
     const brasa = (x, y, w, h, n, seed) => { let s = seed; const r = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); for (let i = 0; i < n; i++) { const px = x + r() * w, py = y + r() * h, rr = 2 + r() * 4; g.fillStyle = `rgba(255,${150 + r() * 80 | 0},60,${0.4 + r() * 0.5})`; g.beginPath(); g.arc(px, py, rr, 0, Math.PI * 2); g.fill(); } };
-    fundo(0, 0, W, Ht); lua(2160, 230, 120);
+    fundo(0, 0, W, Ht); lua(2290, 110, 70);
     g.textAlign = 'left'; g.font = '900 72px Inter'; g.fillStyle = '#FFB13B'; g.fillText('TÉO · TRANSFORMAÇÃO EM LOBISOMEM', 60, 110);
     g.font = '700 32px Inter'; g.fillStyle = '#BFD0FF'; g.fillText('Homem-fera · forma da noite · proposta para aprovação', 60, 160);
     // ---- linha de etapas ----
@@ -26,21 +26,25 @@ const raiz = process.argv[2], saida = process.argv[3];
     item('criarTeoFera', { estagio: 2 }, 'frente', 'garras', 'raiva', 'TEO_FERA_POSES', xs[2], 800); rot(xs[2], '3. Orelhas|e garras');
     item('criarTeoFera', { estagio: 3 }, 'frente', 'garras', 'raiva', 'TEO_FERA_POSES', xs[3], 860); rot(xs[3], '4. Pelo e|mangas rasgando');
     brasa(xs[4] - 260, 260, 520, 860, 50, 3);
-    item('criarTeoLobisomem', {}, 'frente', 'garras', 'raiva', 'TEO_LOBISOMEM_POSES', xs[4], 1000); rot(xs[4], '5. LOBISOMEM|cabeça de lobo, juba, rabo', '#FFB13B');
-    // forma de lobo (quatro patas)
-    brasa(xs[5] - 260, 600, 520, 520, 30, 9);
-    Criaturas.lobo(g, xs[5] - 10, chao, 250, 0.2, { pose: 'parado', boca: 0.8, pelagem: { base: '#D45E2A', costas: '#963616', barriga: '#F3E4CC', escuro: '#2A1A14', focinho: '#F3E4CC' } });
-    rot(xs[5], '6. Forma de lobo|(lua cheia, para depois)');
+    item('criarTeoLobisomem', {}, 'frente', 'garras', 'raiva', 'TEO_LOBISOMEM_POSES', xs[4], 960); rot(xs[4], '5. LOBISOMEM|cabeça de lobo, juba, rabo', '#FFB13B');
+    // lobisomem de 3/4
+    item('criarTeoLobisomem', {}, 'tq', 'tq', 'raiva', 'TEO_LOBISOMEM_POSES', xs[5] + 30, 960);
+    rot(xs[5], '6. Visto de 3/4|focinho de lobo');
     g.fillStyle = 'rgba(255,190,70,0.9)'; g.font = '900 64px Inter'; g.textAlign = 'center';
-    for (let i = 0; i < 5; i++) g.fillText('›', (xs[i] + xs[i + 1]) / 2 + (i === 3 ? 10 : 0), 760);
+    for (let i = 0; i < 4; i++) g.fillText('›', (xs[i] + xs[i + 1]) / 2 + (i === 3 ? 10 : 0), 760);
     // ---- quadros de close ----
     const y0 = 1300, hq = 900, gap = 20, ws = [620, 500, 500, 670], tit = ['Rugido', 'Olho de fera', 'Garras', 'De costas, sob a lua'];
     let x = 30;
     ws.forEach((w, i) => {
       g.save(); g.beginPath(); g.rect(x, y0, w, hq); g.clip(); fundo(x, y0, w, hq);
-      if (i === 0) { brasa(x, y0, w, hq, 40, 21); window.desenharItem(g, { fabrica: 'criarTeoLobisomem', vista: 'frente', pose: 'rugindo', registroPoses: 'TEO_LOBISOMEM_POSES' }, x + w / 2, y0 + hq * 0.4 + 2100 * 0.87, 2100); }
+      if (i === 0) { brasa(x, y0, w, hq, 40, 21); window.desenharItem(g, { fabrica: 'criarTeoLobisomem', vista: 'frente', pose: 'rugindo', registroPoses: 'TEO_LOBISOMEM_POSES' }, x + w / 2, y0 + hq * 0.36 + 2300 * 0.86, 2300); }
       if (i === 1) TeoCloses.olho(g, x + w / 2, y0 + hq / 2, 300, 0, {});
-      if (i === 2) { Valdor.brilhoRadial(g, x + w * 0.6, y0 + hq / 2, 320, '255,170,60', 0.35); TeoCloses.garra(g, x + w * 0.45, y0 + hq / 2, 400, 0, { giro: -0.35 }); }
+      if (i === 2) {
+        Valdor.brilhoRadial(g, x + w * 0.5, y0 + hq * 0.55, 360, '255,170,60', 0.35);
+        const it = { fabrica: 'criarTeoLobisomem', vista: 'frente', pose: 'garras', expressao: 'raiva', registroPoses: 'TEO_LOBISOMEM_POSES' };
+        const tmp = document.createElement('canvas').getContext('2d'); const r = window.desenharItem(tmp, it, 0, 0, 3000);
+        const m = r.pontoMundo('mao_d', [0, 0.3]); window.desenharItem(g, it, x + w * 0.5 - m.x, y0 + hq * 0.42 - m.y, 3000);
+      }
       if (i === 3) { lua(x + w * 0.55, y0 + 330, 190); window.desenharItem(g, { fabrica: 'criarTeoLobisomem', vista: 'costas', pose: 'costas', registroPoses: 'TEO_LOBISOMEM_POSES' }, x + w * 0.5, y0 + hq + 120, 980); }
       g.restore();
       g.strokeStyle = 'rgba(255,177,59,0.8)'; g.lineWidth = 4; g.strokeRect(x, y0, w, hq);
