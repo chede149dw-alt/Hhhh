@@ -193,3 +193,10 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
 - **Final de temporada pode ter 2min40 a 3min** (usuário, 14/11). Vale só para o final da temporada; os episódios normais continuam com até 1min15. Com o motor da skill o render é rápido, então a duração não pesa.
 - **Lesão em cena de luta = raio-X, sem sangue** (pedido do usuário: "o osso trincando"). Mostrar o impacto em câmera lenta e o osso trincando num infográfico de raio-X, no estilo das referências.
 - **No motor da skill, `api.fase(a, b)` conta em SEGUNDOS do plano, não em fração.** Para fração do plano usar `fr(api, a, b)` (= `api.fase(a*dur, b*dur)`, definido em `roteiros/chede/ep07.js`). Erro da Parte 7: escurecimento a 85% virou "depois de 0,85 s", e a cena do desmaio ficou preta.
+- **Sacrifício do Chede com fala e emoção** (usuário, 14/11). A cena segue esta ordem:
+  - a fenda vira tornado gigante e o Kaik segura a mão do Chede;
+  - Kaik: "Por favor, não faça isso"; Chede: "Me desculpa, mas eu preciso";
+  - closes dos dois chorando, com lágrimas voando no vento;
+  - o Chede solta a mão e grita "Corre!".
+  Falas de personagem usam a voz do personagem, não a do narrador. Mãos dadas: medir a mão de um personagem desenhando invisível (`globalAlpha = 0`) e depois encaixar o outro nela.
+- **Fala longa na prévia (espeak) também precisa de `duracao`** (palavras ÷ velocidade + 0,5 s). Senão o plano corta em 3 s, o áudio vaza para o seguinte e a legenda fica atrasada.

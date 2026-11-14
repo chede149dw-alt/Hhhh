@@ -10,6 +10,11 @@
   - luta: o Kaik corre de muito longe e dá um soco com toda a força; a criatura sente, mas o braço dele quebra, com close do impacto e do osso trincando;
   - só dá para mandar a criatura de volta pela fenda; ela saiu pequena e ficou gigante, e a fenda grande só fecha por dentro;
   - o Chede se sacrifica e fica lá dentro, desmaiado;
+  - (14/11, ajuste do usuário) a fenda puxa como um tornado gigante e o Kaik segura a mão do Chede:
+    - Kaik: "Por favor, não faça isso";
+    - Chede: "Me desculpa, mas eu preciso";
+    - close nos dois chorando;
+    - o Chede solta a mão e grita "Corre!";
   - a Lia entra em coma, e no hospital o Kaik fala "eu sei que você ainda não morreu";
   - gancho para a 2ª temporada.
 - **Lógica dos poderes neste episódio:**
@@ -62,18 +67,22 @@
 | 31 | Mas duas fendas juntas viram uma só. **Gigante**. | Lembrança rápida do ímã da Parte 6. |
 | **ATO 4 · O SACRIFÍCIO** | | |
 | 32 | O Chede e a Lia abriram juntos, com as luvas no máximo. **Vinte metros**. | Tomada girando: os dois de braço estendido, a fenda enorme se abrindo; "20 m". |
-| 33 | A criatura foi puxada… e se agarrou na **borda**. | Dedos gigantes cravados na borda; a rua racha. (selo "SEGUE PRA VER") |
+| 33 | A fenda virou um **tornado** gigante. A criatura foi puxada… e se agarrou na **borda**. | Ventania em espiral puxando tudo; dedos gigantes cravados na borda; a rua racha. (selo "SEGUE PRA VER") |
 | 34 | E a Lia gritou: fenda desse tamanho só fecha do lado de **dentro**. | Close na Lia, desesperada. |
-| 35 | O Chede olhou pro Kaik: "Cuida **dela**." | Reação em três tempos: olhar → Kaik entende → câmera aproxima. |
-| 36 | E pulou junto com a **criatura**. | O Chede corre e salta; a criatura solta a borda e cai junto. |
-| 37 | A fenda fechou. E o silêncio voltou de uma **vez**. | Corte seco; o som some; as luzes da cidade voltam uma a uma. |
-| 38 | Lá dentro, ele tentou abrir outra… mas não tinha mais **força**. | Outro lugar: o Chede de joelhos; só uma faísca roxa na luva. |
-| 39 | Desmaiou. E ninguém sabe o que a criatura fez com **ele**. | O Chede caído; ao fundo, dois olhos se acendem e chegam perto. Escuro. |
-| 40 | A Lia também apagou. Três dias depois, ainda em **coma**. | Hospital: Lia na cama, monitor; "3 DIAS". |
-| 41 | O Kaik, de braço engessado, não saiu do lado dela. | Kaik com tipoia ao lado da cama; o gato preto no pé da cama. |
-| 42 | "Chede… eu sei que você ainda não **morreu**." | Close no Kaik, olhando pela janela para a cidade acesa. |
-| 43 | E na mão da Lia… uma luz roxa **piscou**. | Close na mão da Lia; faísca de fenda; o monitor dispara. |
-| 44 | Fim da primeira temporada. Segue pra ver a **temporada 2**! | Cartela "FIM DA 1ª TEMPORADA" + "SEGUE PRA VER A TEMPORADA 2" com o botão de seguir pulsando. |
+| 35 | O vento puxou o Chede… e o Kaik segurou a mão **dele**. | Corte: o Chede sendo puxado para o alto; o Kaik no chão, de mão dada com ele. |
+| 36 | Kaik: "Por favor… não faça **isso**." | Close no Kaik, chorando; lágrimas escorrendo. (voz do Kaik) |
+| 37 | Chede: "Me desculpa… mas eu **preciso**." | Close no Chede, chorando, cabelo voando no vento. (voz do Chede) |
+| 38 | Os dois **chorando**. | Close dos dois rostos, lágrimas voando com o vento. |
+| 39 | Ele soltou a mão do amigo: "**Corre**!" | As mãos se soltando em câmera lenta; o Chede some na fenda gritando; o Kaik cai para trás. |
+| 40 | E foi puxado junto com a **criatura**. | A criatura solta a borda e cai junto; os dois somem no roxo. |
+| 41 | A fenda fechou. E o silêncio voltou de uma **vez**. | Corte seco; o som some; as luzes da cidade voltam uma a uma. |
+| 42 | Lá dentro, ele tentou abrir outra… mas não tinha mais **força**. | Outro lugar: o Chede de joelhos; só uma faísca roxa na luva. |
+| 43 | Desmaiou. E ninguém sabe o que a criatura fez com **ele**. | O Chede caído; ao fundo, dois olhos se acendem e chegam perto. Escuro. |
+| 44 | A Lia também apagou. Três dias depois, ainda em **coma**. | Hospital: Lia na cama, monitor; "3 DIAS". |
+| 45 | O Kaik, de braço engessado, não saiu do lado dela. | Kaik com tipoia ao lado da cama; o gato preto no pé da cama. |
+| 46 | "Chede… eu sei que você ainda não **morreu**." | Close no Kaik, olhando pela janela para a cidade acesa. |
+| 47 | E na mão da Lia… uma luz roxa **piscou**. | Close na mão da Lia; faísca de fenda; o monitor dispara. |
+| 48 | Fim da primeira temporada. Segue pra ver a **temporada 2**! | Cartela "FIM DA 1ª TEMPORADA" + "SEGUE PRA VER A TEMPORADA 2" com o botão de seguir pulsando. |
 
 ## O que é novo de desenhar
 - **A criatura inteira:** silhueta escura, braços compridos, rachaduras roxas, dois olhos brilhando, em 10 m e 15 m.
@@ -96,4 +105,4 @@
 - [x] Engajamento: dois selos no meio e chamada no fim ("temporada 2")
 - [x] O Regente não aparece (só o anel dourado na mulher do governo)
 - [x] Gancho para a 2ª temporada: o Chede está vivo lá dentro? A luz roxa na mão da Lia? Quem mandou o governo pedir ajuda?
-- [x] **Aprovado pelo usuário (14/11)**: "Ss A FENDA".
+- [x] **Aprovado pelo usuário (14/11)**: "Ss A FENDA". Sacrifício reescrito com a cena do usuário (mão dada, falas, choro, "Corre!").

@@ -547,21 +547,32 @@
       close(api, { ...LIA_T, pose: 'parado', expressao: 'medo', voz: 'narrador' }, 540, 860, 520, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
       ctx.restore();
     },
-    cuida(ctx, u, d, api) {
-      const z = u < 0.9 ? 1 : api.lerp(1, 1.06, (u - 0.9) / (d - 0.9)); ctx.save(); ctx.translate(540, 900); ctx.scale(z, z); ctx.translate(-540, -900);
-      const camada = api.camada(), g = camada.getContext('2d'); g.fillStyle = '#20103E'; g.fillRect(0, 0, W, H); Efeitos.fenda(g, 540, 400, 1400, { t: api.t, abre: 1 }); api.desfocar(camada, 20);
-      const ex = u < 0.4 ? { ...P().determinado, olhar: [0.012, 0] } : 'determinado';
-      close(api, { ...CHEDE_T, pose: 'parado', expressao: ex, vistaCabeca: u > 0.4 ? 'tq' : undefined, voz: 'narrador' }, 540, 880, 520, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 1.5 });
-      ctx.restore();
+    // a mão: o Chede puxado para o alto, o Kaik no chão segurando a mão dele
+    segurou(ctx, u, d, api) { maoDada(ctx, api, 0); },
+    kaikfala(ctx, u, d, api) { closeChoro(ctx, api, KAIK_T, 'kaik'); },
+    chedefala(ctx, u, d, api) { closeChoro(ctx, api, CHEDE_T, 'chede'); },
+    choram(ctx, u, d, api) {
+      // os dois rostos, um em cima do outro, chorando no vento
+      fundoTornado(ctx, api);
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, H / 2 - 6); ctx.clip();
+      const r1 = close(api, { ...KAIK_T, pose: 'parado', expressao: { ...P().medo, boca: { tipo: 'aberta', curva: -0.8, abertura: 0.03, largura: 0.05 } }, vista: 'tq' }, 560, 520, 420, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
+      lagrimas(ctx, api, r1, 1); ctx.restore();
+      ctx.fillStyle = '#0B0620'; ctx.fillRect(0, H / 2 - 6, W, 12);
+      ctx.save(); ctx.beginPath(); ctx.rect(0, H / 2 + 6, W, H / 2); ctx.clip();
+      const r2 = close(api, { ...CHEDE_T, pose: 'parado', expressao: { ...P().preocupado, boca: { tipo: 'linha', curva: -0.6 } }, vista: 'tq', espelhar: true }, 520, 1330, 420, { luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
+      lagrimas(ctx, api, r2, 1); ctx.restore();
+      vento(ctx, api, 0.8, 540, 300);
     },
+    solta(ctx, u, d, api) { maoDada(ctx, api, 1); },
     pulou(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 8, 18], raio: 16, ang: 0.15, altura: 3, ySalvo: 1150 });
       cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
-      const fq = cam.p(0, 12, 22); Efeitos.fenda(ctx, fq.x, fq.y, 20 * fq.s, { t: api.t, abre: 1, semente: 8 });
-      const k = fr(api, 0.2, 1, 'entra');
+      const fq = cam.p(0, 12, 22); tornado(ctx, api, fq.x, fq.y, 900, 1); Efeitos.fenda(ctx, fq.x, fq.y, 20 * fq.s, { t: api.t, abre: 1, semente: 8 });
+      const k = fr(api, 0.1, 1, 'entra');
       criatura3d(ctx, cam, 0, api.lerp(20, 22, k), 15, { t: api.t, inclina: -20 * k });
-      const Y = api.lerp(0, 9, fr(api, 0.25, 0.9)), Zc = api.lerp(9, 21, fr(api, 0.25, 0.9));
-      if (k < 0.95) api.personagem3d(cam, { ...CHEDE_T, pose: { braco_d: 160, braco_e: 160, coxa_d: -30, canela_d: 40 }, expressao: 'determinado' }, 0, Zc, 1.75, { luz: LUZ_NOITE, y: Y, rumo: Math.PI, parado: true });
+      const Y = api.lerp(4, 11.5, k), Zc = api.lerp(14, 21.6, k);
+      if (k < 0.95) api.personagem3d(cam, { ...CHEDE_T, pose: { braco_d: 160, braco_e: 150, coxa_d: -30, canela_d: 40 }, expressao: 'medo' }, 0.6, Zc, 1.75, { luz: LUZ_NOITE, y: Y, rumo: Math.PI, parado: true });
+      vento(ctx, api, 1, fq.x, fq.y);
     },
     fechou(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 3, 12], raio: 12, ang: api.lerp(0.1, 0.25, u / d), altura: 1.8, ySalvo: 1050 });
@@ -669,6 +680,7 @@
     const [tx, ty] = api.tremor(T > 3.5 ? 12 : 4); ctx.save(); ctx.translate(tx, ty);
     cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
     const abre = api.clamp(T / 2, 0, 1), fq = cam.p(0.3, 11, 22);
+    tornado(ctx, api, fq.x, fq.y, 1000, api.clamp((T - 1.5) / 2, 0, 1));
     Efeitos.fenda(ctx, fq.x, fq.y, 20 * fq.s * abre + 1, { t: api.t, abre: 1, semente: 8 });
     const puxa = api.clamp((T - 2) / 1.5, 0, 1);
     criatura3d(ctx, cam, 0.3, api.lerp(17, 21, puxa), 15, { t: api.t, inclina: -15 * puxa, bracoD: 1 * puxa, garra: 1 });
@@ -682,6 +694,78 @@
     ctx.restore();
     vento(ctx, api, 0.8, fq.x, fq.y);
     if (T < 3.5) info(api, ctx, 'FENDA', '20 m', 1600, ROXO, api.clamp((T - 0.6) / 0.35, 0, 1));
+  }
+
+  // tornado: braços em espiral de poeira/vento girando em volta da fenda
+  function tornado(ctx, api, x, y, R, forca) {
+    if (forca <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+    for (let b = 0; b < 7; b++) {
+      ctx.beginPath();
+      for (let i = 0; i <= 40; i++) { const k = i / 40, a = b * 0.9 + k * 5 + api.t * 3, r = R * (1 - k * 0.85); const px = Math.cos(a) * r, py = Math.sin(a) * r * 0.45; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
+      ctx.strokeStyle = `rgba(${b % 2 ? '200,180,255' : '170,150,200'},${0.22 * forca})`; ctx.lineWidth = 18 - b; ctx.stroke();
+    }
+    const r = rng(17);
+    for (let i = 0; i < 70; i++) { const a = r() * 6.28 + api.t * (2 + r() * 2), rr = R * (0.2 + ((r() + api.t * 0.4) % 1) * 0.9); ctx.fillStyle = `rgba(150,120,90,${0.6 * forca})`; ctx.save(); ctx.translate(Math.cos(a) * rr, Math.sin(a) * rr * 0.45); ctx.rotate(a * 3); ctx.fillRect(-10, -4, 20, 8); ctx.restore(); }
+    ctx.restore();
+  }
+  // fundo da cena da mão: céu roxo, fenda enorme em cima puxando
+  function fundoTornado(ctx, api) {
+    const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#2A0E5C'); g.addColorStop(0.5, '#170A36'); g.addColorStop(1, '#0B0620'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    tornado(ctx, api, 540, 260, 1100, 1); Efeitos.fenda(ctx, 540, 240, 1300, { t: api.t, abre: 1, semente: 8 });
+  }
+  // lágrimas escorrendo dos dois olhos (e voando para cima com o vento)
+  function lagrimas(ctx, api, rig, forca) {
+    if (!rig || !rig.pontoMundo) return;
+    for (const sx of [-0.19, 0.19]) {
+      const o = rig.pontoMundo('cabeca', [sx, -0.33]), b = rig.pontoMundo('cabeca', [sx * 1.05, -0.12]);
+      const L = Math.hypot(b.x - o.x, b.y - o.y);
+      ctx.save(); ctx.lineCap = 'round';
+      ctx.strokeStyle = `rgba(190,225,255,${0.75 * forca})`; ctx.lineWidth = Math.max(3, L * 0.09);
+      ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.quadraticCurveTo(o.x + (b.x - o.x) * 0.4 + 4, o.y + (b.y - o.y) * 0.5, b.x, b.y); ctx.stroke();
+      for (let k = 0; k < 3; k++) { const f = ((api.t * 1.4 + k / 3 + (sx > 0 ? 0.5 : 0)) % 1); ctx.fillStyle = `rgba(210,235,255,${(1 - f) * forca})`; ctx.beginPath(); ctx.ellipse(o.x + f * L * 0.2, o.y - f * L * 1.2, L * 0.07, L * 0.11, 0, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore();
+    }
+  }
+  // close chorando com o vento
+  function closeChoro(ctx, api, item, quem) {
+    fundoTornado(ctx, api);
+    const z = api.lerp(1, 1.08, api.u / api.dur); ctx.save(); ctx.translate(540, 900); ctx.scale(z, z); ctx.translate(-540, -900);
+    const ex = quem === 'kaik' ? { ...P().medo, boca: { tipo: 'aberta', curva: -0.9, abertura: 0.04, largura: 0.055 } } : { ...P().preocupado, boca: { tipo: 'aberta', curva: -0.5, abertura: 0.025, largura: 0.05 } };
+    const rig = close(api, { ...item, pose: 'parado', expressao: ex, voz: quem === 'kaik' ? 'amigo' : 'lucas' }, 540, 900, 560, { luz: { lado: quem === 'kaik' ? 1 : -1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
+    ctx.restore();
+    lagrimas(ctx, api, rig, 1);
+    vento(ctx, api, 0.9, 540, 260);
+  }
+  // as duas mãos: fase 0 = segurando firme (o Chede puxado para cima), 1 = solta em câmera lenta e o Chede some
+  function maoDada(ctx, api, fase) {
+    fundoTornado(ctx, api);
+    const u = api.u, d = api.dur;
+    const solta = fase === 1 ? fr(api, 0.5, 1, 'entra') : 0;
+    const tremor = api.tremor(10); ctx.save(); ctx.translate(tremor[0], tremor[1]);
+    // Kaik agachado no chão, braço bom esticado para cima
+    ctx.fillStyle = '#1A1428'; ctx.fillRect(0, 1720, W, 200);
+    const exK = fase === 1 && u > 0.6 * d ? 'medo' : 'raiva';
+    const rk = api.personagem({ ...KAIK_T, pose: { braco_d: 160, antebraco_d: 5, braco_e: 25, antebraco_e: 80, tronco: 12, coxa_d: -60, canela_d: 90, coxa_e: -20, canela_e: 30 }, expressao: exK, vista: 'tq' }, 380, 1860, 760, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.8 }, vida: 3 });
+    const mk = rk && rk.pontoMundo ? rk.pontoMundo('mao_d', [0, 0.25]) : { x: 520, y: 900 };
+    // Chede de cabeça para cima da fenda (puxado), a mão dele encaixada na do Kaik
+    const poseC = { braco_d: 170, antebraco_d: 0, braco_e: 140, antebraco_e: 25, coxa_d: -12, coxa_e: 18 };
+    const exC = fase === 1 && u > 0.35 * d ? { ...P().raiva } : 'preocupado';
+    const giro = Math.PI + 0.25 + Math.sin(api.t * 9) * 0.04;
+    // 1) mede onde fica a mão do Chede (desenho invisível)
+    ctx.save(); ctx.globalAlpha = 0; ctx.translate(0, 0); ctx.rotate(giro);
+    const rm = api.personagem({ ...CHEDE_T, pose: poseC, expressao: exC }, 0, 0, 700, { parado: true });
+    ctx.restore();
+    const hm = rm && rm.pontoMundo ? rm.pontoMundo('mao_d', [0, 0.25]) : { x: 0, y: 0 };
+    // 2) desenha de verdade com a mão no lugar certo (e subindo quando solta)
+    const subir = solta * 1500;
+    ctx.save(); ctx.translate(mk.x - hm.x + solta * 60, mk.y - hm.y - subir); ctx.rotate(giro + solta * 0.5);
+    api.personagem({ ...CHEDE_T, pose: poseC, expressao: exC }, 0, 0, 700, { luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.8 }, vida: 3 });
+    ctx.restore();
+    if (solta < 0.12) brilho(ctx, mk.x, mk.y, 110, 0.4, '200,180,255');
+    ctx.restore();
+    vento(ctx, api, 1, 540, 240);
+    if (fase === 1 && u > 0.35 * d && u < 0.75 * d) { const k = fr(api, 0.35, 0.45, 'volta'); ctx.save(); ctx.translate(540, 1300); ctx.scale(k, k); ctx.translate(-540, -1300); api.texto('CORRE!', 540, 1300, 170, { cor: '#FF5A4A' }); ctx.restore(); }
   }
 
   // hospital: 0 = Lia em coma (3 dias), 1 = Kaik de tipoia ao lado, 2 = luz roxa na mão + monitor dispara

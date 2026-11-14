@@ -24,7 +24,8 @@
    },
    "destaque": [
     "APAGANDO."
-   ]
+   ],
+   "duracao": 4.19
   },
   {
    "id": "bairros",
@@ -54,7 +55,8 @@
      "ate": 2.5,
      "volume": 1.2
     }
-   ]
+   ],
+   "duracao": 5.42
   },
   {
    "id": "energia",
@@ -65,7 +67,8 @@
    },
    "destaque": [
     "ENERGIA."
-   ]
+   ],
+   "duracao": 3.88
   },
   {
    "id": "kaikcorre",
@@ -74,7 +77,8 @@
     "voz": "narrador",
     "velocidade": 195
    },
-   "destaque": []
+   "destaque": [],
+   "duracao": 4.5
   },
   {
    "id": "tapa",
@@ -85,7 +89,8 @@
    },
    "destaque": [
     "OLHOU."
-   ]
+   ],
+   "duracao": 4.19
   },
   {
    "id": "moeda",
@@ -96,7 +101,8 @@
    },
    "destaque": [
     "MOEDA."
-   ]
+   ],
+   "duracao": 5.12
   },
   {
    "id": "fugir",
@@ -127,7 +133,8 @@
     "voz": "narrador",
     "velocidade": 195
    },
-   "destaque": []
+   "destaque": [],
+   "duracao": 4.19
   },
   {
    "id": "mulher",
@@ -138,7 +145,8 @@
    },
    "destaque": [
     "VOCÊS."
-   ]
+   ],
+   "duracao": 3.58
   },
   {
    "id": "amanhecer",
@@ -149,7 +157,8 @@
    },
    "destaque": [
     "AMANHECER."
-   ]
+   ],
+   "duracao": 3.58
   },
   {
    "id": "anel",
@@ -160,7 +169,8 @@
    },
    "destaque": [
     "DOURADO."
-   ]
+   ],
+   "duracao": 3.58
   },
   {
    "id": "aceitam",
@@ -193,7 +203,8 @@
    },
    "destaque": [
     "GRAUS."
-   ]
+   ],
+   "duracao": 4.5
   },
   {
    "id": "derrete",
@@ -215,7 +226,8 @@
    },
    "destaque": [
     "LUVAS"
-   ]
+   ],
+   "duracao": 4.81
   },
   {
    "id": "medo",
@@ -267,7 +279,8 @@
    },
    "destaque": [
     "MIL"
-   ]
+   ],
+   "duracao": 3.58
   },
   {
    "id": "caminhoes",
@@ -278,7 +291,8 @@
    },
    "destaque": [
     "CAMINHÕES"
-   ]
+   ],
+   "duracao": 4.81
   },
   {
    "id": "soco",
@@ -307,7 +321,8 @@
    },
    "destaque": [
     "SENTIU."
-   ]
+   ],
+   "duracao": 3.88
   },
   {
    "id": "braco",
@@ -336,7 +351,8 @@
      "em": 0.5,
      "volume": 1
     }
-   ]
+   ],
+   "duracao": 3.88
   },
   {
    "id": "caiu",
@@ -367,7 +383,8 @@
    },
    "destaque": [
     "METROS."
-   ]
+   ],
+   "duracao": 4.5
   },
   {
    "id": "juntas",
@@ -389,18 +406,29 @@
    },
    "destaque": [
     "METROS."
-   ]
+   ],
+   "duracao": 4.81
   },
   {
    "id": "borda",
    "fala": {
-    "texto": "A criatura foi puxada... e se agarrou na borda.",
+    "texto": "A fenda virou um tornado gigante. A criatura foi puxada... e se agarrou na borda.",
     "voz": "narrador",
     "velocidade": 195
    },
    "destaque": [
+    "TORNADO",
     "BORDA."
-   ]
+   ],
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "de": 0,
+     "ate": 4,
+     "volume": 1.4
+    }
+   ],
+   "duracao": 5.12
   },
   {
    "id": "dentro",
@@ -411,23 +439,88 @@
    },
    "destaque": [
     "DENTRO."
-   ]
+   ],
+   "duracao": 4.5
   },
   {
-   "id": "cuida",
+   "id": "segurou",
    "fala": {
-    "texto": "O Chede olhou pro Kaik: Cuida dela.",
+    "texto": "O vento puxou o Chede... e o Kaik segurou a mão dele.",
     "voz": "narrador",
     "velocidade": 195
    },
    "destaque": [
-    "DELA."
+    "DELE."
+   ],
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "de": 0,
+     "ate": 3,
+     "volume": 1.2
+    }
+   ],
+   "duracao": 4.19
+  },
+  {
+   "id": "kaikfala",
+   "fala": {
+    "texto": "Por favor... não faça isso.",
+    "voz": "amigo",
+    "velocidade": 150
+   },
+   "destaque": [
+    "ISSO."
+   ],
+   "duracao": 2.8
+  },
+  {
+   "id": "chedefala",
+   "fala": {
+    "texto": "Me desculpa... mas eu preciso.",
+    "voz": "lucas",
+    "velocidade": 150
+   },
+   "destaque": [
+    "PRECISO."
+   ],
+   "duracao": 2.8
+  },
+  {
+   "id": "choram",
+   "fala": {
+    "texto": "Os dois chorando.",
+    "voz": "narrador",
+    "velocidade": 170
+   },
+   "destaque": [
+    "CHORANDO."
+   ],
+   "duracao": 2.4
+  },
+  {
+   "id": "solta",
+   "fala": {
+    "texto": "Ele soltou a mão do amigo: Corre!",
+    "voz": "narrador",
+    "velocidade": 185
+   },
+   "destaque": [
+    "CORRE!"
+   ],
+   "duracao": 2.8,
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 1.6,
+     "volume": 0.8
+    }
    ]
   },
   {
    "id": "pulou",
    "fala": {
-    "texto": "E pulou junto com a criatura.",
+    "texto": "E foi puxado junto com a criatura.",
     "voz": "narrador",
     "velocidade": 195
    },
@@ -444,7 +537,8 @@
    },
    "destaque": [
     "VEZ."
-   ]
+   ],
+   "duracao": 3.58
   },
   {
    "id": "semforca",
@@ -455,7 +549,8 @@
    },
    "destaque": [
     "FORÇA."
-   ]
+   ],
+   "duracao": 3.88
   },
   {
    "id": "desmaiou",
@@ -466,7 +561,8 @@
    },
    "destaque": [
     "ELE."
-   ]
+   ],
+   "duracao": 3.88
   },
   {
    "id": "coma",
@@ -486,7 +582,8 @@
      "de": 0,
      "ate": 3
     }
-   ]
+   ],
+   "duracao": 3.58
   },
   {
    "id": "kaikhosp",
@@ -495,7 +592,8 @@
     "voz": "narrador",
     "velocidade": 195
    },
-   "destaque": []
+   "destaque": [],
+   "duracao": 3.58
   },
   {
    "id": "naomorreu",
@@ -526,7 +624,8 @@
      "de": 0,
      "ate": 3
     }
-   ]
+   ],
+   "duracao": 3.27
   },
   {
    "id": "parte",
