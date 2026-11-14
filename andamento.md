@@ -100,9 +100,15 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
   - anel nos olhos;
   - soco na barriga pegando o momento exato;
   - corrida em primeira pessoa.
-- Prévia 2: `animacao-do-chede/previas/a-fenda-parte-final-previa2.mp4`. Tem o cenário novo `animacao-do-chede/cenarios/cidade-noite-3d.js` e o ciclo `correr` no motor, e refaz o tapa, a fuga, o anel, o soco e a corrida.
+- Prévia 2 (substituída pela 3): `animacao-do-chede/previas/a-fenda-parte-final-previa2.mp4`. Tem o cenário novo `animacao-do-chede/cenarios/cidade-noite-3d.js` e o ciclo `correr` no motor, e refaz o tapa, a fuga, o anel, o soco e a corrida.
 - Pendente depois da aprovação:
   - vozes separadas do Kaik e do Chede nas falas (o usuário ainda não respondeu);
   - voz final do Witalo;
   - render final em `prontos/a-fenda-parte-final.mp4`;
   - capa "A FENDA" + "PARTE FINAL" e post "🌀 A FENDA · PARTE FINAL".
+- Prévia 3: `animacao-do-chede/previas/a-fenda-parte-final-previa3.mp4`. Mudanças:
+  - Kaik correndo de frente;
+  - hospital refeito;
+  - Lia deitada no tamanho certo;
+  - tipoia no Kaik;
+  - Chede sugado para dentro da fenda.

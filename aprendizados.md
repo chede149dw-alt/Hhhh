@@ -215,3 +215,12 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   - o estrondo sônico e os vidros estourando dos lados;
   - os punhos dele balançando embaixo da tela;
   - a criatura crescendo no fim da rua.
+- **Quem corre olha para onde vai** (usuário, 14/11: "por que ele tá correndo de costas?"). Em trajeto curvo, o `rumo` sai da direção do movimento. No círculo `(cos a, sin a)`, isso dá `rumo = atan2(sin a, −cos a)`. Conferir num zoom de 3 a 4 quadros seguidos.
+- **Personagem deitado: só a cabeça e o ombro para fora, o resto coberto, no tamanho da cama** (usuário: "a menina tá gigante… as pernas dela ficou muito feio"). Usar a vista de perfil girada −90° (rosto para cima), com o comprimento do corpo proporcional à cama e o lençol desenhado por cima, do ombro ao pé. Nunca a vista de frente deitada, que mostra pernas enormes.
+- **Hospital bonito = quarto à noite**. Elementos:
+  - janela grande com a cidade, a lua e um brilho roxo ao longe;
+  - cortinas, soro e monitor com brilho verde;
+  - luz azul da janela no chão e cama de lado com rodinhas.
+  Fundo claro e chapado ficou feio.
+- **Braço machucado = gesso + tipoia desenhados sobre o rig** (usuário: "as mãos estão bugadas" no Kaik de costas). Pose com os braços soltos; o gesso fica no antebraço (`antebraco_d` → `mao_d`), a faixa vai até o pescoço e, de costas, só aparece a faixa cruzando as costas. Antebraço dobrado de costas deixa a mão torta.
+- **Ser sugado pela fenda = encolher e sumir no centro dela, nunca passar por cima da borda** (usuário: "ele passa por cima do portal"). O personagem vai para o centro da fenda encolhendo, girando e ganhando luz roxa, e no fim vem um clarão roxo. Não desenhar o grito ("CORRE!") se a legenda já mostra a mesma palavra.

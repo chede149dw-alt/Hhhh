@@ -451,7 +451,7 @@
           const n = 30; let prev = null;
           for (let i = 0; i <= n; i++) { const a = api.t * 7 - i * 0.1, q = cam.p(Math.cos(a) * 3.4, 0.9, 19 + Math.sin(a) * 2.4); if (prev && q.dz > 1) rastro(ctx, prev.x, prev.y, q.x, q.y, 0.5 * q.s, 1 - i / n); prev = q; }
           const a = api.t * 7, X = Math.cos(a) * 3.4, Z = 19 + Math.sin(a) * 2.4;
-          if (Z < 19) api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: 'determinado' }, X, Z, 1.75, { luz: LUZ_NOITE, rumo: a + Math.PI, correr: api.t * 1.6 });
+          if (Z < 19) api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: 'determinado' }, X, Z, 1.75, { luz: LUZ_NOITE, rumo: Math.atan2(Math.sin(a), -Math.cos(a)), correr: api.t * 1.6 });
         } else {
           const q = cam.p(3.2, 1.2, 17.5);
           onda(ctx, q.x, q.y, fr(api, 0.52, 0.6), 520); faiscas(ctx, q.x, q.y, 30, 220, api.t, 5);
@@ -866,7 +866,7 @@
       const k = fr(api, 0.1, 1, 'entra');
       criatura3d(ctx, cam, 0, api.lerp(20, 22, k), 15, { t: api.t, inclina: -20 * k });
       const Y = api.lerp(4, 11.5, k), Zc = api.lerp(14, 21.6, k);
-      if (k < 0.95) api.personagem3d(cam, { ...CHEDE_T, pose: { braco_d: 160, braco_e: 150, coxa_d: -30, canela_d: 40 }, expressao: 'medo' }, 0.6, Zc, 1.75, { luz: LUZ_NOITE, y: Y, rumo: Math.PI, parado: true });
+      if (k < 0.95) { ctx.save(); ctx.globalAlpha = 1 - api.clamp((k - 0.7) / 0.25, 0, 1); api.personagem3d(cam, { ...CHEDE_T, pose: { braco_d: 160, braco_e: 150, coxa_d: -30, canela_d: 40 }, expressao: 'medo' }, 0.6, Zc, 1.75 * (1 - 0.8 * Math.max(0, k - 0.5) * 2), { luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.9 }, y: Y, rumo: Math.PI, parado: true }); ctx.restore(); }
       vento(ctx, api, 1, fq.x, fq.y);
     },
     fechou(ctx, u, d, api) {
@@ -895,13 +895,14 @@
     coma: (ctx, u, d, api) => hospital(ctx, api, 0, d),
     kaikhosp: (ctx, u, d, api) => hospital(ctx, api, 1, d),
     naomorreu(ctx, u, d, api) {
-      ctx.fillStyle = '#1A1E2E'; ctx.fillRect(0, 0, W, H);
-      // janela com a cidade acesa
-      ctx.fillStyle = '#0D1330'; ctx.fillRect(140, 200, 800, 900);
-      const r = rng(12); for (let i = 0; i < 260; i++) { ctx.fillStyle = `rgba(255,214,140,${0.4 + r() * 0.6})`; ctx.fillRect(160 + r() * 760, 600 + r() * 480, 4, 4); }
-      ctx.strokeStyle = '#2C3248'; ctx.lineWidth = 24; ctx.strokeRect(140, 200, 800, 900); ctx.beginPath(); ctx.moveTo(540, 200); ctx.lineTo(540, 1100); ctx.stroke();
-      const z = api.lerp(1, 1.06, u / d); ctx.save(); ctx.translate(540, 1000); ctx.scale(z, z); ctx.translate(-540, -1000);
-      close(api, { ...KAIK, pose: { braco_d: 20, antebraco_d: 100 }, expressao: { ...P().preocupado, olhar: [0, -0.006] }, vista: 'costas', voz: 'narrador' }, 540, 980, 520, { luz: { lado: 1, cor: 'rgb(255,214,160)', forca: 0.5 }, vida: 1 });
+      // o Kaik de costas na janela do quarto, olhando a cidade; lá longe, um brilho roxo
+      const z = api.lerp(1, 1.07, u / d); ctx.save(); ctx.translate(540, 900); ctx.scale(z, z); ctx.translate(-540, -900);
+      let g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#121A2C'); g.addColorStop(1, '#1D263A'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      janelaCidade(ctx, api, 120, 170, 840, 1050, 0.9);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; g = ctx.createRadialGradient(540, 700, 100, 540, 700, 900); g.addColorStop(0, 'rgba(120,130,255,0.12)'); g.addColorStop(1, 'rgba(120,130,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
+      const rig = close(api, { ...KAIK, pose: { braco_d: 5, antebraco_d: 0, braco_e: -5, antebraco_e: 0 }, expressao: { ...P().preocupado }, vista: 'costas', voz: 'narrador' }, 540, 1000, 540, { luz: { lado: 1, cor: 'rgb(170,160,255)', forca: 0.8 }, vida: 0.8 });
+      // faixa da tipoia cruzando as costas
+      if (rig && rig.pontoMundo) { const o = rig.pontoMundo('pescoco', [0, 0]); ctx.strokeStyle = '#3E5A86'; ctx.lineWidth = 34; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(o.x - 70, o.y + 40); ctx.quadraticCurveTo(o.x + 40, o.y + 160, o.x + 170, o.y + 330); ctx.stroke(); }
       ctx.restore();
     },
     luz: (ctx, u, d, api) => hospital(ctx, api, 2, d),
@@ -1041,7 +1042,11 @@
     // Kaik agachado no chão, braço bom esticado para cima
     ctx.fillStyle = '#1A1428'; ctx.fillRect(0, 1720, W, 200);
     const exK = fase === 1 && u > 0.6 * d ? 'medo' : 'raiva';
-    const rk = api.personagem({ ...KAIK_T, pose: { braco_d: 160, antebraco_d: 5, braco_e: 25, antebraco_e: 80, tronco: 12, coxa_d: -60, canela_d: 90, coxa_e: -20, canela_e: 30 }, expressao: exK, vista: 'tq' }, 380, 1860, 760, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.8 }, vida: 3 });
+    // ao soltar, o Kaik cai para trás
+    const cai = fase === 1 ? fr(api, 0.5, 0.75, 'sai') : 0;
+    ctx.save(); ctx.translate(380, 1860); ctx.rotate(-0.35 * cai); ctx.translate(-380, -1860 - 0 * cai);
+    const rk = api.personagem({ ...KAIK_T, pose: { braco_d: 160 - 25 * cai, antebraco_d: 5, braco_e: 25 + 30 * cai, antebraco_e: 80, tronco: 12 - 20 * cai, coxa_d: -60, canela_d: 90, coxa_e: -20, canela_e: 30 }, expressao: exK, vista: 'tq' }, 380, 1860, 760, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.8 }, vida: 3 });
+    ctx.restore();
     const mk = rk && rk.pontoMundo ? rk.pontoMundo('mao_d', [0, 0.25]) : { x: 520, y: 900 };
     // Chede de cabeça para cima da fenda (puxado), a mão dele encaixada na do Kaik
     const poseC = { braco_d: 170, antebraco_d: 0, braco_e: 140, antebraco_e: 25, coxa_d: -12, coxa_e: 18 };
@@ -1053,53 +1058,131 @@
     ctx.restore();
     const hm = rm && rm.pontoMundo ? rm.pontoMundo('mao_d', [0, 0.25]) : { x: 0, y: 0 };
     // 2) desenha de verdade com a mão no lugar certo (e subindo quando solta)
-    const subir = solta * 1500;
-    ctx.save(); ctx.translate(mk.x - hm.x + solta * 60, mk.y - hm.y - subir); ctx.rotate(giro + solta * 0.5);
-    api.personagem({ ...CHEDE_T, pose: poseC, expressao: exC }, 0, 0, 700, { luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.8 }, vida: 3 });
-    ctx.restore();
+    // centro do corpo do Chede na tela; ao soltar, ele vai para o fundo da fenda encolhendo e girando
+    const ox = mk.x - hm.x, oy = mk.y - hm.y, c0 = [ox + Math.sin(giro) * 350, oy - Math.cos(giro) * 350];
+    const e = solta * solta, alvo = [api.lerp(c0[0], 540, e), api.lerp(c0[1], 250, e)], esc = api.lerp(1, 0.03, Math.pow(solta, 0.8));
+    if (solta < 0.97) {
+      ctx.save(); ctx.globalAlpha = 1 - fr(api, 0.9, 0.99);
+      ctx.translate(alvo[0], alvo[1]); ctx.scale(esc, esc); ctx.rotate(solta * 3.5); ctx.translate(-c0[0], -c0[1]);
+      ctx.translate(ox, oy); ctx.rotate(giro);
+      api.personagem({ ...CHEDE_T, pose: poseC, expressao: exC }, 0, 0, 700, { luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.8 + solta }, vida: 3 });
+      ctx.restore();
+      if (solta > 0.3) brilho(ctx, alvo[0], alvo[1], 260 * esc + 60, 0.5 * solta, '200,160,255');
+    }
+    if (solta > 0.9) brilho(ctx, 540, 250, 700, 0.8 * (1 - fr(api, 0.95, 1)), '220,190,255');
     if (solta < 0.12) brilho(ctx, mk.x, mk.y, 110, 0.4, '200,180,255');
     ctx.restore();
     vento(ctx, api, 1, 540, 240);
-    if (fase === 1 && u > 0.35 * d && u < 0.75 * d) { const k = fr(api, 0.35, 0.45, 'volta'); ctx.save(); ctx.translate(540, 1300); ctx.scale(k, k); ctx.translate(-540, -1300); api.texto('CORRE!', 540, 1300, 170, { cor: '#FF5A4A' }); ctx.restore(); }
   }
 
+  // ---------- hospital (refeito: quarto à noite, cama de lado, Lia deitada de perfil com o lençol até o ombro) ----------
+  // janela com a cidade à noite (e um brilho roxo lá longe, onde a fenda fechou)
+  function janelaCidade(ctx, api, x0, y0, w, h, roxo = 0) {
+    ctx.save(); ctx.beginPath(); ctx.rect(x0, y0, w, h); ctx.clip();
+    const g = ctx.createLinearGradient(0, y0, 0, y0 + h); g.addColorStop(0, '#080B26'); g.addColorStop(0.6, '#1C1B4A'); g.addColorStop(1, '#3A2768'); ctx.fillStyle = g; ctx.fillRect(x0, y0, w, h);
+    const r = rng(5); for (let i = 0; i < 60; i++) { ctx.fillStyle = `rgba(230,225,255,${0.2 + r() * 0.5})`; ctx.fillRect(x0 + r() * w, y0 + r() * h * 0.5, 2, 2); }
+    ctx.fillStyle = '#EDE6FF'; ctx.beginPath(); ctx.arc(x0 + w * 0.75, y0 + h * 0.18, 26, 0, Math.PI * 2); ctx.fill(); brilho(ctx, x0 + w * 0.75, y0 + h * 0.18, 140, 0.3, '170,160,255');
+    if (roxo > 0) brilho(ctx, x0 + w * 0.3, y0 + h * 0.62, 220, roxo * (0.5 + 0.2 * Math.sin(api.t * 2)), '170,110,255');
+    const r2 = rng(9);
+    for (let i = 0; i < 16; i++) {
+      const bx = x0 - 20 + i * (w / 14), bw = w / 16 + r2() * 30, bh = h * (0.18 + r2() * 0.35), by = y0 + h - bh;
+      ctx.fillStyle = i % 2 ? '#141838' : '#1A1E44'; ctx.fillRect(bx, by, bw, bh);
+      for (let j = 0; j < 14; j++) if (r2() < 0.5) { ctx.fillStyle = r2() < 0.8 ? 'rgba(255,210,140,0.85)' : 'rgba(150,210,255,0.8)'; ctx.fillRect(bx + 4 + r2() * (bw - 10), by + 6 + r2() * (bh - 12), 4, 5); }
+    }
+    ctx.restore();
+    // moldura e divisória
+    ctx.strokeStyle = '#5A6680'; ctx.lineWidth = 18; ctx.strokeRect(x0, y0, w, h);
+    ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(x0 + w / 2, y0); ctx.lineTo(x0 + w / 2, y0 + h); ctx.stroke();
+    ctx.fillStyle = '#6B7895'; ctx.fillRect(x0 - 24, y0 + h, w + 48, 20);
+  }
+  function quartoHospital(ctx, api, cena) {
+    let g = ctx.createLinearGradient(0, 0, 0, 1320); g.addColorStop(0, '#121A2C'); g.addColorStop(1, '#27344D'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, 1320);
+    g = ctx.createLinearGradient(0, 1320, 0, H); g.addColorStop(0, '#202A3E'); g.addColorStop(1, '#0E1220'); ctx.fillStyle = g; ctx.fillRect(0, 1320, W, H - 1320);
+    ctx.fillStyle = '#1A2234'; ctx.fillRect(0, 1305, W, 18);
+    janelaCidade(ctx, api, 520, 200, 470, 700, cena === 2 ? 0.8 : 0.35);
+    // cortinas
+    for (const [x, l] of [[470, -1], [1000, 1]]) { ctx.fillStyle = '#34405E'; ctx.beginPath(); ctx.moveTo(x - 50, 170); ctx.lineTo(x + 50, 170); ctx.quadraticCurveTo(x + 30 + l * 20, 600, x + 60 * l + 10, 980); ctx.lineTo(x - 60 * -l - 10, 980); ctx.quadraticCurveTo(x - 30, 600, x - 50, 170); ctx.fill(); ctx.strokeStyle = 'rgba(15,20,40,0.5)'; ctx.lineWidth = 4; for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.moveTo(x + k * 20, 190); ctx.quadraticCurveTo(x + k * 26, 600, x + k * 30 + l * 20, 960); ctx.stroke(); } }
+    // luz da janela no chão e na parede
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = 'rgba(120,140,255,0.07)'; ctx.beginPath(); ctx.moveTo(520, 900); ctx.lineTo(990, 900); ctx.lineTo(900, 1920); ctx.lineTo(200, 1920); ctx.fill(); ctx.restore();
+    // soro
+    ctx.strokeStyle = '#8C97AE'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(430, 330); ctx.lineTo(430, 1420); ctx.stroke(); ctx.beginPath(); ctx.moveTo(380, 330); ctx.lineTo(480, 330); ctx.stroke();
+    ctx.fillStyle = 'rgba(200,225,255,0.55)'; ctx.beginPath(); ctx.roundRect(400, 340, 60, 110, 18); ctx.fill(); ctx.strokeStyle = 'rgba(220,235,255,0.7)'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.strokeStyle = 'rgba(210,230,255,0.45)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(430, 450); ctx.bezierCurveTo(440, 800, 520, 900, 520, 1130); ctx.stroke();
+    // monitor no suporte
+    const pico = cena === 2 && api.u > 0.55 * api.dur;
+    ctx.fillStyle = '#3A4458'; ctx.fillRect(205, 640, 14, 700);
+    ctx.fillStyle = '#1E2533'; ctx.beginPath(); ctx.roundRect(80, 420, 300, 230, 18); ctx.fill();
+    ctx.fillStyle = '#06110C'; ctx.beginPath(); ctx.roundRect(96, 436, 268, 198, 10); ctx.fill();
+    ctx.strokeStyle = pico ? '#FF5A4A' : '#4BE08A'; ctx.lineWidth = 4; ctx.beginPath();
+    for (let x = 0; x <= 256; x += 4) { const ph = (x / 256 * 3 + api.t * (pico ? 3 : 1)) % 1; const yv = ph > 0.45 && ph < 0.5 ? -60 * (pico ? 1.4 : 1) : ph > 0.5 && ph < 0.54 ? 34 : 0; x ? ctx.lineTo(102 + x, 545 + yv) : ctx.moveTo(102 + x, 545 + yv); }
+    ctx.stroke();
+    ctx.font = '700 30px Inter'; ctx.fillStyle = pico ? '#FF5A4A' : '#4BE08A'; ctx.textAlign = 'left'; ctx.fillText(pico ? '142' : '58', 300, 470);
+    brilho(ctx, 230, 535, 300, 0.25, pico ? '255,90,74' : '75,224,138');
+  }
+  // cama de lado com a Lia deitada (perfil, olhando para cima) e o lençol até o ombro
+  function camaLia(ctx, api, cena) {
+    // estrutura
+    ctx.fillStyle = '#7C889E'; ctx.beginPath(); ctx.roundRect(108, 960, 30, 360, 10); ctx.fill(); // cabeceira
+    ctx.fillStyle = '#8F9BB2'; ctx.beginPath(); ctx.roundRect(100, 950, 46, 40, 12); ctx.fill();
+    ctx.fillStyle = '#7C889E'; ctx.beginPath(); ctx.roundRect(940, 1060, 26, 260, 10); ctx.fill(); // pé
+    ctx.fillStyle = '#5E6A80'; ctx.fillRect(120, 1270, 840, 34);
+    for (const x of [170, 900]) { ctx.fillStyle = '#4A5468'; ctx.fillRect(x, 1300, 18, 130); ctx.fillStyle = '#2A3040'; ctx.beginPath(); ctx.arc(x + 9, 1438, 18, 0, Math.PI * 2); ctx.fill(); }
+    // colchão e travesseiro
+    ctx.fillStyle = '#D5DEEA'; ctx.beginPath(); ctx.roundRect(130, 1190, 820, 86, 26); ctx.fill();
+    ctx.fillStyle = '#EEF2F8'; ctx.beginPath(); ctx.ellipse(250, 1170, 125, 42, -0.05, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(150,165,200,0.35)'; ctx.beginPath(); ctx.ellipse(262, 1186, 105, 18, 0, 0, Math.PI * 2); ctx.fill();
+    // Lia deitada de perfil: cabeça no travesseiro, rosto para cima
+    deitado(api, ctx, { ...LIA, pose: 'parado', expressao: fechado(), vista: 'perfil' }, 560, 1150, 700, -Math.PI / 2);
+    // lençol (do ombro ao pé), com dobras
+    const g = ctx.createLinearGradient(0, 1080, 0, 1260); g.addColorStop(0, '#B8CCE6'); g.addColorStop(1, '#7F97BC');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(330, 1250); ctx.bezierCurveTo(325, 1150, 360, 1105, 420, 1100); ctx.bezierCurveTo(560, 1092, 700, 1112, 790, 1118); ctx.bezierCurveTo(880, 1122, 930, 1150, 955, 1200); ctx.lineTo(960, 1262); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#E4ECF6'; ctx.beginPath(); ctx.moveTo(330, 1250); ctx.bezierCurveTo(325, 1150, 360, 1105, 420, 1100); ctx.lineTo(440, 1102); ctx.bezierCurveTo(380, 1115, 352, 1160, 356, 1250); ctx.fill(); // dobra de cima
+    ctx.strokeStyle = 'rgba(70,90,130,0.35)'; ctx.lineWidth = 4;
+    for (const [a, b] of [[520, 1110], [660, 1116], [800, 1125]]) { ctx.beginPath(); ctx.moveTo(a, b + 10); ctx.quadraticCurveTo(a + 30, b + 70, a - 10, b + 130); ctx.stroke(); }
+    // mão da Lia por cima do lençol
+    const mx = 560, my = 1100;
+    ctx.fillStyle = '#B57B55'; ctx.beginPath(); ctx.roundRect(mx - 38, my - 16, 76, 30, 14); ctx.fill();
+    ctx.fillStyle = '#C98B63'; ctx.beginPath(); ctx.roundRect(mx - 34, my - 20, 70, 28, 14); ctx.fill();
+    ctx.fillStyle = '#8E8A9E'; ctx.fillRect(mx - 70, my - 14, 34, 24); // punho do pijama
+    // monitor no dedo (fio)
+    ctx.strokeStyle = 'rgba(40,46,60,0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(mx + 34, my - 6); ctx.bezierCurveTo(mx + 120, my - 200, 300, 760, 230, 650); ctx.stroke();
+    if (cena === 2) {
+      const a = fr(api, 0.3, 0.5);
+      if (a > 0) { Efeitos.fenda(ctx, mx, my - 46, 110, { t: api.t, abre: (0.4 + 0.6 * Math.abs(Math.sin(api.t * 7))) * a, semente: 6 }); brilho(ctx, mx, my - 30, 260 * a, 0.7 * a, '190,150,255'); }
+    }
+    // gato no pé da cama, em cima do lençol, olhando para ela
+    if (cena >= 1) gato(ctx, 860, 1124, 150, { pose: cena === 2 && api.u > 0.55 * api.dur ? 'arrepiado' : 'sentado', t: api.t, espelhar: true });
+    return { mx, my };
+  }
+  // tipoia + gesso no braço direito do Kaik (sobre o rig)
+  function tipoia(ctx, rig) {
+    if (!rig || !rig.pontoMundo) return;
+    const a = rig.pontoMundo('antebraco_d', [0, 0.02]), b = rig.pontoMundo('mao_d', [0, 0.1]), n = rig.pontoMundo('pescoco', [0, 0]);
+    const L = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
+    ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(ang);
+    ctx.fillStyle = '#F4F1EA'; ctx.strokeStyle = '#B9B4AA'; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(-L * 0.08, -L * 0.2, L * 1.0, L * 0.4, L * 0.18); ctx.fill(); ctx.stroke();
+    ctx.restore();
+    // faixa da tipoia até o pescoço
+    ctx.strokeStyle = '#3E5A86'; ctx.lineCap = 'round'; ctx.lineWidth = Math.max(8, L * 0.16);
+    ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.quadraticCurveTo((b.x + n.x) / 2 + 10, (b.y + n.y) / 2, n.x + L * 0.25, n.y + 6); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(n.x - L * 0.2, n.y + 6); ctx.stroke();
+  }
   // hospital: 0 = Lia em coma (3 dias), 1 = Kaik de tipoia ao lado, 2 = luz roxa na mão + monitor dispara
   function hospital(ctx, api, cena, d) {
     const u = api.u;
-    ctx.fillStyle = '#C9D2D8'; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#AEB9C2'; ctx.fillRect(0, 1250, W, 670);
-    // janela noturna
-    ctx.fillStyle = '#0D1330'; ctx.fillRect(660, 260, 360, 520); ctx.strokeStyle = '#8A96A2'; ctx.lineWidth = 16; ctx.strokeRect(660, 260, 360, 520);
-    const r = rng(3); for (let i = 0; i < 70; i++) { ctx.fillStyle = `rgba(255,214,140,${0.4 + r() * 0.6})`; ctx.fillRect(670 + r() * 340, 520 + r() * 250, 4, 4); }
-    const z = cena === 2 ? api.lerp(1, 1.25, fr(api, 0, 1)) : api.lerp(1, 1.05, u / d);
-    const fx = cena === 2 ? 380 : 540, fy = cena === 2 ? 1140 : 1100;
+    const z = cena === 2 ? api.lerp(1, 1.9, fr(api, 0, 0.7, 'sai')) : api.lerp(1, 1.05, u / d);
+    const fx = cena === 2 ? 560 : 540, fy = cena === 2 ? 1080 : 1000;
     ctx.save(); ctx.translate(fx, fy); ctx.scale(z, z); ctx.translate(-fx, -fy);
-    // monitor
-    const pico = cena === 2 && u > 0.55 * d;
-    ctx.fillStyle = '#20262E'; ctx.fillRect(110, 360, 360, 250); ctx.fillStyle = '#0A1410'; ctx.fillRect(126, 376, 328, 218);
-    ctx.strokeStyle = pico ? '#FF4A3A' : '#4BE08A'; ctx.lineWidth = 5; ctx.beginPath();
-    for (let x = 0; x <= 320; x += 4) { const ph = (x / 320 * 3 + api.t * (pico ? 3 : 1)) % 1; const yv = ph > 0.45 && ph < 0.52 ? -70 * (pico ? 1.4 : 1) : ph > 0.52 && ph < 0.56 ? 40 : 0; x ? ctx.lineTo(130 + x, 485 + yv) : ctx.moveTo(130 + x, 485 + yv); }
-    ctx.stroke();
-    // cama
-    ctx.fillStyle = '#E8ECEF'; ctx.fillRect(120, 1150, 780, 120); ctx.fillStyle = '#8A96A2'; ctx.fillRect(120, 1270, 780, 30); ctx.fillRect(130, 1300, 24, 160); ctx.fillRect(866, 1300, 24, 160);
-    ctx.fillStyle = '#F4F6F8'; ctx.beginPath(); ctx.roundRect(140, 1070, 200, 100, 30); ctx.fill();
-    // Lia deitada, coberta
-    deitado(api, ctx, { ...LIA, pose: 'parado', expressao: fechado() }, 240, 1135, 700, -Math.PI / 2);
-    ctx.fillStyle = '#B9D4E8'; ctx.beginPath(); ctx.roundRect(330, 1080, 560, 120, 20); ctx.fill();
-    // mão da Lia para fora do lençol
-    const mx = 560, my = 1150;
-    ctx.fillStyle = Estilo.base.pele3; ctx.beginPath(); ctx.ellipse(mx, my, 34, 22, 0, 0, Math.PI * 2); ctx.fill();
-    if (cena === 2 && u > 0.3 * d) Efeitos.fenda(ctx, mx, my - 40, 120, { t: api.t, abre: Math.abs(Math.sin(api.t * 7)) * fr(api, 0.3, 0.5), semente: 6 });
-    // gato no pé da cama
-    if (cena >= 1) gato(ctx, 820, 1150, 130, { pose: 'sentado', t: api.t, espelhar: true });
-    ctx.restore();
-    // Kaik de tipoia sentado ao lado (cena 1)
+    quartoHospital(ctx, api, cena);
     if (cena === 1) {
-      const rk = api.personagem({ ...KAIK, pose: { braco_d: 40, antebraco_d: 110 }, expressao: 'preocupado', vista: 'tq', espelhar: true }, 960, 1900, 1000, { vida: 1 });
-      const mk = rk && rk.pontoMundo ? rk.pontoMundo('antebraco_d', [0, 0.3]) : null; if (mk) { ctx.fillStyle = '#F2EDE6'; ctx.beginPath(); ctx.ellipse(mk.x, mk.y, 70, 44, 0.4, 0, Math.PI * 2); ctx.fill(); }
+      // Kaik em pé atrás da cama, olhando para ela, braço direito na tipoia
+      const rk = api.personagem({ ...KAIK, pose: { braco_d: 30, antebraco_d: -95, braco_e: -4, cabeca: 10 }, expressao: { ...P().preocupado, olhar: [-0.012, 0.01] }, vista: 'tq', espelhar: true }, 760, 1360, 880, { luz: { lado: 1, cor: 'rgb(150,170,255)', forca: 0.7 }, vida: 0.8 });
+      tipoia(ctx, rk);
     }
-    if (cena === 0) info(api, ctx, 'EM COMA', '3 DIAS', 1640, '#211B26', fr(api, 0.3, 0.6, 'volta'));
-    if (pico) { ctx.fillStyle = `rgba(167,121,255,${0.25 * Math.abs(Math.sin(api.t * 8))})`; ctx.fillRect(0, 0, W, H); }
+    camaLia(ctx, api, cena);
+    ctx.restore();
+    if (cena === 0) info(api, ctx, 'EM COMA', '3 DIAS', 1640, '#B9A6FF', fr(api, 0.3, 0.6, 'volta'));
+    if (cena === 2 && u > 0.55 * d) { ctx.fillStyle = `rgba(167,121,255,${0.25 * Math.abs(Math.sin(api.t * 8))})`; ctx.fillRect(0, 0, W, H); }
   }
 
   // capa (vídeo e Reels): A FENDA + PARTE FINAL, padrão do autor
