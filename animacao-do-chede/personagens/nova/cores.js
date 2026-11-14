@@ -8,3 +8,4 @@
   });
 })();
 (function () { Object.assign(Estilo.base, { armaduraEscura: '#3B3654', armaduraLuz: '#5C5680', mantoRoxo: '#4A2E7A', prata: '#C8CCD8' }); })();
+(function () { Object.assign(Estilo.base, { peleFera: '#D98E5C', peloFera: '#B4471F', garra: '#F1ECE2', narizFera: '#2A1A14' }); })();
