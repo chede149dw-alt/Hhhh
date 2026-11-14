@@ -271,14 +271,14 @@
     brilho(ctx, b.x, b.y - 1.5 * b.s, 7 * b.s * forca, 0.55 * fl * forca, '255,130,50');
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     for (let i = 0; i < 7; i++) {
-      const ph = (t * 0.9 + i / 7 + sem * 0.13) % 1, q = cam.p(X + Math.sin(i * 2.1 + sem) * 1.2, ph * 4, Z);
+      const ph = (((t * 0.9 + i / 7 + sem * 0.13) % 1) + 1) % 1, q = cam.p(X + Math.sin(i * 2.1 + sem) * 1.2, ph * 4, Z);
       ctx.fillStyle = `rgba(255,${120 + i * 15},50,${0.5 * (1 - ph) * forca})`;
       ctx.beginPath(); ctx.ellipse(q.x, q.y, 0.9 * q.s * (1 - ph * 0.6), 1.6 * q.s * (1 - ph * 0.5), 0, 0, Math.PI * 2); ctx.fill();
     }
     ctx.restore();
     // coluna de fumaça subindo e abrindo
     for (let i = 0; i < 14; i++) {
-      const ph = (t * 0.12 + i / 14 + sem * 0.37) % 1, Y = 2 + ph * 40, R = 2 + ph * 9;
+      const ph = (((t * 0.12 + i / 14 + sem * 0.37) % 1) + 1) % 1, Y = 2 + ph * 40, R = 2 + ph * 9;
       const q = cam.p(X + Math.sin(ph * 4 + sem) * 3 + ph * 6, Y, Z + ph * 4); if (q.atras) continue;
       const a = 0.32 * forca * Math.sin(ph * Math.PI);
       const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, R * q.s);

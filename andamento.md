@@ -106,9 +106,13 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
   - voz final do Witalo;
   - render final em `prontos/a-fenda-parte-final.mp4`;
   - capa "A FENDA" + "PARTE FINAL" e post "🌀 A FENDA · PARTE FINAL".
-- Prévia 3: `animacao-do-chede/previas/a-fenda-parte-final-previa3.mp4`. Mudanças:
+- Prévia 3 (substituída pela 4): `animacao-do-chede/previas/a-fenda-parte-final-previa3.mp4`. Mudanças:
   - Kaik correndo de frente;
   - hospital refeito;
   - Lia deitada no tamanho certo;
   - tipoia no Kaik;
   - Chede sugado para dentro da fenda.
+- Prévia 4: `animacao-do-chede/previas/a-fenda-parte-final-previa4.mp4` (3min05). Mudanças:
+  - lágrimas certas;
+  - sequência nova depois do "Corre!": o Kaik corre até a Lia, pega ela no colo (primeira pessoa) e foge, e a fenda fecha e explode;
+  - colo refeito, com braços curtos.

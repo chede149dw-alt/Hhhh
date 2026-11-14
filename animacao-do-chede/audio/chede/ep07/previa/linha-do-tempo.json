@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "total": 172.3995460000001,
+  "total": 184.8195460000001,
   "planos": [
     {
       "id": "capa",
@@ -429,9 +429,61 @@
       "sfx": []
     },
     {
-      "id": "fechou",
+      "id": "pegalia",
       "inicio": 144.21730100000005,
-      "fim": 147.79730100000006,
+      "fim": 148.01730100000006,
+      "semLegenda": false,
+      "semCinema": false,
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "de": 0,
+          "ate": 3.8,
+          "volume": 0.8
+        }
+      ]
+    },
+    {
+      "id": "carrega",
+      "inicio": 148.01730100000006,
+      "fim": 153.61730100000005,
+      "semLegenda": false,
+      "semCinema": false,
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 1.2,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "explodiu",
+      "inicio": 153.61730100000005,
+      "fim": 157.21730100000005,
+      "semLegenda": false,
+      "semCinema": false,
+      "batidas": [],
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 1.08,
+          "volume": 1.5
+        },
+        {
+          "tipo": "ronco",
+          "de": 1,
+          "ate": 3.6,
+          "volume": 1.4
+        }
+      ]
+    },
+    {
+      "id": "fechou",
+      "inicio": 157.21730100000005,
+      "fim": 160.21730100000005,
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
@@ -439,8 +491,8 @@
     },
     {
       "id": "semforca",
-      "inicio": 147.79730100000006,
-      "fim": 151.67730100000006,
+      "inicio": 160.21730100000005,
+      "fim": 164.09730100000004,
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
@@ -448,8 +500,8 @@
     },
     {
       "id": "desmaiou",
-      "inicio": 151.67730100000006,
-      "fim": 155.55730100000005,
+      "inicio": 164.09730100000004,
+      "fim": 167.97730100000004,
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
@@ -457,8 +509,8 @@
     },
     {
       "id": "coma",
-      "inicio": 155.55730100000005,
-      "fim": 159.13730100000006,
+      "inicio": 167.97730100000004,
+      "fim": 171.55730100000005,
       "semLegenda": false,
       "semCinema": false,
       "batidas": [
@@ -479,8 +531,8 @@
     },
     {
       "id": "kaikhosp",
-      "inicio": 159.13730100000006,
-      "fim": 162.71730100000008,
+      "inicio": 171.55730100000005,
+      "fim": 175.13730100000006,
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
@@ -488,8 +540,8 @@
     },
     {
       "id": "naomorreu",
-      "inicio": 162.71730100000008,
-      "fim": 165.1295460000001,
+      "inicio": 175.13730100000006,
+      "fim": 177.54954600000008,
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
@@ -497,8 +549,8 @@
     },
     {
       "id": "luz",
-      "inicio": 165.1295460000001,
-      "fim": 168.3995460000001,
+      "inicio": 177.54954600000008,
+      "fim": 180.8195460000001,
       "semLegenda": false,
       "semCinema": false,
       "batidas": [
@@ -519,8 +571,8 @@
     },
     {
       "id": "parte",
-      "inicio": 168.3995460000001,
-      "fim": 172.3995460000001,
+      "inicio": 180.8195460000001,
+      "fim": 184.8195460000001,
       "semLegenda": true,
       "semCinema": false,
       "batidas": [],
@@ -816,59 +868,80 @@
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/pulou.wav"
     },
     {
-      "id": "fechou",
+      "id": "pegalia",
       "voz": "narrador",
       "inicio": 144.29730100000006,
-      "fim": 147.06741400000007,
+      "fim": 147.54768600000006,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/pegalia.wav"
+    },
+    {
+      "id": "carrega",
+      "voz": "narrador",
+      "inicio": 148.09730100000007,
+      "fim": 152.10936400000008,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/carrega.wav"
+    },
+    {
+      "id": "explodiu",
+      "voz": "narrador",
+      "inicio": 153.69730100000007,
+      "fim": 156.38918300000006,
+      "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/explodiu.wav"
+    },
+    {
+      "id": "fechou",
+      "voz": "narrador",
+      "inicio": 157.29730100000006,
+      "fim": 159.47893400000007,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/fechou.wav"
     },
     {
       "id": "semforca",
       "voz": "narrador",
-      "inicio": 147.87730100000007,
-      "fim": 151.22718800000007,
+      "inicio": 160.29730100000006,
+      "fim": 163.64718800000006,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/semforca.wav"
     },
     {
       "id": "desmaiou",
       "voz": "narrador",
-      "inicio": 151.75730100000007,
-      "fim": 154.67244800000006,
+      "inicio": 164.17730100000006,
+      "fim": 167.09244800000005,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/desmaiou.wav"
     },
     {
       "id": "coma",
       "voz": "narrador",
-      "inicio": 155.63730100000006,
-      "fim": 158.98138300000005,
+      "inicio": 168.05730100000005,
+      "fim": 171.40138300000007,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/coma.wav"
     },
     {
       "id": "kaikhosp",
       "voz": "narrador",
-      "inicio": 159.21730100000008,
-      "fim": 161.92809500000007,
+      "inicio": 171.63730100000006,
+      "fim": 174.34809500000006,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/kaikhosp.wav"
     },
     {
       "id": "naomorreu",
       "voz": "narrador",
-      "inicio": 162.7973010000001,
-      "fim": 164.82954600000008,
+      "inicio": 175.21730100000008,
+      "fim": 177.24954600000007,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/naomorreu.wav"
     },
     {
       "id": "luz",
       "voz": "narrador",
-      "inicio": 165.2095460000001,
-      "fim": 167.2310430000001,
+      "inicio": 177.6295460000001,
+      "fim": 179.6510430000001,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/luz.wav"
     },
     {
       "id": "parte",
       "voz": "narrador",
-      "inicio": 168.4795460000001,
-      "fim": 171.7946480000001,
+      "inicio": 180.8995460000001,
+      "fim": 184.2146480000001,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/chede/ep07/previa/parte.wav"
     }
   ],
@@ -3680,600 +3753,828 @@
     },
     {
       "inicio": 144.29730100000006,
-      "fim": 145.2047518103449,
+      "fim": 145.26756517910454,
       "palavras": [
         {
-          "texto": "A",
+          "texto": "O",
           "destaque": false,
           "inicio": 144.29730100000006
         },
         {
-          "texto": "FENDA",
+          "texto": "KAIK",
           "destaque": false,
-          "inicio": 144.4405827068966
+          "inicio": 144.44284062686575
         },
         {
-          "texto": "FECHOU.",
+          "texto": "OBEDECEU.",
           "destaque": false,
-          "inicio": 144.77490668965524
+          "inicio": 144.73391988059709
         }
       ]
     },
     {
-      "inicio": 145.2047518103449,
-      "fim": 145.96892091379317,
+      "inicio": 145.26756517910454,
+      "fim": 146.04377652238813,
       "palavras": [
         {
-          "texto": "E",
+          "texto": "CORREU",
           "destaque": false,
-          "inicio": 145.2047518103449
+          "inicio": 145.26756517910454
         },
         {
-          "texto": "O",
+          "texto": "ATÉ",
           "destaque": false,
-          "inicio": 145.34803351724145
-        },
-        {
-          "texto": "SILÊNCIO",
-          "destaque": false,
-          "inicio": 145.491315224138
-        }
-      ]
-    },
-    {
-      "inicio": 145.96892091379317,
-      "fim": 146.78085058620695,
-      "palavras": [
-        {
-          "texto": "VOLTOU",
-          "destaque": false,
-          "inicio": 145.96892091379317
-        },
-        {
-          "texto": "DE",
-          "destaque": false,
-          "inicio": 146.35100546551732
-        },
-        {
-          "texto": "UMA",
-          "destaque": false,
-          "inicio": 146.54204774137938
-        }
-      ]
-    },
-    {
-      "inicio": 146.78085058620695,
-      "fim": 147.21741400000005,
-      "palavras": [
-        {
-          "texto": "VEZ.",
-          "destaque": true,
-          "inicio": 146.78085058620695
-        }
-      ]
-    },
-    {
-      "inicio": 147.87730100000007,
-      "fim": 148.46579466216224,
-      "palavras": [
-        {
-          "texto": "LÁ",
-          "destaque": false,
-          "inicio": 147.87730100000007
-        },
-        {
-          "texto": "DENTRO,",
-          "destaque": false,
-          "inicio": 148.05837597297304
-        }
-      ]
-    },
-    {
-      "inicio": 148.46579466216224,
-      "fim": 149.3711695270271,
-      "palavras": [
-        {
-          "texto": "ELE",
-          "destaque": false,
-          "inicio": 148.46579466216224
-        },
-        {
-          "texto": "TENTOU",
-          "destaque": false,
-          "inicio": 148.69213837837844
-        },
-        {
-          "texto": "ABRIR",
-          "destaque": false,
-          "inicio": 149.0542883243244
-        }
-      ]
-    },
-    {
-      "inicio": 149.3711695270271,
-      "fim": 149.82385695945953,
-      "palavras": [
-        {
-          "texto": "OUTRA",
-          "destaque": false,
-          "inicio": 149.3711695270271
-        }
-      ]
-    },
-    {
-      "inicio": 149.82385695945953,
-      "fim": 150.59342559459463,
-      "palavras": [
-        {
-          "texto": "MAS",
-          "destaque": false,
-          "inicio": 149.82385695945953
-        },
-        {
-          "texto": "NÃO",
-          "destaque": false,
-          "inicio": 150.05020067567574
-        },
-        {
-          "texto": "TINHA",
-          "destaque": false,
-          "inicio": 150.27654439189195
-        }
-      ]
-    },
-    {
-      "inicio": 150.59342559459463,
-      "fim": 151.37718800000005,
-      "palavras": [
-        {
-          "texto": "MAIS",
-          "destaque": false,
-          "inicio": 150.59342559459463
-        },
-        {
-          "texto": "FORÇA.",
-          "destaque": true,
-          "inicio": 150.86503805405408
-        }
-      ]
-    },
-    {
-      "inicio": 151.75730100000007,
-      "fim": 152.2431588333334,
-      "palavras": [
-        {
-          "texto": "DESMAIOU.",
-          "destaque": false,
-          "inicio": 151.75730100000007
-        }
-      ]
-    },
-    {
-      "inicio": 152.2431588333334,
-      "fim": 153.0381989242425,
-      "palavras": [
-        {
-          "texto": "E",
-          "destaque": false,
-          "inicio": 152.2431588333334
-        },
-        {
-          "texto": "NINGUÉM",
-          "destaque": false,
-          "inicio": 152.37566551515158
-        },
-        {
-          "texto": "SABE",
-          "destaque": false,
-          "inicio": 152.77318556060612
-        }
-      ]
-    },
-    {
-      "inicio": 153.0381989242425,
-      "fim": 153.5240567575758,
-      "palavras": [
-        {
-          "texto": "O",
-          "destaque": false,
-          "inicio": 153.0381989242425
-        },
-        {
-          "texto": "QUE",
-          "destaque": false,
-          "inicio": 153.17070560606066
+          "inicio": 145.65567085074633
         },
         {
           "texto": "A",
           "destaque": false,
-          "inicio": 153.39155007575764
+          "inicio": 145.89823689552244
         }
       ]
     },
     {
-      "inicio": 153.5240567575758,
-      "fim": 154.4074346363637,
+      "inicio": 146.04377652238813,
+      "fim": 146.33485577611947,
       "palavras": [
         {
-          "texto": "CRIATURA",
+          "texto": "LIA,",
+          "destaque": true,
+          "inicio": 146.04377652238813
+        }
+      ]
+    },
+    {
+      "inicio": 146.33485577611947,
+      "fim": 147.69768600000006,
+      "palavras": [
+        {
+          "texto": "DESMAIADA",
           "destaque": false,
-          "inicio": 153.5240567575758
+          "inicio": 146.33485577611947
         },
         {
-          "texto": "FEZ",
+          "texto": "NO",
           "destaque": false,
-          "inicio": 153.96574569696975
+          "inicio": 146.86850107462692
+        },
+        {
+          "texto": "ASFALTO.",
+          "destaque": false,
+          "inicio": 147.0625539104478
+        }
+      ]
+    },
+    {
+      "inicio": 148.09730100000007,
+      "fim": 148.75908458762896,
+      "palavras": [
+        {
+          "texto": "PEGOU",
+          "destaque": false,
+          "inicio": 148.09730100000007
+        },
+        {
+          "texto": "ELA",
+          "destaque": false,
+          "inicio": 148.3868313195877
+        },
+        {
+          "texto": "NO",
+          "destaque": false,
+          "inicio": 148.59363869072175
+        }
+      ]
+    },
+    {
+      "inicio": 148.75908458762896,
+      "fim": 149.0486149072166,
+      "palavras": [
+        {
+          "texto": "COLO,",
+          "destaque": false,
+          "inicio": 148.75908458762896
+        }
+      ]
+    },
+    {
+      "inicio": 149.0486149072166,
+      "fim": 149.6690370206187,
+      "palavras": [
+        {
+          "texto": "MESMO",
+          "destaque": false,
+          "inicio": 149.0486149072166
         },
         {
           "texto": "COM",
           "destaque": false,
-          "inicio": 154.18659016666672
-        }
-      ]
-    },
-    {
-      "inicio": 154.4074346363637,
-      "fim": 154.82244800000007,
-      "palavras": [
-        {
-          "texto": "ELE.",
-          "destaque": true,
-          "inicio": 154.4074346363637
-        }
-      ]
-    },
-    {
-      "inicio": 155.63730100000006,
-      "fim": 156.47332150000008,
-      "palavras": [
-        {
-          "texto": "A",
-          "destaque": false,
-          "inicio": 155.63730100000006
+          "inicio": 149.33814522680424
         },
-        {
-          "texto": "LIA",
-          "destaque": false,
-          "inicio": 155.79405484375008
-        },
-        {
-          "texto": "TAMBÉM",
-          "destaque": false,
-          "inicio": 156.05531125000007
-        }
-      ]
-    },
-    {
-      "inicio": 156.47332150000008,
-      "fim": 156.94358303125009,
-      "palavras": [
-        {
-          "texto": "APAGOU.",
-          "destaque": false,
-          "inicio": 156.47332150000008
-        }
-      ]
-    },
-    {
-      "inicio": 156.94358303125009,
-      "fim": 158.04085993750007,
-      "palavras": [
-        {
-          "texto": "TRÊS",
-          "destaque": false,
-          "inicio": 156.94358303125009
-        },
-        {
-          "texto": "DIAS",
-          "destaque": false,
-          "inicio": 157.25709071875008
-        },
-        {
-          "texto": "DEPOIS,",
-          "destaque": false,
-          "inicio": 157.57059840625007
-        }
-      ]
-    },
-    {
-      "inicio": 158.04085993750007,
-      "fim": 159.13138300000006,
-      "palavras": [
-        {
-          "texto": "AINDA",
-          "destaque": false,
-          "inicio": 158.04085993750007
-        },
-        {
-          "texto": "EM",
-          "destaque": false,
-          "inicio": 158.40661890625006
-        },
-        {
-          "texto": "COMA.",
-          "destaque": true,
-          "inicio": 158.61562403125006
-        }
-      ]
-    },
-    {
-      "inicio": 159.21730100000008,
-      "fim": 159.66169345901648,
-      "palavras": [
         {
           "texto": "O",
           "destaque": false,
-          "inicio": 159.21730100000008
-        },
-        {
-          "texto": "KAIK,",
-          "destaque": false,
-          "inicio": 159.350618737705
+          "inicio": 149.54495259793828
         }
       ]
     },
     {
-      "inicio": 159.66169345901648,
-      "fim": 160.68379611475422,
+      "inicio": 149.6690370206187,
+      "fim": 150.4962665051548,
       "palavras": [
-        {
-          "texto": "DE",
-          "destaque": false,
-          "inicio": 159.66169345901648
-        },
         {
           "texto": "BRAÇO",
           "destaque": false,
-          "inicio": 159.83945044262305
+          "inicio": 149.6690370206187
         },
         {
-          "texto": "ENGESSADO,",
+          "texto": "QUEBRADO",
           "destaque": false,
-          "inicio": 160.15052516393453
+          "inicio": 149.95856734020634
         }
       ]
     },
     {
-      "inicio": 160.68379611475422,
-      "fim": 161.3503848032788,
-      "palavras": [
-        {
-          "texto": "NÃO",
-          "destaque": false,
-          "inicio": 160.68379611475422
-        },
-        {
-          "texto": "SAIU",
-          "destaque": false,
-          "inicio": 160.90599234426242
-        },
-        {
-          "texto": "DO",
-          "destaque": false,
-          "inicio": 161.17262781967224
-        }
-      ]
-    },
-    {
-      "inicio": 161.3503848032788,
-      "fim": 162.07809500000013,
-      "palavras": [
-        {
-          "texto": "LADO",
-          "destaque": false,
-          "inicio": 161.3503848032788
-        },
-        {
-          "texto": "DELA.",
-          "destaque": false,
-          "inicio": 161.61702027868864
-        }
-      ]
-    },
-    {
-      "inicio": 162.7973010000001,
-      "fim": 163.1957804117648,
-      "palavras": [
-        {
-          "texto": "CHEDE",
-          "destaque": false,
-          "inicio": 162.7973010000001
-        }
-      ]
-    },
-    {
-      "inicio": 163.1957804117648,
-      "fim": 163.75365158823536,
-      "palavras": [
-        {
-          "texto": "EU",
-          "destaque": false,
-          "inicio": 163.1957804117648
-        },
-        {
-          "texto": "SEI",
-          "destaque": false,
-          "inicio": 163.35517217647066
-        },
-        {
-          "texto": "QUE",
-          "destaque": false,
-          "inicio": 163.554411882353
-        }
-      ]
-    },
-    {
-      "inicio": 163.75365158823536,
-      "fim": 164.47091452941183,
-      "palavras": [
-        {
-          "texto": "VOCÊ",
-          "destaque": false,
-          "inicio": 163.75365158823536
-        },
-        {
-          "texto": "AINDA",
-          "destaque": false,
-          "inicio": 163.99273923529418
-        },
-        {
-          "texto": "NÃO",
-          "destaque": false,
-          "inicio": 164.27167482352948
-        }
-      ]
-    },
-    {
-      "inicio": 164.47091452941183,
-      "fim": 164.97954600000006,
-      "palavras": [
-        {
-          "texto": "MORREU.",
-          "destaque": true,
-          "inicio": 164.47091452941183
-        }
-      ]
-    },
-    {
-      "inicio": 165.2095460000001,
-      "fim": 165.70460648979602,
+      "inicio": 150.4962665051548,
+      "fim": 151.0753271443301,
       "palavras": [
         {
           "texto": "E",
           "destaque": false,
-          "inicio": 165.2095460000001
+          "inicio": 150.4962665051548
         },
         {
-          "texto": "NA",
+          "texto": "CORREU",
           "destaque": false,
-          "inicio": 165.3333111224491
+          "inicio": 150.62035092783523
         },
         {
-          "texto": "MÃO",
+          "texto": "O",
           "destaque": false,
-          "inicio": 165.49833128571439
+          "inicio": 150.95124272164966
         }
       ]
     },
     {
-      "inicio": 165.70460648979602,
-      "fim": 166.19966697959194,
+      "inicio": 151.0753271443301,
+      "fim": 151.8198336804126,
       "palavras": [
         {
-          "texto": "DA",
+          "texto": "MAIS",
           "destaque": false,
-          "inicio": 165.70460648979602
+          "inicio": 151.0753271443301
         },
         {
-          "texto": "LIA",
+          "texto": "LONGE",
           "destaque": false,
-          "inicio": 165.86962665306132
+          "inicio": 151.3234959896909
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 151.61302630927855
         }
       ]
     },
     {
-      "inicio": 166.19966697959194,
-      "fim": 166.85974763265318,
+      "inicio": 151.8198336804126,
+      "fim": 152.25936400000023,
       "palavras": [
         {
-          "texto": "UMA",
+          "texto": "PÔDE.",
           "destaque": false,
-          "inicio": 166.19966697959194
-        },
-        {
-          "texto": "LUZ",
-          "destaque": false,
-          "inicio": 166.40594218367357
-        },
-        {
-          "texto": "ROXA",
-          "destaque": false,
-          "inicio": 166.6122173877552
+          "inicio": 151.8198336804126
         }
       ]
     },
     {
-      "inicio": 166.85974763265318,
-      "fim": 167.38104300000012,
+      "inicio": 153.69730100000007,
+      "fim": 154.50486560000007,
       "palavras": [
         {
-          "texto": "PISCOU.",
-          "destaque": true,
-          "inicio": 166.85974763265318
+          "texto": "ATRÁS",
+          "destaque": false,
+          "inicio": 153.69730100000007
+        },
+        {
+          "texto": "DELES,",
+          "destaque": false,
+          "inicio": 154.07416448000006
         }
       ]
     },
     {
-      "inicio": 168.4795460000001,
-      "fim": 169.43389354545468,
-      "palavras": [
-        {
-          "texto": "FIM",
-          "destaque": false,
-          "inicio": 168.4795460000001
-        },
-        {
-          "texto": "DA",
-          "destaque": false,
-          "inicio": 168.7306900909092
-        },
-        {
-          "texto": "PRIMEIRA",
-          "destaque": false,
-          "inicio": 168.9316053636365
-        }
-      ]
-    },
-    {
-      "inicio": 169.43389354545468,
-      "fim": 170.0366393636365,
-      "palavras": [
-        {
-          "texto": "TEMPORADA.",
-          "destaque": false,
-          "inicio": 169.43389354545468
-        }
-      ]
-    },
-    {
-      "inicio": 170.0366393636365,
-      "fim": 170.89052927272743,
-      "palavras": [
-        {
-          "texto": "SEGUE",
-          "destaque": false,
-          "inicio": 170.0366393636365
-        },
-        {
-          "texto": "PRA",
-          "destaque": false,
-          "inicio": 170.38824109090925
-        },
-        {
-          "texto": "VER",
-          "destaque": false,
-          "inicio": 170.63938518181834
-        }
-      ]
-    },
-    {
-      "inicio": 170.89052927272743,
-      "fim": 171.79464800000017,
+      "inicio": 154.50486560000007,
+      "fim": 155.63545604000007,
       "palavras": [
         {
           "texto": "A",
           "destaque": false,
-          "inicio": 170.89052927272743
+          "inicio": 154.50486560000007
+        },
+        {
+          "texto": "FENDA",
+          "destaque": false,
+          "inicio": 154.66637852000008
+        },
+        {
+          "texto": "FECHOU",
+          "destaque": false,
+          "inicio": 155.04324200000008
+        }
+      ]
+    },
+    {
+      "inicio": 155.63545604000007,
+      "fim": 156.53918300000007,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 155.63545604000007
+        },
+        {
+          "texto": "EXPLODIU.",
+          "destaque": true,
+          "inicio": 155.79696896000007
+        }
+      ]
+    },
+    {
+      "inicio": 157.29730100000006,
+      "fim": 157.80789595744687,
+      "palavras": [
+        {
+          "texto": "DEPOIS",
+          "destaque": false,
+          "inicio": 157.29730100000006
+        }
+      ]
+    },
+    {
+      "inicio": 157.80789595744687,
+      "fim": 158.7826681489362,
+      "palavras": [
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 157.80789595744687
+        },
+        {
+          "texto": "SILÊNCIO",
+          "destaque": false,
+          "inicio": 157.94714912765963
+        },
+        {
+          "texto": "VOLTOU",
+          "destaque": false,
+          "inicio": 158.41132636170218
+        }
+      ]
+    },
+    {
+      "inicio": 158.7826681489362,
+      "fim": 159.62893400000004,
+      "palavras": [
+        {
+          "texto": "DE",
+          "destaque": false,
+          "inicio": 158.7826681489362
+        },
+        {
+          "texto": "UMA",
+          "destaque": false,
+          "inicio": 158.96833904255323
+        },
+        {
+          "texto": "VEZ.",
+          "destaque": true,
+          "inicio": 159.2004276595745
+        }
+      ]
+    },
+    {
+      "inicio": 160.29730100000006,
+      "fim": 160.88579466216223,
+      "palavras": [
+        {
+          "texto": "LÁ",
+          "destaque": false,
+          "inicio": 160.29730100000006
+        },
+        {
+          "texto": "DENTRO,",
+          "destaque": false,
+          "inicio": 160.47837597297303
+        }
+      ]
+    },
+    {
+      "inicio": 160.88579466216223,
+      "fim": 161.79116952702708,
+      "palavras": [
+        {
+          "texto": "ELE",
+          "destaque": false,
+          "inicio": 160.88579466216223
+        },
+        {
+          "texto": "TENTOU",
+          "destaque": false,
+          "inicio": 161.11213837837843
+        },
+        {
+          "texto": "ABRIR",
+          "destaque": false,
+          "inicio": 161.4742883243244
+        }
+      ]
+    },
+    {
+      "inicio": 161.79116952702708,
+      "fim": 162.24385695945952,
+      "palavras": [
+        {
+          "texto": "OUTRA",
+          "destaque": false,
+          "inicio": 161.79116952702708
+        }
+      ]
+    },
+    {
+      "inicio": 162.24385695945952,
+      "fim": 163.01342559459462,
+      "palavras": [
+        {
+          "texto": "MAS",
+          "destaque": false,
+          "inicio": 162.24385695945952
+        },
+        {
+          "texto": "NÃO",
+          "destaque": false,
+          "inicio": 162.47020067567573
+        },
+        {
+          "texto": "TINHA",
+          "destaque": false,
+          "inicio": 162.69654439189193
+        }
+      ]
+    },
+    {
+      "inicio": 163.01342559459462,
+      "fim": 163.79718800000003,
+      "palavras": [
+        {
+          "texto": "MAIS",
+          "destaque": false,
+          "inicio": 163.01342559459462
+        },
+        {
+          "texto": "FORÇA.",
+          "destaque": true,
+          "inicio": 163.28503805405407
+        }
+      ]
+    },
+    {
+      "inicio": 164.17730100000006,
+      "fim": 164.6631588333334,
+      "palavras": [
+        {
+          "texto": "DESMAIOU.",
+          "destaque": false,
+          "inicio": 164.17730100000006
+        }
+      ]
+    },
+    {
+      "inicio": 164.6631588333334,
+      "fim": 165.45819892424248,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 164.6631588333334
+        },
+        {
+          "texto": "NINGUÉM",
+          "destaque": false,
+          "inicio": 164.79566551515157
+        },
+        {
+          "texto": "SABE",
+          "destaque": false,
+          "inicio": 165.1931855606061
+        }
+      ]
+    },
+    {
+      "inicio": 165.45819892424248,
+      "fim": 165.9440567575758,
+      "palavras": [
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 165.45819892424248
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 165.59070560606065
+        },
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 165.81155007575762
+        }
+      ]
+    },
+    {
+      "inicio": 165.9440567575758,
+      "fim": 166.82743463636368,
+      "palavras": [
+        {
+          "texto": "CRIATURA",
+          "destaque": false,
+          "inicio": 165.9440567575758
+        },
+        {
+          "texto": "FEZ",
+          "destaque": false,
+          "inicio": 166.38574569696974
+        },
+        {
+          "texto": "COM",
+          "destaque": false,
+          "inicio": 166.6065901666667
+        }
+      ]
+    },
+    {
+      "inicio": 166.82743463636368,
+      "fim": 167.24244800000005,
+      "palavras": [
+        {
+          "texto": "ELE.",
+          "destaque": true,
+          "inicio": 166.82743463636368
+        }
+      ]
+    },
+    {
+      "inicio": 168.05730100000005,
+      "fim": 168.89332150000007,
+      "palavras": [
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 168.05730100000005
+        },
+        {
+          "texto": "LIA",
+          "destaque": false,
+          "inicio": 168.21405484375006
+        },
+        {
+          "texto": "TAMBÉM",
+          "destaque": false,
+          "inicio": 168.47531125000006
+        }
+      ]
+    },
+    {
+      "inicio": 168.89332150000007,
+      "fim": 169.36358303125007,
+      "palavras": [
+        {
+          "texto": "APAGOU.",
+          "destaque": false,
+          "inicio": 168.89332150000007
+        }
+      ]
+    },
+    {
+      "inicio": 169.36358303125007,
+      "fim": 170.46085993750006,
+      "palavras": [
+        {
+          "texto": "TRÊS",
+          "destaque": false,
+          "inicio": 169.36358303125007
+        },
+        {
+          "texto": "DIAS",
+          "destaque": false,
+          "inicio": 169.67709071875007
+        },
+        {
+          "texto": "DEPOIS,",
+          "destaque": false,
+          "inicio": 169.99059840625006
+        }
+      ]
+    },
+    {
+      "inicio": 170.46085993750006,
+      "fim": 171.55138300000004,
+      "palavras": [
+        {
+          "texto": "AINDA",
+          "destaque": false,
+          "inicio": 170.46085993750006
+        },
+        {
+          "texto": "EM",
+          "destaque": false,
+          "inicio": 170.82661890625005
+        },
+        {
+          "texto": "COMA.",
+          "destaque": true,
+          "inicio": 171.03562403125005
+        }
+      ]
+    },
+    {
+      "inicio": 171.63730100000006,
+      "fim": 172.08169345901646,
+      "palavras": [
+        {
+          "texto": "O",
+          "destaque": false,
+          "inicio": 171.63730100000006
+        },
+        {
+          "texto": "KAIK,",
+          "destaque": false,
+          "inicio": 171.77061873770498
+        }
+      ]
+    },
+    {
+      "inicio": 172.08169345901646,
+      "fim": 173.1037961147542,
+      "palavras": [
+        {
+          "texto": "DE",
+          "destaque": false,
+          "inicio": 172.08169345901646
+        },
+        {
+          "texto": "BRAÇO",
+          "destaque": false,
+          "inicio": 172.25945044262303
+        },
+        {
+          "texto": "ENGESSADO,",
+          "destaque": false,
+          "inicio": 172.57052516393452
+        }
+      ]
+    },
+    {
+      "inicio": 173.1037961147542,
+      "fim": 173.7703848032788,
+      "palavras": [
+        {
+          "texto": "NÃO",
+          "destaque": false,
+          "inicio": 173.1037961147542
+        },
+        {
+          "texto": "SAIU",
+          "destaque": false,
+          "inicio": 173.3259923442624
+        },
+        {
+          "texto": "DO",
+          "destaque": false,
+          "inicio": 173.59262781967223
+        }
+      ]
+    },
+    {
+      "inicio": 173.7703848032788,
+      "fim": 174.49809500000012,
+      "palavras": [
+        {
+          "texto": "LADO",
+          "destaque": false,
+          "inicio": 173.7703848032788
+        },
+        {
+          "texto": "DELA.",
+          "destaque": false,
+          "inicio": 174.03702027868863
+        }
+      ]
+    },
+    {
+      "inicio": 175.21730100000008,
+      "fim": 175.61578041176477,
+      "palavras": [
+        {
+          "texto": "CHEDE",
+          "destaque": false,
+          "inicio": 175.21730100000008
+        }
+      ]
+    },
+    {
+      "inicio": 175.61578041176477,
+      "fim": 176.17365158823534,
+      "palavras": [
+        {
+          "texto": "EU",
+          "destaque": false,
+          "inicio": 175.61578041176477
+        },
+        {
+          "texto": "SEI",
+          "destaque": false,
+          "inicio": 175.77517217647065
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 175.974411882353
+        }
+      ]
+    },
+    {
+      "inicio": 176.17365158823534,
+      "fim": 176.89091452941182,
+      "palavras": [
+        {
+          "texto": "VOCÊ",
+          "destaque": false,
+          "inicio": 176.17365158823534
+        },
+        {
+          "texto": "AINDA",
+          "destaque": false,
+          "inicio": 176.41273923529417
+        },
+        {
+          "texto": "NÃO",
+          "destaque": false,
+          "inicio": 176.69167482352947
+        }
+      ]
+    },
+    {
+      "inicio": 176.89091452941182,
+      "fim": 177.39954600000004,
+      "palavras": [
+        {
+          "texto": "MORREU.",
+          "destaque": true,
+          "inicio": 176.89091452941182
+        }
+      ]
+    },
+    {
+      "inicio": 177.6295460000001,
+      "fim": 178.124606489796,
+      "palavras": [
+        {
+          "texto": "E",
+          "destaque": false,
+          "inicio": 177.6295460000001
+        },
+        {
+          "texto": "NA",
+          "destaque": false,
+          "inicio": 177.75331112244908
+        },
+        {
+          "texto": "MÃO",
+          "destaque": false,
+          "inicio": 177.91833128571437
+        }
+      ]
+    },
+    {
+      "inicio": 178.124606489796,
+      "fim": 178.61966697959193,
+      "palavras": [
+        {
+          "texto": "DA",
+          "destaque": false,
+          "inicio": 178.124606489796
+        },
+        {
+          "texto": "LIA",
+          "destaque": false,
+          "inicio": 178.2896266530613
+        }
+      ]
+    },
+    {
+      "inicio": 178.61966697959193,
+      "fim": 179.27974763265317,
+      "palavras": [
+        {
+          "texto": "UMA",
+          "destaque": false,
+          "inicio": 178.61966697959193
+        },
+        {
+          "texto": "LUZ",
+          "destaque": false,
+          "inicio": 178.82594218367356
+        },
+        {
+          "texto": "ROXA",
+          "destaque": false,
+          "inicio": 179.0322173877552
+        }
+      ]
+    },
+    {
+      "inicio": 179.27974763265317,
+      "fim": 179.8010430000001,
+      "palavras": [
+        {
+          "texto": "PISCOU.",
+          "destaque": true,
+          "inicio": 179.27974763265317
+        }
+      ]
+    },
+    {
+      "inicio": 180.8995460000001,
+      "fim": 181.85389354545467,
+      "palavras": [
+        {
+          "texto": "FIM",
+          "destaque": false,
+          "inicio": 180.8995460000001
+        },
+        {
+          "texto": "DA",
+          "destaque": false,
+          "inicio": 181.1506900909092
+        },
+        {
+          "texto": "PRIMEIRA",
+          "destaque": false,
+          "inicio": 181.35160536363648
+        }
+      ]
+    },
+    {
+      "inicio": 181.85389354545467,
+      "fim": 182.4566393636365,
+      "palavras": [
+        {
+          "texto": "TEMPORADA.",
+          "destaque": false,
+          "inicio": 181.85389354545467
+        }
+      ]
+    },
+    {
+      "inicio": 182.4566393636365,
+      "fim": 183.31052927272742,
+      "palavras": [
+        {
+          "texto": "SEGUE",
+          "destaque": false,
+          "inicio": 182.4566393636365
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 182.80824109090923
+        },
+        {
+          "texto": "VER",
+          "destaque": false,
+          "inicio": 183.05938518181833
+        }
+      ]
+    },
+    {
+      "inicio": 183.31052927272742,
+      "fim": 184.21464800000015,
+      "palavras": [
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 183.31052927272742
         },
         {
           "texto": "TEMPORADA",
           "destaque": false,
-          "inicio": 171.04121572727288
+          "inicio": 183.46121572727287
         },
         {
           "texto": "2!",
           "destaque": true,
-          "inicio": 171.59373272727288
+          "inicio": 184.01373272727287
         }
       ]
     }

@@ -345,10 +345,12 @@
   const AGACHA = { tronco: 35, cabeca: -20, braco_d: 55, antebraco_d: -40, braco_e: 60, antebraco_e: -50, coxa_d: -70, canela_d: 110, coxa_e: -40, canela_e: 120, _desloca: [0, 0.18] };
   const PULO = { tronco: 18, cabeca: -12, braco_d: -60, antebraco_d: -70, braco_e: 50, antebraco_e: -90, coxa_d: -60, canela_d: 90, coxa_e: 30, canela_e: 40, _maos: { d: 'punho', e: 'punho' } };
   // braços do Kaik em primeira pessoa (manga marinho com faixa turquesa, punho fechado)
-  function bracosPOV(ctx, api, vel) {
+  function bracosPOV(ctx, api, vel, o = {}) {
     const f = api.t * 2 * Math.PI * (1.6 + vel * 0.6);
     for (const l of [-1, 1]) {
-      const s = Math.sin(f + (l > 0 ? Math.PI : 0)), x = 540 + l * 360 + l * s * 20, y = 1780 - s * 170 * (1 - vel * 0.6), ang = l * (0.35 - s * 0.15);
+      const quebrado = o.machucado && l > 0;
+      let s = Math.sin(f + (l > 0 ? Math.PI : 0)); if (quebrado) s = -0.6 + Math.sin(api.t * 31) * 0.03;
+      const x = 540 + l * 360 + l * s * 20, y = 1780 - s * 170 * (1 - vel * 0.6) + (o.desce || 0) * 260 + (quebrado ? 120 : 0), ang = l * (0.35 - s * 0.15);
       ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
       ctx.fillStyle = '#1F2B52'; ctx.beginPath(); ctx.roundRect(-95, -40, 190, 520, 80); ctx.fill();
       ctx.fillStyle = '#41D8CB'; ctx.fillRect(l > 0 ? -95 : 75, -10, 20, 470);
@@ -360,7 +362,35 @@
       ctx.restore();
       // aura ciano nos punhos
       brilho(ctx, x - l * 30, y - 120, 220, 0.35 * vel, '89,216,255');
+      if (quebrado) brilho(ctx, x, y + 60, 200, 0.35 + 0.15 * Math.sin(api.t * 6), '255,70,50');
     }
+  }
+  // Lia no colo do Kaik (primeira pessoa): cabeça caída para trás, braços pendurados, joelhos dobrados por cima do braço dele.
+  // k: 0 = deitada no chão … 1 = no colo. Os antebraços dele vêm de baixo da tela e passam por baixo das costas e dos joelhos dela.
+  const LIA_CHAO = { braco_d: 25, antebraco_d: 10, braco_e: -35, coxa_d: -8 };
+  const LIA_COLO = { braco_d: 85, antebraco_d: 10, braco_e: 62, antebraco_e: 15, coxa_d: -45, canela_d: 125, coxa_e: -52, canela_e: 118, cabeca: -25 };
+  function liaColo(ctx, api, x, y, L, ang, k, balanco = 0) {
+    const colo = { ...LIA_COLO, braco_d: LIA_COLO.braco_d + balanco * 8, braco_e: LIA_COLO.braco_e - balanco * 6, canela_d: LIA_COLO.canela_d + balanco * 6 };
+    const item = { ...LIA_T, pose: LIA_CHAO, pose2: colo, mistura: k, expressao: fechado(), vista: 'perfil' };
+    ctx.save(); ctx.globalAlpha = 0; ctx.translate(x, y); ctx.rotate(ang); const rig = api.personagem(item, 0, L * 0.5, L, { parado: true, semRosto: true }); ctx.restore();
+    if (k > 0.02 && rig && rig.pontoMundo) {
+      const om = rig.pontoMundo('braco_e', [0, 0.05]), jo = rig.pontoMundo('canela_d', [0, 0.02]);
+      // antebraços curtos e grossos (perto da câmera): só aparecem quando ela já está perto
+      const kb = api.clamp((k - 0.35) / 0.4, 0, 1);
+      const braco = (bx, alvo, l) => {
+        if (kb <= 0) return;
+        const by = 2040, ex = api.lerp(bx, alvo.x, kb), ey = api.lerp(2200, alvo.y + 0.05 * L, kb);
+        const ang2 = Math.atan2(ey - by, ex - bx), nx = Math.cos(ang2 + Math.PI / 2), ny = Math.sin(ang2 + Math.PI / 2);
+        ctx.save(); ctx.fillStyle = '#1F2B52'; ctx.beginPath();
+        ctx.moveTo(bx + nx * 150, by + ny * 150); ctx.lineTo(ex + nx * 80, ey + ny * 80); ctx.quadraticCurveTo(ex + Math.cos(ang2) * 90, ey + Math.sin(ang2) * 90, ex - nx * 80, ey - ny * 80); ctx.lineTo(bx - nx * 150, by - ny * 150); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = '#41D8CB'; ctx.lineWidth = 14; ctx.beginPath(); ctx.moveTo(bx + l * nx * 80, by + l * ny * 80); ctx.lineTo(ex + l * nx * 50, ey + l * ny * 50); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.beginPath(); ctx.moveTo(bx - l * nx * 20, by - l * ny * 20); ctx.lineTo(ex - l * nx * 10, ey - l * ny * 10); ctx.lineTo(ex - l * nx * 45, ey - l * ny * 45); ctx.lineTo(bx - l * nx * 70, by - l * ny * 70); ctx.fill();
+        ctx.restore();
+      };
+      braco(Math.min(260, om.x - 60), om, 1); braco(Math.max(820, jo.x + 60), jo, -1);
+    }
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); api.personagem(item, 0, L * 0.5, L, { parado: true, luz: { lado: -1, cor: 'rgb(190,160,255)', forca: 0.6 } }); ctx.restore();
+    return rig;
   }
   // parede de prédio (concreto) no plano x = Xw, de z0 a z1, com placas e uma vitrine
   function paredeConcreto(ctx, cam, Xw, z0, z1, h) {
@@ -850,12 +880,12 @@
       // os dois rostos, um em cima do outro, chorando no vento
       fundoTornado(ctx, api);
       ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, H / 2 - 6); ctx.clip();
-      const r1 = close(api, { ...KAIK_T, pose: 'parado', expressao: { ...P().medo, boca: { tipo: 'aberta', curva: -0.8, abertura: 0.03, largura: 0.05 } }, vista: 'tq' }, 560, 520, 420, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
-      lagrimas(ctx, api, r1, 1); ctx.restore();
+      const r1 = close(api, { ...KAIK_T, pose: 'parado', expressao: { ...P().medo, gota: false, boca: { tipo: 'aberta', curva: -0.8, abertura: 0.03, largura: 0.05 } }, vista: 'tq' }, 560, 520, 420, { luz: { lado: 1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
+      lagrimas(ctx, api, r1, 1, 'tq', 0.92); ctx.restore();
       ctx.fillStyle = '#0B0620'; ctx.fillRect(0, H / 2 - 6, W, 12);
       ctx.save(); ctx.beginPath(); ctx.rect(0, H / 2 + 6, W, H / 2); ctx.clip();
       const r2 = close(api, { ...CHEDE_T, pose: 'parado', expressao: { ...P().preocupado, boca: { tipo: 'linha', curva: -0.6 } }, vista: 'tq', espelhar: true }, 520, 1330, 420, { luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
-      lagrimas(ctx, api, r2, 1); ctx.restore();
+      lagrimas(ctx, api, r2, 1, 'tq', 0.94); ctx.restore();
       vento(ctx, api, 0.8, 540, 300);
     },
     solta(ctx, u, d, api) { maoDada(ctx, api, 1); },
@@ -869,11 +899,91 @@
       if (k < 0.95) { ctx.save(); ctx.globalAlpha = 1 - api.clamp((k - 0.7) / 0.25, 0, 1); api.personagem3d(cam, { ...CHEDE_T, pose: { braco_d: 160, braco_e: 150, coxa_d: -30, canela_d: 40 }, expressao: 'medo' }, 0.6, Zc, 1.75 * (1 - 0.8 * Math.max(0, k - 0.5) * 2), { luz: { lado: -1, cor: 'rgb(200,160,255)', forca: 0.9 }, y: Y, rumo: Math.PI, parado: true }); ctx.restore(); }
       vento(ctx, api, 1, fq.x, fq.y);
     },
+    // NOVO (usuário 14/11): o Kaik obedece, corre até a Lia desmaiada, pega ela no colo e foge — em primeira pessoa
+    pegalia(ctx, u, d, api) {
+      const chega = fr(api, 0, 0.85, 'sai'), olha = fr(api, 0.55, 1, 'entra'), Zl = 12;
+      const Zc = api.lerp(Zl - 15, Zl - 1.7, chega), bob = Math.sin(api.t * 2 * Math.PI * 2.2) * 0.07 * (1 - chega);
+      const cam = api.camera({ f: 900, x: 0.4 + Math.sin(api.t * 1.7) * 0.08 * (1 - chega), y: 1.55 + bob, z: Zc, cy: 960 - 520 * olha, nevoa: NEV, distNevoa: 70 });
+      const [tx, ty] = api.tremor(9); ctx.save(); ctx.translate(tx, ty);
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15, destruicao: 0.8 });
+      const fq = cam.p(-2, 15, 45); if (fq.dz > 1) { tornado(ctx, api, fq.x, fq.y, 900, 1); Efeitos.fenda(ctx, fq.x, fq.y, 22 * fq.s, { t: api.t, abre: 1, semente: 8 }); brilho(ctx, fq.x, fq.y, 18 * fq.s, 0.4, '190,150,255'); }
+      const q = cam.p(0.4, 0, Zl);
+      if (q.dz > 0.6) { Cena3D.sombraChao(ctx, cam, 0.4, Zl, 1.6, 0.6); liaColo(ctx, api, q.x, q.y - 0.13 * q.s, 1.65 * q.s, -Math.PI / 2, 0); }
+      ctx.restore();
+      vento(ctx, api, 0.6, 540, 200);
+      bracosPOV(ctx, api, 0.25 * (1 - chega), { machucado: true, desce: olha });
+    },
+    carrega(ctx, u, d, api) {
+      const k = u / d, ergue = fr(api, 0.05, 0.38, 'sai');
+      if (k < 0.4) {
+        // olhando para baixo: os braços passam por baixo dela e erguem (o braço quebrado dói)
+        const cam = api.camera({ f: 900, x: 0.4, y: 1.55, z: 10.3, cy: 440, nevoa: NEV, distNevoa: 70 });
+        const [tx, ty] = api.tremor(ergue > 0.3 && ergue < 0.8 ? 12 : 3); ctx.save(); ctx.translate(tx, ty);
+        cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15, destruicao: 0.8 });
+        const q = cam.p(0.4, 0, 12), x = api.lerp(q.x, 560, ergue), y = api.lerp(q.y - 0.13 * q.s, 1560, ergue), L = api.lerp(1.65 * q.s, 1000, ergue);
+        liaColo(ctx, api, x, y, L, -Math.PI / 2 + 0.25 * ergue, ergue);
+        ctx.restore();
+        if (ergue > 0.35 && ergue < 0.75) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; brilho(ctx, 820, 1700, 260, 0.6 * Math.sin((ergue - 0.35) / 0.4 * Math.PI), '255,70,50'); ctx.restore(); }
+        vento(ctx, api, 0.6, 540, 200);
+        return;
+      }
+      // correndo com ela no colo, o mais longe possível (a fenda fica para trás)
+      const v = fr(api, 0.4, 0.7), Zc = 30 + (u - 0.4 * d) * 38, bob = Math.sin(api.t * 2 * Math.PI * 2.3);
+      const cam = api.camera({ f: 820, x: Math.sin(api.t * 1.4) * 0.12, y: 1.6 + bob * 0.05, z: Zc, cy: 900 + bob * 10, nevoa: NEV, distNevoa: 80 });
+      const camada = api.camada(), g = camada.getContext('2d');
+      cidade(g, api, cam, { zApaga: 0, acesas: 0.15, destruicao: 0.6 });
+      ctx.drawImage(camada, 0, 0);
+      for (let i = 1; i <= 4; i++) { const s = 1 + i * 0.015 * v; ctx.save(); ctx.globalAlpha = 0.3 * v; ctx.translate(540, 900); ctx.scale(s, s); ctx.translate(-540, -900); ctx.drawImage(camada, 0, 0); ctx.restore(); }
+      linhasVel(ctx, 540, 900, 0.5 * v, api.t);
+      // luz roxa crescendo atrás dele (vai explodir)
+      ctx.save(); const gv = ctx.createRadialGradient(540, 960, 450, 540, 960, 1200); gv.addColorStop(0, 'rgba(170,110,255,0)'); gv.addColorStop(1, `rgba(170,110,255,${0.15 + 0.35 * fr(api, 0.5, 1)})`); ctx.fillStyle = gv; ctx.fillRect(0, 0, W, H); ctx.restore();
+      liaColo(ctx, api, 560, 1560 + bob * 22, 1000, -Math.PI / 2 + 0.25, 1, bob);
+      vento(ctx, api, 0.4, 540, 300);
+    },
+    explodiu(ctx, u, d, api) {
+      // de longe: a fenda se fecha num ponto e explode; o rastro do Kaik foge na frente da onda
+      const k = u / d, fecha = fr(api, 0, 0.3, 'entra'), boom = fr(api, 0.3, 1, 'sai'), bt = Math.max(0, u - 0.3 * d);
+      const [tx, ty] = api.tremor(k > 0.3 ? 34 * Math.max(0, 1 - bt / 1.5) : 6 * fecha);
+      ctx.save(); ctx.translate(tx, ty);
+      const cam = api.camera({ f: 900, x: 0, y: 4, z: -22, cy: 1250, nevoa: NEV, distNevoa: 100 });
+      cidade(ctx, api, cam, { zApaga: k > 0.3 ? 0 : 999, acesas: k > 0.3 ? 0 : 0.15, destruicao: 0.8 });
+      const C = [0, 12, 22], fq = cam.p(...C);
+      if (k < 0.3) {
+        tornado(ctx, api, fq.x, fq.y, 700 * (1 - fecha) + 50, 1 - fecha);
+        Efeitos.fenda(ctx, fq.x, fq.y, 20 * fq.s * (1 - fecha) + 4, { t: api.t, abre: 1, semente: 8 });
+        brilho(ctx, fq.x, fq.y, 60 + 300 * fecha, 0.4 + 0.6 * fecha, '220,190,255');
+      }
+      const R = k < 0.3 ? 0 : 6 + boom * 110;
+      // rastro do Kaik correndo (sempre na frente da onda)
+      const Zk = Math.min(api.lerp(10, -16, fr(api, 0, 1)), C[2] - R - 4);
+      { const a = cam.p(0.6, 0.9, Zk + 14), b = cam.p(0.6, 0.9, Zk); if (a.dz > 1 && b.dz > 1) rastro(ctx, a.x, a.y, b.x, b.y, 0.9 * b.s, 1); brilho(ctx, b.x, b.y, 1.5 * b.s, 0.6, '89,216,255'); }
+      if (R > 0) {
+        const c = cam.p(C[0], C[1], C[2]), e = cam.p(C[0] + Math.min(R, 35), C[1], C[2]), rp = Math.abs(e.x - c.x), al = 1 - boom * 0.7;
+        // coluna de luz subindo
+        ctx.save(); ctx.globalCompositeOperation = 'lighter'; const gc = ctx.createLinearGradient(c.x - 120, 0, c.x + 120, 0); gc.addColorStop(0, 'rgba(200,150,255,0)'); gc.addColorStop(0.5, `rgba(240,225,255,${0.7 * al})`); gc.addColorStop(1, 'rgba(200,150,255,0)'); ctx.fillStyle = gc; ctx.fillRect(c.x - 120 - 200 * boom, 0, 240 + 400 * boom, c.y); ctx.restore();
+        ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        const gd = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, rp * 1.25); gd.addColorStop(0, `rgba(255,250,255,${al})`); gd.addColorStop(0.35, `rgba(200,150,255,${0.8 * al})`); gd.addColorStop(0.8, `rgba(120,60,230,${0.45 * al})`); gd.addColorStop(1, 'rgba(120,60,230,0)');
+        ctx.fillStyle = gd; ctx.beginPath(); ctx.arc(c.x, c.y, rp * 1.25, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        // anel de choque correndo pelo chão
+        const g0 = cam.p(C[0], 0, C[2]), gA = cam.p(C[0], 0, Math.max(cam.z + 2, C[2] - R)), gB = cam.p(C[0], 0, C[2] + R), gx = cam.p(C[0] + R, 0, C[2]);
+        ctx.save(); ctx.strokeStyle = `rgba(230,210,255,${0.9 * al})`; ctx.lineWidth = 30 * al + 4;
+        ctx.beginPath(); ctx.ellipse(g0.x, (gA.y + gB.y) / 2, Math.abs(gx.x - g0.x), Math.abs(gA.y - gB.y) / 2, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+        nuvem(ctx, cam, C[0], 0, C[2], boom, Math.min(R, 40) * 0.6, 3, '150,110,200', 0.55);
+        estilhacos(ctx, cam, C[0], 4, C[2], bt, 60, 12, { v: 22, dir: [0, 0.5, -0.4], tam: 0.8, g: 6 });
+        for (let j = 0; j < 6; j++) { const s = j % 2 ? 1 : -1, z0 = C[2] - R * 0.7 + j * 5; estilhacos(ctx, cam, s * 9.7, 6 + j * 3, z0, 0.1 + (bt % 0.8), 12, 50 + j, { v: 7, dir: [-s * 0.8, 0.3, -0.5], tam: 0.3, cor: 'rgba(170,220,255,0.75)', g: 4 }); }
+      }
+      ctx.restore();
+      if (k > 0.3 && k < 0.36) quadroImpacto(ctx, fq.x, fq.y, 13);
+      else if (k >= 0.36) clarao(ctx, 0.7 * Math.max(0, 1 - (k - 0.36) / 0.25), '235,220,255');
+      brasas(ctx, api, 40, 1);
+    },
     fechou(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 3, 12], raio: 12, ang: api.lerp(0.1, 0.25, u / d), altura: 1.8, ySalvo: 1050 });
       cidade(ctx, api, cam, { zApaga: api.lerp(0, 70, fr(api, 0.3, 1)), acesas: api.lerp(0.15, 1, fr(api, 0.3, 1)) });
-      const fq = cam.p(0, 12, 22); Efeitos.fenda(ctx, fq.x, fq.y, 20 * fq.s, { t: api.t, abre: 1 - fr(api, 0, 0.2), semente: 8 });
-      if (u < 0.2 * d + 0.05) { ctx.fillStyle = `rgba(233,220,255,${1 - fr(api, 0.15, 0.3)})`; ctx.fillRect(0, 0, W, H); }
+      nuvem(ctx, cam, 0, 0, 22, 0.5 + 0.5 * fr(api, 0, 1), 30, 3, '90,70,130', 0.5);
+      if (u < 0.3 * d) clarao(ctx, 0.5 * (1 - fr(api, 0, 0.3)), '200,170,255');
+      brasas(ctx, api, 50, 1 - 0.5 * fr(api, 0, 1));
     },
     semforca(ctx, u, d, api) {
       const cam = api.orbita({ alvo: [0, 0.7, 0], raio: api.lerp(2.6, 2.1, u / d), ang: api.lerp(-0.4, -0.1, u / d), altura: 1.1, f: 1100, ySalvo: 1000 });
@@ -1010,16 +1120,33 @@
     const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#2A0E5C'); g.addColorStop(0.5, '#170A36'); g.addColorStop(1, '#0B0620'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     tornado(ctx, api, 540, 260, 1100, 1); Efeitos.fenda(ctx, 540, 240, 1300, { t: api.t, abre: 1, semente: 8 });
   }
-  // lágrimas escorrendo dos dois olhos (e voando para cima com o vento)
-  function lagrimas(ctx, api, rig, forca) {
+  // lágrimas escorrendo pela bochecha, saindo da pálpebra de baixo de cada olho visível.
+  // A posição do olho segue a cabeça do rig: x = projeção de (sep · r/0,48) girada pelo ângulo da vista (frente 0°, 3/4 45°), y = −0,37.
+  function lagrimas(ctx, api, rig, forca, vista = 'frente', cl = 0.92) {
     if (!rig || !rig.pontoMundo) return;
-    for (const sx of [-0.19, 0.19]) {
-      const o = rig.pontoMundo('cabeca', [sx, -0.33]), b = rig.pontoMundo('cabeca', [sx * 1.05, -0.12]);
-      const L = Math.hypot(b.x - o.x, b.y - o.y);
-      ctx.save(); ctx.lineCap = 'round';
-      ctx.strokeStyle = `rgba(190,225,255,${0.75 * forca})`; ctx.lineWidth = Math.max(3, L * 0.09);
-      ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.quadraticCurveTo(o.x + (b.x - o.x) * 0.4 + 4, o.y + (b.y - o.y) * 0.5, b.x, b.y); ctx.stroke();
-      for (let k = 0; k < 3; k++) { const f = ((api.t * 1.4 + k / 3 + (sx > 0 ? 0.5 : 0)) % 1); ctx.fillStyle = `rgba(210,235,255,${(1 - f) * forca})`; ctx.beginPath(); ctx.ellipse(o.x + f * L * 0.2, o.y - f * L * 1.2, L * 0.07, L * 0.11, 0, 0, Math.PI * 2); ctx.fill(); }
+    const r = cl / 2, sx = r / 0.48, rr = r * 0.92, th = vista === 'tq' ? Math.PI / 4 : 0;
+    const a0 = rig.pontoMundo('cabeca', [0, 0]), a1 = rig.pontoMundo('cabeca', [0, 0.1]), un = Math.hypot(a1.x - a0.x, a1.y - a0.y) * 10;
+    for (const s of [-1, 1]) {
+      const a = Math.asin(Math.max(-1, Math.min(1, (0.19 * sx * s) / rr))) + th; if (Math.cos(a) < 0.35) continue;
+      const ex = rr * Math.sin(a), sai = 0.012 * Math.sign(ex || s);
+      const loc = [[ex, -0.305], [ex + sai * 0.6, -0.265], [ex + sai * 1.2, -0.22], [ex + sai * 1.4, -0.175], [ex + sai * 1.2, -0.13]];
+      const P2 = loc.map((q) => rig.pontoMundo('cabeca', q));
+      ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      // olho molhado: brilho na pálpebra de baixo
+      ctx.strokeStyle = `rgba(200,235,255,${0.7 * forca})`; ctx.lineWidth = Math.max(2, 0.012 * un);
+      const l0 = rig.pontoMundo('cabeca', [ex - 0.045, -0.315]), l1 = rig.pontoMundo('cabeca', [ex + 0.045, -0.315]);
+      ctx.beginPath(); ctx.moveTo(l0.x, l0.y); ctx.quadraticCurveTo(P2[0].x, P2[0].y + 0.01 * un, l1.x, l1.y); ctx.stroke();
+      // trilho da lágrima
+      const caminho = () => { ctx.beginPath(); ctx.moveTo(P2[0].x, P2[0].y); for (let i = 1; i < P2.length - 1; i++) ctx.quadraticCurveTo(P2[i].x, P2[i].y, (P2[i].x + P2[i + 1].x) / 2, (P2[i].y + P2[i + 1].y) / 2); ctx.lineTo(P2[P2.length - 1].x, P2[P2.length - 1].y); };
+      ctx.strokeStyle = `rgba(150,200,240,${0.55 * forca})`; ctx.lineWidth = Math.max(3, 0.02 * un); caminho(); ctx.stroke();
+      ctx.strokeStyle = `rgba(240,250,255,${0.85 * forca})`; ctx.lineWidth = Math.max(1, 0.006 * un); caminho(); ctx.stroke();
+      // gota descendo e pingando do rosto
+      const f = (api.t * 0.8 + (s > 0 ? 0.45 : 0)) % 1;
+      let gx, gy, al = forca;
+      if (f < 0.7) { const t = f / 0.7, i = Math.min(P2.length - 2, Math.floor(t * (P2.length - 1))), tt = t * (P2.length - 1) - i; gx = P2[i].x + (P2[i + 1].x - P2[i].x) * tt; gy = P2[i].y + (P2[i + 1].y - P2[i].y) * tt; }
+      else { const t = (f - 0.7) / 0.3, e = P2[P2.length - 1]; gx = e.x; gy = e.y + t * t * 0.5 * un; al = forca * (1 - t); }
+      ctx.fillStyle = `rgba(200,235,255,${0.95 * al})`; ctx.beginPath(); ctx.moveTo(gx, gy - 0.03 * un); ctx.quadraticCurveTo(gx + 0.016 * un, gy, gx, gy + 0.014 * un); ctx.quadraticCurveTo(gx - 0.016 * un, gy, gx, gy - 0.03 * un); ctx.fill();
+      ctx.fillStyle = `rgba(255,255,255,${al})`; ctx.beginPath(); ctx.arc(gx - 0.004 * un, gy - 0.004 * un, Math.max(1, 0.004 * un), 0, Math.PI * 2); ctx.fill();
       ctx.restore();
     }
   }
@@ -1027,10 +1154,10 @@
   function closeChoro(ctx, api, item, quem) {
     fundoTornado(ctx, api);
     const z = api.lerp(1, 1.08, api.u / api.dur); ctx.save(); ctx.translate(540, 900); ctx.scale(z, z); ctx.translate(-540, -900);
-    const ex = quem === 'kaik' ? { ...P().medo, boca: { tipo: 'aberta', curva: -0.9, abertura: 0.04, largura: 0.055 } } : { ...P().preocupado, boca: { tipo: 'aberta', curva: -0.5, abertura: 0.025, largura: 0.05 } };
+    const ex = quem === 'kaik' ? { ...P().medo, gota: false, boca: { tipo: 'aberta', curva: -0.9, abertura: 0.04, largura: 0.055 } } : { ...P().preocupado, boca: { tipo: 'aberta', curva: -0.5, abertura: 0.025, largura: 0.05 } };
     const rig = close(api, { ...item, pose: 'parado', expressao: ex, voz: quem === 'kaik' ? 'amigo' : 'lucas' }, 540, 900, 560, { luz: { lado: quem === 'kaik' ? 1 : -1, cor: 'rgb(200,160,255)', forca: 0.9 }, vida: 2.5 });
     ctx.restore();
-    lagrimas(ctx, api, rig, 1);
+    lagrimas(ctx, api, rig, 1, 'frente', quem === 'kaik' ? 0.92 : 0.94);
     vento(ctx, api, 0.9, 540, 260);
   }
   // as duas mãos: fase 0 = segurando firme (o Chede puxado para cima), 1 = solta em câmera lenta e o Chede some

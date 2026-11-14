@@ -75,7 +75,10 @@
 | 38 | Os dois **chorando**. | Close dos dois rostos, lágrimas voando com o vento. |
 | 39 | Ele soltou a mão do amigo: "**Corre**!" | As mãos se soltando em câmera lenta; o Chede some na fenda gritando; o Kaik cai para trás. |
 | 40 | E foi puxado junto com a **criatura**. | A criatura solta a borda e cai junto; os dois somem no roxo. |
-| 41 | A fenda fechou. E o silêncio voltou de uma **vez**. | Corte seco; o som some; as luzes da cidade voltam uma a uma. |
+| 40a | O Kaik obedeceu. Correu até a **Lia**, desmaiada no asfalto. | (usuário, 14/11) Primeira pessoa: correndo pela avenida até a Lia caída; a fenda puxando no céu; o braço quebrado parado, doendo. |
+| 40b | Pegou ela no colo, mesmo com o braço **quebrado**… e correu o mais longe que pôde. | Primeira pessoa: os braços passam por baixo dela e erguem (o braço quebrado dói, com brilho vermelho); depois corre com ela no colo, com luz roxa crescendo atrás. |
+| 40c | Atrás deles, a fenda fechou… e **explodiu**. | De longe: a fenda se fecha num ponto e explode (coluna de luz, onda de choque, pedaços, vidros); o rastro ciano do Kaik foge na frente da onda. |
+| 41 | Depois… o silêncio voltou de uma **vez**. | A poeira baixa; brasas roxas caindo; as luzes da cidade voltam uma a uma. |
 | 42 | Lá dentro, ele tentou abrir outra… mas não tinha mais **força**. | Outro lugar: o Chede de joelhos; só uma faísca roxa na luva. |
 | 43 | Desmaiou. E ninguém sabe o que a criatura fez com **ele**. | O Chede caído; ao fundo, dois olhos se acendem e chegam perto. Escuro. |
 | 44 | A Lia também apagou. Três dias depois, ainda em **coma**. | Hospital: Lia na cama, monitor; "3 DIAS". |
@@ -105,4 +108,5 @@
 - [x] Engajamento: dois selos no meio e chamada no fim ("temporada 2")
 - [x] O Regente não aparece (só o anel dourado na mulher do governo)
 - [x] Gancho para a 2ª temporada: o Chede está vivo lá dentro? A luz roxa na mão da Lia? Quem mandou o governo pedir ajuda?
+- [x] Fuga com a Lia no colo em primeira pessoa e explosão da fenda (pedido do usuário, 14/11: "não tem problema se o vídeo ficar muito longo").
 - [x] **Aprovado pelo usuário (14/11)**: "Ss A FENDA". Sacrifício reescrito com a cena do usuário (mão dada, falas, choro, "Corre!").

@@ -543,16 +543,80 @@
       ]
     },
     {
+      "id": "pegalia",
+      "fala": {
+        "texto": "O Kaik obedeceu. Correu até a Lia, desmaiada no asfalto.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "LIA,"
+      ],
+      "duracao": 3.8,
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "de": 0,
+          "ate": 3.8,
+          "volume": 0.8
+        }
+      ]
+    },
+    {
+      "id": "carrega",
+      "fala": {
+        "texto": "Pegou ela no colo, mesmo com o braço quebrado... e correu o mais longe que pôde.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "QUEBRADO..."
+      ],
+      "duracao": 5.6,
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 1.2,
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "explodiu",
+      "fala": {
+        "texto": "Atrás deles, a fenda fechou... e explodiu.",
+        "voz": "narrador",
+        "velocidade": 185
+      },
+      "destaque": [
+        "EXPLODIU."
+      ],
+      "duracao": 3.6,
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 1.08,
+          "volume": 1.5
+        },
+        {
+          "tipo": "ronco",
+          "de": 1.0,
+          "ate": 3.6,
+          "volume": 1.4
+        }
+      ]
+    },
+    {
       "id": "fechou",
       "fala": {
-        "texto": "A fenda fechou. E o silêncio voltou de uma vez.",
+        "texto": "Depois... o silêncio voltou de uma vez.",
         "voz": "narrador",
         "velocidade": 195
       },
       "destaque": [
         "VEZ."
       ],
-      "duracao": 3.58
+      "duracao": 3.0
     },
     {
       "id": "semforca",

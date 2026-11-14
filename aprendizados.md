@@ -224,3 +224,13 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   Fundo claro e chapado ficou feio.
 - **Braço machucado = gesso + tipoia desenhados sobre o rig** (usuário: "as mãos estão bugadas" no Kaik de costas). Pose com os braços soltos; o gesso fica no antebraço (`antebraco_d` → `mao_d`), a faixa vai até o pescoço e, de costas, só aparece a faixa cruzando as costas. Antebraço dobrado de costas deixa a mão torta.
 - **Ser sugado pela fenda = encolher e sumir no centro dela, nunca passar por cima da borda** (usuário: "ele passa por cima do portal"). O personagem vai para o centro da fenda encolhendo, girando e ganhando luz roxa, e no fim vem um clarão roxo. Não desenhar o grito ("CORRE!") se a legenda já mostra a mesma palavra.
+- **Lágrima sai do olho de verdade**. O usuário reclamou da lágrima errada no close dos dois chorando, de 3/4. Como desenhar:
+  - a posição do olho segue a conta da cabeça do rig: `x = r·0,92·sin(asin(0,19·sx/(r·0,92)) + ângulo da vista)`, `y = −0,37`, com frente 0° e 3/4 45°. `pontoMundo` já devolve a coordenada final da tela, então desenhar FORA da transformação do close;
+  - a lágrima escorre da pálpebra de baixo pela bochecha, com uma gota que desce e pinga; nunca para cima;
+  - tirar a gota de suor da expressão `medo` (`gota: false`), que na testa parece lágrima.
+- **Sacrifício com fuga** (usuário, 14/11): depois do "Corre!", o Kaik corre até a Lia desmaiada, pega ela no colo mesmo com o braço quebrado (custo, com brilho vermelho de dor) e foge. A fenda fecha e explode atrás deles. Tudo em primeira pessoa: os braços dele aparecem embaixo da tela e ela fica atravessada no colo. O vídeo pode passar de 3 min no final de temporada.
+- **Colo em primeira pessoa** (usuário: "tá estranho" e depois "a mão dele ficou longa demais"). Como desenhar:
+  - pose de colo de verdade: cabeça caída para trás, braços pendurados, joelhos dobrados por cima do braço dele e canelas penduradas (`LIA_COLO` no ep07.js; perfil girado −90°+0,25);
+  - os braços de quem carrega aparecem só como antebraços curtos e grossos saindo do pé da tela, por baixo das costas e dos joelhos;
+  - nunca braços compridos indo longe, nem dedos soltos por cima;
+  - os braços só aparecem quando ela já está perto da câmera.
