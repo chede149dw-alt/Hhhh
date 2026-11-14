@@ -91,7 +91,7 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
 - Render final: `cd animacao-do-chede && node motor/video.js roteiros/chede/ep06.json roteiros/chede/ep06.js ../prontos/parte-6-mesmo-poder.mp4 --workers 4` (~3 min).
 - Próximo: Parte 7 — o que saiu da fenda (marcas de mão pretas indo para a cidade).
 
-## Parte 7 — "A FENDA · PARTE FINAL" (final da 1ª temporada, EM PRÉVIA)
+## Parte 7 — "A FENDA · PARTE FINAL" (final da 1ª temporada, ENTREGUE 14/11)
 - Roteiro aprovado: `roteiros/parte-7-final-temporada.md`. Os planos estão em `animacao-do-chede/roteiros/chede/ep07.{json,js}`; são 49 planos, ~2min50.
 - Prévia 1: `animacao-do-chede/previas/a-fenda-final-previa.mp4`. O usuário pediu (14/11):
   - cenário 3D bonito para a batalha (a criatura aparecia dentro da árvore);
@@ -116,3 +116,12 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
   - lágrimas certas;
   - sequência nova depois do "Corre!": o Kaik corre até a Lia, pega ela no colo (primeira pessoa) e foge, e a fenda fecha e explode;
   - colo refeito, com braços curtos.
+- Aprovada pelo usuário (14/11: "ficou ótimo, pode gerar versão final").
+- Final: `prontos/a-fenda-parte-final.mp4` (3min15, 1080x1920, −16,1 LUFS, sem congelamentos) + capa `prontos/a-fenda-parte-final-capa.png` + post `roteiros/a-fenda-parte-final-post.md`.
+- Vozes (ElevenLabs v4): Witalo narra (take B, acerto 0,958); Kaik = Wesley Bessa; Chede = Nick Storyteller Prime. Cortes em `animacao-do-chede/audio/chede/ep07/vozes/final/`.
+- Som: 14 efeitos do ElevenLabs em `audio/chede/ep07/brutos/sfx_*.mp3`; trilha original `audio/chede/ep07/trilha.mp3`, feita por `animacao-do-chede/scripts/trilha_ep07.py`, que o motor abaixa embaixo da voz.
+- Render final: `cd animacao-do-chede && node motor/video.js roteiros/chede/ep07.json roteiros/chede/ep07.js ../prontos/a-fenda-parte-final.mp4 --workers 4` e depois recomprimir com CRF 21 para ficar abaixo de 100 MB (limite do GitHub).
+- FIM DA 1ª TEMPORADA. Ganchos para a 2ª temporada:
+  - o Chede está vivo dentro da fenda?
+  - a luz roxa na mão da Lia;
+  - quem controla a mulher do governo (anel dourado).

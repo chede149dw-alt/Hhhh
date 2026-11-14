@@ -129,6 +129,16 @@ for (const p of planos) {
   for (const b of p.batidas) addSfx(sfxArq.coracao, p.inicio + b, 1.1);
   for (const s of p.sfx) {
     if (s.tipo === 'impacto') addSfx(sfxArq.impacto, p.inicio + (s.em || 0), s.volume || 1.0);
+    // efeito de arquivo (ElevenLabs etc.), relativo a audio/<serie>/<ep>/: { tipo: 'arquivo', arquivo, em, volume, dur (repete até dur), fade }
+    if (s.tipo === 'arquivo') {
+      let arq = path.join(raiz, 'audio', serie, nomeEp, s.arquivo);
+      if (s.dur) {
+        const lp = path.join(pastaAudio, `sfx-loop-${p.id}-${nSfx}.wav`), fd = Math.min(s.fade === undefined ? 0.5 : s.fade, s.dur / 3);
+        execFileSync('ffmpeg', ['-v', 'error', '-y', '-stream_loop', '-1', '-i', arq, '-t', s.dur.toFixed(2), '-af', `afade=t=in:d=${fd.toFixed(2)},afade=t=out:st=${(s.dur - fd).toFixed(2)}:d=${fd.toFixed(2)}`, '-ar', '48000', '-ac', '1', lp]);
+        arq = lp;
+      }
+      addSfx(arq, p.inicio + (s.em || 0), s.volume === undefined ? 1.0 : s.volume);
+    }
     if (s.tipo === 'ronco') {
       const de = s.de || 0, ate = Math.min(p.fim - p.inicio, s.ate === undefined ? p.fim - p.inicio : s.ate), d = ate - de;
       const arq = path.join(pastaAudio, `sfx-ronco-${p.id}.wav`);
@@ -137,8 +147,18 @@ for (const p of planos) {
     }
   }
 }
+// trilha (roteiro.trilha = { arquivo, volume }): abaixa sozinha quando há fala (sidechain com as vozes)
+if (roteiro.trilha && !args.includes('--previa')) {
+  const vozes = falas.map((_, i) => `[f${i}]`).join('');
+  const resto = mix.slice(vozes.length);
+  const kt = entradas.length / 2; entradas.push('-i', path.join(raiz, 'audio', serie, nomeEp, roteiro.trilha.arquivo));
+  filtros.push(`${vozes}amix=inputs=${falas.length}:normalize=0,asplit=2[vz][vzsc]`);
+  filtros.push(`[${kt}]aformat=channel_layouts=mono,aresample=48000,volume=${roteiro.trilha.volume || 0.5}[tr0]`);
+  filtros.push(`[tr0][vzsc]sidechaincompress=threshold=0.02:ratio=6:attack=30:release=450:makeup=1[tr]`);
+  mix = '[vz]' + resto + '[tr]';
+}
 const n = mix.match(/\[/g).length;
-filtros.push(`${mix}amix=inputs=${n}:normalize=0,apad,atrim=0:${total.toFixed(3)},loudnorm=I=-16:TP=-1.5[a]`);
+filtros.push(`${mix}amix=inputs=${n}:normalize=0,apad,atrim=0:${total.toFixed(3)},alimiter=limit=0.89,loudnorm=I=-16:TP=-1.5[a]`);
 const audioFinal = path.join(pastaAudio, 'mix.wav');
 execFileSync('ffmpeg', ['-v', 'error', '-y', ...entradas, '-filter_complex', filtros.join(';'), '-map', '[a]', '-ar', '48000', audioFinal]);
 

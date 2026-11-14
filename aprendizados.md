@@ -234,3 +234,7 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   - os braços de quem carrega aparecem só como antebraços curtos e grossos saindo do pé da tela, por baixo das costas e dos joelhos;
   - nunca braços compridos indo longe, nem dedos soltos por cima;
   - os braços só aparecem quando ela já está perto da câmera.
+- **Final com som caprichado, sem volume alto** (usuário, 14/11: "coloca os efeitos sonoros também, a trilha sonora e capricha… só cuidado para não ficar tão alto"). Como montar:
+  - **Efeitos sonoros:** gerados no ElevenLabs (`eleven_text_to_sound_v2`, 1 variação cada: explosão, soco, parede, vidro, tornado, rugido, estrondo sônico, monitor, faíscas, fenda, cidade, whoosh, pulo). Entram no roteiro como `sfx { tipo: 'arquivo', arquivo, em, volume, dur }` sincronizados com as frações das cenas; `dur` repete o som, para ambientes como o tornado e o monitor. Baixar só depois de TODOS terminarem: um efeito ainda gerando faltou e travou o render.
+  - **Trilha:** este conector não gera música, então ela é composta por código (`animacao-do-chede/scripts/trilha_ep07.py`), seção por seção, a partir das durações dos planos. Fica em −20 LUFS com compressão leve, e o motor ainda abaixa a trilha embaixo da voz (`roteiro.trilha`, com sidechain). O mix final fica em −16 LUFS.
+  - **Vozes dos personagens:** Kaik = Wesley Bessa, Chede = Nick Storyteller Prime, ambos com tags de choro do v4; Witalo narra. Duas falas na mesma geração são cortadas pelo tempo das palavras (whisper), nunca pelo "maior silêncio", que cortou no lugar errado.

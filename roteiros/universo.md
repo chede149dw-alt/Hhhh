@@ -62,3 +62,26 @@ Tudo o que já aconteceu e o que ficou em aberto. Ler antes de escrever qualquer
 - **Lia Moraes** (ficha proposta em `personagens/lia/ficha-lia.png`): aluna que sumiu há 2 anos; com o tempo lento lá dentro, quase não envelheceu.
 - **"O Coletor"**: criatura do outro lugar (cega, caça por som/calor, empilha as coisas, quer sair). O usuário disse que ela "veio junto com o poder do Chede" — falta definir se ela dá o poder (antes era da Lia) ou se nasceu com o poder dele.
 - A regra antiga "8× mais rápido lá dentro" foi descartada; vale a do tempo lento.
+
+## Parte 6 · "E se alguém tivesse o mesmo poder que você?" (entregue)
+- Quem esperava era a **Lia Moraes**, dona do gato (Pipoca), com a mesma fenda roxa. Duas fendas perto se puxam como ímã e só fecham juntas.
+- A fenda que ficou aberta no chão deixou **alguma coisa sair**: marcas de mão pretas indo para a cidade.
+
+## Parte 7 · "A FENDA · PARTE FINAL" (entregue, fim da 1ª temporada)
+- A criatura cresce **comendo energia** (cada poste que toca apaga): de um gato para 10 m e depois 15 m.
+- O governo pede ajuda; a mulher de terno tem o **anel dourado nos olhos** (é controlada, e só o Kaik percebe).
+- Os trajes resolvem custos antigos:
+  - Kaik: sola de cerâmica que aguenta 1.500 °C;
+  - Chede e Lia: luvas que seguram o tamanho da fenda mesmo com medo.
+- O soco de 2.000 km/h (= 3 caminhões a 100 km/h) faz a criatura sentir, mas trinca o rádio do Kaik e desloca o ombro dele.
+- Duas fendas juntas formam uma de 20 m, que vira tornado. **Fenda desse tamanho só fecha por dentro.**
+- O Kaik segura a mão do Chede ("Por favor, não faça isso" / "Me desculpa, mas eu preciso"). O Chede solta, grita "Corre!" e é puxado junto com a criatura.
+- O Kaik leva a Lia desmaiada no colo, mesmo com o braço quebrado; a fenda fecha e **explode**.
+- Lá dentro, o Chede desmaia sem força; dois olhos chegam perto.
+- A Lia fica em coma (3 dias). O Kaik, de gesso, diz: "eu sei que você ainda não morreu". Na mão da Lia, uma luz roxa pisca.
+
+**Ganchos para a 2ª temporada:**
+- o Chede está vivo lá dentro?
+- o que a criatura faz com ele?
+- a luz roxa na mão da Lia;
+- quem controla o governo (o anel dourado, o Regente).

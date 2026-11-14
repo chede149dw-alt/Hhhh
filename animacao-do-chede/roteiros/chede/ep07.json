@@ -8,34 +8,82 @@
       "fala": {
         "texto": "A Fenda. Parte final.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/capa.wav"
+        }
       },
       "destaque": [
         "FINAL."
       ],
-      "duracao": 2.6
+      "duracao": 2.4,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_fenda.mp3",
+          "em": 0.15,
+          "volume": 0.7
+        }
+      ]
     },
     {
       "id": "apagando",
       "fala": {
         "texto": "As marcas pretas iam até o centro. E a cidade estava apagando.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/apagando.wav"
+        }
       },
       "destaque": [
         "APAGANDO."
       ],
-      "duracao": 4.19
+      "duracao": 4.75,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.5,
+          "dur": 4.75
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_faiscas.mp3",
+          "em": 1.9,
+          "volume": 0.35
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_faiscas.mp3",
+          "em": 3.56,
+          "volume": 0.3
+        }
+      ]
     },
     {
       "id": "bairros",
       "fala": {
         "texto": "Bairro por bairro, as luzes iam sumindo.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/bairros.wav"
+        }
       },
       "destaque": [
         "SUMINDO."
+      ],
+      "duracao": 3.09,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.4,
+          "dur": 3.09
+        }
       ]
     },
     {
@@ -43,64 +91,143 @@
       "fala": {
         "texto": "A coisa que saiu da fenda tinha o tamanho de um gato. Agora tinha dez metros.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/dezmetros.wav"
+        }
       },
       "destaque": [
         "METROS."
       ],
       "sfx": [
         {
-          "tipo": "ronco",
-          "de": 0,
-          "ate": 2.5,
-          "volume": 1.2
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 1.34,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.35,
+          "dur": 5.35
         }
       ],
-      "duracao": 5.42
+      "duracao": 5.35
     },
     {
       "id": "energia",
       "fala": {
         "texto": "Ela come energia. Cada poste que toca apaga... e ela cresce.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/energia.wav"
+        }
       },
       "destaque": [
         "ENERGIA."
       ],
-      "duracao": 3.88
+      "duracao": 5.17,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_faiscas.mp3",
+          "em": 1.55,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_faiscas.mp3",
+          "em": 2.33,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 3.1,
+          "volume": 0.6
+        }
+      ]
     },
     {
       "id": "kaikcorre",
       "fala": {
         "texto": "O Kaik foi primeiro. Correu em volta dela a mil quilômetros por hora.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/kaikcorre.wav"
+        }
       },
       "destaque": [],
-      "duracao": 4.5
+      "duracao": 4.32,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 0.35,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 1.64,
+          "volume": 0.55
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 2.94,
+          "volume": 0.55
+        }
+      ]
     },
     {
       "id": "tapa",
       "fala": {
         "texto": "Ela nem olhou. Abriu a mão... e o Kaik voou trinta metros.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/tapa.wav"
+        }
       },
       "destaque": [
         "OLHOU."
       ],
-      "duracao": 4.19,
+      "duracao": 4.2,
       "sfx": [
         {
-          "tipo": "impacto",
-          "em": 2.18,
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 1.76,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_soco.mp3",
+          "em": 2.16,
           "volume": 0.9
         },
         {
-          "tipo": "impacto",
-          "em": 2.77,
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 2.52,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_parede.mp3",
+          "em": 2.75,
           "volume": 1.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_vidro.mp3",
+          "em": 2.81,
+          "volume": 0.35
         }
       ]
     },
@@ -109,34 +236,81 @@
       "fala": {
         "texto": "O Chede abriu uma fenda. Mas com medo, ela ficou do tamanho de uma moeda.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/moeda.wav"
+        }
       },
       "destaque": [
         "MOEDA."
       ],
-      "duracao": 5.12
+      "duracao": 5.31,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_fenda.mp3",
+          "em": 0.27,
+          "volume": 0.35
+        }
+      ]
     },
     {
       "id": "fugir",
       "fala": {
         "texto": "Eles tiveram que fugir.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/fugir.wav"
+        }
       },
       "destaque": [
         "FUGIR."
       ],
-      "duracao": 2.8
+      "duracao": 2.6,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 0.13,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_pulo.mp3",
+          "em": 1.14,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_vidro.mp3",
+          "em": 1.3,
+          "volume": 0.4
+        }
+      ]
     },
     {
       "id": "beco",
       "fala": {
         "texto": "Num beco escuro, faróis acenderam dos dois lados.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/beco.wav"
+        }
       },
       "destaque": [
         "LADOS."
+      ],
+      "duracao": 3.39,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.35,
+          "dur": 3.39
+        }
       ]
     },
     {
@@ -144,67 +318,104 @@
       "fala": {
         "texto": "Os mesmos carros pretos de antes. Só que dessa vez, ninguém atacou.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/carros.wav"
+        }
       },
       "destaque": [],
-      "duracao": 4.19
+      "duracao": 4.71,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.3,
+          "dur": 4.71
+        }
+      ]
     },
     {
       "id": "mulher",
       "fala": {
         "texto": "Uma mulher de terno desceu: A gente precisa de vocês.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/mulher.wav"
+        }
       },
       "destaque": [
         "VOCÊS."
       ],
-      "duracao": 3.58
+      "duracao": 3.75
     },
     {
       "id": "amanhecer",
       "fala": {
         "texto": "Essa coisa vai engolir a cidade inteira até o amanhecer.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/amanhecer.wav"
+        }
       },
       "destaque": [
         "AMANHECER."
       ],
-      "duracao": 3.58
+      "duracao": 3.29
     },
     {
       "id": "anel",
       "fala": {
         "texto": "O Kaik desconfiou. Nos olhos dela... o mesmo anel dourado.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/anel.wav"
+        }
       },
       "destaque": [
         "DOURADO."
       ],
-      "duracao": 3.58
+      "duracao": 4.6
     },
     {
       "id": "aceitam",
       "fala": {
         "texto": "Mas não tinha outro jeito. Eles aceitaram.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/aceitam.wav"
+        }
       },
       "destaque": [
         "ACEITARAM."
-      ]
+      ],
+      "duracao": 2.73
     },
     {
       "id": "galpao",
       "fala": {
         "texto": "Num galpão, três trajes feitos sob medida.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/galpao.wav"
+        }
       },
       "destaque": [
         "MEDIDA."
+      ],
+      "duracao": 3.34,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 0.33,
+          "volume": 0.3
+        }
       ]
     },
     {
@@ -212,116 +423,205 @@
       "fala": {
         "texto": "O do Kaik tinha sola de cerâmica, que aguenta mil e quinhentos graus.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/sola.wav"
+        }
       },
       "destaque": [
         "GRAUS."
       ],
-      "duracao": 4.5
+      "duracao": 4.31
     },
     {
       "id": "derrete",
       "fala": {
         "texto": "Chega de tênis derretendo.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/derrete.wav"
+        }
       },
       "destaque": [
         "DERRETENDO."
-      ]
+      ],
+      "duracao": 1.92
     },
     {
       "id": "luvas",
       "fala": {
         "texto": "Os do Chede e da Lia tinham luvas que seguram o tamanho da fenda...",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/luvas.wav"
+        }
       },
       "destaque": [
         "LUVAS"
       ],
-      "duracao": 4.81
+      "duracao": 3.94
     },
     {
       "id": "medo",
       "fala": {
         "texto": "...mesmo com medo.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/medo.wav"
+        }
       },
       "destaque": [
         "MEDO."
-      ]
+      ],
+      "duracao": 1.8
     },
     {
       "id": "quinze",
       "fala": {
         "texto": "Quando voltaram, a criatura já tinha quinze metros.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/quinze.wav"
+        }
       },
       "destaque": [
         "METROS."
       ],
       "sfx": [
         {
-          "tipo": "ronco",
-          "de": 0,
-          "ate": 2.5,
-          "volume": 1.2
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 0.52,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.3,
+          "dur": 3.44
         }
-      ]
+      ],
+      "duracao": 3.44
     },
     {
       "id": "cincokm",
       "fala": {
         "texto": "O Kaik se afastou cinco quilômetros.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/cincokm.wav"
+        }
       },
       "destaque": [
         "QUILÔMETROS."
-      ]
+      ],
+      "duracao": 2.38
     },
     {
       "id": "corre",
       "fala": {
         "texto": "E correu em linha reta. Dois mil quilômetros por hora.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/corre.wav"
+        }
       },
       "destaque": [
         "MIL"
       ],
-      "duracao": 3.58
+      "duracao": 3.61,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 0.11,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_sonico.mp3",
+          "em": 1.01,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_vidro.mp3",
+          "em": 1.19,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_vidro.mp3",
+          "em": 2.17,
+          "volume": 0.4
+        }
+      ]
     },
     {
       "id": "caminhoes",
       "fala": {
         "texto": "Setenta quilos nessa velocidade é a força de três caminhões a cem por hora.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/caminhoes.wav"
+        }
       },
       "destaque": [
         "CAMINHÕES"
       ],
-      "duracao": 4.81
+      "duracao": 4.76
     },
     {
       "id": "soco",
       "fala": {
         "texto": "Ele pulou... e acertou o soco com tudo.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/soco.wav"
+        }
       },
       "destaque": [
         "TUDO."
       ],
       "sfx": [
         {
-          "tipo": "impacto",
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 0.21,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_pulo.mp3",
+          "em": 0.71,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 1.26,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_soco.mp3",
           "em": 2.31,
-          "volume": 1.2
+          "volume": 1.1
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_explosao.mp3",
+          "em": 2.33,
+          "volume": 0.45
         }
       ],
       "duracao": 4.2
@@ -331,22 +631,51 @@
       "fala": {
         "texto": "Pela primeira vez, a criatura sentiu. Deu três passos pra trás.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/sentiu.wav"
+        }
       },
       "destaque": [
         "SENTIU."
       ],
-      "duracao": 3.88
+      "duracao": 4.89,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 0.24,
+          "volume": 0.9
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_faiscas.mp3",
+          "em": 2.2,
+          "volume": 0.5
+        }
+      ]
     },
     {
       "id": "braco",
       "fala": {
         "texto": "Só que o braço do Kaik não aguentou.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/braco.wav"
+        }
       },
       "destaque": [
         "AGUENTOU."
+      ],
+      "duracao": 2.22,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_soco.mp3",
+          "em": 0.11,
+          "volume": 0.5
+        }
       ]
     },
     {
@@ -354,81 +683,130 @@
       "fala": {
         "texto": "O osso do antebraço trincou. E o ombro saiu do lugar.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/osso.wav"
+        }
       },
       "destaque": [
         "TRINCOU."
       ],
       "sfx": [
         {
-          "tipo": "impacto",
-          "em": 0.5,
-          "volume": 1
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_parede.mp3",
+          "em": 0.3,
+          "volume": 0.5
         }
       ],
-      "duracao": 3.88
+      "duracao": 3.78
     },
     {
       "id": "caiu",
       "fala": {
         "texto": "Ele caiu no asfalto, segurando o braço.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/caiu.wav"
+        }
       },
-      "destaque": []
+      "destaque": [],
+      "duracao": 2.53,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.3,
+          "dur": 2.53
+        }
+      ]
     },
     {
       "id": "sofenda",
       "fala": {
         "texto": "Força não adiantava. Ela só volta pela fenda.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/sofenda.wav"
+        }
       },
       "destaque": [
         "FENDA."
-      ]
+      ],
+      "duracao": 3.4
     },
     {
       "id": "porta",
       "fala": {
         "texto": "Só que uma fenda do tamanho de uma porta não engole quinze metros.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/porta.wav"
+        }
       },
       "destaque": [
         "METROS."
       ],
-      "duracao": 4.5
+      "duracao": 3.72
     },
     {
       "id": "juntas",
       "fala": {
         "texto": "Mas duas fendas juntas viram uma só. Gigante.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/juntas.wav"
+        }
       },
       "destaque": [
         "GIGANTE."
-      ]
+      ],
+      "duracao": 3.75
     },
     {
       "id": "vinte",
       "fala": {
         "texto": "O Chede e a Lia abriram juntos, com as luvas no máximo. Vinte metros.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/vinte.wav"
+        }
       },
       "destaque": [
         "METROS."
       ],
-      "duracao": 4.81
+      "duracao": 5.26,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_fenda.mp3",
+          "em": 0.05,
+          "volume": 0.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 2.1,
+          "volume": 0.6,
+          "dur": 3.1559999999999997
+        }
+      ]
     },
     {
       "id": "borda",
       "fala": {
         "texto": "A fenda virou um tornado gigante. A criatura foi puxada... e se agarrou na borda.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/borda.wav"
+        }
       },
       "destaque": [
         "TORNADO",
@@ -436,98 +814,168 @@
       ],
       "sfx": [
         {
-          "tipo": "ronco",
-          "de": 0,
-          "ate": 4,
-          "volume": 1.4
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.7,
+          "dur": 5.51
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 1.93,
+          "volume": 0.8
         }
       ],
-      "duracao": 5.12
+      "duracao": 5.51
     },
     {
       "id": "dentro",
       "fala": {
         "texto": "E a Lia gritou: fenda desse tamanho só fecha do lado de dentro.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/dentro.wav"
+        }
       },
       "destaque": [
         "DENTRO."
       ],
-      "duracao": 4.5
+      "duracao": 4.29,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.5,
+          "dur": 4.29
+        }
+      ]
     },
     {
       "id": "segurou",
       "fala": {
         "texto": "O vento puxou o Chede... e o Kaik segurou a mão dele.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/segurou.wav"
+        }
       },
       "destaque": [
         "DELE."
       ],
       "sfx": [
         {
-          "tipo": "ronco",
-          "de": 0,
-          "ate": 3,
-          "volume": 1.2
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.55,
+          "dur": 3.57
         }
       ],
-      "duracao": 4.19
+      "duracao": 3.57
     },
     {
       "id": "kaikfala",
       "fala": {
         "texto": "Por favor... não faça isso.",
         "voz": "amigo",
-        "velocidade": 150
+        "velocidade": 150,
+        "voz_final": {
+          "arquivo": "vozes/final/kaikfala.wav"
+        }
       },
       "destaque": [
         "ISSO."
       ],
-      "duracao": 2.8
+      "duracao": 3.6,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.3,
+          "dur": 3.6
+        }
+      ]
     },
     {
       "id": "chedefala",
       "fala": {
         "texto": "Me desculpa... mas eu preciso.",
         "voz": "lucas",
-        "velocidade": 150
+        "velocidade": 150,
+        "voz_final": {
+          "arquivo": "vozes/final/chedefala.wav"
+        }
       },
       "destaque": [
         "PRECISO."
       ],
-      "duracao": 2.8
+      "duracao": 3.93,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.3,
+          "dur": 3.93
+        }
+      ]
     },
     {
       "id": "choram",
       "fala": {
         "texto": "Os dois chorando.",
         "voz": "narrador",
-        "velocidade": 170
+        "velocidade": 170,
+        "voz_final": {
+          "arquivo": "vozes/final/choram.wav"
+        }
       },
       "destaque": [
         "CHORANDO."
       ],
-      "duracao": 2.4
+      "duracao": 2.6,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.35,
+          "dur": 2.6
+        }
+      ]
     },
     {
       "id": "solta",
       "fala": {
         "texto": "Ele soltou a mão do amigo: Corre!",
         "voz": "narrador",
-        "velocidade": 185
+        "velocidade": 185,
+        "voz_final": {
+          "arquivo": "vozes/final/solta.wav"
+        }
       },
       "destaque": [
         "CORRE!"
       ],
-      "duracao": 2.8,
+      "duracao": 3.0,
       "sfx": [
         {
-          "tipo": "impacto",
-          "em": 1.6,
-          "volume": 0.8
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.5,
+          "dur": 3.0
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 1.5,
+          "volume": 0.6
         }
       ]
     },
@@ -536,10 +984,29 @@
       "fala": {
         "texto": "E foi puxado junto com a criatura.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/pulou.wav"
+        }
       },
       "destaque": [
         "CRIATURA."
+      ],
+      "duracao": 2.8,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.6,
+          "dur": 2.8
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 0.7,
+          "volume": 0.7
+        }
       ]
     },
     {
@@ -547,18 +1014,28 @@
       "fala": {
         "texto": "O Kaik obedeceu. Correu até a Lia, desmaiada no asfalto.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/pegalia.wav"
+        }
       },
       "destaque": [
         "LIA,"
       ],
-      "duracao": 3.8,
+      "duracao": 3.92,
       "sfx": [
         {
-          "tipo": "ronco",
-          "de": 0,
-          "ate": 3.8,
-          "volume": 0.8
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.45,
+          "dur": 3.92
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 0.2,
+          "volume": 0.4
         }
       ]
     },
@@ -567,16 +1044,27 @@
       "fala": {
         "texto": "Pegou ela no colo, mesmo com o braço quebrado... e correu o mais longe que pôde.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/carrega.wav"
+        }
       },
       "destaque": [
         "QUEBRADO..."
       ],
-      "duracao": 5.6,
+      "duracao": 5.4,
       "sfx": [
         {
-          "tipo": "impacto",
-          "em": 1.2,
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_tornado.mp3",
+          "em": 0,
+          "volume": 0.3,
+          "dur": 2.16
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_whoosh.mp3",
+          "em": 2.27,
           "volume": 0.5
         }
       ]
@@ -586,7 +1074,10 @@
       "fala": {
         "texto": "Atrás deles, a fenda fechou... e explodiu.",
         "voz": "narrador",
-        "velocidade": 185
+        "velocidade": 185,
+        "voz_final": {
+          "arquivo": "vozes/final/explodiu.wav"
+        }
       },
       "destaque": [
         "EXPLODIU."
@@ -594,15 +1085,34 @@
       "duracao": 3.6,
       "sfx": [
         {
-          "tipo": "impacto",
-          "em": 1.08,
-          "volume": 1.5
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_fenda.mp3",
+          "em": 0.05,
+          "volume": 0.5
         },
         {
-          "tipo": "ronco",
-          "de": 1.0,
-          "ate": 3.6,
-          "volume": 1.4
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_explosao.mp3",
+          "em": 1.08,
+          "volume": 1.3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_soco.mp3",
+          "em": 1.08,
+          "volume": 0.7
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_vidro.mp3",
+          "em": 1.3,
+          "volume": 0.6
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_vidro.mp3",
+          "em": 1.8,
+          "volume": 0.4
         }
       ]
     },
@@ -611,43 +1121,71 @@
       "fala": {
         "texto": "Depois... o silêncio voltou de uma vez.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/fechou.wav"
+        }
       },
       "destaque": [
         "VEZ."
       ],
-      "duracao": 3.0
+      "duracao": 3.18
     },
     {
       "id": "semforca",
       "fala": {
         "texto": "Lá dentro, ele tentou abrir outra... mas não tinha mais força.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/semforca.wav"
+        }
       },
       "destaque": [
         "FORÇA."
       ],
-      "duracao": 3.88
+      "duracao": 3.82,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_faiscas.mp3",
+          "em": 0.76,
+          "volume": 0.3
+        }
+      ]
     },
     {
       "id": "desmaiou",
       "fala": {
         "texto": "Desmaiou. E ninguém sabe o que a criatura fez com ele.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/desmaiou.wav"
+        }
       },
       "destaque": [
         "ELE."
       ],
-      "duracao": 3.88
+      "duracao": 3.6,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_rugido.mp3",
+          "em": 1.26,
+          "volume": 0.4
+        }
+      ]
     },
     {
       "id": "coma",
       "fala": {
         "texto": "A Lia também apagou. Três dias depois, ainda em coma.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/coma.wav"
+        }
       },
       "destaque": [
         "COMA."
@@ -659,29 +1197,63 @@
           "bpmFim": 70,
           "de": 0,
           "ate": 3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_monitor.mp3",
+          "em": 0,
+          "volume": 0.45,
+          "dur": 4.33,
+          "fade": 0.3
         }
       ],
-      "duracao": 3.58
+      "duracao": 4.33
     },
     {
       "id": "kaikhosp",
       "fala": {
         "texto": "O Kaik, de braço engessado, não saiu do lado dela.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/kaikhosp.wav"
+        }
       },
       "destaque": [],
-      "duracao": 3.58
+      "duracao": 3.72,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_monitor.mp3",
+          "em": 0,
+          "volume": 0.4,
+          "dur": 3.72,
+          "fade": 0.3
+        }
+      ]
     },
     {
       "id": "naomorreu",
       "fala": {
         "texto": "Chede... eu sei que você ainda não morreu.",
-        "voz": "narrador",
-        "velocidade": 195
+        "voz": "amigo",
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/naomorreu.wav"
+        }
       },
       "destaque": [
         "MORREU."
+      ],
+      "duracao": 3.4,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_cidade.mp3",
+          "em": 0,
+          "volume": 0.25,
+          "dur": 3.4
+        }
       ]
     },
     {
@@ -689,7 +1261,10 @@
       "fala": {
         "texto": "E na mão da Lia... uma luz roxa piscou.",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/luz.wav"
+        }
       },
       "destaque": [
         "PISCOU."
@@ -701,21 +1276,50 @@
           "bpmFim": 120,
           "de": 0,
           "ate": 3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_monitor.mp3",
+          "em": 0,
+          "volume": 0.45,
+          "dur": 3.4,
+          "fade": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_fenda.mp3",
+          "em": 1.02,
+          "volume": 0.6
         }
       ],
-      "duracao": 3.27
+      "duracao": 3.4
     },
     {
       "id": "parte",
       "fala": {
         "texto": "Fim da primeira temporada. Segue pra ver a temporada 2!",
         "voz": "narrador",
-        "velocidade": 195
+        "velocidade": 195,
+        "voz_final": {
+          "arquivo": "vozes/final/parte.wav"
+        }
       },
       "destaque": [
         "2!"
       ],
-      "duracao": 4.0
+      "duracao": 4.6,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "brutos/sfx_fenda.mp3",
+          "em": 0.05,
+          "volume": 0.5
+        }
+      ]
     }
-  ]
+  ],
+  "trilha": {
+    "arquivo": "trilha.mp3",
+    "volume": 0.55
+  }
 }
