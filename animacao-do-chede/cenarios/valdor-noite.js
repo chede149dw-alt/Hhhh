@@ -422,7 +422,7 @@
         });
         // vaga-lumes grandes e desfocados bem perto
         const av = suave(0.45, 1, n), r = rng(77);
-        if (av > 0) Cinema.desfocado(ctx, 6, (g) => { for (let i = 0; i < 9; i++) { const x = r() * W + Math.sin(t * 0.7 + i) * 60, y = H * (0.45 + r() * 0.5) + Math.cos(t * 0.5 + i) * 40, R = 18 + r() * 26, p = Math.max(0, Math.sin(t * 2 + i * 2)); const gr = g.createRadialGradient(x, y, 0, x, y, R * 3); gr.addColorStop(0, `rgba(230,255,150,${av * (0.3 + 0.7 * p)})`); gr.addColorStop(1, 'rgba(180,255,100,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, R * 3, 0, Math.PI * 2); g.fill(); } }, 'screen');
+        if (av > 0) Cinema.desfocado(ctx, 6, (g) => { for (let i = 0; i < 5; i++) { const x = r() * W + Math.sin(t * 0.7 + i) * 60, y = H * (0.45 + r() * 0.5) + Math.cos(t * 0.5 + i) * 40, R = 12 + r() * 16, p = Math.max(0, Math.sin(t * 2 + i * 2)); const gr = g.createRadialGradient(x, y, 0, x, y, R * 3); gr.addColorStop(0, `rgba(230,255,150,${av * (0.3 + 0.7 * p)})`); gr.addColorStop(1, 'rgba(180,255,100,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, R * 3, 0, Math.PI * 2); g.fill(); } }, 'screen');
       }
       this.luz(ctx, cam, o);
     },
