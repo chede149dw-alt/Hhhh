@@ -161,3 +161,12 @@
   escuro, cicatriz costurada; a cabeça é desenhada POR CIMA da perna, só o focinho e as presas cobrem a borda), arrasto
   com o personagem deitado (rotacionado -90°), barra de vida do herói (verde → amarelo → vermelho) e aviso LENTO.
 - Exceção do autor: a Parte 1 pode ter até 80 s (luta completa).
+
+## VALDOR Parte 2 · efeitos e câmera de luta (14/11)
+- Câmera de luta (pedido do autor): órbita em volta de quem conjura, chicote de câmera com borrão seguindo o raio, zoom-soco no impacto,
+  ângulo holandês + vertigem na câmera lenta, tranco/recuo quando o herói apanha e bullet time (tempo parado, câmera girando) no golpe final.
+  Implementado em `roteiros/nova/previa-combate.js` (camFx, soco, remap de tempo). Tremor entra no centro do camFx, nunca com ctx.translate
+  antes de desenhar camadas (senão o personagem treme em dobro).
+- Câmera em órbita: o rosto do personagem só aparece de frente se a câmera ficar do lado para onde ele olha (checar o ângulo no fim do plano).
+- Lobo (Criaturas.lobo) é um recorte de perfil: em órbita, girar no máximo ~35° e nunca deixar ele no primeiro plano.
+- Efeitos novos: `efeitos/combate.js` (raio com galhos, mãos elétricas, impacto, corte, garras, números, HUD) e `efeitos/noite.js`.
