@@ -1,0 +1,28 @@
+{
+ "serie": "VALDOR",
+ "episodio": 2,
+ "parte": 2,
+ "scripts": [
+  "personagens/nova/cores.js",
+  "personagens/nova/equipamento.js",
+  "personagens/nova/davi/davi.js",
+  "personagens/nova/davi/davi-jogo.js",
+  "cenarios/valdor-noite.js",
+  "efeitos/valdor.js",
+  "efeitos/criaturas.js",
+  "efeitos/noite.js",
+  "efeitos/combate.js"
+ ],
+ "planos": [
+  { "id": "carga", "duracao": 2.8, "cinema": { "quente": 0, "bloom": 0.9, "vinheta": 0.9 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/noite-ambiente-20s.mp3", "em": 0, "volume": 0.4 }, { "tipo": "arquivo", "arquivo": "sfx/carga.mp3", "em": 0.3, "volume": 0.8 } ] },
+  { "id": "raio", "duracao": 2.6, "cinema": { "quente": 0, "bloom": 0.9, "vinheta": 0.9 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/raio.mp3", "em": 0.28, "volume": 1.0 } ] },
+  { "id": "esquiva", "duracao": 3.2, "cinema": { "quente": 0, "bloom": 0.7, "vinheta": 0.9 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/rosnado.mp3", "em": 0.1, "volume": 0.7, "corte": 1.2 }, { "tipo": "arquivo", "arquivo": "sfx/whoosh.mp3", "em": 1.15, "volume": 0.9 } ] },
+  { "id": "dano", "duracao": 2.4, "cinema": { "quente": 0, "bloom": 0.7, "vinheta": 0.9 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/mordida.mp3", "em": 0.5, "volume": 0.9 } ] },
+  { "id": "golpe", "duracao": 2.8, "cinema": { "quente": 0, "bloom": 0.9, "vinheta": 0.9 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/whoosh.mp3", "em": 0.25, "volume": 0.7 }, { "tipo": "arquivo", "arquivo": "sfx/corte.mp3", "em": 0.58, "volume": 1.0 }, { "tipo": "arquivo", "arquivo": "sfx/desfaz.mp3", "em": 1.4, "volume": 0.8 } ] }
+ ]
+}
