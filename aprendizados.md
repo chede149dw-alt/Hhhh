@@ -190,3 +190,5 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   - a Parte 6 como modelo e o padrão de capa;
   - as regras novas no SKILL.md.
   Ela foi testada instalando do zero (folha de teste e capa geradas). A cópia sincronizada em `/root/.claude/skills/synced/` não foi alterada; para trocar a skill da conta, o usuário sobe o zip.
+- **Final de temporada pode ter 2min40 a 3min** (usuário, 14/11). Vale só para o final da temporada; os episódios normais continuam com até 1min15. Com o motor da skill o render é rápido, então a duração não pesa.
+- **Lesão em cena de luta = raio-X, sem sangue** (pedido do usuário: "o osso trincando"). Mostrar o impacto em câmera lenta e o osso trincando num infográfico de raio-X, no estilo das referências.
