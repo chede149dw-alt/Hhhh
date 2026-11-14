@@ -90,3 +90,19 @@ npx remotion still Sumir1 ../prontos/serie-sumir-parte-1-capa.png --frame=40 --b
 - Final: `prontos/parte-6-mesmo-poder.mp4` (61,5 s, −16,8 LUFS) + capa `prontos/parte-6-mesmo-poder-capa.png` (padrão de capa novo) + post `roteiros/parte-6-mesmo-poder-post.md`.
 - Render final: `cd animacao-do-chede && node motor/video.js roteiros/chede/ep06.json roteiros/chede/ep06.js ../prontos/parte-6-mesmo-poder.mp4 --workers 4` (~3 min).
 - Próximo: Parte 7 — o que saiu da fenda (marcas de mão pretas indo para a cidade).
+
+## Parte 7 — "A FENDA · PARTE FINAL" (final da 1ª temporada, EM PRÉVIA)
+- Roteiro aprovado: `roteiros/parte-7-final-temporada.md`. Os planos estão em `animacao-do-chede/roteiros/chede/ep07.{json,js}`; são 49 planos, ~2min50.
+- Prévia 1: `animacao-do-chede/previas/a-fenda-final-previa.mp4`. O usuário pediu (14/11):
+  - cenário 3D bonito para a batalha (a criatura aparecia dentro da árvore);
+  - tapa com o Kaik batendo na parede, que racha;
+  - corrida de verdade;
+  - anel nos olhos;
+  - soco na barriga pegando o momento exato;
+  - corrida em primeira pessoa.
+- Prévia 2: `animacao-do-chede/previas/a-fenda-parte-final-previa2.mp4`. Tem o cenário novo `animacao-do-chede/cenarios/cidade-noite-3d.js` e o ciclo `correr` no motor, e refaz o tapa, a fuga, o anel, o soco e a corrida.
+- Pendente depois da aprovação:
+  - vozes separadas do Kaik e do Chede nas falas (o usuário ainda não respondeu);
+  - voz final do Witalo;
+  - render final em `prontos/a-fenda-parte-final.mp4`;
+  - capa "A FENDA" + "PARTE FINAL" e post "🌀 A FENDA · PARTE FINAL".

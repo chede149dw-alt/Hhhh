@@ -146,7 +146,7 @@ execFileSync('ffmpeg', ['-v', 'error', '-y', ...entradas, '-filter_complex', fil
 const scripts = ['motor/cena.js', 'motor/cena3d.js', 'motor/cinema.js', 'motor/personagem-base.js',
   'personagens/lucas/lucas.js', 'personagens/mae/mae.js', 'personagens/rafael/rafael.js', 'personagens/chede/chede.js', 'personagens/kaik/kaik.js', 'personagens/lia/lia.js', 'efeitos/fenda.js',
   'cenarios/objetos/cama.js', 'cenarios/objetos/despertador.js', 'cenarios/objetos/mochila.js',
-  'cenarios/quarto-3d.js', 'cenarios/rua-3d.js', 'cenarios/escola-3d.js', 'cenarios/patio-3d.js',
+  'cenarios/quarto-3d.js', 'cenarios/rua-3d.js', 'cenarios/cidade-noite-3d.js', 'cenarios/escola-3d.js', 'cenarios/patio-3d.js',
   'efeitos/invisibilidade.js', 'efeitos/poder-energia.js', 'efeitos/poder-terra.js', 'efeitos/terra-cena.js', 'motor/mao-detalhe.js', 'motor/episodio.js', planosArq].map((s) => path.resolve(raiz, s));
 
 const tmp = path.join(pastaAudio, 'partes'); fs.mkdirSync(tmp, { recursive: true });

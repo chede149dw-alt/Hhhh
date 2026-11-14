@@ -137,6 +137,22 @@
     };
   }
 
+  // corrida de verdade (vista de perfil/3-4, indo para a direita da tela): tronco inclinado, joelho dobrando alto
+  // na volta da perna, braços dobrados em 90° balançando ao contrário das pernas e o corpo quicando no ar.
+  // Convenção do rig: ângulo NEGATIVO leva o membro para a frente (coxa, braço); canela positiva dobra o joelho.
+  function corrida(t, vel = 1) {
+    const f = t * 2 * Math.PI * 1.45 * vel;
+    const perna = (ph) => { const s = Math.sin(ph), c = Math.cos(ph); return { coxa: -18 - 48 * s, canela: 18 + 100 * Math.pow(Math.max(0, c), 0.8), pe: -10 + 25 * Math.max(0, c) }; };
+    const D = perna(f), E = perna(f + Math.PI), s = Math.sin(f);
+    return {
+      tronco: 15, cabeca: -9, quadril: 0,
+      coxa_d: D.coxa, canela_d: D.canela, pe_d: D.pe, coxa_e: E.coxa, canela_e: E.canela, pe_e: E.pe,
+      braco_d: 48 * s, antebraco_d: -88 - 14 * s, braco_e: -48 * s, antebraco_e: -88 + 14 * s,
+      _maos: { d: 'punho', e: 'punho' },
+      _desloca: [0, -0.05 - 0.07 * Math.abs(Math.cos(f))],
+    };
+  }
+
   // desenha um personagem (com vida) num ponto da tela; registra o rosto para a legenda desviar
   function personagem(ctx, item, x, ySola, alturaPx, o = {}) {
     if (o.luz) { const { luz, ...resto } = o; return comLuz(ctx, luz, x, alturaPx, (g) => personagem(g, item, x, ySola, alturaPx, resto)); }
@@ -159,6 +175,7 @@
     if (item.pose2) { const p2 = typeof item.pose2 === 'string' ? reg[item.pose2].angulos : item.pose2; ang = misturaPoses(ang, p2, item.mistura || 0); }
     if (o.caminhar !== undefined) ang = { ...caminhada(o.caminhar, o.velocidade) };
     if (o.caminharFrontal !== undefined) ang = { ...caminhadaFrontal(o.caminharFrontal, o.velocidade, vista === 'costas') };
+    if (o.correr !== undefined) ang = { ...corrida(o.correr, o.velocidade) };
     rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? 1 : o.vida));
     const exprBase = typeof item.expressao === 'object' ? item.expressao : (def.expressoes[item.expressao || (pdef && pdef.expressao) || 'neutro']);
     rig.usarExpressao(expressaoViva(exprBase, TL.t, { voz: item.voz, semente: o.semente }));

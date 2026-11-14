@@ -1,643 +1,657 @@
 {
- "serie": "A Fenda",
- "episodio": 7,
- "parte": 7,
- "planos": [
-  {
-   "id": "capa",
-   "fala": {
-    "texto": "A Fenda. Parte final.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "FINAL."
-   ],
-   "duracao": 2.6
-  },
-  {
-   "id": "apagando",
-   "fala": {
-    "texto": "As marcas pretas iam até o centro. E a cidade estava apagando.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "APAGANDO."
-   ],
-   "duracao": 4.19
-  },
-  {
-   "id": "bairros",
-   "fala": {
-    "texto": "Bairro por bairro, as luzes iam sumindo.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "SUMINDO."
-   ]
-  },
-  {
-   "id": "dezmetros",
-   "fala": {
-    "texto": "A coisa que saiu da fenda tinha o tamanho de um gato. Agora tinha dez metros.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "METROS."
-   ],
-   "sfx": [
+  "serie": "A Fenda",
+  "episodio": 7,
+  "parte": 7,
+  "planos": [
     {
-     "tipo": "ronco",
-     "de": 0,
-     "ate": 2.5,
-     "volume": 1.2
-    }
-   ],
-   "duracao": 5.42
-  },
-  {
-   "id": "energia",
-   "fala": {
-    "texto": "Ela come energia. Cada poste que toca apaga... e ela cresce.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "ENERGIA."
-   ],
-   "duracao": 3.88
-  },
-  {
-   "id": "kaikcorre",
-   "fala": {
-    "texto": "O Kaik foi primeiro. Correu em volta dela a mil quilômetros por hora.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [],
-   "duracao": 4.5
-  },
-  {
-   "id": "tapa",
-   "fala": {
-    "texto": "Ela nem olhou. Abriu a mão... e o Kaik voou trinta metros.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "OLHOU."
-   ],
-   "duracao": 4.19
-  },
-  {
-   "id": "moeda",
-   "fala": {
-    "texto": "O Chede abriu uma fenda. Mas com medo, ela ficou do tamanho de uma moeda.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "MOEDA."
-   ],
-   "duracao": 5.12
-  },
-  {
-   "id": "fugir",
-   "fala": {
-    "texto": "Eles tiveram que fugir.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "FUGIR."
-   ]
-  },
-  {
-   "id": "beco",
-   "fala": {
-    "texto": "Num beco escuro, faróis acenderam dos dois lados.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "LADOS."
-   ]
-  },
-  {
-   "id": "carros",
-   "fala": {
-    "texto": "Os mesmos carros pretos de antes. Só que dessa vez, ninguém atacou.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [],
-   "duracao": 4.19
-  },
-  {
-   "id": "mulher",
-   "fala": {
-    "texto": "Uma mulher de terno desceu: A gente precisa de vocês.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "VOCÊS."
-   ],
-   "duracao": 3.58
-  },
-  {
-   "id": "amanhecer",
-   "fala": {
-    "texto": "Essa coisa vai engolir a cidade inteira até o amanhecer.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "AMANHECER."
-   ],
-   "duracao": 3.58
-  },
-  {
-   "id": "anel",
-   "fala": {
-    "texto": "O Kaik desconfiou. Nos olhos dela... o mesmo anel dourado.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "DOURADO."
-   ],
-   "duracao": 3.58
-  },
-  {
-   "id": "aceitam",
-   "fala": {
-    "texto": "Mas não tinha outro jeito. Eles aceitaram.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "ACEITARAM."
-   ]
-  },
-  {
-   "id": "galpao",
-   "fala": {
-    "texto": "Num galpão, três trajes feitos sob medida.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "MEDIDA."
-   ]
-  },
-  {
-   "id": "sola",
-   "fala": {
-    "texto": "O do Kaik tinha sola de cerâmica, que aguenta mil e quinhentos graus.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "GRAUS."
-   ],
-   "duracao": 4.5
-  },
-  {
-   "id": "derrete",
-   "fala": {
-    "texto": "Chega de tênis derretendo.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "DERRETENDO."
-   ]
-  },
-  {
-   "id": "luvas",
-   "fala": {
-    "texto": "Os do Chede e da Lia tinham luvas que seguram o tamanho da fenda...",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "LUVAS"
-   ],
-   "duracao": 4.81
-  },
-  {
-   "id": "medo",
-   "fala": {
-    "texto": "...mesmo com medo.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "MEDO."
-   ]
-  },
-  {
-   "id": "quinze",
-   "fala": {
-    "texto": "Quando voltaram, a criatura já tinha quinze metros.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "METROS."
-   ],
-   "sfx": [
+      "id": "capa",
+      "fala": {
+        "texto": "A Fenda. Parte final.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "FINAL."
+      ],
+      "duracao": 2.6
+    },
     {
-     "tipo": "ronco",
-     "de": 0,
-     "ate": 2.5,
-     "volume": 1.2
-    }
-   ]
-  },
-  {
-   "id": "cincokm",
-   "fala": {
-    "texto": "O Kaik se afastou cinco quilômetros.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "QUILÔMETROS."
-   ]
-  },
-  {
-   "id": "corre",
-   "fala": {
-    "texto": "E correu em linha reta. Dois mil quilômetros por hora.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "MIL"
-   ],
-   "duracao": 3.58
-  },
-  {
-   "id": "caminhoes",
-   "fala": {
-    "texto": "Setenta quilos nessa velocidade é a força de três caminhões a cem por hora.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "CAMINHÕES"
-   ],
-   "duracao": 4.81
-  },
-  {
-   "id": "soco",
-   "fala": {
-    "texto": "Ele pulou... e acertou o soco com tudo.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "TUDO."
-   ],
-   "sfx": [
+      "id": "apagando",
+      "fala": {
+        "texto": "As marcas pretas iam até o centro. E a cidade estava apagando.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "APAGANDO."
+      ],
+      "duracao": 4.19
+    },
     {
-     "tipo": "impacto",
-     "em": 0.5,
-     "volume": 1
-    }
-   ]
-  },
-  {
-   "id": "sentiu",
-   "fala": {
-    "texto": "Pela primeira vez, a criatura sentiu. Deu três passos pra trás.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "SENTIU."
-   ],
-   "duracao": 3.88
-  },
-  {
-   "id": "braco",
-   "fala": {
-    "texto": "Só que o braço do Kaik não aguentou.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "AGUENTOU."
-   ]
-  },
-  {
-   "id": "osso",
-   "fala": {
-    "texto": "O osso do antebraço trincou. E o ombro saiu do lugar.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "TRINCOU."
-   ],
-   "sfx": [
+      "id": "bairros",
+      "fala": {
+        "texto": "Bairro por bairro, as luzes iam sumindo.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "SUMINDO."
+      ]
+    },
     {
-     "tipo": "impacto",
-     "em": 0.5,
-     "volume": 1
-    }
-   ],
-   "duracao": 3.88
-  },
-  {
-   "id": "caiu",
-   "fala": {
-    "texto": "Ele caiu no asfalto, segurando o braço.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": []
-  },
-  {
-   "id": "sofenda",
-   "fala": {
-    "texto": "Força não adiantava. Ela só volta pela fenda.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "FENDA."
-   ]
-  },
-  {
-   "id": "porta",
-   "fala": {
-    "texto": "Só que uma fenda do tamanho de uma porta não engole quinze metros.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "METROS."
-   ],
-   "duracao": 4.5
-  },
-  {
-   "id": "juntas",
-   "fala": {
-    "texto": "Mas duas fendas juntas viram uma só. Gigante.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "GIGANTE."
-   ]
-  },
-  {
-   "id": "vinte",
-   "fala": {
-    "texto": "O Chede e a Lia abriram juntos, com as luvas no máximo. Vinte metros.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "METROS."
-   ],
-   "duracao": 4.81
-  },
-  {
-   "id": "borda",
-   "fala": {
-    "texto": "A fenda virou um tornado gigante. A criatura foi puxada... e se agarrou na borda.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "TORNADO",
-    "BORDA."
-   ],
-   "sfx": [
+      "id": "dezmetros",
+      "fala": {
+        "texto": "A coisa que saiu da fenda tinha o tamanho de um gato. Agora tinha dez metros.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "METROS."
+      ],
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "de": 0,
+          "ate": 2.5,
+          "volume": 1.2
+        }
+      ],
+      "duracao": 5.42
+    },
     {
-     "tipo": "ronco",
-     "de": 0,
-     "ate": 4,
-     "volume": 1.4
-    }
-   ],
-   "duracao": 5.12
-  },
-  {
-   "id": "dentro",
-   "fala": {
-    "texto": "E a Lia gritou: fenda desse tamanho só fecha do lado de dentro.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "DENTRO."
-   ],
-   "duracao": 4.5
-  },
-  {
-   "id": "segurou",
-   "fala": {
-    "texto": "O vento puxou o Chede... e o Kaik segurou a mão dele.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "DELE."
-   ],
-   "sfx": [
+      "id": "energia",
+      "fala": {
+        "texto": "Ela come energia. Cada poste que toca apaga... e ela cresce.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "ENERGIA."
+      ],
+      "duracao": 3.88
+    },
     {
-     "tipo": "ronco",
-     "de": 0,
-     "ate": 3,
-     "volume": 1.2
-    }
-   ],
-   "duracao": 4.19
-  },
-  {
-   "id": "kaikfala",
-   "fala": {
-    "texto": "Por favor... não faça isso.",
-    "voz": "amigo",
-    "velocidade": 150
-   },
-   "destaque": [
-    "ISSO."
-   ],
-   "duracao": 2.8
-  },
-  {
-   "id": "chedefala",
-   "fala": {
-    "texto": "Me desculpa... mas eu preciso.",
-    "voz": "lucas",
-    "velocidade": 150
-   },
-   "destaque": [
-    "PRECISO."
-   ],
-   "duracao": 2.8
-  },
-  {
-   "id": "choram",
-   "fala": {
-    "texto": "Os dois chorando.",
-    "voz": "narrador",
-    "velocidade": 170
-   },
-   "destaque": [
-    "CHORANDO."
-   ],
-   "duracao": 2.4
-  },
-  {
-   "id": "solta",
-   "fala": {
-    "texto": "Ele soltou a mão do amigo: Corre!",
-    "voz": "narrador",
-    "velocidade": 185
-   },
-   "destaque": [
-    "CORRE!"
-   ],
-   "duracao": 2.8,
-   "sfx": [
+      "id": "kaikcorre",
+      "fala": {
+        "texto": "O Kaik foi primeiro. Correu em volta dela a mil quilômetros por hora.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [],
+      "duracao": 4.5
+    },
     {
-     "tipo": "impacto",
-     "em": 1.6,
-     "volume": 0.8
-    }
-   ]
-  },
-  {
-   "id": "pulou",
-   "fala": {
-    "texto": "E foi puxado junto com a criatura.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "CRIATURA."
-   ]
-  },
-  {
-   "id": "fechou",
-   "fala": {
-    "texto": "A fenda fechou. E o silêncio voltou de uma vez.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "VEZ."
-   ],
-   "duracao": 3.58
-  },
-  {
-   "id": "semforca",
-   "fala": {
-    "texto": "Lá dentro, ele tentou abrir outra... mas não tinha mais força.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "FORÇA."
-   ],
-   "duracao": 3.88
-  },
-  {
-   "id": "desmaiou",
-   "fala": {
-    "texto": "Desmaiou. E ninguém sabe o que a criatura fez com ele.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "ELE."
-   ],
-   "duracao": 3.88
-  },
-  {
-   "id": "coma",
-   "fala": {
-    "texto": "A Lia também apagou. Três dias depois, ainda em coma.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "COMA."
-   ],
-   "sfx": [
+      "id": "tapa",
+      "fala": {
+        "texto": "Ela nem olhou. Abriu a mão... e o Kaik voou trinta metros.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "OLHOU."
+      ],
+      "duracao": 4.19,
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 2.18,
+          "volume": 0.9
+        },
+        {
+          "tipo": "impacto",
+          "em": 2.77,
+          "volume": 1.0
+        }
+      ]
+    },
     {
-     "tipo": "coracao",
-     "bpm": 60,
-     "bpmFim": 70,
-     "de": 0,
-     "ate": 3
-    }
-   ],
-   "duracao": 3.58
-  },
-  {
-   "id": "kaikhosp",
-   "fala": {
-    "texto": "O Kaik, de braço engessado, não saiu do lado dela.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [],
-   "duracao": 3.58
-  },
-  {
-   "id": "naomorreu",
-   "fala": {
-    "texto": "Chede... eu sei que você ainda não morreu.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "MORREU."
-   ]
-  },
-  {
-   "id": "luz",
-   "fala": {
-    "texto": "E na mão da Lia... uma luz roxa piscou.",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "PISCOU."
-   ],
-   "sfx": [
+      "id": "moeda",
+      "fala": {
+        "texto": "O Chede abriu uma fenda. Mas com medo, ela ficou do tamanho de uma moeda.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "MOEDA."
+      ],
+      "duracao": 5.12
+    },
     {
-     "tipo": "coracao",
-     "bpm": 60,
-     "bpmFim": 120,
-     "de": 0,
-     "ate": 3
+      "id": "fugir",
+      "fala": {
+        "texto": "Eles tiveram que fugir.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "FUGIR."
+      ],
+      "duracao": 2.8
+    },
+    {
+      "id": "beco",
+      "fala": {
+        "texto": "Num beco escuro, faróis acenderam dos dois lados.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "LADOS."
+      ]
+    },
+    {
+      "id": "carros",
+      "fala": {
+        "texto": "Os mesmos carros pretos de antes. Só que dessa vez, ninguém atacou.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [],
+      "duracao": 4.19
+    },
+    {
+      "id": "mulher",
+      "fala": {
+        "texto": "Uma mulher de terno desceu: A gente precisa de vocês.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "VOCÊS."
+      ],
+      "duracao": 3.58
+    },
+    {
+      "id": "amanhecer",
+      "fala": {
+        "texto": "Essa coisa vai engolir a cidade inteira até o amanhecer.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "AMANHECER."
+      ],
+      "duracao": 3.58
+    },
+    {
+      "id": "anel",
+      "fala": {
+        "texto": "O Kaik desconfiou. Nos olhos dela... o mesmo anel dourado.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "DOURADO."
+      ],
+      "duracao": 3.58
+    },
+    {
+      "id": "aceitam",
+      "fala": {
+        "texto": "Mas não tinha outro jeito. Eles aceitaram.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "ACEITARAM."
+      ]
+    },
+    {
+      "id": "galpao",
+      "fala": {
+        "texto": "Num galpão, três trajes feitos sob medida.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "MEDIDA."
+      ]
+    },
+    {
+      "id": "sola",
+      "fala": {
+        "texto": "O do Kaik tinha sola de cerâmica, que aguenta mil e quinhentos graus.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "GRAUS."
+      ],
+      "duracao": 4.5
+    },
+    {
+      "id": "derrete",
+      "fala": {
+        "texto": "Chega de tênis derretendo.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "DERRETENDO."
+      ]
+    },
+    {
+      "id": "luvas",
+      "fala": {
+        "texto": "Os do Chede e da Lia tinham luvas que seguram o tamanho da fenda...",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "LUVAS"
+      ],
+      "duracao": 4.81
+    },
+    {
+      "id": "medo",
+      "fala": {
+        "texto": "...mesmo com medo.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "MEDO."
+      ]
+    },
+    {
+      "id": "quinze",
+      "fala": {
+        "texto": "Quando voltaram, a criatura já tinha quinze metros.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "METROS."
+      ],
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "de": 0,
+          "ate": 2.5,
+          "volume": 1.2
+        }
+      ]
+    },
+    {
+      "id": "cincokm",
+      "fala": {
+        "texto": "O Kaik se afastou cinco quilômetros.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "QUILÔMETROS."
+      ]
+    },
+    {
+      "id": "corre",
+      "fala": {
+        "texto": "E correu em linha reta. Dois mil quilômetros por hora.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "MIL"
+      ],
+      "duracao": 3.58
+    },
+    {
+      "id": "caminhoes",
+      "fala": {
+        "texto": "Setenta quilos nessa velocidade é a força de três caminhões a cem por hora.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "CAMINHÕES"
+      ],
+      "duracao": 4.81
+    },
+    {
+      "id": "soco",
+      "fala": {
+        "texto": "Ele pulou... e acertou o soco com tudo.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "TUDO."
+      ],
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 2.31,
+          "volume": 1.2
+        }
+      ],
+      "duracao": 4.2
+    },
+    {
+      "id": "sentiu",
+      "fala": {
+        "texto": "Pela primeira vez, a criatura sentiu. Deu três passos pra trás.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "SENTIU."
+      ],
+      "duracao": 3.88
+    },
+    {
+      "id": "braco",
+      "fala": {
+        "texto": "Só que o braço do Kaik não aguentou.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "AGUENTOU."
+      ]
+    },
+    {
+      "id": "osso",
+      "fala": {
+        "texto": "O osso do antebraço trincou. E o ombro saiu do lugar.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "TRINCOU."
+      ],
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 0.5,
+          "volume": 1
+        }
+      ],
+      "duracao": 3.88
+    },
+    {
+      "id": "caiu",
+      "fala": {
+        "texto": "Ele caiu no asfalto, segurando o braço.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": []
+    },
+    {
+      "id": "sofenda",
+      "fala": {
+        "texto": "Força não adiantava. Ela só volta pela fenda.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "FENDA."
+      ]
+    },
+    {
+      "id": "porta",
+      "fala": {
+        "texto": "Só que uma fenda do tamanho de uma porta não engole quinze metros.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "METROS."
+      ],
+      "duracao": 4.5
+    },
+    {
+      "id": "juntas",
+      "fala": {
+        "texto": "Mas duas fendas juntas viram uma só. Gigante.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "GIGANTE."
+      ]
+    },
+    {
+      "id": "vinte",
+      "fala": {
+        "texto": "O Chede e a Lia abriram juntos, com as luvas no máximo. Vinte metros.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "METROS."
+      ],
+      "duracao": 4.81
+    },
+    {
+      "id": "borda",
+      "fala": {
+        "texto": "A fenda virou um tornado gigante. A criatura foi puxada... e se agarrou na borda.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "TORNADO",
+        "BORDA."
+      ],
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "de": 0,
+          "ate": 4,
+          "volume": 1.4
+        }
+      ],
+      "duracao": 5.12
+    },
+    {
+      "id": "dentro",
+      "fala": {
+        "texto": "E a Lia gritou: fenda desse tamanho só fecha do lado de dentro.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "DENTRO."
+      ],
+      "duracao": 4.5
+    },
+    {
+      "id": "segurou",
+      "fala": {
+        "texto": "O vento puxou o Chede... e o Kaik segurou a mão dele.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "DELE."
+      ],
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "de": 0,
+          "ate": 3,
+          "volume": 1.2
+        }
+      ],
+      "duracao": 4.19
+    },
+    {
+      "id": "kaikfala",
+      "fala": {
+        "texto": "Por favor... não faça isso.",
+        "voz": "amigo",
+        "velocidade": 150
+      },
+      "destaque": [
+        "ISSO."
+      ],
+      "duracao": 2.8
+    },
+    {
+      "id": "chedefala",
+      "fala": {
+        "texto": "Me desculpa... mas eu preciso.",
+        "voz": "lucas",
+        "velocidade": 150
+      },
+      "destaque": [
+        "PRECISO."
+      ],
+      "duracao": 2.8
+    },
+    {
+      "id": "choram",
+      "fala": {
+        "texto": "Os dois chorando.",
+        "voz": "narrador",
+        "velocidade": 170
+      },
+      "destaque": [
+        "CHORANDO."
+      ],
+      "duracao": 2.4
+    },
+    {
+      "id": "solta",
+      "fala": {
+        "texto": "Ele soltou a mão do amigo: Corre!",
+        "voz": "narrador",
+        "velocidade": 185
+      },
+      "destaque": [
+        "CORRE!"
+      ],
+      "duracao": 2.8,
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 1.6,
+          "volume": 0.8
+        }
+      ]
+    },
+    {
+      "id": "pulou",
+      "fala": {
+        "texto": "E foi puxado junto com a criatura.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "CRIATURA."
+      ]
+    },
+    {
+      "id": "fechou",
+      "fala": {
+        "texto": "A fenda fechou. E o silêncio voltou de uma vez.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "VEZ."
+      ],
+      "duracao": 3.58
+    },
+    {
+      "id": "semforca",
+      "fala": {
+        "texto": "Lá dentro, ele tentou abrir outra... mas não tinha mais força.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "FORÇA."
+      ],
+      "duracao": 3.88
+    },
+    {
+      "id": "desmaiou",
+      "fala": {
+        "texto": "Desmaiou. E ninguém sabe o que a criatura fez com ele.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "ELE."
+      ],
+      "duracao": 3.88
+    },
+    {
+      "id": "coma",
+      "fala": {
+        "texto": "A Lia também apagou. Três dias depois, ainda em coma.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "COMA."
+      ],
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 60,
+          "bpmFim": 70,
+          "de": 0,
+          "ate": 3
+        }
+      ],
+      "duracao": 3.58
+    },
+    {
+      "id": "kaikhosp",
+      "fala": {
+        "texto": "O Kaik, de braço engessado, não saiu do lado dela.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [],
+      "duracao": 3.58
+    },
+    {
+      "id": "naomorreu",
+      "fala": {
+        "texto": "Chede... eu sei que você ainda não morreu.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "MORREU."
+      ]
+    },
+    {
+      "id": "luz",
+      "fala": {
+        "texto": "E na mão da Lia... uma luz roxa piscou.",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "PISCOU."
+      ],
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 60,
+          "bpmFim": 120,
+          "de": 0,
+          "ate": 3
+        }
+      ],
+      "duracao": 3.27
+    },
+    {
+      "id": "parte",
+      "fala": {
+        "texto": "Fim da primeira temporada. Segue pra ver a temporada 2!",
+        "voz": "narrador",
+        "velocidade": 195
+      },
+      "destaque": [
+        "2!"
+      ],
+      "duracao": 4.0
     }
-   ],
-   "duracao": 3.27
-  },
-  {
-   "id": "parte",
-   "fala": {
-    "texto": "Fim da primeira temporada. Segue pra ver a temporada 2!",
-    "voz": "narrador",
-    "velocidade": 195
-   },
-   "destaque": [
-    "2!"
-   ],
-   "duracao": 4.0
-  }
- ]
+  ]
 }

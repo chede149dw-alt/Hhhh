@@ -200,3 +200,18 @@ Regras que valem para todos os vídeos. Cada uma com o motivo.
   - o Chede solta a mão e grita "Corre!".
   Falas de personagem usam a voz do personagem, não a do narrador. Mãos dadas: medir a mão de um personagem desenhando invisível (`globalAlpha = 0`) e depois encaixar o outro nela.
 - **Fala longa na prévia (espeak) também precisa de `duracao`** (palavras ÷ velocidade + 0,5 s). Senão o plano corta em 3 s, o áudio vaza para o seguinte e a legenda fica atrasada.
+- **Batalha na cidade = cenário `Cenarios3D.cidade` (avenida à noite), nunca a rua do bairro** (usuário, 14/11: "a criatura tá por dentro da árvore"). A rua do bairro tem árvores e carros parados que ficam na frente da criatura. O cenário novo (`animacao-do-chede/cenarios/cidade-noite-3d.js`) tem:
+  - avenida de 12 m sem nada no meio, prédios com janelas acesas, neon, postes com cone de luz;
+  - fumaça, fogo e entulho (`destruicao`), beco estreito (`beco: true`);
+  - quarteirões que se repetem sem fim (serve para a corrida em primeira pessoa).
+- **Golpe forte = bater na parede, rachar e ficar escorado** (usuário: "batendo na parede, ficando rachado, ele fica meio que escorado"). Sequência: voo com rastro → quadro de impacto (tela branca com linhas pretas, estilo mangá) → rachadura crescendo na parede, pedaços e poeira → escorrega até sentar. A rachadura deve ser fina e serrilhada; grossa e comprida parece galho de árvore. Não usar quadro de cores invertidas: no cenário escuro fica barrento.
+- **Correr é correr, não andar** (usuário: "parece que eles tão andando"). Usar `correr: api.t` no `personagem3d`: tronco inclinado, joelho dobrando alto, braços em 90° e corpo quicando. Câmera correndo junto em 3/4, com poeira dos passos. No rig, ângulo negativo leva coxa e braço para a frente.
+- **Anel dourado tem que ficar nos olhos** (usuário: o anel estava no cabelo e na testa). No close da mulher do governo, os olhos ficam em `rig.pontoMundo('cabeca', [±0,10, −0,51])`, e o anel é desenhado dentro da mesma transformação do close.
+- **O soco precisa mostrar o instante exato** (usuário: "a câmera pegando certinho o momento que o Kaik dá um soco na barriga"). Usar dois planos:
+  - no chão: ele chega, agacha e pula, e o asfalto racha;
+  - no ar, de lado, na altura da barriga, em câmera lenta. O punho é medido com desenho invisível e encaixado no ponto de impacto, dentro da silhueta da criatura. Depois vêm o quadro de impacto, as ondas de choque, a estrela de energia, o tremor forte e a criatura recuando.
+- **Corrida em linha reta = primeira pessoa** (usuário: "a visão dele, primeira pessoa"). Mostrar:
+  - a avenida reta à frente, acelerando, com borrão de zoom e linhas de velocidade;
+  - o estrondo sônico e os vidros estourando dos lados;
+  - os punhos dele balançando embaixo da tela;
+  - a criatura crescendo no fim da rua.

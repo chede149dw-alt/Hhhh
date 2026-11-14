@@ -40,7 +40,7 @@
   }
   function fundo(ctx, api, camOpts, px) {
     const camada = api.camada(), g = camada.getContext('2d');
-    const cam = api.camera({ nevoa: Cenarios3D.rua.nevoa, distNevoa: 30, ...camOpts });
+    const cam = api.camera({ nevoa: NEV, distNevoa: 30, ...camOpts });
     Cenarios3D.rua.desenhar(g, cam, { t: api.t });
     api.desfocar(camada, px);
     return cam;
@@ -134,6 +134,10 @@
   // fração do plano (0..1) → 0..1 (api.fase conta em SEGUNDOS)
   const fr = (api, a, b, e) => api.fase(a * api.dur, b * api.dur, e);
   const ROXO = '#C9A6FF';
+  const NEV = Cenarios3D.cidade.nevoa;
+  // olho na cabeça do rig (unidades da cabeça) e raio do anel em fração da altura do close
+  const OLHO_SX = 0.1, OLHO_DY = -0.14, OLHO_R = 0.048;
+  const DOR = () => ({ ...P().raiva, palpebra: 0.7, sobrancelha: { y: 0.02, ang: 14 }, boca: { tipo: 'aberta', curva: -0.6, abertura: 0.04, largura: 0.07 } });
   const LUZ_NOITE = { lado: -1, cor: 'rgb(150,170,255)', forca: 0.6 };
   // trajes do governo (moletom técnico com faixa da cor do poder, calça e bota de cano alto)
   const TRAJE = (cor, faixa) => ({ top: { tipo: 'moletom', cor, faixa }, calca: { tipo: 'reta', cor: 'grafite' }, calcado: { tipo: 'cano-alto', cor: 'grafite', acento: faixa } });
@@ -160,33 +164,9 @@
     g.addColorStop(0, `rgba(255,250,230,${a})`); g.addColorStop(0.3, `rgba(${cor},${a * 0.5})`); g.addColorStop(1, `rgba(${cor},0)`);
     ctx.fillStyle = g; ctx.fillRect(x - r, y - r, 2 * r, 2 * r); ctx.restore();
   }
-  // postes dos dois lados da rua; apagados = os que a criatura já "comeu" (zApaga: postes com Z maior que isso estão apagados)
-  function postes(ctx, cam, zApaga = 999) {
-    for (let Z = 4; Z < 70; Z += 7) for (const X of [-3.4, 3.4]) {
-      const b = cam.p(X, 0, Z), t = cam.p(X, 5.2, Z); if (b.dz < 0.8) continue;
-      ctx.strokeStyle = '#2A2838'; ctx.lineWidth = Math.max(1.5, 0.12 * b.s); ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(t.x, t.y); ctx.stroke();
-      if (Z < zApaga) { brilho(ctx, t.x, t.y, 1.6 * t.s, 0.9); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = 'rgba(255,220,150,0.08)'; ctx.beginPath(); ctx.moveTo(t.x - 0.2 * t.s, t.y); ctx.lineTo(t.x + 0.2 * t.s, t.y); ctx.lineTo(b.x + 1.6 * b.s, b.y); ctx.lineTo(b.x - 1.6 * b.s, b.y); ctx.fill(); ctx.restore(); }
-    }
-  }
-  // prédios escuros ao fundo, com janelas que apagam
-  function predios(ctx, cam, acesas = 1, sem = 4) {
-    const rnd = rng(sem);
-    for (let i = 0; i < 14; i++) {
-      const X = -40 + i * 6.2 + rnd() * 2, Z = 70 + rnd() * 30, h = 18 + rnd() * 40, w = 5 + rnd() * 3;
-      const a = cam.p(X - w / 2, 0, Z), b = cam.p(X + w / 2, h, Z); if (a.dz < 1) continue;
-      ctx.fillStyle = '#151830'; ctx.fillRect(a.x, b.y, b.x - a.x, a.y - b.y);
-      const r2 = rng(sem * 31 + i);
-      for (let jy = b.y + 6; jy < a.y - 6; jy += Math.max(6, (a.y - b.y) / 14)) for (let jx = a.x + 4; jx < b.x - 4; jx += Math.max(5, (b.x - a.x) / 5)) {
-        if (r2() < 0.5 * acesas) { ctx.fillStyle = 'rgba(255,214,140,0.85)'; ctx.fillRect(jx, jy, Math.max(2, (b.x - a.x) / 9), Math.max(2, (a.y - b.y) / 30)); }
-      }
-    }
-  }
-  // cenário da cidade à noite: rua + prédios + postes, escurecida
+  // cenário da cidade à noite (Cenarios3D.cidade: avenida larga, prédios dos dois lados, nada no meio da rua)
   function cidade(ctx, api, cam, o = {}) {
-    Cenarios3D.rua.desenhar(ctx, cam, { t: api.t });
-    predios(ctx, cam, o.acesas === undefined ? 1 : o.acesas);
-    noite(ctx, o.noite === undefined ? 0.72 : o.noite);
-    postes(ctx, cam, o.zApaga === undefined ? 999 : o.zApaga);
+    Cenarios3D.cidade.desenhar(ctx, cam, { t: api.t, acesas: o.acesas === undefined ? 1 : o.acesas, zApaga: o.zApaga === undefined ? 999 : o.zApaga, apagados: o.apagados, destruicao: o.destruicao || 0, beco: o.beco, semPoste: o.semPoste });
   }
 
   // ---------- A CRIATURA (2D) ----------
@@ -264,8 +244,145 @@
   }
   const fechado = () => ({ ...P().neutro, fechado: 'sorriso', boca: { tipo: 'linha', curva: 0 } });
 
+  // ---------- efeitos da batalha (estilhaços, poeira, rachadura, linhas de impacto) ----------
+  // estilhaços 3D com gravidade; k = segundos desde a explosão. o: { v, dir:[x,y,z], tam, cor, g }
+  function estilhacos(ctx, cam, X, Y, Z, k, n, sem, o = {}) {
+    if (k <= 0) return; const r = rng(sem), g = o.g === undefined ? 9.8 : o.g, v0 = o.v || 8, dir = o.dir || [0, 0.6, 0];
+    for (let i = 0; i < n; i++) {
+      const a = r() * Math.PI * 2, b = (r() - 0.3) * Math.PI * 0.6, v = v0 * (0.35 + r() * 0.9), sz = (o.tam || 0.22) * (0.4 + r() * 1.1);
+      const vx = Math.cos(a) * Math.cos(b) * v * 0.6 + dir[0] * v, vy = Math.sin(b) * v * 0.6 + dir[1] * v, vz = Math.sin(a) * Math.cos(b) * v * 0.6 + dir[2] * v;
+      let y = Y + vy * k - 0.5 * g * k * k; const x = X + vx * k, z = Z + vz * k;
+      if (y < 0) y = 0;
+      const q = cam.p(x, y + sz / 2, z); if (q.dz < 0.5) continue;
+      const R = sz * q.s; if (R < 0.6) continue;
+      ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(r() * 6 + k * (r() - 0.5) * 18);
+      ctx.fillStyle = o.cor || (i % 3 ? '#454660' : '#5D5B78'); ctx.beginPath(); ctx.moveTo(-R, -R * 0.4); ctx.lineTo(R * 0.2, -R); ctx.lineTo(R, R * 0.3); ctx.lineTo(-R * 0.3, R * 0.8); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(200,200,255,0.35)'; ctx.fillRect(-R * 0.5, -R * 0.6, R * 0.6, R * 0.18);
+      ctx.restore();
+    }
+  }
+  // nuvem de poeira se abrindo; k 0..1
+  function nuvem(ctx, cam, X, Y, Z, k, R, sem, cor = '110,100,140', a0 = 0.55) {
+    if (k <= 0 || k >= 1) return; const r = rng(sem), e = 1 - Math.pow(1 - k, 3);
+    for (let i = 0; i < 12; i++) {
+      const a = r() * Math.PI * 2, d = R * e * (0.3 + r() * 0.7), q = cam.p(X + Math.cos(a) * d, Y + Math.abs(Math.sin(a)) * d * 0.4 + e * 0.6, Z + Math.sin(a) * d * 0.5);
+      if (q.dz < 0.5) continue; const rr = R * (0.35 + 0.5 * e) * (0.6 + r() * 0.6) * q.s;
+      const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, rr); g.addColorStop(0, `rgba(${cor},${a0 * (1 - k)})`); g.addColorStop(1, `rgba(${cor},0)`);
+      ctx.fillStyle = g; ctx.fillRect(q.x - rr, q.y - rr, 2 * rr, 2 * rr);
+    }
+  }
+  // rachadura numa parede vertical (plano x = Xw) ou no chão (plano y = 0, eixo: 'chao'); k 0..1 cresce
+  function racha(ctx, cam, P, k, sem, esc = 1, plano = 'parede') {
+    if (k <= 0) return; const r = rng(sem);
+    const pt = (a, b) => (plano === 'parede' ? cam.p(P[0], P[1] + a, P[2] + b) : cam.p(P[0] + b, 0.02, P[2] + a));
+    ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // cratera
+    const cr = 0.5 * esc * Math.min(1, k * 4), c = pt(0, 0);
+    if (!c.atras) {
+      ctx.fillStyle = 'rgba(10,8,20,0.85)'; ctx.beginPath();
+      for (let i = 0; i < 14; i++) { const a = (i / 14) * Math.PI * 2, rr = cr * (0.7 + r() * 0.5), q = pt(Math.sin(a) * rr, Math.cos(a) * rr); i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y); }
+      ctx.closePath(); ctx.fill(); ctx.strokeStyle = 'rgba(190,190,230,0.6)'; ctx.lineWidth = Math.max(1, 0.06 * c.s); ctx.stroke();
+      // lascas em volta da cratera
+      for (let i = 0; i < 8; i++) { const a = r() * Math.PI * 2, rr = cr * (1.1 + r() * 0.5), q = pt(Math.sin(a) * rr, Math.cos(a) * rr), z = Math.max(2, 0.08 * c.s); ctx.fillStyle = 'rgba(20,16,34,0.8)'; ctx.fillRect(q.x - z / 2, q.y - z / 2, z, z * 0.7); }
+    }
+    const linha = (pts, w) => {
+      const q = pts.map(([a, b]) => pt(a, b)); if (q.some((v) => v.atras)) return;
+      ctx.strokeStyle = 'rgba(12,10,22,0.9)'; ctx.lineWidth = Math.max(1, w * c.s); ctx.beginPath(); q.forEach((v, i) => (i ? ctx.lineTo(v.x, v.y) : ctx.moveTo(v.x, v.y))); ctx.stroke();
+      ctx.strokeStyle = 'rgba(190,190,235,0.4)'; ctx.lineWidth = Math.max(0.6, w * 0.5 * c.s); ctx.beginPath(); q.forEach((v, i) => (i ? ctx.lineTo(v.x + 2, v.y + 2) : ctx.moveTo(v.x + 2, v.y + 2))); ctx.stroke();
+    };
+    for (let i = 0; i < 12; i++) {
+      let ang = (i / 12) * Math.PI * 2 + r() * 0.4, a = 0, b = 0; const pts = [[0, 0]], L = (0.7 + r() * 1.5) * esc * k;
+      for (let j = 0; j < 8; j++) {
+        ang += (j % 2 ? 1 : -1) * (0.25 + r() * 0.35); a += (Math.sin(ang) * L) / 8; b += (Math.cos(ang) * L) / 8; pts.push([a, b]);
+        if (j === 3 && r() < 0.7) { let a2 = a, b2 = b, an2 = ang + (r() < 0.5 ? 0.9 : -0.9); const p2 = [[a, b]]; for (let m = 0; m < 4; m++) { an2 += (r() - 0.5) * 0.6; a2 += (Math.sin(an2) * L) / 10; b2 += (Math.cos(an2) * L) / 10; p2.push([a2, b2]); } linha(p2, 0.008 * esc); }
+      }
+      linha(pts, 0.018 * esc);
+    }
+    ctx.restore();
+  }
+  // linhas de impacto estilo anime saindo de um ponto (de fora para dentro)
+  function linhasImpacto(ctx, x, y, a, sem, cor = '255,255,255', rMin = 260) {
+    if (a <= 0) return; const r = rng(sem + Math.floor(a * 3));
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    for (let i = 0; i < 70; i++) {
+      const ang = r() * Math.PI * 2, r0 = rMin + r() * 260, w = 2 + r() * 10;
+      ctx.fillStyle = `rgba(${cor},${a * (0.4 + r() * 0.6)})`;
+      ctx.beginPath(); ctx.moveTo(x + Math.cos(ang - 0.004 * w) * r0, y + Math.sin(ang - 0.004 * w) * r0);
+      ctx.lineTo(x + Math.cos(ang) * 2200, y + Math.sin(ang) * 2200); ctx.lineTo(x + Math.cos(ang + 0.004 * w) * r0, y + Math.sin(ang + 0.004 * w) * r0); ctx.fill();
+    }
+    ctx.restore();
+  }
+  // linhas de velocidade (radiais a partir do ponto de fuga)
+  function linhasVel(ctx, cx, cy, a, t, cor = '220,245,255') {
+    if (a <= 0) return; const r = rng(77);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+    for (let i = 0; i < 90; i++) {
+      const ang = r() * Math.PI * 2, sp = 0.6 + r() * 1.4, ph = (t * sp * 2.2 + r()) % 1, r0 = 200 + ph * 1400, len = 120 + ph * 700;
+      ctx.strokeStyle = `rgba(${cor},${a * ph * (0.3 + r() * 0.5)})`; ctx.lineWidth = 1 + ph * 4;
+      ctx.beginPath(); ctx.moveTo(cx + Math.cos(ang) * r0, cy + Math.sin(ang) * r0); ctx.lineTo(cx + Math.cos(ang) * (r0 + len), cy + Math.sin(ang) * (r0 + len)); ctx.stroke();
+    }
+    ctx.restore();
+  }
+  // quadro de impacto: cores invertidas (anime)
+  function inverte(ctx) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  // quadro de impacto (mangá): tela branca com linhas pretas saindo do ponto
+  function quadroImpacto(ctx, x, y, sem) { clarao(ctx, 0.92, '250,250,255'); linhasImpacto(ctx, x, y, 1, sem, '10,6,24', 180); }
+  function clarao(ctx, a, cor = '255,255,255') { if (a <= 0) return; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = `rgba(${cor},${Math.min(1, a)})`; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  // brasas/poeira flutuando na tela (clima de batalha)
+  function brasas(ctx, api, n = 40, a = 1) {
+    const r = rng(19); ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < n; i++) {
+      const x = (r() * W + Math.sin(api.t * 0.7 + i) * 40 + api.t * 30 * (r() - 0.3)) % W, y = H - ((r() * H + api.t * (40 + r() * 80)) % H), s = 1.5 + r() * 3.5;
+      ctx.fillStyle = `rgba(255,${140 + r() * 80},${60 + r() * 60},${a * (0.25 + 0.5 * r()) * (0.6 + 0.4 * Math.sin(api.t * 5 + i))})`;
+      ctx.beginPath(); ctx.arc(x, y, s, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+  // poses
+  const SENTADO_PAREDE = { tronco: -6, cabeca: 16, coxa_d: -82, canela_d: 12, pe_d: 10, coxa_e: -70, canela_e: 38, pe_e: 5, braco_d: 8, antebraco_d: -18, braco_e: -6, antebraco_e: -30 };
+  const ESMAGADO = { tronco: -14, cabeca: -18, braco_d: 120, antebraco_d: 30, braco_e: 100, antebraco_e: 20, coxa_d: 25, canela_d: 30, coxa_e: -20, canela_e: 45 };
+  const SOCO_AR = { tronco: 22, cabeca: -6, braco_d: -92, antebraco_d: -2, braco_e: 70, antebraco_e: -110, coxa_d: 35, canela_d: 70, coxa_e: -55, canela_e: 80, pe_d: 20, _maos: { d: 'punho', e: 'punho' } };
+  const AGACHA = { tronco: 35, cabeca: -20, braco_d: 55, antebraco_d: -40, braco_e: 60, antebraco_e: -50, coxa_d: -70, canela_d: 110, coxa_e: -40, canela_e: 120, _desloca: [0, 0.18] };
+  const PULO = { tronco: 18, cabeca: -12, braco_d: -60, antebraco_d: -70, braco_e: 50, antebraco_e: -90, coxa_d: -60, canela_d: 90, coxa_e: 30, canela_e: 40, _maos: { d: 'punho', e: 'punho' } };
+  // braços do Kaik em primeira pessoa (manga marinho com faixa turquesa, punho fechado)
+  function bracosPOV(ctx, api, vel) {
+    const f = api.t * 2 * Math.PI * (1.6 + vel * 0.6);
+    for (const l of [-1, 1]) {
+      const s = Math.sin(f + (l > 0 ? Math.PI : 0)), x = 540 + l * 360 + l * s * 20, y = 1780 - s * 170 * (1 - vel * 0.6), ang = l * (0.35 - s * 0.15);
+      ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+      ctx.fillStyle = '#1F2B52'; ctx.beginPath(); ctx.roundRect(-95, -40, 190, 520, 80); ctx.fill();
+      ctx.fillStyle = '#41D8CB'; ctx.fillRect(l > 0 ? -95 : 75, -10, 20, 470);
+      ctx.fillStyle = '#16203F'; ctx.beginPath(); ctx.roundRect(-100, -60, 200, 70, 30); ctx.fill();
+      // punho
+      ctx.fillStyle = '#E9B892'; ctx.beginPath(); ctx.roundRect(-82, -175, 164, 130, 55); ctx.fill();
+      ctx.fillStyle = '#D29E7A'; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.roundRect(-74 + k * 38, -182, 34, 40, 15); ctx.fill(); }
+      ctx.fillStyle = 'rgba(255,240,220,0.35)'; ctx.beginPath(); ctx.roundRect(-60, -165, 60, 30, 12); ctx.fill();
+      ctx.restore();
+      // aura ciano nos punhos
+      brilho(ctx, x - l * 30, y - 120, 220, 0.35 * vel, '89,216,255');
+    }
+  }
+  // parede de prédio (concreto) no plano x = Xw, de z0 a z1, com placas e uma vitrine
+  function paredeConcreto(ctx, cam, Xw, z0, z1, h) {
+    const q = [[Xw, 0, z0], [Xw, 0, z1], [Xw, h, z1], [Xw, h, z0]].map((P) => cam.p(...P)); if (q.some((v) => v.atras)) return;
+    const g = ctx.createLinearGradient(0, (q[0].y + q[1].y) / 2, 0, (q[2].y + q[3].y) / 2);
+    g.addColorStop(0, '#5B5470'); g.addColorStop(0.3, '#433F5E'); g.addColorStop(1, '#22213D');
+    ctx.fillStyle = g; ctx.beginPath(); q.forEach((v, i) => (i ? ctx.lineTo(v.x, v.y) : ctx.moveTo(v.x, v.y))); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(15,12,30,0.45)'; ctx.lineWidth = 2;
+    for (let y = 3.2; y < h; y += 3.2) { const a = cam.p(Xw, y, z0), b = cam.p(Xw, y, z1); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    for (let z = z0 + 4; z < z1; z += 4) { const a = cam.p(Xw, 0, z), b = cam.p(Xw, h, z); if (a.atras) continue; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    // rodapé
+    const r0 = cam.p(Xw, 0.4, z0), r1 = cam.p(Xw, 0.4, z1); ctx.strokeStyle = 'rgba(10,8,22,0.7)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(r0.x, r0.y); ctx.lineTo(r1.x, r1.y); ctx.stroke();
+    // janelas dos andares de cima
+    for (let y = 4.4; y + 1.7 < h; y += 3.2) for (let z = z0 + 1; z + 1.4 < z1; z += 2.6) {
+      const ac = rng(Math.floor(y * 13 + z * 7))() < 0.45;
+      const w = [[Xw - 0.01, y, z], [Xw - 0.01, y, z + 1.3], [Xw - 0.01, y + 1.7, z + 1.3], [Xw - 0.01, y + 1.7, z]].map((P) => cam.p(...P)); if (w.some((v) => v.atras)) continue;
+      ctx.fillStyle = ac ? '#E9C487' : '#1A1C36'; ctx.beginPath(); w.forEach((v, i) => (i ? ctx.lineTo(v.x, v.y) : ctx.moveTo(v.x, v.y))); ctx.closePath(); ctx.fill();
+    }
+  }
+
   // ---------- planos ----------
-  const CAM_RUA = (api, o) => api.orbita({ nevoa: Cenarios3D.rua.nevoa, f: 1150, ySalvo: 1000, ...o });
+  const CAM_RUA = (api, o) => api.orbita({ nevoa: NEV, distNevoa: 70, f: 1150, ySalvo: 1000, ...o });
   // trio na rua (trajes ou não), em ordem de profundidade
   function trio(api, ctx, cam, pos, o = {}) {
     const [C1, K1, L1] = pos, alvo = o.alvo || [0, 30];
@@ -284,7 +401,7 @@
 
     // ATO 1
     apagando(ctx, u, d, api) {
-      const cam = api.camera({ f: 1150, x: 0.3, y: 1.6, z: api.lerp(0, 1.2, u / d), cy: 980, nevoa: Cenarios3D.rua.nevoa });
+      const cam = api.camera({ f: 1150, x: 0.3, y: 1.6, z: api.lerp(0, 1.2, u / d), cy: 980, nevoa: NEV });
       cidade(ctx, api, cam, { zApaga: api.lerp(70, 8, fr(api, 0.1, 0.95)) });
       // marcas pretas no asfalto
       for (let i = 0; i < 10; i++) { const Z = 4 + i * 2.6, X = (i % 2 ? 0.3 : -0.3); const q = cam.p(X, 0.01, Z); if (q.dz < 1) continue; ctx.fillStyle = 'rgba(8,4,14,0.9)'; ctx.beginPath(); ctx.ellipse(q.x, q.y, 0.18 * q.s, 0.06 * q.s, 0, 0, Math.PI * 2); ctx.fill(); }
@@ -297,40 +414,88 @@
     },
     dezmetros(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, api.lerp(1.5, 6, fr(api, 0, 0.8)), 22], raio: 18, ang: 0.15, altura: api.lerp(1.4, 2.6, fr(api, 0, 0.8)), ySalvo: 1050 });
-      cidade(ctx, api, cam, { zApaga: 6, acesas: 0.3 });
+      cidade(ctx, api, cam, { zApaga: 6, acesas: 0.3 , destruicao: 0.6 });
       criatura3d(ctx, cam, 0.5, 26, 10, { t: api.t });
       if (u > 1.2) info(api, ctx, 'ALTURA', '10 m', 1580, ROXO, fr(api, 1.2, 1.5, 'volta'));
     },
     energia(ctx, u, d, api) {
-      const cam = CAM_RUA(api, { alvo: [2.5, 4.5, 14], raio: 9, ang: api.lerp(0.4, 0.55, u / d), altura: 2.5, ySalvo: 1050 });
-      const pega = fr(api, 0.2, 0.6);
-      cidade(ctx, api, cam, { zApaga: pega > 0.9 ? 4 : 999, acesas: 0.3 });
-      const q = criatura3d(ctx, cam, 1.0, 19, 10 + fr(api, 0.6, 1) * 0.6, { t: api.t, bracoD: 0.35 * pega, garra: pega, cresce: fr(api, 0.6, 1) });
-      const pt = cam.p(3.4, 5.2, 18);
-      if (pega > 0.5 && pega < 1 || (u > 0.5 * d && u < 0.75 * d)) faiscas(ctx, pt.x, pt.y, 26, 0.9 * pt.s, api.t, 3);
-      void q;
+      // a mão gigante agarra um poste: faíscas, o poste apaga e ela incha
+      const cam = CAM_RUA(api, { alvo: [-2, 5, 16], raio: 10, ang: api.lerp(-0.35, -0.2, u / d), altura: 2.2, ySalvo: 1060 });
+      const pega = fr(api, 0.2, 0.55), comeu = fr(api, 0.55, 1);
+      cidade(ctx, api, cam, { zApaga: 999, acesas: 0.4, apagados: pega > 0.95 ? [18] : [], destruicao: 0.4 });
+      criatura3d(ctx, cam, -1.2, 21, 10 + comeu * 0.8, { t: api.t, bracoD: 0.55 * pega, garra: pega, cresce: comeu, inclina: -4 * pega });
+      const pt = cam.p(-4.5, 8.5, 18);
+      if (pega > 0.6 && comeu < 0.6) { faiscas(ctx, pt.x, pt.y, 34, 1.2 * pt.s, api.t, 3); brilho(ctx, pt.x, pt.y, 2.5 * pt.s, 0.8 * (1 - comeu), '190,150,255'); }
+      if (comeu > 0) { const q = cam.p(-1.2, 6, 21); brilho(ctx, q.x, q.y, 6 * q.s * (1 - comeu), 0.6 * (1 - comeu), '190,150,255'); }
+      brasas(ctx, api, 20, 0.6);
     },
     kaikcorre(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 3, 16], raio: 12, ang: api.lerp(-0.3, 0.1, u / d), altura: 3.2, ySalvo: 1050 });
-      cidade(ctx, api, cam, { zApaga: 4, acesas: 0.3 });
+      cidade(ctx, api, cam, { zApaga: 4, acesas: 0.3 , destruicao: 0.6 });
       criatura3d(ctx, cam, 0, 18, 10, { t: api.t });
       const n = 40; let prev = null;
       for (let i = 0; i <= n; i++) { const a = api.t * 9 - i * 0.09, X = Math.cos(a) * 3.2, Z = 18 + Math.sin(a) * 2.2, q = cam.p(X, 0.9, Z); if (prev && q.dz > 1) rastro(ctx, prev.x, prev.y, q.x, q.y, 0.6 * q.s, 1 - i / n); prev = q; }
       info(api, ctx, 'KAIK', '1.000 km/h', 1580, '#59D8FF', fr(api, 0.2, 0.5, 'volta'));
     },
     tapa(ctx, u, d, api) {
-      const cam = CAM_RUA(api, { alvo: [0, 2, 12], raio: 11, ang: 0.3, altura: 2.2, ySalvo: 1050 });
-      cidade(ctx, api, cam, { zApaga: 4, acesas: 0.3 });
-      const golpe = fr(api, 0.3, 0.55);
-      criatura3d(ctx, cam, 0.5, 16, 10, { t: api.t, bracoD: golpe < 1 ? golpe * 0.9 : 0.9 - fr(api, 0.55, 1) * 0.9, garra: 0.5 });
-      const voo = fr(api, 0.5, 1, 'sai'), X = api.lerp(0.6, -4, voo), Z = api.lerp(13, 2.5, voo), y = Math.sin(voo * Math.PI) * 2.5;
-      if (u > 0.35 * d) api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: 'medo' }, X, Z, 1.75, { luz: LUZ_NOITE, y, rumo: voo * 6 });
-      if (voo > 0.2) info(api, ctx, 'VOOU', '30 m', 1580, AMARELO, fr(api, 0.6, 0.85, 'volta'));
+      const k = u / d;
+      if (k < 0.6) {
+        // plano aberto: o Kaik girando no pé dela; ela abre a mão sem olhar e acerta
+        const cam = CAM_RUA(api, { alvo: [0.8, 3.4, 16], raio: 10, ang: 0.22, altura: 1.3, ySalvo: 1120 });
+        const imp = fr(api, 0.5, 0.52), [tx, ty] = api.tremor(k > 0.52 ? 22 * (1 - fr(api, 0.52, 0.6)) : 0);
+        ctx.save(); ctx.translate(tx, ty);
+        cidade(ctx, api, cam, { zApaga: 4, acesas: 0.35, destruicao: 0.5 });
+        const golpe = fr(api, 0.38, 0.52, 'entra');
+        criatura3d(ctx, cam, 0.4, 19, 10, { t: api.t, bracoD: golpe * 1.05, garra: 0.4 + 0.6 * golpe });
+        if (k < 0.52) {
+          const n = 30; let prev = null;
+          for (let i = 0; i <= n; i++) { const a = api.t * 7 - i * 0.1, q = cam.p(Math.cos(a) * 3.4, 0.9, 19 + Math.sin(a) * 2.4); if (prev && q.dz > 1) rastro(ctx, prev.x, prev.y, q.x, q.y, 0.5 * q.s, 1 - i / n); prev = q; }
+          const a = api.t * 7, X = Math.cos(a) * 3.4, Z = 19 + Math.sin(a) * 2.4;
+          if (Z < 19) api.personagem3d(cam, { ...KAIK, pose: 'parado', expressao: 'determinado' }, X, Z, 1.75, { luz: LUZ_NOITE, rumo: a + Math.PI, correr: api.t * 1.6 });
+        } else {
+          const q = cam.p(3.2, 1.2, 17.5);
+          onda(ctx, q.x, q.y, fr(api, 0.52, 0.6), 520); faiscas(ctx, q.x, q.y, 30, 220, api.t, 5);
+          const s = fr(api, 0.52, 0.58, 'sai'); rastro(ctx, q.x, q.y, q.x + 1400 * s, q.y - 160 * s, 60, 1);
+          if (s < 0.4) clarao(ctx, 0.85 * (1 - s / 0.4));
+        }
+        ctx.restore();
+        if (k > 0.515 && k < 0.535) { const q = cam.p(3.2, 1.2, 17.5); quadroImpacto(ctx, q.x, q.y, 3); }
+        void imp;
+        return;
+      }
+      // contraplano: ele bate na parede do prédio, a parede racha e ele fica escorado
+      const Zk = 60, Xw = 8.6, b = fr(api, 0.6, 0.66, 'entra'), bate = k >= 0.66;
+      const [tx, ty] = api.tremor(bate ? 30 * (1 - fr(api, 0.66, 0.8)) : 6);
+      ctx.save(); ctx.translate(tx, ty);
+      const cam = api.camera({ f: 980, x: 4.2, y: 1.2, z: Zk - 5.6, yaw: 0.68, cy: 1100, nevoa: NEV, distNevoa: 70 });
+      Cenarios3D.cidade.desenhar(ctx, cam, { t: api.t, acesas: 0.35, zApaga: 4, destruicao: 0.5, semPoste: (s, Z) => s > 0 && Z > Zk - 8 && Z < Zk + 14 });
+      criatura3d(ctx, cam, -1.5, Zk + 45, 10, { t: api.t, olhos: 0.8 });
+      paredeConcreto(ctx, cam, Xw, Zk - 12, Zk + 16, 16);
+      const P = [Xw - 0.01, 1.45, Zk];
+      racha(ctx, cam, P, fr(api, 0.66, 0.78, 'sai'), 31, 1.2);
+      if (!bate) {
+        // voando de lado contra a parede
+        const X = api.lerp(1.5, Xw - 0.35, b), Y = api.lerp(1.6, 0.55, b);
+        const q0 = cam.p(X - 3, Y + 0.9, Zk + 0.4), q1 = cam.p(X, Y + 0.9, Zk);
+        rastro(ctx, q0.x, q0.y, q1.x, q1.y, 0.9 * q1.s, 0.8);
+        api.personagem3d(cam, { ...KAIK, pose: ESMAGADO, expressao: DOR() }, X, Zk, 1.75, { luz: LUZ_NOITE, y: Y, rumo: Math.PI / 2, parado: true });
+      } else {
+        // escorrega pela parede até sentar (poeira e pedaços atrás dele)
+        const desce = fr(api, 0.7, 0.84, 'sai'), dt = (k - 0.66) * d;
+        nuvem(ctx, cam, P[0] - 0.3, P[1], P[2], fr(api, 0.66, 0.95), 1.3, 4, '150,140,175', 0.45);
+        estilhacos(ctx, cam, P[0], P[1], P[2], dt, 34, 8, { v: 5, dir: [-0.8, 0.4, 0], tam: 0.14 });
+        api.personagem3d(cam, { ...KAIK, pose: ESMAGADO, pose2: SENTADO_PAREDE, mistura: desce, expressao: desce > 0.8 ? fechado() : DOR() }, Xw - 0.38, Zk, 1.75, { luz: LUZ_NOITE, y: api.lerp(0.55, -0.62, desce), rumo: Math.PI / 2, parado: true });
+        nuvem(ctx, cam, Xw - 0.6, 0.1, Zk + 0.3, fr(api, 0.8, 1), 0.9, 5, '140,130,165', 0.3);
+        if (k < 0.68) clarao(ctx, 0.9 * (1 - fr(api, 0.66, 0.68)));
+      }
+      ctx.restore();
+      if (bate && k < 0.68) { const q = cam.p(P[0], P[1], P[2]); quadroImpacto(ctx, q.x, q.y, 7); }
+      info(api, ctx, 'VOOU', '30 m', 1600, AMARELO, fr(api, 0.72, 0.84, 'volta'));
     },
     moeda(ctx, u, d, api) {
       const z = api.lerp(1, 1.05, u / d);
       ctx.save(); ctx.translate(540, 1000); ctx.scale(z, z); ctx.translate(-540, -1000);
-      const camada = api.camada(), g = camada.getContext('2d'); const cam = api.camera({ f: 1100, x: 0.4, y: 1.4, z: 1.2, cy: 980, nevoa: Cenarios3D.rua.nevoa });
+      const camada = api.camada(), g = camada.getContext('2d'); const cam = api.camera({ f: 1100, x: 0.4, y: 1.4, z: 1.2, cy: 980, nevoa: NEV });
       cidade(g, api, cam, { zApaga: 4, acesas: 0.3 }); api.desfocar(camada, 14);
       const rig = close(api, { ...CHEDE, pose: { braco_d: 70, antebraco_d: 20 }, expressao: 'medo' }, 600, 760, 300, { luz: LUZ_NOITE, vida: 2 });
       ctx.restore();
@@ -339,24 +504,43 @@
       info(api, ctx, 'COM MEDO', 'MOEDA', 1580, ROXO, fr(api, 0.5, 0.8, 'volta'));
     },
     fugir(ctx, u, d, api) {
-      const cam = api.camera({ f: 1100, x: 0.2, y: 1.5, z: api.lerp(-1, 4, u / d), cy: 990, nevoa: Cenarios3D.rua.nevoa });
-      cidade(ctx, api, cam, { zApaga: 4, acesas: 0.3 });
-      criatura3d(ctx, cam, -1, 30, 10, { t: api.t, bracoD: 0.4 });
-      const zz = api.lerp(9, 6, u / d) + api.lerp(-1, 4, u / d);
-      emOrdem(cam, POS.map((p0, i) => [p0[0], zz + i * 0.3 - 0.3, () => api.personagem3d(cam, { ...[CHEDE, KAIK, LIA][i], pose: 'andando', expressao: 'medo' }, p0[0], zz + i * 0.3 - 0.3, i === 2 ? 1.65 : 1.75, { luz: LUZ_NOITE, rumo: 0, caminharFrontal: api.t * 2.2, vida: 2 })]));
+      // câmera correndo junto (3/4 de frente); a criatura vem atrás e soca o asfalto
+      const v = 7.5, Zg = 34 - v * u, k = u / d;
+      const slam = fr(api, 0.38, 0.45, 'entra'), dt = Math.max(0, u - 0.45 * d);
+      const [tx, ty] = api.tremor(dt > 0 ? 26 * Math.max(0, 1 - dt / 0.8) : 3);
+      ctx.save(); ctx.translate(tx, ty);
+      const cam = CAM_RUA(api, { alvo: [0.4, 1.15, Zg], raio: 6.2, ang: 0.6, altura: 1.25, f: 950, ySalvo: 1100 });
+      cidade(ctx, api, cam, { zApaga: 4, acesas: 0.35, destruicao: 0.6 });
+      const Pc = [3.0, 0, Zg + 9];
+      racha(ctx, cam, Pc, fr(api, 0.45, 0.6, 'sai'), 12, 3, 'chao');
+      criatura3d(ctx, cam, 4.4, Zg + 14, 10, { t: api.t, bracoD: slam < 1 ? 0.2 + slam * 0.6 : 0.8 - fr(api, 0.6, 1) * 0.5, garra: 1, inclina: 8 * slam });
+      if (dt > 0) {
+        estilhacos(ctx, cam, Pc[0], 0.2, Pc[2], dt, 40, 3, { v: 9, dir: [-0.2, 0.9, -0.4], tam: 0.4 });
+        nuvem(ctx, cam, Pc[0], 0, Pc[2], fr(api, 0.45, 1), 6, 7, '110,100,140', 0.6);
+        
+      }
+      const corre = [[CHEDE, -0.9, 0.3, 1.75, 0], [LIA, 0.5, 0.9, 1.65, 0.33], [KAIK, 1.6, -0.3, 1.75, 0.6]];
+      emOrdem(cam, corre.map(([it, X, dz, h, ph]) => [X, Zg + dz, () => {
+        api.personagem3d(cam, { ...it, pose: 'parado', expressao: 'medo' }, X, Zg + dz, h, { luz: LUZ_NOITE, rumo: 0, correr: api.t + ph, velocidade: 1.15 });
+        // poeira dos passos
+        const pp = (api.t * 1.45 * 1.15 + ph) % 0.5; nuvem(ctx, cam, X, 0, Zg + dz + 0.4, pp * 2, 0.5, Math.floor(api.t * 3 + ph * 7), '140,130,170', 0.35);
+      }]));
+      ctx.restore();
+      vento(ctx, api, 0.25, 540, 900);
+      brasas(ctx, api, 30, 0.8);
+      void k;
     },
-
     // ATO 2
     beco(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 1.2, 4], raio: 5, ang: api.lerp(-0.6, -0.2, u / d), altura: 1.6 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, noite: 0.85 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, beco: true });
       const far = fr(api, 0.1, 0.4);
       for (const [X, Z] of [[-2.6, 0.5], [2.6, 8.5]]) { const q = cam.p(X, 0.7, Z); if (q.dz > 1) { brilho(ctx, q.x - 0.5 * q.s, q.y, 2.2 * q.s * far, far); brilho(ctx, q.x + 0.5 * q.s, q.y, 2.2 * q.s * far, far); } }
       trio(api, ctx, cam, [[-0.6, 4.0], [0.3, 3.7], [1.1, 4.3]], { alvo: [-2.6, 0.5] });
     },
     carros(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 1.2, 5], raio: 6, ang: api.lerp(0.2, 0.6, u / d), altura: 1.5 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, noite: 0.85 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, beco: true });
       const lista = [];
       for (let i = 0; i < 4; i++) { const X = -2 + i * 1.3, Z = 9 + (i % 2) * 0.6; lista.push([X, Z, () => api.personagem3d(cam, { ...AGENTE, pose: 'parado', expressao: 'neutro' }, X, Z, 1.8, { luz: LUZ_NOITE, olhaPara: [0, 4] })]); }
       [[-0.6, 4.0], [0.3, 3.7], [1.1, 4.3]].forEach((p0, i) => lista.push([p0[0], p0[1], () => api.personagem3d(cam, { ...[CHEDE, KAIK, LIA][i], pose: 'parado', expressao: 'preocupado' }, p0[0], p0[1], i === 2 ? 1.65 : 1.75, { luz: LUZ_NOITE, olhaPara: [0, 9] })]));
@@ -364,7 +548,7 @@
     },
     mulher(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0.6, 1.4, 6.5], raio: api.lerp(4, 3.2, u / d), ang: 0.35, altura: 1.55 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, noite: 0.85 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, beco: true });
       emOrdem(cam, [
         [1.0, 8.6, () => api.personagem3d(cam, { ...MULHER, pose: 'parado', expressao: 'neutro', voz: 'narrador' }, 1.0, 8.6, 1.7, { luz: LUZ_NOITE, olhaPara: [0, 4] })],
         [-0.4, 9.4, () => api.personagem3d(cam, { ...AGENTE, pose: 'parado', expressao: 'neutro' }, -0.4, 9.4, 1.8, { luz: LUZ_NOITE, olhaPara: [0, 4] })],
@@ -383,19 +567,38 @@
       info(api, ctx, 'ATÉ O AMANHECER', '6 h', 1640, ROXO, fr(api, 0.2, 0.5, 'volta'));
     },
     anel(ctx, u, d, api) {
-      const z = api.lerp(1, 1.1, u / d);
-      ctx.save(); ctx.translate(540, 900); ctx.scale(z, z); ctx.translate(-540, -900);
-      const camada = api.camada(), g = camada.getContext('2d'); const cam = api.camera({ f: 1100, x: 0.8, y: 1.5, z: 3, cy: 980, nevoa: Cenarios3D.rua.nevoa });
-      cidade(g, api, cam, { zApaga: 0, acesas: 0.1, noite: 0.85 }); api.desfocar(camada, 16);
-      close(api, { ...MULHER, pose: 'parado', expressao: { ...P().neutro, pupila: 0.7 } }, 540, 860, 560, { luz: LUZ_NOITE, vida: 0.5 });
+      const k = u / d;
+      if (k < 0.36) {
+        // o Kaik aperta os olhos, desconfiado
+        const camada = api.camada(), g = camada.getContext('2d'); const cam = api.camera({ f: 1100, x: -0.6, y: 1.5, z: 2.6, cy: 980, nevoa: NEV, distNevoa: 40 });
+        cidade(g, api, cam, { zApaga: 0, acesas: 0.25, beco: true }); api.desfocar(camada, 16);
+        const z = api.lerp(1, 1.06, fr(api, 0, 0.36));
+        ctx.save(); ctx.translate(540, 900); ctx.scale(z, z); ctx.translate(-540, -900);
+        close(api, { ...KAIK, pose: 'parado', expressao: { ...P().serio, palpebra: 0.55, sobrancelha: { y: 0.03, ang: -14 }, olhar: [0.01, 0] }, vista: 'tq' }, 520, 860, 600, { luz: LUZ_NOITE, vida: 0.6 });
+        ctx.restore();
+        return;
+      }
+      // close nos olhos da mulher: o anel dourado acende em volta da íris
+      const camada = api.camada(), g = camada.getContext('2d'); const cam = api.camera({ f: 1100, x: 0.8, y: 1.5, z: 3, cy: 980, nevoa: NEV, distNevoa: 40 });
+      cidade(g, api, cam, { zApaga: 0, acesas: 0.25, beco: true }); api.desfocar(camada, 18);
+      const z = api.lerp(1.55, 1.9, fr(api, 0.36, 1, 'sai'));
+      ctx.save(); ctx.translate(540, 760); ctx.scale(z, z); ctx.translate(-540, -760);
+      const rig = close(api, { ...MULHER, pose: 'parado', expressao: { ...P().neutro, pupila: 0.7 } }, 540, 860, 560, { luz: LUZ_NOITE, vida: 0.3 });
+      const a = fr(api, 0.55, 0.8);
+      if (rig && rig.pontoMundo && a > 0) for (const sx of [-OLHO_SX, OLHO_SX]) {
+        const e = rig.pontoMundo('cabeca', [sx, -0.37 + OLHO_DY]), R = OLHO_R * 560;
+        ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        const gl = ctx.createRadialGradient(e.x, e.y, R * 0.5, e.x, e.y, R * 3.2); gl.addColorStop(0, `rgba(255,190,60,${0.55 * a})`); gl.addColorStop(1, 'rgba(255,170,40,0)');
+        ctx.fillStyle = gl; ctx.fillRect(e.x - R * 3.2, e.y - R * 3.2, R * 6.4, R * 6.4);
+        ctx.strokeStyle = `rgba(255,214,90,${a})`; ctx.lineWidth = R * 0.28; ctx.beginPath(); ctx.arc(e.x, e.y, R * 1.0, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = `rgba(255,250,210,${a})`; ctx.lineWidth = R * 0.1; ctx.beginPath(); ctx.arc(e.x, e.y, R * 1.0, api.t * 3, api.t * 3 + Math.PI * 1.2); ctx.stroke();
+        ctx.restore();
+      }
       ctx.restore();
-      // anel dourado brilhando nos dois olhos
-      const a = fr(api, 0.3, 0.6);
-      for (const dx of [-0.19, 0.19]) brilho(ctx, 540 + dx * 560 * z, 860 - 0.37 * 560 * z + 0.47 * 560 * z * 0 + (-0.37 + 0.47) * 0, 60 * a, 0.7 * a, '255,178,30');
     },
     aceitam(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0.2, 1.4, 4.0], raio: api.lerp(3.2, 2.6, u / d), ang: api.lerp(-0.2, 0.2, u / d), altura: 1.55 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, noite: 0.85 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.1, beco: true });
       trio(api, ctx, cam, [[-0.6, 4.0], [0.3, 3.7], [1.1, 4.3]], { exC: u > 1 ? 'determinado' : 'preocupado', exK: 'preocupado', exL: 'preocupado', olhaK: [-0.6, 4], olhaL: [-0.6, 4], olhaC: [0.3, 3.7] });
       SELO(ctx, api);
     },
@@ -450,7 +653,7 @@
     // ATO 3
     quinze(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 6, 24], raio: 20, ang: api.lerp(-0.2, 0.05, u / d), altura: 1.3, ySalvo: 1100 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 , destruicao: 0.6 });
       criatura3d(ctx, cam, 0.5, 30, 15, { t: api.t, cresce: 0.5 });
       trio(api, ctx, cam, [[-0.9, 6.0], [0.1, 5.6], [1.1, 6.2]], { traje: true, exC: 'determinado', exK: 'determinado', exL: 'determinado' });
       info(api, ctx, 'ALTURA', '15 m', 1600, ROXO, fr(api, 0.3, 0.6, 'volta'));
@@ -465,12 +668,34 @@
       info(api, ctx, 'DISTÂNCIA', '5 km', 1050, '#59D8FF', fr(api, 0.2, 0.5, 'volta'));
     },
     corre(ctx, u, d, api) {
-      const cam = api.camera({ f: 1000, x: 2.2, y: 1.1, z: api.lerp(2, 8, u / d), cy: 1000, nevoa: Cenarios3D.rua.nevoa });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
-      const k = fr(api, 0.1, 0.9), Z = api.lerp(-30, 40, k);
-      const a = cam.p(0, 0.9, Z - 25), b = cam.p(0, 0.9, Z); if (b.dz > 1 && a.dz > 1) rastro(ctx, a.x, a.y, b.x, b.y, 0.7 * b.s);
-      if (b.dz > 1) api.personagem3d(cam, { ...KAIK_T, pose: 'andando', expressao: 'raiva' }, 0, Z, 1.75, { luz: LUZ_NOITE, rumo: Math.PI, caminhar: api.t * 6 });
-      info(api, ctx, 'VELOCIDADE', '2.000 km/h', 1600, '#59D8FF', fr(api, 0.1, 0.4, 'volta'));
+      // primeira pessoa: a visão do Kaik descendo a avenida reta, cada vez mais rápido, até a criatura
+      const k = u / d, vel = fr(api, 0.05, 0.75, 'entra');
+      const Zc = 20 + 6 * u + 32 * u * u * u / 3 * 2; // posição (acelera)
+      const Zcri = Zc + 16 + 380 * Math.pow(1 - k, 1.6);
+      const bob = Math.sin(api.t * 2 * Math.PI * 2.4) * 0.08 * (1 - vel);
+      const cam = api.camera({ f: api.lerp(900, 620, vel), x: Math.sin(api.t * 1.3) * 0.15, y: 1.55 + bob, z: Zc, cy: 960 + Math.sin(api.t * 2 * Math.PI * 2.4 + 1) * 12 * (1 - vel), nevoa: NEV, distNevoa: 110 });
+      const camada = api.camada(), g = camada.getContext('2d');
+      cidade(g, api, cam, { zApaga: 0, acesas: 0.2, destruicao: 0.6 });
+      criatura3d(g, cam, 0.5, Zcri, 15, { t: api.t, bracoD: 0.2 });
+      // borrão de zoom (velocidade): várias cópias ampliadas a partir do ponto de fuga
+      ctx.drawImage(camada, 0, 0);
+      const n = 5;
+      for (let i = 1; i <= n; i++) { const s = 1 + i * 0.022 * vel; ctx.save(); ctx.globalAlpha = 0.32 * vel; ctx.translate(540, 960); ctx.scale(s, s); ctx.translate(-540, -960); ctx.drawImage(camada, 0, 0); ctx.restore(); }
+      // estrondo sônico: anel de vapor quando passa da velocidade do som
+      const boom = fr(api, 0.3, 0.55);
+      if (boom > 0 && boom < 1) { ctx.save(); ctx.strokeStyle = `rgba(230,245,255,${0.7 * (1 - boom)})`; ctx.lineWidth = 60 * (1 - boom) + 6; ctx.beginPath(); ctx.ellipse(540, 960, 200 + boom * 900, 260 + boom * 1300, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); if (boom < 0.15) clarao(ctx, 0.5 * (1 - boom / 0.15)); }
+      // vidros estourando dos dois lados
+      if (k > 0.32) for (let j = 0; j < 4; j++) {
+        const z0 = Zc + 8 + j * 9; const s = j % 2 ? 1 : -1;
+        estilhacos(ctx, cam, s * 9.7, 5 + j * 2, z0, 0.15 + ((api.t * 3 + j * 0.25) % 0.6), 14, 40 + j, { v: 6, dir: [-s * 0.9, 0.2, -0.6], tam: 0.25, cor: 'rgba(170,220,255,0.75)', g: 4 });
+      }
+      linhasVel(ctx, 540, 960, 0.25 + 0.75 * vel, api.t);
+      // aura ciano nas bordas da tela
+      ctx.save(); const gv = ctx.createRadialGradient(540, 960, 500, 540, 960, 1150); gv.addColorStop(0, 'rgba(89,216,255,0)'); gv.addColorStop(1, `rgba(89,216,255,${0.35 * vel})`); ctx.fillStyle = gv; ctx.fillRect(0, 0, W, H); ctx.restore();
+      // faíscas da sola de cerâmica lá embaixo
+      faiscas(ctx, 540, 1960, 30, 260 * (0.5 + vel), api.t, 9);
+      bracosPOV(ctx, api, vel);
+      info(api, ctx, 'VELOCIDADE', vel > 0.6 ? '2.000 km/h' : `${Math.round(api.lerp(30, 2000, vel / 0.6) / 10) * 10} km/h`, 420, '#59D8FF', fr(api, 0.08, 0.3, 'volta'));
     },
     caminhoes(ctx, u, d, api) {
       grade(ctx, '#0D1530');
@@ -487,36 +712,106 @@
       { const k = fr(api, 0.5, 0.8, 'volta'); ctx.save(); ctx.translate(540, 1560); ctx.scale(k, k); ctx.translate(-540, -1560); api.texto('O SOCO = 3 CAMINHÕES', 540, 1720, 70, { cor: AMARELO }); api.texto('A 100 KM/H', 540, 1820, 56); ctx.restore(); }
     },
     soco(ctx, u, d, api) {
-      const lento = fr(api, 0.35, 0.65), imp = u > 0.6 * d;
-      const [tx, ty] = api.tremor(imp ? 24 * (1 - fr(api, 0.6, 1)) : 0);
-      ctx.save(); ctx.translate(tx, ty);
-      const cam = CAM_RUA(api, { alvo: [0, 6, 15], raio: 13, ang: 1.05, altura: 5, f: 1000, ySalvo: 950 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
-      criatura3d(ctx, cam, 0, 17, 15, { t: api.t, inclina: imp ? -6 * fr(api, 0.6, 0.8) : 0 });
-      const Y = api.lerp(1, 7.5, fr(api, 0, 0.6)), Zk = api.lerp(10, 16.2, fr(api, 0, 0.6));
-      api.personagem3d(cam, { ...KAIK_T, pose: { tronco: 20, braco_d: 95, antebraco_d: 0, braco_e: -50, antebraco_e: -60, coxa_d: -40, canela_d: 60, coxa_e: 30, canela_e: 40 }, expressao: 'raiva' }, -0.3, Zk, 1.75, { luz: LUZ_NOITE, y: Y, rumo: Math.PI * 0.95, parado: true });
+      const k = u / d, KI = 0.55; // momento do impacto (fração do plano)
+      if (k < 0.3) {
+        // chão: ele chega como um raio, agacha e pula; o asfalto racha na decolagem
+        const cam = api.orbita({ alvo: [0, 3.5, 16], raio: 6.5, ang: 0.7, altura: 0.45, f: 820, ySalvo: 1420, nevoa: NEV, distNevoa: 70 });
+        const [tx, ty] = api.tremor(k > 0.17 ? 18 * (1 - fr(api, 0.17, 0.3)) : 4);
+        ctx.save(); ctx.translate(tx, ty);
+        cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15, destruicao: 0.8 });
+        criatura3d(ctx, cam, 0, 22, 15, { t: api.t, bracoD: 0.15 });
+        const chega = fr(api, 0, 0.1, 'sai'), agacha = fr(api, 0.1, 0.17), sobe = fr(api, 0.17, 0.3, 'sai');
+        const Z = api.lerp(4, 15, chega) + sobe * 3, Y = sobe * 5.5;
+        if (chega < 1) { const a = cam.p(0, 0.9, Z - 14), b = cam.p(0, 0.9, Z); if (a.dz > 0.6 && b.dz > 0.6) rastro(ctx, a.x, a.y, b.x, b.y, 0.9 * b.s); }
+        racha(ctx, cam, [0, 0, 15], fr(api, 0.17, 0.25, 'sai'), 21, 1.6, 'chao');
+        if (sobe > 0) {
+          const dt = (k - 0.17) * d;
+          nuvem(ctx, cam, 0, 0, 15, fr(api, 0.17, 0.3), 3, 2, '120,120,160', 0.6);
+          const q = cam.p(0, 0.05, 15); onda(ctx, q.x, q.y, fr(api, 0.17, 0.27), 700);
+          const a = cam.p(0, 0.9, 15), b = cam.p(0, Y + 0.9, Z); rastro(ctx, a.x, a.y, b.x, b.y, 0.35 * b.s, 0.6);
+          estilhacos(ctx, cam, 0, 0.1, 15, dt, 30, 9, { v: 7, dir: [0, 1, 0], tam: 0.3 });
+        }
+        const pose = sobe > 0 ? PULO : agacha > 0 ? AGACHA : null;
+        if (pose) api.personagem3d(cam, { ...KAIK_T, pose, expressao: 'raiva' }, 0, Z, 1.75, { luz: { lado: 1, cor: 'rgb(140,230,255)', forca: 0.9 }, y: Y, rumo: Math.PI, parado: true });
+        else api.personagem3d(cam, { ...KAIK_T, pose: 'parado', expressao: 'raiva' }, 0, Z, 1.75, { luz: LUZ_NOITE, rumo: Math.PI, correr: api.t * 2.5, velocidade: 1.5 });
+        if (sobe > 0) { const b = cam.p(0, Y + 0.9, Z); brilho(ctx, b.x, b.y, 1.6 * b.s, 0.4, '89,216,255'); }
+        ctx.restore();
+        brasas(ctx, api, 30, 0.8);
+        return;
+      }
+      // no ar, de lado, na altura da barriga: câmera lenta até o punho entrar; quadro de impacto
+      const imp = k >= KI, di = (k - KI) * d;
+      const [tx, ty] = api.tremor(imp ? 34 * Math.max(0, 1 - di / 1.1) : 2);
+      const zoom = imp ? 1 + 0.12 * Math.exp(-di * 3) : api.lerp(1, 1.06, fr(api, 0.3, KI));
+      ctx.save(); ctx.translate(540 + tx, 960 + ty); ctx.scale(zoom, zoom); ctx.translate(-540, -960);
+      const camada = api.camada(), g = camada.getContext('2d');
+      const cam = api.camera({ f: 900, x: -6, y: 7, z: 4, yaw: 0.5, cy: 1180, nevoa: NEV, distNevoa: 70 });
+      cidade(g, api, cam, { zApaga: 0, acesas: 0.15, destruicao: 0.8 }); api.desfocar(camada, 8);
+      linhasVel(ctx, 1300, 960, imp ? 0 : 0.5, api.t, '200,240,255');
+      // criatura gigante à direita; recua depois do soco
+      const recua = imp ? fr(api, KI + 0.03, 1, 'sai') : 0, cx = 800 + 160 * recua, hC = 3700, PI = [560, 930];
+      ctx.save(); ctx.translate(PI[0], PI[1]); ctx.rotate(0.12 * recua); ctx.translate(-PI[0], -PI[1]);
+      const cc = api.camada(), gc = cc.getContext('2d'); gc.setTransform(ctx.getTransform());
+      criatura(gc, cx, PI[1] + 0.56 * hC, hC, { t: api.t, olhos: imp ? 0.6 + 0.4 * Math.sin(api.t * 30) : 1, bracoD: 0.3 + 0.4 * recua, garra: 1 });
+      gc.setTransform(1, 0, 0, 1, 0, 0); gc.globalCompositeOperation = 'source-atop';
+      const lr = gc.createRadialGradient(PI[0], PI[1], 0, PI[0], PI[1], 700); lr.addColorStop(0, `rgba(120,230,255,${imp ? 0.55 : 0.25 + 0.2 * fr(api, 0.3, KI)})`); lr.addColorStop(1, 'rgba(120,230,255,0)');
+      gc.fillStyle = lr; gc.fillRect(0, 0, W, H);
+      const lt = gc.createLinearGradient(0, 0, W, 0); lt.addColorStop(0, 'rgba(150,110,255,0.28)'); lt.addColorStop(0.5, 'rgba(150,110,255,0)'); gc.fillStyle = lt; gc.fillRect(0, 0, W, H);
       ctx.restore();
-      if (imp) { const q = cam.p(0, 8, 16.5); onda(ctx, q.x, q.y, fr(api, 0.6, 0.95), 700); faiscas(ctx, q.x, q.y, 40, 260, api.t, 6); ctx.fillStyle = `rgba(255,255,255,${0.8 * (1 - fr(api, 0.6, 0.7))})`; ctx.fillRect(0, 0, W, H); }
-      void lento;
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(cc, 0, 0); ctx.restore();
+      // barriga afundando: anéis roxos e a rachadura acesa
+      if (imp) {
+        const e = fr(api, KI, KI + 0.25, 'sai');
+        ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < 4; i++) { const r = (60 + i * 70) * (0.3 + e) + 40 * recua; ctx.strokeStyle = `rgba(190,140,255,${0.7 * (1 - e) * (1 - i * 0.2)})`; ctx.lineWidth = 10 - i * 2; ctx.beginPath(); ctx.ellipse(PI[0] + 60 + 160 * recua, PI[1], r * 0.55, r, 0, -1.3, 1.3); ctx.stroke(); }
+        ctx.restore();
+      }
+      // Kaik: chega em câmera lenta com o punho na frente; o punho termina exatamente no ponto de impacto
+      const chega = imp ? 1 : fr(api, 0.3, KI, 'sai'), ret = imp ? fr(api, KI + 0.05, 1, 'sai') : 0;
+      const off = (1 - chega) * 520 + ret * 60, hK = 820;
+      const pose = { ...SOCO_AR, braco_d: -92 + (1 - chega) * 40, antebraco_d: -2 - (1 - chega) * 70 };
+      const item = { ...KAIK_T, pose, expressao: { ...P().raiva, boca: { tipo: 'aberta', curva: -0.4, abertura: 0.05, largura: 0.07 } }, vista: 'perfil' };
+      ctx.save(); ctx.globalAlpha = 0; const rig0 = api.personagem(item, 0, 0, hK, { parado: true, semRosto: true }); ctx.restore();
+      const m = rig0 && rig0.pontoMundo ? rig0.pontoMundo('mao_d', [0, 0.35]) : { x: 300, y: -420 };
+      const x0 = PI[0] - m.x - off, y0 = PI[1] - m.y + (1 - chega) * 90;
+      // aura e rastro do pulo
+      brilho(ctx, x0 + 120, y0 - hK * 0.5, 520, 0.35, '89,216,255');
+      rastro(ctx, x0 - 900, y0 - hK * 0.35 + 300, x0 + 60, y0 - hK * 0.45, 200, 0.6);
+      api.personagem(item, x0, y0, hK, { parado: true, luz: { lado: 1, cor: 'rgb(140,230,255)', forca: 0.9 } });
+      brilho(ctx, PI[0], PI[1], imp ? 260 : 120 + 140 * chega, imp ? 0.9 : 0.5, '120,230,255');
+      ctx.restore();
+      if (imp) {
+        const e = fr(api, KI, KI + 0.3, 'sai');
+        // ondas de choque e estrela de energia
+        for (let i = 0; i < 3; i++) { const kk = api.clamp(e * 1.4 - i * 0.18, 0, 1); onda(ctx, PI[0], PI[1], kk, 1100 + i * 300); }
+        ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.translate(PI[0], PI[1]);
+        for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2 + 0.2, L = (180 + (i % 3) * 120) * (1 - e * 0.7); ctx.fillStyle = `rgba(200,245,255,${1 - e})`; ctx.beginPath(); ctx.moveTo(Math.cos(a - 0.08) * 30, Math.sin(a - 0.08) * 30); ctx.lineTo(Math.cos(a) * L, Math.sin(a) * L); ctx.lineTo(Math.cos(a + 0.08) * 30, Math.sin(a + 0.08) * 30); ctx.fill(); }
+        ctx.restore();
+        faiscas(ctx, PI[0], PI[1], 60, 520, api.t, 6);
+        if (di < 0.5) linhasImpacto(ctx, PI[0], PI[1], 1 - di / 0.5, 5, '20,10,40', 300);
+        if (di < 0.09) quadroImpacto(ctx, PI[0], PI[1], 11);
+        else clarao(ctx, 0.75 * Math.max(0, 1 - (di - 0.09) / 0.25), '235,250,255');
+      }
+      brasas(ctx, api, 30, 0.8);
     },
     sentiu(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 6, 18], raio: 16, ang: 0.2, altura: 2, ySalvo: 1050 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15, destruicao: 0.8, apagados: [25] });
       const k = fr(api, 0, 0.8, 'sai');
       criatura3d(ctx, cam, api.lerp(0, 1.5, k), api.lerp(18, 22, k), 15, { t: api.t, inclina: -10 * (1 - k) + 4 });
-      const p = cam.p(3.4, 0, 21); if (p.dz > 1) faiscas(ctx, p.x, p.y - 2 * p.s, 20, 1.5 * p.s, api.t, 4);
+      const p = cam.p(4.5, 8.5, 25); if (p.dz > 1 && k > 0.4) faiscas(ctx, p.x, p.y, 24, 1.5 * p.s, api.t, 4);
     },
     braco: (ctx, u, d, api) => raioX(ctx, api, 0, d),
     osso: (ctx, u, d, api) => raioX(ctx, api, 1, d),
     caiu(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 0.6, 6], raio: api.lerp(3, 2.4, u / d), ang: 0.6, altura: 1.1, ySalvo: 1150 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 , destruicao: 0.6 });
       const q = cam.p(0, 0, 6);
       if (q.dz > 1) deitado(api, ctx, { ...KAIK_T, pose: { braco_d: 30, antebraco_d: 90, braco_e: 10 }, expressao: 'raiva' }, q.x, q.y - 0.25 * q.s, 1.75 * q.s, -Math.PI / 2 + 0.15);
     },
     sofenda(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0.4, 1.3, 6], raio: api.lerp(3.2, 2.8, u / d), ang: -0.4, altura: 1.5 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 , destruicao: 0.6 });
       criatura3d(ctx, cam, 2, 26, 15, { t: api.t });
       emOrdem(cam, [
         [0.9, 6.4, () => api.personagem3d(cam, { ...LIA_T, pose: 'parado', expressao: 'determinado', voz: 'narrador' }, 0.9, 6.4, 1.65, { luz: LUZ_NOITE, olhaPara: [2, 26] })],
@@ -566,7 +861,7 @@
     solta(ctx, u, d, api) { maoDada(ctx, api, 1); },
     pulou(ctx, u, d, api) {
       const cam = CAM_RUA(api, { alvo: [0, 8, 18], raio: 16, ang: 0.15, altura: 3, ySalvo: 1150 });
-      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
+      cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 , destruicao: 0.6 });
       const fq = cam.p(0, 12, 22); tornado(ctx, api, fq.x, fq.y, 900, 1); Efeitos.fenda(ctx, fq.x, fq.y, 20 * fq.s, { t: api.t, abre: 1, semente: 8 });
       const k = fr(api, 0.1, 1, 'entra');
       criatura3d(ctx, cam, 0, api.lerp(20, 22, k), 15, { t: api.t, inclina: -20 * k });
@@ -678,7 +973,7 @@
     const T = tempoTomada(api, ['vinte', 'borda'], [3.5, 3.5]);
     const cam = CAM_RUA(api, { alvo: [0.3, 4, 10], raio: chave(T, [[0, 9], [7, 7]]), ang: chave(T, [[0, -0.6], [7, 0.4]]), altura: 1.3, ySalvo: 1250, f: 1000 });
     const [tx, ty] = api.tremor(T > 3.5 ? 12 : 4); ctx.save(); ctx.translate(tx, ty);
-    cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 });
+    cidade(ctx, api, cam, { zApaga: 0, acesas: 0.15 , destruicao: 0.8 });
     const abre = api.clamp(T / 2, 0, 1), fq = cam.p(0.3, 11, 22);
     tornado(ctx, api, fq.x, fq.y, 1000, api.clamp((T - 1.5) / 2, 0, 1));
     Efeitos.fenda(ctx, fq.x, fq.y, 20 * fq.s * abre + 1, { t: api.t, abre: 1, semente: 8 });
