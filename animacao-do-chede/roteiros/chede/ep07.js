@@ -695,7 +695,7 @@
       // faíscas da sola de cerâmica lá embaixo
       faiscas(ctx, 540, 1960, 30, 260 * (0.5 + vel), api.t, 9);
       bracosPOV(ctx, api, vel);
-      info(api, ctx, 'VELOCIDADE', vel > 0.6 ? '2.000 km/h' : `${Math.round(api.lerp(30, 2000, vel / 0.6) / 10) * 10} km/h`, 420, '#59D8FF', fr(api, 0.08, 0.3, 'volta'));
+      info(api, ctx, 'VELOCIDADE', vel > 0.6 ? '2.000 km/h' : `${Math.round(api.lerp(30, 2000, vel / 0.6) / 10) * 10} km/h`, 1250, '#59D8FF', fr(api, 0.08, 0.3, 'volta'));
     },
     caminhoes(ctx, u, d, api) {
       grade(ctx, '#0D1530');
