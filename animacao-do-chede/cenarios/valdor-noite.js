@@ -14,6 +14,7 @@
   const RIO = { z0: 8, larg: 3.2 }; // rio atravessando o campo
   const rioZ = (x) => RIO.z0 + Math.sin(x * 0.11) * 0.7 + Math.sin(x * 0.035) * 1.6;
 
+  const naTrilha = (x, z) => Math.abs(x - (Math.sin(z * 0.12) * 1.4 + 0.3)) < 0.8 + z * 0.012;
   const OBJ = (() => {
     const r = rng(2026), arv = [], ped = [], tufo = [], flor = [], luz = [];
     for (let i = 0; i < 70; i++) {
@@ -22,10 +23,15 @@
       arv.push([x, z, 3.2 + r() * 2.6, r() < 0.35 ? 'pinheiro' : 'copa', r() * 1000]);
     }
     for (let i = 0; i < 26; i++) { const z = 1 + r() * 30, x = (r() * 2 - 1) * (3 + z * 0.4); if (Math.abs(x) > 1.2 && Math.abs(z - rioZ(x)) > RIO.larg) ped.push([x, z, 0.18 + r() * 0.35]); }
-    for (let i = 0; i < 700; i++) { const z = 0.5 + Math.pow(r(), 1.6) * 34, x = (r() * 2 - 1) * (2 + z * 0.9); if (Math.abs(z - rioZ(x) - RIO.larg / 2) > RIO.larg * 0.6) tufo.push([x, z, 0.28 + r() * 0.26, r() * 6]); }
+    for (let i = 0; i < 1500; i++) { const z = 0.4 + Math.pow(r(), 1.7) * 32, x = (r() * 2 - 1) * (2.2 + z * 0.9); if (Math.abs(z - rioZ(x) - RIO.larg / 2) > RIO.larg * 0.6 && !naTrilha(x, z)) tufo.push([x, z, 0.28 + r() * 0.26, r() * 6]); }
     for (let i = 0; i < 90; i++) { const z = 0.8 + Math.pow(r(), 1.4) * 18, x = (r() * 2 - 1) * (2 + z * 0.8); if (Math.abs(x) > 0.9 && Math.abs(z - rioZ(x) - RIO.larg / 2) > RIO.larg * 0.6) flor.push([x, z, r() * 6]); }
     for (let i = 0; i < 90; i++) luz.push([(r() * 2 - 1) * 9, 0.25 + r() * 1.8, 1 + Math.pow(r(), 1.3) * 26, r() * 10, 0.6 + r() * 0.8]);
-    return { arv, ped, tufo, flor, luz };
+    // grama nas bordas da trilha e pedrinhas no caminho
+    const seixo = [];
+    for (let z = 0.6; z < 30; z += 0.22 + z * 0.02) { const cx = Math.sin(z * 0.12) * 1.4 + 0.3, w = 0.8 + z * 0.012; if (Math.abs(z - rioZ(cx) - RIO.larg / 2) < RIO.larg * 0.8) continue; for (const sd of [-1, 1]) tufo.push([cx + sd * (w - 0.05 + r() * 0.2), z + r() * 0.1, 0.16 + r() * 0.16, r() * 6]); for (let k = 0; k < 2; k++) seixo.push([cx + (r() * 2 - 1) * w * 0.8, z + r() * 0.2, 0.03 + r() * 0.05]); }
+    const grama = []; for (let i = 0; i < 4200; i++) { const z = 0.3 + Math.pow(r(), 1.5) * 40, x = (r() * 2 - 1) * (2 + z * 0.95); if (Math.abs(z - rioZ(x) - RIO.larg / 2) > RIO.larg * 0.55 && !naTrilha(x, z)) grama.push([x, z, r()]); }
+    const mata = []; for (const [zf, n0, seed] of [[95, 120, 1], [62, 90, 2]]) { const rr = rng(seed + 50); for (let i = 0; i < n0; i++) mata.push([(i / n0) * 360 - 180 + rr() * 2, zf + rr() * 6, 4 + rr() * 5, rr() < 0.4 ? 'p' : 'c', zf]); }
+    return { arv, ped, tufo, flor, luz, grama, mata, seixo };
   })();
   const ESPADAS = [[-16, 46, 26, -0.18], [24, 62, 34, 0.14], [-34, 80, 22, 0.25], [10, 98, 18, -0.08]];
 
@@ -101,7 +107,8 @@
       const ofs = ((desl % (c.per * 4)) + c.per * 4) % (c.per * 4);
       for (let rep = -1; rep <= 1; rep++) {
         const base = -ofs + rep * c.per * 4;
-        ctx.fillStyle = c.cor; ctx.beginPath(); ctx.moveTo(base - 200, hz + 4);
+        const gm = ctx.createLinearGradient(0, hz - c.alt, 0, hz); gm.addColorStop(0, mistura(c.cor, n > 0.5 ? '#8A9AD8' : '#E8B8A8', 0.28)); gm.addColorStop(1, c.cor);
+        ctx.fillStyle = gm; ctx.beginPath(); ctx.moveTo(base - 200, hz + 4);
         for (const [px, ph] of picos) { ctx.lineTo(base + px - ph * 0.9, hz + 4); ctx.lineTo(base + px, hz - ph); ctx.lineTo(base + px + ph * 0.9, hz + 4); }
         ctx.lineTo(base + c.per * 4 + 200, hz + 4); ctx.closePath(); ctx.fill();
         // lado iluminado pela lua (esquerda)
@@ -137,7 +144,7 @@
   function chao(ctx, cam, n, t) {
     const zs = faixasZ(cam), X = 260;
     for (let i = 0; i < zs.length - 1; i++) {
-      const a = zs[i], b = zs[i + 1] + 0.03, k = (i % 2) * 0.03;
+      const a = zs[i], b = zs[i + 1] + 0.03, k = (i % 2) * 0.012;
       face(ctx, cam, [[-X, 0, a], [X, 0, a], [X, 0, b], [-X, 0, b]], mistura(M('#4E7A30', '#18332A', n), M('#46702B', '#152E25', n), k), { contorno: false });
     }
     // luar no chão: manchas mais claras onde a luz passa entre as árvores
@@ -154,8 +161,10 @@
     const e = pts(-1), d = pts(1);
     for (let i = 0; i < e.length - 1; i++) {
       const zr = rioZ(e[i][0] / 2 + d[i][0] / 2); if (e[i][2] > zr - 0.4 && e[i][2] < zr + RIO.larg + 0.4) continue;
-      face(ctx, cam, [e[i], d[i], d[i + 1], e[i + 1]], mistura(M('#8E6A48', '#3A4058', n), M('#84623F', '#353A52', n), (i % 2) * 0.4), { contorno: false });
+      face(ctx, cam, [e[i], d[i], d[i + 1], e[i + 1]], mistura(M('#8E6A48', '#2E3446', n), M('#84623F', '#2B3142', n), (i % 2) * 0.1), { contorno: false });
     }
+    gramaBaixa(ctx, cam, n);
+    for (const [X, Z, rr] of OBJ.seixo) { const q = cam.p(X, 0, Z); if (q.dz < 0.5) continue; ctx.fillStyle = cam.tom(M('#6E5A48', '#22283A', n), Z); ctx.beginPath(); ctx.ellipse(q.x, q.y, rr * q.s, rr * 0.45 * q.s, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = cam.tom(M('#B8A088', '#4E5E86', n), Z); ctx.beginPath(); ctx.ellipse(q.x - rr * 0.3 * q.s, q.y - rr * 0.15 * q.s, rr * 0.45 * q.s, rr * 0.18 * q.s, 0, 0, Math.PI * 2); ctx.fill(); }
     rio(ctx, cam, n, t);
     ponte(ctx, cam, n);
   }
@@ -234,11 +243,16 @@
       return;
     }
     const cachos = [];
-    for (let i = 0; i < 9; i++) { const a = r() * Math.PI * 2, d = r() * 0.24; cachos.push([Math.cos(a) * d * 1.2, 0.72 + Math.sin(a) * d * 0.8, 0.16 + r() * 0.12]); }
+    for (let i = 0; i < 13; i++) { const a = r() * Math.PI * 2, d = r() * 0.26; cachos.push([Math.cos(a) * d * 1.2, 0.72 + Math.sin(a) * d * 0.8, 0.16 + r() * 0.12]); }
     cachos.sort((a, b) => a[1] - b[1]);
-    for (const [dx, dy, rr] of cachos) { ctx.fillStyle = borda; ctx.beginPath(); ctx.arc(base.x + (dx - 0.025) * k, base.y - (dy + 0.025) * k, rr * k, 0, Math.PI * 2); ctx.fill(); }
-    for (const [dx, dy, rr] of cachos) { ctx.fillStyle = tom(M('#2E5A2E', '#0C1C20', n)); ctx.beginPath(); ctx.arc(base.x + dx * k, base.y - dy * k, rr * k, 0, Math.PI * 2); ctx.fill(); }
-    for (const [dx, dy, rr] of cachos) { ctx.fillStyle = tom(M('#4E8A3A', '#16303A', n)); ctx.beginPath(); ctx.arc(base.x + (dx - 0.04) * k, base.y - (dy + 0.05) * k, rr * 0.55 * k, 0, Math.PI * 2); ctx.fill(); }
+    // galhos
+    ctx.strokeStyle = tom(M('#3E2A20', '#0E1418', n)); ctx.lineWidth = Math.max(1, 0.025 * k); ctx.lineCap = 'round';
+    for (const sd of [-1, 1]) { ctx.beginPath(); ctx.moveTo(base.x, base.y - 0.42 * k); ctx.quadraticCurveTo(base.x + sd * 0.1 * k, base.y - 0.52 * k, base.x + sd * 0.2 * k, base.y - 0.62 * k); ctx.stroke(); }
+    const folhas = (dx, dy, rr, cor, dd = 0) => { ctx.fillStyle = cor; ctx.beginPath(); const cx = base.x + dx * k, cy = base.y - dy * k, R = rr * k; ctx.moveTo(cx + R, cy); for (let a = 0; a <= 12; a++) { const ang = (a / 12) * Math.PI * 2, rb = R * (a % 2 ? 1.0 : 0.9) + dd; ctx.lineTo(cx + Math.cos(ang) * rb, cy + Math.sin(ang) * rb); } ctx.closePath(); ctx.fill(); for (let a = 0; a < 7; a++) { const ang = Math.PI * (1.05 + a * 0.13), rb = R * 0.95; ctx.beginPath(); ctx.arc(cx + Math.cos(ang) * rb, cy + Math.sin(ang) * rb, R * 0.22 + dd * 0.5, 0, Math.PI * 2); ctx.fill(); } };
+    for (const [dx, dy, rr] of cachos) folhas(dx - 0.03, dy + 0.03, rr, borda, 0);
+    for (const [dx, dy, rr] of cachos) folhas(dx, dy, rr, tom(M('#2E5A2E', '#0C1C20', n)));
+    for (const [dx, dy, rr] of cachos) folhas(dx - 0.05, dy + 0.06, rr * 0.5, tom(M('#5E9A42', '#1A3644', n)));
+    ctx.fillStyle = tom(M('#0E2414', '#050C10', n)); for (const [dx, dy, rr] of cachos) { ctx.beginPath(); ctx.ellipse(base.x + (dx + 0.03) * k, base.y - (dy - rr * 0.55) * k, rr * 0.7 * k, rr * 0.25 * k, 0, 0, Math.PI * 2); ctx.fill(); }
   }
   function sombraArvore(ctx, cam, X, Z, alt, n) {
     // sombra do luar: vai para a direita e para a frente (lua à esquerda, atrás)
@@ -247,14 +261,42 @@
     if (pts.some(([, , z]) => z < cam.z + 0.5)) return;
     ctx.fillStyle = `rgba(5,10,20,${0.3 * n * (1 - cam.fator(Z))})`; ctx.fill(Cena3D.caminho(cam, pts));
   }
+  // folhas de grama afinando na ponta, com degradê do pé escuro até a ponta iluminada (tela, em px)
+  function laminas(ctx, x, y, h, w, nl, cBase, cPonta, t, fase, seed, vento = 1) {
+    if (h < 1.5) return;
+    const r = rng(seed), g = ctx.createLinearGradient(0, y - h, 0, y); g.addColorStop(0, cPonta); g.addColorStop(0.5, mistura(cPonta, cBase, 0.55)); g.addColorStop(0.85, cBase); g.addColorStop(1, cBase);
+    ctx.fillStyle = g;
+    for (let i = 0; i < nl; i++) {
+      const bx = x + (r() - 0.5) * w, hh = h * (0.5 + 0.5 * r()), bal = Math.sin(t * 1.5 + fase + i * 0.7) * h * 0.06 * vento, lean = (r() - 0.5) * h * 0.55 + bal, bw = Math.max(0.8, h * 0.035 * (0.7 + 0.6 * r()));
+      ctx.beginPath(); ctx.moveTo(bx - bw, y); ctx.quadraticCurveTo(bx - bw * 0.4 + lean * 0.25, y - hh * 0.6, bx + lean, y - hh); ctx.quadraticCurveTo(bx + bw * 0.4 + lean * 0.25, y - hh * 0.6, bx + bw, y); ctx.closePath(); ctx.fill();
+    }
+  }
   function tufo(ctx, cam, X, Z, h, fase, t, n) {
-    const q = cam.p(X, 0, Z); if (q.dz < 0.5 || q.x < -200 || q.x > 1280) return;
-    const s = q.s, cor = cam.tom(M('#24521C', '#0E2420', n), Z), cor2 = cam.tom(M('#4E8A30', '#2A4A5A', n), Z);
+    const q = cam.p(X, 0, Z); if (q.dz < 0.4 || q.x < -200 || q.x > 1280) return;
+    const s = q.s, hp = h * s, nl = hp > 60 ? 11 : hp > 20 ? 8 : hp > 6 ? 5 : 3;
+    laminas(ctx, q.x, q.y + 0.04 * s, hp, 0.32 * s, nl, cam.tom(M('#3E6E28', '#15302A', n), Z), cam.tom(M('#8CC452', '#6C93C8', n), Z), t, fase, Math.floor(fase * 1000) + 1);
+  }
+  // grama baixa cobrindo o chão (textura)
+  function gramaBaixa(ctx, cam, n) {
+    const escura = M('#2E5E22', '#10261F', n), clara = M('#76A844', '#3A5A6E', n);
     ctx.lineCap = 'round';
-    for (let i = 0; i < 5; i++) {
-      const dx = (i - 2) * 0.035 * s, bal = Math.sin(t * 1.6 + fase + i) * 0.04 * s, alt = h * (0.7 + 0.3 * ((i * 7) % 3) / 2) * s;
-      ctx.strokeStyle = i % 2 ? cor : cor2; ctx.lineWidth = Math.max(1, 0.025 * s);
-      ctx.beginPath(); ctx.moveTo(q.x + dx, q.y); ctx.quadraticCurveTo(q.x + dx + bal * 0.5, q.y - alt * 0.6, q.x + dx * 1.8 + bal, q.y - alt); ctx.stroke();
+    for (const [X, Z, k] of OBJ.grama) {
+      const q = cam.p(X, 0, Z); if (q.dz < 0.5 || q.x < -20 || q.x > 1100 || q.y > 1940) continue;
+      const h = 0.1 * q.s, cor = cam.tom(k < 0.5 ? escura : clara, Z);
+      ctx.strokeStyle = cor; ctx.lineWidth = Math.max(0.8, 0.012 * q.s);
+      ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.lineTo(q.x - h * 0.3, q.y - h); ctx.moveTo(q.x + h * 0.25, q.y); ctx.lineTo(q.x + h * 0.4, q.y - h * 0.8); ctx.stroke();
+    }
+  }
+  // faixas de floresta no fundo (silhuetas com borda de luar), entre o campo e as montanhas
+  function mata(ctx, cam, n, zFaixa) {
+    const corTopo = `rgba(130,160,240,${0.22 * n})`;
+    for (const [X, Z, h, tipo, zf] of OBJ.mata) {
+      if (zf !== zFaixa) continue;
+      const q = cam.p(X, 0, Z); if (q.dz < 5 || q.x < -300 || q.x > 1400) continue;
+      const k = h * q.s, cor = mistura(cam.tom(M(zf > 80 ? '#3A5A44' : '#2A4A36', zf > 80 ? '#121E36' : '#0C1828', n), Z), M('#3A5A44', '#0A1424', n), 0.45);
+      ctx.fillStyle = cor;
+      if (tipo === 'p') { ctx.beginPath(); ctx.moveTo(q.x, q.y - k); ctx.lineTo(q.x + k * 0.3, q.y); ctx.lineTo(q.x - k * 0.3, q.y); ctx.closePath(); ctx.fill(); ctx.fillStyle = corTopo; ctx.beginPath(); ctx.moveTo(q.x, q.y - k); ctx.lineTo(q.x - k * 0.3, q.y); ctx.lineTo(q.x - k * 0.24, q.y); ctx.closePath(); ctx.fill(); }
+      else { ctx.beginPath(); ctx.arc(q.x, q.y - k * 0.55, k * 0.38, 0, Math.PI * 2); ctx.arc(q.x - k * 0.25, q.y - k * 0.35, k * 0.3, 0, Math.PI * 2); ctx.arc(q.x + k * 0.25, q.y - k * 0.32, k * 0.3, 0, Math.PI * 2); ctx.fill(); ctx.fillRect(q.x - k * 0.5, q.y - k * 0.3, k, k * 0.3); ctx.strokeStyle = corTopo; ctx.lineWidth = Math.max(1, k * 0.04); ctx.beginPath(); ctx.arc(q.x, q.y - k * 0.55, k * 0.38, Math.PI * 1.1, Math.PI * 1.45); ctx.stroke(); }
     }
   }
   // flor da lua: pétalas claras que brilham de leve no escuro
@@ -306,6 +348,7 @@
       chao(ctx, cam, n, t);
       for (const [x, z, h] of OBJ.arv) if (z > cam.z + 1) sombraArvore(ctx, cam, x, z, h, n);
       const lista = [];
+      lista.push([95, () => mata(ctx, cam, n, 95)], [62, () => mata(ctx, cam, n, 62)]);
       if (o.espadas !== false) for (const [x, z, h, inc] of ESPADAS) lista.push([z, () => espadaGigante(ctx, cam, x, z, h, inc, n, t)]);
       for (const [x, z, h, tipo, sem] of OBJ.arv) lista.push([z, () => arvoreNoite(ctx, cam, x, z, h, tipo, sem, n)]);
       for (const [x, z, r] of OBJ.ped) lista.push([z, () => pedra(ctx, cam, x, z, r, n)]);
@@ -319,16 +362,16 @@
     },
     // personagem à noite: escurece/azula o corpo e acende um recorte azul do lado da lua
     personagemNoite(ctx, desenhar, o = {}) {
-      const n = o.noite === undefined ? 1 : o.noite, W = ctx.canvas.width, H = ctx.canvas.height, d = o.recorte || 7;
+      const n = o.noite === undefined ? 1 : o.noite, W = ctx.canvas.width, H = ctx.canvas.height, d = o.recorte || 4;
       const a = document.createElement('canvas'); a.width = W; a.height = H; const ga = a.getContext('2d'); ga.setTransform(ctx.getTransform()); desenhar(ga);
       ga.setTransform(1, 0, 0, 1, 0, 0);
       // tinta da noite
       ga.globalCompositeOperation = 'source-atop'; ga.fillStyle = `rgba(30,45,110,${0.38 * n})`; ga.fillRect(0, 0, W, H);
       // recorte de luar: silhueta azul menos a silhueta deslocada para longe da lua (lua em cima à esquerda)
       const b = document.createElement('canvas'); b.width = W; b.height = H; const gb = b.getContext('2d');
-      gb.drawImage(a, 0, 0); gb.globalCompositeOperation = 'source-in'; gb.fillStyle = 'rgba(170,200,255,1)'; gb.fillRect(0, 0, W, H);
+      gb.drawImage(a, 0, 0); gb.globalCompositeOperation = 'source-in'; gb.fillStyle = 'rgba(120,160,255,1)'; gb.fillRect(0, 0, W, H);
       gb.globalCompositeOperation = 'destination-out'; gb.drawImage(a, d, d * 0.6);
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(a, 0, 0); ctx.globalAlpha = 0.85 * n; ctx.globalCompositeOperation = 'screen'; ctx.drawImage(b, 0, 0); ctx.restore();
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(a, 0, 0); ctx.globalAlpha = 0.6 * n; ctx.globalCompositeOperation = 'screen'; ctx.drawImage(b, 0, 0); ctx.restore();
     },
     // luz da cena: feixes de luar entrando na diagonal, tom azul e vinheta
     luz(ctx, cam, o = {}) {
@@ -353,13 +396,24 @@
       neblina(ctx, cam, n, t, true);
       if (forca > 0) {
         const desl = -(cam.yaw || 0) * cam.f * 1.6 - cam.x * 260;
-        Cinema.desfocado(ctx, 10, (g) => {
-          const r = rng(44); g.lineCap = 'round';
-          for (let i = 0; i < 46; i++) {
-            const x = ((r() * (W + 400) + desl) % (W + 400) + W + 400) % (W + 400) - 200, alt = (180 + r() * 380) * forca, bal = Math.sin(t * 1.3 + i) * 30;
-            g.strokeStyle = i % 3 ? M('#1E4A1A', '#081814', n) : M('#3E7A28', '#1A3440', n); g.lineWidth = 14 + r() * 12;
-            g.beginPath(); g.moveTo(x, H + 20); g.quadraticCurveTo(x + bal * 0.3, H - alt * 0.6, x + bal + (r() - 0.5) * 80, H - alt); g.stroke();
-          }
+        const base = M('#0A1E0C', '#030A08', n), ponta = M('#7CB24A', '#7E9ED6', n), pontaEsc = M('#3E7A2A', '#2E4870', n);
+        // camada nítida: touceiras de grama na borda de baixo, ponta prateada pelo luar
+        const rg = rng(44);
+        for (let i = 0; i < 30; i++) {
+          const x = ((rg() * (W + 300) + desl) % (W + 300) + W + 300) % (W + 300) - 150, h = (160 + rg() * 330) * forca;
+          laminas(ctx, x, H + 30, h, 170, 13, base, i % 3 ? pontaEsc : ponta, t, i, 900 + i, 1.4);
+        }
+        // hastes com sementes (capim alto)
+        for (let i = 0; i < 4; i++) {
+          const x = ((rg() * W + desl * 0.8) % W + W) % W, h = (380 + rg() * 260) * forca, bal = Math.sin(t * 1.2 + i) * 18;
+          ctx.strokeStyle = base; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x, H + 10); ctx.quadraticCurveTo(x + bal * 0.5, H - h * 0.5, x + bal, H - h); ctx.stroke();
+          ctx.fillStyle = pontaEsc; ctx.beginPath(); ctx.ellipse(x + bal, H - h - 22, 9, 30, bal * 0.01, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = `rgba(170,200,255,${0.5 * n})`; ctx.beginPath(); ctx.ellipse(x + bal - 4, H - h - 26, 3, 22, bal * 0.01, 0, Math.PI * 2); ctx.fill();
+        }
+        // camada desfocada bem perto da câmera, nos cantos (moldura)
+        Cinema.desfocado(ctx, 14, (g) => {
+          const r2 = rng(45);
+          for (let i = 0; i < 12; i++) { const lado = i % 2 ? -1 : 1, x = (lado < 0 ? r2() * 260 - 80 : W - r2() * 260 + 80) + desl * 1.3, h = (520 + r2() * 520) * forca; laminas(g, x, H + 60, h, 260, 9, '#020604', M('#2A5A26', '#1A2E48', n), t, i, 300 + i, 1.8); }
           for (const [cx, ang, esc] of [[-40, -0.5, 1], [W + 40, -2.6, 0.9]]) {
             g.save(); g.translate(cx + desl * 0.3, H + 30); g.rotate(ang + Math.sin(t * 0.9 + cx) * 0.03); g.scale(esc * forca, esc * forca);
             for (let f = -2; f <= 2; f++) { g.save(); g.rotate(f * 0.28); g.strokeStyle = M('#1A3E20', '#06120F', n); g.lineWidth = 10; g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(260, -40, 520, 30); g.stroke(); for (let i = 1; i < 14; i++) { const px = i * 36, py = -Math.sin((i / 14) * Math.PI) * 30 + i * 2, l = 70 * (1 - i / 16); g.fillStyle = i % 2 ? M('#255A2A', '#0B1C1A', n) : M('#1E4E24', '#081614', n); for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(px, py + sd * l * 0.5, l * 0.55, 14, sd * 0.9, 0, Math.PI * 2); g.fill(); } } g.restore(); }
