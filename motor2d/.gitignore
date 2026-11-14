@@ -1,0 +1,7 @@
+# Saídas de render (pesadas e refeitas a qualquer hora)
+previas/
+prontos/*.mp4
+node_modules/
+
+# Vozes de prévia (espeak, refeitas a cada render)
+audio/*/*/previa/

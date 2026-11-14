@@ -1,0 +1,10 @@
+{
+  "serie": "exemplo",
+  "episodio": 0,
+  "parte": 1,
+  "planos": [
+    { "id": "capa", "duracao": 2.0, "fala": { "texto": "E se você acordasse controlando a terra?", "voz": "narrador", "velocidade": 185 }, "destaque": ["TERRA?"] },
+    { "id": "treme", "fala": { "texto": "O quarto inteiro treme.", "voz": "narrador" }, "destaque": ["TREME."] },
+    { "id": "parte", "duracao": 3.0, "fala": { "texto": "Segue pra ver a parte dois!", "voz": "narrador" } }
+  ]
+}

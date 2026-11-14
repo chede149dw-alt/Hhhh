@@ -1,6 +1,9 @@
 # Hhhh
 
-Descrição curta do projeto.
+Vídeos verticais animados feitos por código.
+
+- `motor2d/`: o motor 2D (estilo "Animação do Chede"), com personagens, cenários, efeitos e roteiros. Comece pelo `motor2d/auditoria-regras.md`.
+- `video-teste/`: testes com Remotion.
 
 ## Sobre
 

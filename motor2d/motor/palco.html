@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script src="estilo.js"></script>
+<script src="rig.js"></script>
+<script>
+  // Palco genérico: o script Node injeta personagens/efeitos e chama uma das funções abaixo.
+
+  // Monta e desenha um personagem.
+  // item: { fabrica, opcoes, vista, pose (nome ou mapa de ângulos), expressao, espelhar, efeito, registroPoses }
+  // Se "pose" for o nome de uma pose do registro (ex.: LUCAS_POSES), a vista, expressão e efeito vêm dela.
+  window.desenharItem = function (ctx, item, cx, ySola, alturaPx, cabecaPx) {
+    const reg = item.registroPoses ? window[item.registroPoses] : null;
+    const pdef = reg && typeof item.pose === 'string' ? reg[item.pose] : null;
+    const vista = item.vista || (pdef && pdef.vista) || 'frente';
+    const def = item.fabrica ? window[item.fabrica](item.opcoes || {}, vista) : window.PERSONAGEM;
+    const rig = new Rig(def);
+    if (pdef) rig.usarPose(pdef.angulos); else if (item.pose) rig.usarPose(item.pose);
+    const expr = item.expressao || (pdef && pdef.expressao);
+    if (expr) rig.usarExpressao(expr);
+    const alt = cabecaPx ? def.alturaEmH * cabecaPx : alturaPx;
+    rig.desenhar(ctx, cx, ySola, alt, { espelhar: item.espelhar });
+    const efeito = item.efeito === undefined ? pdef && pdef.efeito : item.efeito;
+    if (efeito && window.Efeitos && window.Efeitos[efeito]) {
+      // ancora entre as duas mãos, um pouco à frente das palmas
+      const a = rig.pontoMundo('mao_d', [0, 0.32]), b = rig.pontoMundo('mao_e', [0, 0.32]);
+      const H = rig.escalaPx;
+      const dir = item.espelhar ? -1 : 1;
+      window.Efeitos[efeito](ctx, (a.x + b.x) / 2 + H * 0.45 * dir, (a.y + b.y) / 2, H, { t: item.t || 0.3 });
+    }
+    return rig;
+  };
+
+  // Um personagem em uma imagem.
+  window.desenharFicha = function (o) {
+    const c = document.getElementById('c');
+    c.width = o.largura; c.height = o.altura;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = o.fundo || Estilo.fundoFicha;
+    ctx.fillRect(0, 0, c.width, c.height);
+    const ySola = o.ySola || (c.height + o.alturaPersonagem) / 2;
+    window.desenharItem(ctx, o, o.x || c.width / 2, ySola, o.alturaPersonagem, o.cabecaPx);
+    return c.toDataURL('image/png').split(',')[1];
+  };
+
+  // Folha com várias versões lado a lado: o.variantes = [{ id, nome, opcoes, vista, pose, expressao, efeito, fundo }]
+  window.desenharFolha = async function (o) {
+    await document.fonts.load('600 34px Inter');
+    const cols = o.colunas || 3, cw = o.celulaLargura || 600, ch = o.celulaAltura || 1080;
+    const linhas = Math.ceil(o.variantes.length / cols);
+    const c = document.getElementById('c');
+    c.width = cols * cw; c.height = linhas * ch;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = o.fundo || Estilo.fundoFicha;
+    ctx.fillRect(0, 0, c.width, c.height);
+    o.variantes.forEach((v, i) => {
+      const x0 = (i % cols) * cw, y0 = Math.floor(i / cols) * ch;
+      ctx.save();
+      if (v.fundo) { ctx.fillStyle = v.fundo; ctx.fillRect(x0, y0, cw, ch); }
+      const item = { fabrica: o.fabrica, registroPoses: o.registroPoses, ...v };
+      let ySola = y0 + ch - 130 - (v.subir || 0);
+      if (o.enquadrar === 'rosto') {
+        // cabeça centralizada na célula (cabelo incluído), resto do corpo recortado
+        const A = window[o.fabrica](v.opcoes || {}, v.vista || 'frente').alturaEmH;
+        ySola = y0 + 0.55 * o.cabecaPx + A * o.cabecaPx;
+      }
+      ctx.beginPath(); ctx.rect(x0, y0, cw, ch - (o.enquadrar === 'rosto' ? 100 : 0)); ctx.clip();
+      window.desenharItem(ctx, item, x0 + cw / 2 + (v.dx || 0), ySola, o.alturaPersonagem || 860, o.cabecaPx);
+      ctx.restore();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = v.fundo ? '#F2EDE6' : Estilo.base.tinta;
+      ctx.textAlign = 'center';
+      ctx.font = '800 64px Inter';
+      ctx.fillText(v.id, x0 + cw / 2, y0 + ch - 50);
+      ctx.font = '600 28px Inter';
+      ctx.fillText(v.nome || '', x0 + cw / 2, y0 + ch - 14);
+      ctx.strokeStyle = 'rgba(33,27,38,0.12)'; ctx.lineWidth = 2;
+      ctx.strokeRect(x0 + 1, y0 + 1, cw - 2, ch - 2);
+    });
+    return c.toDataURL('image/png').split(',')[1];
+  };
+</script>
+</body>
+</html>
