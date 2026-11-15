@@ -3,6 +3,8 @@
 //   --previa: voz sintética gratuita (espeak-ng), só para conferir o tempo das cenas.
 //   sem --previa: usa a voz final de cada fala (fala.voz_final.arquivo, relativo a audio/<serie>/<ep>/).
 // Regras aplicadas: plano de 2 a 3 s; legenda de até 3 palavras; capa nos 2 primeiros segundos; "PARTE X" no fim.
+// Travas (motor/travas.js): conferidas antes, durante e depois do render. Se alguma barrar, o render nem começa
+// (ou, com --mesmo-assim, o vídeo sai com "-BARRADO" no nome). O relatório fica em <saida>.travas.txt.
 const { chromium } = require('playwright');
 const { spawn, execFileSync } = require('child_process');
 const fs = require('fs');
@@ -10,7 +12,7 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 const opt = (n, p) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : p; };
-const [roteiroArq, planosArq, saida] = args.filter((a, i) => !a.startsWith('--') && !['--workers', '--teste', '--momento'].includes(args[i - 1]));
+const [roteiroArq, planosArq, saida] = args.filter((a, i) => !a.startsWith('--') && !['--workers', '--teste', '--momento', '--quadros', '--cada', '--so-eventos'].includes(args[i - 1]));
 const WORKERS = +opt('workers', 4);
 const FPS = 30;
 const raiz = path.resolve(__dirname, '..');
@@ -103,6 +105,17 @@ fs.writeFileSync(path.join(pastaAudio, 'linha-do-tempo.json'), JSON.stringify({ 
 console.log('Duração', total.toFixed(2) + 's,', nQuadros, 'quadros');
 for (const p of planos) console.log('  ', p.id.padEnd(12), (p.fim - p.inicio).toFixed(2) + 's');
 
+// ---------- travas antes do render ----------
+const Travas = require('./travas');
+const travasAntes = Travas.antes(TL, planosArq);
+console.log(Travas.relatorio('Travas antes do render:', travasAntes));
+const soConferindo = opt('teste') || opt('quadros') || opt('so-eventos');
+if (!soConferindo && !travasAntes.every((t) => t.ok) && !args.includes('--mesmo-assim')) {
+  console.error('\nVídeo barrado antes do render. Corrija o que está marcado como BARRA (ou rode com --mesmo-assim para ver mesmo assim).');
+  process.exit(1);
+}
+const eventosPorQuadro = [];
+
 // ---------- 3. áudio: falas posicionadas + bipe do despertador ----------
 const bipe = path.join(pastaAudio, 'sfx-despertador.wav');
 const pDesp = planos.find((p) => p.id === 'despertador');
@@ -161,7 +174,8 @@ async function trabalhador(k, browser) {
   const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19', '-preset', 'veryfast', arq], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let q = ini; q < fim; q++) {
-    const b64 = await page.evaluate((q) => { Episodio.quadro(q); return document.getElementById('c').toDataURL('image/jpeg', 0.93).split(',')[1]; }, q);
+    const [b64, ev] = await page.evaluate((q) => { Episodio.quadro(q); return [document.getElementById('c').toDataURL('image/jpeg', 0.93).split(',')[1], Episodio.eventos()]; }, q);
+    eventosPorQuadro[q] = ev;
     if (!ff.stdin.write(Buffer.from(b64, 'base64'))) await new Promise((r) => ff.stdin.once('drain', r));
     if (k === 0 && (q - ini) % 30 === 0) process.stdout.write(`\r  quadros: ${Math.round(((q - ini) / (fim - ini)) * 100)}% `);
   }
@@ -191,8 +205,46 @@ async function teste(png) {
   console.log('Folha de teste:', png);
 }
 
+// modo quadros: salva um PNG a cada N quadros, para comparar versões (--quadros pasta [--cada 10])
+async function quadrosSoltos(pasta) {
+  const cada = +opt('cada', 10);
+  fs.mkdirSync(pasta, { recursive: true });
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  page.on('pageerror', (e) => { console.error('Erro na página:', e.message); process.exitCode = 1; });
+  await page.goto('file://' + path.join(__dirname, 'palco.html'));
+  for (const s of scripts) await page.addScriptTag({ path: s });
+  await page.evaluate(async (tl) => { await document.fonts.load('900 98px Inter'); Episodio.iniciar(tl); }, TL);
+  for (let q = 0; q < nQuadros; q += cada) {
+    const b64 = await page.evaluate((q) => { Episodio.quadro(q); return document.getElementById('c').toDataURL('image/png').split(',')[1]; }, q);
+    fs.writeFileSync(path.join(pasta, 'q' + String(q).padStart(5, '0') + '.png'), Buffer.from(b64, 'base64'));
+  }
+  await browser.close();
+  fs.rmSync(tmp, { recursive: true, force: true });
+  console.log('Quadros salvos em', pasta);
+}
+
+// modo eventos: roda todos os quadros sem gerar imagem e salva os eventos das travas (--so-eventos saida.json)
+async function soEventos(arq) {
+  const browser = await chromium.launch();
+  await Promise.all([...Array(WORKERS).keys()].map(async (k) => {
+    const ini = Math.floor((nQuadros * k) / WORKERS), fim = Math.floor((nQuadros * (k + 1)) / WORKERS);
+    const page = await browser.newPage();
+    await page.goto('file://' + path.join(__dirname, 'palco.html'));
+    for (const s of scripts) await page.addScriptTag({ path: s });
+    await page.evaluate(async (tl) => { await document.fonts.load('900 98px Inter'); Episodio.iniciar(tl); }, TL);
+    for (let q = ini; q < fim; q++) eventosPorQuadro[q] = await page.evaluate((q) => { Episodio.quadro(q); return Episodio.eventos(); }, q);
+  }));
+  await browser.close();
+  fs.writeFileSync(arq, JSON.stringify(eventosPorQuadro));
+  fs.rmSync(tmp, { recursive: true, force: true });
+  console.log(Travas.relatorio('Durante o render:', Travas.durante(eventosPorQuadro, TL)));
+}
+
 (async () => {
   if (opt('teste')) { await teste(opt('teste')); return; }
+  if (opt('so-eventos')) { await soEventos(opt('so-eventos')); return; }
+  if (opt('quadros')) { await quadrosSoltos(opt('quadros')); return; }
   const t0 = Date.now();
   const browser = await chromium.launch();
   const partes = await Promise.all([...Array(WORKERS).keys()].map((k) => trabalhador(k, browser)));
@@ -204,5 +256,19 @@ async function teste(png) {
   execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', lista, '-i', audioFinal,
     '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', saida]);
   fs.rmSync(tmp, { recursive: true, force: true });
-  console.log('Pronto:', saida);
+  // ---------- travas durante e depois do render ----------
+  const travasDurante = Travas.durante(eventosPorQuadro, TL);
+  const travasDepois = Travas.depois(saida);
+  const todas = [...travasAntes, ...travasDurante, ...travasDepois];
+  const texto = [Travas.relatorio('Antes do render:', travasAntes), Travas.relatorio('Durante o render:', travasDurante), Travas.relatorio('Vídeo pronto:', travasDepois)].join('\n');
+  console.log('\n' + texto);
+  let final = saida;
+  if (!todas.every((t) => t.ok)) {
+    final = saida.replace(/\.mp4$/, '') + '-BARRADO.mp4';
+    fs.renameSync(saida, final);
+    console.log('\nVÍDEO BARRADO:', final);
+    process.exitCode = 1;
+  } else console.log('\nPassou em todas as travas.');
+  fs.writeFileSync(final + '.travas.txt', texto + '\n');
+  console.log('Pronto:', final);
 })();

@@ -32,6 +32,10 @@
   const RIG_FORA = { pontoMundo: () => ({ x: -9999, y: -9999 }), escalaPx: 0 };
   let TL = null;
   const rostos = [];
+  // eventos para as travas (motor/travas.js): o que só dá para ver por dentro do desenho
+  // rente = personagem a menos de 0,6 m da câmera (some e reaparece); mistura = duas vistas misturadas (fantasma);
+  // legenda-rosto = legenda em cima de um rosto
+  const eventos = [];
 
   // amplitude da voz de um personagem no tempo t (sincronia labial)
   function amplitude(voz, t) {
@@ -187,6 +191,7 @@
     const v = vistaPorAngulo(rel);
     const um = (vista) => ({ ...item, vista, espelhar: vista === 'frente' || vista === 'costas' ? false : v.espelhar });
     if (!v.vista2 || v.mistura <= 0.02 || v.mistura >= 0.98) return personagem(ctx, um(v.vista2 && v.mistura >= 0.98 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
+    eventos.push({ tipo: 'mistura', quem: item.fabrica, vistas: v.vista + '/' + v.vista2, mistura: +v.mistura.toFixed(2) });
     const w = ctx.canvas.width, h = ctx.canvas.height, T = ctx.getTransform();
     const A = camadaFixa('giroA', w, h), B = camadaFixa('giroB', w, h);
     const gA = A.getContext('2d'), gB = B.getContext('2d'); gA.setTransform(T); gB.setTransform(T);
@@ -271,6 +276,7 @@
     // a legenda não pula de lugar no meio do bloco: fica onde estava enquanto não cobrir um rosto
     if (legAnterior.bloco === bloco && legAnterior.y !== melhor && dist(legAnterior.y) > 40) melhor = legAnterior.y;
     legAnterior.bloco = bloco; legAnterior.y = melhor;
+    if (dist(melhor) < 0) eventos.push({ tipo: 'legenda-rosto', texto: bloco.palavras.map((w) => w.texto).join(' ') });
     const k = fase(t, bloco.inicio, bloco.inicio + 0.09, 'entra');
     const tam = 98 * (1.18 - 0.18 * k);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -307,6 +313,7 @@
   window.Episodio = {
     W, H, ease, fase, clamp, lerp,
     iniciar(tl) { TL = tl; },
+    eventos: () => eventos.slice(),
     quadro(n) {
       const t = n / TL.fps;
       TL.t = t;
@@ -318,6 +325,7 @@
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
       let forcaTremor = 0;
       rostos.length = 0;
+      eventos.length = 0;
       const p = TL.planos.find((q) => t >= q.inicio && t < q.fim) || TL.planos[TL.planos.length - 1];
       const u = t - p.inicio, dur = p.fim - p.inicio;
       const api = {
@@ -326,7 +334,8 @@
         personagem: (item, x, y, alt, o) => personagem(ctx, item, x, y, alt, o),
         personagem3d: (cam, item, X, Z, alturaM, o = {}) => {
           // o.rumo: para onde o personagem está virado (rad, 0 = para -Z); o.olhaPara: [X, Z]; o.y: altura do chão (flutuando)
-          const y = o.y || 0, q = cam.p(X, y, Z); if (q.dz < 0.6) return RIG_FORA;
+          const y = o.y || 0, q = cam.p(X, y, Z);
+          if (q.dz < 0.6) { if (!q.atras) eventos.push({ tipo: 'rente', quem: item.fabrica, dz: +q.dz.toFixed(2), x: Math.round(q.x) }); return RIG_FORA; }
           const { rumo, olhaPara, y: _y, ...resto } = o;
           Cena3D.sombraChao(ctx, cam, X, Z, 0.55 / (1 + y * 1.5), 1.4);
           if (rumo === undefined && !olhaPara) return personagem(ctx, item, q.x, q.y, alturaM * q.s, resto);
@@ -345,7 +354,7 @@
         // segundos desde o início do plano `id` (para tomadas contínuas que atravessam vários planos)
         desde: (id) => { const q = TL.planos.find((k) => k.id === id); return q ? t - q.inicio : u; },
         invisivel: (item, x, y, alt, prog, o) => invisivel(ctx, item, x, y, alt, prog, o),
-        invisivel3d: (cam, item, X, Z, alturaM, prog, o = {}) => { const q = cam.p(X, 0, Z); if (q.dz < 0.6) return RIG_FORA; if (prog < 0.7) Cena3D.sombraChao(ctx, cam, X, Z, 0.55 * (1 - prog), 1.4); return invisivel(ctx, item, q.x, q.y, alturaM * q.s, prog, o); },
+        invisivel3d: (cam, item, X, Z, alturaM, prog, o = {}) => { const q = cam.p(X, 0, Z); if (q.dz < 0.6) { if (!q.atras) eventos.push({ tipo: 'rente', quem: item.fabrica, dz: +q.dz.toFixed(2), x: Math.round(q.x) }); return RIG_FORA; } if (prog < 0.7) Cena3D.sombraChao(ctx, cam, X, Z, 0.55 * (1 - prog), 1.4); return invisivel(ctx, item, q.x, q.y, alturaM * q.s, prog, o); },
         camada: () => Cinema.camada(W, H),
         desfocar: (origem, px, a) => Cinema.desfocar(ctx, origem, px, a),
         texto: (txt, x, y, tam, o) => textoContornado(ctx, txt, x, y, tam, o),
