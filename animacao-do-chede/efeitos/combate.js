@@ -220,7 +220,9 @@
   function laminaRubra(ctx, x, y, s, t, ang = 0, o = {}) {
     const br = o.brilho === undefined ? 1 : o.brilho;
     ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    if (br > 0 && !o.semAura) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(0, -s * 0.45, 0, 0, -s * 0.45, s * 0.75); g.addColorStop(0, `rgba(255,90,60,${0.5 * br})`); g.addColorStop(1, 'rgba(255,60,40,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -s * 0.45, s * 0.75, 0, TAU); ctx.fill(); ctx.restore(); }
+    if (br > 0 && !o.semAura && o.so !== 'cabo') { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(0, -s * 0.45, 0, 0, -s * 0.45, s * 0.75); g.addColorStop(0, `rgba(255,90,60,${0.5 * br})`); g.addColorStop(1, 'rgba(255,60,40,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -s * 0.45, s * 0.75, 0, TAU); ctx.fill(); ctx.restore(); }
+    const lamina = o.so !== 'cabo', cabo = o.so !== 'lamina';
+    if (lamina) {
     // lâmina curva
     const lam = new Path2D(); lam.moveTo(-s * 0.035, -s * 0.16); lam.quadraticCurveTo(-s * 0.06, -s * 0.6, s * 0.06, -s * 0.98); lam.quadraticCurveTo(s * 0.09, -s * 0.62, s * 0.045, -s * 0.16); lam.closePath();
     const gl = ctx.createLinearGradient(-s * 0.06, 0, s * 0.08, 0); gl.addColorStop(0, '#3A0A10'); gl.addColorStop(0.45, '#9E1424'); gl.addColorStop(1, '#E2384A');
@@ -233,10 +235,13 @@
     ctx.fillStyle = '#C9A24A'; ctx.strokeStyle = '#5A4010'; ctx.lineWidth = Math.max(1, s * 0.01);
     ctx.beginPath(); ctx.moveTo(-s * 0.15, -s * 0.13); ctx.quadraticCurveTo(0, -s * 0.2, s * 0.15, -s * 0.13); ctx.quadraticCurveTo(s * 0.17, -s * 0.18, s * 0.12, -s * 0.21); ctx.quadraticCurveTo(0, -s * 0.15, -s * 0.12, -s * 0.21); ctx.quadraticCurveTo(-s * 0.17, -s * 0.18, -s * 0.15, -s * 0.13); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#FF3A4A'; ctx.beginPath(); ctx.arc(0, -s * 0.165, s * 0.028, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.beginPath(); ctx.arc(-s * 0.008, -s * 0.172, s * 0.009, 0, TAU); ctx.fill();
+    }
+    if (cabo) {
     // cabo com fita e pomo
     ctx.fillStyle = '#2A1A14'; ctx.beginPath(); ctx.roundRect(-s * 0.025, -s * 0.13, s * 0.05, s * 0.15, s * 0.01); ctx.fill(); ctx.stroke();
     ctx.strokeStyle = '#7A1E26'; ctx.lineWidth = Math.max(1, s * 0.008); for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(-s * 0.025, -s * (0.11 - i * 0.03)); ctx.lineTo(s * 0.025, -s * (0.09 - i * 0.03)); ctx.stroke(); }
     ctx.fillStyle = '#C9A24A'; ctx.beginPath(); ctx.arc(0, s * 0.035, s * 0.03, 0, TAU); ctx.fill();
+    }
     ctx.restore();
   }
 

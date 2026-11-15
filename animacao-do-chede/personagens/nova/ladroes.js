@@ -114,13 +114,16 @@
   function espadaNaMao(def) {
     const mao = def.partes.find((q) => q.nome === 'mao_d'); if (!mao) return;
     const T = def.alturaEmH * 0.5;
-    def.partes.push({ nome: 'espada_d', pai: 'mao_d', pivo: [0, 0.17], z: mao.z - 0.004, desenhar: (pc) => {
+    // cabo: logo abaixo da mão (o punho fecha por cima); lâmina e guarda: na frente de tudo (nunca por dentro da máscara)
+    const peca = (nome, z, so) => ({ nome, pai: 'mao_d', pivo: [0, 0.17], z, desenhar: (pc) => {
       const g = pc.ctx, m = g.getTransform(), esc = Math.hypot(m.c, m.d), e = window.ESPADA_MAO || {};
       const S = T * esc, ang = e.ang || 0, d = 0.06 * S; // meio do cabo dentro do punho
       g.save(); g.setTransform(1, 0, 0, 1, m.e - d * Math.sin(ang), m.f + d * Math.cos(ang));
-      Combate.laminaRubra(g, 0, 0, S, e.t || 0, e.ang || 0, { brilho: e.brilho === undefined ? 1 : e.brilho, semAura: true });
+      Combate.laminaRubra(g, 0, 0, S, e.t || 0, ang, { brilho: e.brilho === undefined ? 1 : e.brilho, semAura: true, so });
       g.restore();
     } });
+    const zMax = Math.max(...def.partes.map((q) => q.z));
+    def.partes.push(peca('espada_cabo', mao.z - 0.004, 'cabo'), peca('espada_lamina', zMax + 1, 'lamina'));
   }
 
   window.LADRAO_POSES = {

@@ -472,7 +472,7 @@
       const pega = api.ease.entra(api.fase(0.2, 0.7)), ergue = api.ease.entra(api.fase(0.75, 1.35)), luz = api.fase(0.8, 1.8);
       const fora = ergue > 0.05;
       const pose = { braco_d: 12 + 150 * pega - 120 * ergue, antebraco_d: -10 - 140 * pega + 40 * ergue, mao_d: 0, braco_e: -12, antebraco_e: 8, coxa_d: 5, coxa_e: -5, cabeca: -4 * ergue, _maos: { d: pega > 0.6 ? 'punho' : 'relaxada' } };
-      window.ESPADA_MAO = { t: api.t, ang: -0.25 + 0.25 * ergue, brilho: luz };
+      window.ESPADA_MAO = { t: api.t, ang: -0.3 + 0.12 * ergue, brilho: luz };
       noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDER, opcoes: { lider: true, estilo: 'C', semEspada: fora, espadaNaMao: fora }, vista: 'frente', pose, expressao: 'raiva' }, 0.55, 6.4, 1.9, { luz: { lado: 1, forca: 0.3 + 0.5 * luz, cor: 'rgb(255,110,80)', sombra: 1 } }), cor: `rgba(160,30,30,${0.1 * luz})` }], {
         forca: 0.3,
         depois: ([rig]) => {
