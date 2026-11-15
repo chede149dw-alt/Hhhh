@@ -134,6 +134,62 @@
     return tela(256, 128, (g, w, h) => { g.save(); g.scale(1, h / w); const gr = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, 'rgba(255,255,255,0.9)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.4)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, w); g.restore(); });
   }
 
+  // árvore 2D como nas referências: tronco escuro com galhos em V e copa de bolas chapadas em 3 verdes (escuro atrás, limão na frente)
+  function texArvore2D(seed, tipo) {
+    return tela(512, 768, (g, w, h) => {
+      const r = rng(seed), cx = w / 2, chao = h - 6;
+      const pinta = (x, y, R, cor, n) => { g.fillStyle = cor; for (let i = 0; i < n; i++) { const a = r() * 6.28, d = Math.sqrt(r()) * R * 0.8; g.beginPath(); g.ellipse(x + Math.cos(a) * d, y + Math.sin(a) * d, 3 + r() * 4, 2 + r() * 2.5, r() * 3, 0, 7); g.fill(); } };
+      if (tipo === 'pinheiro') {
+        g.fillStyle = '#3E2A1E'; g.fillRect(cx - 14, chao - 150, 28, 150);
+        for (let i = 0; i < 4; i++) {
+          const yb = chao - 110 - i * 135, L = 210 - i * 38, alt = 230;
+          g.fillStyle = '#1F4426'; g.beginPath(); g.moveTo(cx, yb - alt); g.quadraticCurveTo(cx + L * 0.5, yb - alt * 0.35, cx + L, yb); g.quadraticCurveTo(cx, yb + 26, cx - L, yb); g.quadraticCurveTo(cx - L * 0.5, yb - alt * 0.35, cx, yb - alt); g.fill();
+          g.fillStyle = '#2F6A33'; g.beginPath(); g.moveTo(cx, yb - alt); g.quadraticCurveTo(cx - L * 0.45, yb - alt * 0.35, cx - L * 0.92, yb - 4); g.quadraticCurveTo(cx - L * 0.3, yb + 8, cx - 6, yb + 6); g.closePath(); g.fill();
+          pinta(cx - L * 0.35, yb - alt * 0.3, L * 0.35, 'rgba(20,40,20,0.35)', 8);
+        }
+        return;
+      }
+      const arbusto = tipo === 'arbusto', topo = arbusto ? chao - 60 : chao - 330, ccy = arbusto ? chao - 150 : 300, rx = arbusto ? 200 : 205, ry = arbusto ? 120 : 175;
+      if (!arbusto) {
+        // tronco e galhos (mais escuro do lado da sombra)
+        g.fillStyle = '#4A3428'; g.beginPath(); g.moveTo(cx - 20, chao); g.lineTo(cx - 11, topo); g.lineTo(cx + 11, topo); g.lineTo(cx + 20, chao); g.closePath(); g.fill();
+        g.fillStyle = '#3A281E'; g.beginPath(); g.moveTo(cx + 2, chao); g.lineTo(cx + 2, topo); g.lineTo(cx + 11, topo); g.lineTo(cx + 20, chao); g.closePath(); g.fill();
+        g.strokeStyle = '#4A3428'; g.lineCap = 'round';
+        for (const [dx, dy, lw] of [[-95, -150, 13], [105, -170, 12], [-25, -210, 10]]) { g.lineWidth = lw; g.beginPath(); g.moveTo(cx, topo + 40); g.lineTo(cx + dx, topo + dy); g.stroke(); }
+      }
+      // bolas da copa
+      const bolas = [];
+      const n = arbusto ? 9 : 16;
+      for (let i = 0; i < n; i++) { const a = r() * 6.28, d = Math.sqrt(r()); bolas.push([cx + Math.cos(a) * d * rx * 0.78, ccy + Math.sin(a) * d * ry * 0.78, (arbusto ? 55 : 72) + r() * (arbusto ? 30 : 40)]); }
+      bolas.push([cx, ccy - ry * 0.55, arbusto ? 60 : 95], [cx - rx * 0.55, ccy, arbusto ? 55 : 85], [cx + rx * 0.55, ccy + 10, arbusto ? 55 : 85]);
+      const nota = (b) => -(b[1] - ccy) / ry - 0.55 * (b[0] - cx) / rx + (r() - 0.5) * 0.5;
+      bolas.forEach((b) => (b[3] = nota(b))); bolas.sort((a, b) => a[3] - b[3]);
+      bolas.forEach((b, i) => {
+        const k = i / bolas.length, cor = k < 0.38 ? '#2C5A28' : k < 0.68 ? '#3D7B33' : (r() < 0.5 ? '#86C23E' : '#78B53A');
+        g.fillStyle = cor; g.beginPath(); g.arc(b[0], b[1], b[2], 0, 7); g.fill();
+        pinta(b[0], b[1], b[2], k < 0.68 ? 'rgba(15,35,15,0.35)' : 'rgba(40,80,25,0.4)', 6);
+      });
+      if (!arbusto) { g.strokeStyle = '#3A281E'; g.lineWidth = 9; g.beginPath(); g.moveTo(cx, topo + 40); g.lineTo(cx - 40, topo - 60); g.moveTo(cx, topo + 40); g.lineTo(cx + 45, topo - 70); g.stroke(); }
+    });
+  }
+  function texCirculo() {
+    return tela(1024, 1024, (g, w) => {
+      const c = w / 2; g.translate(c, c); g.strokeStyle = '#FFFFFF'; g.fillStyle = '#FFFFFF'; g.shadowColor = '#FFFFFF'; g.shadowBlur = 18;
+      const anel = (R, lw) => { g.lineWidth = lw; g.beginPath(); g.arc(0, 0, R, 0, 7); g.stroke(); };
+      anel(480, 10); anel(450, 4); anel(330, 8); anel(300, 3); anel(170, 6);
+      // runas entre os anéis
+      g.font = '700 46px serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      const runas = 'ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ';
+      for (let i = 0; i < 24; i++) { const a = (i / 24) * Math.PI * 2; g.save(); g.rotate(a); g.fillText(runas[i], 0, -392); g.restore(); }
+      // hexagrama e estrela interna
+      g.lineWidth = 6;
+      for (const off of [0, Math.PI / 3]) { g.beginPath(); for (let i = 0; i <= 3; i++) { const a = off + (i / 3) * Math.PI * 2 - Math.PI / 2; const x = Math.cos(a) * 300, y = Math.sin(a) * 300; i ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); }
+      for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; g.beginPath(); g.arc(Math.cos(a) * 330, Math.sin(a) * 330, 26, 0, 7); g.stroke(); }
+      g.lineWidth = 4; for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2; g.beginPath(); g.moveTo(Math.cos(a) * 170, Math.sin(a) * 170); g.lineTo(Math.cos(a) * 300, Math.sin(a) * 300); g.stroke(); }
+      const gr = g.createRadialGradient(0, 0, 0, 0, 0, 480); gr.addColorStop(0, 'rgba(255,255,255,0.35)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.08)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.shadowBlur = 0; g.fillStyle = gr; g.beginPath(); g.arc(0, 0, 480, 0, 7); g.fill();
+    });
+  }
+
   // ---------------- geometria ----------------
   // junta várias geometrias numa só (sem índice), pintando cada vértice com cor(x,y,z,nx,ny,nz)
   function juntar(lista) {
@@ -207,7 +263,7 @@
   // ---------------- montagem do mundo ----------------
   let R = null;
   function montar() {
-    const T = THREE, r = rng(2024);
+    const T = THREE, r = rng(2024), arvores = [];
     const canvas = document.createElement('canvas');
     const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
     const esc = 0.75; renderer.setPixelRatio(1); renderer.setSize(Math.round(W * esc), Math.round(H * esc), false);
@@ -338,12 +394,19 @@
       }
       // fileiras de árvores na beira do campo (moldura dos planos)
       for (const [x, z] of [[-5.2, 9], [-6.8, 12.5], [5.8, 11.5], [7.4, 14], [-7.5, 4], [7.8, 6.5], [-4.8, 15], [4.9, 16.2], [-8.5, -1], [8.6, 1], [-6, -6], [6.4, -4.5]]) pos[r() < 0.5 ? 0 : 1].push([x, z, 1.0 + r() * 0.3, r() * 6.28]);
-      const mat = lambert({ vertexColors: true, flatShading: true }), o = new T.Object3D();
-      proto.forEach((g, k) => {
-        const lista = pos[k]; if (!lista.length) return;
-        const m = new T.InstancedMesh(g, mat, lista.length);
-        lista.forEach(([x, z, s, a], i) => { o.position.set(x, altura(x, z) - 0.05, -z); o.rotation.set(0, a, 0); o.scale.setScalar(s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); });
-        m.castShadow = true; m.receiveShadow = true; cena.add(m);
+      // árvores 2D em pé no 3D (como nas referências), sempre viradas para a câmera; recebem luz e fazem sombra
+      const o = new T.Object3D();
+      const tipos = [['redonda', 11, 6.2], ['redonda', 12, 5.6], ['redonda', 13, 6.6], ['pinheiro', 14, 8.5], ['pinheiro', 15, 9.5], ['arbusto', 16, 1.5]];
+      const deTipo = [[0, 1, 2], [0, 1, 2], [3, 4], [3, 4], [5]];
+      const listas = tipos.map(() => []);
+      pos.forEach((l, k) => l.forEach((p, i) => { const op = deTipo[k]; listas[op[i % op.length]].push(p); }));
+      tipos.forEach(([tipo, seed, alt], k) => {
+        const L = listas[k]; if (!L.length) return;
+        const g = new T.PlaneGeometry(alt * (512 / 768), alt); g.translate(0, alt / 2, 0);
+        const nr = g.attributes.normal; for (let i = 0; i < nr.count; i++) nr.setXYZ(i, 0, 1, 0); // luz por cima: não fica escura contra a lua/sol
+        const mat = lambert({ map: textura(texArvore2D(seed, tipo)), alphaTest: 0.5, side: T.DoubleSide }); mat.alphaToCoverage = true;
+        const m = new T.InstancedMesh(g, mat, L.length); m.castShadow = true; m.receiveShadow = false; m.frustumCulled = false;
+        m.userData.arv = L.map(([x, z, s]) => [x, altura(x, z) - 0.05, z, s]); cena.add(m); arvores.push(m);
       });
       const rochas = [geoRocha(1), geoRocha(2)], rp = [[], []];
       for (let i = 0; i < 900 && rp[0].length + rp[1].length < 90; i++) { const x = (r() - 0.5) * 70, z = -15 + r() * 70; if (naTrilha(x, z, 0.6) || (Math.abs(x) < 3.6 && z > 0 && z < 11)) continue; const banco = noRio(x, z, 1.4) && !noRio(x, z, -0.2); if (noRio(x, z, -0.1)) continue; if (!banco && r() < 0.6) continue; rp[i % 2].push([x, z, banco ? 0.25 + r() * 0.35 : 0.2 + r() * 0.6, r() * 6.28]); }
@@ -450,9 +513,44 @@
     const nevoas = [];
     { const tn = textura(texNevoa()); for (let i = 0; i < 22; i++) { const s = new T.Sprite(new T.SpriteMaterial({ map: tn, transparent: true, depthWrite: false, opacity: 0.12, color: 0x96aae6 })); const w = 7 + r() * 9; s.scale.set(w, w * 0.22, 1); const x = (r() - 0.5) * 40, z = 4 + r() * 40; s.position.set(x, 0.35, -z); cena.add(s); nevoas.push({ s, x, z, v: 0.15 + r() * 0.25 }); } }
 
-    R = { renderer, canvas, cena, camera, uni, ceuMat, lua, sol, hemi, dir, pontos, chamas, nevoas, aguaMat, aguaNorm, runasMat, janelaMat, florMat, grupoCeu, esc };
+    R = { renderer, canvas, cena, camera, uni, arvores, magia: montarMagia(cena, uni), ceuMat, lua, sol, hemi, dir, pontos, chamas, nevoas, aguaMat, aguaNorm, runasMat, janelaMat, florMat, grupoCeu, esc };
   }
   let R_estrelas = null;
+
+  // ---------------- magia em 3D: círculo no chão (em perspectiva, girando) e faíscas em volta das mãos ----------------
+  // magias: [{ tipo: 'circulo', x, z, raio, k, cor } | { tipo: 'orbe', x, y, z, k, cor }]
+  function montarMagia(cena, uni) {
+    const T = THREE, tc = textura(texCirculo()), circulos = [], nuvens = [], tb = textura(texBrilho('255,255,255'));
+    for (let i = 0; i < 2; i++) {
+      const a = new T.Mesh(new T.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ map: tc, transparent: true, depthWrite: false, blending: T.AdditiveBlending, color: 0x7fd0ff, fog: false, polygonOffset: true, polygonOffsetFactor: -6 }));
+      const b = a.clone(); b.material = a.material.clone();
+      a.visible = b.visible = false; a.renderOrder = b.renderOrder = -1; cena.add(a); cena.add(b); circulos.push([a, b]);
+    }
+    for (let i = 0; i < 3; i++) {
+      const n = 70, P = new Float32Array(n * 3), g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(P, 3));
+      const pts = new T.Points(g, new T.PointsMaterial({ map: tb, size: 0.05, transparent: true, depthWrite: false, blending: T.AdditiveBlending, color: 0x9fe0ff, sizeAttenuation: true }));
+      pts.frustumCulled = false; pts.visible = false; cena.add(pts); nuvens.push(pts);
+    }
+    return { circulos, nuvens };
+  }
+  function atualizaMagia(lista, t) {
+    const M = R.magia; let ic = 0, io = 0;
+    for (const g of lista) {
+      if (!(g.k > 0.01)) continue;
+      if (g.tipo === 'circulo' && ic < M.circulos.length) {
+        const [a, b] = M.circulos[ic++], y = altura(g.x, g.z) + (naTrilha(g.x, g.z, 0.3) ? 0.12 : 0.26), R0 = (g.raio || 0.9) * (0.6 + 0.4 * Math.min(1, g.k * 1.5));
+        a.position.set(g.x, y, -g.z); a.scale.set(R0 * 2, 1, R0 * 2); a.rotation.y = t * 0.7; a.material.opacity = Math.min(1, g.k); a.material.color.set(g.cor || '#9AD8FF'); a.visible = true;
+        b.position.set(g.x, y + 0.005, -g.z); b.scale.set(R0 * 1.25, 1, R0 * 1.25); b.rotation.y = -t * 1.3; b.material.opacity = 0.7 * Math.min(1, g.k); b.material.color.set(g.cor || '#C8ECFF'); b.visible = true;
+      }
+      if (g.tipo === 'orbe' && io < M.nuvens.length) {
+        const pts = M.nuvens[io++], P = pts.geometry.attributes.position, n = P.count, vidaNada = 0;
+        for (let i = 0; i < n; i++) { const f = i * 1.618, vida = ((t * 0.9 + f * 0.37) % 1), ang = f * 2.4 + t * (2 + (i % 3)), rr = 0.06 + 0.2 * vida; P.setXYZ(i, g.x + Math.cos(ang) * rr, g.y - 0.03 + vida * 0.4 + Math.sin(t * 3 + f) * 0.03, -(g.z + Math.sin(ang) * rr)); }
+        P.needsUpdate = true; pts.material.opacity = Math.min(1, g.k) * (1 - 0.5 * vidaNada); pts.material.color.set(g.cor || '#8FD8FF'); pts.visible = true;
+      }
+    }
+    for (; ic < M.circulos.length; ic++) M.circulos[ic].forEach((m) => (m.visible = false));
+    for (; io < M.nuvens.length; io++) M.nuvens[io].visible = false;
+  }
 
   // posiciona a câmera do three igual à câmera do motor (inclusive o horizonte fora do centro)
   function ajustaCamera(cam, near, far) {
@@ -485,9 +583,11 @@
     R.runasMat.opacity = 0.25 + 0.75 * noite * (0.75 + 0.25 * Math.sin(t * 2)); R.janelaMat.opacity = 0.2 + 0.8 * noite; R.florMat.opacity = 0.15 + 0.85 * noite;
     R.aguaNorm.offset.set(t * 0.03, t * 0.015);
     R.aguaMat.color.copy(new T.Color('#4A80B8').lerp(new T.Color('#E09A88'), suave(0.5, 1, h) * (1 - suave(1.2, 1.7, h))).lerp(new T.Color('#1C2C66'), noite));
+    { const o = new T.Object3D(), cx = cam.x, cz = cam.z, tom = new T.Color(1, 1, 1).lerp(new T.Color('#55628E'), 0.62 * noite); for (const m of R.arvores) { m.material.color.copy(tom); m.userData.arv.forEach(([x, y, z, s], i) => { o.position.set(x, y, -z); o.rotation.set(0, Math.atan2(cx - x, -(cz - z)), 0); o.scale.setScalar(s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); }); m.instanceMatrix.needsUpdate = true; } }
+    atualizaMagia(o.magias || [], t);
     for (const n of R.nevoas) { const x = ((n.x + t * n.v + 30) % 60 + 60) % 60 - 30; n.s.position.x = x; n.s.material.opacity = 0.05 + 0.13 * noite; n.s.material.color.set(noite > 0.5 ? 0x96aae6 : 0xf0c8b0); }
     // tochas: acendem no pôr do sol; as 9 luzes vão para as tochas mais perto do que a câmera vê + luzes extras do plano
-    const acesa = suave(1.15, 1.7, h), extras = (o.luzes || []).slice(0, 4);
+    const acesa = suave(1.15, 1.7, h), extras = [...(o.magias || []).filter((g) => g.k > 0.02).map((g) => ({ x: g.x, y: g.tipo === 'circulo' ? 0.7 : g.y, z: g.z, cor: g.cor || '#4E9CFF', forca: (g.tipo === 'circulo' ? 1.4 : 0.9) * g.k, raio: g.tipo === 'circulo' ? 6 : 3.5 })), ...(o.luzes || [])].slice(0, 5);
     const lista = R.chamas.map((c) => ({ c, d: Math.hypot(c.x - fx, c.z - fz) })).sort((a, b) => a.d - b.d);
     for (const { c } of lista) { const fl = 0.85 + 0.15 * Math.sin(t * 13 + c.i * 2) * Math.sin(t * 7.3 + c.i); c.ch.scale.set(0.34 * fl * acesa, 0.62 * (0.9 + 0.2 * Math.sin(t * 11 + c.i)) * acesa, 1); c.br.material.opacity = 0.55 * acesa * fl; c.br.visible = acesa > 0.01; c.ch.visible = acesa > 0.01; c.fl = fl; }
     let li = 0;
@@ -551,6 +651,8 @@
   window.Valdor3D = {
     trilhaX, trilhaW, rioZ, RIO, PONTE, altura, 
     nevoa: (n = 1, dia = false) => hex(pal('nevoa', dia ? 0 : 1 + n)),
+    // ponto da tela (px) na profundidade dz (m) da câmera → mundo { x, y, z }
+    paraMundo(cam, sx, sy, dz) { const yaw = cam.yaw || 0, co = Math.cos(yaw), si = Math.sin(yaw), xr = ((sx - (cam.cx || W / 2)) * dz) / cam.f, yr = (((cam.cy || H / 2) - sy) * dz) / cam.f; return { x: cam.x + xr * co + dz * si, y: cam.y + yr, z: cam.z - xr * si + dz * co }; },
     // fundo: renderiza tudo que está além de `perto` metros da câmera
     desenhar(ctx, cam, o = {}) {
       if (!R) montar();

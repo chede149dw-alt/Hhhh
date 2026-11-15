@@ -22,6 +22,9 @@
   const soco = (k, f = 0.14) => (k < 0 ? 1 : 1 + f * Math.exp(-k * 7) * Math.min(1, k / 0.04));
   function zoomEm(ctx, x, y, k, fn) { ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.translate(-x, -y); fn(); ctx.restore(); }
   function close(api, item, cx, cy, Hpx, o = {}) { const A = alturaH(item, item.vista || 'frente'); return api.personagem(item, cx, cy - 0.47 * Hpx + A * Hpx, A * Hpx, o); }
+  // mão do personagem (tela) → mundo 3D, para a magia acontecer dentro do cenário
+  const maoMundo = (cam, rig, parte, X, Z) => { if (!rig || !rig.pontoMundo) return null; const m = rig.pontoMundo(parte, [0, 0.28]); return Valdor3D.paraMundo(cam, m.x, m.y, cam.p(X, 0, Z).dz); };
+  const orbe = (p, k, cor) => (p ? { tipo: 'orbe', x: p.x, y: p.y, z: p.z, k, cor } : null);
   // expressão com ajuste (olhar para um lado, etc.)
   const expr = (nome, extra = {}) => ({ ...window.EXPRESSOES_PADRAO[nome], ...extra });
   function emOrdem(cam, lista) { const dist = (X, Z) => (X - cam.x) ** 2 + (Z - cam.z) ** 2; lista.slice().sort((a, b) => dist(b[0], b[1]) - dist(a[0], a[1])).forEach((it) => it[2]()); }
@@ -75,13 +78,14 @@
     if (perto < 0.3) perto = 0;
     // foco logo atrás de quem está mais longe; o fundo além disso sai desfocado
     const dzs = figuras.filter((f) => f.sombra !== false).map((f) => f.dz), foco = dzs.length ? Math.max(...dzs) + (o.folgaFoco || 3) : 0;
-    const op = { t: tc, noite: n, dia, perto, luzes, figuras, foco, bokeh: o.bokeh === undefined ? 5 : o.bokeh };
+    const magias = o.magias ? o.magias(res).filter(Boolean) : [];
+    const op = { t: tc, noite: n, dia, perto, luzes, figuras, foco, bokeh: o.bokeh === undefined ? 5 : o.bokeh, magias };
     if (o.desfoque) { const F = api.camada(); V().desenhar(F.getContext('2d'), cam, op); api.desfocar(F, o.desfoque); } else V().desenhar(ctx, cam, op);
     if (o.chao && !o.chaoEm) o.chao(res);
     for (const [L, a] of camadas) { ctx.save(); ctx.globalAlpha = a; ctx.drawImage(L, 0, 0); ctx.restore(); }
     window.SEM_SOMBRA_CHAO = false;
     if (o.depois) o.depois(res);
-    V().frente(ctx, cam, { t: tc, noite: n, dia, forca: o.forca === undefined ? 0.5 : o.forca, perto, luzes });
+    V().frente(ctx, cam, { t: tc, noite: n, dia, forca: o.forca === undefined ? 0.5 : o.forca, perto, luzes, magias });
     if (o.fx) camFx(ctx, api, o.fx);
     if (o.fim) o.fim(res);
     return res;
@@ -257,6 +261,7 @@
         { f: () => api.personagem3d(cam, { ...TEOJ, pose: 'parado', expressao: 'determinado' }, 0.4, 4.0, 1.82, { olhaPara: [LX, LZ], luz: LUZ_CAMPO, semente: 3 }) },
       ], {
         dia: true, forca: 0.5,
+        magias: (rs) => [orbe(maoMundo(cam, rs[1], 'mao_d', -0.6, 4.4), 0.9), i % 2 ? { tipo: 'circulo', x: -0.6, z: 4.4, raio: 0.8, k: 0.8 } : null],
         depois: () => {
           const q = cam.p(LX, 0.45, LZ); Combate.impacto(ctx, q.x, q.y, 140, uu - 0.25, { dura: 0.4, seed: i + 2 });
           const qd = cam.p(-0.6, 2.05, 4.4); Valdor.placaNivel(ctx, qd.x, qd.y, 2 + i, 1 + 0.3 * Math.max(0, 1 - uu * 4), { tam: 42, cor: AMARELO });
@@ -392,6 +397,7 @@
       ];
       noite(ctx, api, cam, ents.reverse(), {
         forca: 0.35,
+        magias: (rs) => { const dv = rs[rs.length - 2]; return [orbe(maoMundo(cam, dv, 'mao_d', -1.0, 5.3), 0.8), orbe(maoMundo(cam, dv, 'mao_e', -1.0, 5.3), 0.8)]; },
         luzes: pos.filter((_, i) => i % 2).map(([x, z]) => ({ x: x + 0.3, y: 1.7, z, cor: '#FFB066', forca: 0.9 })),
         depois: (rs) => { const ladr = rs.slice().reverse().slice(2); ladr.forEach((r, i) => { if (i % 2) tochaNaMao(ctx, r, api.t, i); }); const qt = cam.p(1.05, 2.75, 5.0), qd = cam.p(-1.0, 2.0, 5.3); Combate.vidaCabeca(ctx, qt.x, qt.y, 0.7 * qt.s, 1); Combate.vidaCabeca(ctx, qd.x, qd.y, 0.6 * qd.s, 1, { mana: 0.8 });
           pos.forEach(([x, z], i) => { const q = cam.p(x, 2.15, z); Valdor.placaNivel(ctx, q.x, q.y, [12, 13, 15, 14, 12][i], api.fase(1.0 + i * 0.1, 1.3 + i * 0.1, 'volta'), { tam: 34, cor: i === 2 ? '#FF6A7A' : '#FFB0B0' }); }); },
@@ -455,8 +461,7 @@
         const uu = u - 1.7, cam = api.orbita({ alvo: [-0.9, 1.15, 4.3], raio: chave(uu, [[0, 2.6], [d - 1.7, 1.9]]), ang: chave(uu, [[0, -1.9], [d - 1.7, -1.5]]), altura: 1.2, f: 1150, ySalvo: 960, nevoa: V().nevoa(1) });
         const kc = api.fase(1.7, d);
         noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIL, pose: 'conjurando', expressao: 'determinado' }, -0.9, 4.3, 1.76, { olhaPara: [1.7, 5.6], luz: { lado: 1, forca: 1, cor: 'rgb(130,200,255)', sombra: 0.8 } }) }], {
-          chaoEm: [-0.9, 4.3],
-          chao: () => { const q = cam.p(-0.9, 0, 4.3); Valdor.circuloMagico(ctx, q.x, q.y, 0.85 * q.s, { k: kc, t: api.t }); },
+          magias: ([rig]) => [{ tipo: 'circulo', x: -0.9, z: 4.3, raio: 1.0, k: kc }, orbe(maoMundo(cam, rig, 'mao_d', -0.9, 4.3), 1), orbe(maoMundo(cam, rig, 'mao_e', -0.9, 4.3), 1)],
           depois: ([rig]) => { if (!rig || !rig.pontoMundo) return; const m = [rig.pontoMundo('mao_d', [0, 0.28]), rig.pontoMundo('mao_e', [0, 0.28])]; for (const p of m) Combate.maoEletrica(ctx, p.x, p.y, 30, api.t, 1); Combate.arcoEntre(ctx, [m[0].x, m[0].y], [m[1].x, m[1].y], api.t, 1); Combate.convergir(ctx, (m[0].x + m[1].x) / 2, (m[0].y + m[1].y) / 2, 500, api.t, 1); },
         });
       }
