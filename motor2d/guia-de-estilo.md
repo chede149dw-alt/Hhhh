@@ -1,7 +1,13 @@
 # Guia de estilo
 
 Estilo próprio para os vídeos do motor: **animação 2D flat em recorte, personagens jovens de
-roupa larga, contorno escuro médio, sombra de corte único e poderes neon em camadas.**
+roupa larga, borda fina na cor da própria peça, sombra em degradê (modo suave) e poderes em camadas.**
+
+> **Como ler este guia (15/11/2026).** Aqui fica só o que é gosto e precisa de olho. O que dá pra medir virou
+> trava em `motor/travas.js` e não é repetido aqui (duração, nada parado, legenda, quadro que pisca, brilho
+> estourado, volume, câmera rente, personagem fantasma, boneco único, só peça aprovada). Regras com data e motivo:
+> `regras.md`. Quando uma regra nova substituir uma antiga, **apague a antiga** — duas versões no texto confundem
+> quem lê (capítulo 9 do livro).
 
 Ele nasceu do que se repete nas 15 imagens de `referencias/`, mas **não reproduz nenhuma delas**:
 nenhum personagem, combinação de cores ou roupa das referências deve ser copiado (ver seção 9).
@@ -48,7 +54,7 @@ cabelo). Medidas em px valem para o quadro 1080×1920 com o personagem em tamanh
 
 | Nome | Uso | Base | Sombra | Luz |
 |---|---|---|---|---|
-| Tinta | Contorno e linhas internas | `#211B26` | — | — |
+| Tinta | Contorno da legenda e dos textos (no modo suave, não é usada nos personagens) | `#211B26` | — | — |
 | Grafite | Roupa escura | `#38343F` | `#2B2537` | `#5C575B` |
 | Pedra | Roupa média, detalhes | `#6A6573` | `#514864` | `#857F87` |
 | Linho | Off-white (camisetas, solas, golas) | `#F2EDE6` | `#BAA9C8` | `#F4F0EA` |
@@ -152,23 +158,28 @@ triste, determinado. Mudam só sobrancelhas, pálpebras, boca e o tamanho da pup
 
 ---
 
-## 6. Contorno, sombra e luz
+## 6. Contorno, sombra e luz (modo suave, o padrão)
+
+Pedido do autor: menos cartunesco, mais perto das referências. Vale para personagens, objetos e cenários
+(`Estilo.modo = 'suave'` em `motor/estilo.js`; o modo `'classico'`, com contorno Tinta e sombra de corte único,
+só volta com pedido explícito).
 
 ### Contorno
 | Item | Regra |
 |---|---|
-| Cor | Tinta `#211B26` (nunca preto puro) |
-| Silhueta externa | **4‰ da altura do personagem** → 4,5 px no tamanho padrão (mín. 2 px) |
-| Linhas internas (dobras, separação de peças) | 55% da externa → 2,5 px |
-| Detalhes do rosto | Olhos e sobrancelhas: 1,2× a externa; boca: igual às internas |
+| Cor | Na cor da própria peça: tom de sombra × `#9A8EAA`. **Nada de contorno preto ou Tinta pura.** |
+| Espessura | 42% da espessura clássica (a clássica era 4‰ da altura do personagem) |
+| Linhas internas | `rgba(48,32,56,0.62)`, 85% da espessura |
 | Pontas | Arredondadas (`lineCap = 'round'`, `lineJoin = 'round'`) |
 | Efeitos e partículas | **Sem contorno** |
+| Cenários 3D | Borda a 40% da espessura, na cor da face escurecida |
 
 ### Sombra (no personagem)
-- **Um único tom de sombra, borda dura** (cel shading). Sem degradê no preenchimento.
-- Luz principal **de cima à esquerda, a 45°**. A sombra fica do lado direito e embaixo de cada peça.
-- A sombra cobre **20–35%** de cada peça. Lugares fixos: embaixo do queixo (0,15 H no pescoço), embaixo da franja na testa, dobra do cotovelo, entre as pernas, embaixo da barra do moletom.
-- **Sombra no chão**: elipse com 1,1× a largura dos ombros e 0,18 H de altura, `rgba(17,14,20,0.22)`, desfoque de 12 px.
+- **Sombra em degradê**: entra suave do lado oposto à luz (4 camadas da cor base deslocadas para a luz).
+- **Sombra de contato entre peças**: cada peça escurece de leve o que está atrás dela (`rgba(28,18,42,0.16)`) — cabeça no pescoço, braço no corpo.
+- Luz principal **de cima à esquerda, a 45°**.
+- **Sombra no chão**: elipse com 1,1× a largura dos ombros, gradiente radial (não blur).
+- Blush leve: `rgba(232,140,128,0.16)`.
 
 ### Luz
 - Luz (tom "luz" da paleta) só em: **1 faixa no cabelo**, ponta do nariz/bochecha (opcional), objetos brilhantes.
@@ -245,24 +256,25 @@ Carregar (0,3–0,6 s) → disparar (2–4 quadros) → viajar → impactar (fla
 
 ---
 
-## 10. Checklist antes de aprovar um quadro
+## 10. Checklist antes de aprovar um quadro (o que é olho)
 
-- [ ] Personagem com 5,5 H (ou uma das variações), linhas de altura batendo entre as vistas
+A máquina já confere sozinha o que dá pra medir (`motor/travas.js`). Sobra para o olho:
+
+- [ ] Personagem novo com 5,5 H (ou uma das variações) e as cores da seção 2
 - [ ] Máximo de 5 cores-base, 1 acento entre 10–20% da área
-- [ ] Contorno em Tinta, 4‰ na silhueta e 55% disso nas linhas internas
-- [ ] Um tom de sombra de borda dura, luz vindo de cima à esquerda
+- [ ] Modo suave: sem contorno preto, sombra em degradê, luz de cima à esquerda (seção 6)
 - [ ] Sem preto ou branco puros no personagem; sem textura
-- [ ] Efeitos com núcleo creme ≤ 6%, mistura aditiva, sem contorno, sobre fundo com luminância ≤ 20%
+- [ ] Efeito brilhante (aditivo) só sobre fundo escuro; em cena clara, partículas chapadas
 - [ ] Nenhuma combinação proibida da seção 9
 
 ---
 
 ## 11. Cenários e objetos
 
-- Formato vertical 1080 × 1920, câmera frontal (ou leve perspectiva de um ponto no chão).
+- Formato vertical 1080 × 1920, câmera frontal (ou leve perspectiva de um ponto no chão). Isso vale para pranchas e fichas; **nos vídeos vale a seção 12** (câmera 3D).
 - **Planos e contorno:** primeiro plano (onde o personagem pisa) 4 px · plano médio 2,5 px · fundo distante sem contorno, com cor clareada.
 - **Luz:** a mesma do guia, de cima à esquerda. Sol e janelas ficam à esquerda. Feixes de luz são polígonos chapados `rgba(255,241,204,0.28–0.32)` sem contorno.
-- **Sombra:** mesma regra de corte único (seção 6); em px, deslocamento de 4–14 px conforme o tamanho da peça.
+- **Sombra:** degradê do modo suave (seção 6), com sombra de contato embaixo e atrás dos objetos.
 - **Céu:** 4 faixas chapadas (Céu → Céu luz → Horizonte clareado → Horizonte), sem degradê contínuo.
 - **Objetos:** desenhados em H (mesma unidade dos personagens), base no chão, com sombra elíptica no chão.
 - **Cores de cenário** (tons calculados pela fórmula da seção 2.2):
@@ -306,7 +318,7 @@ Referência: `referencias/videos/ref-cenario-01.mp4` (só a linguagem de cenári
 - **Profundidade de campo:** em close, fundo desfocado (10–18 px); primeiro plano (copa de árvore) bem desfocado.
 - **Pós-processamento** (`motor/cinema.js`) em todo quadro: cor quente (soft-light), bloom leve, vinheta, granulado.
 - **Personagens continuam flat** (seções 3–6): só o cenário e a luz ganham profundidade.
-- **Legenda:** Inter 900, caixa alta, branca com contorno Tinta (20% do tamanho), palavra-chave em Mostarda; até 3 palavras; na faixa mais longe dos rostos.
+- **Legenda:** Inter 900, caixa alta, branca com contorno Tinta (20% do tamanho), palavra-chave em Mostarda; até 3 palavras; na faixa mais longe dos rostos e sem pular de faixa no meio do bloco (o motor faz isso sozinho).
 
 ---
 
@@ -322,18 +334,9 @@ Referência: `referencias/videos/ref-cenario-01.mp4` (só a linguagem de cenári
 
 ---
 
-## 14. Modo de render "suave" (padrão)
+## 14. Modo de render "suave"
 
-Pedido: deixar os vídeos menos cartunescos, mais perto das referências. Vale para personagens, objetos e cenários
-(`Estilo.modo = 'suave'` em `motor/estilo.js`; o modo `'classico'` continua disponível). Substitui, onde houver conflito, as seções 6 e 11:
-
-- **Sem contorno preto.** A borda de cada peça é fina (42% da espessura clássica) e na cor da própria peça: tom de sombra × `#9A8EAA`.
-- **Sombra em degradê** (não mais corte único): a sombra entra suave do lado oposto à luz.
-- **Sombra de contato entre peças:** cada peça escurece de leve o que está atrás dela (`rgba(28,18,42,0.16)`), dando volume (cabeça no pescoço, braço no corpo).
-- **Linhas internas discretas:** `rgba(48,32,56,0.62)`, 85% da espessura.
-- **Blush leve:** `rgba(232,140,128,0.16)`.
-- **Cenários 3D:** borda 40% da espessura, na cor da face escurecida; nada de Tinta pura.
-- Cores, proporções, roupas e rostos dos personagens **não mudam**.
+Foi incorporado à seção 6 em 15/11/2026 (era uma seção à parte que "substituía onde houvesse conflito"; agora não há conflito).
 
 ---
 
@@ -343,5 +346,4 @@ Pedido: deixar os vídeos menos cartunescos, mais perto das referências. Vale p
 - **Linhas de energia:** quando o Lucas controla a terra à distância, linhas âmbar curvas ligam a mão ao alvo, com grãos brilhando viajando por elas.
 - **Mão em close** (`motor/mao-detalhe.js`): nos momentos de poder, um plano da mão grande na tela, dedos articulados mexendo e fechando, punho do moletom com a faixa.
 - **Objetos redondos** usam cilindro com degradê (`Cena3D.cilindro`), nunca caixa.
-- **Final de todo episódio:** "PARTE X" + "SEGUE PRA VER A PARTE X+1", botão de seguir pulsando de leve (sem mão clicando) e fala do narrador (cartela de 3 s).
-- **Duração:** no máximo 1 min 15 s por episódio.
+- **Final de todo episódio:** "PARTE X" + "SEGUE PRA VER A PARTE X+1", botão de seguir pulsando de leve (sem mão clicando) e fala do narrador. Pronto em `Kit.cartelaParte` (motor/kit.js).

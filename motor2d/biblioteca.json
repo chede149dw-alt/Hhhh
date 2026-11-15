@@ -1,0 +1,26 @@
+{
+  "_leia": "BIBLIOTECA (capítulos 4 e 7 do livro): só fica o que o autor aprovou. O motor carrega as peças nesta ordem. status: 'aprovado' (pode ir pro vídeo final), 'a-confirmar' (usado em vídeo, mas sem um 'sim' registrado do autor) ou 'proposta'. Vídeo final (sem --previa) que usa peça fora de 'aprovado' é barrado. Para aprovar: mude o status, ponha a data e de onde veio o 'sim'.",
+  "pecas": [
+    { "arquivo": "motor/cena.js", "tipo": "motor", "status": "aprovado", "desde": "2026-11-11", "onde": "base do motor" },
+    { "arquivo": "motor/cena3d.js", "tipo": "motor", "status": "aprovado", "desde": "2026-11-11", "onde": "base do motor" },
+    { "arquivo": "motor/cinema.js", "tipo": "motor", "status": "aprovado", "desde": "2026-11-11", "onde": "base do motor" },
+    { "arquivo": "motor/personagem-base.js", "tipo": "motor", "status": "aprovado", "desde": "2026-11-11", "onde": "base do motor" },
+    { "arquivo": "personagens/lucas/lucas.js", "tipo": "personagem", "nome": "Lucas", "fornece": ["criarLucas"], "status": "aprovado", "desde": "2026-11-11", "onde": "ficha oficial (versão B2) e episódio 1 da terra, postado" },
+    { "arquivo": "personagens/mae/mae.js", "tipo": "personagem", "nome": "Mãe", "fornece": ["criarMae"], "status": "a-confirmar", "onde": "serie.md diz 'proposta', mas aparece no episódio 1 da terra, postado" },
+    { "arquivo": "personagens/rafael/rafael.js", "tipo": "personagem", "nome": "Rafael", "fornece": ["criarRafael", "criarAmigo"], "status": "a-confirmar", "onde": "serie.md diz 'proposta', mas aparece no episódio 1 da terra, postado" },
+    { "arquivo": "cenarios/objetos/cama.js", "tipo": "objeto", "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "cenarios/objetos/despertador.js", "tipo": "objeto", "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "cenarios/objetos/mochila.js", "tipo": "objeto", "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "cenarios/quarto-3d.js", "tipo": "cenário", "nome": "quarto", "fornece": ["Cenarios3D.quarto"], "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "cenarios/rua-3d.js", "tipo": "cenário", "nome": "rua", "fornece": ["Cenarios3D.rua"], "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "cenarios/escola-3d.js", "tipo": "cenário", "nome": "escola", "fornece": ["Cenarios3D.escola"], "status": "a-confirmar", "onde": "não aparece no episódio postado" },
+    { "arquivo": "cenarios/patio-3d.js", "tipo": "cenário", "nome": "pátio", "fornece": ["Cenarios3D.patio"], "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "efeitos/invisibilidade.js", "tipo": "efeito", "nome": "invisibilidade", "fornece": ["invisivel", "Efeitos.invisibilidade"], "status": "a-confirmar", "onde": "só nas prévias da série da invisibilidade" },
+    { "arquivo": "efeitos/poder-energia.js", "tipo": "efeito", "nome": "energia", "fornece": ["Efeitos['poder-energia']"], "status": "a-confirmar", "onde": "só nas pranchas da série da invisibilidade" },
+    { "arquivo": "efeitos/poder-terra.js", "tipo": "efeito", "nome": "poder da terra", "fornece": ["Efeitos['poder-terra']"], "status": "aprovado", "desde": "2026-11-11", "onde": "poder oficial do Lucas; episódio 1 da terra, postado" },
+    { "arquivo": "efeitos/terra-cena.js", "tipo": "efeito", "nome": "efeitos de terra em cena", "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "motor/mao-detalhe.js", "tipo": "efeito", "nome": "mão em close", "fornece": ["Maos."], "status": "aprovado", "desde": "2026-11-11", "onde": "episódio 1 da terra, postado" },
+    { "arquivo": "motor/kit.js", "tipo": "motor", "nome": "kit do molde", "status": "aprovado", "desde": "2026-11-15", "onde": "funções tiradas do episódio 1 da terra, postado" },
+    { "arquivo": "motor/episodio.js", "tipo": "motor", "status": "aprovado", "desde": "2026-11-11", "onde": "base do motor" }
+  ]
+}

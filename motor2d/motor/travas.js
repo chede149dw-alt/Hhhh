@@ -72,6 +72,16 @@ function bonecoUnico(planosArq) {
   return trava('boneco único (corpo só em motor/corpo.js)', !achados.length, achados.length ? achados.join('; ') : 'ok');
 }
 
+// só peça aprovada (capítulo 7): vídeo final só usa peça com status "aprovado" na biblioteca.json.
+// Na prévia, peça a confirmar é permitida (é assim que ela é mostrada para o autor aprovar).
+function soAprovado(biblioteca, planosArq, previa) {
+  const txt = planosArq ? fs.readFileSync(planosArq, 'utf8') : '';
+  const usadas = biblioteca.filter((p) => p.status !== 'aprovado' && (p.fornece || []).some((f) => txt.includes(f)));
+  const lista = usadas.map((p) => `${p.nome || p.arquivo} (${p.status})`).join(', ');
+  if (!usadas.length) return trava('só peça aprovada da biblioteca', true, 'ok');
+  return trava('só peça aprovada da biblioteca', previa, (previa ? 'prévia liberada; para o vídeo final falta aprovar: ' : 'falta aprovar na biblioteca.json: ') + lista);
+}
+
 // ---------- durante o render ----------
 // eventos[q] = lista de eventos do quadro q (vindos de Episodio.eventos())
 function durante(eventos, TL) {
@@ -121,7 +131,7 @@ function relatorio(titulo, lista) {
   return linhas.join('\n');
 }
 
-module.exports = { LIMITES, antes, durante, depois, relatorio };
+module.exports = { LIMITES, antes, soAprovado, durante, depois, relatorio };
 
 if (require.main === module) {
   const [video, tlArq] = process.argv.slice(2);

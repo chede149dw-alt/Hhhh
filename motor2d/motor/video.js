@@ -16,6 +16,8 @@ const [roteiroArq, planosArq, saida] = args.filter((a, i) => !a.startsWith('--')
 const WORKERS = +opt('workers', 4);
 const FPS = 30;
 const raiz = path.resolve(__dirname, '..');
+// peças que o motor pode carregar: só as da biblioteca (biblioteca.json), na ordem dela
+const biblioteca = JSON.parse(fs.readFileSync(path.join(raiz, 'biblioteca.json'), 'utf8')).pecas;
 const roteiro = JSON.parse(fs.readFileSync(roteiroArq, 'utf8'));
 const nomeEp = path.basename(roteiroArq, '.json');
 const serie = path.basename(path.dirname(roteiroArq));
@@ -107,7 +109,7 @@ for (const p of planos) console.log('  ', p.id.padEnd(12), (p.fim - p.inicio).to
 
 // ---------- travas antes do render ----------
 const Travas = require('./travas');
-const travasAntes = Travas.antes(TL, planosArq);
+const travasAntes = [...Travas.antes(TL, planosArq), Travas.soAprovado(biblioteca, planosArq, args.includes('--previa'))];
 console.log(Travas.relatorio('Travas antes do render:', travasAntes));
 const soConferindo = opt('teste') || opt('quadros') || opt('so-eventos');
 if (!soConferindo && !travasAntes.every((t) => t.ok) && !args.includes('--mesmo-assim')) {
@@ -156,11 +158,8 @@ const audioFinal = path.join(pastaAudio, 'mix.wav');
 execFileSync('ffmpeg', ['-v', 'error', '-y', ...entradas, '-filter_complex', filtros.join(';'), '-map', '[a]', '-ar', '48000', audioFinal]);
 
 // ---------- 4. quadros em paralelo ----------
-const scripts = ['motor/cena.js', 'motor/cena3d.js', 'motor/cinema.js', 'motor/personagem-base.js',
-  'personagens/lucas/lucas.js', 'personagens/mae/mae.js', 'personagens/rafael/rafael.js',
-  'cenarios/objetos/cama.js', 'cenarios/objetos/despertador.js', 'cenarios/objetos/mochila.js',
-  'cenarios/quarto-3d.js', 'cenarios/rua-3d.js', 'cenarios/escola-3d.js', 'cenarios/patio-3d.js',
-  'efeitos/invisibilidade.js', 'efeitos/poder-energia.js', 'efeitos/poder-terra.js', 'efeitos/terra-cena.js', 'motor/mao-detalhe.js', 'motor/episodio.js', planosArq].map((s) => path.resolve(raiz, s));
+// peças carregadas = as da biblioteca (biblioteca.json), na ordem dela, + os planos do episódio
+const scripts = [...biblioteca.map((p) => p.arquivo), planosArq].map((s) => path.resolve(raiz, s));
 
 const tmp = path.join(pastaAudio, 'partes'); fs.mkdirSync(tmp, { recursive: true });
 async function trabalhador(k, browser) {
@@ -196,7 +195,16 @@ async function teste(png) {
   const dir = path.join(tmp, 'teste'); fs.mkdirSync(dir, { recursive: true });
   for (const [i, p] of planos.entries()) {
     const q = Math.floor((p.inicio + (p.fim - p.inicio) * m) * FPS);
-    const b64 = await page.evaluate((q) => { Episodio.quadro(q); return document.getElementById('c').toDataURL('image/jpeg', 0.9).split(',')[1]; }, q);
+    // cada plano sai NUMERADO (capítulo 7): o autor aponta "a 12" em vez de descrever a cena
+    const b64 = await page.evaluate(([q, rotulo]) => {
+      Episodio.quadro(q);
+      const c = document.getElementById('c'), g = c.getContext('2d');
+      g.setTransform(1, 0, 0, 1, 0, 0); g.font = '900 120px Inter'; g.textAlign = 'left'; g.textBaseline = 'top';
+      const w = g.measureText(rotulo).width;
+      g.fillStyle = 'rgba(210,58,66,0.92)'; g.beginPath(); g.roundRect(24, 1760, w + 60, 140, 30); g.fill();
+      g.fillStyle = '#FFFFFF'; g.fillText(rotulo, 54, 1772);
+      return c.toDataURL('image/jpeg', 0.9).split(',')[1];
+    }, [q, String(i + 1) + ' ' + p.id]);
     fs.writeFileSync(path.join(dir, String(i).padStart(2, '0') + '.jpg'), Buffer.from(b64, 'base64'));
   }
   await browser.close();
@@ -249,7 +257,8 @@ async function soEventos(arq) {
   const browser = await chromium.launch();
   const partes = await Promise.all([...Array(WORKERS).keys()].map((k) => trabalhador(k, browser)));
   await browser.close();
-  console.log(`\n  render: ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+  const segRender = (Date.now() - t0) / 1000;
+  console.log(`\n  render: ${segRender.toFixed(0)}s`);
   const lista = path.join(tmp, 'lista.txt');
   fs.writeFileSync(lista, partes.map((p) => `file '${p}'`).join('\n'));
   fs.mkdirSync(path.dirname(path.resolve(saida)), { recursive: true });
@@ -270,5 +279,11 @@ async function soEventos(arq) {
     process.exitCode = 1;
   } else console.log('\nPassou em todas as travas.');
   fs.writeFileSync(final + '.travas.txt', texto + '\n');
+  // medição (capítulo 6: mede antes de cortar): uma linha por render em medicoes.csv
+  const med = path.join(raiz, 'medicoes.csv');
+  if (!fs.existsSync(med)) fs.writeFileSync(med, 'data,serie,episodio,modo,duracao_video_s,quadros,render_s,travas_ok,travas_barradas\n');
+  const barradas = todas.filter((t) => !t.ok).map((t) => t.nome).join(' | ');
+  fs.appendFileSync(med, [new Date().toISOString().slice(0, 16).replace('T', ' '), serie, nomeEp, args.includes('--previa') ? 'previa' : 'final',
+    total.toFixed(1), nQuadros, segRender.toFixed(0), todas.filter((t) => t.ok).length, JSON.stringify(barradas)].join(',') + '\n');
   console.log('Pronto:', final);
 })();

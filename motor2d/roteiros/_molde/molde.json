@@ -1,0 +1,18 @@
+{
+  "_leia": "MOLDE de episódio. Episódio novo começa daqui (ferramentas/novo-episodio.sh), nunca do último vídeo. Só tem o que já foi aprovado: capa com a premissa, uma tomada contínua girando em volta do protagonista, um close de mão no momento do poder e a cartela final. Troque as falas, os destaques e as cenas; mantenha capa no começo e 'parte' no fim (as travas conferem).",
+  "serie": "molde",
+  "episodio": 0,
+  "parte": 1,
+  "planos": [
+    { "id": "capa", "duracao": 3.0, "fala": { "texto": "E se você acordasse controlando a terra?", "voz": "narrador", "velocidade": 210 }, "destaque": ["TERRA?"],
+      "cinema": { "quente": 0.1, "vinheta": 0.9, "bloom": 0.6 }, "sfx": [{ "tipo": "ronco", "volume": 1.0 }], "camera": { "tomada": true, "forca": 0.7 } },
+    { "id": "treme", "duracao": 2.3, "fala": { "texto": "e a casa inteira treme.", "voz": "narrador", "velocidade": 158 }, "destaque": ["TREME."],
+      "cinema": { "quente": 0.1, "vinheta": 0.9, "bloom": 0.6 }, "sfx": [{ "tipo": "ronco", "volume": 1.8 }], "camera": { "tomada": true, "forca": 0.7 } },
+    { "id": "rachadura", "duracao": 2.9, "fala": { "texto": "Uma rachadura nasce embaixo da cama.", "voz": "narrador", "velocidade": 158 }, "destaque": ["RACHADURA"],
+      "cinema": { "quente": 0.1, "vinheta": 0.9, "bloom": 0.6 }, "sfx": [{ "tipo": "coracao", "bpm": 80 }, { "tipo": "ronco", "volume": 0.9 }], "camera": { "tomada": true, "continua": true, "forca": 0.7 } },
+    { "id": "maos", "duracao": 2.9, "fala": { "texto": "Suas mãos estão quentes... e tremendo.", "voz": "narrador", "velocidade": 172 }, "destaque": ["QUENTES..."],
+      "cinema": { "quente": 0.1, "vinheta": 0.9, "bloom": 0.6 }, "sfx": [{ "tipo": "coracao", "bpm": 84 }] },
+    { "id": "parte", "duracao": 2.4, "fala": { "texto": "Segue pra ver a parte dois!", "voz": "narrador", "velocidade": 175 },
+      "cinema": { "quente": 0.05, "vinheta": 1.0, "bloom": 0.8 } }
+  ]
+}

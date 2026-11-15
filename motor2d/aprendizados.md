@@ -1,5 +1,7 @@
 # Aprendizados
 
+> Histórico técnico de como cada coisa foi resolvida, vídeo por vídeo. **As regras que valem estão em `regras.md`** (regra · motivo · data); o que dá pra medir virou trava em `motor/travas.js`. Daqui pra frente, aprendizado novo entra com data.
+
 ## Vídeo de teste (previas/teste.mp4)
 - Canvas 2D + Chromium headless (Playwright) + ffmpeg funciona bem: 150 quadros 1080x1920 renderizados em ~10 s, numa aba só.
 - Levar os quadros como PNG (`canvas.toDataURL`) direto para o `ffmpeg -f image2pipe` pelo stdin, sem gravar arquivos intermediários.
@@ -85,7 +87,7 @@
 - Vocabulário dos efeitos de terra (imagens de referência): anel no chão com rachaduras incandescentes, anéis de choque brancos, espinhos escuros em leque, poeira em bolhas cor de areia, brasas, jatos verticais de poeira.
 - Objetos redondos (vaso) precisam de cilindro com degradê de cilindro (claro a 25%, escuro na borda direita) e boca elíptica; caixa não serve.
 - Câmera auxiliar (`camEm`) permite usar efeitos 3D (impacto) em closes 2D.
-- Chamada final: "PARTE 1" + "SEGUE PRA VER A PARTE 2" + botão que é tocado e vira "SEGUINDO ✓", com fala do narrador; cartela de 3 s.
+- Chamada final: "PARTE 1" + "SEGUE PRA VER A PARTE 2" + botão de seguir, com fala do narrador. (A versão com a mão tocando o botão e "SEGUINDO ✓" foi substituída: hoje o botão só pulsa, sem mão clicando.)
 
 ## Episódio 1, versão dramática (previas/terra-ep01-dramatico-previa.mp4, 1 min 12 s)
 - Clima de madrugada sem mexer nos cenários: desenhar a cena, aplicar um "multiply" azul (#4A5A8C, 0,5–0,65) + vinheta

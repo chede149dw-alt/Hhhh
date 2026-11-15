@@ -1,5 +1,7 @@
 # Auditoria de regras (capítulo 3 do livro)
 
+> **Feito em 15/11/2026.** As 9 travas viraram 14 (`motor/travas.js`), as contradições do guia foram limpas, o boneco virou um só (`motor/corpo.js`) e as regras estão em `regras.md`. Este arquivo fica como registro de onde tudo começou.
+
 Lido em 14/11/2026: `aprendizados.md`, `guia-de-estilo.md`, as regras do vídeo da skill e o código que já confere coisas
 sozinho (`motor/video.js`, `motor/episodio.js`).
 
