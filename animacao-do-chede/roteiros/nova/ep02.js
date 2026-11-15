@@ -4,6 +4,7 @@
   const W = 1080, H = 1920, TAU = Math.PI * 2;
   const AMARELO = '#EBC25A', ROXO = '155,92,255';
   const DAVIJ = { fabrica: 'criarDaviJogo', registroPoses: 'DAVI_JOGO_POSES' };
+  const DAVIL = { fabrica: 'criarDaviLuvas', registroPoses: 'DAVI_JOGO_POSES' };
   const TEOJ = { fabrica: 'criarTeoJogo', registroPoses: 'POSES_PADRAO' };
   const FERA = (e) => ({ fabrica: 'criarTeoFera', opcoes: { estagio: e }, registroPoses: 'TEO_FERA_POSES' });
   const LOBO = { fabrica: 'criarTeoLobisomem', registroPoses: 'TEO_LOBISOMEM_POSES' };
@@ -216,21 +217,28 @@
     },
     // 5) equipar: luvas no Davi (a faísca vira raio) e escudo de ferro no Téo
     equipar(ctx, u, d, api) {
-      const cam = campoDia(ctx, api, { x: 0, y: 1.25, z: 1.8 + u * 0.15 }, { desfoque: 6 });
-      const troca = u > 0.45;
-      const rigs = [];
-      emOrdem(cam, [
-        [-0.75, 4.2, () => rigs.push(api.personagem3d(cam, { ...DAVIJ, pose: 'magia-na-mao', expressao: troca ? 'determinado' : 'neutro' }, -0.75, 4.2, 1.76, { luz: LUZ_CAMPO }))],
-        [0.75, 4.3, () => rigs.push(api.personagem3d(cam, { ...(troca ? TEOF : TEOJ), pose: 'parado', expressao: troca ? 'feliz' : 'neutro' }, 0.75, 4.3, 1.82, { luz: LUZ_CAMPO, semente: 3 }))],
-      ]);
-      const [rd, rt] = rigs;
-      if (rd && rd.pontoMundo) { const m = rd.pontoMundo('mao_d', [0, 0.28]); if (troca) { Combate.maoEletrica(ctx, m.x, m.y, 34, api.t, 1); Combate.relampago(ctx, [m.x, m.y], [m.x + 260, m.y - 160], api.t, api.fase(0.6, 0.75) * (1 - api.fase(1.0, 1.3))); } else Valdor.faisca(ctx, m.x, m.y, 30, api.t, 0.5); }
-      if (u > 0.4 && u < 0.6) Noite.clarao(ctx, 540, 900, 0.5 * (1 - (u - 0.4) / 0.2), '180,230,255');
-      const qd = cam.p(-0.75, 2.0, 4.2), qt = cam.p(0.75, 2.05, 4.3);
-      setaAtributo(ctx, qd.x - 140, qd.y, '+MAGIA', (u - 0.5) * 2);
-      setaAtributo(ctx, qt.x - 300, qt.y - 40, '+DEFESA', (u - 0.7) * 2);
-      Valdor.etiqueta(ctx, 300, 1500, 'LUVAS DO CONJURADOR', '#9AD0FF', api.fase(0.5, 0.8, 'volta'), { tam: 40 });
-      Valdor.etiqueta(ctx, 780, 1600, 'ESCUDO DE FERRO', '#E8E8F0', api.fase(0.7, 1.0, 'volta'), { tam: 40 });
+      campoDia(ctx, api, { x: 0, y: 1.4, z: 1.2 + u * 0.1 }, { desfoque: 10 });
+      const meio = d * 0.55;
+      if (u < meio) {
+        // close no Davi: a carta voa para a mão e as luvas aparecem com brilho raro
+        const troca = u > 0.55, Hpx = 360 * (1 + u * 0.04);
+        const rig = close(api, { ...(troca ? DAVIL : DAVIJ), pose: { braco_d: 28, antebraco_d: -105, mao_d: -15, braco_e: -28, antebraco_e: 105, mao_e: 15, _magia: troca ? 1 : 0 }, expressao: troca ? 'determinado' : 'espanto' }, 540, 640, Hpx, { luz: LUZ_CAMPO });
+        if (rig && rig.pontoMundo) {
+          const m = [rig.pontoMundo('mao_d', [0, 0.2]), rig.pontoMundo('mao_e', [0, 0.2])], c = [(m[0].x + m[1].x) / 2, (m[0].y + m[1].y) / 2];
+          const kv = api.fase(0.0, 0.5); if (kv < 1) cartaLoot(ctx, 540 + (c[0] - 540) * kv, 420 + (c[1] - 420) * kv, 320 * (1 - 0.85 * kv), LOOTS[3], 1, api.t);
+          if (troca) { for (const p of m) { Valdor.brilhoRadial(ctx, p.x, p.y, 200 * (1 - api.fase(0.6, 1.3)) + 70, '90,180,255', 0.8); Combate.maoEletrica(ctx, p.x, p.y, 24, api.t, api.fase(0.7, 1.0)); } Noite.faiscas(ctx, c[0], c[1] + 60, 360, 420, api.t, 1 - api.fase(1.0, 1.6), 9, '120,200,255'); }
+          if (u > 0.5 && u < 0.7) Noite.clarao(ctx, c[0], c[1], 0.6 * (1 - (u - 0.5) / 0.2), '170,220,255');
+          Valdor.etiqueta(ctx, 540, 1580, 'LUVAS DO CONJURADOR · RARO', '#5AB4FF', api.fase(0.6, 0.85, 'volta'), { tam: 44 });
+          setaAtributo(ctx, 380, 1730, '+MAGIA', (u - 0.7) * 2);
+        }
+      } else {
+        // close no Téo: o escudo de tábuas vira escudo de ferro
+        const uu = u - meio, troca = uu > 0.25;
+        close(api, { ...(troca ? TEOF : TEOJ), pose: 'parado', expressao: troca ? 'feliz' : 'neutro' }, 540, 640, 360, { luz: LUZ_CAMPO, semente: 3 });
+        if (uu > 0.2 && uu < 0.4) Noite.clarao(ctx, 700, 1200, 0.5 * (1 - (uu - 0.2) / 0.2), '230,230,240');
+        Valdor.etiqueta(ctx, 540, 1580, 'ESCUDO DE FERRO', '#E8E8F0', api.fase(meio + 0.3, meio + 0.55, 'volta'), { tam: 46 });
+        setaAtributo(ctx, 380, 1730, '+DEFESA', (uu - 0.35) * 2);
+      }
     },
     // 6) raio-X: neurônio com sinal lento → mielina → sinal rápido
     cerebro(ctx, u, d, api) { Valdor.raioFundo(ctx, api.t); neuronio(ctx, 160, 920, 960, 0, (u * 0.35) % 1, api.t); api.texto('100x', 540, 600, 120, { cor: '#7FE6FF' }); },
@@ -248,7 +256,7 @@
       const n = api.ease.suave(cl((u - 0.3) / (d - 0.6)));
       const cam = camNoite(api, { noite: n, x: chave(u, [[0, -0.5], [d, 0.1]]), y: chave(u, [[0, 1.15], [d, 1.4]]), z: chave(u, [[0, 1.2], [d, 2.2]]), yaw: chave(u, [[0, 0.05], [d, -0.03]]) });
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'parado', expressao: 'espanto' }, -0.45, 4.1, 1.76, { rumo: Math.PI, luz: { ...LUZ_LUA, forca: 0.85 * n } }) },
+        { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'parado', expressao: 'espanto' }, -0.45, 4.1, 1.76, { rumo: Math.PI, luz: { ...LUZ_LUA, forca: 0.85 * n } }) },
         { f: () => api.personagem3d(cam, { ...TEOF, pose: 'parado', expressao: 'neutro' }, 0.6, 4.9, 1.82, { rumo: Math.PI, luz: { ...LUZ_LUA, forca: 0.85 * n }, semente: 3 }) },
       ], { noite: n, forca: 0.7 });
     },
@@ -274,7 +282,7 @@
       const e = Math.min(3, 1 + Math.floor(u / 0.45)), lobo = u >= vira;
       const k = api.fase(0.1, 0.7) * (1 - api.fase(vira + 0.3, vira + 1.0)), [tx] = api.tremor(u > 0.8 && u < vira + 0.4 ? 7 : 0);
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'parado', expressao: 'espanto' }, -1.25, 4.0, 1.76, { olhaPara: [X, Z], luz: LUZ_LUA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'parado', expressao: 'espanto' }, -1.25, 4.0, 1.76, { olhaPara: [X, Z], luz: LUZ_LUA }) },
         { f: () => (lobo ? api.personagem3d(cam, { ...LOBO, pose: 'garras' }, X, Z, 2.55, { luz: LUZ_LUA }) : api.personagem3d(cam, { ...FERA(e), pose: e >= 2 ? 'garras' : 'tremendo', expressao: 'raiva' }, X + tx * 0.002, Z, 1.82 + (e >= 3 ? 0.12 : 0), { luz: LUZ_LUA })) },
       ], {
         chao: () => { const q = cam.p(X, 0, Z); Noite.anelChao(ctx, q.x, q.y, 1.4 * q.s * (1 + api.fase(vira, vira + 0.8)), k); },
@@ -286,7 +294,7 @@
       const cam = camNoite(api, { x: -0.6, y: 1.3, z: 1.6 + u * 0.1, cy: 900, yaw: 0.06 });
       noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...LOBO, pose: 'parado' }, 0.4, 4.6, 2.55, { luz: LUZ_LUA }) },
-        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'parado', expressao: 'espanto' }, -1.15, 3.1, 1.76, { olhaPara: [0.4, 4.6], luz: LUZ_LUA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'parado', expressao: 'espanto' }, -1.15, 3.1, 1.76, { olhaPara: [0.4, 4.6], luz: LUZ_LUA }) },
       ], {
         forca: 0.3,
         fim: () => {
@@ -316,7 +324,7 @@
       const pos = [[-2.4, 6.6], [-1.5, 7.4], [0.0, 7.9], [1.8, 7.3], [2.7, 6.4]].map(([x, z]) => [x * (1.4 - 0.4 * anda), 5.0 + (z - 5.0) * (1.6 - 0.6 * anda)]);
       const ents = [
         { f: () => api.personagem3d(cam, { ...LOBO, pose: 'garras' }, 1.05, 5.0, 2.55, { olhaPara: pos[2], luz: LUZ_LUA }) },
-        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'conjurando', expressao: 'medo' }, -1.0, 5.3, 1.76, { olhaPara: pos[1], luz: LUZ_LUA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'conjurando', expressao: 'medo' }, -1.0, 5.3, 1.76, { olhaPara: pos[1], luz: LUZ_LUA }) },
         ...pos.map(([x, z], i) => ({ f: () => api.personagem3d(cam, { ...(i === 2 ? LIDER : LADRAO(i)), pose: i === 2 ? 'parado' : i % 2 ? 'tocha' : 'faca', expressao: 'raiva' }, x, z, 1.85, { olhaPara: [0, 5], luz: i === 2 ? LUZ_LUA : { lado: 1, forca: 0.9, cor: 'rgb(255,170,90)', sombra: 0.9 }, caminhar: anda < 1 ? api.t : undefined, semente: i }) })),
       ];
       noite(ctx, api, cam, ents.reverse(), {
@@ -383,19 +391,25 @@
       } else {
         const uu = u - 1.7, cam = api.orbita({ alvo: [-0.9, 1.15, 4.3], raio: chave(uu, [[0, 2.6], [d - 1.7, 1.9]]), ang: chave(uu, [[0, -1.9], [d - 1.7, -1.5]]), altura: 1.2, f: 1150, ySalvo: 960, nevoa: V().nevoa(1) });
         const kc = api.fase(1.7, d);
-        noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'conjurando', expressao: 'determinado' }, -0.9, 4.3, 1.76, { olhaPara: [1.7, 5.6], luz: { lado: 1, forca: 1, cor: 'rgb(130,200,255)', sombra: 0.8 } }) }], {
+        noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIL, pose: 'conjurando', expressao: 'determinado' }, -0.9, 4.3, 1.76, { olhaPara: [1.7, 5.6], luz: { lado: 1, forca: 1, cor: 'rgb(130,200,255)', sombra: 0.8 } }) }], {
           chao: () => { const q = cam.p(-0.9, 0, 4.3); Valdor.circuloMagico(ctx, q.x, q.y, 0.85 * q.s, { k: kc, t: api.t }); },
           depois: ([rig]) => { if (!rig || !rig.pontoMundo) return; const m = [rig.pontoMundo('mao_d', [0, 0.28]), rig.pontoMundo('mao_e', [0, 0.28])]; for (const p of m) Combate.maoEletrica(ctx, p.x, p.y, 30, api.t, 1); Combate.arcoEntre(ctx, [m[0].x, m[0].y], [m[1].x, m[1].y], api.t, 1); Combate.convergir(ctx, (m[0].x + m[1].x) / 2, (m[0].y + m[1].y) / 2, 500, api.t, 1); },
         });
       }
     },
-    // 18) gancho: o líder abre a capa, luz roxa no rosto
+    // 18) gancho: o líder saca a adaga da cintura e a luz roxa sobe no rosto dele
     lider(ctx, u, d, api) {
-      const cam = camNoite(api, { f: 1100, x: 0.5, y: 0.7, z: 5.6 + u * 0.25, cy: 1100, yaw: -0.03 });
-      const abre = api.fase(0.2, 1.4);
-      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDER, pose: abre > 0.3 ? 'abrindoCapa' : 'parado', expressao: 'raiva' }, 0.55, 8.2, 1.9, { luz: { lado: 1, forca: abre, cor: 'rgb(180,120,255)', sombra: 1 } }), cor: `rgba(120,60,200,${0.25 * abre})` }], {
+      const cam = camNoite(api, { f: 1150, x: 0.45, y: 1.0, z: 4.2 + u * 0.3, cy: 1000, yaw: -0.03 });
+      const saca = api.ease.entra(api.fase(0.35, 1.1)), luz = api.fase(0.5, 1.6);
+      const pose = { braco_d: 12 + 30 * saca, antebraco_d: -10 - 110 * saca, mao_d: -20 * saca, braco_e: -12, antebraco_e: 8, coxa_d: 5, coxa_e: -5, cabeca: -4 * saca };
+      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDER, opcoes: { lider: true, estilo: 'C', semAdaga: saca > 0.05 }, vista: 'frente', pose, expressao: 'raiva' }, 0.55, 6.4, 1.9, { luz: { lado: 1, forca: 0.3 + 0.5 * luz, cor: 'rgb(180,120,255)', sombra: 1 } }), cor: `rgba(120,60,200,${0.1 * luz})` }], {
         forca: 0.3,
-        depois: ([rig]) => { if (!rig || !rig.pontoMundo) return; const c = rig.pontoMundo('quadril', [0.1, 0.1]); Valdor.brilhoRadial(ctx, c.x, c.y, 520 * abre, ROXO, 0.7 * abre); const cab = rig.pontoMundo('cabeca', [0, -0.4]); Valdor.brilhoRadial(ctx, cab.x, cab.y + 40, 200 * abre, ROXO, 0.35 * abre); },
+        depois: ([rig]) => {
+          if (!rig || !rig.pontoMundo) return;
+          const m = saca > 0.05 ? rig.pontoMundo('mao_d', [0, 0.18]) : null;
+          if (m) { Valdor.adagaEpica(ctx, m.x, m.y - 50 * saca, 380, api.t, -0.3 + 0.3 * saca, { brilho: luz }); Valdor.brilhoRadial(ctx, m.x, m.y - 60, 480 * luz, ROXO, 0.55 * luz); }
+          const cab = rig.pontoMundo('cabeca', [0, -0.4]); Valdor.brilhoRadial(ctx, cab.x, cab.y + 40, 220 * luz, ROXO, 0.35 * luz);
+        },
       });
     },
     // 19) a Adaga Eclipse; o Davi reconhece
@@ -408,7 +422,7 @@
         Valdor.etiqueta(ctx, 540, 1460, 'ADAGA ECLIPSE · ÉPICA', '#D9C8FF', api.fase(0.2, 0.5, 'volta'), { tam: 54 });
       } else {
         const cam = camNoite(api, { x: -0.2, y: 1.6, z: 0.4, cy: 820 });
-        const zoom = 1 + (u - 1.3) * 0.25, Hpx = 560 * zoom, item = { ...DAVIJ, pose: 'parado', expressao: 'espanto' };
+        const zoom = 1 + (u - 1.3) * 0.25, Hpx = 560 * zoom, item = { ...DAVIL, pose: 'parado', expressao: 'espanto' };
         noite(ctx, api, cam, [{ f: () => { const A = alturaH(item); return api.personagem(item, W * 0.5, 980 - 0.47 * Hpx + A * Hpx, A * Hpx, { luz: { lado: 1, forca: 1, cor: 'rgb(180,120,255)', sombra: 1 } }); }, cor: 'rgba(120,60,200,0.15)' }], { desfoque: 10, forca: 0 });
         Valdor.brilhoRadial(ctx, 900, 1300, 600, ROXO, 0.4);
       }
