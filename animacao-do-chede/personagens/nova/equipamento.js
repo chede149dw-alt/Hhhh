@@ -13,6 +13,9 @@
   const P = (fn) => { const p = new Path2D(); fn(p); return p; };
   const tomFixo = (b, s, l) => ({ base: b, sombra: s, luz: l || b });
 
+  // costura tracejada clara (couro costurado, referências 3D)
+  const costura = (pc, path, cor = 'rgba(255,236,205,0.55)') => { if (pc.modo === 'contorno') return; pc.ctx.save(); pc.ctx.setLineDash([0.035, 0.028]); pc.linha(path, pc.interno * 0.75, cor); pc.ctx.restore(); };
+  const tachas = (pc, pts, tom, r = 0.022) => { for (const [x, y] of pts) { pc.peca(P((p) => p.arc(x, y, r, 0, Math.PI * 2)), tom, { sombra: 0, espessura: pc.interno * 0.5 }); pc.preencher(P((p) => p.arc(x - r * 0.3, y - r * 0.3, r * 0.35, 0, Math.PI * 2)), 'rgba(255,255,255,0.7)'); } };
   window.equipar = function (def, eq) {
     const c = def.opcoes, vista = def.vista;
     const A = c.altura, f = (A - 1) / 4.5;
@@ -51,6 +54,8 @@
         pc.peca(P((p) => { p.moveTo(cx - 0.3 * k, neckY + 0.06); p.lineTo(cx - 0.18 * k, neckY + 0.02); p.quadraticCurveTo(cx, neckY + 0.2, cx + 0.18 * k, neckY + 0.02); p.lineTo(cx + 0.3 * k, neckY + 0.06); p.lineTo(cx + 0.34 * k, shoulderY + 0.62); p.quadraticCurveTo(cx, shoulderY + 0.7, cx - 0.34 * k, shoulderY + 0.62); p.closePath(); }), cor, { sombra: 0.1 });
         pc.linha(P((p) => { p.moveTo(cx - 0.26 * k, shoulderY + 0.5); p.quadraticCurveTo(cx, shoulderY + 0.56, cx + 0.26 * k, shoulderY + 0.5); }));
         for (const sx of [-1, 1]) pc.peca(P((p) => p.arc(cx + sx * 0.24 * k, shoulderY + 0.14, 0.03, 0, Math.PI * 2)), T('mostarda'), { sombra: 0, espessura: pc.interno * 0.7 });
+        costura(pc, P((p) => { p.moveTo(cx - 0.26 * k, neckY + 0.1); p.lineTo(cx - 0.3 * k, shoulderY + 0.56); p.quadraticCurveTo(cx, shoulderY + 0.63, cx + 0.3 * k, shoulderY + 0.56); p.lineTo(cx + 0.26 * k, neckY + 0.1); }));
+        tachas(pc, [-0.16, -0.05, 0.05, 0.16].map((x) => [cx + x * k, shoulderY + 0.4]), T('pedra'), 0.018);
       });
     }
 
@@ -115,6 +120,8 @@
       const brac = (pc) => {
         pc.peca(P((p) => p.roundRect(-0.16, Lante - 0.32, 0.32, 0.3, 0.06)), cor, { sombra: 0.08 });
         pc.linha(P((p) => { p.moveTo(-0.13, Lante - 0.2); p.lineTo(0.13, Lante - 0.2); }));
+        costura(pc, P((p) => { p.moveTo(-0.13, Lante - 0.29); p.lineTo(0.13, Lante - 0.29); p.moveTo(-0.13, Lante - 0.06); p.lineTo(0.13, Lante - 0.06); }));
+        tachas(pc, [[-0.07, Lante - 0.13], [0.07, Lante - 0.13]], T('pedra'), 0.016);
       };
       depois('antebraco_d', brac); depois('antebraco_e', brac);
     }
@@ -210,6 +217,25 @@
         pc.linha(P((p) => { for (const t of [-0.33, 0.33]) { p.moveTo(t * R, y - R * 0.92); p.lineTo(t * R, y + R * 0.92); } }));
       }
     }
+    // peitoral de couro em faixas horizontais com tachas e costura (assassino da referência 3D)
+    if (eq.peitoral) {
+      const cor = T(eq.peitoral.cor), tc = T(eq.peitoral.tachas || 'prata'), n = eq.peitoral.faixas || 3;
+      depois('tronco', (pc) => {
+        const y0 = shoulderY + 0.1, y1 = hemY - 0.36 * f;
+        if (perfil) { const forma = P((p) => p.roundRect(-d * 0.85, y0, d * 1.85, y1 - y0, 0.06)); pc.peca(forma, cor, { sombra: 0.12 }); for (let i = 1; i <= n; i++) { const y = y0 + (y1 - y0) * (i / (n + 1)); pc.linha(P((p) => { p.moveTo(-d * 0.85, y); p.lineTo(d, y); })); tachas(pc, [-0.1, 0.08, 0.26].map((x) => [x, y + 0.05]), tc, 0.018); } return; }
+        const a = (hw - 0.03) * k, x0 = cx - a, x1 = cx + a;
+        const forma = P((p) => { p.moveTo(x0, y0 + 0.04); if (!costas) { p.lineTo(cx - 0.14 * k, y0); p.lineTo(cx, y0 + 0.16); p.lineTo(cx + 0.14 * k, y0); } p.lineTo(x1, y0 + 0.04); p.lineTo(x1 + 0.02 * k, y1); p.quadraticCurveTo(cx, y1 + 0.05, x0 - 0.02 * k, y1); p.closePath(); });
+        pc.peca(forma, cor, { sombra: 0.14 });
+        for (let i = 1; i <= n; i++) {
+          const y = y0 + 0.1 + (y1 - y0 - 0.1) * (i / (n + 1));
+          pc.sombraDentro(forma, P((p) => p.rect(x0 - 0.1, y - 0.035, 2 * a + 0.2, 0.035)), 'rgba(0,0,0,0.28)');
+          pc.linha(P((p) => { p.moveTo(x0, y); p.quadraticCurveTo(cx, y + 0.03, x1, y); }));
+          tachas(pc, [-0.7, -0.35, 0.35, 0.7].map((t) => [cx + t * a, y + 0.06]), tc, 0.02);
+        }
+        costura(pc, P((p) => { p.moveTo(x0 + 0.05, y0 + 0.1); p.lineTo(x0 + 0.04, y1 - 0.05); p.moveTo(x1 - 0.05, y0 + 0.1); p.lineTo(x1 - 0.04, y1 - 0.05); }));
+        if (!costas) { pc.linha(P((p) => { p.moveTo(cx, y0 + 0.18); p.lineTo(cx, y1); })); for (let i = 0; i < 4; i++) { const y = y0 + 0.24 + i * (y1 - y0 - 0.3) / 4; pc.linha(P((p) => { p.moveTo(cx - 0.05, y); p.lineTo(cx + 0.05, y + 0.07); p.moveTo(cx + 0.05, y); p.lineTo(cx - 0.05, y + 0.07); }), pc.interno * 0.9, 'rgba(230,210,180,0.8)'); } }
+      });
+    }
     // cinta de couro cruzada no peito, com tachas e bolsinha (referências 3D: couro com cintas, fivelas e tachas)
     if (eq.cinta) {
       const cor = T(eq.cinta.cor), tacha = T(eq.cinta.tachas || 'prata');
@@ -218,7 +244,8 @@
         const s = costas ? -1 : 1, x0 = cx + s * (-hw * 0.78) * k, y0 = shoulderY + 0.06, x1 = cx + s * (hw * 0.82) * k, y1 = hemY - 0.3 * f, w = 0.075;
         const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy), nx = -dy / L * w, ny = dx / L * w;
         pc.peca(P((p) => { p.moveTo(x0 - nx, y0 - ny); p.lineTo(x1 - nx, y1 - ny); p.lineTo(x1 + nx, y1 + ny); p.lineTo(x0 + nx, y0 + ny); p.closePath(); }), cor, { sombra: 0.06, espessura: pc.interno * 1.2 });
-        for (let i = 1; i < 6; i++) { const t = i / 6; pc.peca(P((p) => p.arc(x0 + dx * t, y0 + dy * t, 0.022, 0, Math.PI * 2)), tacha, { sombra: 0, espessura: pc.interno * 0.5 }); }
+        costura(pc, P((p) => { p.moveTo(x0 - nx * 0.6, y0 - ny * 0.6); p.lineTo(x1 - nx * 0.6, y1 - ny * 0.6); p.moveTo(x0 + nx * 0.6, y0 + ny * 0.6); p.lineTo(x1 + nx * 0.6, y1 + ny * 0.6); }));
+        tachas(pc, [1, 2, 3, 4, 5].map((i) => [x0 + dx * i / 6, y0 + dy * i / 6]), tacha, 0.02);
         const fx = x0 + dx * 0.5, fy = y0 + dy * 0.5;
         pc.peca(P((p) => p.roundRect(fx - 0.06, fy - 0.06, 0.12, 0.12, 0.02)), tacha, { sombra: 0.05, espessura: pc.interno * 0.7 });
         if (eq.cinta.bolsa && !costas) pc.peca(P((p) => p.roundRect(x1 - 0.12, y1 - 0.02, 0.22, 0.2, 0.05)), T(eq.cinta.bolsa), { sombra: 0.1 });
@@ -230,6 +257,7 @@
       for (const nome of ['braco_d', 'braco_e']) depois(nome, (pc) => {
         pc.peca(P((p) => { p.moveTo(-0.22, 0.02); p.quadraticCurveTo(-0.24, -0.16, 0, -0.18); p.quadraticCurveTo(0.24, -0.16, 0.22, 0.02); p.quadraticCurveTo(0.24, Lbraco * 0.38, 0, Lbraco * 0.42); p.quadraticCurveTo(-0.24, Lbraco * 0.38, -0.22, 0.02); p.closePath(); }), cor, { sombra: 0.12 });
         pc.linha(P((p) => { p.moveTo(-0.2, Lbraco * 0.16); p.quadraticCurveTo(0, Lbraco * 0.2, 0.2, Lbraco * 0.16); }), pc.interno, 'rgba(0,0,0,0.35)');
+        costura(pc, P((p) => { p.moveTo(-0.18, 0.0); p.quadraticCurveTo(-0.19, -0.12, 0, -0.14); p.quadraticCurveTo(0.19, -0.12, 0.18, 0.0); }));
         for (const [x, y] of [[-0.13, -0.04], [0.13, -0.04], [0, Lbraco * 0.3]]) pc.peca(P((p) => p.arc(x, y, 0.025, 0, Math.PI * 2)), reb, { sombra: 0, espessura: pc.interno * 0.5 });
       });
     }

@@ -37,7 +37,8 @@
         q.closePath();
       });
       pc.peca(capuz, cap, { sombra: 0.16 });
-      pc.linha(P((q) => { q.moveTo(dx - r * 0.9 * k, 0.1); q.quadraticCurveTo(dx - r * 0.98 * k, -0.62, dx, -0.47 - r * 0.78); q.quadraticCurveTo(dx + r * 0.98 * k, -0.62, dx + r * 0.9 * k, 0.1); }), pc.interno * 1.4, 'rgba(255,255,255,0.12)');
+      pc.linha(P((q) => { q.moveTo(dx - r * 0.9 * k, 0.1); q.quadraticCurveTo(dx - r * 0.98 * k, -0.62, dx, -0.47 - r * 0.78); q.quadraticCurveTo(dx + r * 0.98 * k, -0.62, dx + r * 0.9 * k, 0.1); }), pc.interno * 3.2, 'rgba(255,255,255,0.18)');
+      if (pc.modo !== 'contorno') { pc.ctx.save(); pc.ctx.setLineDash([0.035, 0.03]); pc.linha(P((q) => { q.moveTo(dx - r * 1.02 * k, 0.1); q.quadraticCurveTo(dx - r * 1.12 * k, -0.66, dx, -0.47 - r * 0.9); q.quadraticCurveTo(dx + r * 1.12 * k, -0.66, dx + r * 1.02 * k, 0.1); }), pc.interno * 0.7, 'rgba(255,236,205,0.45)'); pc.ctx.restore(); }
     };
   }
 
@@ -62,8 +63,8 @@
       poses: Object.fromEntries(Object.entries(window.LADRAO_POSES).map(([k, x]) => [k, x.angulos])),
     };
     const eq = lider
-      ? { gola: 'prata', manto: { cor: 'vinho', barra: 'carvao' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'armaduraEscura', cano: 0.5 }, bracadeira: 'armaduraEscura', cinta: { cor: 'carvao', tachas: 'prata' }, ombreira: { cor: 'armaduraEscura', rebites: 'prata' }, adagaCinto: o.semAdaga ? undefined : { epica: true } }
-      : { cinto: { cor: 'couroLadrao', fivela: 'carvao', bolsa: 'couroLadrao' }, botas: { cor: 'couroLadrao', cano: 0.4 }, bracadeira: 'couroLadrao', cinta: { cor: 'couroLadrao', tachas: 'prata', bolsa: 'carvao' }, ombreira: { cor: 'couroLadrao', rebites: 'prata' }, arma: o.semFaca ? undefined : { tipo: 'adaga', mao: 'd' } };
+      ? { peitoral: { cor: 'armaduraEscura', faixas: 4, tachas: 'prata' }, manto: { cor: 'vinho', barra: 'carvao' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'armaduraEscura', cano: 0.5 }, bracadeira: 'armaduraEscura', cinta: { cor: 'carvao', tachas: 'prata' }, ombreira: { cor: 'armaduraEscura', rebites: 'prata' }, adagaCinto: o.semAdaga ? undefined : { epica: true } }
+      : { cinto: { cor: 'couroLadrao', fivela: 'carvao', bolsa: 'couroLadrao' }, botas: { cor: 'couroLadrao', cano: 0.4 }, bracadeira: 'couroLadrao', peitoral: { cor: 'couroLadrao', faixas: 3, tachas: 'prata' }, cinta: { cor: 'carvao', tachas: 'prata', bolsa: 'carvao' }, ombreira: { cor: 'couroLadrao', rebites: 'prata' }, arma: o.semFaca ? undefined : { tipo: 'adaga', mao: 'd' } };
     const def = window.equipar(window.criarPersonagem(opc, vista), eq);
     vestirCabeca(def, lider ? 'vinho' : v.capuz, 'mascara', lider ? 'rgba(200,40,60,0.9)' : null);
     return def;
