@@ -220,7 +220,7 @@
   function laminaRubra(ctx, x, y, s, t, ang = 0, o = {}) {
     const br = o.brilho === undefined ? 1 : o.brilho;
     ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    if (br > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(0, -s * 0.45, 0, 0, -s * 0.45, s * 0.75); g.addColorStop(0, `rgba(255,90,60,${0.5 * br})`); g.addColorStop(1, 'rgba(255,60,40,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -s * 0.45, s * 0.75, 0, TAU); ctx.fill(); ctx.restore(); }
+    if (br > 0 && !o.semAura) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(0, -s * 0.45, 0, 0, -s * 0.45, s * 0.75); g.addColorStop(0, `rgba(255,90,60,${0.5 * br})`); g.addColorStop(1, 'rgba(255,60,40,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -s * 0.45, s * 0.75, 0, TAU); ctx.fill(); ctx.restore(); }
     // lâmina curva
     const lam = new Path2D(); lam.moveTo(-s * 0.035, -s * 0.16); lam.quadraticCurveTo(-s * 0.06, -s * 0.6, s * 0.06, -s * 0.98); lam.quadraticCurveTo(s * 0.09, -s * 0.62, s * 0.045, -s * 0.16); lam.closePath();
     const gl = ctx.createLinearGradient(-s * 0.06, 0, s * 0.08, 0); gl.addColorStop(0, '#3A0A10'); gl.addColorStop(0.45, '#9E1424'); gl.addColorStop(1, '#E2384A');

@@ -109,6 +109,20 @@
     };
   }
 
+  // Lâmina Rubra NA MÃO: peça do boneco presa na mão direita, desenhada logo ABAIXO da mão (o punho fecha por cima do cabo).
+  // Ângulo, brilho e tempo vêm de window.ESPADA_MAO = { t, ang (rad, na tela), brilho } (assim a ficha do boneco não muda a cada quadro).
+  function espadaNaMao(def) {
+    const mao = def.partes.find((q) => q.nome === 'mao_d'); if (!mao) return;
+    const T = def.alturaEmH * 0.5;
+    def.partes.push({ nome: 'espada_d', pai: 'mao_d', pivo: [0, 0.17], z: mao.z - 0.004, desenhar: (pc) => {
+      const g = pc.ctx, m = g.getTransform(), esc = Math.hypot(m.c, m.d), e = window.ESPADA_MAO || {};
+      const S = T * esc, ang = e.ang || 0, d = 0.06 * S; // meio do cabo dentro do punho
+      g.save(); g.setTransform(1, 0, 0, 1, m.e - d * Math.sin(ang), m.f + d * Math.cos(ang));
+      Combate.laminaRubra(g, 0, 0, S, e.t || 0, e.ang || 0, { brilho: e.brilho === undefined ? 1 : e.brilho, semAura: true });
+      g.restore();
+    } });
+  }
+
   window.LADRAO_POSES = {
     ...window.POSES_PADRAO,
     faca: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 55, antebraco_d: 60, mao_d: -10, braco_e: -20, antebraco_e: -30, coxa_d: 12, canela_d: -6, coxa_e: -11, canela_e: 5, tronco: 6, _desloca: [0, 0.04] } },
@@ -138,7 +152,7 @@
       : { cinto: { cor: 'couroLadrao', fivela: 'carvao', bolsa: 'couroLadrao' }, botas: { cor: 'couroLadrao', cano: 0.4 }, bracadeira: 'couroLadrao', peitoral: { cor: 'couroLadrao', faixas: 3, tachas: 'prata' }, cinta: { cor: 'carvao', tachas: 'prata', bolsa: 'carvao' }, ombreira: { cor: 'couroLadrao', rebites: 'prata' }, arma: o.semFaca ? undefined : { tipo: 'adaga', mao: 'd' } };
     const def = window.equipar(window.criarPersonagem(opc, vista), eq);
     if (est === 'B') { vestirCabeca(def, 'carvao', 'mascara', null); vestirLider(def, 'B'); }
-    else if (est === 'C') { vestirLider(def, 'C'); if (!o.semEspada) espadaNasCostas(def); }
+    else if (est === 'C') { vestirLider(def, 'C'); if (!o.semEspada) espadaNasCostas(def); if (o.espadaNaMao) espadaNaMao(def); }
     else vestirCabeca(def, lider ? 'vinho' : v.capuz, 'mascara', lider ? 'rgba(200,40,60,0.9)' : null);
     return def;
   };

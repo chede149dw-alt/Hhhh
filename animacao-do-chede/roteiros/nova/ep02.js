@@ -51,7 +51,7 @@
       const alfa = e.alfa === undefined ? 1 : e.alfa, pos = reg || (e.pos ? { X: e.pos[0], Z: e.pos[1], y: 0, alt: e.alt || 1.2 } : null);
       if (pos && !o.desfoque) {
         const q = cam.p(pos.X, pos.y, pos.Z), hp = pos.alt * q.s;
-        const x0 = Math.max(0, Math.floor(q.x - 0.95 * hp)), x1 = Math.min(W, Math.ceil(q.x + 0.95 * hp)), y0 = Math.max(0, Math.floor(q.y - 1.4 * hp)), y1 = Math.min(H, Math.ceil(q.y + 0.12 * hp));
+        const x0 = Math.max(0, Math.floor(q.x - 0.95 * hp)), x1 = Math.min(W, Math.ceil(q.x + 0.95 * hp)), y0 = Math.max(0, Math.floor(q.y - 1.75 * hp)), y1 = Math.min(H, Math.ceil(q.y + 0.12 * hp));
         if (q.dz > 0.6 && x1 > x0 + 2 && y1 > y0 + 2) {
           const C = document.createElement('canvas'); C.width = x1 - x0; C.height = y1 - y0; const gc = C.getContext('2d'); gc.globalAlpha = alfa; gc.drawImage(L, x0, y0, C.width, C.height, 0, 0, C.width, C.height);
           figuras.push({ canvas: C, x0, y0, w: C.width, h: C.height, dz: q.dz, X: pos.X, Z: pos.Z, y: pos.y, alt: pos.alt });
@@ -465,13 +465,14 @@
     lider(ctx, u, d, api) {
       const cam = camNoite(api, { f: 1150, x: 0.45, y: 1.0, z: 4.2 + u * 0.3, cy: 1000, yaw: -0.03 });
       const pega = api.ease.entra(api.fase(0.2, 0.7)), ergue = api.ease.entra(api.fase(0.75, 1.35)), luz = api.fase(0.8, 1.8);
-      const pose = { braco_d: 12 + 150 * pega - 120 * ergue, antebraco_d: -10 - 140 * pega + 40 * ergue, mao_d: 0, braco_e: -12, antebraco_e: 8, coxa_d: 5, coxa_e: -5, cabeca: -4 * ergue };
       const fora = ergue > 0.05;
-      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDER, opcoes: { lider: true, estilo: 'C', semEspada: fora }, vista: 'frente', pose, expressao: 'raiva' }, 0.55, 6.4, 1.9, { luz: { lado: 1, forca: 0.3 + 0.5 * luz, cor: 'rgb(255,110,80)', sombra: 1 } }), cor: `rgba(160,30,30,${0.1 * luz})` }], {
+      const pose = { braco_d: 12 + 150 * pega - 120 * ergue, antebraco_d: -10 - 140 * pega + 40 * ergue, mao_d: 0, braco_e: -12, antebraco_e: 8, coxa_d: 5, coxa_e: -5, cabeca: -4 * ergue, _maos: { d: pega > 0.6 ? 'punho' : 'relaxada' } };
+      window.ESPADA_MAO = { t: api.t, ang: -0.25 + 0.25 * ergue, brilho: luz };
+      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDER, opcoes: { lider: true, estilo: 'C', semEspada: fora, espadaNaMao: fora }, vista: 'frente', pose, expressao: 'raiva' }, 0.55, 6.4, 1.9, { luz: { lado: 1, forca: 0.3 + 0.5 * luz, cor: 'rgb(255,110,80)', sombra: 1 } }), cor: `rgba(160,30,30,${0.1 * luz})` }], {
         forca: 0.3,
         depois: ([rig]) => {
           if (!rig || !rig.pontoMundo) return;
-          if (fora) { const m = rig.pontoMundo('mao_d', [0, 0.15]); Combate.laminaRubra(ctx, m.x, m.y, 560, api.t, -0.25 + 0.25 * ergue, { brilho: luz }); Valdor.brilhoRadial(ctx, m.x, m.y - 200, 520 * luz, '255,80,60', 0.5 * luz); }
+          if (fora) { const m = rig.pontoMundo('mao_d', [0, 0.15]); Valdor.brilhoRadial(ctx, m.x, m.y - 200, 520 * luz, '255,80,60', 0.5 * luz); }
           const cab = rig.pontoMundo('cabeca', [0, -0.4]); Valdor.brilhoRadial(ctx, cab.x, cab.y + 40, 220 * luz, '255,80,60', 0.35 * luz);
         },
       });
