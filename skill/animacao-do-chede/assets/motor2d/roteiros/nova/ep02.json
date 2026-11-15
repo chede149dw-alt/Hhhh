@@ -1,0 +1,722 @@
+{
+ "serie": "VALDOR",
+ "episodio": 2,
+ "parte": 2,
+ "scripts": [
+  "personagens/nova/cores.js",
+  "personagens/nova/equipamento.js",
+  "personagens/nova/davi/davi.js",
+  "personagens/nova/davi/davi-jogo.js",
+  "personagens/nova/teo/teo.js",
+  "personagens/nova/teo/teo-jogo.js",
+  "personagens/nova/teo/teo-fera.js",
+  "personagens/nova/teo/teo-lobisomem.js",
+  "personagens/nova/ladroes.js",
+  "motor/vendor/three-r160.min.js",
+  "cenarios/valdor-3d.js",
+  "cenarios/valdor-campo.js",
+  "cenarios/valdor-noite.js",
+  "efeitos/criaturas.js",
+  "efeitos/valdor.js",
+  "efeitos/noite.js",
+  "efeitos/combate.js",
+  "efeitos/teo-closes.js"
+ ],
+ "legenda": {
+  "faixas": [
+   1180,
+   1400,
+   760,
+   420
+  ]
+ },
+ "trilha": {
+  "arquivo": "ep02/trilha.wav",
+  "volume": 0.4
+ },
+ "planos": [
+  {
+   "id": "capa",
+   "fala": {
+    "texto": "Trinta dias pra pagar o aluguel... jogando videogame.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/capa.wav"
+    }
+   },
+   "destaque": [
+    "ALUGUEL"
+   ],
+   "duracao": 4.31,
+   "cinema": {
+    "quente": 0.45,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.4,
+     "volume": 0.18
+    }
+   ]
+  },
+  {
+   "id": "lembra",
+   "fala": {
+    "texto": "O Davi gastou tudo num jogo onde os itens valem dinheiro de verdade.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/lembra.wav"
+    }
+   },
+   "destaque": [
+    "DINHEIRO"
+   ],
+   "duracao": 4.93,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/visor.mp3",
+     "em": 1.2,
+     "volume": 0.23
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 2.3,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "farmar",
+   "fala": {
+    "texto": "Então os dois fizeram o que todo jogador pobre faz: farmar.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/farmar.wav"
+    }
+   },
+   "destaque": [
+    "FARMAR."
+   ],
+   "duracao": 4.92,
+   "cinema": {
+    "quente": 0.45,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 0.25,
+     "volume": 0.23
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/corte.mp3",
+     "em": 1.2,
+     "volume": 0.23
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 2.1,
+     "volume": 0.23
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/nivel.mp3",
+     "em": 2.9,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "loot",
+   "fala": {
+    "texto": "E a adaga não é o único item que vale dinheiro.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/loot.wav"
+    }
+   },
+   "destaque": [
+    "DINHEIRO."
+   ],
+   "duracao": 3.77,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/moeda.mp3",
+     "em": 0.15,
+     "volume": 0.23
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/moeda.mp3",
+     "em": 0.65,
+     "volume": 0.23
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.15,
+     "volume": 0.23
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.65,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "vender",
+   "fala": {
+    "texto": "Tem coisa pra vender...",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/vender.wav"
+    }
+   },
+   "destaque": [
+    "VENDER"
+   ],
+   "duracao": 2.4,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/moeda.mp3",
+     "em": 0.2,
+     "volume": 0.27
+    }
+   ]
+  },
+  {
+   "id": "equipar",
+   "fala": {
+    "texto": "...e coisa pra equipar.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/equipar.wav"
+    }
+   },
+   "destaque": [
+    "EQUIPAR."
+   ],
+   "duracao": 3.38,
+   "cinema": {
+    "quente": 0.45,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/compra.mp3",
+     "em": 0.4,
+     "volume": 0.32
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 0.65,
+     "volume": 0.27
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 0.75,
+     "volume": 0.32
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/nivel.mp3",
+     "em": 1.0,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "cerebro",
+   "fala": {
+    "texto": "E repetir cem vezes mudou o cérebro deles.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/cerebro.wav"
+    }
+   },
+   "destaque": [
+    "CÉREBRO"
+   ],
+   "duracao": 3.86,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   }
+  },
+  {
+   "id": "mielina",
+   "fala": {
+    "texto": "Cada repetição cobre o caminho do movimento com uma capa chamada mielina...",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/mielina.wav"
+    }
+   },
+   "destaque": [
+    "MIELINA"
+   ],
+   "duracao": 5.13,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   }
+  },
+  {
+   "id": "rapido",
+   "fala": {
+    "texto": "...e o sinal passa até cem vezes mais rápido.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/rapido.wav"
+    }
+   },
+   "destaque": [
+    "RÁPIDO."
+   ],
+   "duracao": 3.51,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 0.5,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "noite",
+   "fala": {
+    "texto": "Aí, pela primeira vez, a noite caiu em Valdor.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/noite.wav"
+    }
+   },
+   "destaque": [
+    "NOITE"
+   ],
+   "duracao": 4.75,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/noite-ambiente-20s.mp3",
+     "em": 0,
+     "volume": 0.12,
+     "corte": 7.6,
+     "entra": 1.5,
+     "sai": 2.0
+    }
+   ]
+  },
+  {
+   "id": "tremer",
+   "fala": {
+    "texto": "E o Téo começou a tremer.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/tremer.wav"
+    }
+   },
+   "destaque": [
+    "TREMER."
+   ],
+   "duracao": 2.88,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 1.1,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "olho",
+   "fala": {
+    "texto": "Bicho da noite tem um espelho atrás do olho: a luz passa duas vezes.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/olho.wav"
+    }
+   },
+   "destaque": [
+    "ESPELHO"
+   ],
+   "duracao": 5.89,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.4,
+     "volume": 0.18
+    }
+   ]
+  },
+  {
+   "id": "nome",
+   "fala": {
+    "texto": "Homem-fera não é só um nome.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/nome.wav"
+    }
+   },
+   "destaque": [
+    "HOMEM-FERA"
+   ],
+   "duracao": 3.78,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/transformacao.mp3",
+     "em": 0,
+     "volume": 0.41
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 1.45,
+     "volume": 0.27
+    }
+   ]
+  },
+  {
+   "id": "davi",
+   "fala": {
+    "texto": "Téo...?",
+    "voz": "davi",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/davi.wav"
+    }
+   },
+   "destaque": [
+    "TÉO...?"
+   ],
+   "duracao": 3.05,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/nivel.mp3",
+     "em": 0.5,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "sozinhos",
+   "fala": {
+    "texto": "Mas eles não estavam sozinhos.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/sozinhos.wav"
+    }
+   },
+   "destaque": [
+    "SOZINHOS."
+   ],
+   "duracao": 2.95,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/noite-ambiente-20s.mp3",
+     "em": 0,
+     "volume": 0.12,
+     "corte": 7.6,
+     "entra": 1.5,
+     "sai": 2.0
+    }
+   ]
+  },
+  {
+   "id": "rara",
+   "fala": {
+    "texto": "Homem-fera é a raça mais rara de Valdor...",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/rara.wav"
+    }
+   },
+   "destaque": [
+    "RARA"
+   ],
+   "duracao": 3.77,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   }
+  },
+  {
+   "id": "fortuna",
+   "fala": {
+    "texto": "...e vale uma fortuna pra quem captura um.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/fortuna.wav"
+    }
+   },
+   "destaque": [
+    "FORTUNA"
+   ],
+   "duracao": 3.35,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   }
+  },
+  {
+   "id": "terminou",
+   "fala": {
+    "texto": "Só que o Téo terminou de se transformar.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/terminou.wav"
+    }
+   },
+   "destaque": [
+    "TRANSFORMAR."
+   ],
+   "duracao": 3.53,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rugido.mp3",
+     "em": 0.55,
+     "volume": 0.45
+    }
+   ]
+  },
+  {
+   "id": "ataca",
+   "fala": {
+    "texto": "E partiu pra cima deles!",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/ataca.wav"
+    }
+   },
+   "destaque": [
+    "CIMA"
+   ],
+   "duracao": 2.87,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 0.15,
+     "volume": 0.36
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/corte.mp3",
+     "em": 0.58,
+     "volume": 0.41
+    }
+   ]
+  },
+  {
+   "id": "luta",
+   "duracao": 3.2,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 0.2,
+     "volume": 0.32
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 0.9,
+     "volume": 0.27
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 1.7,
+     "volume": 0.36
+    }
+   ]
+  },
+  {
+   "id": "lider",
+   "fala": {
+    "texto": "Até que o líder sacou a arma dele...",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/lider.wav"
+    }
+   },
+   "destaque": [
+    "ARMA"
+   ],
+   "duracao": 3.82,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.2,
+     "volume": 0.23
+    }
+   ]
+  },
+  {
+   "id": "conhecia",
+   "fala": {
+    "texto": "...uma lâmina lendária. Mais rara que a adaga épica.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/conhecia.wav"
+    }
+   },
+   "destaque": [
+    "LENDÁRIA."
+   ],
+   "duracao": 4.97,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   },
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.1,
+     "volume": 0.27
+    }
+   ]
+  },
+  {
+   "id": "parte",
+   "fala": {
+    "texto": "Segue pra ver a parte três!",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/parte.wav"
+    }
+   },
+   "destaque": [
+    "TRÊS!"
+   ],
+   "duracao": 2.75,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.7
+   }
+  }
+ ]
+}

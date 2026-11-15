@@ -1,0 +1,900 @@
+{
+  "serie": "E se você acordasse controlando a terra?",
+  "episodio": 1,
+  "parte": 1,
+  "versao": "dramatica",
+  "status": "prévia com voz grátis",
+  "planos": [
+    {
+      "id": "capa",
+      "duracao": 3.0,
+      "fala": {
+        "texto": "E se você acordasse controlando a terra?",
+        "voz": "narrador",
+        "velocidade": 210,
+        "voz_final": {
+          "arquivo": "vozes/final/capa.wav",
+          "versao": "b",
+          "aceleracao": 1.208
+        }
+      },
+      "destaque": [
+        "TERRA?"
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "volume": 1.0
+        }
+      ],
+      "imagem": "Capa no quarto escuro, pedras flutuando, rachaduras brilhando; título.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "noite",
+      "duracao": 2.9,
+      "fala": {
+        "texto": "Ontem à noite, a cidade inteira tremeu.",
+        "voz": "narrador",
+        "velocidade": 178,
+        "voz_final": {
+          "arquivo": "vozes/final/noite.wav",
+          "versao": "a",
+          "aceleracao": 1.17
+        }
+      },
+      "destaque": [
+        "TREMEU."
+      ],
+      "cinema": {
+        "quente": 0.05,
+        "vinheta": 1.0,
+        "bloom": 0.8
+      },
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "volume": 1.6
+        }
+      ],
+      "imagem": "Rua à noite, luzes piscando, rachadura brilhando no asfalto; câmera sobe."
+    },
+    {
+      "id": "acorda",
+      "duracao": 2.9,
+      "fala": {
+        "texto": "Você acorda... e o chão ainda treme.",
+        "voz": "narrador",
+        "velocidade": 168,
+        "voz_final": {
+          "arquivo": "vozes/final/acorda.wav",
+          "versao": "a",
+          "aceleracao": 1.161
+        }
+      },
+      "destaque": [
+        "TREME."
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 66
+        },
+        {
+          "tipo": "ronco",
+          "volume": 0.8
+        }
+      ],
+      "imagem": "Lucas deitado abre os olhos devagar; poeira do teto."
+    },
+    {
+      "id": "despertador",
+      "duracao": 1.8,
+      "fala": {
+        "texto": "O despertador dispara.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/despertador.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "DISPARA."
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "imagem": "Despertador tocando e tremendo."
+    },
+    {
+      "id": "tapa",
+      "duracao": 1.6,
+      "fala": {
+        "texto": "Um tapa...",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/tapa.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "TAPA..."
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 0.45,
+          "volume": 1.3
+        }
+      ],
+      "imagem": "Mão desce; silêncio; impacto."
+    },
+    {
+      "id": "treme",
+      "duracao": 2.3,
+      "fala": {
+        "texto": "e a casa inteira treme.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/treme.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "TREME."
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "volume": 1.8
+        }
+      ],
+      "imagem": "Quarto chacoalhando forte, livros caindo.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "rachadura",
+      "duracao": 2.9,
+      "fala": {
+        "texto": "Uma rachadura nasce embaixo da cama.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/rachadura.wav",
+          "versao": "a",
+          "aceleracao": 1.047
+        }
+      },
+      "destaque": [
+        "RACHADURA"
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 80
+        },
+        {
+          "tipo": "ronco",
+          "volume": 0.9
+        }
+      ],
+      "imagem": "Rachadura do pé da cama até o Lucas, que recua com medo.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "maos",
+      "duracao": 2.9,
+      "fala": {
+        "texto": "Suas mãos estão quentes... e tremendo.",
+        "voz": "narrador",
+        "velocidade": 172,
+        "voz_final": {
+          "arquivo": "vozes/final/maos.wav",
+          "versao": "b",
+          "aceleracao": 1.187
+        }
+      },
+      "destaque": [
+        "QUENTES..."
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 84
+        }
+      ],
+      "imagem": "Close nas duas mãos tremendo com brilho nas linhas da palma."
+    },
+    {
+      "id": "vaso",
+      "duracao": 2.5,
+      "fala": {
+        "texto": "A terra do vaso vem até você.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/vaso.wav",
+          "versao": "b",
+          "aceleracao": 1.004
+        }
+      },
+      "destaque": [
+        "ATÉ",
+        "VOCÊ."
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "imagem": "Terra sobe do vaso e flutua até a mão do Lucas."
+    },
+    {
+      "id": "dedos",
+      "duracao": 2.9,
+      "fala": {
+        "texto": "Você fecha a mão... e ela obedece.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/dedos.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "OBEDECE."
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 92
+        }
+      ],
+      "imagem": "Esfera de terra se formando na mão."
+    },
+    {
+      "id": "mae",
+      "duracao": 2.4,
+      "fala": {
+        "texto": "Lucas?! Que barulho foi esse?",
+        "voz": "mae",
+        "velocidade": 170,
+        "voz_final": {
+          "arquivo": "vozes/final/mae.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "BARULHO"
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "imagem": "Mãe abre a porta de repente, preocupada.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "susto",
+      "duracao": 2.3,
+      "fala": {
+        "texto": "A terra desaba no tapete.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/susto.wav",
+          "versao": "b",
+          "aceleracao": 1.013
+        }
+      },
+      "destaque": [
+        "DESABA"
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 0.5,
+          "volume": 0.6
+        }
+      ],
+      "imagem": "Esfera desmancha; Lucas congela com medo.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "mae2",
+      "duracao": 2.0,
+      "fala": {
+        "texto": "Por que tem terra no chão?",
+        "voz": "mae",
+        "velocidade": 165,
+        "voz_final": {
+          "arquivo": "vozes/final/mae2.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "TERRA"
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "imagem": "Close na mãe, olha o chão e depois o Lucas, desconfiada.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "mentira",
+      "duracao": 1.6,
+      "fala": {
+        "texto": "Não é nada, mãe!",
+        "voz": "lucas",
+        "velocidade": 175,
+        "voz_final": {
+          "arquivo": "vozes/final/mentira.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "NADA,"
+      ],
+      "cinema": {
+        "quente": 0.1,
+        "vinheta": 0.9,
+        "bloom": 0.6
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 110
+        }
+      ],
+      "imagem": "Lucas com sorriso forçado e suor; rachadura brilhando atrás.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "rua",
+      "duracao": 3.0,
+      "fala": {
+        "texto": "Você foge... e cada passo racha a rua.",
+        "voz": "narrador",
+        "velocidade": 172,
+        "voz_final": {
+          "arquivo": "vozes/final/rua.wav",
+          "versao": "b",
+          "aceleracao": 1.283
+        }
+      },
+      "destaque": [
+        "RACHA"
+      ],
+      "cinema": {
+        "quente": 0.3,
+        "vinheta": 0.7
+      },
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 0.6,
+          "volume": 0.5
+        },
+        {
+          "tipo": "impacto",
+          "em": 1.26,
+          "volume": 0.5
+        },
+        {
+          "tipo": "impacto",
+          "em": 1.92,
+          "volume": 0.5
+        },
+        {
+          "tipo": "impacto",
+          "em": 2.58,
+          "volume": 0.5
+        }
+      ],
+      "imagem": "Lucas correndo; cada passo racha a calçada.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "onda",
+      "duracao": 2.9,
+      "fala": {
+        "texto": "Você tenta parar. A terra não para.",
+        "voz": "narrador",
+        "velocidade": 172,
+        "voz_final": {
+          "arquivo": "vozes/final/onda.wav",
+          "versao": "b",
+          "aceleracao": 1.185
+        }
+      },
+      "destaque": [
+        "NÃO",
+        "PARA."
+      ],
+      "cinema": {
+        "quente": 0.3,
+        "vinheta": 0.7
+      },
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "volume": 2.0
+        }
+      ],
+      "imagem": "Onda de pedras arrasta o Lucas sem controle.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "portao",
+      "duracao": 2.4,
+      "fala": {
+        "texto": "Ela te joga no portão da escola.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/portao.wav",
+          "versao": "a",
+          "aceleracao": 1.007
+        }
+      },
+      "destaque": [
+        "JOGA"
+      ],
+      "cinema": {
+        "quente": 0.3,
+        "vinheta": 0.7
+      },
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 0.35,
+          "volume": 1.2
+        }
+      ],
+      "imagem": "Onda desmancha no pátio; Lucas cai na poeira.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "olhares",
+      "duracao": 1.8,
+      "fala": {
+        "texto": "E todo mundo viu.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/olhares.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "VIU."
+      ],
+      "cinema": {
+        "quente": 0.3,
+        "vinheta": 0.7
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 96
+        }
+      ],
+      "imagem": "Alunos parados olhando; alguém aponta; close no Lucas.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "rafael",
+      "duracao": 2.3,
+      "fala": {
+        "texto": "Cara... você tá pálido.",
+        "voz": "rafael",
+        "velocidade": 165,
+        "voz_final": {
+          "arquivo": "vozes/final/rafael.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "PÁLIDO."
+      ],
+      "cinema": {
+        "quente": 0.3,
+        "vinheta": 0.7
+      },
+      "imagem": "Rafael corre até o Lucas, preocupado; bueiro solta poeira.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "buraco",
+      "duracao": 2.6,
+      "fala": {
+        "texto": "Então o chão cede embaixo dele.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/buraco.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "CEDE"
+      ],
+      "cinema": {
+        "quente": 0.3,
+        "vinheta": 0.7
+      },
+      "sfx": [
+        {
+          "tipo": "impacto",
+          "em": 0.3,
+          "volume": 1.2
+        },
+        {
+          "tipo": "ronco",
+          "volume": 1.6
+        }
+      ],
+      "imagem": "Bueiro afunda; Rafael escorrega para a beira do buraco.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "coluna",
+      "duracao": 3.0,
+      "fala": {
+        "texto": "Você estende a mão... e a terra segura ele.",
+        "voz": "narrador",
+        "velocidade": 168,
+        "voz_final": {
+          "arquivo": "vozes/final/coluna.wav",
+          "versao": "b",
+          "aceleracao": 1.19
+        }
+      },
+      "destaque": [
+        "SEGURA"
+      ],
+      "cinema": {
+        "quente": 0.3,
+        "vinheta": 0.7
+      },
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "volume": 1.4
+        },
+        {
+          "tipo": "impacto",
+          "em": 0.4,
+          "volume": 0.8
+        }
+      ],
+      "imagem": "Coluna de terra sustenta o Rafael e fecha o chão.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "amigo",
+      "duracao": 2.2,
+      "fala": {
+        "texto": "Lucas... o que é você?",
+        "voz": "rafael",
+        "velocidade": 150,
+        "voz_final": {
+          "arquivo": "vozes/final/amigo.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "VOCÊ?"
+      ],
+      "cinema": {
+        "quente": 0.05,
+        "vinheta": 1.0,
+        "bloom": 0.8
+      },
+      "imagem": "Close no Rafael recuando com medo.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "resposta",
+      "duracao": 2.2,
+      "fala": {
+        "texto": "Eu não sei o que tá acontecendo comigo.",
+        "voz": "lucas",
+        "velocidade": 165,
+        "voz_final": {
+          "arquivo": "vozes/final/resposta.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "COMIGO."
+      ],
+      "cinema": {
+        "quente": 0.05,
+        "vinheta": 1.0,
+        "bloom": 0.8
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 72
+        }
+      ],
+      "imagem": "Lucas olhando as próprias mãos, triste.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "sozinho",
+      "duracao": 3.0,
+      "fala": {
+        "texto": "Ele sai correndo... e você fica sozinho.",
+        "voz": "narrador",
+        "velocidade": 168,
+        "voz_final": {
+          "arquivo": "vozes/final/sozinho.wav",
+          "versao": "b",
+          "aceleracao": 1.175
+        }
+      },
+      "destaque": [
+        "SOZINHO."
+      ],
+      "cinema": {
+        "quente": 0.05,
+        "vinheta": 1.0,
+        "bloom": 0.8
+      },
+      "imagem": "Rafael foge; câmera se afasta; Lucas sozinho no pátio rachado.",
+      "camera": {
+        "tomada": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "racha",
+      "duracao": 2.3,
+      "fala": {
+        "texto": "Mas o poder não quer parar.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/racha.wav",
+          "versao": "a",
+          "aceleracao": 1.0
+        }
+      },
+      "destaque": [
+        "PARAR."
+      ],
+      "cinema": {
+        "quente": 0.05,
+        "vinheta": 1.0,
+        "bloom": 0.8
+      },
+      "sfx": [
+        {
+          "tipo": "ronco",
+          "volume": 1.8
+        }
+      ],
+      "imagem": "Rachadura maior corre até os pés do Lucas.",
+      "camera": {
+        "tomada": true,
+        "continua": true,
+        "forca": 0.7
+      }
+    },
+    {
+      "id": "fundo",
+      "duracao": 3.0,
+      "fala": {
+        "texto": "E lá embaixo... alguma coisa acordou com você.",
+        "voz": "narrador",
+        "velocidade": 178,
+        "voz_final": {
+          "arquivo": "vozes/final/fundo.wav",
+          "versao": "b",
+          "aceleracao": 1.187
+        }
+      },
+      "destaque": [
+        "ACORDOU"
+      ],
+      "cinema": {
+        "quente": 0,
+        "vinheta": 1.0,
+        "bloom": 1.0
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 54,
+          "de": 0.4
+        },
+        {
+          "tipo": "ronco",
+          "volume": 2.2
+        }
+      ],
+      "imagem": "Câmera mergulha na rachadura; brilho enorme pulsando."
+    },
+    {
+      "id": "ritmo",
+      "duracao": 2.9,
+      "fala": {
+        "texto": "E bate no mesmo ritmo que o seu coração.",
+        "voz": "narrador",
+        "velocidade": 158,
+        "voz_final": {
+          "arquivo": "vozes/final/ritmo.wav",
+          "versao": "b",
+          "aceleracao": 1.001
+        }
+      },
+      "destaque": [
+        "CORAÇÃO."
+      ],
+      "cinema": {
+        "quente": 0,
+        "vinheta": 1.0,
+        "bloom": 1.0
+      },
+      "sfx": [
+        {
+          "tipo": "coracao",
+          "bpm": 70,
+          "bpmFim": 150
+        },
+        {
+          "tipo": "ronco",
+          "volume": 1.2
+        }
+      ],
+      "imagem": "Alterna brilho pulsando e Lucas com o peito brilhando."
+    },
+    {
+      "id": "parte",
+      "duracao": 2.4,
+      "fala": {
+        "texto": "Segue pra ver a parte dois!",
+        "voz": "narrador",
+        "velocidade": 175,
+        "voz_final": {
+          "arquivo": "vozes/final/parte.wav",
+          "versao": "b",
+          "aceleracao": 1.0
+        }
+      },
+      "cinema": {
+        "quente": 0.05,
+        "vinheta": 1.0,
+        "bloom": 0.8
+      },
+      "imagem": "Cartela PARTE 1 + SEGUE PRA VER A PARTE 2."
+    }
+  ],
+  "vozes": {
+    "narrador": "ElevenLabs Torlien (T2qRqqooUigDNZPs6usG)",
+    "mae": "ElevenLabs Juliana Moreira (dxIMMSJYSsbUSMhioLNb)",
+    "lucas": "ElevenLabs Lucas Gabriel (jGMGxcV5sW7h4qUUl30i)",
+    "rafael": "ElevenLabs Davi Leão (6PhbMr9YjdeOaTNz9y24)",
+    "modelo": "eleven_v4"
+  }
+}

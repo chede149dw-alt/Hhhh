@@ -1,0 +1,113 @@
+{
+ "fabrica": "criarTeo",
+ "registroPoses": "POSES_PADRAO",
+ "opcoes": {},
+ "titulo": "TÉO",
+ "subtitulo": "Melhor amigo do Davi · joga desde criança",
+ "paleta": [
+  {
+   "nome": "Camiseta",
+   "cor": "#4FB3A4"
+  },
+  {
+   "nome": "Estampa",
+   "cor": "#F2EDE6"
+  },
+  {
+   "nome": "Calça",
+   "cor": "#B39A6F"
+  },
+  {
+   "nome": "Tênis",
+   "cor": "#38343F"
+  },
+  {
+   "nome": "Pele",
+   "cor": "#EAB28E"
+  },
+  {
+   "nome": "Cabelo",
+   "cor": "#C2552E"
+  }
+ ],
+ "vistas": [
+  {
+   "nome": "Frente",
+   "vista": "frente",
+   "pose": "parado"
+  },
+  {
+   "nome": "3/4",
+   "vista": "tq",
+   "pose": "tq"
+  },
+  {
+   "nome": "Perfil",
+   "vista": "perfil",
+   "pose": "perfil"
+  },
+  {
+   "nome": "Costas",
+   "vista": "costas",
+   "pose": "costas"
+  }
+ ],
+ "expressoes": [
+  {
+   "nome": "Neutro",
+   "expressao": "neutro"
+  },
+  {
+   "nome": "Feliz",
+   "expressao": "feliz"
+  },
+  {
+   "nome": "Espanto",
+   "expressao": "espanto"
+  },
+  {
+   "nome": "Medo",
+   "expressao": "medo"
+  },
+  {
+   "nome": "Raiva",
+   "expressao": "raiva"
+  },
+  {
+   "nome": "Preocupado",
+   "expressao": "preocupado"
+  },
+  {
+   "nome": "Cansado",
+   "expressao": "cansado"
+  },
+  {
+   "nome": "Rindo",
+   "expressao": "rindo"
+  }
+ ],
+ "poses": [
+  {
+   "nome": "Parado",
+   "pose": "parado"
+  },
+  {
+   "nome": "Andando",
+   "pose": "andando"
+  },
+  {
+   "nome": "Acenando",
+   "pose": "acenando"
+  },
+  {
+   "nome": "Mãos na cintura",
+   "pose": "maos-na-cintura"
+  }
+ ],
+ "regras": [
+  "Sempre camiseta verde-água com estampa, calça caqui e tênis grafite",
+  "Cabelo ruivo liso de lado, olhos azuis",
+  "No jogo: classe Guardião, protege o Davi"
+ ],
+ "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}

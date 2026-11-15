@@ -1,0 +1,29 @@
+{
+ "serie": "VALDOR",
+ "episodio": 2,
+ "parte": 2,
+ "scripts": [
+  "personagens/nova/cores.js",
+  "personagens/nova/equipamento.js",
+  "personagens/nova/davi/davi.js",
+  "personagens/nova/davi/davi-jogo.js",
+  "personagens/nova/teo/teo.js",
+  "personagens/nova/teo/teo-jogo.js",
+  "personagens/nova/teo/teo-fera.js",
+  "personagens/nova/teo/teo-lobisomem.js",
+  "cenarios/valdor-noite.js",
+  "efeitos/valdor.js",
+  "efeitos/noite.js"
+ ],
+ "planos": [
+  { "id": "anoitecer", "duracao": 4.6, "cinema": { "quente": 0, "bloom": 0.7, "vinheta": 0.9 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/noite-ambiente-20s.mp3", "em": 0, "volume": 0.55 } ] },
+  { "id": "lua", "duracao": 3.2, "cinema": { "quente": 0, "bloom": 0.8, "vinheta": 0.9 } },
+  { "id": "olhos", "duracao": 2.8, "cinema": { "quente": 0, "bloom": 0.8, "vinheta": 1 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/rosnado.mp3", "em": 1.2, "volume": 0.5 } ] },
+  { "id": "transforma", "duracao": 3.6, "cinema": { "quente": 0, "bloom": 0.9, "vinheta": 0.9 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/transformacao.mp3", "em": 0.0, "volume": 0.9 }, { "tipo": "arquivo", "arquivo": "sfx/whoosh.mp3", "em": 1.6, "volume": 0.6 } ] },
+  { "id": "rugido", "duracao": 3.4, "cinema": { "quente": 0, "bloom": 0.8, "vinheta": 0.95 },
+    "sfx": [ { "tipo": "arquivo", "arquivo": "sfx/rugido.mp3", "em": 0.65, "volume": 1.0 } ] }
+ ]
+}
