@@ -637,7 +637,7 @@
   {
    "id": "lider",
    "fala": {
-    "texto": "Até que o líder sacou uma arma...",
+    "texto": "Até que o líder sacou a arma dele...",
     "voz": "narrador",
     "velocidade": 210,
     "voz_final": {
@@ -645,9 +645,9 @@
     }
    },
    "destaque": [
-    "ARMA..."
+    "ARMA"
    ],
-   "duracao": 3.12,
+   "duracao": 3.82,
    "cinema": {
     "quente": 0.0,
     "vinheta": 0.9,
@@ -665,7 +665,7 @@
   {
    "id": "conhecia",
    "fala": {
-    "texto": "...que o Davi conhecia muito bem.",
+    "texto": "...uma lâmina lendária. Mais rara que a adaga épica.",
     "voz": "narrador",
     "velocidade": 210,
     "voz_final": {
@@ -673,9 +673,9 @@
     }
    },
    "destaque": [
-    "BEM."
+    "LENDÁRIA."
    ],
-   "duracao": 3.38,
+   "duracao": 4.97,
    "cinema": {
     "quente": 0.0,
     "vinheta": 0.9,

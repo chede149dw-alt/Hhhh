@@ -397,34 +397,34 @@
         });
       }
     },
-    // 18) gancho: o líder saca a adaga da cintura e a luz roxa sobe no rosto dele
+    // 18) gancho: o líder leva a mão por cima do ombro e saca a Lâmina Rubra das costas; luz vermelha no rosto
     lider(ctx, u, d, api) {
       const cam = camNoite(api, { f: 1150, x: 0.45, y: 1.0, z: 4.2 + u * 0.3, cy: 1000, yaw: -0.03 });
-      const saca = api.ease.entra(api.fase(0.35, 1.1)), luz = api.fase(0.5, 1.6);
-      const pose = { braco_d: 12 + 30 * saca, antebraco_d: -10 - 110 * saca, mao_d: -20 * saca, braco_e: -12, antebraco_e: 8, coxa_d: 5, coxa_e: -5, cabeca: -4 * saca };
-      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDER, opcoes: { lider: true, estilo: 'C', semAdaga: saca > 0.05 }, vista: 'frente', pose, expressao: 'raiva' }, 0.55, 6.4, 1.9, { luz: { lado: 1, forca: 0.3 + 0.5 * luz, cor: 'rgb(180,120,255)', sombra: 1 } }), cor: `rgba(120,60,200,${0.1 * luz})` }], {
+      const pega = api.ease.entra(api.fase(0.2, 0.7)), ergue = api.ease.entra(api.fase(0.75, 1.35)), luz = api.fase(0.8, 1.8);
+      const pose = { braco_d: 12 + 150 * pega - 120 * ergue, antebraco_d: -10 - 140 * pega + 40 * ergue, mao_d: 0, braco_e: -12, antebraco_e: 8, coxa_d: 5, coxa_e: -5, cabeca: -4 * ergue };
+      const fora = ergue > 0.05;
+      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDER, opcoes: { lider: true, estilo: 'C', semEspada: fora }, vista: 'frente', pose, expressao: 'raiva' }, 0.55, 6.4, 1.9, { luz: { lado: 1, forca: 0.3 + 0.5 * luz, cor: 'rgb(255,110,80)', sombra: 1 } }), cor: `rgba(160,30,30,${0.1 * luz})` }], {
         forca: 0.3,
         depois: ([rig]) => {
           if (!rig || !rig.pontoMundo) return;
-          const m = saca > 0.05 ? rig.pontoMundo('mao_d', [0, 0.18]) : null;
-          if (m) { Valdor.adagaEpica(ctx, m.x, m.y - 50 * saca, 380, api.t, -0.3 + 0.3 * saca, { brilho: luz }); Valdor.brilhoRadial(ctx, m.x, m.y - 60, 480 * luz, ROXO, 0.55 * luz); }
-          const cab = rig.pontoMundo('cabeca', [0, -0.4]); Valdor.brilhoRadial(ctx, cab.x, cab.y + 40, 220 * luz, ROXO, 0.35 * luz);
+          if (fora) { const m = rig.pontoMundo('mao_d', [0, 0.15]); Combate.laminaRubra(ctx, m.x, m.y, 560, api.t, -0.25 + 0.25 * ergue, { brilho: luz }); Valdor.brilhoRadial(ctx, m.x, m.y - 200, 520 * luz, '255,80,60', 0.5 * luz); }
+          const cab = rig.pontoMundo('cabeca', [0, -0.4]); Valdor.brilhoRadial(ctx, cab.x, cab.y + 40, 220 * luz, '255,80,60', 0.35 * luz);
         },
       });
     },
-    // 19) a Adaga Eclipse; o Davi reconhece
+    // 19) a Lâmina Rubra (lendária); o Davi arregala os olhos
     conhecia(ctx, u, d, api) {
-      if (u < 1.3) {
-        ctx.fillStyle = '#0A0612'; ctx.fillRect(0, 0, W, H);
-        Valdor.brilhoRadial(ctx, 540, 960, 900, ROXO, 0.6);
-        Valdor.adagaEpica(ctx, 540, 960, 760 * (1 + u * 0.08), api.t, -0.35 + u * 0.05);
-        for (let i = 0; i < 3; i++) Valdor.estrela(ctx, 420 + i * 120, 760 + i * 90, 28 * (0.5 + 0.5 * Math.sin(api.t * 6 + i)), '#F0E4FF');
-        Valdor.etiqueta(ctx, 540, 1460, 'ADAGA ECLIPSE · ÉPICA', '#D9C8FF', api.fase(0.2, 0.5, 'volta'), { tam: 54 });
+      if (u < d * 0.55) {
+        ctx.fillStyle = '#10060A'; ctx.fillRect(0, 0, W, H);
+        Valdor.brilhoRadial(ctx, 540, 900, 900, '255,70,50', 0.55);
+        Combate.laminaRubra(ctx, 520, 1420, 1150 * (1 + u * 0.05), api.t, 0.12 - u * 0.04, { brilho: 1 });
+        for (let i = 0; i < 4; i++) Valdor.estrela(ctx, 400 + i * 110, 700 + i * 120, 26 * (0.5 + 0.5 * Math.sin(api.t * 6 + i)), '#FFE0D0');
+        Valdor.etiqueta(ctx, 540, 1600, 'LÂMINA RUBRA · LENDÁRIA', '#FFB070', api.fase(0.2, 0.5, 'volta'), { tam: 56 });
       } else {
-        const cam = camNoite(api, { x: -0.2, y: 1.6, z: 0.4, cy: 820 });
-        const zoom = 1 + (u - 1.3) * 0.25, Hpx = 560 * zoom, item = { ...DAVIL, pose: 'parado', expressao: 'espanto' };
-        noite(ctx, api, cam, [{ f: () => { const A = alturaH(item); return api.personagem(item, W * 0.5, 980 - 0.47 * Hpx + A * Hpx, A * Hpx, { luz: { lado: 1, forca: 1, cor: 'rgb(180,120,255)', sombra: 1 } }); }, cor: 'rgba(120,60,200,0.15)' }], { desfoque: 10, forca: 0 });
-        Valdor.brilhoRadial(ctx, 900, 1300, 600, ROXO, 0.4);
+        const cam = camNoite(api, { x: -0.2, y: 1.6, z: 0.4, cy: 820 }), uu = u - d * 0.55;
+        const zoom = 1 + uu * 0.2, Hpx = 560 * zoom, item = { ...DAVIL, pose: 'parado', expressao: 'espanto' };
+        noite(ctx, api, cam, [{ f: () => { const A = alturaH(item); return api.personagem(item, W * 0.5, 980 - 0.47 * Hpx + A * Hpx, A * Hpx, { luz: { lado: 1, forca: 1, cor: 'rgb(255,110,80)', sombra: 1 } }); }, cor: 'rgba(160,30,30,0.1)' }], { desfoque: 10, forca: 0 });
+        Valdor.brilhoRadial(ctx, 900, 1300, 600, '255,80,60', 0.4);
       }
     },
     // 20) cartela final

@@ -215,5 +215,30 @@
     ctx.restore();
   }
 
-  window.Combate = { aluguel, vidaCabeca, relampago, arcoEntre, maoEletrica, convergir, impacto, eletrocutado, corte, garras, numero, velocidade, vinhetaDano, hud };
+  // LÂMINA RUBRA (item lendário do líder): espada curva vermelho-escura, fio brilhando, guarda dourada com gema
+  // (x, y) = cabo; s = comprimento total em px; ang = rotação (0 = lâmina para cima)
+  function laminaRubra(ctx, x, y, s, t, ang = 0, o = {}) {
+    const br = o.brilho === undefined ? 1 : o.brilho;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    if (br > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createRadialGradient(0, -s * 0.45, 0, 0, -s * 0.45, s * 0.75); g.addColorStop(0, `rgba(255,90,60,${0.5 * br})`); g.addColorStop(1, 'rgba(255,60,40,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -s * 0.45, s * 0.75, 0, TAU); ctx.fill(); ctx.restore(); }
+    // lâmina curva
+    const lam = new Path2D(); lam.moveTo(-s * 0.035, -s * 0.16); lam.quadraticCurveTo(-s * 0.06, -s * 0.6, s * 0.06, -s * 0.98); lam.quadraticCurveTo(s * 0.09, -s * 0.62, s * 0.045, -s * 0.16); lam.closePath();
+    const gl = ctx.createLinearGradient(-s * 0.06, 0, s * 0.08, 0); gl.addColorStop(0, '#3A0A10'); gl.addColorStop(0.45, '#9E1424'); gl.addColorStop(1, '#E2384A');
+    ctx.fillStyle = gl; ctx.fill(lam); ctx.strokeStyle = '#1A0406'; ctx.lineWidth = Math.max(1.5, s * 0.012); ctx.stroke(lam);
+    // fio brilhante e runas
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = `rgba(255,180,140,${0.9 * br + 0.1})`; ctx.lineWidth = Math.max(1, s * 0.01); ctx.beginPath(); ctx.moveTo(s * 0.04, -s * 0.18); ctx.quadraticCurveTo(s * 0.085, -s * 0.62, s * 0.06, -s * 0.96); ctx.stroke();
+    ctx.fillStyle = `rgba(255,140,90,${0.8 * br})`; for (let i = 0; i < 4; i++) { const yy = -s * (0.3 + i * 0.13); ctx.beginPath(); ctx.arc(s * (0.0 + i * 0.008), yy, s * 0.012, 0, TAU); ctx.fill(); }
+    ctx.restore();
+    // guarda dourada em asa + gema
+    ctx.fillStyle = '#C9A24A'; ctx.strokeStyle = '#5A4010'; ctx.lineWidth = Math.max(1, s * 0.01);
+    ctx.beginPath(); ctx.moveTo(-s * 0.15, -s * 0.13); ctx.quadraticCurveTo(0, -s * 0.2, s * 0.15, -s * 0.13); ctx.quadraticCurveTo(s * 0.17, -s * 0.18, s * 0.12, -s * 0.21); ctx.quadraticCurveTo(0, -s * 0.15, -s * 0.12, -s * 0.21); ctx.quadraticCurveTo(-s * 0.17, -s * 0.18, -s * 0.15, -s * 0.13); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#FF3A4A'; ctx.beginPath(); ctx.arc(0, -s * 0.165, s * 0.028, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.beginPath(); ctx.arc(-s * 0.008, -s * 0.172, s * 0.009, 0, TAU); ctx.fill();
+    // cabo com fita e pomo
+    ctx.fillStyle = '#2A1A14'; ctx.beginPath(); ctx.roundRect(-s * 0.025, -s * 0.13, s * 0.05, s * 0.15, s * 0.01); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#7A1E26'; ctx.lineWidth = Math.max(1, s * 0.008); for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(-s * 0.025, -s * (0.11 - i * 0.03)); ctx.lineTo(s * 0.025, -s * (0.09 - i * 0.03)); ctx.stroke(); }
+    ctx.fillStyle = '#C9A24A'; ctx.beginPath(); ctx.arc(0, s * 0.035, s * 0.03, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+
+  window.Combate = { laminaRubra, aluguel, vidaCabeca, relampago, arcoEntre, maoEletrica, convergir, impacto, eletrocutado, corte, garras, numero, velocidade, vinhetaDano, hud };
 })();

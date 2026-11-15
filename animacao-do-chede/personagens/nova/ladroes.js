@@ -91,6 +91,24 @@
     }
   }
 
+  // Lâmina Rubra guardada nas costas: bainha diagonal atrás do corpo e o cabo aparecendo por cima do ombro
+  function espadaNasCostas(def) {
+    const capuz = def.partes.find((q) => q.nome === 'capuz'); if (!capuz) return;
+    const c = def.opcoes, A = c.altura, f = (A - 1) / 4.5, vista = def.vista, orig = capuz.desenhar;
+    capuz.desenhar = (pc, ...r) => {
+      orig(pc, ...r);
+      const sx = vista === 'costas' ? -1 : 1, kx = vista === 'perfil' ? 0.5 : 1;
+      pc.ctx.save(); pc.ctx.translate(0, -0.15); pc.ctx.rotate(-sx * 0.62);
+      pc.peca(P((q) => q.roundRect(-0.07 * kx, -0.55, 0.14 * kx, 1.9 * f + 0.4, 0.06)), Estilo.tom('couroEscuro'), { sombra: 0.1 });
+      pc.peca(P((q) => q.roundRect(-0.09 * kx, -0.55, 0.18 * kx, 0.08, 0.02)), Estilo.tom('mostarda'), { sombra: 0.05 });
+      pc.peca(P((q) => { q.moveTo(-0.17, -0.6); q.quadraticCurveTo(0, -0.66, 0.17, -0.6); q.lineTo(0.13, -0.68); q.quadraticCurveTo(0, -0.64, -0.13, -0.68); q.closePath(); }), Estilo.tom('mostarda'), { sombra: 0.05 });
+      pc.peca(P((q) => q.roundRect(-0.035, -0.95, 0.07, 0.32, 0.02)), { base: '#2A1A14', sombra: '#120A08' }, { sombra: 0.05 });
+      pc.peca(P((q) => q.arc(0, -0.97, 0.045, 0, Math.PI * 2)), Estilo.tom('mostarda'), { sombra: 0 });
+      pc.preencher(P((q) => q.arc(0, -0.63, 0.03, 0, Math.PI * 2)), '#FF3A4A');
+      pc.ctx.restore();
+    };
+  }
+
   window.LADRAO_POSES = {
     ...window.POSES_PADRAO,
     faca: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 55, antebraco_d: 60, mao_d: -10, braco_e: -20, antebraco_e: -30, coxa_d: -10, canela_d: 15, coxa_e: 12, canela_e: 10, tronco: 6, _desloca: [0, 0.08] } },
@@ -114,13 +132,13 @@
     const eq = lider && est === 'B'
       ? { peitoral: { cor: 'armaduraEscura', faixas: 4, tachas: 'prata' }, manto: { cor: 'vinho', barra: 'prata' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'armaduraEscura', cano: 0.6 }, bracadeira: 'prata', ombreira: { cor: 'prata', rebites: 'carvao' }, adagaCinto: o.semAdaga ? undefined : { epica: true } }
       : lider && est === 'C'
-      ? { peitoral: { cor: 'couroEscuro', faixas: 3, tachas: 'mostarda' }, cinto: { cor: 'couroEscuro', fivela: 'mostarda' }, botas: { cor: 'couroEscuro', cano: 0.6 }, bracadeira: 'couroVermelho', cinta: { cor: 'couroEscuro', tachas: 'mostarda' }, ombreira: { cor: 'couroVermelho', rebites: 'mostarda' }, adagaCinto: o.semAdaga ? undefined : { epica: true } }
+      ? { peitoral: { cor: 'couroEscuro', faixas: 3, tachas: 'mostarda' }, cinto: { cor: 'couroEscuro', fivela: 'mostarda' }, botas: { cor: 'couroEscuro', cano: 0.6 }, bracadeira: 'couroVermelho', cinta: { cor: 'couroEscuro', tachas: 'mostarda' }, ombreira: { cor: 'couroVermelho', rebites: 'mostarda' } }
       : lider
       ? { peitoral: { cor: 'armaduraEscura', faixas: 4, tachas: 'prata' }, manto: { cor: 'vinho', barra: 'carvao' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'armaduraEscura', cano: 0.5 }, bracadeira: 'armaduraEscura', cinta: { cor: 'carvao', tachas: 'prata' }, ombreira: { cor: 'armaduraEscura', rebites: 'prata' }, adagaCinto: o.semAdaga ? undefined : { epica: true } }
       : { cinto: { cor: 'couroLadrao', fivela: 'carvao', bolsa: 'couroLadrao' }, botas: { cor: 'couroLadrao', cano: 0.4 }, bracadeira: 'couroLadrao', peitoral: { cor: 'couroLadrao', faixas: 3, tachas: 'prata' }, cinta: { cor: 'carvao', tachas: 'prata', bolsa: 'carvao' }, ombreira: { cor: 'couroLadrao', rebites: 'prata' }, arma: o.semFaca ? undefined : { tipo: 'adaga', mao: 'd' } };
     const def = window.equipar(window.criarPersonagem(opc, vista), eq);
     if (est === 'B') { vestirCabeca(def, 'carvao', 'mascara', null); vestirLider(def, 'B'); }
-    else if (est === 'C') vestirLider(def, 'C');
+    else if (est === 'C') { vestirLider(def, 'C'); if (!o.semEspada) espadaNasCostas(def); }
     else vestirCabeca(def, lider ? 'vinho' : v.capuz, 'mascara', lider ? 'rgba(200,40,60,0.9)' : null);
     return def;
   };
