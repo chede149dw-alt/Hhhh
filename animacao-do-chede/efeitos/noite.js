@@ -134,5 +134,26 @@
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, rx, 0, TAU); ctx.fill(); ctx.restore();
   }
 
-  window.Noite = { olhos, energia, faiscas, clarao, onda, anelChao, tocha, luzChao };
+  // fumaça/poeira volumosa (como nas referências 3D): bolhas macias que crescem, sobem e somem, com luz em cima e sombra embaixo.
+  // k = vida 0..1; o = { cor: '200,210,240', seed, sobe (0..1), largura }
+  function fumaca(ctx, x, y, raio, k, o = {}) {
+    if (k <= 0 || k >= 1) return;
+    let sd = (o.seed || 1) * 9301 + 49297; const r = () => ((sd = (sd * 9301 + 49297) % 233280) / 233280);
+    const cor = o.cor || '205,212,235', n = o.n || 16, larg = o.largura || 1.6, sobe = o.sobe === undefined ? 0.7 : o.sobe;
+    const vida = Math.pow(1 - k, 1.4), cresce = 1 - Math.pow(1 - k, 2.2), bolhas = [];
+    for (let i = 0; i < n; i++) {
+      const a = r() * Math.PI * 2, d = Math.sqrt(r()), dx = Math.cos(a) * d * raio * larg * (0.35 + 0.65 * cresce), dy = -Math.abs(Math.sin(a)) * d * raio * 0.35 - r() * raio * sobe * cresce;
+      bolhas.push([x + dx, y + dy, raio * (0.28 + r() * 0.3) * (0.45 + 0.9 * cresce), 0.55 + r() * 0.45]);
+    }
+    bolhas.sort((p, q) => p[1] - q[1]);
+    ctx.save();
+    for (const [bx, by, br, al] of bolhas) {
+      const g = ctx.createRadialGradient(bx - br * 0.3, by - br * 0.35, br * 0.1, bx, by, br);
+      g.addColorStop(0, `rgba(255,255,255,${0.95 * al * vida})`); g.addColorStop(0.45, `rgba(${cor},${0.85 * al * vida})`); g.addColorStop(0.85, `rgba(${cor},${0.4 * al * vida})`); g.addColorStop(1, `rgba(${cor},0)`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(bx, by, br, 0, TAU); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  window.Noite = { olhos, energia, faiscas, clarao, onda, anelChao, tocha, luzChao, fumaca };
 })();

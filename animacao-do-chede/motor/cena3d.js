@@ -82,6 +82,7 @@
 
   // sombra suave no chão (elipse projetada, desfocada), esticada para a direita como a luz do guia
   function sombraChao(ctx, cam, X, Z, larg, comp = 1) {
+    if (window.SEM_SOMBRA_CHAO) return; // cenário 3D com sombra de verdade
     const a = cam.p(X - larg / 2, 0, Z), b = cam.p(X + larg / 2 + larg * 0.6 * comp, 0, Z);
     const c = cam.p(X, 0, Z - larg * 0.3), d = cam.p(X, 0, Z + larg * 0.3);
     if (a.atras || b.atras || c.atras || d.atras) return;
