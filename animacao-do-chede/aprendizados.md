@@ -170,3 +170,15 @@
 - Câmera em órbita: o rosto do personagem só aparece de frente se a câmera ficar do lado para onde ele olha (checar o ângulo no fim do plano).
 - Lobo (Criaturas.lobo) é um recorte de perfil: em órbita, girar no máximo ~35° e nunca deixar ele no primeiro plano.
 - Efeitos novos: `efeitos/combate.js` (raio com galhos, mãos elétricas, impacto, corte, garras, números, HUD) e `efeitos/noite.js`.
+
+## VALDOR Parte 2 · cenário 3D de verdade (15/11)
+- Pedido do autor: nas referências o CENÁRIO é 3D e os PERSONAGENS são 2D. Cenário pintado em 2D "gruda" na câmera
+  (grama da frente em espaço de tela, chão chapado sem textura) e o autor percebe na hora. Agora o cenário é WebGL:
+  `cenarios/valdor-3d.js` (three.js r160 em `motor/vendor/`), com a câmera do three montada igual à do motor
+  (posição, yaw, horizonte fora do centro via makePerspective), então `cam.p()` bate com o 3D e os pés ficam no chão.
+- Primeiro plano: tudo a menos de `perto` m (padrão 1,2) é renderizado numa segunda passada e desfocado POR CIMA dos
+  personagens. Closes em espaço de tela (forca 0) não usam essa passada.
+- Ninguém em cima da água: o rio fica em Z≈19–22 (atrás da ação). Conferir posições dos personagens contra o traçado.
+- Pernas na vista tq/frente: coxa_d positiva e coxa_e negativa abrem as pernas; o contrário cruza em X (erro apontado
+  pelo autor nos ladrões). Caminhada em tq usa o passo frontal.
+- Som na hora que anoitece: ambiente de noite curto (corte + fade) e baixo; trilha com ganho reduzido nesse trecho.

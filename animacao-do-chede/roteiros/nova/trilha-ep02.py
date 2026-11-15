@@ -114,6 +114,14 @@ for c, a, b in grupos:
     x = x * (0.08 / rms)
     fade = int(0.4 * SR); x[:fade] *= np.linspace(0, 1, fade); x[-fade:] *= np.linspace(1, 0, fade)
     soma(out, x, max(0, a - 0.2))
+# a noite caindo pede música baixinha (usuário 15/11: o som na hora que anoitece estava alto)
+GANHO = {'noite': 0.45, 'tremer': 0.65}
+g = np.ones(len(out))
+for pid, ini, dur in sec:
+    if pid in GANHO:
+        i0, i1 = int(ini * SR), int((ini + dur) * SR); g[i0:i1] = np.minimum(g[i0:i1], GANHO[pid])
+from scipy.ndimage import uniform_filter1d
+g = uniform_filter1d(g, int(0.8 * SR)); out = out * g
 out = out[: int(TOTAL * SR)]
 out = out / (np.max(np.abs(out)) + 1e-9) * 0.7
 with wave.open(f'{raiz}/audio/nova/ep02/trilha.wav', 'wb') as w:

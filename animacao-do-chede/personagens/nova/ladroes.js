@@ -111,10 +111,10 @@
 
   window.LADRAO_POSES = {
     ...window.POSES_PADRAO,
-    faca: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 55, antebraco_d: 60, mao_d: -10, braco_e: -20, antebraco_e: -30, coxa_d: -10, canela_d: 15, coxa_e: 12, canela_e: 10, tronco: 6, _desloca: [0, 0.08] } },
-    aponta: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 88, antebraco_d: 0, mao_d: 0, braco_e: -8, antebraco_e: -10, coxa_d: -4, coxa_e: 6 } },
+    faca: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 55, antebraco_d: 60, mao_d: -10, braco_e: -20, antebraco_e: -30, coxa_d: 12, canela_d: -6, coxa_e: -11, canela_e: 5, tronco: 6, _desloca: [0, 0.04] } },
+    aponta: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 88, antebraco_d: 0, mao_d: 0, braco_e: -8, antebraco_e: -10, coxa_d: 7, canela_d: -3, coxa_e: -7, canela_e: 3 } },
     caido: { vista: 'perfil', expressao: 'medo', angulos: { tronco: -70, cabeca: -20, braco_d: -120, antebraco_d: -20, braco_e: -100, antebraco_e: -30, coxa_d: -60, canela_d: 30, coxa_e: -40, canela_e: 20, _desloca: [0, 1.6] } },
-    tocha: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 30, antebraco_d: 45, mao_d: -10, braco_e: -38, antebraco_e: -115, mao_e: 10, coxa_d: -6, canela_d: 8, coxa_e: 8, canela_e: 6, tronco: 4 } },
+    tocha: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 30, antebraco_d: 45, mao_d: -10, braco_e: -38, antebraco_e: -115, mao_e: 10, coxa_d: 9, canela_d: -4, coxa_e: -9, canela_e: 4, tronco: 4 } },
     abrindoCapa: { vista: 'frente', expressao: 'raiva', angulos: { braco_d: 70, antebraco_d: -30, braco_e: -70, antebraco_e: 30, coxa_d: 6, coxa_e: -6 } },
   };
   window.criarLadrao = (o = {}, vista = 'frente') => {

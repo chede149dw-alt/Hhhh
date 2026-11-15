@@ -355,7 +355,10 @@
      "tipo": "arquivo",
      "arquivo": "sfx/noite-ambiente-20s.mp3",
      "em": 0,
-     "volume": 0.34
+     "volume": 0.12,
+     "corte": 7.6,
+     "entra": 1.5,
+     "sai": 2.0
     }
    ]
   },
@@ -501,7 +504,10 @@
      "tipo": "arquivo",
      "arquivo": "sfx/noite-ambiente-20s.mp3",
      "em": 0,
-     "volume": 0.3
+     "volume": 0.12,
+     "corte": 7.6,
+     "entra": 1.5,
+     "sai": 2.0
     }
    ]
   },

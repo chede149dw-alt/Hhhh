@@ -145,10 +145,35 @@
     ctx.restore();
   }
   // corrente brilhando entre dois pontos (caída)
-  function corrente(ctx, a, b, t, k = 1) {
+  // corrente de verdade: elos de aço encaixados (um de frente, um de lado) seguindo a curva, com brilho mágico fraco
+  function corrente(ctx, a, b, t, k = 1, tam = 15) {
     if (k <= 0) return;
-    const n = 16; ctx.save(); ctx.globalAlpha = k;
-    for (let i = 0; i < n; i++) { const s = i / (n - 1), x = a[0] + (b[0] - a[0]) * s, y = a[1] + (b[1] - a[1]) * s + Math.sin(s * Math.PI) * 80 + Math.sin(t * 4 + i) * 4; Valdor.brilhoRadial(ctx, x, y, 34, '150,170,255', 0.35); ctx.strokeStyle = '#C9D4FF'; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(x, y, 13, 8, (i % 2) * 1.57 + 0.3, 0, TAU); ctx.stroke(); }
+    const L0 = Math.hypot(b[0] - a[0], b[1] - a[1]), cai = L0 * 0.16;
+    const P = (s) => [a[0] + (b[0] - a[0]) * s + Math.sin(t * 3 + s * 7) * 2.5, a[1] + (b[1] - a[1]) * s + Math.sin(s * Math.PI) * cai + Math.sin(t * 2.2 + s * 5) * 3];
+    const amostras = []; for (let i = 0; i <= 80; i++) amostras.push(P(i / 80));
+    ctx.save(); ctx.globalAlpha = k; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = 'rgba(140,170,255,0.18)'; ctx.lineWidth = tam * 2.4; ctx.beginPath(); amostras.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke();
+    const passo = tam * 1.25; let acc = 0, prox = 0, idx = 0;
+    for (let i = 1; i < amostras.length; i++) {
+      const [x0, y0] = amostras[i - 1], [x1, y1] = amostras[i], seg = Math.hypot(x1 - x0, y1 - y0), ang = Math.atan2(y1 - y0, x1 - x0);
+      while (prox <= acc + seg) {
+        const f = (prox - acc) / seg, x = x0 + (x1 - x0) * f, y = y0 + (y1 - y0) * f;
+        ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+        if (idx % 2 === 0) {
+          ctx.strokeStyle = '#141826'; ctx.lineWidth = tam * 0.5; ctx.beginPath(); ctx.ellipse(0, 0, tam * 0.85, tam * 0.48, 0, 0, TAU); ctx.stroke();
+          const g = ctx.createLinearGradient(0, -tam * 0.5, 0, tam * 0.5); g.addColorStop(0, '#F2F5FF'); g.addColorStop(0.45, '#9AA6C4'); g.addColorStop(1, '#4A5470');
+          ctx.strokeStyle = g; ctx.lineWidth = tam * 0.28; ctx.beginPath(); ctx.ellipse(0, 0, tam * 0.85, tam * 0.48, 0, 0, TAU); ctx.stroke();
+          ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = tam * 0.08; ctx.beginPath(); ctx.ellipse(0, 0, tam * 0.85, tam * 0.48, 0, Math.PI * 1.15, Math.PI * 1.7); ctx.stroke();
+        } else {
+          ctx.fillStyle = '#141826'; ctx.beginPath(); ctx.roundRect(-tam * 0.95, -tam * 0.2, tam * 1.9, tam * 0.4, tam * 0.2); ctx.fill();
+          const g = ctx.createLinearGradient(0, -tam * 0.14, 0, tam * 0.14); g.addColorStop(0, '#E8EDFF'); g.addColorStop(1, '#5A6684');
+          ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(-tam * 0.85, -tam * 0.11, tam * 1.7, tam * 0.22, tam * 0.11); ctx.fill();
+        }
+        ctx.restore(); prox += passo; idx++;
+      }
+      acc += seg;
+    }
+    for (let i = 0; i < 3; i++) { const [x, y] = P(((t * 0.35 + i / 3) % 1)); Valdor.brilhoRadial(ctx, x, y, tam * 2.2, '170,190,255', 0.5); }
     ctx.restore();
   }
   function tituloMetal(ctx, txt, x, y, tam, cores) {

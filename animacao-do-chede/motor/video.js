@@ -131,7 +131,7 @@ for (const p of planos) {
     if (s.tipo === 'impacto') addSfx(sfxArq.impacto, p.inicio + (s.em || 0), s.volume || 1.0);
     // efeito sonoro de arquivo (audio/<serie>/<arquivo>), ex.: { "tipo": "arquivo", "arquivo": "sfx/rosnado.mp3", "em": 0.4, "volume": 0.8, "corte": 1.2 }
     if (s.tipo === 'arquivo') {
-      const corte = s.corte ? `atrim=0:${s.corte},afade=t=out:st=${Math.max(0, s.corte - 0.2).toFixed(2)}:d=0.2,` : '';
+      const sai = s.sai || 0.2, corte = (s.corte ? `atrim=0:${s.corte},afade=t=out:st=${Math.max(0, s.corte - sai).toFixed(2)}:d=${sai},` : '') + (s.entra ? `afade=t=in:d=${s.entra},` : '');
       addSfx(path.join(raiz, 'audio', serie, s.arquivo), p.inicio + (s.em || 0), s.volume || 1.0, `aresample=48000,aformat=channel_layouts=mono,${corte}`);
     }
     if (s.tipo === 'ronco') {
