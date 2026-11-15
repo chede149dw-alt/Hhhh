@@ -11,7 +11,7 @@
   window.DAVI_JOGO_EQUIP = {
     capuz: 'capuzDavi', manto: { cor: 'azulArdosia', barra: 'mostarda' },
     cinto: { cor: 'couroEscuro', fivela: 'pedra', bolsa: 'couro' },
-    botas: { cor: 'couro', cano: 0.4 }, bracadeira: 'couro',
+    botas: { cor: 'couro', cano: 0.4 }, bracadeira: 'couro', cinta: { cor: 'couro', tachas: 'mostarda', bolsa: 'couroEscuro' },
     magiaMaos: { cor: '111,200,255' }, adagaCinto: true,
   };
   window.DAVI_JOGO_POSES = {

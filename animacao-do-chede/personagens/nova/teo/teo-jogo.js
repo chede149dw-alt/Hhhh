@@ -9,7 +9,7 @@
   window.TEO_JOGO_EQUIP = {
     gola: 'couro', cinto: { cor: 'couroEscuro', fivela: 'mostarda' },
     botas: { cor: 'couroEscuro', cano: 0.4 }, arma: { tipo: 'espada-madeira', mao: 'd' },
-    escudo: { cor: 'madeira', borda: 'pedra', emblema: 'verdeAgua' },
+    escudo: { cor: 'madeira', borda: 'pedra', emblema: 'verdeAgua' }, ombreira: { cor: 'couro', rebites: 'pedra' },
   };
   window.criarTeoJogo = (opcoes = {}, vista = 'frente') => window.equipar(window.criarTeo({ ...window.TEO_JOGO_OPCOES, ...opcoes }, vista), window.TEO_JOGO_EQUIP);
 })();

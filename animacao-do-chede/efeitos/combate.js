@@ -182,5 +182,38 @@
     ctx.restore();
   }
 
-  window.Combate = { relampago, arcoEntre, maoEletrica, convergir, impacto, eletrocutado, corte, garras, numero, velocidade, vinhetaDano, hud };
+  // barra do objetivo (referência 3D): casinha + "Aluguel" + moeda + valor; frac = quanto já juntou
+  function aluguel(ctx, frac, valor, o = {}) {
+    const W = ctx.canvas.width, x = o.x || 70, y = o.y || 110, w = o.w || W - 140, h = 132, a = o.alfa === undefined ? 1 : o.alfa;
+    if (a <= 0) return;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = a;
+    ctx.fillStyle = 'rgba(14,18,34,0.85)'; ctx.strokeStyle = 'rgba(255,214,120,0.45)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(x, y, w, h, 28); ctx.fill(); ctx.stroke();
+    ctx.font = '800 36px Inter'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#F4EEDC'; ctx.fillText(o.titulo || 'Aluguel', x + 104, y + 38);
+    ctx.textAlign = 'right'; ctx.fillStyle = '#FFD76A'; ctx.fillText(valor, x + w - 36, y + 38);
+    if (o.dias) { ctx.font = '700 26px Inter'; ctx.fillStyle = '#FF8A8A'; ctx.fillText(o.dias, x + w - 36, y + 104); }
+    // casinha
+    ctx.save(); ctx.translate(x + 56, y + 86); ctx.fillStyle = '#F4EEDC'; ctx.beginPath(); ctx.moveTo(-26, -2); ctx.lineTo(0, -26); ctx.lineTo(26, -2); ctx.closePath(); ctx.fill(); ctx.fillRect(-20, -4, 40, 28); ctx.fillStyle = '#7A4A2A'; ctx.fillRect(-7, 6, 14, 18); ctx.restore();
+    const bx = x + 96, by = y + 70, bw = w - (o.dias ? 260 : 140), bh = 34;
+    ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, bh / 2); ctx.fill(); ctx.stroke();
+    const g = ctx.createLinearGradient(0, by, 0, by + bh); g.addColorStop(0, '#FFE27A'); g.addColorStop(1, '#E09A1A');
+    const fw = Math.max(bh, bw * cl(frac)); ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(bx, by, fw, bh, bh / 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.roundRect(bx + 6, by + 5, fw - 12, bh * 0.3, bh * 0.15); ctx.fill();
+    // moeda no fim da barra
+    const mx = bx + fw - bh * 0.1, my = by + bh / 2; ctx.fillStyle = '#FFD24A'; ctx.strokeStyle = '#B07A10'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(mx, my, 22, 0, TAU); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#FFF2B0'; ctx.beginPath(); ctx.arc(mx - 7, my - 7, 6, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+  // vida verde em cima da cabeça (com coração), e mana azul opcional
+  function vidaCabeca(ctx, x, y, w, frac, o = {}) {
+    const h = Math.max(8, w * 0.09), a = o.alfa === undefined ? 1 : o.alfa; if (a <= 0) return;
+    ctx.save(); ctx.globalAlpha = a;
+    ctx.fillStyle = 'rgba(10,14,24,0.75)'; ctx.beginPath(); ctx.roundRect(x - w / 2 - 3, y - h / 2 - 3, w + 6, h + 6, (h + 6) / 2); ctx.fill();
+    const cores = o.inimigo ? ['#FF7A7A', '#C8303A'] : ['#8CFF9A', '#2FA84A'], g = ctx.createLinearGradient(0, y - h / 2, 0, y + h / 2); g.addColorStop(0, cores[0]); g.addColorStop(1, cores[1]);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, Math.max(h, w * cl(frac)), h, h / 2); ctx.fill();
+    // coração
+    const cx = x - w / 2 - h * 1.4; ctx.fillStyle = o.inimigo ? '#FF6A6A' : '#5CFF7A'; ctx.beginPath(); ctx.moveTo(cx, y + h * 0.6); ctx.bezierCurveTo(cx - h * 1.1, y - h * 0.2, cx - h * 0.5, y - h * 1.0, cx, y - h * 0.35); ctx.bezierCurveTo(cx + h * 0.5, y - h * 1.0, cx + h * 1.1, y - h * 0.2, cx, y + h * 0.6); ctx.fill();
+    if (o.mana !== undefined) { const my = y + h * 1.6; ctx.fillStyle = 'rgba(10,14,24,0.75)'; ctx.beginPath(); ctx.roundRect(x - w / 2 - 3, my - h * 0.35 - 3, w + 6, h * 0.7 + 6, h); ctx.fill(); const gm = ctx.createLinearGradient(0, my - h * 0.35, 0, my + h * 0.35); gm.addColorStop(0, '#8AD8FF'); gm.addColorStop(1, '#2A7BE0'); ctx.fillStyle = gm; ctx.beginPath(); ctx.roundRect(x - w / 2, my - h * 0.35, Math.max(h * 0.7, w * cl(o.mana)), h * 0.7, h * 0.35); ctx.fill(); }
+    ctx.restore();
+  }
+
+  window.Combate = { aluguel, vidaCabeca, relampago, arcoEntre, maoEletrica, convergir, impacto, eletrocutado, corte, garras, numero, velocidade, vinhetaDano, hud };
 })();

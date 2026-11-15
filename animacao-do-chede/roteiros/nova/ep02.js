@@ -154,6 +154,10 @@
     ctx.translate(x, y); ctx.scale(k, 1); ctx.shadowColor = 'rgba(255,170,60,0.9)'; ctx.shadowBlur = 30; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1A0B10'; ctx.lineWidth = tam * 0.16; ctx.strokeText(txt, 0, 0); ctx.shadowBlur = 0;
     const g = ctx.createLinearGradient(0, -tam * 0.5, 0, tam * 0.5); cores.forEach(([o, c]) => g.addColorStop(o, c)); ctx.fillStyle = g; ctx.fillText(txt, 0, 0); ctx.restore();
   }
+  // ladrão com tocha na mão esquerda: desenha a tocha depois do corpo
+  const tochaNaMao = (ctx, rig, t, seed, s = 0.5) => { if (rig && rig.pontoMundo) { const m = rig.pontoMundo('mao_e', [0, 0.2]); Noite.tocha(ctx, m.x, m.y, s * rig.escalaPx * 2.2, t, { seed }); } };
+  const ALUGUEL_META = 1200;
+  const reaisTxt = (v) => 'R$ ' + v.toFixed(2).replace('.', ',') + ' / 1.200';
   const OURO = [[0, '#FFF2B0'], [0.45, '#FFC83D'], [0.55, '#D98A12'], [1, '#FFD45E']];
 
   window.PLANOS = {
@@ -196,7 +200,9 @@
       ]);
       const q = cam.p(LX, 0.45, LZ); Combate.impacto(ctx, q.x, q.y, 140, uu - 0.25, { dura: 0.4, seed: i + 2 });
       const qd = cam.p(-0.6, 2.05, 4.4); Valdor.placaNivel(ctx, qd.x, qd.y, 2 + i, 1 + 0.3 * Math.max(0, 1 - uu * 4), { tam: 42, cor: AMARELO });
+      const qt = cam.p(0.4, 2.1, 4.0); Combate.vidaCabeca(ctx, qt.x, qt.y, 0.7 * qt.s, 1); Combate.vidaCabeca(ctx, qd.x, qd.y - 0.22 * qd.s, 0.7 * qd.s, 1, { mana: 0.4 + 0.5 * Math.abs(Math.sin(api.t * 1.5)) });
       Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.6 });
+      const v = 7.9 + 1.5 * (u / d); Combate.aluguel(ctx, v / ALUGUEL_META, reaisTxt(v), { dias: '29 DIAS' });
     },
     // 4) loots caindo em cartas de vidro
     loot(ctx, u, d, api) {
@@ -206,6 +212,7 @@
     vender(ctx, u, d, api) {
       const g = ctx.createRadialGradient(W / 2, H * 0.45, 100, W / 2, H * 0.45, H * 0.8); g.addColorStop(0, '#26305E'); g.addColorStop(1, '#0A0D20'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       LOOTS.forEach((it, i) => { const x = i % 2 ? 790 : 290, y = i < 2 ? 560 : 1580, vende = i < 3; cartaLoot(ctx, x, y, 360, it, 1 + (vende ? 0.04 * Math.sin(api.t * 8) : 0), api.t, { selo: vende ? 'VENDER' : undefined }); if (vende) Valdor.moeda(ctx, x + 150, y + 230 - api.fase(0.1, 0.8) * 60, 30, api.t * 3, api.fase(0.1, 0.3)); });
+      const v = 9.4 + 61.68 * api.fase(0.15, 0.9); Combate.aluguel(ctx, v / ALUGUEL_META, reaisTxt(v), { dias: '29 DIAS', y: 900 });
     },
     // 5) equipar: luvas no Davi (a faísca vira raio) e escudo de ferro no Téo
     equipar(ctx, u, d, api) {
@@ -239,10 +246,10 @@
     // 7) a noite cai
     noite(ctx, u, d, api) {
       const n = api.ease.suave(cl((u - 0.3) / (d - 0.6)));
-      const cam = camNoite(api, { noite: n, x: chave(u, [[0, -0.3], [d, 0.2]]), y: chave(u, [[0, 1.2], [d, 1.55]]), z: chave(u, [[0, -0.8], [d, 0.4]]) });
+      const cam = camNoite(api, { noite: n, x: chave(u, [[0, -0.5], [d, 0.1]]), y: chave(u, [[0, 1.15], [d, 1.4]]), z: chave(u, [[0, 1.2], [d, 2.2]]), yaw: chave(u, [[0, 0.05], [d, -0.03]]) });
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'parado', expressao: 'espanto' }, -0.75, 4.4, 1.76, { rumo: Math.PI, luz: { ...LUZ_LUA, forca: 0.85 * n } }) },
-        { f: () => api.personagem3d(cam, { ...TEOF, pose: 'parado', expressao: 'neutro' }, 0.75, 4.5, 1.82, { rumo: Math.PI, luz: { ...LUZ_LUA, forca: 0.85 * n }, semente: 3 }) },
+        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'parado', expressao: 'espanto' }, -0.45, 4.1, 1.76, { rumo: Math.PI, luz: { ...LUZ_LUA, forca: 0.85 * n } }) },
+        { f: () => api.personagem3d(cam, { ...TEOF, pose: 'parado', expressao: 'neutro' }, 0.6, 4.9, 1.82, { rumo: Math.PI, luz: { ...LUZ_LUA, forca: 0.85 * n }, semente: 3 }) },
       ], { noite: n, forca: 0.7 });
     },
     // 8) o Téo começa a tremer, os olhos abrem amarelos
@@ -297,34 +304,39 @@
         forca: 0.4,
         depois: () => {
           const pares = [[3.2, 9, 0.2], [5.5, 11, 0.45], [1.6, 12, 0.7], [7.2, 13, 0.95], [4.4, 15, 1.2]];
+          for (const [X, Z, t0] of pares) { const k = api.fase(t0 + 0.1, t0 + 0.35); if (k <= 0) continue; Noite.luzChao(ctx, cam, X + 0.3, Z, 2.4, api.t, k, X); const q = cam.p(X + 0.35, 1.9, Z); Noite.tocha(ctx, q.x, q.y + 0.5 * q.s, 0.55 * q.s, api.t, { seed: X }); }
           for (const [X, Z, t0] of pares) { const q = cam.p(X, 1.6, Z), k = api.fase(t0, t0 + 0.2); if (k <= 0) continue; const sep = 0.09 * q.s; Noite.olhos(ctx, [[q.x - sep, q.y], [q.x + sep, q.y]], Math.max(4, 0.035 * q.s), k * (0.7 + 0.3 * Math.sin(api.t * 3 + X)), api.t); }
         },
       });
     },
     // 13) cinco encapuzados saem da neblina e cercam os dois
     rara(ctx, u, d, api) {
-      const cam = api.orbita({ alvo: [0, 1.0, 5.0], raio: 4.6, ang: chave(u, [[0, -0.25], [d, 0.25]]), altura: 2.2, f: 1050, ySalvo: 960, nevoa: V().nevoa(1) });
+      const cam = api.orbita({ alvo: [-0.1, 1.15, 6.6], raio: chave(u, [[0, 5.6], [d, 5.0]]), ang: chave(u, [[0, -0.2], [d, -0.04]]), altura: 1.9, f: 1050, ySalvo: 940, nevoa: V().nevoa(1) });
       const anda = api.ease.entra(api.fase(0, 1.8));
-      const pos = [[-2.4, 6.6], [-1.3, 7.4], [0.2, 7.8], [1.6, 7.3], [2.6, 6.4]].map(([x, z]) => [x * (1.4 - 0.4 * anda), 5.0 + (z - 5.0) * (1.6 - 0.6 * anda)]);
+      const pos = [[-2.4, 6.6], [-1.5, 7.4], [0.0, 7.9], [1.8, 7.3], [2.7, 6.4]].map(([x, z]) => [x * (1.4 - 0.4 * anda), 5.0 + (z - 5.0) * (1.6 - 0.6 * anda)]);
       const ents = [
-        { f: () => api.personagem3d(cam, { ...LOBO, pose: 'garras' }, 0.45, 5.0, 2.55, { olhaPara: pos[2], luz: LUZ_LUA }) },
-        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'conjurando', expressao: 'medo' }, -0.6, 4.7, 1.76, { olhaPara: pos[1], luz: LUZ_LUA }) },
-        ...pos.map(([x, z], i) => ({ f: () => api.personagem3d(cam, { ...(i === 2 ? LIDER : LADRAO(i)), pose: i === 2 ? 'parado' : 'faca', expressao: 'raiva' }, x, z, 1.85, { olhaPara: [0, 5], luz: LUZ_LUA, caminhar: anda < 1 ? api.t : undefined, semente: i }) })),
+        { f: () => api.personagem3d(cam, { ...LOBO, pose: 'garras' }, 1.05, 5.0, 2.55, { olhaPara: pos[2], luz: LUZ_LUA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIJ, pose: 'conjurando', expressao: 'medo' }, -1.0, 5.3, 1.76, { olhaPara: pos[1], luz: LUZ_LUA }) },
+        ...pos.map(([x, z], i) => ({ f: () => api.personagem3d(cam, { ...(i === 2 ? LIDER : LADRAO(i)), pose: i === 2 ? 'parado' : i % 2 ? 'tocha' : 'faca', expressao: 'raiva' }, x, z, 1.85, { olhaPara: [0, 5], luz: i === 2 ? LUZ_LUA : { lado: 1, forca: 0.9, cor: 'rgb(255,170,90)', sombra: 0.9 }, caminhar: anda < 1 ? api.t : undefined, semente: i }) })),
       ];
       noite(ctx, api, cam, ents.reverse(), {
         forca: 0.35,
-        depois: () => pos.forEach(([x, z], i) => { const q = cam.p(x, 2.15, z); Valdor.placaNivel(ctx, q.x, q.y, [12, 13, 15, 14, 12][i], api.fase(1.0 + i * 0.1, 1.3 + i * 0.1, 'volta'), { tam: 34, cor: i === 2 ? '#FF6A7A' : '#FFB0B0' }); }),
+        chao: () => pos.forEach(([x, z], i) => { if (i % 2) Noite.luzChao(ctx, cam, x, z, 2.6, api.t, 1, i); }),
+        depois: (rs) => { const ladr = rs.slice().reverse().slice(2); ladr.forEach((r, i) => { if (i % 2) tochaNaMao(ctx, r, api.t, i); }); const qt = cam.p(1.05, 2.75, 5.0), qd = cam.p(-1.0, 2.0, 5.3); Combate.vidaCabeca(ctx, qt.x, qt.y, 0.7 * qt.s, 1); Combate.vidaCabeca(ctx, qd.x, qd.y, 0.6 * qd.s, 1, { mana: 0.8 });
+          pos.forEach(([x, z], i) => { const q = cam.p(x, 2.15, z); Valdor.placaNivel(ctx, q.x, q.y, [12, 13, 15, 14, 12][i], api.fase(1.0 + i * 0.1, 1.3 + i * 0.1, 'volta'), { tam: 34, cor: i === 2 ? '#FF6A7A' : '#FFB0B0' }); }); },
       });
     },
     // 14) o líder aponta para o Téo; um ladrão prepara a corrente
     fortuna(ctx, u, d, api) {
       const cam = camNoite(api, { x: 0.9, y: 1.4, z: 4.4 + u * 0.15, cy: 900, yaw: -0.15 });
       const res = noite(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...LADRAO(3), pose: 'tocha', expressao: 'raiva' }, -0.6, 8.9, 1.85, { olhaPara: [0, 5], luz: { lado: 1, forca: 0.9, cor: 'rgb(255,170,90)', sombra: 0.9 } }) },
         { f: () => api.personagem3d(cam, { ...LADRAO(1), pose: 'faca', expressao: 'raiva' }, 1.7, 8.4, 1.85, { olhaPara: [0, 5], luz: LUZ_LUA }) },
         { f: () => api.personagem3d(cam, { ...LIDER, pose: 'aponta', expressao: 'raiva' }, 0.75, 7.6, 1.9, { olhaPara: [0, 5], luz: LUZ_LUA }) },
       ], {
         forca: 0.3,
-        depois: ([r1]) => { if (r1 && r1.pontoMundo) { const m = r1.pontoMundo('mao_e', [0, 0.25]), m2 = r1.pontoMundo('mao_d', [0, 0.25]); corrente(ctx, [m.x, m.y], [m2.x - 40, m2.y + 30], api.t, api.fase(0.4, 0.8)); } },
+        chao: () => Noite.luzChao(ctx, cam, -0.6, 8.9, 2.8, api.t, 1, 3),
+        depois: ([r0, r1]) => { tochaNaMao(ctx, r0, api.t, 3); if (r1 && r1.pontoMundo) { const m = r1.pontoMundo('mao_e', [0, 0.25]), m2 = r1.pontoMundo('mao_d', [0, 0.25]); corrente(ctx, [m.x, m.y], [m2.x - 40, m2.y + 30], api.t, api.fase(0.4, 0.8)); } },
         fim: () => Valdor.etiqueta(ctx, 540, 380, 'RECOMPENSA: HOMEM-FERA', '#FFB0B0', api.fase(1.0, 1.3, 'volta'), { tam: 52 }),
       });
     },

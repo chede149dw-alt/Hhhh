@@ -210,6 +210,29 @@
         pc.linha(P((p) => { for (const t of [-0.33, 0.33]) { p.moveTo(t * R, y - R * 0.92); p.lineTo(t * R, y + R * 0.92); } }));
       }
     }
+    // cinta de couro cruzada no peito, com tachas e bolsinha (referências 3D: couro com cintas, fivelas e tachas)
+    if (eq.cinta) {
+      const cor = T(eq.cinta.cor), tacha = T(eq.cinta.tachas || 'prata');
+      depois('tronco', (pc) => {
+        if (perfil) return;
+        const s = costas ? -1 : 1, x0 = cx + s * (-hw * 0.78) * k, y0 = shoulderY + 0.06, x1 = cx + s * (hw * 0.82) * k, y1 = hemY - 0.3 * f, w = 0.075;
+        const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy), nx = -dy / L * w, ny = dx / L * w;
+        pc.peca(P((p) => { p.moveTo(x0 - nx, y0 - ny); p.lineTo(x1 - nx, y1 - ny); p.lineTo(x1 + nx, y1 + ny); p.lineTo(x0 + nx, y0 + ny); p.closePath(); }), cor, { sombra: 0.06, espessura: pc.interno * 1.2 });
+        for (let i = 1; i < 6; i++) { const t = i / 6; pc.peca(P((p) => p.arc(x0 + dx * t, y0 + dy * t, 0.022, 0, Math.PI * 2)), tacha, { sombra: 0, espessura: pc.interno * 0.5 }); }
+        const fx = x0 + dx * 0.5, fy = y0 + dy * 0.5;
+        pc.peca(P((p) => p.roundRect(fx - 0.06, fy - 0.06, 0.12, 0.12, 0.02)), tacha, { sombra: 0.05, espessura: pc.interno * 0.7 });
+        if (eq.cinta.bolsa && !costas) pc.peca(P((p) => p.roundRect(x1 - 0.12, y1 - 0.02, 0.22, 0.2, 0.05)), T(eq.cinta.bolsa), { sombra: 0.1 });
+      });
+    }
+    // ombreira com rebites no ombro do braço da frente
+    if (eq.ombreira) {
+      const cor = T(eq.ombreira.cor), reb = T(eq.ombreira.rebites || 'prata');
+      for (const nome of ['braco_d', 'braco_e']) depois(nome, (pc) => {
+        pc.peca(P((p) => { p.moveTo(-0.22, 0.02); p.quadraticCurveTo(-0.24, -0.16, 0, -0.18); p.quadraticCurveTo(0.24, -0.16, 0.22, 0.02); p.quadraticCurveTo(0.24, Lbraco * 0.38, 0, Lbraco * 0.42); p.quadraticCurveTo(-0.24, Lbraco * 0.38, -0.22, 0.02); p.closePath(); }), cor, { sombra: 0.12 });
+        pc.linha(P((p) => { p.moveTo(-0.2, Lbraco * 0.16); p.quadraticCurveTo(0, Lbraco * 0.2, 0.2, Lbraco * 0.16); }), pc.interno, 'rgba(0,0,0,0.35)');
+        for (const [x, y] of [[-0.13, -0.04], [0.13, -0.04], [0, Lbraco * 0.3]]) pc.peca(P((p) => p.arc(x, y, 0.025, 0, Math.PI * 2)), reb, { sombra: 0, espessura: pc.interno * 0.5 });
+      });
+    }
     return def;
   };
 })();

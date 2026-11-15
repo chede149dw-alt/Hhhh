@@ -95,5 +95,44 @@
     ctx.restore();
   }
 
-  window.Noite = { olhos, energia, faiscas, clarao, onda, anelChao };
+  // tocha: cabo de madeira, pano enrolado e chama em camadas tremendo; (x, y) = mão; s = comprimento do cabo em px
+  function tocha(ctx, x, y, s, t, o = {}) {
+    const ang = o.ang || -0.15, seed = o.seed || 1;
+    const fl = (k) => 0.85 + 0.15 * Math.sin(t * (13 + k) + seed * 3) * Math.sin(t * (7.3 + k) + seed);
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+    // halo quente grande
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    const R = s * 3.2 * fl(0), g = ctx.createRadialGradient(0, -s * 1.05, 0, 0, -s * 1.05, R); g.addColorStop(0, 'rgba(255,190,90,0.55)'); g.addColorStop(0.35, 'rgba(255,140,50,0.18)'); g.addColorStop(1, 'rgba(255,120,40,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -s * 1.05, R, 0, TAU); ctx.fill(); ctx.restore();
+    // cabo
+    ctx.fillStyle = '#5A3A22'; ctx.strokeStyle = '#2A1A10'; ctx.lineWidth = Math.max(1.5, s * 0.03);
+    ctx.beginPath(); ctx.roundRect(-s * 0.05, -s * 0.85, s * 0.1, s * 1.05, s * 0.04); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#7A5232'; ctx.fillRect(-s * 0.02, -s * 0.8, s * 0.025, s * 0.95);
+    // pano enrolado
+    ctx.fillStyle = '#6E5440'; ctx.beginPath(); ctx.roundRect(-s * 0.09, -s * 0.98, s * 0.18, s * 0.2, s * 0.05); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(30,18,10,0.6)'; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(-s * 0.09, -s * (0.93 - i * 0.05)); ctx.lineTo(s * 0.09, -s * (0.9 - i * 0.05)); ctx.stroke(); }
+    // chama em camadas
+    ctx.globalCompositeOperation = 'screen';
+    const camadas = [['255,110,30', 0.42, 0.9], ['255,170,50', 0.32, 0.95], ['255,230,140', 0.2, 1], ['255,255,235', 0.1, 1]];
+    camadas.forEach(([cor, w, a], k) => {
+      const h = s * (0.75 - k * 0.13) * fl(k), bal = Math.sin(t * (9 + k * 2) + seed) * s * 0.05;
+      ctx.fillStyle = `rgba(${cor},${a})`; ctx.beginPath(); ctx.moveTo(-s * w * 0.5, -s * 0.96);
+      ctx.quadraticCurveTo(-s * w * 0.7, -s * 0.96 - h * 0.45, bal, -s * 0.96 - h);
+      ctx.quadraticCurveTo(s * w * 0.7, -s * 0.96 - h * 0.45, s * w * 0.5, -s * 0.96); ctx.closePath(); ctx.fill();
+    });
+    // brasas subindo
+    for (let i = 0; i < 6; i++) { const f = (t * 0.9 + i / 6 + seed * 0.13) % 1, px = Math.sin(t * 3 + i * 2 + seed) * s * 0.25 * f, py = -s * 1.2 - f * s * 1.4; ctx.fillStyle = `rgba(255,200,90,${(1 - f) * 0.9})`; ctx.beginPath(); ctx.arc(px, py, s * 0.025 * (1 - f) + 1, 0, TAU); ctx.fill(); }
+    ctx.restore();
+  }
+  // poça de luz quente da tocha no chão (perspectiva da câmera)
+  function luzChao(ctx, cam, X, Z, raio, t, k = 1, seed = 1) {
+    const q = cam.p(X, 0, Z); if (q.dz < 0.5 || k <= 0) return;
+    const fl = 0.85 + 0.15 * Math.sin(t * 11 + seed * 2) * Math.sin(t * 5.7 + seed);
+    const rx = raio * q.s, ry = rx * Math.min(0.5, (cam.y + 0.2) / Math.max(1, q.dz) * 1.6 + 0.12);
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(q.x, q.y); ctx.scale(1, ry / rx);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx); g.addColorStop(0, `rgba(255,170,80,${0.45 * k * fl})`); g.addColorStop(0.5, `rgba(255,130,50,${0.18 * k * fl})`); g.addColorStop(1, 'rgba(255,110,40,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, rx, 0, TAU); ctx.fill(); ctx.restore();
+  }
+
+  window.Noite = { olhos, energia, faiscas, clarao, onda, anelChao, tocha, luzChao };
 })();

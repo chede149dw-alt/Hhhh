@@ -78,3 +78,19 @@ Esta é uma referência de **formato e linguagem visual**. A história, os nomes
 | Interface de vidro (cartas, painel, barras) | Não existe | Criar efeito novo `holograma` |
 | Close de mãos com celular | Existe `motor/mao-detalhe.js` | Reaproveitar e criar o celular |
 | Sem cartela de "PARTE X" no fim | Cartela "PARTE X" obrigatória | Manter a nossa cartela (é regra do autor) |
+
+## Referências 3D novas (ref-3d-01.mp4 e ref-3d-02.mp4, 15/11)
+Mesmo formato (narrador, legenda branca com palavra amarela, ciência em raio-X azul), mas com cenário e câmera de nível maior:
+- **Cenário 3D com textura:** túnel de pedra abobadado, tijolos em perspectiva com variação de tom, piso em lajes; profundidade real
+  (ponto de fuga no fim do corredor), poeira no ar, feixes de luz azul vindos do teto.
+- **Luz:** tochas com chama tremendo, halo quente e poça de luz no piso; contraste quente (tocha) × frio (azul da noite/breu).
+  Vinheta escura forte nas bordas.
+- **Enquadramento:** personagem grande (50–80% da altura do quadro) em plano médio/americano, close de rosto com o fundo desfocado
+  (profundidade de campo), câmera baixa olhando o corredor, POV nos pés descendo a escada, por cima do ombro.
+- **Movimento:** câmera acompanha o grupo andando (travelling), personagens escalonados em profundidade (um atrás do outro),
+  virados para a ação; quando alguém age, a câmera fecha nele.
+- **Roupas:** armadura de placas com rebites e pluma vermelha, couro com cintas, fivelas e tachas, capuz de couro, chapéu de mago,
+  capuz verde de arqueiro com aljava. Mesmo estilo chapado, mas com muito mais detalhe de figurino.
+- **Interface do jogo:** barra "Aluguel R$ 1.800" com moeda no alto (progresso do objetivo), vida verde em cima da cabeça,
+  barra de mana do mago, contador circular "3 s" na tocha.
+- **Criaturas:** esqueletos com ossos bem construídos, olhos azuis brilhando, espada; desmontam em ossos no chão.

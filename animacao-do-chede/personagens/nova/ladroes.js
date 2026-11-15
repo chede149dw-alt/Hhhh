@@ -46,6 +46,7 @@
     faca: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 55, antebraco_d: 60, mao_d: -10, braco_e: -20, antebraco_e: -30, coxa_d: -10, canela_d: 15, coxa_e: 12, canela_e: 10, tronco: 6, _desloca: [0, 0.08] } },
     aponta: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 88, antebraco_d: 0, mao_d: 0, braco_e: -8, antebraco_e: -10, coxa_d: -4, coxa_e: 6 } },
     caido: { vista: 'perfil', expressao: 'medo', angulos: { tronco: -70, cabeca: -20, braco_d: -120, antebraco_d: -20, braco_e: -100, antebraco_e: -30, coxa_d: -60, canela_d: 30, coxa_e: -40, canela_e: 20, _desloca: [0, 1.6] } },
+    tocha: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 30, antebraco_d: 45, mao_d: -10, braco_e: -38, antebraco_e: -115, mao_e: 10, coxa_d: -6, canela_d: 8, coxa_e: 8, canela_e: 6, tronco: 4 } },
     abrindoCapa: { vista: 'frente', expressao: 'raiva', angulos: { braco_d: 70, antebraco_d: -30, braco_e: -70, antebraco_e: 30, coxa_d: 6, coxa_e: -6 } },
   };
   window.criarLadrao = (o = {}, vista = 'frente') => {
@@ -61,8 +62,8 @@
       poses: Object.fromEntries(Object.entries(window.LADRAO_POSES).map(([k, x]) => [k, x.angulos])),
     };
     const eq = lider
-      ? { gola: 'prata', manto: { cor: 'vinho', barra: 'carvao' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'armaduraEscura', cano: 0.5 }, bracadeira: 'armaduraEscura', adagaCinto: o.semAdaga ? undefined : { epica: true } }
-      : { cinto: { cor: 'couroLadrao', fivela: 'carvao', bolsa: 'couroLadrao' }, botas: { cor: 'couroLadrao', cano: 0.4 }, bracadeira: 'couroLadrao', arma: o.semFaca ? undefined : { tipo: 'adaga', mao: 'd' } };
+      ? { gola: 'prata', manto: { cor: 'vinho', barra: 'carvao' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'armaduraEscura', cano: 0.5 }, bracadeira: 'armaduraEscura', cinta: { cor: 'carvao', tachas: 'prata' }, ombreira: { cor: 'armaduraEscura', rebites: 'prata' }, adagaCinto: o.semAdaga ? undefined : { epica: true } }
+      : { cinto: { cor: 'couroLadrao', fivela: 'carvao', bolsa: 'couroLadrao' }, botas: { cor: 'couroLadrao', cano: 0.4 }, bracadeira: 'couroLadrao', cinta: { cor: 'couroLadrao', tachas: 'prata', bolsa: 'carvao' }, ombreira: { cor: 'couroLadrao', rebites: 'prata' }, arma: o.semFaca ? undefined : { tipo: 'adaga', mao: 'd' } };
     const def = window.equipar(window.criarPersonagem(opc, vista), eq);
     vestirCabeca(def, lider ? 'vinho' : v.capuz, 'mascara', lider ? 'rgba(200,40,60,0.9)' : null);
     return def;
