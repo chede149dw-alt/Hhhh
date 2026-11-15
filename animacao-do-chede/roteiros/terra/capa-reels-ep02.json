@@ -1,0 +1,20 @@
+{
+ "serie": "terra",
+ "scripts": [
+  "motor/vendor/three-r160.min.js",
+  "cenarios/terra-3d.js",
+  "efeitos/terra-p2.js",
+  "personagens/golem/golem.js"
+ ],
+ "planos": [
+  {
+   "id": "capaReels",
+   "duracao": 3,
+   "cinema": {
+    "quente": 0.12,
+    "vinheta": 0.75,
+    "bloom": 0.9
+   }
+  }
+ ]
+}

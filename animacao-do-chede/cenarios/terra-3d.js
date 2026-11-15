@@ -137,7 +137,7 @@
     const cachos = [];
     for (let i = 0; i < 26; i++) { const a = r() * TAU, d = 0.72 + r() * 0.24; cachos.push([CX + Math.cos(a) * raioParede(a) * d, CZ + Math.sin(a) * raioParede(a) * d, 0.7 + r() * 1.8]); }
     for (const c of [[-4.6, 10.4, 1.1], [6.2, 8.6, 1.3], [2.4, 13.8, 1.6], [-4.4, 13, 1.2], [5.5, 10.5, 1.0], [-1.6, 14.4, 1.4]]) cachos.push(c);
-    for (let i = cachos.length - 1; i >= 0; i--) if (Math.hypot(cachos[i][0] - 5.5, cachos[i][1] - 1.5) < 3.2 || Math.hypot(cachos[i][0] + 2.5, cachos[i][1] - 3.4) < 2.5) cachos.splice(i, 1);
+    for (let i = cachos.length - 1; i >= 0; i--) if (Math.hypot(cachos[i][0] - 5.5, cachos[i][1] - 1.5) < 3.2 || Math.hypot(cachos[i][0] + 2.5, cachos[i][1] - 3.4) < 2.5 || Math.hypot(cachos[i][0] + 9.0, cachos[i][1] - 6.7) < 3.2 || Math.hypot(cachos[i][0] + 6.0, cachos[i][1] - 7.4) < 2.6) cachos.splice(i, 1);
     const brilhoTex = textura(texBrilho('255,150,60'));
     { const total = cachos.length * 6, m = new T.InstancedMesh(geoCristal, cristalMat, total), o = new T.Object3D(); let k = 0;
       for (const [x, z, s] of cachos) { const n = 3 + Math.floor(r() * 4); for (let j = 0; j < n && k < total; j++, k++) { o.position.set(x + (r() - 0.5) * s * 0.6, 0, -(z + (r() - 0.5) * s * 0.5)); o.rotation.set((r() - 0.5) * 0.9, r() * 3, (r() - 0.5) * 0.9); const h = s * (0.5 + r() * 0.8); o.scale.set(h * 0.9, h, h * 0.9); o.updateMatrix(); m.setMatrixAt(k, o.matrix); } }
@@ -175,6 +175,11 @@
     const muroDados = Array.from({ length: 7 }, () => ({ h: 0.82 + r() * 0.32, d: 0.5 + r() * 0.2, atraso: r() * 0.25, giro: (r() - 0.5) * 0.15 }));
     const muroRacha = new T.Mesh(new T.PlaneGeometry(0.5, 1.8), new T.MeshBasicMaterial({ map: textura(tela(64, 256, (g) => { g.strokeStyle = '#ffd59a'; g.shadowColor = '#ff8a30'; g.shadowBlur = 12; g.lineWidth = 6; g.beginPath(); g.moveTo(32, 0); g.lineTo(20, 70); g.lineTo(42, 120); g.lineTo(24, 180); g.lineTo(36, 256); g.stroke(); })), transparent: true, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
     muroRacha.visible = false; cena.add(muroRacha);
+    // coluna de pedra que o Lucas lança (sobe do chão inclinada) e pedras que caem do teto quando a caverna treme
+    const coluna = new T.Mesh(deformar(new T.CylinderGeometry(0.32, 0.5, 1, 7, 4).translate(0, 0.5, 0), (v) => { v.x *= 1 + 0.12 * (hash(v.y * 9, v.z * 4) - 0.5); v.z *= 1 + 0.12 * (hash(v.x * 5, v.y * 7) - 0.5); }), std({ map: rocha2, color: 0xb4a2a6 }));
+    coluna.castShadow = true; coluna.receiveShadow = true; coluna.visible = false; cena.add(coluna);
+    const queda = new T.InstancedMesh(new T.DodecahedronGeometry(1, 0), std({ map: rocha, color: 0xa894b0 }), 40); queda.castShadow = true; queda.count = 0; cena.add(queda);
+    const quedaDados = Array.from({ length: 40 }, () => ({ a: r() * TAU, d: 0.6 + Math.sqrt(r()) * 4.5, atraso: r() * 1.6, s: 0.06 + Math.pow(r(), 2) * 0.22, giro: r() * 6 }));
 
     // ===== túnel da escada (em x = 60) =====
     const tunel = new T.Group(); cena.add(tunel);
@@ -203,7 +208,7 @@
       const fundoS = new T.Sprite(new T.SpriteMaterial({ map: brilhoTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.9 })); fundoS.position.copy(fundoL.position); fundoS.scale.set(10, 10, 1); tunel.add(fundoS); }
 
     const luzCristal = [...cachos].sort((a, b) => b[2] - a[2]).slice(0, 8).map((c) => { const p = new T.PointLight(0xff9a40, 0, 7, 1.8); p.position.set(c[0], c[2] * 0.6, -c[1]); cena.add(p); return { p, c }; });
-    R = { sol, luzCristal, renderer, canvas, cena, camera, uni, spot, nucleoLuz, pontos, nucleo, nucleoMat, aura, orbitam, orbDados, onda, poeira, muro, muroDados, muroRacha, cachos, hemi };
+    R = { coluna, queda, quedaDados, cristalMat, sol, luzCristal, renderer, canvas, cena, camera, uni, spot, nucleoLuz, pontos, nucleo, nucleoMat, aura, orbitam, orbDados, onda, poeira, muro, muroDados, muroRacha, cachos, hemi };
   }
 
   function ajustaCamera(cam, near, far) {
@@ -233,6 +238,14 @@
       R.sol.position.set(cx0 - fx * 7 - fz * 6, y0 + 16, -(cz0 - fz * 7 + fx * 6)); R.sol.intensity = (o.sol === undefined ? 5.5 : o.sol) * (0.9 + 0.1 * Math.sin(t * 1.3) * Math.sin(t * 3.7 + 1)); }
     R.cena.background.set(Math.abs(cam.x - X0) < 20 ? 0x0e080b : 0x1c1424);
     if (ladosTunel) { const dx = cam.x - X0; for (const l of [-1, 1]) ladosTunel[l].visible = !(Math.abs(dx) > PX - 0.1 && Math.sign(dx) === l); }
+    // coluna: o.coluna = { x, z, altura, k (0..1 sobe), incl (rad, inclinação), giro (rad, para onde inclina) }
+    { const c = o.coluna; if (c && c.k > 0.01) { R.coluna.visible = true; R.coluna.position.set(c.x, -0.05, -c.z); R.coluna.rotation.set(0, c.giro || 0, 0); R.coluna.rotateX(c.incl || 0); R.coluna.scale.set(c.grossura || 1, (c.altura || 2.4) * Math.min(1, c.k), c.grossura || 1); } else R.coluna.visible = false; }
+    // pedras caindo: o.queda = { x, z, s (segundos desde o começo) }
+    { const q = o.queda; if (q) { const ob = new T.Object3D(); let k = 0;
+        R.quedaDados.forEach((d) => { const tt = q.s - d.atraso; if (tt < 0) return; const y = Math.max(d.s * 0.4, 7.5 - 4.9 * tt * tt); ob.position.set(q.x + Math.cos(d.a) * d.d, y, -(q.z + Math.sin(d.a) * d.d)); ob.rotation.set(d.giro + tt * 3, d.giro, 0); ob.scale.setScalar(d.s); ob.updateMatrix(); R.queda.setMatrixAt(k++, ob.matrix); });
+        R.queda.count = k; R.queda.instanceMatrix.needsUpdate = true; } else R.queda.count = 0; }
+    // cristais piscando (o.piscar 0..1) quando a caverna treme
+    R.cristalMat.emissiveIntensity = 1.3 * (o.piscar ? (1 - o.piscar * 0.8 * (Math.sin(t * 37) > 0.2 ? 1 : 0) * (Math.sin(t * 11) > -0.3 ? 1 : 0.3)) : 1);
     // muro
     const mu = o.muro;
     if (mu && mu.sobe > 0) {

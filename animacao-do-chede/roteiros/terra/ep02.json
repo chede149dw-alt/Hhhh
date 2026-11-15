@@ -1,0 +1,667 @@
+{
+ "serie": "E se você acordasse controlando a terra?",
+ "episodio": 2,
+ "parte": 2,
+ "versao": "3d",
+ "vozes": {
+  "narrador": "ElevenLabs Torlien (T2qRqqooUigDNZPs6usG)",
+  "mae": "ElevenLabs Juliana Moreira (dxIMMSJYSsbUSMhioLNb)",
+  "lucas": "ElevenLabs Lucas Gabriel (jGMGxcV5sW7h4qUUl30i)",
+  "rafael": "ElevenLabs Davi Leão (6PhbMr9YjdeOaTNz9y24)",
+  "terra": "ElevenLabs Brad (9z2KRE0crZu7bZt1ZfUH), grave + eco",
+  "modelo": "eleven_v4"
+ },
+ "scripts": [
+  "motor/vendor/three-r160.min.js",
+  "cenarios/terra-3d.js",
+  "efeitos/terra-p2.js",
+  "personagens/golem/golem.js"
+ ],
+ "planos": [
+  {
+   "id": "capa",
+   "duracao": 3.54,
+   "fala": {
+    "texto": "E se você acordasse controlando a terra?",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/capa.wav"
+    }
+   },
+   "destaque": [
+    "TERRA?"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "volume": 0.9
+    }
+   ]
+  },
+  {
+   "id": "lembra",
+   "duracao": 3.06,
+   "fala": {
+    "texto": "Ontem, o Lucas descobriu um poder.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/lembra.wav"
+    }
+   },
+   "destaque": [
+    "PODER."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.6
+   },
+   "sfx": []
+  },
+  {
+   "id": "acordou",
+   "duracao": 3.74,
+   "fala": {
+    "texto": "E alguma coisa acordou junto com ele.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/acordou.wav"
+    }
+   },
+   "destaque": [
+    "ACORDOU"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "coracao",
+     "bpm": 62
+    }
+   ]
+  },
+  {
+   "id": "meianoite",
+   "duracao": 3.39,
+   "fala": {
+    "texto": "Meia-noite. Ele não consegue dormir.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/meianoite.wav"
+    }
+   },
+   "destaque": [
+    "MEIA-NOITE."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.6
+   },
+   "sfx": [
+    {
+     "tipo": "coracao",
+     "bpm": 66
+    }
+   ]
+  },
+  {
+   "id": "chamado",
+   "duracao": 2.28,
+   "fala": {
+    "texto": "Lucas...",
+    "voz": "terra",
+    "voz_final": {
+     "arquivo": "vozes/final/chamado.wav"
+    }
+   },
+   "destaque": [
+    "LUCAS"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.6
+   },
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "volume": 0.7
+    }
+   ]
+  },
+  {
+   "id": "abre",
+   "duracao": 3.2,
+   "fala": {
+    "texto": "A rachadura embaixo da cama se abre.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/abre.wav"
+    }
+   },
+   "destaque": [
+    "ABRE."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "volume": 1.4
+    }
+   ]
+  },
+  {
+   "id": "desce",
+   "duracao": 1.57,
+   "fala": {
+    "texto": "E ele desce.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/desce.wav"
+    }
+   },
+   "destaque": [
+    "DESCE."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "espera",
+   "duracao": 2.0,
+   "fala": {
+    "texto": "Lucas! Espera!",
+    "voz": "rafael",
+    "voz_final": {
+     "arquivo": "vozes/final/espera.wav"
+    }
+   },
+   "destaque": [
+    "ESPERA!"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "medo",
+   "duracao": 3.77,
+   "fala": {
+    "texto": "Eu fiquei com medo... mas não vou te deixar sozinho.",
+    "voz": "rafael",
+    "voz_final": {
+     "arquivo": "vozes/final/medo.wav"
+    }
+   },
+   "destaque": [
+    "SOZINHO."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "valeu",
+   "duracao": 1.69,
+   "fala": {
+    "texto": "Valeu, cara.",
+    "voz": "lucas",
+    "voz_final": {
+     "arquivo": "vozes/final/valeu.wav"
+    }
+   },
+   "destaque": [],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "caverna",
+   "duracao": 4.47,
+   "fala": {
+    "texto": "Lá embaixo, uma caverna gigante de cristais.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/caverna.wav"
+    }
+   },
+   "destaque": [
+    "CRISTAIS."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "desenhos",
+   "duracao": 3.09,
+   "fala": {
+    "texto": "Nas paredes, desenhos antigos...",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/desenhos.wav"
+    }
+   },
+   "destaque": [
+    "ANTIGOS"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "criancas",
+   "duracao": 3.35,
+   "fala": {
+    "texto": "de crianças com poderes iguais ao dele.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/criancas.wav"
+    }
+   },
+   "destaque": [
+    "PODERES"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "unico",
+   "duracao": 2.1,
+   "fala": {
+    "texto": "Você não é o único.",
+    "voz": "rafael",
+    "voz_final": {
+     "arquivo": "vozes/final/unico.wav"
+    }
+   },
+   "destaque": [
+    "ÚNICO."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "coracao",
+   "duracao": 4.73,
+   "fala": {
+    "texto": "No centro, um coração de pedra bate no mesmo ritmo que o dele.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/coracao.wav"
+    }
+   },
+   "destaque": [
+    "CORAÇÃO",
+    "RITMO"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "coracao",
+     "bpm": 66
+    }
+   ]
+  },
+  {
+   "id": "mao",
+   "duracao": 1.66,
+   "fala": {
+    "texto": "Ele encosta a mão...",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/mao.wav"
+    }
+   },
+   "destaque": [
+    "MÃO"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "coracao",
+     "bpm": 80
+    }
+   ]
+  },
+  {
+   "id": "guardiao",
+   "duracao": 3.49,
+   "fala": {
+    "texto": "Guardião... eles estão vindo.",
+    "voz": "terra",
+    "voz_final": {
+     "arquivo": "vozes/final/guardiao.wav"
+    }
+   },
+   "destaque": [
+    "GUARDIÃO...",
+    "VINDO."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.6
+   },
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "volume": 1.0
+    }
+   ]
+  },
+  {
+   "id": "treme",
+   "duracao": 2.38,
+   "fala": {
+    "texto": "Então a caverna treme.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/treme.wav"
+    }
+   },
+   "destaque": [
+    "TREME."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "volume": 1.8
+    },
+    {
+     "tipo": "impacto",
+     "em": 0.2,
+     "volume": 1.0
+    }
+   ]
+  },
+  {
+   "id": "levanta",
+   "duracao": 2.35,
+   "fala": {
+    "texto": "E o chão se levanta.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/levanta.wav"
+    }
+   },
+   "destaque": [
+    "LEVANTA."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "ronco",
+     "volume": 1.5
+    }
+   ]
+  },
+  {
+   "id": "avanca",
+   "duracao": 2.04,
+   "fala": {
+    "texto": "E ele avança no Rafael!",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/avanca.wav"
+    }
+   },
+   "destaque": [
+    "RAFAEL!"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 1.2,
+     "volume": 0.8
+    }
+   ]
+  },
+  {
+   "id": "muro",
+   "duracao": 2.99,
+   "fala": {
+    "texto": "O Lucas ergue um muro de pedra.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/muro.wav"
+    }
+   },
+   "destaque": [
+    "MURO"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 0.5,
+     "volume": 1.0
+    },
+    {
+     "tipo": "impacto",
+     "em": 2.1,
+     "volume": 1.4
+    }
+   ]
+  },
+  {
+   "id": "manda",
+   "duracao": 2.54,
+   "fala": {
+    "texto": "E manda a terra contra ele!",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/manda.wav"
+    }
+   },
+   "destaque": [
+    "TERRA"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 0.9,
+     "volume": 1.6
+    }
+   ]
+  },
+  {
+   "id": "naoataca",
+   "duracao": 3.0,
+   "fala": {
+    "texto": "Mas o golem não ataca de novo...",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/naoataca.wav"
+    }
+   },
+   "destaque": [
+    "GOLEM"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "ajoelha",
+   "duracao": 3.18,
+   "fala": {
+    "texto": "Ele se ajoelha. Pro Lucas.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/ajoelha.wav"
+    }
+   },
+   "destaque": [
+    "AJOELHA.",
+    "LUCAS."
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": [
+    {
+     "tipo": "impacto",
+     "em": 0.9,
+     "volume": 0.7
+    }
+   ]
+  },
+  {
+   "id": "passos",
+   "duracao": 2.02,
+   "fala": {
+    "texto": "Passos atrás deles.",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/passos.wav"
+    }
+   },
+   "destaque": [
+    "PASSOS"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.6
+   },
+   "sfx": []
+  },
+  {
+   "id": "mae",
+   "duracao": 3.83,
+   "fala": {
+    "texto": "Lucas... eu sabia que esse dia ia chegar.",
+    "voz": "mae",
+    "voz_final": {
+     "arquivo": "vozes/final/mae.wav"
+    }
+   },
+   "destaque": [
+    "DIA"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "maeq",
+   "duracao": 1.37,
+   "fala": {
+    "texto": "Mãe?!",
+    "voz": "lucas",
+    "voz_final": {
+     "arquivo": "vozes/final/maeq.wav"
+    }
+   },
+   "destaque": [
+    "MÃE?!"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  },
+  {
+   "id": "parte",
+   "duracao": 3.11,
+   "fala": {
+    "texto": "Segue pra ver a parte três!",
+    "voz": "narrador",
+    "voz_final": {
+     "arquivo": "vozes/final/segue.wav"
+    }
+   },
+   "destaque": [
+    "TRÊS!"
+   ],
+   "cinema": {
+    "quente": 0.08,
+    "vinheta": 0.7,
+    "bloom": 0.8
+   },
+   "sfx": []
+  }
+ ]
+}
