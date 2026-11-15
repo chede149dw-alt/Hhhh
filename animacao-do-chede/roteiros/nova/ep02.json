@@ -12,6 +12,8 @@
   "personagens/nova/teo/teo-fera.js",
   "personagens/nova/teo/teo-lobisomem.js",
   "personagens/nova/ladroes.js",
+  "motor/vendor/three-r160.min.js",
+  "cenarios/valdor-3d.js",
   "cenarios/valdor-campo.js",
   "cenarios/valdor-noite.js",
   "efeitos/criaturas.js",

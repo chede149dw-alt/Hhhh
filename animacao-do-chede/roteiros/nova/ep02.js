@@ -14,7 +14,7 @@
   const TEOF = { fabrica: 'criarTeoFerro', registroPoses: 'POSES_PADRAO' };
   const LUZ_CAMPO = { lado: 1, forca: 0.9, cor: 'rgb(255,200,130)', sombra: 0.75 };
   const LUZ_LUA = { lado: -1, forca: 0.85, cor: 'rgb(150,185,255)', sombra: 1 };
-  const V = () => Cenarios3D.valdorNoite;
+  const V = () => Valdor3D;
   const alturaH = (item, vista = 'frente') => window[item.fabrica](item.opcoes || {}, vista).alturaEmH;
   const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const chave = (T, lista) => { if (T <= lista[0][0]) return lista[0][1]; for (let i = 0; i < lista.length - 1; i++) { const [t0, v0] = lista[i], [t1, v1] = lista[i + 1]; if (T <= t1) { const k0 = (T - t0) / (t1 - t0), k = k0 * k0 * (3 - 2 * k0); return v0 + (v1 - v0) * k; } } return lista[lista.length - 1][1]; };
@@ -26,9 +26,9 @@
 
   // ---------- fundos ----------
   function campoDia(ctx, api, camOpts, o = {}) {
-    const cam = api.camera({ f: 1150, x: 0, y: 1.45, z: 0, cy: 860, nevoa: Cenarios3D.valdor.nevoa, ...camOpts });
-    if (o.desfoque) { const c = api.camada(); Cenarios3D.valdor.desenhar(c.getContext('2d'), cam, { t: api.t }); api.desfocar(c, o.desfoque); Cenarios3D.valdor.luz(ctx, cam, { t: api.t }); }
-    else Cenarios3D.valdor.desenhar(ctx, cam, { t: api.t });
+    const cam = api.camera({ f: 1150, x: 0, y: 1.45, z: 0, cy: 860, nevoa: Valdor3D.nevoa(0, true), ...camOpts });
+    if (o.desfoque) { const c = api.camada(); Valdor3D.desenhar(c.getContext('2d'), cam, { t: api.t, dia: true }); api.desfocar(c, o.desfoque); }
+    else Valdor3D.desenhar(ctx, cam, { t: api.t, dia: true });
     return cam;
   }
   // cena de noite com cada personagem numa camada (tom de noite + cor extra), efeitos de câmera no fim
@@ -45,11 +45,13 @@
     }
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.restore();
     const tc = o.t === undefined ? api.t : o.t;
-    if (o.desfoque) { const F = api.camada(); V().desenhar(F.getContext('2d'), cam, { t: tc, noite: n }); api.desfocar(F, o.desfoque); } else V().desenhar(ctx, cam, { t: tc, noite: n });
+    // perto: o que fica a menos disso (m) da câmera vai para o primeiro plano, na frente dos personagens (desfocado)
+    const perto = o.forca === 0 ? 0 : o.perto === undefined ? 1.2 : o.perto, luzes = o.luzes;
+    if (o.desfoque) { const F = api.camada(); V().desenhar(F.getContext('2d'), cam, { t: tc, noite: n, perto, luzes }); api.desfocar(F, o.desfoque); } else V().desenhar(ctx, cam, { t: tc, noite: n, perto, luzes });
     if (o.chao) o.chao(res);
     for (const [L, a] of camadas) { ctx.save(); ctx.globalAlpha = a; ctx.drawImage(L, 0, 0); ctx.restore(); }
     if (o.depois) o.depois(res);
-    V().frente(ctx, cam, { t: tc, noite: n, forca: o.forca === undefined ? 0.5 : o.forca });
+    V().frente(ctx, cam, { t: tc, noite: n, forca: o.forca === undefined ? 0.5 : o.forca, perto, luzes });
     if (o.fx) camFx(ctx, api, o.fx);
     if (o.fim) o.fim(res);
     return res;
@@ -202,7 +204,7 @@
       const q = cam.p(LX, 0.45, LZ); Combate.impacto(ctx, q.x, q.y, 140, uu - 0.25, { dura: 0.4, seed: i + 2 });
       const qd = cam.p(-0.6, 2.05, 4.4); Valdor.placaNivel(ctx, qd.x, qd.y, 2 + i, 1 + 0.3 * Math.max(0, 1 - uu * 4), { tam: 42, cor: AMARELO });
       const qt = cam.p(0.4, 2.1, 4.0); Combate.vidaCabeca(ctx, qt.x, qt.y, 0.7 * qt.s, 1); Combate.vidaCabeca(ctx, qd.x, qd.y - 0.22 * qd.s, 0.7 * qd.s, 1, { mana: 0.4 + 0.5 * Math.abs(Math.sin(api.t * 1.5)) });
-      Cenarios3D.valdor.frente(ctx, cam, { t: api.t, forca: 0.6 });
+      Valdor3D.luz(ctx, cam, { t: api.t, dia: true });
       const v = 7.9 + 1.5 * (u / d); Combate.aluguel(ctx, v / ALUGUEL_META, reaisTxt(v), { dias: '29 DIAS' });
     },
     // 4) loots caindo em cartas de vidro
@@ -308,11 +310,13 @@
     // 12) olhos acendendo entre as árvores
     sozinhos(ctx, u, d, api) {
       const cam = camNoite(api, { x: 0.3, y: 1.2, z: 0.2 + u * 0.4, cy: 880, yaw: 0.25 });
+      const pares = [[3.2, 9, 0.2], [5.5, 11, 0.45], [1.6, 12, 0.7], [7.2, 13, 0.95], [4.4, 15, 1.2]];
       noite(ctx, api, cam, [], {
         forca: 0.4,
+        luzes: pares.slice(0, 4).map(([X, Z, t0]) => ({ x: X + 0.35, y: 1.9, z: Z, cor: '#FFB066', forca: 0.9 * api.fase(t0 + 0.1, t0 + 0.35) })),
         depois: () => {
-          const pares = [[3.2, 9, 0.2], [5.5, 11, 0.45], [1.6, 12, 0.7], [7.2, 13, 0.95], [4.4, 15, 1.2]];
-          for (const [X, Z, t0] of pares) { const k = api.fase(t0 + 0.1, t0 + 0.35); if (k <= 0) continue; Noite.luzChao(ctx, cam, X + 0.3, Z, 2.4, api.t, k, X); const q = cam.p(X + 0.35, 1.9, Z); Noite.tocha(ctx, q.x, q.y + 0.5 * q.s, 0.55 * q.s, api.t, { seed: X }); }
+          const _p = [[3.2, 9, 0.2], [5.5, 11, 0.45], [1.6, 12, 0.7], [7.2, 13, 0.95], [4.4, 15, 1.2]];
+          for (const [X, Z, t0] of pares) { const k = api.fase(t0 + 0.1, t0 + 0.35); if (k <= 0) continue; const q = cam.p(X + 0.35, 1.9, Z); Noite.tocha(ctx, q.x, q.y + 0.5 * q.s, 0.55 * q.s, api.t, { seed: X }); }
           for (const [X, Z, t0] of pares) { const q = cam.p(X, 1.6, Z), k = api.fase(t0, t0 + 0.2); if (k <= 0) continue; const sep = 0.09 * q.s; Noite.olhos(ctx, [[q.x - sep, q.y], [q.x + sep, q.y]], Math.max(4, 0.035 * q.s), k * (0.7 + 0.3 * Math.sin(api.t * 3 + X)), api.t); }
         },
       });
@@ -329,7 +333,7 @@
       ];
       noite(ctx, api, cam, ents.reverse(), {
         forca: 0.35,
-        chao: () => pos.forEach(([x, z], i) => { if (i % 2) Noite.luzChao(ctx, cam, x, z, 2.6, api.t, 1, i); }),
+        luzes: pos.filter((_, i) => i % 2).map(([x, z]) => ({ x: x + 0.3, y: 1.7, z, cor: '#FFB066', forca: 0.9 })),
         depois: (rs) => { const ladr = rs.slice().reverse().slice(2); ladr.forEach((r, i) => { if (i % 2) tochaNaMao(ctx, r, api.t, i); }); const qt = cam.p(1.05, 2.75, 5.0), qd = cam.p(-1.0, 2.0, 5.3); Combate.vidaCabeca(ctx, qt.x, qt.y, 0.7 * qt.s, 1); Combate.vidaCabeca(ctx, qd.x, qd.y, 0.6 * qd.s, 1, { mana: 0.8 });
           pos.forEach(([x, z], i) => { const q = cam.p(x, 2.15, z); Valdor.placaNivel(ctx, q.x, q.y, [12, 13, 15, 14, 12][i], api.fase(1.0 + i * 0.1, 1.3 + i * 0.1, 'volta'), { tam: 34, cor: i === 2 ? '#FF6A7A' : '#FFB0B0' }); }); },
       });
@@ -343,7 +347,7 @@
         { f: () => api.personagem3d(cam, { ...LIDER, pose: 'aponta', expressao: 'raiva' }, 0.75, 7.6, 1.9, { olhaPara: [0, 5], luz: LUZ_LUA }) },
       ], {
         forca: 0.3,
-        chao: () => Noite.luzChao(ctx, cam, -0.6, 8.9, 2.8, api.t, 1, 3),
+        luzes: [{ x: -0.3, y: 1.7, z: 8.9, cor: '#FFB066', forca: 1 }],
         depois: ([r0, r1]) => { tochaNaMao(ctx, r0, api.t, 3); if (r1 && r1.pontoMundo) { const m = r1.pontoMundo('mao_e', [0, 0.25]), m2 = r1.pontoMundo('mao_d', [0, 0.25]); corrente(ctx, [m.x, m.y], [m2.x - 40, m2.y + 30], api.t, api.fase(0.4, 0.8)); } },
         fim: () => Valdor.etiqueta(ctx, 540, 380, 'RECOMPENSA: HOMEM-FERA', '#FFB0B0', api.fase(1.0, 1.3, 'volta'), { tam: 52 }),
       });
