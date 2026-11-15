@@ -1,0 +1,22 @@
+{
+  "serie": "teste-masmorra",
+  "episodio": 1,
+  "parte": 1,
+  "status": "teste de movimentação",
+  "planos": [
+    { "id": "capa", "duracao": 3.0, "fala": { "texto": "E se você achasse uma masmorra embaixo da escola?", "voz": "narrador", "velocidade": 215 }, "destaque": ["MASMORRA"],
+      "cinema": { "quente": 0.15, "vinheta": 1.0, "bloom": 0.7 }, "sfx": [{ "tipo": "ronco", "volume": 0.8 }], "camera": { "tomada": true, "forca": 0.6 } },
+    { "id": "entrada", "fala": { "texto": "Eles desceram sem contar pra ninguém.", "voz": "narrador", "velocidade": 170 }, "destaque": ["NINGUÉM."],
+      "cinema": { "quente": 0.15, "vinheta": 1.0, "bloom": 0.7 }, "camera": { "tomada": true, "continua": true, "forca": 0.6 } },
+    { "id": "placa", "fala": { "texto": "Primeiro andar.", "voz": "narrador", "velocidade": 160 }, "destaque": ["ANDAR."],
+      "cinema": { "quente": 0.15, "vinheta": 1.0, "bloom": 0.6 } },
+    { "id": "pes", "fala": { "texto": "Cada passo ecoava lá no fundo.", "voz": "narrador", "velocidade": 168 }, "destaque": ["ECOAVA"],
+      "cinema": { "quente": 0.15, "vinheta": 1.0, "bloom": 0.6 }, "sfx": [{ "tipo": "coracao", "bpm": 76 }] },
+    { "id": "tocha", "duracao": 2.8, "fala": { "texto": "E aí... alguma coisa respirou.", "voz": "narrador", "velocidade": 165 }, "destaque": ["RESPIROU."],
+      "cinema": { "quente": 0.2, "vinheta": 1.0, "bloom": 0.8 }, "sfx": [{ "tipo": "coracao", "bpm": 96 }] },
+    { "id": "revela", "duracao": 2.9, "fala": { "texto": "O Rafael levantou a tocha.", "voz": "narrador", "velocidade": 165 }, "destaque": ["TOCHA."],
+      "cinema": { "quente": 0.2, "vinheta": 1.0, "bloom": 0.8 }, "sfx": [{ "tipo": "impacto", "em": 1.6, "volume": 0.7 }], "camera": { "tomada": true, "forca": 0.7 } },
+    { "id": "parte", "duracao": 2.4, "fala": { "texto": "Segue pra ver a parte dois!", "voz": "narrador", "velocidade": 175 },
+      "cinema": { "quente": 0.05, "vinheta": 1.0, "bloom": 0.8 } }
+  ]
+}

@@ -129,6 +129,16 @@
       "onde": "episódio 1 da terra, postado"
     },
     {
+      "arquivo": "cenarios/masmorra-3d.js",
+      "tipo": "cenário",
+      "nome": "masmorra",
+      "fornece": [
+        "Cenarios3D.masmorra"
+      ],
+      "status": "proposta",
+      "onde": "teste de movimentação inspirado em referências (15/11/2026); aguardando o autor ver a prévia"
+    },
+    {
       "arquivo": "efeitos/invisibilidade.js",
       "tipo": "efeito",
       "nome": "invisibilidade",
