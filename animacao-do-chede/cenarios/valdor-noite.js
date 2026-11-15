@@ -160,11 +160,15 @@
     const pts = (lado) => { const out = []; for (const z of zs) { if (z > 90) break; const cx = Math.sin(z * 0.12) * 1.4 + 0.3, w = 0.75 + z * 0.012; out.push([cx + lado * w, 0.002, z]); } return out; };
     const e = pts(-1), d = pts(1);
     for (let i = 0; i < e.length - 1; i++) {
+      if (e[i][2] < 34) continue;
       const zr = rioZ(e[i][0] / 2 + d[i][0] / 2); if (e[i][2] > zr - 0.4 && e[i][2] < zr + RIO.larg + 0.4) continue;
       face(ctx, cam, [e[i], d[i], d[i + 1], e[i + 1]], mistura(M('#8E6A48', '#2E3446', n), M('#84623F', '#2B3142', n), (i % 2) * 0.1), { contorno: false });
     }
+    // terra batida em volta das lajes e manchas de terra no campo
+    const rt = rng(55); for (let i = 0; i < 40; i++) { const z = 0.5 + rt() * 30, x = trilhaX(z) + (rt() * 2 - 1) * (trilhaW(z) + 1.2), q = cam.p(x, 0, z); if (q.dz < 0.5) continue; ctx.fillStyle = `rgba(${n > 0.5 ? '30,26,24' : '90,70,40'},${0.35 * (1 - cam.fator(z))})`; ctx.beginPath(); ctx.ellipse(q.x, q.y, (0.5 + rt()) * q.s, (0.12 + rt() * 0.1) * q.s, 0, 0, Math.PI * 2); ctx.fill(); }
+    lajes(ctx, cam, n);
+    if (n > 0.2) for (const [x, z, i] of TOCHAS) Noite.luzChao(ctx, cam, x, z, 3.4, t, n, i);
     gramaBaixa(ctx, cam, n);
-    for (const [X, Z, rr] of OBJ.seixo) { const q = cam.p(X, 0, Z); if (q.dz < 0.5) continue; ctx.fillStyle = cam.tom(M('#6E5A48', '#22283A', n), Z); ctx.beginPath(); ctx.ellipse(q.x, q.y, rr * q.s, rr * 0.45 * q.s, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = cam.tom(M('#B8A088', '#4E5E86', n), Z); ctx.beginPath(); ctx.ellipse(q.x - rr * 0.3 * q.s, q.y - rr * 0.15 * q.s, rr * 0.45 * q.s, rr * 0.18 * q.s, 0, 0, Math.PI * 2); ctx.fill(); }
     rio(ctx, cam, n, t);
     ponte(ctx, cam, n);
   }
@@ -234,6 +238,11 @@
     const borda = `rgba(150,180,255,${0.55 * n * (1 - cam.fator(Z))})`;
     ctx.fillStyle = tom(M('#3E2A20', '#0E1418', n)); ctx.beginPath(); ctx.moveTo(base.x - 0.05 * k, base.y); ctx.lineTo(base.x - 0.03 * k, base.y - 0.5 * k); ctx.lineTo(base.x + 0.03 * k, base.y - 0.5 * k); ctx.lineTo(base.x + 0.05 * k, base.y); ctx.closePath(); ctx.fill();
     ctx.fillStyle = borda; ctx.fillRect(base.x - 0.05 * k, base.y - 0.5 * k, 0.015 * k, 0.5 * k);
+    if (base.dz < 30) {
+      ctx.strokeStyle = tom(M('#2A1C14', '#05080A', n)); ctx.lineWidth = Math.max(0.6, 0.006 * k);
+      for (const dx of [-0.02, 0.005, 0.025]) { ctx.beginPath(); ctx.moveTo(base.x + dx * k, base.y); ctx.quadraticCurveTo(base.x + (dx + 0.006) * k, base.y - 0.25 * k, base.x + dx * 0.6 * k, base.y - 0.48 * k); ctx.stroke(); }
+      ctx.fillStyle = tom(M('#3E2A20', '#0E1418', n)); for (const sd of [-1, 1]) { ctx.beginPath(); ctx.moveTo(base.x + sd * 0.04 * k, base.y - 0.06 * k); ctx.quadraticCurveTo(base.x + sd * 0.07 * k, base.y - 0.01 * k, base.x + sd * 0.12 * k, base.y + 0.004 * k); ctx.lineTo(base.x + sd * 0.03 * k, base.y + 0.004 * k); ctx.closePath(); ctx.fill(); }
+    }
     if (tipo === 'pinheiro') {
       for (let i = 0; i < 4; i++) {
         const y0 = base.y - (0.25 + i * 0.18) * k, w = (0.32 - i * 0.06) * k, h = 0.34 * k;
@@ -315,6 +324,101 @@
     ctx.fillStyle = cam.tom(M('#7E7A8E', '#252C44', n), Z); ctx.beginPath(); ctx.ellipse(q.x, q.y - r * 0.4 * s, r * s, r * 0.55 * s, 0, Math.PI, 0); ctx.lineTo(q.x + r * s, q.y); ctx.lineTo(q.x - r * s, q.y); ctx.fill();
     ctx.fillStyle = cam.tom(M('#A6A2B6', '#5A6C9C', n), Z); ctx.beginPath(); ctx.ellipse(q.x - r * 0.35 * s, q.y - r * 0.62 * s, r * 0.45 * s, r * 0.18 * s, -0.2, 0, Math.PI * 2); ctx.fill();
   }
+
+  // ===================== cenário refeito no nível das referências 3D =====================
+  const trilhaX = (z) => Math.sin(z * 0.12) * 1.4 + 0.3, trilhaW = (z) => 0.8 + z * 0.012;
+  const naPonte = (z) => z > rioZ(0.3) - 0.6 && z < rioZ(0.3) + RIO.larg + 0.6;
+  // postes com tocha ao longo da trilha (luz quente contra o azul da noite)
+  const TOCHAS = [3.4, 6.4, 13.6, 17.2, 21.5, 26.5].map((z, i) => [trilhaX(z) + (i % 2 ? 1 : -1) * (trilhaW(z) + 0.55), z, i]);
+  const luzTocha = (x, z) => { let k = 0; for (const [tx, tz] of TOCHAS) { const d = Math.hypot(x - tx, z - tz); k = Math.max(k, Math.max(0, 1 - d / 3.2)); } return k; };
+  const quente = (cor, k) => (k > 0 ? mistura(cor, '#B87A44', 0.4 * k) : cor);
+  // muros baixos de pedra (tijolos com argamassa), quebrados como ruínas
+  const MUROS = (() => {
+    const r = rng(404), out = [];
+    for (const [z0, z1, lado, dist] of [[1.6, 7.2, -1, 1.5], [12.4, 24, -1, 1.7], [13.5, 19.5, 1, 1.9], [26, 32, 1, 1.6]]) {
+      for (let z = z0; z < z1; z += 0.9) { if (r() < 0.12 || naPonte(z) || naPonte(z + 0.9)) continue; out.push([z, z + 0.88, lado, dist, 0.55 + r() * 0.35, Math.floor(r() * 1000)]); }
+    }
+    return out;
+  })();
+  function lajes(ctx, cam, n) {
+    let linha = 0;
+    for (let z = Math.max(0.15, cam.z + 0.2); z < 34; z += 0.5, linha++) {
+      if (naPonte(z) || naPonte(z + 0.5)) continue;
+      const r = rng(Math.floor(z * 2) * 131 + 7), c0 = trilhaX(z), c1 = trilhaX(z + 0.5), w0 = trilhaW(z), w1 = trilhaW(z + 0.5);
+      const cortes = r() < 0.5 ? [0, 0.38 + r() * 0.2, 1] : [0, 0.25 + r() * 0.12, 0.6 + r() * 0.12, 1];
+      for (let i = 0; i < cortes.length - 1; i++) {
+        const a = cortes[i], b = cortes[i + 1], g = 0.025;
+        const p = [[c0 - w0 + 2 * w0 * a + g, 0.004, z + g], [c0 - w0 + 2 * w0 * b - g, 0.004, z + g], [c1 - w1 + 2 * w1 * b - g, 0.004, z + 0.5 - g], [c1 - w1 + 2 * w1 * a + g, 0.004, z + 0.5 - g]];
+        const xm = (p[0][0] + p[2][0]) / 2, zm = z + 0.25, lt = luzTocha(xm, zm), v = r();
+        const cor = quente(mistura(M('#A8957A', '#3E4458', n), M('#8C7A62', '#2E3344', n), v), lt * n);
+        const path = Cena3D.caminho(cam, p); ctx.fillStyle = cam.tom(cor, zm); ctx.fill(path);
+        const q = cam.p(xm, 0, zm); if (q.dz < 0.3) continue;
+        ctx.strokeStyle = cam.tom(M('#5E4E3C', '#12141C', n), zm); ctx.lineWidth = Math.max(0.6, 0.03 * q.s); ctx.stroke(path);
+        // brilho na borda de cima e rachaduras nas lajes de perto
+        if (q.dz < 9) {
+          ctx.strokeStyle = `rgba(${lt > 0.1 ? '255,200,140' : '170,190,240'},${0.18 * (1 - q.dz / 9)})`; ctx.lineWidth = Math.max(0.6, 0.02 * q.s);
+          const A = cam.p(...p[3]), B = cam.p(...p[2]); ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+          if (v > 0.6) { ctx.strokeStyle = `rgba(10,12,18,${0.5 * (1 - q.dz / 9)})`; ctx.lineWidth = Math.max(0.5, 0.012 * q.s); ctx.beginPath(); let px = xm - 0.15, pz = zm - 0.1; let P0 = cam.p(px, 0.005, pz); ctx.moveTo(P0.x, P0.y); for (let k = 0; k < 4; k++) { px += 0.07 + r() * 0.05; pz += (r() - 0.4) * 0.08; const Pk = cam.p(px, 0.005, pz); ctx.lineTo(Pk.x, Pk.y); } ctx.stroke(); }
+        }
+      }
+    }
+  }
+  function muro(ctx, cam, z0, z1, lado, dist, h, sem, n) {
+    const x0 = trilhaX(z0) + lado * (trilhaW(z0) + dist), x1 = trilhaX(z1) + lado * (trilhaW(z1) + dist), esp = 0.38 * lado;
+    const q = cam.p((x0 + x1) / 2, 0, (z0 + z1) / 2); if (q.dz < 0.6 || q.x < -400 || q.x > 1500) return;
+    const r = rng(sem), lt = luzTocha((x0 + x1) / 2, (z0 + z1) / 2) * n, zm = (z0 + z1) / 2;
+    const pedraC = quente(M('#9E9078', '#353A4E', n), lt * 0.7), pedraE = quente(M('#7C705E', '#2A2F40', n), lt), topo = quente(M('#B2A48A', '#454C64', n), lt * 0.7);
+    const hh0 = h * (0.85 + r() * 0.3), hh1 = h * (0.85 + r() * 0.3);
+    const frente = [[x0, 0, z0], [x1, 0, z1], [x1, hh1, z1], [x0, hh0, z0]];
+    const pf = Cena3D.caminho(cam, frente); ctx.fillStyle = cam.tom(pedraC, zm); ctx.fill(pf);
+    // topo (espessura do muro)
+    const pt = Cena3D.caminho(cam, [[x0, hh0, z0], [x1, hh1, z1], [x1 + esp, hh1, z1], [x0 + esp, hh0, z0]]); ctx.fillStyle = cam.tom(topo, zm); ctx.fill(pt);
+    // tijolos: fiadas e juntas desencontradas
+    ctx.save(); ctx.clip(pf);
+    const lw = Math.max(0.6, 0.022 * q.s), corJ = cam.tom(M('#5A5040', '#161A24', n), zm);
+    ctx.strokeStyle = corJ; ctx.lineWidth = lw;
+    const fiadas = 4;
+    for (let i = 1; i < fiadas; i++) { const k = i / fiadas, A = cam.p(x0, hh0 * k, z0), B = cam.p(x1, hh1 * k, z1); ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke(); }
+    for (let i = 0; i < fiadas; i++) {
+      const off = (i % 2) * 0.15;
+      for (let s2 = off; s2 < 0.88; s2 += 0.3) { const t2 = s2 / 0.88, x = x0 + (x1 - x0) * t2, z = z0 + (z1 - z0) * t2, hh = hh0 + (hh1 - hh0) * t2; const A = cam.p(x, hh * i / fiadas, z), B = cam.p(x, hh * (i + 1) / fiadas, z); ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke(); }
+      // tijolos com tom variado
+      for (let s2 = off; s2 < 0.88; s2 += 0.3) { if (r() < 0.55) continue; const ta = s2 / 0.88, tb = Math.min(1, (s2 + 0.3) / 0.88); const P = (t2, k) => [x0 + (x1 - x0) * t2, (hh0 + (hh1 - hh0) * t2) * k, z0 + (z1 - z0) * t2]; ctx.fillStyle = r() < 0.5 ? 'rgba(0,0,0,0.14)' : 'rgba(255,255,255,0.06)'; ctx.fill(Cena3D.caminho(cam, [P(ta, i / fiadas), P(tb, i / fiadas), P(tb, (i + 1) / fiadas), P(ta, (i + 1) / fiadas)])); }
+    }
+    // sombra embaixo e luz quente da tocha
+    const A = cam.p(x0, 0, z0), B = cam.p(x1, 0, z1), C = cam.p(x0, hh0, z0);
+    const g = ctx.createLinearGradient(0, A.y, 0, C.y); g.addColorStop(0, 'rgba(0,0,0,0.35)'); g.addColorStop(0.4, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fill(pf);
+    ctx.restore();
+    ctx.strokeStyle = cam.tom(M('#4A4234', '#0E1018', n), zm); ctx.lineWidth = lw * 1.2; ctx.stroke(pf);
+    // musgo no topo
+    ctx.fillStyle = cam.tom(M('#5E8A3A', '#1E3A30', n), zm); const T0 = cam.p(x0 + esp * 0.3, hh0 + 0.01, z0), T1 = cam.p(x1 + esp * 0.3, hh1 + 0.01, z1);
+    for (let i = 0; i < 4; i++) { const t2 = r(); ctx.beginPath(); ctx.ellipse(T0.x + (T1.x - T0.x) * t2, T0.y + (T1.y - T0.y) * t2, 0.12 * q.s, 0.035 * q.s, 0, 0, Math.PI * 2); ctx.fill(); }
+  }
+  function posteTocha(ctx, cam, X, Z, i, t, n) {
+    const b = cam.p(X, 0, Z), tp = cam.p(X, 1.75, Z); if (b.dz < 0.6) return;
+    const w = Math.max(2, 0.07 * b.s);
+    ctx.fillStyle = cam.tom(M('#5A3A22', '#2A1C14', n), Z); ctx.beginPath(); ctx.moveTo(b.x - w, b.y); ctx.lineTo(tp.x - w * 0.8, tp.y); ctx.lineTo(tp.x + w * 0.8, tp.y); ctx.lineTo(b.x + w, b.y); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,190,120,0.25)'; ctx.fillRect(b.x + w * 0.2, tp.y, w * 0.5, b.y - tp.y);
+    // pedras na base do poste
+    ctx.fillStyle = cam.tom(M('#8C8070', '#2E3446', n), Z); for (const dx of [-1, 0.2, 1]) { ctx.beginPath(); ctx.ellipse(b.x + dx * w * 1.6, b.y, w * 1.5, w * 0.8, 0, Math.PI, 0); ctx.fill(); }
+    Noite.tocha(ctx, tp.x, tp.y + 0.25 * b.s, 0.42 * b.s, t, { seed: i + 3, ang: 0 });
+  }
+  function rocha(ctx, cam, X, Z, r0, n) {
+    const q = cam.p(X, 0, Z); if (q.dz < 0.6) return;
+    const s = q.s, R = r0 * s, rr = rng(Math.floor(X * 97 + Z * 31) >>> 0), lt = luzTocha(X, Z) * n;
+    const pts = []; for (let i = 0; i <= 8; i++) { const a = Math.PI + (i / 8) * Math.PI, k = 0.75 + rr() * 0.35; pts.push([q.x + Math.cos(a) * R * k * 1.15, q.y + Math.sin(a) * R * k * 0.95]); }
+    const corpo = new Path2D(); corpo.moveTo(q.x - R * 1.15, q.y); pts.forEach(([x, y]) => corpo.lineTo(x, y)); corpo.lineTo(q.x + R * 1.15, q.y); corpo.closePath();
+    ctx.fillStyle = cam.tom(quente(M('#8E8676', '#2C3246', n), lt), Z); ctx.fill(corpo);
+    ctx.save(); ctx.clip(corpo);
+    // faces: luz do luar à esquerda, sombra à direita
+    ctx.fillStyle = cam.tom(quente(M('#B8AE98', '#56648E', n), lt), Z); ctx.beginPath(); ctx.moveTo(q.x - R * 1.2, q.y); ctx.lineTo(q.x - R * 0.2, q.y - R * 1.1); ctx.lineTo(q.x + R * 0.1, q.y - R * 0.4); ctx.lineTo(q.x - R * 0.4, q.y); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = cam.tom(M('#5E574A', '#181C2A', n), Z); ctx.beginPath(); ctx.moveTo(q.x + R * 0.1, q.y - R * 0.4); ctx.lineTo(q.x + R * 1.2, q.y - R * 0.6); ctx.lineTo(q.x + R * 1.2, q.y); ctx.lineTo(q.x + R * 0.3, q.y); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(8,10,16,0.5)'; ctx.lineWidth = Math.max(0.6, 0.02 * s); ctx.beginPath(); ctx.moveTo(q.x - R * 0.1, q.y - R * 0.8); ctx.lineTo(q.x + R * 0.05, q.y - R * 0.45); ctx.lineTo(q.x - R * 0.15, q.y - R * 0.15); ctx.stroke();
+    ctx.fillStyle = cam.tom(M('#5E8A3A', '#1E3A30', n), Z); ctx.beginPath(); ctx.ellipse(q.x - R * 0.2, q.y - R * 0.95, R * 0.55, R * 0.18, -0.1, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle = cam.tom(M('#4A4234', '#0E1018', n), Z); ctx.lineWidth = Math.max(0.6, 0.02 * s); ctx.stroke(corpo);
+  }
+
   // vaga-lume em 3D (brilho amarelo-esverdeado piscando)
   function vagalume(ctx, cam, X, Y, Z, fase, k, t, a) {
     const x = X + Math.sin(t * 0.6 * k + fase) * 0.6, y = Y + Math.sin(t * 0.9 * k + fase * 2) * 0.25, z = Z + Math.cos(t * 0.5 * k + fase) * 0.5;
@@ -351,7 +455,9 @@
       lista.push([95, () => mata(ctx, cam, n, 95)], [62, () => mata(ctx, cam, n, 62)]);
       if (o.espadas !== false) for (const [x, z, h, inc] of ESPADAS) lista.push([z, () => espadaGigante(ctx, cam, x, z, h, inc, n, t)]);
       for (const [x, z, h, tipo, sem] of OBJ.arv) lista.push([z, () => arvoreNoite(ctx, cam, x, z, h, tipo, sem, n)]);
-      for (const [x, z, r] of OBJ.ped) lista.push([z, () => pedra(ctx, cam, x, z, r, n)]);
+      for (const [x, z, r] of OBJ.ped) lista.push([z, () => rocha(ctx, cam, x, z, r * 1.3, n)]);
+      for (const [z0, z1, lado, dist, h, sem] of MUROS) lista.push([(z0 + z1) / 2, () => muro(ctx, cam, z0, z1, lado, dist, h, sem, n)]);
+      if (o.tochas !== false) for (const [x, z, i] of TOCHAS) lista.push([z, () => posteTocha(ctx, cam, x, z, i, t, n)]);
       for (const [x, z, h, f] of OBJ.tufo) lista.push([z, () => tufo(ctx, cam, x, z, h, f, t, n)]);
       for (const [x, z, f] of OBJ.flor) lista.push([z, () => florLua(ctx, cam, x, z, f, t, n)]);
       lista.sort((a, b) => b[0] - a[0]);

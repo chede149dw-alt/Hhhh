@@ -217,6 +217,17 @@
         pc.linha(P((p) => { for (const t of [-0.33, 0.33]) { p.moveTo(t * R, y - R * 0.92); p.lineTo(t * R, y + R * 0.92); } }));
       }
     }
+    // luvas do conjurador (item raro): luva azul com punho dourado e runa que brilha
+    if (eq.luvas) {
+      const cor = T(eq.luvas.cor || 'azulArdosia'), punho = T(eq.luvas.punho || 'mostarda'), brilho = eq.luvas.brilho || '120,200,255';
+      const luva = (pc, rig) => {
+        pc.peca(P((p) => { p.moveTo(-0.115, -0.03); p.lineTo(0.115, -0.03); p.quadraticCurveTo(0.155, 0.16, 0.12, 0.31); p.quadraticCurveTo(0.065, 0.43, -0.03, 0.4); p.quadraticCurveTo(-0.12, 0.37, -0.12, 0.24); p.closePath(); }), cor, { sombra: 0.1 });
+        pc.peca(P((p) => p.roundRect(-0.135, -0.07, 0.27, 0.1, 0.03)), punho, { sombra: 0.05 });
+        pc.linha(P((p) => { p.moveTo(-0.02, 0.24); p.lineTo(0.0, 0.33); p.moveTo(0.05, 0.22); p.lineTo(0.06, 0.32); }), pc.interno, 'rgba(0,0,0,0.3)');
+        if (pc.modo !== 'contorno') { const g = pc.ctx.createRadialGradient(0, 0.13, 0, 0, 0.13, 0.12); g.addColorStop(0, `rgba(${brilho},0.95)`); g.addColorStop(1, `rgba(${brilho},0)`); pc.preencher(P((p) => p.arc(0, 0.13, 0.12, 0, Math.PI * 2)), g); pc.preencher(P((p) => { p.moveTo(0, 0.08); p.lineTo(0.035, 0.13); p.lineTo(0, 0.18); p.lineTo(-0.035, 0.13); p.closePath(); }), '#EAF8FF'); }
+      };
+      depois('mao_d', luva); depois('mao_e', luva);
+    }
     // peitoral de couro em faixas horizontais com tachas e costura (assassino da referência 3D)
     if (eq.peitoral) {
       const cor = T(eq.peitoral.cor), tc = T(eq.peitoral.tachas || 'prata'), n = eq.peitoral.faixas || 3;

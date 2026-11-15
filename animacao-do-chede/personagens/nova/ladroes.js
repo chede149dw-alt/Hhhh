@@ -53,10 +53,14 @@
     cab.desenhar = (pc, ...resto) => {
       oCab(pc, ...resto);
       if (vista === 'costas') { if (estilo === 'C') { pc.peca(P((q) => q.roundRect(-r - 0.02, -0.66, 2 * r + 0.04, 0.1, 0.03)), Estilo.tom('couroVermelho'), { sombra: 0.05 }); pc.peca(P((q) => { q.moveTo(-0.05, -0.62); q.lineTo(-0.22, -0.2); q.lineTo(-0.08, -0.25); q.lineTo(0.05, -0.62); q.closePath(); }), Estilo.tom('couroVermelho'), { sombra: 0.05 }); } return; }
-      // cicatriz no olho
-      const sx = dx + 0.19 * k;
-      pc.linha(P((q) => { q.moveTo(sx - 0.02, -0.58); q.lineTo(sx + 0.05, -0.18); }), pc.interno * 2.2, 'rgba(170,70,80,0.9)');
-      pc.linha(P((q) => { for (let i = 0; i < 3; i++) { const y = -0.5 + i * 0.12, x = sx + 0.01 + i * 0.017; q.moveTo(x - 0.04, y); q.lineTo(x + 0.04, y + 0.01); } }), pc.interno * 1.2, 'rgba(170,70,80,0.8)');
+      // cicatriz: corta a sobrancelha, passa por fora do olho e desce pela bochecha (sem cobrir o olho)
+      const ex = dx + 0.19 * k + 0.06, pele = Estilo.base[c.pele] || '#EAB28E';
+      pc.preencher(P((q) => { q.moveTo(ex - 0.045, -0.6); q.lineTo(ex - 0.005, -0.6); q.lineTo(ex + 0.005, -0.5); q.lineTo(ex - 0.035, -0.5); q.closePath(); }), pele);
+      const corte = P((q) => { q.moveTo(ex - 0.045, -0.7); q.quadraticCurveTo(ex - 0.01, -0.58, ex + 0.005, -0.47); q.moveTo(ex + 0.03, -0.33); q.quadraticCurveTo(ex + 0.045, -0.29, ex + 0.055, -0.26); });
+      pc.linha(corte, pc.interno * 3.6, 'rgba(150,70,70,0.55)');
+      pc.linha(corte, pc.interno * 2.4, 'rgba(214,132,124,0.95)');
+      pc.linha(corte, pc.interno * 0.8, 'rgba(255,220,205,0.75)');
+      pc.linha(P((q) => { for (const [x, y] of [[ex - 0.035, -0.64], [ex - 0.015, -0.55]]) { q.moveTo(x - 0.03, y + 0.008); q.lineTo(x + 0.03, y - 0.008); } }), pc.interno * 0.9, 'rgba(180,95,95,0.75)');
       if (estilo === 'B') {
         // meia-máscara de metal com rebites e respiros
         const m = P((q) => { q.moveTo(dx - r * 0.98 * k, -0.28); q.quadraticCurveTo(dx, -0.36, dx + r * 0.98 * k, -0.28); q.bezierCurveTo(dx + r * k, -0.02, dx + r * 0.5 * k, 0.1, dx, 0.1); q.bezierCurveTo(dx - r * 0.5 * k, 0.1, dx - r * k, -0.02, dx - r * 0.98 * k, -0.28); q.closePath(); });

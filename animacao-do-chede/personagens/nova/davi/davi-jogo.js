@@ -20,4 +20,6 @@
     'magia-na-mao': { vista: 'tq', expressao: 'espanto', angulos: { braco_d: 75, antebraco_d: 70, mao_d: -20, braco_e: -4, coxa_d: -3, coxa_e: 3, cabeca: -4, _magia: 0.7 } },
   };
   window.criarDaviJogo = (opcoes = {}, vista = 'frente') => window.equipar(window.criarPersonagem({ ...window.DAVI_OPCOES, ...window.DAVI_JOGO_OPCOES, ...opcoes, poses: Object.fromEntries(Object.entries(window.DAVI_JOGO_POSES).map(([k, v]) => [k, v.angulos])) }, vista), window.DAVI_JOGO_EQUIP);
+  // depois de equipar as Luvas do conjurador (Parte 2)
+  window.criarDaviLuvas = (opcoes = {}, vista = 'frente') => window.equipar(window.criarPersonagem({ ...window.DAVI_OPCOES, ...window.DAVI_JOGO_OPCOES, ...opcoes, poses: Object.fromEntries(Object.entries(window.DAVI_JOGO_POSES).map(([k, v]) => [k, v.angulos])) }, vista), { ...window.DAVI_JOGO_EQUIP, luvas: { cor: 'azulArdosia', punho: 'mostarda' } });
 })();

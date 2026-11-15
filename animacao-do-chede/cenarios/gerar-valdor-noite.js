@@ -5,7 +5,7 @@ const raiz = process.argv[2], saida = process.argv[3];
   const b = await chromium.launch(); const p = await b.newPage();
   p.on('pageerror', (e) => console.error('ERRO', e.message)); p.on('console', (m) => console.log(m.text()));
   await p.goto('file://' + path.join(raiz, 'motor/palco.html'));
-  for (const s of ['motor/cena.js', 'motor/cinema.js', 'motor/cena3d.js', 'motor/personagem-base.js', 'personagens/nova/cores.js', 'personagens/nova/equipamento.js', 'personagens/nova/davi/davi.js', 'personagens/nova/davi/davi-jogo.js', 'personagens/nova/teo/teo.js', 'personagens/nova/teo/teo-jogo.js', 'personagens/nova/teo/teo-lobisomem.js', 'cenarios/valdor-noite.js']) await p.addScriptTag({ path: path.join(raiz, s) });
+  for (const s of ['motor/cena.js', 'motor/cinema.js', 'motor/cena3d.js', 'motor/personagem-base.js', 'personagens/nova/cores.js', 'personagens/nova/equipamento.js', 'personagens/nova/davi/davi.js', 'personagens/nova/davi/davi-jogo.js', 'personagens/nova/teo/teo.js', 'personagens/nova/teo/teo-jogo.js', 'personagens/nova/teo/teo-lobisomem.js', 'efeitos/noite.js', 'cenarios/valdor-noite.js']) await p.addScriptTag({ path: path.join(raiz, s) });
   await p.evaluate(() => document.fonts.load('900 98px Inter'));
   const b64 = await p.evaluate(() => {
     const V = Cenarios3D.valdorNoite;
