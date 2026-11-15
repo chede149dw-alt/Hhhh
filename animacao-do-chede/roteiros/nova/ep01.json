@@ -1,0 +1,896 @@
+{
+ "serie": "VALDOR",
+ "episodio": 1,
+ "parte": 1,
+ "scripts": [
+  "personagens/nova/cores.js",
+  "personagens/nova/equipamento.js",
+  "personagens/nova/davi/davi.js",
+  "personagens/nova/davi/davi-jogo.js",
+  "personagens/nova/teo/teo.js",
+  "personagens/nova/teo/teo-jogo.js",
+  "personagens/nova/jogador-forte.js",
+  "cenarios/valdor-campo.js",
+  "efeitos/criaturas.js",
+  "efeitos/valdor.js"
+ ],
+ "legenda": {
+  "faixas": [
+   1180,
+   1400,
+   760,
+   420
+  ]
+ },
+ "planos": [
+  {
+   "id": "capa",
+   "fala": {
+    "texto": "E se um videogame pagasse o seu aluguel?",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/capa.wav"
+    }
+   },
+   "destaque": [
+    "ALUGUEL?"
+   ],
+   "duracao": 2.6,
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   }
+  },
+  {
+   "id": "saldo",
+   "fala": {
+    "texto": "O Davi juntou dinheiro por dois anos...",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/saldo.wav"
+    }
+   },
+   "destaque": [
+    "DINHEIRO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   },
+   "duracao": 2.21,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.3,
+     "volume": 0.45
+    }
+   ]
+  },
+  {
+   "id": "comprar",
+   "fala": {
+    "texto": "e gastou tudo numa cadeira de realidade virtual.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/comprar.wav"
+    }
+   },
+   "destaque": [
+    "TUDO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   },
+   "duracao": 2.66,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/compra.mp3",
+     "em": 0.85,
+     "volume": 0.9
+    }
+   ]
+  },
+  {
+   "id": "mae",
+   "fala": {
+    "texto": "A mãe dele ainda não sabe.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/mae.wav"
+    }
+   },
+   "destaque": [
+    "MÃE"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   },
+   "duracao": 1.8
+  },
+  {
+   "id": "itens",
+   "fala": {
+    "texto": "Porque em Valdor, tudo que você pega lá dentro",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/itens.wav"
+    }
+   },
+   "destaque": [
+    "VALDOR,"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.8
+   },
+   "duracao": 2.53,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.0,
+     "volume": 0.5
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.55,
+     "volume": 0.5
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.1,
+     "volume": 0.6
+    }
+   ]
+  },
+  {
+   "id": "precos",
+   "fala": {
+    "texto": "vale dinheiro de verdade aqui fora.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/precos.wav"
+    }
+   },
+   "destaque": [
+    "DINHEIRO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.9,
+    "bloom": 0.8
+   },
+   "duracao": 1.82,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/moeda.mp3",
+     "em": 0.9,
+     "volume": 0.6
+    }
+   ]
+  },
+  {
+   "id": "raro",
+   "fala": {
+    "texto": "Um item épico cai uma vez a cada mil monstros.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/raro.wav"
+    }
+   },
+   "destaque": [
+    "ÉPICO",
+    "MIL"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   },
+   "duracao": 2.84,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.45,
+     "volume": 0.7
+    }
+   ]
+  },
+  {
+   "id": "teo",
+   "fala": {
+    "texto": "E o Téo, melhor amigo dele, comprou junto.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/teo.wav"
+    }
+   },
+   "destaque": [
+    "TÉO,"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   },
+   "duracao": 2.39
+  },
+  {
+   "id": "novatos",
+   "fala": {
+    "texto": "Nenhum dos dois tinha jogado antes.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/novatos.wav"
+    }
+   },
+   "destaque": [
+    "ANTES."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   },
+   "duracao": 1.91,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/visor.mp3",
+     "em": 1.25,
+     "volume": 0.6
+    }
+   ]
+  },
+  {
+   "id": "ouvido",
+   "fala": {
+    "texto": "O corpo fica parado, mas o ouvido não sabe.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/ouvido.wav"
+    }
+   },
+   "destaque": [
+    "OUVIDO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   },
+   "duracao": 2.56
+  },
+  {
+   "id": "pulso",
+   "fala": {
+    "texto": "O capacete manda um pulso pro labirinto do ouvido,",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/pulso.wav"
+    }
+   },
+   "destaque": [
+    "PULSO",
+    "LABIRINTO"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   },
+   "duracao": 2.71
+  },
+  {
+   "id": "cerebro",
+   "fala": {
+    "texto": "e o cérebro jura que você está andando.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/cerebro.wav"
+    }
+   },
+   "destaque": [
+    "CÉREBRO",
+    "ANDANDO."
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   },
+   "duracao": 2.17
+  },
+  {
+   "id": "visor",
+   "fala": {
+    "texto": "Bem-vindos a Valdor.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/visor.wav"
+    }
+   },
+   "destaque": [
+    "VALDOR."
+   ],
+   "duracao": 2.2,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/visor.mp3",
+     "em": 0.05,
+     "volume": 1.0
+    }
+   ]
+  },
+  {
+   "id": "raca",
+   "fala": {
+    "texto": "Primeiro, escolha sua raça.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/raca.wav"
+    }
+   },
+   "destaque": [
+    "RAÇA."
+   ],
+   "duracao": 1.87,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.3,
+     "volume": 0.6
+    }
+   ]
+  },
+  {
+   "id": "fera",
+   "fala": {
+    "texto": "O Téo escolheu homem-fera, e não contou por quê.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/fera.wav"
+    }
+   },
+   "destaque": [
+    "HOMEM-FERA,"
+   ],
+   "duracao": 2.92,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.9,
+     "volume": 0.5
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 1.45,
+     "volume": 0.35
+    }
+   ]
+  },
+  {
+   "id": "classe",
+   "fala": {
+    "texto": "Depois, a classe. O Davi virou mago.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/classe.wav"
+    }
+   },
+   "destaque": [
+    "MAGO."
+   ],
+   "duracao": 2.73,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.9,
+     "volume": 0.7
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/nivel.mp3",
+     "em": 1.22,
+     "volume": 0.45,
+     "corte": 1.6
+    }
+   ]
+  },
+  {
+   "id": "guardiao",
+   "fala": {
+    "texto": "E o Téo, guardião.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/guardiao.wav"
+    }
+   },
+   "destaque": [
+    "GUARDIÃO."
+   ],
+   "duracao": 1.8,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 0.42,
+     "volume": 0.5,
+     "corte": 0.8
+    }
+   ]
+  },
+  {
+   "id": "nivel",
+   "fala": {
+    "texto": "Nível um: magia fraca e espada de madeira.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/nivel.wav"
+    }
+   },
+   "destaque": [
+    "UM:",
+    "MADEIRA."
+   ],
+   "duracao": 3.26,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 0.3,
+     "volume": 0.25
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 1.42,
+     "volume": 0.35,
+     "corte": 0.6
+    }
+   ]
+  },
+  {
+   "id": "explorar",
+   "fala": {
+    "texto": "Antes de sonhar alto, eles precisavam ficar fortes.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/explorar.wav"
+    }
+   },
+   "destaque": [
+    "FORTES."
+   ],
+   "duracao": 2.94
+  },
+  {
+   "id": "gosma",
+   "fala": {
+    "texto": "Primeiro monstro: um lobo jovem.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/gosma.wav"
+    }
+   },
+   "destaque": [
+    "LOBO"
+   ],
+   "duracao": 2.17,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 0.7,
+     "volume": 0.9
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 1.4,
+     "volume": 0.5
+    }
+   ]
+  },
+  {
+   "id": "bote",
+   "fala": {
+    "texto": "O lobo deu o bote... e o Davi saltou pra trás num borrão.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/bote.wav"
+    }
+   },
+   "destaque": [
+    "BOTE...",
+    "BORRÃO."
+   ],
+   "duracao": 3.43,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 0.0,
+     "volume": 0.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 0.45,
+     "volume": 0.7,
+     "corte": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 1.3,
+     "volume": 1.0,
+     "corte": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 1.55,
+     "volume": 0.55
+    }
+   ]
+  },
+  {
+   "id": "mordida",
+   "fala": {
+    "texto": "Mas o segundo bote pegou a perna dele, e o lobo arrastou ele pelo chão.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/mordida.wav"
+    }
+   },
+   "destaque": [
+    "PERNA",
+    "ARRASTOU"
+   ],
+   "duracao": 3.96,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 0.05,
+     "volume": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 0.65,
+     "volume": 0.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/mordida.mp3",
+     "em": 1.25,
+     "volume": 0.75
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/arrasta.mp3",
+     "em": 1.9,
+     "volume": 1.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/arrasta.mp3",
+     "em": 2.9,
+     "volume": 1.6
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/rosnado.mp3",
+     "em": 2.3,
+     "volume": 0.7
+    }
+   ]
+  },
+  {
+   "id": "golpe",
+   "fala": {
+    "texto": "O Davi se preparou e lançou um feitiço de eletricidade, enquanto o Téo bloqueou. E finalizou com um corte seco!",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/golpe.wav"
+    }
+   },
+   "destaque": [
+    "ELETRICIDADE,",
+    "BLOQUEOU.",
+    "SECO!"
+   ],
+   "duracao": 5.6,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.2,
+     "volume": 0.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.7,
+     "volume": 0.8
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 1.4,
+     "volume": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/raio.mp3",
+     "em": 1.6,
+     "volume": 0.7
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/escudo.mp3",
+     "em": 3.0,
+     "volume": 1.0,
+     "corte": 1.2
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/whoosh.mp3",
+     "em": 4.35,
+     "volume": 0.6,
+     "corte": 0.6
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/corte.mp3",
+     "em": 4.7,
+     "volume": 1.0
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/desfaz.mp3",
+     "em": 5.0,
+     "volume": 0.8,
+     "corte": 2.2
+    }
+   ]
+  },
+  {
+   "id": "drop",
+   "fala": {
+    "texto": "Ele deixou cair... dois centavos.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/drop.wav"
+    }
+   },
+   "destaque": [
+    "CENTAVOS."
+   ],
+   "duracao": 2.75,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/moeda.mp3",
+     "em": 0.35,
+     "volume": 1.0
+    }
+   ]
+  },
+  {
+   "id": "nivel2",
+   "fala": {
+    "texto": "Nível dois!",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/nivel2.wav"
+    }
+   },
+   "destaque": [
+    "DOIS!"
+   ],
+   "duracao": 1.8,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/nivel.mp3",
+     "em": 0.45,
+     "volume": 0.9,
+     "corte": 2.0
+    }
+   ]
+  },
+  {
+   "id": "xp",
+   "fala": {
+    "texto": "A barra de experiência foi feita pra prender você.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/xp.wav"
+    }
+   },
+   "destaque": [
+    "PRENDER"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.8,
+    "bloom": 0.75
+   },
+   "duracao": 2.62,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.4,
+     "volume": 0.3
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 1.2,
+     "volume": 0.3
+    },
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 2.0,
+     "volume": 0.3
+    }
+   ]
+  },
+  {
+   "id": "forte",
+   "fala": {
+    "texto": "Aí passou um jogador nível oitenta.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/forte.wav"
+    }
+   },
+   "destaque": [
+    "OITENTA."
+   ],
+   "duracao": 1.91
+  },
+  {
+   "id": "adaga",
+   "fala": {
+    "texto": "Na cintura, uma adaga épica. Quinze mil reais.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/adaga.wav"
+    }
+   },
+   "destaque": [
+    "ÉPICA.",
+    "QUINZE"
+   ],
+   "duracao": 3.54,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/carga.mp3",
+     "em": 0.15,
+     "volume": 0.5
+    }
+   ]
+  },
+  {
+   "id": "aluguel",
+   "fala": {
+    "texto": "Só que o Davi tinha sete reais...",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/aluguel.wav"
+    }
+   },
+   "destaque": [
+    "SETE"
+   ],
+   "cinema": {
+    "quente": 0.0,
+    "vinheta": 0.95,
+    "bloom": 0.5
+   },
+   "duracao": 1.99,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.2,
+     "volume": 0.35
+    }
+   ]
+  },
+  {
+   "id": "trinta",
+   "fala": {
+    "texto": "e o aluguel vencia em trinta dias.",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/trinta.wav"
+    }
+   },
+   "destaque": [
+    "TRINTA"
+   ],
+   "duracao": 1.93
+  },
+  {
+   "id": "parte",
+   "fala": {
+    "texto": "Segue pra ver a parte dois!",
+    "voz": "narrador",
+    "velocidade": 210,
+    "voz_final": {
+     "arquivo": "vozes/final/parte.wav"
+    }
+   },
+   "destaque": [],
+   "duracao": 2.4,
+   "sfx": [
+    {
+     "tipo": "arquivo",
+     "arquivo": "sfx/ping.mp3",
+     "em": 0.9,
+     "volume": 0.5
+    }
+   ]
+  }
+ ],
+ "trilha": {
+  "arquivo": "ep01/trilha.wav",
+  "volume": 0.55
+ }
+}

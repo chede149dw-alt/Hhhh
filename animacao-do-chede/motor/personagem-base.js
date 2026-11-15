@@ -70,6 +70,22 @@
     },
   };
 
+  // cacheado (Chede e Kaik): contorno em muitos caracóis arredondados
+  const cachos = (n, cx, cy, rx, ry, a0, a1, amp) => Array.from({ length: n + 1 }, (_, i) => {
+    const a = a0 + (a1 - a0) * (i / n), k = i % 2 ? 1 + amp : 1;
+    return [Math.round((cx + Math.cos(a) * rx * k) * 1000) / 1000, Math.round((cy + Math.sin(a) * ry * k) * 1000) / 1000];
+  });
+  CABELOS.cacheado = {
+    // justo na cabeça e descendo nas têmporas (usuário 12/11: "fora da cabeça", "meio careca")
+    borda: [[0.47, -0.3], [0.44, -0.44], ...cachos(12, 0, -0.55, 0.4, 0.07, -0.25, -Math.PI + 0.25, 0.35).slice(1, -1), [-0.44, -0.44], [-0.47, -0.3]],
+    topo: [[-0.47, -0.3], ...cachos(24, 0, -0.5, 0.53, 0.52, Math.PI - 0.08, 2 * Math.PI + 0.08, 0.06).slice(1, -1), [0.47, -0.3]],
+    nuca: [[-0.48, -0.3], ...cachos(8, 0, -0.2, 0.44, 0.06, Math.PI, 0, 0.22).slice(1, -1), [0.48, -0.3]],
+    linhas: [[[-0.2, -0.8], [-0.14, -0.9], [-0.02, -0.94]], [[0.12, -0.82], [0.2, -0.9], [0.3, -0.92]]],
+    estufa: 0.05,
+  };
+
+
+
   const ANGULO = { frente: 0, tq: 45, perfil: 90, costas: 180 };
 
   window.criarPersonagem = function (cfg = {}, vista = 'frente') {
@@ -122,13 +138,15 @@
         p.quadraticCurveTo(0, 0.3, -(w - 0.02) * k, 0.22); p.closePath();
       }), COR.calca, { sombra: 0.08 });
     }
-    const CAL = { larga: { c0: 0.48, c1: 0.44, k0: 0.44, k1: 0.52 }, reta: { c0: 0.4, c1: 0.35, k0: 0.35, k1: 0.37 } }[c.calca.tipo];
+    const CAL = { larga: { c0: 0.48, c1: 0.44, k0: 0.44, k1: 0.52 }, reta: { c0: 0.4, c1: 0.35, k0: 0.35, k1: 0.37 }, bermuda: { c0: 0.5, c1: 0.47, k0: 0.27, k1: 0.24 } }[c.calca.tipo];
     function coxa(pc) {
       const a = CAL.c0 / 2, b = CAL.c1 / 2;
+      if (c.calca.tipo === 'bermuda') pc.peca(capsula(0.28, 0.27, -0.1, Lcoxa), COR.pele, { sombra: 0.06 });
       pc.peca(P((p) => {
         p.moveTo(-a, -0.15); p.lineTo(a + 0.01, -0.15);
-        p.quadraticCurveTo(a + 0.02, Lcoxa * 0.5, b, Lcoxa + 0.05); p.lineTo(-b, Lcoxa + 0.05);
-        p.quadraticCurveTo(-a - 0.01, Lcoxa * 0.5, -a, -0.15); p.closePath();
+        const Lb = c.calca.tipo === 'bermuda' ? Lcoxa * 0.82 : Lcoxa + 0.05;
+        p.quadraticCurveTo(a + 0.02, Lb * 0.5, b, Lb); p.lineTo(-b, Lb);
+        p.quadraticCurveTo(-a - 0.01, Lb * 0.5, -a, -0.15); p.closePath();
       }), COR.calca, { sombra: 0.09 });
       pc.linha(P((p) => { p.moveTo(-b * 0.6, Lcoxa - 0.02); p.quadraticCurveTo(0, Lcoxa + 0.03, b * 0.5, Lcoxa - 0.04); }));
     }
@@ -138,8 +156,10 @@
         p.moveTo(-a, 0); p.arc(0, 0, a, Math.PI, 0);
         p.lineTo(a, L * 0.78); p.quadraticCurveTo(b + 0.01, L * 0.86, b, L - 0.04);
         p.quadraticCurveTo(0, L + 0.01, -b, L - 0.04); p.quadraticCurveTo(-b - 0.01, L * 0.86, -a, L * 0.78); p.closePath();
-      }), COR.calca, { sombra: 0.09 });
-      if (c.calca.tipo === 'larga') {
+      }), c.calca.tipo === 'bermuda' ? COR.pele : COR.calca, { sombra: 0.09 });
+      if (c.calca.tipo === 'bermuda') {
+        // perna de fora: sem barra
+      } else if (c.calca.tipo === 'larga') {
         pc.linha(P((p) => { p.moveTo(-b + 0.02, L * 0.8); p.quadraticCurveTo(-0.02, L * 0.85, b * 0.6, L * 0.79); }));
       } else {
         pc.linha(P((p) => { p.moveTo(-b + 0.03, L * 0.9); p.lineTo(b - 0.03, L * 0.9); }));
@@ -248,6 +268,17 @@
         });
         pc.peca(gola, COR.top, { sombra: 0, espessura: pc.interno });
         pc.linha(P((p) => { p.moveTo(-hw * k + 0.1, hemY - 0.35); p.quadraticCurveTo(-hw * k + 0.18, hemY - 0.25, -hw * k + 0.15, hemY - 0.1); }));
+        if (c.top.listra) {
+          // faixa larga atravessando o peito (Kaik)
+          const yl = shoulderY + 0.42, hl = 0.13;
+          pc.sombraDentro(corpo, P((p) => p.rect(-1, yl, 2, hl)), T(c.top.listra).base);
+          pc.sombraDentro(corpo, P((p) => p.rect(-1, yl + hl, 2, 0.03)), T(c.top.cor).sombra);
+        }
+        if (c.top.bolso) {
+          // bolso no peito, do lado esquerdo da tela (Chede)
+          const bx = cx - 0.3, by = shoulderY + 0.3;
+          pc.peca(P((p) => { p.moveTo(bx - 0.11, by); p.lineTo(bx + 0.11, by); p.lineTo(bx + 0.11, by + 0.2); p.lineTo(bx, by + 0.25); p.lineTo(bx - 0.11, by + 0.2); p.closePath(); }), { base: T(c.top.cor).sombra, sombra: T(c.top.cor).sombra }, { sombra: 0, espessura: pc.interno });
+        }
         if (c.top.estampa) {
           const cor = T(c.top.estampa);
           pc.peca(P((p) => { p.moveTo(cx - 0.12, shoulderY + 0.55); p.lineTo(cx + 0.12, shoulderY + 0.55); p.lineTo(cx, shoulderY + 0.35); p.closePath(); }), cor, { sombra: 0, espessura: pc.interno });

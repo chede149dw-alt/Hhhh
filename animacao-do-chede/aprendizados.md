@@ -130,10 +130,63 @@
 - Capa: `motor/quadro.js` + plano `capaReels`; personagem com vista FIXA (com órbita, um ângulo perto de 22,5° mistura
   duas vistas e ele fica transparente); título no terço de cima com faixa escura atrás; selo PARTE X.
 
-## Efeitos sonoros e música de fundo
-- ElevenLabs Sound Effects v2 (conector) gera efeitos de 1–3 s; alguns vêm baixos (porta, terra -43 dB): normalizar.
-  "Riser" de 4 s saiu com 0,5 s: subidas longas, fazer por código.
-- O conector restrito não gera música: trilha composta em Python (numpy/scipy) seguindo as seções do roteiro
-  (tique de relógio no quarto, silêncio antes do tapa, acordes Dm–Bb–Gm–A no poder, cordas tremidas na mãe,
-  tambores na perseguição, piano triste, riser + estrondo no gancho, acorde final).
-- Mix: música abaixa com sidechain pela voz (threshold 0.015, ratio 8); resultado: fala ~6 dB acima do resto.
+## Série nova VALDOR (13/11)
+- Formato do vídeo de referência: corte a cada 2–3 s, câmera sempre andando, ciência em raio-X, legenda NO MEIO
+  (`"legenda": { "faixas": [1180, 1400, 760, 420] }` no roteiro). Textos/etiquetas de infográfico ficam abaixo de y ≈ 1300.
+- O roteiro pode carregar arquivos próprios da série com `"scripts": [...]` (personagens, cenário, efeitos).
+- Personagens de jogo = personagem da vida real + `equipar(def, eq)` (personagens/nova/equipamento.js): manto, capuz,
+  cinto, botas, escudo, adaga; a magia nas mãos acende com `_magia` na pose.
+- Narração de prévia a 210 ppm para caber 31 planos em 75 s.
+- Luz do campo (pedido do autor, ref. imagens/cenarios/cenario-05-luz.jpg): céu azul mais forte, raios de sol diagonais do
+  alto à direita (`Cenarios3D.valdor.luz`), névoa azul-acinzentada mais fraca, verdes menos amarelos.
+- Andando: personagem anda reto, sem balançar para os lados. O motor usa o passo frontal quando a vista é de frente/costas
+  e reduz o balanço de "vida" (0,15) enquanto anda.
+- Criaturas (efeitos/criaturas.js) no estilo da referência de batalha: formas angulosas com facetas, dentes, barra de vida
+  "Nome · Nv · vida/máx". A gosma foi reprovada pelo autor ("muito feia").
+- Personagem andando de lado: o `rumo` aponta para onde ele vai (andar para −X = rumo +π/2). Errado = anda de ré.
+- Cenário de Valdor: fim de tarde dourado, sol baixo à direita, sombras longas das árvores, sombras de nuvem no chão,
+  árvores com luz quente na borda, pinheiros, samambaias escuras nos cantos e vinheta (refs: ref-batalha-luz.mp4).
+- De costas, pose feita de frente cruzava os braços nas costas (print do autor). O motor agora inverte os ângulos dos braços
+  na vista de costas (menos em poses feitas para costas e nas caminhadas).
+- Voz final (13/11): Witalo Guimarães (pt-BR, energética, ideal para Shorts), eleven_v4, 2 versões por fala, a mais curta.
+  Com voz real deu 92 s: acelerei 1,2× (atempo) e cortei 1 plano repetido ("progresso") para fechar em 74,8 s.
+  Plano com animação longa (visor) precisa de duração mínima própria (2,4 s).
+- Capa Reels: mesmo padrão da FENDA (capaReels + roteiros/nova/capa-reels.json).
+- Som (14/11): efeitos sonoros do ElevenLabs (eleven_text_to_sound_v2, ~17 créditos cada) em audio/nova/sfx/, chamados
+  por plano no roteiro com { "tipo": "arquivo", "arquivo": "sfx/x.mp3", "em", "volume", "corte" }. Trilha original
+  sintetizada por código (roteiros/nova/trilha-ep01.py, climas por plano) e mixada com "trilha": { arquivo, volume }:
+  abaixa sozinha quando o narrador fala (sidechain). O conector ElevenLabs restrito não gera música.
+- Batalha no estilo das referências (ref-batalha-2..6): câmera baixa, bote do monstro, salto para trás em borrão
+  (cópias transparentes + linhas de velocidade + poeira), close da mordida na perna (Criaturas.cabecaLobo, contorno
+  escuro, cicatriz costurada; a cabeça é desenhada POR CIMA da perna, só o focinho e as presas cobrem a borda), arrasto
+  com o personagem deitado (rotacionado -90°), barra de vida do herói (verde → amarelo → vermelho) e aviso LENTO.
+- Exceção do autor: a Parte 1 pode ter até 80 s (luta completa).
+
+## VALDOR Parte 2 · efeitos e câmera de luta (14/11)
+- Câmera de luta (pedido do autor): órbita em volta de quem conjura, chicote de câmera com borrão seguindo o raio, zoom-soco no impacto,
+  ângulo holandês + vertigem na câmera lenta, tranco/recuo quando o herói apanha e bullet time (tempo parado, câmera girando) no golpe final.
+  Implementado em `roteiros/nova/previa-combate.js` (camFx, soco, remap de tempo). Tremor entra no centro do camFx, nunca com ctx.translate
+  antes de desenhar camadas (senão o personagem treme em dobro).
+- Câmera em órbita: o rosto do personagem só aparece de frente se a câmera ficar do lado para onde ele olha (checar o ângulo no fim do plano).
+- Lobo (Criaturas.lobo) é um recorte de perfil: em órbita, girar no máximo ~35° e nunca deixar ele no primeiro plano.
+- Efeitos novos: `efeitos/combate.js` (raio com galhos, mãos elétricas, impacto, corte, garras, números, HUD) e `efeitos/noite.js`.
+
+## VALDOR Parte 2 · cenário 3D de verdade (15/11)
+- Pedido do autor: nas referências o CENÁRIO é 3D e os PERSONAGENS são 2D. Cenário pintado em 2D "gruda" na câmera
+  (grama da frente em espaço de tela, chão chapado sem textura) e o autor percebe na hora. Agora o cenário é WebGL:
+  `cenarios/valdor-3d.js` (three.js r160 em `motor/vendor/`), com a câmera do three montada igual à do motor
+  (posição, yaw, horizonte fora do centro via makePerspective), então `cam.p()` bate com o 3D e os pés ficam no chão.
+- Primeiro plano: tudo a menos de `perto` m (padrão 1,2) é renderizado numa segunda passada e desfocado POR CIMA dos
+  personagens. Closes em espaço de tela (forca 0) não usam essa passada.
+- Ninguém em cima da água: o rio fica em Z≈19–22 (atrás da ação). Conferir posições dos personagens contra o traçado.
+- Pernas na vista tq/frente: coxa_d positiva e coxa_e negativa abrem as pernas; o contrário cruza em X (erro apontado
+  pelo autor nos ladrões). Caminhada em tq usa o passo frontal.
+- Som na hora que anoitece: ambiente de noite curto (corte + fade) e baixo; trilha com ganho reduzido nesse trecho.
+- (15/11, prévia 4 → 5) O autor cobrou SOMBRA dos personagens e grama passando ENTRE as pernas. Solução: cada personagem
+  2D vira uma placa em pé no 3D (`figuras` em Valdor3D.desenhar) — teste de profundidade com a grama + sombra da luz
+  principal (alphaTest no material da placa; o three copia alphaTest/map do material para o de sombra).
+  Atenção: depois de mudar left/right/top/bottom da câmera de sombra, chamar updateProjectionMatrix().
+  Sombra fina deitada some na grama alta: luz vindo da FRENTE da câmera (a sombra corre pelo caminho) e sombra de contato.
+- Referências ref-3d-03/04: cenário 3D com sol baixo e sombras longas, fundo bem desfocado (profundidade de campo),
+  personagens 2D, rosto mudando no meio do plano (olho virando, boca abrindo), fumaça/poeira volumosa, chuva, raios,
+  câmera baixa, closes e tomadas aéreas.

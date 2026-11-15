@@ -157,9 +157,14 @@
     const rig = new Rig(def);
     let ang = pdef ? pdef.angulos : (item.pose || {});
     if (item.pose2) { const p2 = typeof item.pose2 === 'string' ? reg[item.pose2].angulos : item.pose2; ang = misturaPoses(ang, p2, item.mistura || 0); }
-    if (o.caminhar !== undefined) ang = { ...caminhada(o.caminhar, o.velocidade) };
+    // andando: de frente/costas usa o passo frontal (de perfil o passo de lado parecia balançar para os lados)
+    if (o.caminhar !== undefined) ang = (vista === 'frente' || vista === 'costas' || vista === 'tq') ? { ...caminhadaFrontal(o.caminhar, o.velocidade, vista === 'costas') } : { ...caminhada(o.caminhar, o.velocidade) };
     if (o.caminharFrontal !== undefined) ang = { ...caminhadaFrontal(o.caminharFrontal, o.velocidade, vista === 'costas') };
-    rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? 1 : o.vida));
+    const andando = o.caminhar !== undefined || o.caminharFrontal !== undefined;
+    // de costas, os braços ficam espelhados: uma pose feita de frente (ex.: braços abertos) cruzava os braços nas costas.
+    // Inverte os ângulos dos braços, menos nas poses feitas para a vista de costas e nas caminhadas (que já tratam isso).
+    if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
+    rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida));
     const exprBase = typeof item.expressao === 'object' ? item.expressao : (def.expressoes[item.expressao || (pdef && pdef.expressao) || 'neutro']);
     rig.usarExpressao(expressaoViva(exprBase, TL.t, { voz: item.voz, semente: o.semente }));
     rig.desenhar(ctx, x, ySola, alturaPx, { espelhar: item.espelhar });
@@ -186,6 +191,8 @@
   function personagemGirando(ctx, item, x, ySola, alturaPx, rel, o) {
     const v = vistaPorAngulo(rel);
     const um = (vista) => ({ ...item, vista, espelhar: vista === 'frente' || vista === 'costas' ? false : v.espelhar });
+    // troca de vista direta, sem misturar as duas (usuário 12/11: a mistura deixava o personagem transparente)
+    if (!window.MISTURA_VISTAS) return personagem(ctx, um(v.vista2 && v.mistura >= 0.5 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
     if (!v.vista2 || v.mistura <= 0.02 || v.mistura >= 0.98) return personagem(ctx, um(v.vista2 && v.mistura >= 0.98 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
     const w = ctx.canvas.width, h = ctx.canvas.height, T = ctx.getTransform();
     const A = camadaFixa('giroA', w, h), B = camadaFixa('giroB', w, h);
@@ -260,7 +267,8 @@
   function legenda(ctx, t) {
     const bloco = TL.legendas.find((b) => t >= b.inicio && t < b.fim);
     if (!bloco) return;
-    const faixas = [380, 1500, 1180, 700];
+    // faixas da legenda (y): padrão no alto; o roteiro pode trocar ("legenda": { "faixas": [...] }), ex.: no meio da tela
+    const faixas = TL.legendaFaixas || [380, 1500, 1180, 700];
     const dist = (y) => { let d = 1e9; for (const r of rostos) d = Math.min(d, Math.abs(r.y - y) - r.r); return rostos.length ? d : 1e9; };
     let melhor = faixas[0], melhorD = -1;
     for (const y of faixas) {

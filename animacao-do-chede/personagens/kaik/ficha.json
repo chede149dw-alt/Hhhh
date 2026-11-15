@@ -1,0 +1,113 @@
+{
+  "fabrica": "criarKaik",
+  "registroPoses": "POSES_PADRAO",
+  "opcoes": {},
+  "titulo": "KAIK",
+  "subtitulo": "Melhor amigo do Chede · super velocidade",
+  "paleta": [
+    {
+      "nome": "Camiseta",
+      "cor": "#2F6FD6"
+    },
+    {
+      "nome": "Faixa",
+      "cor": "#F2EDE6"
+    },
+    {
+      "nome": "Bermuda",
+      "cor": "#C93A32"
+    },
+    {
+      "nome": "Pele",
+      "cor": "#F6D6C0"
+    },
+    {
+      "nome": "Cabelo",
+      "cor": "#2C2936"
+    },
+    {
+      "nome": "Poder",
+      "cor": "#59D8FF"
+    }
+  ],
+  "vistas": [
+    {
+      "nome": "Frente",
+      "vista": "frente",
+      "pose": "parado"
+    },
+    {
+      "nome": "3/4",
+      "vista": "tq",
+      "pose": "tq"
+    },
+    {
+      "nome": "Perfil",
+      "vista": "perfil",
+      "pose": "perfil"
+    },
+    {
+      "nome": "Costas",
+      "vista": "costas",
+      "pose": "costas"
+    }
+  ],
+  "expressoes": [
+    {
+      "nome": "Neutro",
+      "expressao": "neutro"
+    },
+    {
+      "nome": "Feliz",
+      "expressao": "feliz"
+    },
+    {
+      "nome": "Espanto",
+      "expressao": "espanto"
+    },
+    {
+      "nome": "Medo",
+      "expressao": "medo"
+    },
+    {
+      "nome": "Raiva",
+      "expressao": "raiva"
+    },
+    {
+      "nome": "Preocupado",
+      "expressao": "preocupado"
+    },
+    {
+      "nome": "Cansado",
+      "expressao": "cansado"
+    },
+    {
+      "nome": "Rindo",
+      "expressao": "rindo"
+    }
+  ],
+  "poses": [
+    {
+      "nome": "Parado",
+      "pose": "parado"
+    },
+    {
+      "nome": "Andando",
+      "pose": "andando"
+    },
+    {
+      "nome": "Acenando",
+      "pose": "acenando"
+    },
+    {
+      "nome": "Mãos na cintura",
+      "pose": "maos-na-cintura"
+    }
+  ],
+  "regras": [
+    "Sempre camiseta azul com faixa branca e bermuda vermelha",
+    "Cabelo preto cacheado",
+    "Poder: super velocidade com rastro ciano (nunca raio amarelo)"
+  ],
+  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}

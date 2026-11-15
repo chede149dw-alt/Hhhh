@@ -1,0 +1,117 @@
+{
+ "fabrica": "criarDaviJogo",
+ "registroPoses": "DAVI_JOGO_POSES",
+ "opcoes": {},
+ "titulo": "DAVI · NO JOGO",
+ "subtitulo": "Humano · Mago que conjura com as mãos (e também luta) · nível 1",
+ "paleta": [
+  {
+   "nome": "Manto",
+   "cor": "#4B5D7A"
+  },
+  {
+   "nome": "Capuz",
+   "cor": "#36435A"
+  },
+  {
+   "nome": "Runas",
+   "cor": "#EBC25A"
+  },
+  {
+   "nome": "Couro",
+   "cor": "#8A5A36"
+  },
+  {
+   "nome": "Magia",
+   "cor": "#6FC8FF"
+  },
+  {
+   "nome": "Pele",
+   "cor": "#8F5B3E"
+  }
+ ],
+ "vistas": [
+  {
+   "nome": "Frente",
+   "vista": "frente",
+   "pose": "parado"
+  },
+  {
+   "nome": "3/4",
+   "vista": "tq",
+   "pose": "tq"
+  },
+  {
+   "nome": "Perfil",
+   "vista": "perfil",
+   "pose": "perfil"
+  },
+  {
+   "nome": "Costas",
+   "vista": "costas",
+   "pose": "costas"
+  }
+ ],
+ "expressoes": [
+  {
+   "nome": "Neutro",
+   "expressao": "neutro"
+  },
+  {
+   "nome": "Feliz",
+   "expressao": "feliz"
+  },
+  {
+   "nome": "Espanto",
+   "expressao": "espanto"
+  },
+  {
+   "nome": "Medo",
+   "expressao": "medo"
+  },
+  {
+   "nome": "Raiva",
+   "expressao": "raiva"
+  },
+  {
+   "nome": "Preocupado",
+   "expressao": "preocupado"
+  },
+  {
+   "nome": "Cansado",
+   "expressao": "cansado"
+  },
+  {
+   "nome": "Rindo",
+   "expressao": "rindo"
+  }
+ ],
+ "poses": [
+  {
+   "nome": "Parado",
+   "pose": "parado"
+  },
+  {
+   "nome": "Andando",
+   "pose": "andando"
+  },
+  {
+   "nome": "Acenando",
+   "pose": "acenando"
+  },
+  {
+   "nome": "Conjurando",
+   "pose": "conjurando"
+  },
+  {
+   "nome": "Magia na mão",
+   "pose": "magia-na-mao"
+  }
+ ],
+ "regras": [
+  "Raça: humano. Classe: mago que conjura com as MÃOS (sem cajado nem varinha) e também luta corpo a corpo",
+  "Manto azul com capuz e barra de runas douradas, cinto com bolsinha, braçadeiras e botas de couro",
+  "Iniciante: magia azul fraquinha nas palmas + adaga enferrujada na cintura"
+ ],
+ "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}

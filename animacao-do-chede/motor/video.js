@@ -98,7 +98,7 @@ for (const p of roteiro.planos) {
 for (let i = 0; i < legendas.length - 1; i++) legendas[i].fim = Math.min(legendas[i].fim + 0.15, legendas[i + 1].inicio);
 const total = t;
 const nQuadros = Math.round(total * FPS);
-const TL = { fps: FPS, total, planos, falas: falas.map(({ arquivo, ...f }) => f), legendas };
+const TL = { fps: FPS, total, planos, falas: falas.map(({ arquivo, ...f }) => f), legendas, legendaFaixas: (roteiro.legenda || {}).faixas };
 fs.writeFileSync(path.join(pastaAudio, 'linha-do-tempo.json'), JSON.stringify({ ...TL, falas: falas.map(({ envelope, ...f }) => f) }, null, 2));
 console.log('Duração', total.toFixed(2) + 's,', nQuadros, 'quadros');
 for (const p of planos) console.log('  ', p.id.padEnd(12), (p.fim - p.inicio).toFixed(2) + 's');
@@ -108,10 +108,8 @@ const bipe = path.join(pastaAudio, 'sfx-despertador.wav');
 const pDesp = planos.find((p) => p.id === 'despertador');
 const entradas = [], filtros = [];
 falas.forEach((f, i) => { entradas.push('-i', f.arquivo); filtros.push(`[${i}]adelay=${Math.round(f.inicio * 1000)}|${Math.round(f.inicio * 1000)},volume=1.6[f${i}]`); });
-const mixVoz = falas.map((_, i) => `[f${i}]`).join('');
-let mix = ''; // efeitos (tudo que não é voz nem música)
-const temDespertadorReal = pDesp && (roteiro.planos.find((p) => p.id === 'despertador').sfx || []).some((s) => s.tipo === 'arquivo');
-if (pDesp && !temDespertadorReal) {
+let mix = falas.map((_, i) => `[f${i}]`).join('');
+if (pDesp) {
   execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', `sine=frequency=2200:duration=${(pDesp.fim - pDesp.inicio).toFixed(2)}`, '-af', "volume='if(lt(mod(t,0.25),0.1),0.35,0)':eval=frame", bipe]);
   entradas.push('-i', bipe);
   const k = falas.length;
@@ -131,8 +129,11 @@ for (const p of planos) {
   for (const b of p.batidas) addSfx(sfxArq.coracao, p.inicio + b, 1.1);
   for (const s of p.sfx) {
     if (s.tipo === 'impacto') addSfx(sfxArq.impacto, p.inicio + (s.em || 0), s.volume || 1.0);
-    // efeito gravado (ex.: ElevenLabs): { tipo: 'arquivo', arquivo: 'audio/sfx/x.wav' (a partir da pasta do projeto), em, volume }
-    if (s.tipo === 'arquivo') addSfx(path.join(raiz, s.arquivo), p.inicio + (s.em || 0), s.volume || 1.0);
+    // efeito sonoro de arquivo (audio/<serie>/<arquivo>), ex.: { "tipo": "arquivo", "arquivo": "sfx/rosnado.mp3", "em": 0.4, "volume": 0.8, "corte": 1.2 }
+    if (s.tipo === 'arquivo') {
+      const sai = s.sai || 0.2, corte = (s.corte ? `atrim=0:${s.corte},afade=t=out:st=${Math.max(0, s.corte - sai).toFixed(2)}:d=${sai},` : '') + (s.entra ? `afade=t=in:d=${s.entra},` : '');
+      addSfx(path.join(raiz, 'audio', serie, s.arquivo), p.inicio + (s.em || 0), s.volume || 1.0, `aresample=48000,aformat=channel_layouts=mono,${corte}`);
+    }
     if (s.tipo === 'ronco') {
       const de = s.de || 0, ate = Math.min(p.fim - p.inicio, s.ate === undefined ? p.fim - p.inicio : s.ate), d = ate - de;
       const arq = path.join(pastaAudio, `sfx-ronco-${p.id}.wav`);
@@ -141,27 +142,26 @@ for (const p of planos) {
     }
   }
 }
-// vozes juntas; a música de fundo (roteiro.trilha) abaixa sozinha quando alguém fala (sidechain)
-filtros.push(falas.length > 1 ? `${mixVoz}amix=inputs=${falas.length}:normalize=0[vozes]` : `${mixVoz}anull[vozes]`);
-let finais = '[voz1]' + mix, nFinais = 1 + (mix.match(/\[/g) || []).length;
-if (roteiro.trilha) {
-  const k = entradas.length / 2; entradas.push('-i', path.join(raiz, roteiro.trilha.arquivo));
-  filtros.push('[vozes]asplit=2[voz1][vozchave]');
-  filtros.push(`[${k}]aformat=sample_rates=48000:channel_layouts=stereo,volume=${roteiro.trilha.volume || 0.3},apad,atrim=0:${total.toFixed(3)}[mus]`);
-  filtros.push(`[vozchave]aformat=sample_rates=48000:channel_layouts=stereo[chave]`);
-  filtros.push(roteiro.trilha.abaixar === false ? '[mus]anull[musd]' : '[mus][chave]sidechaincompress=threshold=0.015:ratio=8:attack=20:release=400[musd]');
-  finais += '[musd]'; nFinais++;
-} else filtros.push('[vozes]anull[voz1]');
-filtros.push(`${finais}amix=inputs=${nFinais}:normalize=0,apad,atrim=0:${total.toFixed(3)},loudnorm=I=-16:TP=-1.5[a]`);
+// trilha sonora (roteiro.trilha = { arquivo, volume }): abaixa sozinha quando o narrador fala (sidechain)
+if (roteiro.trilha && falas.length) {
+  const voz = falas.map((_, i) => `[f${i}]`).join('');
+  filtros.push(`${voz}amix=inputs=${falas.length}:normalize=0,asplit=2[vz1][vz2]`);
+  const k = entradas.length / 2; entradas.push('-i', path.join(raiz, 'audio', serie, roteiro.trilha.arquivo));
+  filtros.push(`[${k}]aresample=48000,aformat=channel_layouts=mono,volume=${roteiro.trilha.volume || 0.5},apad[mu]`);
+  filtros.push(`[mu][vz2]sidechaincompress=threshold=0.02:ratio=5:attack=15:release=450[mud]`);
+  mix = mix.replace(voz, '') + '[vz1][mud]';
+}
+const n = mix.match(/\[/g).length;
+filtros.push(`${mix}amix=inputs=${n}:normalize=0,apad,atrim=0:${total.toFixed(3)},loudnorm=I=-16:TP=-1.5[a]`);
 const audioFinal = path.join(pastaAudio, 'mix.wav');
 execFileSync('ffmpeg', ['-v', 'error', '-y', ...entradas, '-filter_complex', filtros.join(';'), '-map', '[a]', '-ar', '48000', audioFinal]);
 
 // ---------- 4. quadros em paralelo ----------
 const scripts = ['motor/cena.js', 'motor/cena3d.js', 'motor/cinema.js', 'motor/personagem-base.js',
-  'personagens/lucas/lucas.js', 'personagens/mae/mae.js', 'personagens/rafael/rafael.js',
+  'personagens/lucas/lucas.js', 'personagens/mae/mae.js', 'personagens/rafael/rafael.js', 'personagens/chede/chede.js', 'personagens/kaik/kaik.js', 'personagens/lia/lia.js', 'efeitos/fenda.js',
   'cenarios/objetos/cama.js', 'cenarios/objetos/despertador.js', 'cenarios/objetos/mochila.js',
   'cenarios/quarto-3d.js', 'cenarios/rua-3d.js', 'cenarios/escola-3d.js', 'cenarios/patio-3d.js',
-  'efeitos/invisibilidade.js', 'efeitos/poder-energia.js', 'efeitos/poder-terra.js', 'efeitos/terra-cena.js', 'motor/mao-detalhe.js', 'motor/episodio.js', planosArq].map((s) => path.resolve(raiz, s));
+  'efeitos/invisibilidade.js', 'efeitos/poder-energia.js', 'efeitos/poder-terra.js', 'efeitos/terra-cena.js', 'motor/mao-detalhe.js', ...(roteiro.scripts || []), 'motor/episodio.js', planosArq].map((s) => path.resolve(raiz, s));
 
 const tmp = path.join(pastaAudio, 'partes'); fs.mkdirSync(tmp, { recursive: true });
 async function trabalhador(k, browser) {

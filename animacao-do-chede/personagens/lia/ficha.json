@@ -1,0 +1,113 @@
+{
+  "fabrica": "criarLia",
+  "registroPoses": "POSES_PADRAO",
+  "opcoes": {},
+  "titulo": "LIA",
+  "subtitulo": "Dona do gato preto · a terceira ficha (NÃO ABORDAR) · mesmo poder do Chede",
+  "paleta": [
+    {
+      "nome": "Moletom",
+      "cor": "#5E7A45"
+    },
+    {
+      "nome": "Calça",
+      "cor": "#8FA9C9"
+    },
+    {
+      "nome": "Pele",
+      "cor": "#C98B63"
+    },
+    {
+      "nome": "Cabelo",
+      "cor": "#4A3536"
+    },
+    {
+      "nome": "Tênis",
+      "cor": "#F2EDE6"
+    },
+    {
+      "nome": "Poder",
+      "cor": "#7B4DFF"
+    }
+  ],
+  "vistas": [
+    {
+      "nome": "Frente",
+      "vista": "frente",
+      "pose": "parado"
+    },
+    {
+      "nome": "3/4",
+      "vista": "tq",
+      "pose": "tq"
+    },
+    {
+      "nome": "Perfil",
+      "vista": "perfil",
+      "pose": "perfil"
+    },
+    {
+      "nome": "Costas",
+      "vista": "costas",
+      "pose": "costas"
+    }
+  ],
+  "expressoes": [
+    {
+      "nome": "Neutro",
+      "expressao": "neutro"
+    },
+    {
+      "nome": "Feliz",
+      "expressao": "feliz"
+    },
+    {
+      "nome": "Espanto",
+      "expressao": "espanto"
+    },
+    {
+      "nome": "Medo",
+      "expressao": "medo"
+    },
+    {
+      "nome": "Raiva",
+      "expressao": "raiva"
+    },
+    {
+      "nome": "Preocupado",
+      "expressao": "preocupado"
+    },
+    {
+      "nome": "Cansado",
+      "expressao": "cansado"
+    },
+    {
+      "nome": "Rindo",
+      "expressao": "rindo"
+    }
+  ],
+  "poses": [
+    {
+      "nome": "Parado",
+      "pose": "parado"
+    },
+    {
+      "nome": "Andando",
+      "pose": "andando"
+    },
+    {
+      "nome": "Acenando",
+      "pose": "acenando"
+    },
+    {
+      "nome": "Mãos na cintura",
+      "pose": "maos-na-cintura"
+    }
+  ],
+  "regras": [
+    "Sempre moletom verde-musgo, calça jeans clara e tênis branco",
+    "Cabelo castanho-escuro preso em coque",
+    "Poder: fenda roxa (igual à do Chede); sente o \"eco\" de outras fendas"
+  ],
+  "selo": "PROPOSTA · AGUARDANDO APROVAÇÃO"
+}
