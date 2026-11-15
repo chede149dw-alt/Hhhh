@@ -188,20 +188,11 @@
   }
   // personagem com a vista escolhida pelo ângulo; perto do limite entre duas vistas, mistura as duas
   function personagemGirando(ctx, item, x, ySola, alturaPx, rel, o) {
+    // SEM FANTASMA (pedido do autor, 15/11/2026): na troca de vista o desenho troca direto para a vista mais próxima,
+    // como no recorte tradicional. Antes as duas vistas eram desenhadas meio transparentes uma sobre a outra.
     const v = vistaPorAngulo(rel);
     const um = (vista) => ({ ...item, vista, espelhar: vista === 'frente' || vista === 'costas' ? false : v.espelhar });
-    if (!v.vista2 || v.mistura <= 0.02 || v.mistura >= 0.98) return personagem(ctx, um(v.vista2 && v.mistura >= 0.98 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
-    eventos.push({ tipo: 'mistura', quem: item.fabrica, vistas: v.vista + '/' + v.vista2, mistura: +v.mistura.toFixed(2) });
-    const w = ctx.canvas.width, h = ctx.canvas.height, T = ctx.getTransform();
-    const A = camadaFixa('giroA', w, h), B = camadaFixa('giroB', w, h);
-    const gA = A.getContext('2d'), gB = B.getContext('2d'); gA.setTransform(T); gB.setTransform(T);
-    const rig = personagem(gA, um(v.vista), x, ySola, alturaPx, o);
-    personagem(gB, um(v.vista2), x, ySola, alturaPx, { ...o, semRosto: true });
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.globalAlpha = 1 - v.mistura; ctx.drawImage(A, 0, 0);
-    ctx.globalAlpha = v.mistura; ctx.drawImage(B, 0, 0);
-    ctx.restore();
-    return v.mistura < 0.5 ? rig : rig;
+    return personagem(ctx, um(v.vista2 && v.mistura >= 0.5 ? v.vista2 : v.vista), x, ySola, alturaPx, o);
   }
 
   // personagem desenhado numa camada própria (para efeitos como a invisibilidade)

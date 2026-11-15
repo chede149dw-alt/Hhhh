@@ -20,7 +20,7 @@ Este arquivo guarda o que só o olho do autor decide.
 | Boneco único: corpo, mão e poses só em `motor/corpo.js` | A mão da Mãe e do Rafael era uma cópia pior da do Lucas (o "Pedro desconexo" do livro) | 15/11 |
 | Só peça aprovada da biblioteca no vídeo final | Peça não aprovada volta com cara de oficial | 15/11 |
 | Nada rente à câmera (menos de 0,6 m, dentro do quadro) | Quadrados de 1 quadro, borrão gigante e personagem que some e volta (4 vezes) | 15/11 |
-| Sem personagem fantasma (mais de 1 s no meio da troca de vista) | Câmera parando perto de 22,5°, 67,5° ou 125° deixa o personagem transparente | 15/11 |
+| Sem personagem fantasma (nenhum quadro com duas vistas misturadas) | O autor não quer o personagem meio transparente na troca de vista | 15/11 |
 | Nada parado mais de 1 s | Nada fica parado: personagem age ou reage, câmera viva | até 14/11 |
 | Nenhum quadro que pisca | Os quadrados pretos e brancos de 1 quadro | 15/11 |
 | Brilho sem estourar (até 6% quase branco) | Brilho somado demais vira mancha branca (3 vezes) | 15/11 |
@@ -72,4 +72,4 @@ Quando o autor elogia uma coisa, ela sobe pro molde (`roteiros/_molde/`) ou pro 
 - 15/11 · Estilo dos personagens: fica o do autor (versão A). Foi testado um Lucas no estilo do canal @rmhkaiser (versão B: olho em ponto, sobrancelha grossa, sem blush), com autorização; o autor preferiu o próprio. A versão B não ficou guardada.
 - 15/11 · A mão de punho da Mãe no episódio aprovado ganhou polegar e dedos (mão oficial). Foi a única diferença no teste de diferença zero (5 quadros, 0,03% dos pixels).
 - 15/11 · Mãe, Rafael, escola, invisibilidade e energia: aprovados pelo autor e marcados como "aprovado" na biblioteca.
-- 15/11 · Fantasma: a trava continua barrando só a partir de 1 s no meio da troca de vista. O trecho de 0,67 s em 0:50,6 do episódio aprovado fica como está; o motor não foi mudado.
+- 15/11 · Fantasma: o autor não quer. O motor não mistura mais duas vistas na troca (troca o desenho direto para a vista mais próxima) e a trava barra qualquer quadro misturado. Isso muda o episódio aprovado só nos quadros de troca de vista.

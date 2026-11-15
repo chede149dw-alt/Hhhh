@@ -12,7 +12,8 @@
 // Cada trava foi testada no episódio 1 da terra (versão dramática, aprovado) antes de valer: ele passa em todas.
 // Calibragem (15/11/2026): "fantasma" com 0,3 s barrava o aprovado (as misturas eram a câmera ATRAVESSANDO a troca de
 // vista); passou a contar só o personagem parado no meio da troca (30–70%) por mais de 1 s. O pior trecho do aprovado
-// tem 0,67 s (0:50,6, plano coluna). "Rente" barrava um figurante 18 mil px fora da tela; passou a contar só dentro do quadro.
+// tem 0,67 s (0:50,6, plano coluna). Depois o autor pediu para tirar o fantasma de vez: o motor troca a vista direto
+// e qualquer quadro misturado barra. "Rente" barrava um figurante 18 mil px fora da tela; passou a contar só dentro do quadro.
 // Para mudar um limite, mude aqui, anote em regras.md (regra, motivo, data) e rode de novo no episódio aprovado.
 const fs = require('fs');
 const path = require('path');
@@ -23,7 +24,7 @@ const LIMITES = {
   capaMin: 2.0,            // primeiros 2 s = capa com a premissa
   falaPassaMax: 0.3,       // a fala pode invadir o plano seguinte até 0,3 s (corte em "J"); mais que isso, não cabe
   palavrasLegenda: 3,      // legenda de no máximo 3 palavras
-  fantasmaMax: 30,         // até 30 quadros seguidos (1 s) com o personagem no meio da troca de vista (mistura 30–70%)
+  fantasmaMax: 0,          // nenhum quadro com duas vistas misturadas (o autor não quer fantasma, 15/11/2026)
   telaMargem: 300,         // personagem rente só conta se estiver dentro do quadro (com esta folga em px)
   estouradoPct: 6,         // no máximo 6% de pixels quase brancos num quadro
   volumeAlvo: -16, volumeFolga: 1.5, picoMax: -1.0,
@@ -101,9 +102,9 @@ function durante(eventos, TL) {
     rente.length ? rente.map((x) => `${fmt(x.ini / fps)} plano ${plano(x.ini)}: ${x.e.quem} a ${x.e.dz} m`).join('; ') + '. Leve a câmera por fora (pelo menos 0,6 m).' : 'ok'));
   const fantasmas = [];
   for (const quem of new Set(eventos.flat().filter((e) => e.tipo === 'mistura').map((e) => e.quem))) {
-    for (const x of trechos((e) => e.tipo === 'mistura' && e.quem === quem && e.mistura >= 0.3 && e.mistura <= 0.7)) if (x.quadros > LIMITES.fantasmaMax) fantasmas.push(`${fmt(x.ini / fps)} plano ${plano(x.ini)}: ${quem} ${(x.quadros / fps).toFixed(1)} s em ${x.e.vistas}`);
+    for (const x of trechos((e) => e.tipo === 'mistura' && e.quem === quem)) if (x.quadros > LIMITES.fantasmaMax) fantasmas.push(`${fmt(x.ini / fps)} plano ${plano(x.ini)}: ${quem} ${(x.quadros / fps).toFixed(1)} s em ${x.e.vistas}`);
   }
-  r.push(trava('sem personagem fantasma (câmera parada no limite das vistas)', !fantasmas.length,
+  r.push(trava('sem personagem fantasma (duas vistas misturadas)', !fantasmas.length,
     fantasmas.length ? fantasmas.join('; ') + '. Não pare a órbita perto de 22,5°, 67,5° ou 125°.' : 'ok'));
   const leg = trechos((e) => e.tipo === 'legenda-rosto');
   r.push(trava('legenda não cobre rosto', !leg.length, leg.length ? leg.map((x) => `${fmt(x.ini / fps)} "${x.e.texto}"`).join('; ') : 'ok'));
