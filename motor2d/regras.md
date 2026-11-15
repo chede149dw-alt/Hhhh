@@ -71,5 +71,5 @@ Quando o autor elogia uma coisa, ela sobe pro molde (`roteiros/_molde/`) ou pro 
 
 - 15/11 · Estilo dos personagens: fica o do autor (versão A). Foi testado um Lucas no estilo do canal @rmhkaiser (versão B: olho em ponto, sobrancelha grossa, sem blush), com autorização; o autor preferiu o próprio. A versão B não ficou guardada.
 - 15/11 · A mão de punho da Mãe no episódio aprovado ganhou polegar e dedos (mão oficial). Foi a única diferença no teste de diferença zero (5 quadros, 0,03% dos pixels).
-- 15/11 · Mãe, Rafael, escola, invisibilidade e energia ficam "a confirmar" na biblioteca até o autor dar o "sim".
+- 15/11 · Mãe, Rafael, escola, invisibilidade e energia: aprovados pelo autor e marcados como "aprovado" na biblioteca.
 - 15/11 · Fantasma: a trava continua barrando só a partir de 1 s no meio da troca de vista. O trecho de 0,67 s em 0:50,6 do episódio aprovado fica como está; o motor não foi mudado.
