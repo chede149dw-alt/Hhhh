@@ -149,7 +149,9 @@
       // Peças com o mesmo "grupo" (ex.: braço + antebraço) são desenhadas juntas em duas passadas:
       // primeiro o contorno de todas, depois o preenchimento. Assim a emenda da articulação some
       // e a silhueta do membro continua contornada mesmo dobrado.
-      const ordem = [...this.def.partes].sort((a, b) => a.z - b.z);
+      // _z: { peça: z } troca a ordem de desenho na pose (ex.: de costas, braços esticados para a frente ficam atrás do corpo)
+      const zp = this.pose._z || {}, zDe = (q) => (zp[q.nome] === undefined ? q.z : zp[q.nome]);
+      const ordem = [...this.def.partes].sort((a, b) => zDe(a) - zDe(b));
       const feitos = new Set();
       const desenharPeca = (p, modo) => {
         const md = p.espelho === -1 ? m[p.nome].scale(-1, 1) : m[p.nome];

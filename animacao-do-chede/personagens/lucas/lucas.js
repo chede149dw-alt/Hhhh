@@ -767,9 +767,10 @@
       // visto de costas: os dois braços vão para a frente (para dentro da tela), um pouco abertos, e as mãos
       // aparecem pelas costas, acima dos ombros, dedos para cima
       porVista: {
-        costas: { tronco: 4, cabeca: 4, braco_d: -158, _sy_braco_d: 0.42, antebraco_d: 18, _sy_antebraco_d: 0.6, mao_d: -24,
-          braco_e: 158, _sy_braco_e: 0.42, antebraco_e: -18, _sy_antebraco_e: 0.6, mao_e: 24,
-          coxa_d: -12, canela_d: 6, coxa_e: 12, canela_e: -4, _maos: { d: 'dorso', e: 'dorso' } },
+        costas: { tronco: 5, cabeca: 3, braco_d: -112, _sy_braco_d: 0.5, antebraco_d: -34, _sy_antebraco_d: 0.62, mao_d: -16,
+          braco_e: 112, _sy_braco_e: 0.5, antebraco_e: 34, _sy_antebraco_e: 0.62, mao_e: 16,
+          coxa_d: -12, canela_d: 6, coxa_e: 12, canela_e: -4, _maos: { d: 'dorso', e: 'dorso' },
+          _z: { braco_d: 2, antebraco_d: 2.1, mao_d: 2.2, braco_e: 2, antebraco_e: 2.1, mao_e: 2.2 } },
       },
     },
     caido: {

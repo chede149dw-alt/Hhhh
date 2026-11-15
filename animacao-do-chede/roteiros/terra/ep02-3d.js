@@ -9,6 +9,19 @@
   const LUZ = { lado: 1, cor: 'rgb(255,165,80)', forca: 0.75 };
   const T3 = () => Terra3D;
   const batida = (t) => Math.pow(Math.max(0, Math.sin(t * Math.PI * 1.1)), 6); // coração batendo
+  // brilho do poder nas mãos do Lucas, desenhado ATRÁS dele (destination-over): de costas, a luz vazando pelos lados
+  // mostra que as mãos estão na frente do corpo, empurrando para o golem
+  function brilhoMaos(ctx, rig, t) {
+    if (!rig || !rig.pontoMundo || !rig.ultimas) return;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'destination-over';
+    for (const m of ['mao_d', 'mao_e']) {
+      const p = rig.pontoMundo(m, [0, 0.2]), r = rig.escalaPx * (1.1 + 0.12 * Math.sin(t * 9 + (m === 'mao_d' ? 0 : 2)));
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+      g.addColorStop(0, 'rgba(255,236,190,0.95)'); g.addColorStop(0.3, 'rgba(255,170,80,0.55)'); g.addColorStop(1, 'rgba(255,120,40,0)');
+      ctx.fillStyle = g; ctx.fillRect(p.x - r, p.y - r, 2 * r, 2 * r);
+    }
+    ctx.restore();
+  }
   window.PLANOS = {
     caverna(ctx, u, d, api) {
       const [nx, , nz] = T3().pontos.nucleo;
@@ -19,11 +32,15 @@
       ], { pulso: batida(api.t) * 0.6 });
     },
     escada(ctx, u, d, api) {
-      const D = T3().escada, zL = 3.0 + u * 0.75, yL = D.yEm(zL), xL = D.X0 - 0.35;
+      // um degrau por passo: cada pé pousa em cima do degrau e o corpo baixa um degrau a cada passo (antes o corpo descia
+      // em rampa e o pé entrava no degrau). Ritmo devagar e com cuidado: 0,6 degrau por segundo.
+      const D = T3().escada, passos = 0.6, s = 8.6 + u * passos, n = Math.floor(s), fr = s - n;
+      const desce = fr < 0.15 ? 0 : fr > 0.75 ? 1 : (1 - Math.cos(Math.PI * (fr - 0.15) / 0.6)) / 2;
+      const zL = (s + 0.5) * D.PZ, yL = -(n + desce) * D.PY, xL = D.X0 - 0.35;
       const cam = api.orbita({ alvo: [xL, yL + 0.95, zL], raio: 3.1, ang: Math.PI - 0.95 + u * 0.08, altura: yL + 0.55, f: 980, ySalvo: 1080 });
       T3().cena(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...LUCAS, pose: {}, expressao: { ...LUCAS_EXPRESSOES.curioso, olhar: [0.01, 0.012] } }, xL, zL, 1.75, { y: yL, descer: api.t, luz: LUZ, rumo: Math.PI }) },
-      ], { nucleo: false, luzes: [{ x: xL, y: yL + 1.6, z: zL + 1.2, cor: '#FFB070', forca: 1.2, raio: 5 }] });
+        { f: () => api.personagem3d(cam, { ...LUCAS, pose: {}, expressao: { ...LUCAS_EXPRESSOES.curioso, olhar: [0.01, 0.012] } }, xL, zL, 1.75, { y: yL, descer: (0.5 + s) / 1.7, vida: 0, luz: LUZ, rumo: Math.PI }) },
+      ], { nucleo: false, sol: 4, luzes: [{ x: xL, y: yL + 1.6, z: zL + 1.2, cor: '#FFB070', forca: 1.2, raio: 5 }] });
     },
     nucleo(ctx, u, d, api) {
       const [nx, , nz] = T3().pontos.nucleo;
@@ -38,9 +55,10 @@
       const cam = api.orbita({ alvo: [0, 1.9, 8.0], raio: 5.2, ang: 0.25 + u * 0.35, altura: 1.1, f: 1000, ySalvo: 1080 });
       T3().cena(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...GOLEM, pose: 'punho' }, G[0], G[1], 3.2, { luz: LUZ, olhaPara: R }) },
-        { f: () => api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'raiva' }, L[0], L[1], 1.75, { luz: LUZ, olhaPara: G }) },
+        { f: () => { const rig = api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'raiva' }, L[0], L[1], 1.75, { luz: LUZ, olhaPara: G });
+          brilhoMaos(ctx, rig, api.t); return rig; } },
         { f: () => api.personagem3d(cam, { ...RAFAEL, pose: 'parado', expressao: 'medo' }, R[0], R[1], 1.8, { luz: LUZ, olhaPara: G }) },
-      ], { nucleo: false, muro: { x: M[0], z: M[1], larg: 2.2, sobe: Math.min(1, 0.3 + u * 1.4), racha: Math.max(0, u * 2 - 1), giro: 0.3 },
+      ], { nucleo: false, muro: { x: M[0], z: M[1], larg: 2.2, sobe: Math.min(1, 0.3 + u * 1.4), racha: Math.min(1, Math.max(0, (u - 1.5) * 0.8)), giro: 0.3 },
         luzes: [{ x: L[0] + 0.3, y: 1.5, z: L[1] + 0.5, cor: '#FFB060', forca: 1.5, raio: 5 }] });
     },
     mae(ctx, u, d, api) {
@@ -48,7 +66,7 @@
       const cam = api.orbita({ alvo: [ex, 1.4, ez + 1.5], raio: 2.6, ang: -0.9 + u * 0.08, altura: 1.5, f: 1200, ySalvo: 950 });
       T3().cena(ctx, api, cam, [
         { f: () => { const rig = api.personagem3d(cam, { ...MAE, pose: 'parado', expressao: 'serio' }, ex, ez + 1.5, 1.65, { luz: LUZ, rumo: -0.9 });
-          const p = rig.pontoMundo && rig.pontoMundo('tronco', [0, -1.1]); if (p && p.x > -1000) Efeitos.amuleto(ctx, p.x, p.y, rig.escalaPx * 0.32, 1, api.t); return rig; } },
+          const p = rig.pontoMundo && rig.pontoMundo('tronco', [0, -1.1]); if (p && p.x > -1000) Efeitos.amuleto(ctx, p.x, p.y, rig.escalaPx * 0.32, 1, api.t, [rig.pontoMundo('pescoco', [-0.11, 0.0]), rig.pontoMundo('pescoco', [0.11, 0.0])].map((q) => [q.x, q.y])); return rig; } },
       ], { pulso: 0.3, luzes: [{ x: ex, y: 1.3, z: ez + 1.2, cor: '#FF9A40', forca: 1.0, raio: 3 }] });
     },
   };

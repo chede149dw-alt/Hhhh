@@ -35,7 +35,7 @@
     return tela(512, 512, (g, w, h) => {
       g.fillStyle = base; g.fillRect(0, 0, w, h); const r = rng(seed);
       for (let i = 0; i < 2600; i++) { const x = r() * w, y = r() * h, s = 2 + r() * 14, k = r(); g.fillStyle = k < 0.5 ? `rgba(20,12,30,${0.05 + r() * 0.1})` : `rgba(255,240,230,${0.03 + r() * 0.06})`; g.beginPath(); g.ellipse(x, y, s, s * (0.5 + r() * 0.5), r() * 3, 0, TAU); g.fill(); }
-      g.strokeStyle = 'rgba(15,8,20,0.35)'; g.lineWidth = 2;
+      g.strokeStyle = 'rgba(15,8,20,0.16)'; g.lineWidth = 2;
       for (let i = 0; i < 40; i++) { let x = r() * w, y = r() * h; g.beginPath(); g.moveTo(x, y); for (let k = 0; k < 5; k++) { x += (r() - 0.5) * 60; y += (r() - 0.5) * 60; g.lineTo(x, y); } g.stroke(); }
     });
   }
@@ -78,7 +78,7 @@
   }
 
   // ---------- montagem do mundo ----------
-  let R = null;
+  let R = null, ladosTunel = null;
   function deformar(geo, f) { const p = geo.attributes.position, v = new THREE.Vector3(); for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i); f(v, i); p.setXYZ(i, v.x, v.y, v.z); } geo.computeVertexNormals(); return geo; }
   function montar() {
     const T = THREE, r = rng(77);
@@ -87,27 +87,38 @@
     const esc = 0.85; renderer.setPixelRatio(1); renderer.setSize(Math.round(W * esc), Math.round(H * esc), false);
     renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
-    const cena = new T.Scene(); cena.fog = new T.Fog(0x2a1c34, 14, 48); cena.background = new T.Color(0x1a1222);
+    renderer.shadowMap.autoUpdate = true;
+    const cena = new T.Scene(); cena.fog = new T.Fog(0x2c2036, 20, 65); cena.background = new T.Color(0x1c1424);
     const camera = new T.PerspectiveCamera(60, W / H, 0.05, 300);
     const uni = { uTempo: { value: 0 } };
-    const rocha = textura(texRocha('#7A6A84', 3), [14, 5]), rocha2 = textura(texRocha('#6E5A62', 9), [3, 3]);
+    const rocha = textura(texRocha('#7A6A84', 3), [14, 5]), rocha2 = textura(texRocha('#6E6466', 9), [3, 3]);
     const std = (o) => new T.MeshStandardMaterial({ roughness: 0.92, metalness: 0.0, flatShading: true, ...o });
 
     // luz ambiente roxa bem baixa + luz do núcleo (holofote que faz sombra) + luz pontual do núcleo + cristais
-    const hemi = new T.HemisphereLight(0xb69ad0, 0x4a3040, 2.6); cena.add(hemi);
+    const hemi = new T.HemisphereLight(0xb0a0d0, 0x2c2434, 1.25); cena.add(hemi);
+    // luz que entra por uma fenda no teto: é ela que faz as sombras bem marcadas no chão (personagens, golem, muro, cristais)
+    const sol = new T.DirectionalLight(0xffe0b8, 3.2); sol.castShadow = true; sol.shadow.mapSize.set(2048, 2048);
+    Object.assign(sol.shadow.camera, { left: -11, right: 11, top: 11, bottom: -11, near: 0.5, far: 60 }); sol.shadow.bias = -0.0008; sol.shadow.normalBias = 0.03; sol.shadow.radius = 3;
+    cena.add(sol); cena.add(sol.target);
     const spot = new T.SpotLight(0xffa050, 20, 40, Math.PI * 0.42, 0.6, 1.4); spot.castShadow = true; spot.shadow.mapSize.set(1024, 1024); spot.shadow.bias = -0.0006; spot.shadow.camera.near = 0.5; spot.shadow.camera.far = 40;
     spot.position.set(NUCLEO[0], NUCLEO[1] + 0.4, -NUCLEO[2]); cena.add(spot); cena.add(spot.target);
     const nucleoLuz = new T.PointLight(0xff8a3a, 40, 22, 1.6); nucleoLuz.position.set(NUCLEO[0], NUCLEO[1], -NUCLEO[2]); cena.add(nucleoLuz);
     const pontos = []; for (let i = 0; i < 4; i++) { const p = new T.PointLight(0xff9a40, 0, 8, 1.8); cena.add(p); pontos.push(p); }
 
     // ===== caverna =====
-    const domo = deformar(new T.SphereGeometry(1, 96, 48, 0, TAU, 0, Math.PI / 2), (v) => {
-      const a = Math.atan2(v.z, v.x), k = raioParede(a) / R0, n = 1 + 0.12 * (fbm(a * 3 + 2, v.y * 4) - 0.5);
+    const domo = deformar(new T.SphereGeometry(1, 160, 64, 0, TAU, 0, Math.PI / 2), (v) => {
+      const a = Math.atan2(v.z, v.x), k = raioParede(a) / R0, n = 1 + 0.16 * (fbm(a * 3 + 2, v.y * 4) - 0.5) + 0.09 * (fbm(a * 14 + 7, v.y * 16) - 0.5);
       v.set(v.x * R0 * k * n, v.y * TETO * (0.92 + 0.16 * fbm(v.x * 3, v.z * 3)), v.z * R0 * k * n);
     });
-    const domoM = new T.Mesh(domo, std({ map: rocha, color: 0xb8a4c8, side: T.BackSide })); domoM.position.set(CX, 0, -CZ); domoM.receiveShadow = true; cena.add(domoM);
+    // cor de rocha por vértice: manchas grandes, camadas (estratos) e a base mais escura, para a parede não parecer céu
+    { const p = domo.attributes.position, cor = new Float32Array(p.count * 3), base = new T.Color(0xb8a2c4), escura = new T.Color(0x5a4660), quente = new T.Color(0xc89a8a), c = new T.Color();
+      for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), z = p.getZ(i), a = Math.atan2(z, x);
+        const m = fbm(a * 5 + 1, y * 0.5), estr = 0.5 + 0.5 * Math.sin(y * 3.1 + fbm(a * 8, y) * 3), k = Math.min(1, Math.max(0, 0.15 + 0.85 * m * 1.3 - 0.25 * estr));
+        c.copy(escura).lerp(base, k); if (y < 2.5) c.lerp(quente, 0.25 * (1 - y / 2.5)); cor.set([c.r, c.g, c.b], i * 3); }
+      domo.setAttribute('color', new T.BufferAttribute(cor, 3)); }
+    const domoM = new T.Mesh(domo, std({ map: rocha, color: 0xffffff, vertexColors: true, side: T.BackSide })); domoM.position.set(CX, 0, -CZ); domoM.receiveShadow = true; cena.add(domoM);
     const chaoG = deformar(new T.CircleGeometry(R0 * 1.12, 96, 0, TAU).rotateX(-Math.PI / 2), (v) => { v.y = (fbm(v.x * 0.6 + 10, v.z * 0.6) - 0.5) * 0.12 * Math.min(1, Math.hypot(v.x, v.z) / 6); });
-    const chao = new T.Mesh(chaoG, std({ map: rocha2, color: 0x8a7890, flatShading: false })); chao.position.set(CX, 0, -CZ); chao.receiveShadow = true; cena.add(chao);
+    const chao = new T.Mesh(chaoG, std({ map: rocha2, color: 0xa69a9a, flatShading: false })); chao.position.set(CX, 0, -CZ); chao.receiveShadow = true; cena.add(chao);
     // estalactites e estalagmites
     { const g = new T.ConeGeometry(1, 1, 7, 1), n = 70, m = new T.InstancedMesh(g, std({ map: rocha, color: 0x8a7894 }), n), o = new T.Object3D();
       for (let i = 0; i < n; i++) { const a = r() * TAU, d = Math.sqrt(r()) * 0.9, x = CX + Math.cos(a) * R0 * d, z = CZ + Math.sin(a) * R0 * d, teto = TETO * Math.sqrt(Math.max(0.05, 1 - d * d)) * 0.95, h = 0.8 + r() * 2.6, w = 0.18 + r() * 0.35;
@@ -149,15 +160,15 @@
     const nucleoMat = new T.MeshStandardMaterial({ color: 0x6a5450, roughness: 0.85, metalness: 0.05, emissive: 0xff8a2a, emissiveMap: rach, emissiveIntensity: 2.2, flatShading: true });
     const nucleo = new T.Mesh(nucleoGeo, nucleoMat); nucleo.position.set(NUCLEO[0], NUCLEO[1], -NUCLEO[2]); nucleo.castShadow = false; cena.add(nucleo);
     const aura = new T.Sprite(new T.SpriteMaterial({ map: brilhoTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.7 })); aura.position.copy(nucleo.position); aura.scale.set(7, 7, 1); cena.add(aura);
-    const orbitam = new T.InstancedMesh(new T.DodecahedronGeometry(1, 0), std({ map: rocha, color: 0xb0a0b8 }), 18); orbitam.castShadow = true; cena.add(orbitam);
+    const orbitam = new T.InstancedMesh(new T.DodecahedronGeometry(1, 0), std({ map: rocha, color: 0xb0a0b8 }), 18); orbitam.castShadow = false; cena.add(orbitam);
     const orbDados = Array.from({ length: 18 }, () => ({ a: r() * TAU, d: 1.9 + r() * 0.8, v: 0.25 + r() * 0.4, y: (r() - 0.5) * 1.4, s: 0.1 + r() * 0.16, giro: r() * 3 }));
     const onda = new T.Mesh(new T.TorusGeometry(1, 0.012, 6, 96), new T.MeshBasicMaterial({ color: 0xffc070, transparent: true, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false })); onda.position.copy(nucleo.position); cena.add(onda);
     // poeira brilhante no ar
-    const poeira = (() => { const n = 500, P = new Float32Array(n * 3), F = new Float32Array(n); for (let i = 0; i < n; i++) { const a = r() * TAU, d = Math.sqrt(r()) * R0 * 0.9; P[i * 3] = CX + Math.cos(a) * d; P[i * 3 + 1] = r() * 7; P[i * 3 + 2] = -(CZ + Math.sin(a) * d); F[i] = r() * 10; }
+    const poeira = (() => { const n = 220, P = new Float32Array(n * 3), F = new Float32Array(n); for (let i = 0; i < n; i++) { const a = r() * TAU, d = Math.sqrt(r()) * R0 * 0.9; P[i * 3] = CX + Math.cos(a) * d; P[i * 3 + 1] = r() * 7; P[i * 3 + 2] = -(CZ + Math.sin(a) * d); F[i] = r() * 10; }
       const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(P, 3)); g.setAttribute('fase', new T.BufferAttribute(F, 1));
       const m = new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, uniforms: uni,
         vertexShader: 'attribute float fase; uniform float uTempo; varying float vA; void main(){ vec3 p = position; p.y = mod(p.y + uTempo*0.12 + fase, 7.0); p.x += sin(uTempo*0.5+fase)*0.2; vA = 0.4 + 0.6*sin(uTempo*2.0+fase*3.0); vec4 mv = modelViewMatrix*vec4(p,1.0); gl_PointSize = 70.0/(-mv.z); gl_Position = projectionMatrix*mv; }',
-        fragmentShader: 'varying float vA; void main(){ float a = smoothstep(0.5,0.0,length(gl_PointCoord-0.5)); gl_FragColor = vec4(1.0,0.7,0.35, a*vA*0.8); }' });
+        fragmentShader: 'varying float vA; void main(){ float a = smoothstep(0.5,0.0,length(gl_PointCoord-0.5)); gl_FragColor = vec4(1.0,0.7,0.35, a*vA*0.55); }' });
       const pts = new T.Points(g, m); pts.frustumCulled = false; cena.add(pts); return pts; })();
     // muro de pedra (blocos que sobem do chão)
     const muro = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1, 2, 3, 2), std({ map: rocha2, color: 0xa898ac }), 7); muro.castShadow = true; muro.receiveShadow = true; muro.count = 0; cena.add(muro);
@@ -167,7 +178,7 @@
 
     // ===== túnel da escada (em x = 60) =====
     const tunel = new T.Group(); cena.add(tunel);
-    { const n = 110, mPiso = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), std({ map: rocha2, color: 0xc0a8a4 }), n), o = new T.Object3D();
+    { const n = 110, mPiso = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), std({ map: rocha2, color: 0x9c8c8c }), n), o = new T.Object3D();
       for (let i = 0; i < n; i++) { const d = degrau(i - 8); o.position.set(X0, d.y - 0.5, -(d.z + PZ / 2)); o.scale.set(LX * 2 + (r() - 0.5) * 0.08, 1, PZ + 0.02); o.rotation.set(0, (r() - 0.5) * 0.03, 0); o.updateMatrix(); mPiso.setMatrixAt(i, o.matrix); }
       mPiso.castShadow = true; mPiso.receiveShadow = true; tunel.add(mPiso);
       // paredes e teto inclinados acompanhando a descida
@@ -181,16 +192,18 @@
       const mt = degrau(40 / PZ / 2 - 8); teto.position.set(X0, mt.y + 3.1, -mt.z); tunel.add(teto);
       // veios acesos nas paredes e cristais nos cantos
       const veioMat = new T.MeshBasicMaterial({ color: 0xffb066, toneMapped: false });
-      for (let i = 0; i < 26; i++) { const sx = i % 2 ? 1 : -1, d = degrau(i * 4 - 4 + r() * 2); const v = new T.Mesh(new T.BoxGeometry(0.03, 1.2 + r() * 0.8, 0.05), veioMat); v.position.set(X0 + sx * (PX - 0.04), d.y + 1.3, -d.z); v.rotation.set((r() - 0.5) * 0.8, 0, (r() - 0.5) * 0.6); tunel.add(v);
-        const sp = new T.Sprite(new T.SpriteMaterial({ map: brilhoTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.4 })); sp.position.copy(v.position); sp.scale.set(1.6, 2.4, 1); tunel.add(sp); }
-      const mc = new T.InstancedMesh(geoCristal, cristalMat, 60); let k = 0;
-      for (let i = 0; i < 16; i++) { const sx = r() < 0.5 ? -1 : 1, d = degrau(i * 6 + r() * 4); for (let j = 0; j < 3 + Math.floor(r() * 3); j++, k++) { o.position.set(X0 + sx * (PX - 0.2 - r() * 0.2), d.y + 0.02, -(d.z + (r() - 0.5) * 0.5)); o.rotation.set((r() - 0.5) * 0.8, r() * 3, sx * 0.3 + (r() - 0.5) * 0.6); const h = 0.4 + r() * 0.6; o.scale.set(h, h, h); o.updateMatrix(); mc.setMatrixAt(k, o.matrix); } }
-      mc.count = k; tunel.add(mc);
+      // veios e cristais separados por parede: o lado da câmera some junto com a parede (senão ficam boiando na frente)
+      ladosTunel = { '-1': new T.Group(), '1': new T.Group() }; tunel.add(ladosTunel['-1'], ladosTunel['1']);
+      for (let i = 0; i < 26; i++) { const sx = i % 2 ? 1 : -1, d = degrau(i * 4 - 4 + r() * 2); const v = new T.Mesh(new T.BoxGeometry(0.03, 1.2 + r() * 0.8, 0.05), veioMat); v.position.set(X0 + sx * (PX - 0.04), d.y + 1.3, -d.z); v.rotation.set((r() - 0.5) * 0.8, 0, (r() - 0.5) * 0.6); ladosTunel[sx].add(v);
+        const sp = new T.Sprite(new T.SpriteMaterial({ map: brilhoTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.4 })); sp.position.copy(v.position); sp.scale.set(1.6, 2.4, 1); ladosTunel[sx].add(sp); }
+      const mcs = { '-1': new T.InstancedMesh(geoCristal, cristalMat, 60), '1': new T.InstancedMesh(geoCristal, cristalMat, 60) }, ks = { '-1': 0, '1': 0 };
+      for (let i = 0; i < 16; i++) { const sx = r() < 0.5 ? -1 : 1, d = degrau(i * 6 + r() * 4); for (let j = 0; j < 3 + Math.floor(r() * 3); j++) { o.position.set(X0 + sx * (PX - 0.2 - r() * 0.2), d.y + 0.02, -(d.z + (r() - 0.5) * 0.5)); o.rotation.set((r() - 0.5) * 0.8, r() * 3, sx * 0.3 + (r() - 0.5) * 0.6); const h = 0.4 + r() * 0.6; o.scale.set(h, h, h); o.updateMatrix(); mcs[sx].setMatrixAt(ks[sx]++, o.matrix); } }
+      for (const l of ['-1', '1']) { mcs[l].count = ks[l]; ladosTunel[l].add(mcs[l]); }
       const fundoL = new T.PointLight(0xff8a3a, 30, 18, 1.5); const df = degrau(90); fundoL.position.set(X0, df.y + 1.2, -df.z); tunel.add(fundoL);
       const fundoS = new T.Sprite(new T.SpriteMaterial({ map: brilhoTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.9 })); fundoS.position.copy(fundoL.position); fundoS.scale.set(10, 10, 1); tunel.add(fundoS); }
 
     const luzCristal = [...cachos].sort((a, b) => b[2] - a[2]).slice(0, 8).map((c) => { const p = new T.PointLight(0xff9a40, 0, 7, 1.8); p.position.set(c[0], c[2] * 0.6, -c[1]); cena.add(p); return { p, c }; });
-    R = { luzCristal, renderer, canvas, cena, camera, uni, spot, nucleoLuz, pontos, nucleo, nucleoMat, aura, orbitam, orbDados, onda, poeira, muro, muroDados, muroRacha, cachos, hemi };
+    R = { sol, luzCristal, renderer, canvas, cena, camera, uni, spot, nucleoLuz, pontos, nucleo, nucleoMat, aura, orbitam, orbDados, onda, poeira, muro, muroDados, muroRacha, cachos, hemi };
   }
 
   function ajustaCamera(cam, near, far) {
@@ -215,6 +228,11 @@
     { const ob = new T.Object3D(); R.orbDados.forEach((d, i) => { const a = d.a + t * d.v; ob.position.set(NUCLEO[0] + Math.cos(a) * d.d, NUCLEO[1] + d.y + Math.sin(a * 2) * 0.15, -NUCLEO[2] + Math.sin(a) * d.d); ob.rotation.set(t * d.v + d.giro, t * 0.7 + d.giro, 0); ob.scale.setScalar(d.s); ob.updateMatrix(); R.orbitam.setMatrixAt(i, ob.matrix); }); R.orbitam.instanceMatrix.needsUpdate = true; }
     // holofote do núcleo mira a câmera (as sombras dos personagens caem na direção de quem assiste, dramático)
     R.spot.target.position.set(cam.x, 0, -cam.z); R.spot.target.updateMatrixWorld();
+    { const yaw = cam.yaw || 0, fx = Math.sin(yaw), fz = Math.cos(yaw), cx0 = cam.x + fx * 6, cz0 = cam.z + fz * 6, y0 = cam.y - 1.2;
+      R.sol.target.position.set(cx0, y0, -cz0); R.sol.target.updateMatrixWorld();
+      R.sol.position.set(cx0 - fx * 7 - fz * 6, y0 + 16, -(cz0 - fz * 7 + fx * 6)); R.sol.intensity = (o.sol === undefined ? 5.5 : o.sol) * (0.9 + 0.1 * Math.sin(t * 1.3) * Math.sin(t * 3.7 + 1)); }
+    R.cena.background.set(Math.abs(cam.x - X0) < 20 ? 0x0e080b : 0x1c1424);
+    if (ladosTunel) { const dx = cam.x - X0; for (const l of [-1, 1]) ladosTunel[l].visible = !(Math.abs(dx) > PX - 0.1 && Math.sign(dx) === l); }
     // muro
     const mu = o.muro;
     if (mu && mu.sobe > 0) {
@@ -261,7 +279,7 @@
         d = new T.Mesh(new T.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ map: texContato, transparent: true, depthWrite: false, opacity: 0.6, color: 0x000000, polygonOffset: true, polygonOffsetFactor: -4 }));
         d.renderOrder = 1; R.cena.add(d); contatoPool[i] = d;
       }
-      const a = fg.alt || 1.8, y = fg.y || 0; d.position.set(fg.X, y + 0.03, -fg.Z); d.scale.set(a * 0.42, 1, a * 0.26); d.material.opacity = 0.6; d.visible = true;
+      const a = fg.alt || 1.8, y = fg.y || 0; d.position.set(fg.X, y + 0.03, -fg.Z); d.scale.set(a * 0.42, 1, a * 0.26); d.material.opacity = 0.75; d.visible = true;
     });
     for (let i = comPe.length; i < contatoPool.length; i++) contatoPool[i].visible = false;
   }
@@ -273,12 +291,15 @@
     const foco = o.foco || 0, bokeh = o.bokeh === undefined ? 4 : o.bokeh;
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingQuality = 'high';
     if (foco > 1 && bokeh > 0) {
-      ajustaCamera(cam, foco, 300); R.renderer.setClearColor(0x1a1222, 1); R.renderer.render(R.cena, R.camera);
-      ctx.filter = `blur(${bokeh}px)`; ctx.drawImage(R.canvas, 0, 0, W, H); ctx.filter = 'none';
-      ajustaCamera(cam, 0.05, foco); R.renderer.setClearColor(0x000000, 0); R.renderer.render(R.cena, R.camera);
+      ajustaCamera(cam, foco, 300); R.renderer.setClearColor(0x1c1424, 1); R.renderer.render(R.cena, R.camera);
+      // copia para um canvas 2D antes do desfoque (o blur direto do canvas WebGL saía vazio: o fundo sumia)
+      if (!R.copia) { R.copia = document.createElement('canvas'); R.copia.width = W; R.copia.height = H; }
+      const cg = R.copia.getContext('2d'); cg.clearRect(0, 0, W, H); cg.drawImage(R.canvas, 0, 0, W, H);
+      ctx.filter = `blur(${bokeh}px)`; ctx.drawImage(R.copia, 0, 0); ctx.filter = 'none';
+      ajustaCamera(cam, 0.05, foco); R.renderer.setClearColor(0x000000, 0); const fundo = R.cena.background; R.cena.background = null; R.renderer.render(R.cena, R.camera); R.cena.background = fundo;
       ctx.drawImage(R.canvas, 0, 0, W, H);
     } else {
-      ajustaCamera(cam, 0.05, 300); R.renderer.setClearColor(0x1a1222, 1); R.renderer.render(R.cena, R.camera);
+      ajustaCamera(cam, 0.05, 300); R.renderer.setClearColor(0x1c1424, 1); R.renderer.render(R.cena, R.camera);
       ctx.drawImage(R.canvas, 0, 0, W, H);
     }
     ctx.restore();
@@ -319,6 +340,6 @@
     cena, desenhar, rio,
     pontos: { nucleo: NUCLEO, pintura: [CX + Math.cos(PINTURA_ANG) * R0 * 0.82, CZ + Math.sin(PINTURA_ANG) * R0 * 0.82], entrada: [5.5, 1.5], centro: [CX, CZ] },
     nevoa: '#1A1020',
-    escada: { degrau, yEm: (z) => yEm(z), X0 },
+    escada: { degrau, yEm: (z) => yEm(z), X0, PZ, PY },
   };
 })();

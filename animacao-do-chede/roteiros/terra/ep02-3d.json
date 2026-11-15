@@ -1,8 +1,8 @@
 { "serie": "terra", "scripts": ["motor/vendor/three-r160.min.js", "cenarios/terra-3d.js", "efeitos/terra-p2.js", "personagens/golem/golem.js"],
   "planos": [
-    { "id": "caverna", "duracao": 4, "sfx": [{ "tipo": "coracao", "bpm": 33, "de": 0.45 }], "cinema": { "quente": 0.08, "vinheta": 0.85, "bloom": 0.8 } },
-    { "id": "escada", "duracao": 4, "cinema": { "quente": 0.08, "vinheta": 0.85, "bloom": 0.8 } },
-    { "id": "nucleo", "duracao": 4, "sfx": [{ "tipo": "coracao", "bpm": 33, "de": 0.64 }], "cinema": { "quente": 0.08, "vinheta": 0.85, "bloom": 0.8 } },
-    { "id": "golem", "duracao": 4, "cinema": { "quente": 0.08, "vinheta": 0.85, "bloom": 0.8 } },
-    { "id": "mae", "duracao": 3, "cinema": { "quente": 0.08, "vinheta": 0.85, "bloom": 0.8 } }
+    { "id": "caverna", "duracao": 4, "sfx": [{ "tipo": "coracao", "bpm": 33, "de": 0.45 }], "cinema": { "quente": 0.08, "vinheta": 0.7, "bloom": 0.8 } },
+    { "id": "escada", "duracao": 4, "cinema": { "quente": 0.08, "vinheta": 0.7, "bloom": 0.8 } },
+    { "id": "nucleo", "duracao": 4, "sfx": [{ "tipo": "coracao", "bpm": 33, "de": 0.64 }], "cinema": { "quente": 0.08, "vinheta": 0.7, "bloom": 0.8 } },
+    { "id": "golem", "duracao": 4, "cinema": { "quente": 0.08, "vinheta": 0.7, "bloom": 0.8 } },
+    { "id": "mae", "duracao": 3, "cinema": { "quente": 0.08, "vinheta": 0.7, "bloom": 0.8 } }
   ] }

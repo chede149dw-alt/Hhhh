@@ -39,11 +39,17 @@
     }
   };
 
-  Efeitos.amuleto = function (ctx, x, y, r, brilho = 1, t = 0) {
-    ctx.save(); ctx.translate(x, y);
+  // pescoco: [[x, y], [x, y]] = os dois lados do pescoço na tela (ex.: rig.pontoMundo('pescoco', [±0.12, 0])); o cordão sai
+  // de lá e desce até o amuleto, assim ele fica pendurado de verdade (sem pescoco, um cordão curto genérico)
+  Efeitos.amuleto = function (ctx, x, y, r, brilho = 1, t = 0, pescoco = null) {
     // cordão
-    ctx.strokeStyle = '#4A3424'; ctx.lineWidth = r * 0.08;
-    ctx.beginPath(); ctx.moveTo(-r * 0.9, -r * 2.4); ctx.quadraticCurveTo(-r * 0.4, -r * 1.2, 0, -r * 1.05); ctx.quadraticCurveTo(r * 0.4, -r * 1.2, r * 0.9, -r * 2.4); ctx.stroke();
+    ctx.save(); ctx.strokeStyle = '#4A3424'; ctx.lineWidth = r * 0.09; ctx.lineCap = 'round';
+    const topo = [x, y - r * 1.05];
+    const lados = pescoco || [[x - r * 0.9, y - r * 2.4], [x + r * 0.9, y - r * 2.4]];
+    ctx.beginPath();
+    for (const [px, py] of lados) { ctx.moveTo(px, py); ctx.quadraticCurveTo(px + (topo[0] - px) * 0.25, topo[1] - (topo[1] - py) * 0.15, topo[0], topo[1]); }
+    ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.translate(x, y);
     luzColorida(ctx, x, y, r * (3.2 + 0.4 * Math.sin(t * 4)), 0.4 * brilho);
     // moldura de bronze em losango
     const los = (k) => { ctx.beginPath(); ctx.moveTo(0, -r * k); ctx.lineTo(r * 0.8 * k, 0); ctx.lineTo(0, r * k); ctx.lineTo(-r * 0.8 * k, 0); ctx.closePath(); };
