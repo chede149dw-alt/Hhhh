@@ -237,7 +237,7 @@
       R.sol.target.position.set(cx0, y0, -cz0); R.sol.target.updateMatrixWorld();
       R.sol.position.set(cx0 - fx * 7 - fz * 6, y0 + 16, -(cz0 - fz * 7 + fx * 6)); R.sol.intensity = (o.sol === undefined ? 5.5 : o.sol) * (0.9 + 0.1 * Math.sin(t * 1.3) * Math.sin(t * 3.7 + 1)); }
     R.cena.background.set(Math.abs(cam.x - X0) < 20 ? 0x0e080b : 0x1c1424);
-    if (ladosTunel) { const dx = cam.x - X0; for (const l of [-1, 1]) ladosTunel[l].visible = !(Math.abs(dx) > PX - 0.1 && Math.sign(dx) === l); }
+    if (ladosTunel) { const dx = cam.x - X0; for (const l of [-1, 1]) ladosTunel[l].visible = !(Math.abs(dx) > 0.3 && Math.sign(dx) === l); }
     // coluna: o.coluna = { x, z, altura, k (0..1 sobe), incl (rad, inclinação), giro (rad, para onde inclina) }
     { const c = o.coluna; if (c && c.k > 0.01) { R.coluna.visible = true; R.coluna.position.set(c.x, -0.05, -c.z); R.coluna.rotation.set(0, c.giro || 0, 0); R.coluna.rotateX(c.incl || 0); R.coluna.scale.set(c.grossura || 1, (c.altura || 2.4) * Math.min(1, c.k), c.grossura || 1); } else R.coluna.visible = false; }
     // pedras caindo: o.queda = { x, z, s (segundos desde o começo) }

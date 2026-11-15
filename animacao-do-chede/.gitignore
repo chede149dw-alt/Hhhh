@@ -21,3 +21,4 @@ audio/*/*/vozes/*
 audio/sfx/*
 !audio/sfx/*.wav
 !audio/*/*/trilha.wav
+prontos/terra-ep02-parte2.mp4

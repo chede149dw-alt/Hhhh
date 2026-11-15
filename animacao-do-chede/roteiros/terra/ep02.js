@@ -167,11 +167,11 @@
     const sL = Math.min(10, 9 + T * 0.6), L = naEscada(sL, -0.5), andandoL = T < t1 + 0.05 && sL < 10;
     // Rafael: entra lá em cima e desce correndo até o degrau 9
     const sR = T < t1 ? 3 : Math.min(9, 3 + (T - t1) * 3.0), R = naEscada(sR, 0.5), andandoR = T >= t1 && sR < 9;
-    const alvo = chave(T, [[0, [L.x, L.y + 0.95, L.z]], [t1, [L.x, L.y + 0.95, L.z]], [t1 + 0.9, [R.x - 0.2, R.y + 1.2, R.z + 0.2]], [t2, [(L.x + R.x) / 2, L.y + 1.1, (L.z + R.z) / 2]], [t3, [(L.x + R.x) / 2, L.y + 1.1, (L.z + R.z) / 2]], [t3 + 0.6, [L.x, L.y + 1.45, L.z]]]);
+    const alvo = chave(T, [[0, [L.x, L.y + 0.95, L.z]], [t1, [L.x, L.y + 0.95, L.z]], [t1 + 0.9, [R.x - 0.2, R.y + 1.2, R.z + 0.2]], [t2, [(L.x + R.x) / 2, L.y + 1.1, (L.z + R.z) / 2]], [t3 - 1.2, [(L.x + R.x) / 2, L.y + 1.1, (L.z + R.z) / 2]], [t3 + 0.9, [L.x, L.y + 1.45, L.z]]]);
     const cam = api.orbita({
-      alvo, raio: chave(T, [[0, 3.1], [t1, 3.1], [t1 + 0.9, 3.6], [t2, 3.0], [t3, 2.8], [t3 + 0.6, 1.7]]),
-      ang: chave(T, [[0, Math.PI - 0.95], [t1, Math.PI - 0.9], [t1 + 0.9, Math.PI - 0.55], [t2, Math.PI - 0.5], [t3, Math.PI - 0.7], [t3 + 0.7, 0.45]]),
-      altura: chave(T, [[0, L.y + 0.55], [t1, L.y + 0.6], [t1 + 0.9, L.y + 1.0], [t2, L.y + 1.2], [t3, L.y + 1.2], [t3 + 0.7, L.y + 2.0]]), f: chave(T, [[0, 980], [t3, 1000], [t3 + 0.6, 1150]]), ySalvo: chave(T, [[0, 1080], [t3, 1040], [t3 + 0.6, 900]]),
+      alvo, raio: chave(T, [[0, 3.1], [t1, 3.1], [t1 + 0.9, 3.6], [t2, 3.0], [t3 - 1.2, 2.8], [t3 + 0.9, 1.7]]),
+      ang: chave(T, [[0, Math.PI - 0.95], [t1, Math.PI - 0.9], [t1 + 0.9, Math.PI - 0.55], [t2, Math.PI - 0.5], [t3 - 1.2, Math.PI - 0.7], [t3 + 0.9, 0.45]]),
+      altura: chave(T, [[0, L.y + 0.55], [t1, L.y + 0.6], [t1 + 0.9, L.y + 1.0], [t2, L.y + 1.2], [t3 - 1.2, L.y + 1.2], [t3 + 0.9, L.y + 2.0]]), f: chave(T, [[0, 980], [t3 - 1.2, 1000], [t3 + 0.9, 1150]]), ySalvo: chave(T, [[0, 1080], [t3 - 1.2, 1040], [t3 + 0.9, 900]]),
     });
     const exL = T < t1 ? { ...LUCAS_EXPRESSOES.curioso, olhar: [0.01, 0.012] } : T < t1 + 0.4 ? 'espanto' : T < t3 ? 'neutro' : 'feliz';
     const res = T3().cena(ctx, api, cam, [
