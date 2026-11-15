@@ -98,7 +98,7 @@
     const spot = new T.SpotLight(0xffa050, 20, 40, Math.PI * 0.42, 0.6, 1.4); spot.castShadow = true; spot.shadow.mapSize.set(1024, 1024); spot.shadow.bias = -0.0006; spot.shadow.camera.near = 0.5; spot.shadow.camera.far = 40;
     spot.position.set(NUCLEO[0], NUCLEO[1] + 0.4, -NUCLEO[2]); cena.add(spot); cena.add(spot.target);
     const nucleoLuz = new T.PointLight(0xff8a3a, 40, 22, 1.6); nucleoLuz.position.set(NUCLEO[0], NUCLEO[1], -NUCLEO[2]); cena.add(nucleoLuz);
-    const pontos = []; for (let i = 0; i < 6; i++) { const p = new T.PointLight(0xff9a40, 0, 8, 1.8); cena.add(p); pontos.push(p); }
+    const pontos = []; for (let i = 0; i < 4; i++) { const p = new T.PointLight(0xff9a40, 0, 8, 1.8); cena.add(p); pontos.push(p); }
 
     // ===== caverna =====
     const domo = deformar(new T.SphereGeometry(1, 96, 48, 0, TAU, 0, Math.PI / 2), (v) => {
@@ -125,7 +125,7 @@
     const geoCristal = (() => { const a = new T.CylinderGeometry(0.11, 0.14, 0.8, 6, 1), b = new T.ConeGeometry(0.11, 0.3, 6, 1); a.translate(0, 0.4, 0); b.translate(0, 0.95, 0); const pa = a.toNonIndexed(), pb = b.toNonIndexed(); const pos = new Float32Array(pa.attributes.position.array.length + pb.attributes.position.array.length); pos.set(pa.attributes.position.array, 0); pos.set(pb.attributes.position.array, pa.attributes.position.array.length); const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(pos, 3)); g.computeVertexNormals(); return g; })();
     const cachos = [];
     for (let i = 0; i < 26; i++) { const a = r() * TAU, d = 0.72 + r() * 0.24; cachos.push([CX + Math.cos(a) * raioParede(a) * d, CZ + Math.sin(a) * raioParede(a) * d, 0.7 + r() * 1.8]); }
-    for (const c of [[-4.6, 10.4, 1.1], [3.9, 5.6, 1.3], [2.4, 13.8, 1.6], [-4.4, 13, 1.2], [5.5, 10.5, 1.0], [-1.6, 14.4, 1.4]]) cachos.push(c);
+    for (const c of [[-4.6, 10.4, 1.1], [6.2, 8.6, 1.3], [2.4, 13.8, 1.6], [-4.4, 13, 1.2], [5.5, 10.5, 1.0], [-1.6, 14.4, 1.4]]) cachos.push(c);
     for (let i = cachos.length - 1; i >= 0; i--) if (Math.hypot(cachos[i][0] - 5.5, cachos[i][1] - 1.5) < 3.2 || Math.hypot(cachos[i][0] + 2.5, cachos[i][1] - 3.4) < 2.5) cachos.splice(i, 1);
     const brilhoTex = textura(texBrilho('255,150,60'));
     { const total = cachos.length * 6, m = new T.InstancedMesh(geoCristal, cristalMat, total), o = new T.Object3D(); let k = 0;
@@ -189,7 +189,8 @@
       const fundoL = new T.PointLight(0xff8a3a, 30, 18, 1.5); const df = degrau(90); fundoL.position.set(X0, df.y + 1.2, -df.z); tunel.add(fundoL);
       const fundoS = new T.Sprite(new T.SpriteMaterial({ map: brilhoTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.9 })); fundoS.position.copy(fundoL.position); fundoS.scale.set(10, 10, 1); tunel.add(fundoS); }
 
-    R = { renderer, canvas, cena, camera, uni, spot, nucleoLuz, pontos, nucleo, nucleoMat, aura, orbitam, orbDados, onda, poeira, muro, muroDados, muroRacha, cachos, hemi };
+    const luzCristal = [...cachos].sort((a, b) => b[2] - a[2]).slice(0, 8).map((c) => { const p = new T.PointLight(0xff9a40, 0, 7, 1.8); p.position.set(c[0], c[2] * 0.6, -c[1]); cena.add(p); return { p, c }; });
+    R = { luzCristal, renderer, canvas, cena, camera, uni, spot, nucleoLuz, pontos, nucleo, nucleoMat, aura, orbitam, orbDados, onda, poeira, muro, muroDados, muroRacha, cachos, hemi };
   }
 
   function ajustaCamera(cam, near, far) {
@@ -225,9 +226,9 @@
     // luzes extras do plano (mão do Lucas, etc.) + cristais mais perto da câmera
     let li = 0;
     for (const e of o.luzes || []) { if (li >= R.pontos.length) break; const p = R.pontos[li++]; p.position.set(e.x, e.y === undefined ? 1.2 : e.y, -e.z); p.color.set(e.cor || '#FFA050'); p.intensity = 8 * (e.forca === undefined ? 1 : e.forca); p.distance = e.raio || 6; }
-    const perto = R.cachos.map((c) => ({ c, d: Math.hypot(c[0] - cam.x, c[1] - cam.z) })).sort((a, b) => a.d - b.d);
-    for (const { c } of perto) { if (li >= R.pontos.length) break; const p = R.pontos[li++]; p.position.set(c[0], c[2] * 0.6, -c[1]); p.color.set('#FF9A40'); p.intensity = 6 * c[2] * (0.85 + 0.15 * Math.sin(t * 2 + c[0])); p.distance = 7; }
     for (; li < R.pontos.length; li++) R.pontos[li].intensity = 0;
+    // cristais: luzes fixas nos cachos maiores (antes elas trocavam de cristal conforme a câmera andava e a luz "pulava")
+    R.luzCristal.forEach(({ p, c }) => { p.intensity = 6 * c[2] * (0.85 + 0.15 * Math.sin(t * 2 + c[0])); });
   }
 
   // personagens 2D em placas dentro do 3D (cópia do Valdor3D, chão da caverna em y = 0 / degrau no túnel)

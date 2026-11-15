@@ -35,7 +35,7 @@
     golem(ctx, u, d, api) {
       // a câmera gira em volta da luta (teste do "personagem girando em volta do golem com a câmera junto")
       const G = [1.0, 9.6], L = [-1.4, 6.6], R = [-0.2, 6.0], M = [0.55, 8.0];
-      const cam = api.orbita({ alvo: [0, 1.9, 8.0], raio: 5.2, ang: 0.25 + u * 0.5, altura: 1.1, f: 1000, ySalvo: 1080 });
+      const cam = api.orbita({ alvo: [0, 1.9, 8.0], raio: 5.2, ang: 0.25 + u * 0.35, altura: 1.1, f: 1000, ySalvo: 1080 });
       T3().cena(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...GOLEM, pose: 'punho' }, G[0], G[1], 3.2, { luz: LUZ, olhaPara: R }) },
         { f: () => api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'raiva' }, L[0], L[1], 1.75, { luz: LUZ, olhaPara: G }) },
