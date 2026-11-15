@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "total": 85.48,
+  "total": 87.77,
   "planos": [
     {
       "id": "capa",
@@ -481,7 +481,7 @@
     {
       "id": "lider",
       "inicio": 76.23,
-      "fim": 79.35000000000001,
+      "fim": 80.05,
       "semLegenda": false,
       "semCinema": false,
       "cinema": {
@@ -501,8 +501,8 @@
     },
     {
       "id": "conhecia",
-      "inicio": 79.35000000000001,
-      "fim": 82.73,
+      "inicio": 80.05,
+      "fim": 85.02,
       "semLegenda": false,
       "semCinema": false,
       "cinema": {
@@ -522,8 +522,8 @@
     },
     {
       "id": "parte",
-      "inicio": 82.73,
-      "fim": 85.48,
+      "inicio": 85.02,
+      "fim": 87.77,
       "semLegenda": true,
       "semCinema": false,
       "cinema": {
@@ -673,21 +673,21 @@
       "id": "lider",
       "voz": "narrador",
       "inicio": 76.31,
-      "fim": 78.183021,
+      "fim": 78.480688,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/lider.wav"
     },
     {
       "id": "conhecia",
       "voz": "narrador",
-      "inicio": 79.43,
-      "fim": 81.357292,
+      "inicio": 80.13,
+      "fim": 83.64999999999999,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/conhecia.wav"
     },
     {
       "id": "parte",
       "voz": "narrador",
-      "inicio": 82.81,
-      "fim": 84.312083,
+      "inicio": 85.1,
+      "fim": 86.602083,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep02/final/parte.wav"
     }
   ],
@@ -1728,7 +1728,7 @@
     },
     {
       "inicio": 76.31,
-      "fim": 76.90388470731708,
+      "fim": 76.93708764444445,
       "palavras": [
         {
           "texto": "ATÉ",
@@ -1738,128 +1738,154 @@
         {
           "texto": "QUE",
           "destaque": false,
-          "inicio": 76.53841719512195
+          "inicio": 76.55118755555556
         },
         {
           "texto": "O",
           "destaque": false,
-          "inicio": 76.7668343902439
+          "inicio": 76.79237511111111
         }
       ]
     },
     {
-      "inicio": 76.90388470731708,
-      "fim": 77.7718700487805,
+      "inicio": 76.93708764444445,
+      "fim": 77.75712533333333,
       "palavras": [
         {
           "texto": "LÍDER",
           "destaque": false,
-          "inicio": 76.90388470731708
+          "inicio": 76.93708764444445
         },
         {
           "texto": "SACOU",
           "destaque": false,
-          "inicio": 77.22366878048781
+          "inicio": 77.27475022222222
         },
         {
-          "texto": "UMA",
+          "texto": "A",
           "destaque": false,
-          "inicio": 77.54345285365855
+          "inicio": 77.6124128
         }
       ]
     },
     {
-      "inicio": 77.7718700487805,
-      "fim": 78.33302100000002,
+      "inicio": 77.75712533333333,
+      "fim": 78.630688,
       "palavras": [
         {
           "texto": "ARMA",
-          "destaque": false,
-          "inicio": 77.7718700487805
-        }
-      ]
-    },
-    {
-      "inicio": 79.43,
-      "fim": 80.24909910000001,
-      "palavras": [
-        {
-          "texto": "...QUE",
-          "destaque": false,
-          "inicio": 79.43
-        },
-        {
-          "texto": "O",
-          "destaque": false,
-          "inicio": 79.81545840000001
-        },
-        {
-          "texto": "DAVI",
-          "destaque": false,
-          "inicio": 79.9600053
-        }
-      ]
-    },
-    {
-      "inicio": 80.24909910000001,
-      "fim": 81.50729200000002,
-      "palavras": [
-        {
-          "texto": "CONHECIA",
-          "destaque": false,
-          "inicio": 80.24909910000001
-        },
-        {
-          "texto": "MUITO",
-          "destaque": false,
-          "inicio": 80.73092210000002
-        },
-        {
-          "texto": "BEM.",
           "destaque": true,
-          "inicio": 81.06819820000001
+          "inicio": 77.75712533333333
+        },
+        {
+          "texto": "DELE",
+          "destaque": false,
+          "inicio": 78.0465504
         }
       ]
     },
     {
-      "inicio": 82.81,
-      "fim": 83.5610415,
+      "inicio": 80.13,
+      "fim": 81.66290322580645,
       "palavras": [
         {
-          "texto": "SEGUE",
+          "texto": "...UMA",
           "destaque": false,
-          "inicio": 82.81
+          "inicio": 80.13
         },
         {
-          "texto": "PRA",
+          "texto": "LÂMINA",
           "destaque": false,
-          "inicio": 83.11925238235294
+          "inicio": 80.58419354838709
         },
         {
-          "texto": "VER",
-          "destaque": false,
-          "inicio": 83.34014694117647
+          "texto": "LENDÁRIA.",
+          "destaque": true,
+          "inicio": 81.03838709677419
         }
       ]
     },
     {
-      "inicio": 83.5610415,
-      "fim": 84.312083,
+      "inicio": 81.66290322580645,
+      "fim": 82.62806451612903,
+      "palavras": [
+        {
+          "texto": "MAIS",
+          "destaque": false,
+          "inicio": 81.66290322580645
+        },
+        {
+          "texto": "RARA",
+          "destaque": false,
+          "inicio": 82.00354838709677
+        },
+        {
+          "texto": "QUE",
+          "destaque": false,
+          "inicio": 82.3441935483871
+        }
+      ]
+    },
+    {
+      "inicio": 82.62806451612903,
+      "fim": 83.8,
       "palavras": [
         {
           "texto": "A",
           "destaque": false,
-          "inicio": 83.5610415
+          "inicio": 82.62806451612903
+        },
+        {
+          "texto": "ADAGA",
+          "destaque": false,
+          "inicio": 82.79838709677419
+        },
+        {
+          "texto": "ÉPICA.",
+          "destaque": false,
+          "inicio": 83.1958064516129
+        }
+      ]
+    },
+    {
+      "inicio": 85.1,
+      "fim": 85.8510415,
+      "palavras": [
+        {
+          "texto": "SEGUE",
+          "destaque": false,
+          "inicio": 85.1
+        },
+        {
+          "texto": "PRA",
+          "destaque": false,
+          "inicio": 85.40925238235293
+        },
+        {
+          "texto": "VER",
+          "destaque": false,
+          "inicio": 85.63014694117646
+        }
+      ]
+    },
+    {
+      "inicio": 85.8510415,
+      "fim": 86.602083,
+      "palavras": [
+        {
+          "texto": "A",
+          "destaque": false,
+          "inicio": 85.8510415
         },
         {
           "texto": "PARTE",
           "destaque": false,
-          "inicio": 83.69357823529413
+          "inicio": 85.98357823529412
         },
         {
           "texto": "TRÊS!",
           "destaque": true,
-          "inicio": 84.00283061764706
+          "inicio": 86.29283061764706
         }
       ]
     }
