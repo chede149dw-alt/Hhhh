@@ -182,3 +182,11 @@
 - Pernas na vista tq/frente: coxa_d positiva e coxa_e negativa abrem as pernas; o contrário cruza em X (erro apontado
   pelo autor nos ladrões). Caminhada em tq usa o passo frontal.
 - Som na hora que anoitece: ambiente de noite curto (corte + fade) e baixo; trilha com ganho reduzido nesse trecho.
+- (15/11, prévia 4 → 5) O autor cobrou SOMBRA dos personagens e grama passando ENTRE as pernas. Solução: cada personagem
+  2D vira uma placa em pé no 3D (`figuras` em Valdor3D.desenhar) — teste de profundidade com a grama + sombra da luz
+  principal (alphaTest no material da placa; o three copia alphaTest/map do material para o de sombra).
+  Atenção: depois de mudar left/right/top/bottom da câmera de sombra, chamar updateProjectionMatrix().
+  Sombra fina deitada some na grama alta: luz vindo da FRENTE da câmera (a sombra corre pelo caminho) e sombra de contato.
+- Referências ref-3d-03/04: cenário 3D com sol baixo e sombras longas, fundo bem desfocado (profundidade de campo),
+  personagens 2D, rosto mudando no meio do plano (olho virando, boca abrindo), fumaça/poeira volumosa, chuva, raios,
+  câmera baixa, closes e tomadas aéreas.
