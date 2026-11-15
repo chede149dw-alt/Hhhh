@@ -101,15 +101,20 @@
     matrizes(raiz) {
       const m = {};
       const calc = (p) => {
-        if (m[p.nome]) return m[p.nome];
+        if (base[p.nome]) return base[p.nome];
         const pai = p.pai ? calc(this.partes[p.pai]) : raiz;
         // a peça-raiz (sem pai) pode ser deslocada pela pose: _desloca = [dx, dy] em H
         const [dx, dy] = (!p.pai && this.pose._desloca) || [0, 0];
         // _dy_<peça>: desloca o pivô na vertical (ex.: erguer a perna no passo visto de costas)
         const ergue = this.pose['_dy_' + p.nome] || 0;
-        m[p.nome] = pai.translate(p.pivo[0] + dx, p.pivo[1] + dy + ergue).rotate(this.pose[p.nome] || 0);
-        return m[p.nome];
+        // _sy_<peça>: encurta a peça no comprimento (braço apontando para dentro da tela). Os filhos não ficam
+        // achatados: só o pivô deles chega mais perto (escorço).
+        const syPai = p.pai ? (this.pose['_sy_' + p.pai] || 1) : 1, sy = this.pose['_sy_' + p.nome] || 1;
+        base[p.nome] = pai.translate(p.pivo[0] + dx, p.pivo[1] * syPai + dy + ergue).rotate(this.pose[p.nome] || 0);
+        m[p.nome] = sy !== 1 ? base[p.nome].scale(1, sy) : base[p.nome];
+        return base[p.nome];
       };
+      const base = {};
       for (const p of this.def.partes) calc(p);
       return m;
     }

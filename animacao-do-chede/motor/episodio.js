@@ -85,6 +85,16 @@
     };
   }
 
+  // descer escada (vista de perfil/3-4): a perna da frente estica e desce até o degrau de baixo, a de trás dobra no
+  // degrau de cima — um pé atrás do outro; o corpo dá um leve "degrau" a cada passo
+  function descendo(t, vel = 1) {
+    const f = t * 2 * Math.PI * 0.85 * vel, s = Math.sin(f), c = Math.cos(f);
+    const perna = (k) => ({ coxa: -30 * k + 14 * (1 - k), canela: 4 * k + 46 * (1 - k), pe: 16 * k - 20 * (1 - k) });
+    const kd = (s + 1) / 2, d = perna(kd), e = perna(1 - kd);
+    return { tronco: 7, cabeca: 12, coxa_d: d.coxa, canela_d: d.canela, pe_d: d.pe, coxa_e: e.coxa, canela_e: e.canela, pe_e: e.pe,
+      braco_d: -14 * s + 8, antebraco_d: -24, braco_e: 14 * s + 8, antebraco_e: -24, _desloca: [0, -0.02 - 0.07 * Math.abs(c)] };
+  }
+
   // luz da cena no personagem (referência 2): contraluz no lado da luz + sombra fria do outro lado.
   // o.luz = { lado: -1 (luz vem da esquerda) | 1, cor: 'rgb(255,214,150)', forca: 0..1, sombra: 0..1 }
   const camadas = {};
@@ -155,15 +165,18 @@
       def.partes = def.partes.map((q) => (q.nome === 'cabeca' ? { ...q, espelho: -1 } : q));
     }
     const rig = new Rig(def);
-    let ang = pdef ? pdef.angulos : (item.pose || {});
+    // pose com versão própria por vista (pdef.porVista.costas etc.): usada como está, sem a inversão automática
+    const pv = pdef && pdef.porVista && pdef.porVista[vista];
+    let ang = pv ? pv : pdef ? pdef.angulos : (item.pose || {});
     if (item.pose2) { const p2 = typeof item.pose2 === 'string' ? reg[item.pose2].angulos : item.pose2; ang = misturaPoses(ang, p2, item.mistura || 0); }
     // andando: de frente/costas usa o passo frontal (de perfil o passo de lado parecia balançar para os lados)
+    if (o.descer !== undefined) ang = { ...descendo(o.descer, o.velocidade) };
     if (o.caminhar !== undefined) ang = (vista === 'frente' || vista === 'costas' || vista === 'tq') ? { ...caminhadaFrontal(o.caminhar, o.velocidade, vista === 'costas') } : { ...caminhada(o.caminhar, o.velocidade) };
     if (o.caminharFrontal !== undefined) ang = { ...caminhadaFrontal(o.caminharFrontal, o.velocidade, vista === 'costas') };
     const andando = o.caminhar !== undefined || o.caminharFrontal !== undefined;
     // de costas, os braços ficam espelhados: uma pose feita de frente (ex.: braços abertos) cruzava os braços nas costas.
     // Inverte os ângulos dos braços, menos nas poses feitas para a vista de costas e nas caminhadas (que já tratam isso).
-    if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
+    if (vista === 'costas' && !andando && !pv && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
     rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida));
     const exprBase = typeof item.expressao === 'object' ? item.expressao : (def.expressoes[item.expressao || (pdef && pdef.expressao) || 'neutro']);
     rig.usarExpressao(expressaoViva(exprBase, TL.t, { voz: item.voz, semente: o.semente }));
@@ -349,6 +362,9 @@
           return Cena3D.camera({ f, x: X - R * Math.sin(a), y: cy0, z: Z - R * Math.cos(a), yaw: a, cy: (o.ySalvo || 1000) + ((Y - cy0) * f) / R, ...extra });
         },
         personagemGirando: (item, x, y, alt, rel, o = {}) => personagemGirando(ctx, item, x, y, alt, rel, o),
+        // desenha do mais longe para o mais perto da câmera: itens = [{ X, Z, f }] (personagens, golem, muro, efeitos no chão)
+        // — assim um muro nunca fica por cima de quem está na frente dele, e quem corre em volta passa na frente e atrás
+        porProfundidade: (cam, itens) => itens.map((it) => ({ it, d: cam.p(it.X, 0, it.Z).dz })).sort((a, b) => b.d - a.d).forEach(({ it }) => it.f()),
         planos: TL.planos,
         // segundos desde o início do plano `id` (para tomadas contínuas que atravessam vários planos)
         desde: (id) => { const q = TL.planos.find((k) => k.id === id); return q ? t - q.inicio : u; },

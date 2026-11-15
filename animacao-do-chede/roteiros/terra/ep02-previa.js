@@ -16,28 +16,30 @@
       api.personagem3d(cam, { ...RAFAEL, pose: 'parado', expressao: 'espanto' }, 0.4, 3.6, 1.8, { luz: LUZ_CRISTAL, olhaPara: [nx, nz] });
     },
     escada(ctx, u, d, api) {
-      const D = Cenarios3D.escada, g = D.degrau(10);
-      // câmera dentro do corredor da espiral, alguns degraus acima e atrás do Lucas, olhando para ele
-      const ac = g.ang - 1.25, rc = 1.75, cx = Math.cos(ac) * rc, cz = Math.sin(ac) * rc, cy = g.y + (1.25 / 0.42) * 0.24 + 1.7;
-      const yaw = Math.atan2(g.x - cx, g.z - cz), dist = Math.hypot(g.x - cx, g.z - cz), f = 820;
-      const cam = Cena3D.camera({ f, x: cx, y: cy, z: cz, yaw, cy: 1150 + ((g.y + 1.0 - cy) * f) / dist, nevoa: D.nevoa });
+      // o Lucas desce de verdade: anda ~1,7 degrau por segundo, um pé atrás do outro; a câmera fica uns degraus abaixo,
+      // de lado, e vai descendo junto
+      const D = Cenarios3D.escada, zL = 3.0 + u * 0.58, yL = D.yEm(zL), xL = -0.35;
+      const cam = api.orbita({ alvo: [xL, yL + 0.95, zL], raio: 3.1, ang: Math.PI - 0.95 + u * 0.05, altura: yL + 0.55, f: 980, ySalvo: 1080, nevoa: D.nevoa });
       D.desenhar(ctx, cam, { t: api.t });
-      api.personagem3d(cam, { ...LUCAS, pose: 'parado', expressao: 'curioso' }, g.x, g.z, 1.75, { y: g.y, luz: { lado: -1, cor: 'rgb(255,150,70)', forca: 0.7 }, rumo: -(g.ang + Math.PI / 2) });
+      api.personagem3d(cam, { ...LUCAS, pose: {}, expressao: { ...LUCAS_EXPRESSOES.curioso, olhar: [0.01, 0.012] } }, xL, zL, 1.75, { y: yL, descer: api.t, luz: { lado: 1, cor: 'rgb(255,160,80)', forca: 0.8 }, rumo: Math.PI });
     },
     nucleo(ctx, u, d, api) {
       const [nx, , nz] = CV().pontos.nucleo;
-      const cam = api.orbita({ alvo: [nx - 0.6, 1.8, nz - 1.2], raio: 3.2, ang: 0.4, altura: 1.6, f: 1100, ySalvo: 1000, nevoa: CV().nevoa });
+      const cam = api.orbita({ alvo: [nx - 0.9, 1.7, nz - 0.9], raio: 3.0, ang: 1.15, altura: 1.5, f: 1100, ySalvo: 1000, nevoa: CV().nevoa });
       CV().desenhar(ctx, cam, { t: api.t, pulso: 0.6 });
       const q = cam.p(nx, 2.4, nz); Efeitos.nucleoTerra(ctx, q.x, q.y, q.s * 2.6, api.t, 0.7);
-      api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'determinado' }, nx - 1.3, nz - 2.0, 1.75, { luz: LUZ_CRISTAL, olhaPara: [nx, nz] });
+      api.personagem3d(cam, { ...LUCAS, pose: 'apontando', expressao: { ...LUCAS_EXPRESSOES.curioso, olhar: [0.014, -0.006] } }, nx - 1.55, nz - 1.2, 1.75, { luz: LUZ_CRISTAL, olhaPara: [nx, nz] });
     },
     golem(ctx, u, d, api) {
       const cam = api.orbita({ alvo: [0, 1.9, 8.2], raio: 5.0, ang: 0.45, altura: 1.0, f: 1000, ySalvo: 1080, nevoa: CV().nevoa });
       CV().desenhar(ctx, cam, { t: api.t });
-      api.personagem3d(cam, { ...GOLEM, pose: 'punho' }, 1.0, 9.6, 3.2, { luz: LUZ_CRISTAL, olhaPara: [-0.8, 6] });
-      api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'raiva' }, -1.4, 6.6, 1.75, { luz: LUZ_CRISTAL, olhaPara: [0.6, 10] });
-      api.personagem3d(cam, { ...RAFAEL, pose: 'parado', expressao: 'medo' }, -0.2, 6.0, 1.8, { luz: LUZ_CRISTAL, olhaPara: [0.6, 10] });
-      Efeitos.muroPedra(ctx, cam, 0.6, 7.9, 2.2, 0.75, api.t, { racha: 0.8 });
+      const G = [1.0, 9.6], L = [-1.4, 6.6], R = [-0.2, 6.0], M = [0.55, 8.0];
+      api.porProfundidade(cam, [
+        { X: G[0], Z: G[1], f: () => api.personagem3d(cam, { ...GOLEM, pose: 'punho' }, G[0], G[1], 3.2, { luz: LUZ_CRISTAL, olhaPara: R }) },
+        { X: M[0], Z: M[1], f: () => Efeitos.muroPedra(ctx, cam, M[0], M[1], 2.2, 0.75, api.t, { racha: 0.8 }) },
+        { X: L[0], Z: L[1], f: () => api.personagem3d(cam, { ...LUCAS, pose: 'poder', expressao: 'raiva' }, L[0], L[1], 1.75, { luz: LUZ_CRISTAL, olhaPara: G }) },
+        { X: R[0], Z: R[1], f: () => api.personagem3d(cam, { ...RAFAEL, pose: 'parado', expressao: 'medo' }, R[0], R[1], 1.8, { luz: LUZ_CRISTAL, olhaPara: G }) },
+      ]);
     },
     mae(ctx, u, d, api) {
       const [ex, ez] = CV().pontos.entrada;

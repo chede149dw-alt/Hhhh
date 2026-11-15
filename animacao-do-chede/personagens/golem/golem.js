@@ -9,8 +9,8 @@
 (function () {
   const P = (fn) => { const p = new Path2D(); fn(p); return p; };
   const tom = (b, s, l) => ({ base: b, sombra: s, luz: l || b });
-  const PEDRA = tom('#7C7486', '#4E4858', '#A39CAE'), PEDRA2 = tom('#6A6374', '#423C4B', '#8F889A');
-  const PEDRA3 = tom('#8C8494', '#5A5363', '#B4ADBC'), MUSGO = tom('#5E8A4A', '#3C5E30', '#86B46A');
+  const PEDRA = tom('#7A7186', '#463F52', '#A8A0B6'), PEDRA2 = tom('#655D72', '#3A3344', '#8E869C');
+  const PEDRA3 = tom('#8D8498', '#544C60', '#BCB4C6'), MUSGO = tom('#5E8A4A', '#3C5E30', '#86B46A');
   const CRISTAL = tom('#FF9A3C', '#C25A18', '#FFD9A0');
   const A = 8.0, HIP = 4.05;
   const rng = (s) => () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
@@ -38,12 +38,14 @@
       const mx = (a[0] + b[0]) / 2 - cx, my = (a[1] + b[1]) / 2 - cy, L = Math.hypot(mx, my) || 1;
       const luz = (-mx / L) * 0.62 + (-my / L) * 0.78; // luz vem de cima/esquerda
       const face = P((p) => { p.moveTo(cx, cy); p.lineTo(a[0], a[1]); p.lineTo(b[0], b[1]); p.closePath(); });
-      if (luz > 0.25) pc.preencher(face, `rgba(255,244,230,${0.16 * luz})`);
-      else if (luz < -0.2) pc.preencher(face, `rgba(30,20,45,${0.22 * -luz})`);
+      if (luz > 0.2) pc.preencher(face, `rgba(255,246,232,${0.28 * luz})`);
+      else if (luz < -0.15) pc.preencher(face, `rgba(22,14,36,${0.38 * -luz})`);
       void nx; void ny;
     }
     pc.ctx.restore();
-    if (o.aresta !== false) pc.linha(P((p) => { for (let i = 0; i < pts.length; i += 2) { p.moveTo(cx, cy); p.lineTo(pts[i][0], pts[i][1]); } }), pc.interno * 0.7, 'rgba(40,30,55,0.25)');
+    if (o.aresta !== false) pc.linha(P((p) => { for (let i = 0; i < pts.length; i += 2) { p.moveTo(cx, cy); p.lineTo(pts[i][0], pts[i][1]); } }), pc.interno * 0.7, 'rgba(30,20,45,0.4)');
+    // brilho na aresta de cima (pedra lascada pegando luz)
+    pc.linha(P((p) => { p.moveTo(pts[0][0], pts[0][1]); p.lineTo(pts[1][0], pts[1][1]); }), pc.interno * 0.9, 'rgba(255,248,236,0.35)');
     return caminho;
   }
   // rachadura brilhando (camadas: halo laranja, linha âmbar, miolo claro)
@@ -88,7 +90,9 @@
     const kx = perfil ? 0.62 : tq ? 0.84 : 1, ox = perfil ? 0.15 : tq ? 0.12 : 0;
     const X = (x) => ox + x * kx;
     // espalha as peças quando o golem ainda está se montando
-    const espalha = (nome, f) => (pc) => {
+    const longe = (nome) => (lado && /_e$/.test(nome)) || (costas && /^(cabeca|pescoco)$/.test(nome));
+    const espalha = (nome, f0) => (pc) => {
+      const f = longe(nome) ? (q) => { q.ctx.save(); q.ctx.filter = 'brightness(0.72) saturate(0.9)'; f0(q); q.ctx.restore(); } : f0;
       if (monta >= 0.999) return f(pc);
       const r = rng([...nome].reduce((a, c) => a * 31 + c.charCodeAt(0), 7) >>> 0);
       const d = 1 - monta, e = d * d;

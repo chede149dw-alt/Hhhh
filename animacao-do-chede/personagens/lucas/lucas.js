@@ -369,6 +369,21 @@
         pc.peca(P((p) => p.ellipse(-0.1, 0.07, 0.05, 0.09, 0, 0, Math.PI * 2)), pele, { sombra: 0.02 });
         return;
       }
+      if (forma === 'dorso') {
+        // costas da mão aberta (vista por trás, empurrando o poder para a frente): dedos juntos, nós dos dedos
+        const ctx = pc.ctx;
+        for (const [x, comp, ang] of [[-0.065, 0.31, -0.08], [0.0, 0.35, -0.02], [0.065, 0.34, 0.04], [0.115, 0.28, 0.12]]) {
+          ctx.save(); ctx.translate(x, 0.14); ctx.rotate(ang);
+          pc.peca(capsula(0.06, 0.055, 0, comp - 0.14), pele, { sombra: 0.02 });
+          ctx.restore();
+        }
+        ctx.save(); ctx.translate(-0.11, 0.05); ctx.rotate(0.55);
+        pc.peca(capsula(0.065, 0.058, 0, 0.13), pele, { sombra: 0.03 });
+        ctx.restore();
+        pc.peca(P((p) => p.roundRect(-0.12, -0.04, 0.25, 0.22, 0.08)), pele, { sombra: 0.05 });
+        pc.linha(P((p) => { p.moveTo(-0.08, 0.15); p.quadraticCurveTo(0.02, 0.18, 0.13, 0.14); }));
+        return;
+      }
       if (forma === 'aberta') {
         // palma aberta, dedos afastados (soltando poder)
         const dedos = [[-0.07, 0.3, -0.2], [0.0, 0.34, -0.05], [0.07, 0.33, 0.08], [0.12, 0.27, 0.25]];
@@ -739,11 +754,23 @@
       vista: 'tq', expressao: 'determinado',
       angulos: { tronco: -2, cabeca: -4, braco_d: -84, antebraco_d: -6, mao_d: 4, braco_e: 6, antebraco_e: -10,
         coxa_d: -8, canela_d: 4, pe_d: 4, coxa_e: 7, canela_e: -2, pe_e: -5, _maos: { d: 'apontando' } },
+      // de costas: o braço sobe para a frente (escorço), apontando para cima e um pouco para dentro
+      porVista: {
+        costas: { tronco: -2, cabeca: 6, braco_d: -205, _sy_braco_d: 0.78, antebraco_d: -8, _sy_antebraco_d: 0.85, mao_d: 0,
+          braco_e: 6, antebraco_e: 4, coxa_d: -6, canela_d: 3, coxa_e: 6, canela_e: -2, _maos: { d: 'apontando' } },
+      },
     },
     poder: {
       vista: 'tq', expressao: 'determinado', efeito: 'poder-terra',
       angulos: { tronco: 6, cabeca: -2, braco_d: -76, antebraco_d: -14, mao_d: -78, braco_e: -66, antebraco_e: -24, mao_e: -70,
         coxa_d: -20, canela_d: 14, pe_d: 6, coxa_e: 22, canela_e: 4, pe_e: -26, _maos: { d: 'aberta', e: 'aberta' } },
+      // visto de costas: os dois braços vão para a frente (para dentro da tela), um pouco abertos, e as mãos
+      // aparecem pelas costas, acima dos ombros, dedos para cima
+      porVista: {
+        costas: { tronco: 4, cabeca: 4, braco_d: -158, _sy_braco_d: 0.42, antebraco_d: 18, _sy_antebraco_d: 0.6, mao_d: -24,
+          braco_e: 158, _sy_braco_e: 0.42, antebraco_e: -18, _sy_antebraco_e: 0.6, mao_e: 24,
+          coxa_d: -12, canela_d: 6, coxa_e: 12, canela_e: -4, _maos: { d: 'dorso', e: 'dorso' } },
+      },
     },
     caido: {
       vista: 'perfil', expressao: 'cansado',

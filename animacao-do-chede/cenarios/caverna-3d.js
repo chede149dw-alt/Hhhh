@@ -152,49 +152,57 @@
     },
   };
 
-  // ===================== ESCADA EM ESPIRAL =====================
-  const RE = 2.9, RC = 0.55, PASSO = 0.42, ALT = 0.24; // raio do poço, raio da coluna, ângulo por degrau, altura do degrau
-  const degrau = (i) => ({ ang: i * PASSO, y: -i * ALT, x: Math.cos(i * PASSO) * (RE + RC) / 2, z: Math.sin(i * PASSO) * (RE + RC) / 2 });
+  // ===================== ESCADA DO TÚNEL =====================
+  // escada de pedra reta descendo num túnel escavado: degrau i em z = i·0,34, y = -i·0,23 (x de -1,25 a 1,25);
+  // paredes de rocha em x = ±1,7, teto acompanhando a descida, cristais nos cantos e luz laranja vindo do fundo.
+  const PZ = 0.34, PY = 0.23, LX = 1.25, PX = 1.7;
+  const degrau = (i) => ({ x: 0, y: -i * PY, z: i * PZ });
+  const yEm = (z) => -(z / PZ) * PY;
+  const rE = rng(77), CRIST_E = [];
+  for (let i = 0; i < 18; i++) CRIST_E.push([(rE() < 0.5 ? -1 : 1) * (PX - 0.15), 2 + rE() * 28, 0.35 + rE() * 0.6, 300 + i]);
   window.Cenarios3D.escada = {
-    nevoa: '#180F14', degrau, raio: RE,
+    nevoa: '#1A1014', degrau, yEm,
     desenhar(ctx, cam, o = {}) {
       const t = o.t || 0, br = o.brilho === undefined ? 1 : o.brilho;
       const W = ctx.canvas.width, H = ctx.canvas.height;
       ctx.save();
-      ctx.fillStyle = '#0E0A0E'; ctx.fillRect(-200, -200, W + 400, H + 400);
+      ctx.fillStyle = '#0E0A0C'; ctx.fillRect(-200, -200, W + 400, H + 400);
+      // luz do fundo do túnel
+      const fundo = cam.p(0, yEm(34) + 1.2, 34);
+      if (!fundo.atras) brilho(ctx, fundo.x, fundo.y, 1100, 0.55 * br);
       const itens = [];
-      // paredes do poço (anéis de pedra) — de y +4 até -14
-      const NA = 28;
-      for (let k = 0; k < 9; k++) for (let i = 0; i < NA; i++) {
-        const a = (i / NA) * TAU, b = ((i + 1) / NA) * TAU, y0 = 4 - k * 2.2, y1 = y0 - 2.2, rr = RE + 0.35 + 0.12 * Math.sin(i * 3 + k);
-        const pts = [[Math.cos(a) * rr, y0, Math.sin(a) * rr], [Math.cos(b) * rr, y0, Math.sin(b) * rr], [Math.cos(b) * rr, y1, Math.sin(b) * rr], [Math.cos(a) * rr, y1, Math.sin(a) * rr]];
-        const mx = Math.cos((a + b) / 2) * rr, mz = Math.sin((a + b) / 2) * rr, my = (y0 + y1) / 2;
-        itens.push({ d: Math.hypot(mx - cam.x, my - cam.y, mz - cam.z) + 2, f: () => {
-          face(ctx, cam, pts, ['#3C2E30', '#352A2C', '#433436'][(i + k) % 3], { linha: 0.8 });
-          if ((i * 7 + k * 3) % 5 === 0) { const q0 = cam.p(pts[0][0] * 0.99, y0 - 0.3, pts[0][2] * 0.99), q1 = cam.p(pts[2][0] * 0.99, y1 + 0.4, pts[2][2] * 0.99); if (!q0.atras && !q1.atras && q0.dz > 0.6) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = `rgba(255,150,60,${0.5 * br})`; ctx.lineWidth = Math.max(1, q0.s * 0.04); ctx.beginPath(); ctx.moveTo(q0.x, q0.y); ctx.lineTo((q0.x + q1.x) / 2 + q0.s * 0.15, (q0.y + q1.y) / 2); ctx.lineTo(q1.x, q1.y); ctx.stroke(); ctx.restore(); brilho(ctx, (q0.x + q1.x) / 2, (q0.y + q1.y) / 2, q0.s * 1.2, 0.2 * br); } }
+      for (let i = -8; i < 100; i++) {
+        const z0 = i * PZ, z1 = z0 + PZ, y = -i * PY;
+        const dz = z0 - cam.z; if (dz < -3 || dz > 34) continue;
+        const d = Math.hypot(0 - cam.x, y - cam.y, z0 + PZ / 2 - cam.z);
+        // paredes e teto por trecho (blocos de rocha irregulares)
+        const a = 0.06 * Math.sin(i * 1.7), b = 0.06 * Math.sin(i * 2.3 + 1);
+        itens.push({ d: d + 1.5, f: () => {
+          face(ctx, cam, [[-PX - a, y - 0.6, z0], [-PX - b, y - 0.6 - PY, z1], [-PX - b, y + 3.0 - PY, z1], [-PX - a, y + 3.0, z0]], i % 2 ? '#3A2C2E' : '#433335', { linha: 0.8 });
+          face(ctx, cam, [[PX + a, y - 0.6, z0], [PX + b, y - 0.6 - PY, z1], [PX + b, y + 3.0 - PY, z1], [PX + a, y + 3.0, z0]], i % 2 ? '#342829' : '#3D2F31', { linha: 0.8 });
+          face(ctx, cam, [[-PX - a, y + 3.0, z0], [PX + a, y + 3.0, z0], [PX + b, y + 3.0 - PY, z1], [-PX - b, y + 3.0 - PY, z1]], '#2A2022', { linha: 0.6 });
+          if (i % 4 === 1) for (const sx of [-1, 1]) {
+            const q0 = cam.p(sx * PX * 0.99, y + 2.4, z0), q1 = cam.p(sx * PX * 0.99, y + 0.5, z1 + PZ * 2);
+            if (!q0.atras && !q1.atras && q0.dz > 0.6) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round'; for (const [lw, cor] of [[q0.s * 0.07, `rgba(255,120,40,${0.3 * br})`], [q0.s * 0.025, `rgba(255,200,120,${0.85 * br})`]]) { ctx.strokeStyle = cor; ctx.lineWidth = Math.max(1, lw); ctx.beginPath(); ctx.moveTo(q0.x, q0.y); ctx.lineTo((q0.x + q1.x) / 2 + sx * q0.s * 0.12, (q0.y + q1.y) / 2); ctx.lineTo(q1.x, q1.y); ctx.stroke(); } ctx.restore(); brilho(ctx, (q0.x + q1.x) / 2, (q0.y + q1.y) / 2, q0.s * 1.1, 0.18 * br); }
+          }
+        } });
+        // degrau: espelho (frente, escuro) + piso (claro, luz quente) + borda gasta acesa
+        itens.push({ d, f: () => {
+          face(ctx, cam, [[-LX, y, z0], [LX, y, z0], [LX, y - PY, z0], [-LX, y - PY, z0]], '#3E2F31', { linha: 1 });
+          face(ctx, cam, [[-LX, y, z0], [LX, y, z0], [LX, y, z1], [-LX, y, z1]], i % 3 ? '#7A6260' : '#866C69', { linha: 1 });
+          // sobra de pedra nas laterais (degrau encaixado na parede)
+          face(ctx, cam, [[-PX, y + 0.1, z0], [-LX, y, z0], [-LX, y, z1], [-PX, y + 0.1, z1]], '#4A3A3B', { contorno: false });
+          face(ctx, cam, [[LX, y, z0], [PX, y + 0.1, z0], [PX, y + 0.1, z1], [LX, y, z1]], '#4A3A3B', { contorno: false });
+          const q0 = cam.p(-LX, y + 0.003, z0), q1 = cam.p(LX, y + 0.003, z0);
+          if (!q0.atras && !q1.atras) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = `rgba(255,170,90,${0.35 * br})`; ctx.lineWidth = Math.max(1, q0.s * 0.018); ctx.beginPath(); ctx.moveTo(q0.x, q0.y); ctx.lineTo(q1.x, q1.y); ctx.stroke(); ctx.restore(); }
         } });
       }
-      // coluna central
-      for (let k = 0; k < 9; k++) itens.push({ d: Math.hypot(cam.x, 4 - k * 2.2 - 1.1 - cam.y, cam.z) - 0.2, f: () => Cena3D.cilindro(ctx, cam, 0, 0, 4 - (k + 1) * 2.2, 4 - k * 2.2, RC, RC, '#4A3A3C', null, {}) });
-      // degraus
-      for (let i = -6; i < 52; i++) {
-        const a = i * PASSO, b = a + PASSO * 1.05, y = -i * ALT;
-        const top = [[Math.cos(a) * RC, y, Math.sin(a) * RC], [Math.cos(a) * RE, y, Math.sin(a) * RE], [Math.cos(b) * RE, y, Math.sin(b) * RE], [Math.cos(b) * RC, y, Math.sin(b) * RC]];
-        const frente = [[Math.cos(a) * RC, y, Math.sin(a) * RC], [Math.cos(a) * RE, y, Math.sin(a) * RE], [Math.cos(a) * RE, y - ALT, Math.sin(a) * RE], [Math.cos(a) * RC, y - ALT, Math.sin(a) * RC]];
-        const mx = Math.cos(a + PASSO / 2) * (RE + RC) / 2, mz = Math.sin(a + PASSO / 2) * (RE + RC) / 2;
-        itens.push({ d: Math.hypot(mx - cam.x, y - cam.y, mz - cam.z), f: () => {
-          face(ctx, cam, frente, '#4E3E40', { linha: 1 });
-          face(ctx, cam, top, '#6A5658', { linha: 1 });
-          // borda do degrau acesa de leve (luz que vem de baixo)
-          const q0 = cam.p(Math.cos(a) * RC, y + 0.002, Math.sin(a) * RC), q1 = cam.p(Math.cos(a) * RE, y + 0.002, Math.sin(a) * RE);
-          if (!q0.atras && !q1.atras) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = `rgba(255,140,60,${0.25 * br})`; ctx.lineWidth = Math.max(1, q0.s * 0.02); ctx.beginPath(); ctx.moveTo(q0.x, q0.y); ctx.lineTo(q1.x, q1.y); ctx.stroke(); ctx.restore(); }
-        } });
+      for (const [x, z, h, sem] of CRIST_E) {
+        if (z - cam.z < 0.8 || z - cam.z > 30) continue;
+        itens.push({ d: Math.hypot(x - cam.x, yEm(z) - cam.y, z - cam.z), f: () => grupoCristais(ctx, cam, x, yEm(z) + 0.05, z, h, br, sem) });
       }
       itens.sort((p, q) => q.d - p.d).forEach((it) => it.f());
-      // luz laranja vindo do fundo do poço
-      const fundo = cam.p(0, -14, 0.01);
-      if (!fundo.atras) brilho(ctx, fundo.x, fundo.y, 900, 0.4 * br);
-      Cena3D.poeira(ctx, cam, [[-2.5, -12, -2.5], [2.5, 3, 2.5]], 40, t, { alpha: 0.4 });
+      Cena3D.poeira(ctx, cam, [[-1.5, cam.y - 3, cam.z + 0.5], [1.5, cam.y + 2, cam.z + 8]], 50, t, { alpha: 0.45 });
       ctx.restore();
     },
   };
