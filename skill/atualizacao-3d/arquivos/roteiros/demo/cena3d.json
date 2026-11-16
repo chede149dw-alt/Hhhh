@@ -1,0 +1,12 @@
+{
+  "serie": "demo",
+  "episodio": 1,
+  "parte": 1,
+  "scripts": ["motor/vendor/three-r160.min.js", "cenarios/valdor-3d.js", "motor/cena-noite.js", "efeitos/noite.js", "efeitos/combate.js"],
+  "legenda": { "faixas": [1180, 1400, 760, 420] },
+  "planos": [
+    { "id": "dia", "fala": { "texto": "De dia, o sol faz a sombra correr pelo caminho.", "voz": "narrador" }, "destaque": ["SOMBRA"], "duracao": 3.5 },
+    { "id": "magia", "fala": { "texto": "No pôr do sol, a magia ilumina o cenário de verdade.", "voz": "narrador" }, "destaque": ["MAGIA"], "duracao": 3.5 },
+    { "id": "noite", "fala": { "texto": "E de noite, a lua e a fumaça fazem o resto.", "voz": "narrador" }, "destaque": ["FUMAÇA"], "duracao": 3.5 }
+  ]
+}
