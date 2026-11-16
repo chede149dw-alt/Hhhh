@@ -259,9 +259,19 @@
    ]
   },
   {
+   "id": "rasgado",
+   "fala": {
+    "texto": "A transformação tinha rasgado a roupa do Téo...",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "RASGADO"
+   ]
+  },
+  {
    "id": "roupa",
    "fala": {
-    "texto": "...e roupa nova pros dois.",
+    "texto": "...mas no drop tinha roupa nova pros dois.",
     "voz": "narrador"
    },
    "destaque": [

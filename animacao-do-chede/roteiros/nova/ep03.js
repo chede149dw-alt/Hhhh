@@ -731,7 +731,19 @@
       ctx.save(); ctx.fillStyle = 'rgba(8,10,26,0.5)'; ctx.fillRect(0, 0, W, H); ctx.restore();
       LOOT3.forEach((it, i) => { const t0 = 0.1 + i * 0.32, k = api.fase(t0, t0 + 0.35, 'volta'), ang = (i - 2) * 0.14, x = 540 + (i - 2) * 168, y = 1020 + Math.abs(i - 2) * 50; if (k > 0) Valdor.feixe(ctx, x, 0, y + 240, 220, it.rar === 'epico' ? '176,124,255' : it.rar === 'raro' ? '90,180,255' : '200,206,216', 0.35 * cl(k)); carta3(ctx, x, y - (1 - cl(k)) * 160, 250, it, k, api.t, { giro: ang }); });
     },
-    // 23) tela de equipamento: os dois girando com a roupa nova, peças entrando com brilho
+    // 22b) o Téo volta a ser gente numa nuvem de fumaça — com a roupa toda rasgada; o Davi ri
+    rasgado(ctx, u, d, api) {
+      const cam = camNoite(api, { f: 1150, x: -0.2, y: 1.35, z: 3.0 + u * 0.1, cy: 920, yaw: 0.06 });
+      const volta = 0.55, humano = u > volta, vergonha = cl((u - volta - 0.3) / 0.4);
+      noite(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'parado', expressao: u > 1.2 ? 'rindo' : 'espanto' }, -1.1, 5.4, 1.76, { olhaPara: [0.35, 5.6], luz: LUZ_LUA }) },
+        { f: () => humano ? api.personagem3d(cam, { fabrica: 'criarTeoRasgado', registroPoses: 'POSES_PADRAO', pose: { braco_d: -20 * vergonha, antebraco_d: -110 * vergonha, braco_e: 20 * vergonha, antebraco_e: 110 * vergonha, coxa_d: 4, coxa_e: -4, cabeca: 8 * vergonha }, expressao: expr('preocupado', { olhar: [0, 0.01] }) }, 0.35, 5.6, 1.82, { olhaPara: [-1.1, 5.4], luz: LUZ_LUA })
+          : api.personagem3d(cam, { ...LOBO, pose: 'parado' }, 0.35, 5.6, 2.55 * (1 - 0.25 * cl(u / volta)), { luz: LUZ_LUA }) },
+      ], {
+        depois: () => { const q = cam.p(0.35, 0, 5.6); Noite.fumaca(ctx, q.x, q.y - 0.2 * q.s, 1.1 * q.s, (u - volta + 0.25) / 1.6, { seed: 17, cor: '200,205,230', n: 22, largura: 1.4, sobe: 0.8 }); Noite.clarao(ctx, q.x, q.y - 0.9 * q.s, Math.max(0, 1 - Math.abs(u - volta) / 0.3)); if (humano) for (let i = 0; i < 6; i++) { const f = cl((u - volta) / 1.4), x = q.x + (rnd(i) - 0.5) * 260, y = q.y - 1.5 * q.s + f * 1.4 * q.s + Math.sin(api.t * 3 + i) * 10; ctx.save(); ctx.globalAlpha = 1 - f; ctx.fillStyle = i % 2 ? '#3F7A55' : '#B39A6F'; ctx.translate(x, y); ctx.rotate(api.t * 2 + i); ctx.fillRect(-14, -6, 28, 12); ctx.restore(); } },
+      });
+    },
+    // 23) tela de equipamento: a roupa rasgada do Téo e a do Davi trocam pela roupa nova do drop, peças entrando com brilho
     roupa(ctx, u, d, api) {
       const cam = camNoite(api, { x: 0, y: 1.4, z: 3.0, cy: 900 });
       noite(ctx, api, cam, [], { desfoque: 18, forca: 0 });
@@ -739,15 +751,17 @@
       ctx.fillStyle = 'rgba(30,40,80,0.55)'; ctx.strokeStyle = 'rgba(160,190,255,0.6)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(60, 330, 960, 1280, 40); ctx.fill(); ctx.stroke();
       ctx.font = '900 54px Inter'; ctx.textAlign = 'center'; ctx.fillStyle = '#FFFFFF'; ctx.fillText('EQUIPAMENTO', 540, 410); ctx.restore();
       const giro = u * 1.4;
-      for (const [x, item, cor] of [[320, DAVIA, '127,200,255'], [760, TEOG, '127,230,170']]) {
+      const troca = u > d * 0.45;
+      for (const [x, item, cor] of [[320, troca ? DAVIA : DAVIL, '127,200,255'], [760, troca ? TEOG : { fabrica: 'criarTeoRasgado', registroPoses: 'POSES_PADRAO' }, '127,230,170']]) {
         Valdor.brilhoRadial(ctx, x, 1380, 300, cor, 0.35);
         ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(x, 1430, 150, 26, 0, 0, TAU); ctx.fill(); ctx.restore();
         api.personagemGirando({ ...item, pose: 'parado', expressao: 'feliz' }, x, 1430, 880, Math.sin(giro) * 1.2, {});
-        const kk = api.fase(0.3, 0.6); if (kk > 0 && kk < 1) Valdor.brilhoRadial(ctx, x, 1000, 420 * kk, '255,255,255', 0.6 * (1 - kk));
+        const kk = api.fase(d * 0.45 - 0.2, d * 0.45 + 0.2); if (kk > 0 && kk < 1) Valdor.brilhoRadial(ctx, x, 1000, 520 * Math.sin(kk * Math.PI), '255,255,255', 0.85 * Math.sin(kk * Math.PI));
       }
-      setaAtributo(ctx, 150, 1530, '+MAGIA', (u - 0.5) * 2);
-      setaAtributo(ctx, 600, 1530, '+DEFESA', (u - 0.7) * 2);
-      setaAtributo(ctx, 380, 1640, '+VELOCIDADE', (u - 0.9) * 2);
+      setaAtributo(ctx, 150, 1530, '+MAGIA', (u - d * 0.5) * 2);
+      setaAtributo(ctx, 600, 1530, '+DEFESA', (u - d * 0.5 - 0.15) * 2);
+      setaAtributo(ctx, 380, 1640, '+VELOCIDADE', (u - d * 0.5 - 0.3) * 2);
+      if (!troca) { ctx.save(); ctx.font = '800 34px Inter'; ctx.textAlign = 'center'; ctx.fillStyle = '#FFB0A0'; ctx.fillText('ROUPA RASGADA', 760, 480); ctx.restore(); }
     },
     // 24) a carta lendária: Lâmina Rubra · R$ 348.000
     premio(ctx, u, d, api) {
@@ -763,7 +777,7 @@
     aluguel(ctx, u, d, api) {
       const cam = camNoite(api, { f: 1150, x: -0.3, y: 1.3, z: 3.9 + u * 0.1, cy: 940, yaw: 0.12 });
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...LOBO, pose: 'parado' }, 1.9, 7.3, 2.55, { olhaPara: [0.5, 6.0], luz: LUZ_LUA }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: 'espanto' }, 1.3, 7.6, 1.82, { olhaPara: [0.55, 6.2], luz: LUZ_LUA }) },
         { pos: [1.15, 6.6], alt: 1.2, f: () => { const q = cam.p(1.15, 0, 6.6); Combate.laminaRubra(ctx, q.x, q.y + 0.05 * q.s, 1.0 * q.s, api.t, Math.PI + 0.12, { brilho: 0.9 }); } },
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: 35 * cl((u - 1) / 0.6), antebraco_d: 30 * cl((u - 1) / 0.6), braco_e: -8, coxa_d: 4, coxa_e: -4 }, expressao: u < 1.2 ? 'espanto' : 'feliz' }, 0.55, 6.2, 1.76, { olhaPara: [1.15, 6.6], luz: { lado: 1, forca: 0.6, cor: 'rgb(255,120,90)', sombra: 1 } }) },
       ], {

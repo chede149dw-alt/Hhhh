@@ -452,6 +452,30 @@
     if (eq.colarDentes) {
       depois('tronco', (pc) => { if (perfil || costas) return; const y = neckY + 0.2; pc.linha(P((p) => { p.moveTo(cx - 0.2 * k, neckY + 0.05); p.quadraticCurveTo(cx, y + 0.06, cx + 0.2 * k, neckY + 0.05); }), 0.014, '#3A2414'); for (let i = -2; i <= 2; i++) { const x = cx + i * 0.07 * k, yy = y + 0.04 - Math.abs(i) * 0.025; pc.peca(P((p) => { p.moveTo(x - 0.022, yy); p.quadraticCurveTo(x + 0.01, yy + 0.05, x, yy + 0.09); p.quadraticCurveTo(x + 0.03, yy + 0.04, x + 0.022, yy); p.closePath(); }), T('garra'), { sombra: 0.05, espessura: pc.interno * 0.6 }); } });
     }
+    // roupa rasgada pela transformação: barra esfiapada, rasgos mostrando a pele, mangas arrancadas, bermuda desfiada
+    if (eq.rasgado) {
+      const pele = T(c.pele), roupa = T(c.top.cor), esc = 'rgba(30,20,16,0.55)';
+      const zigue = (x0, x1, y, alt, n, s0 = 1) => P((p) => { p.moveTo(x0, y - 0.2); p.lineTo(x0, y); for (let i = 1; i <= n; i++) { const x = x0 + (x1 - x0) * (i / n); p.lineTo(x - (x1 - x0) / n / 2, y + alt * (0.5 + 0.5 * Math.sin(i * 2.7 + s0))); p.lineTo(x, y - alt * 0.15); } p.lineTo(x1, y - 0.2); p.closePath(); });
+      const rasgo = (pc, x, y, w, h, s0) => { const fm = P((p) => { const n = 7; for (let i = 0; i <= n; i++) { const a = (i / n) * Math.PI * 2, r = 0.6 + 0.4 * Math.sin(i * 3.1 + s0); const px = x + Math.cos(a) * w * r, py = y + Math.sin(a) * h * r; i ? p.lineTo(px, py) : p.moveTo(px, py); } p.closePath(); }); pc.peca(fm, pele, { sombra: 0.08, espessura: pc.interno }); if (pc.modo !== 'contorno') pc.linha(fm, pc.interno * 1.2, esc); };
+      depois('tronco', (pc) => {
+        if (perfil) { rasgo(pc, d * 0.2, shoulderY + 0.45, 0.07, 0.1, 1); return; }
+        // barra rasgada: a camiseta acaba em farrapos mostrando a barriga
+        const yb = hemY - 0.2 * f, a = (hw - 0.01) * k;
+        // barriga aparecendo embaixo e a barra da camiseta em farrapos (dentes de pano caindo por cima)
+        pc.peca(P((p) => p.roundRect(cx - a * 0.92, yb, 2 * a * 0.92, hemY - yb + 0.04, 0.05)), pele, { sombra: 0.08 });
+        const dentes = P((p) => { const n = 8; p.moveTo(cx - a, yb - 0.08); p.lineTo(cx - a, yb); for (let i = 0; i < n; i++) { const x0 = cx - a + 2 * a * (i / n), x1 = cx - a + 2 * a * ((i + 1) / n), L = 0.06 + 0.07 * (0.5 + 0.5 * Math.sin(i * 2.9 + 0.4)); p.lineTo((x0 + x1) / 2 + 0.01 * Math.sin(i), yb + L); p.lineTo(x1, yb); } p.lineTo(cx + a, yb - 0.08); p.closePath(); });
+        pc.peca(dentes, roupa, { sombra: 0.1 });
+        if (!costas) { rasgo(pc, cx - 0.17 * k, shoulderY + 0.4, 0.09, 0.13, 1.3); rasgo(pc, cx + 0.15 * k, shoulderY + 0.66, 0.07, 0.1, 2.1); rasgo(pc, cx + 0.2 * k, shoulderY + 0.18, 0.05, 0.07, 0.6); }
+        else { rasgo(pc, cx + 0.1, shoulderY + 0.5, 0.08, 0.12, 0.9); rasgo(pc, cx - 0.2, shoulderY + 0.8, 0.05, 0.07, 1.9); }
+        // tiras penduradas
+        if (pc.modo !== 'contorno') for (const [x, L] of [[-0.6, 0.18], [0.1, 0.12], [0.5, 0.2]]) { const xx = cx + x * a; pc.peca(P((p) => { p.moveTo(xx - 0.025, yb - 0.02); p.lineTo(xx + 0.025, yb - 0.02); p.lineTo(xx + 0.01, yb + L); p.lineTo(xx - 0.015, yb + L * 0.9); p.closePath(); }), roupa, { sombra: 0.1, espessura: pc.interno * 0.8 }); }
+      });
+      // mangas arrancadas: ponta esfiapada no ombro
+      for (const nome of ['braco_d', 'braco_e']) depois(nome, (pc) => { pc.linha(P((p) => { p.moveTo(-0.18, Lbraco * 0.32); for (let i = 1; i <= 5; i++) { p.lineTo(-0.18 + i * 0.072 - 0.036, Lbraco * (0.36 + 0.05 * Math.sin(i * 2.3))); p.lineTo(-0.18 + i * 0.072, Lbraco * 0.31); } }), pc.interno * 1.2, esc); });
+      // bermuda desfiada (a calça rasgou na altura do joelho)
+      const Lcoxa = (parte('canela_d') || { pivo: [0, 1] }).pivo[1];
+      for (const nome of ['coxa_d', 'coxa_e']) depois(nome, (pc) => { const y = Lcoxa * 0.8; pc.peca(zigue(-0.21, 0.21, y, 0.09, 5, nome === 'coxa_d' ? 0.3 : 1.7), T(c.calca.cor), { sombra: 0.08, espessura: pc.interno }); if (pc.modo !== 'contorno') for (let i = 0; i < 4; i++) pc.linha(P((p) => { const x = -0.16 + i * 0.1; p.moveTo(x, y + 0.04); p.lineTo(x + 0.01, y + 0.1 + 0.03 * Math.sin(i * 3)); }), 0.01, esc); });
+    }
     return def;
   };
 })();

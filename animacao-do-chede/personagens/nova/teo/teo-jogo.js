@@ -37,4 +37,6 @@
       eq: { capa: { cor: 'vinhoCapa', borda: 'bronze' }, escamas: { cor: 'verdeEscama', borda: 'bronze' }, sobreveste: { cor: 'couroEscuro', borda: 'bronze' }, ombreira: { cor: 'bronze', rebites: 'acoGuardiao' }, bracadeira: 'bronze', cinto: { cor: 'couroEscuro', fivela: 'bronze' }, botas: { cor: 'couroEscuro', cano: 0.6 }, escudo: { cor: 'bronze', borda: 'carvao', emblema: 'verdeEscama' }, arma: { tipo: 'espada-madeira', mao: 'd' } } },
   };
   window.criarTeoRoupa = (opcoes = {}, vista = 'frente') => { const R = window.TEO_ROUPAS[opcoes.estilo || 'A']; return window.equipar(window.criarTeo({ ...window.TEO_JOGO_OPCOES, top: R.top, calca: R.calca, calcado: R.calcado }, vista), R.eq); };
+  // Parte 3: Téo depois de voltar da forma de fera — a transformação rasgou a roupa (camiseta em farrapos, bermuda desfiada, descalço)
+  window.criarTeoRasgado = (opcoes = {}, vista = 'frente') => window.equipar(window.criarTeo({ ...window.TEO_JOGO_OPCOES, top: { tipo: 'camiseta', cor: 'verdeFloresta' }, calca: { tipo: 'bermuda', cor: 'caqui' }, calcado: { tipo: 'sapatilha', cor: 'pele2', acento: 'pele2' }, ...opcoes }, vista), { rasgado: true, cinto: { cor: 'couroEscuro', fivela: 'mostarda' } });
 })();
