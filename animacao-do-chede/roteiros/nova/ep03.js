@@ -505,13 +505,12 @@
       const kf = cl(u / pega), fx = mix(1250, 610, api.ease.entra(kf)), fy = mix(700, 840, kf), ang = kp < 0 ? u * 7 : -0.5;
       // braço (manga) vindo de baixo à esquerda até o pulso
       const px = 470 + 30 * Math.sin(api.t * 1.5) * (1 - fecha), py = 1080;
-      ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = '#3C4C66'; ctx.lineWidth = 230; ctx.beginPath(); ctx.moveTo(-60, 1900); ctx.quadraticCurveTo(220, 1450, px, py + 60); ctx.stroke(); ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 90; ctx.beginPath(); ctx.moveTo(-40, 1800); ctx.quadraticCurveTo(200, 1420, px - 30, py + 40); ctx.stroke(); ctx.restore();
       const aM = 0.35, kx = px + Math.sin(aM) * 300 * 0.95, ky = py - Math.cos(aM) * 300 * 0.95;
-      if (kp < 0) faca(ctx, fx, fy, 260, ang); else faca(ctx, kx, ky, 280, aM - 0.15);
-      Maos.desenhar(ctx, px, py, 300, { curl: [0.3 + 0.6 * fecha, 0.15 + 0.85 * fecha, 0.15 + 0.85 * fecha, 0.2 + 0.8 * fecha, 0.25 + 0.75 * fecha], abre: 0.6 * (1 - fecha), ang: 0.35, pele: 'azulArdosia', manga: 'azulArdosia', faixa: 'mostarda' });
+      if (kp < 0) faca(ctx, fx, fy, 500, ang); else faca(ctx, kx, ky, 520, aM - 0.15);
+      Maos.desenhar(ctx, px, py, 300, { curl: [0.3 + 0.6 * fecha, 0.15 + 0.85 * fecha, 0.15 + 0.85 * fecha, 0.2 + 0.8 * fecha, 0.25 + 0.75 * fecha], abre: 0.6 * (1 - fecha), ang: 0.35, pele: 'azulArdosia', manga: 'azulArdosia', faixa: false, mangaLarg: 1.05, mangaComp: 8, luvaPunho: 'mostarda', semVincos: true });
       if (kp >= 0) Combate.impacto(ctx, px + 60, py - 200, 200, kp, { rgb: '255,240,220', dura: 0.35 });
       if (elet > 0) {
-        const tip = [kx + Math.sin(aM - 0.15) * 280, ky - Math.cos(aM - 0.15) * 280];
+        const tip = [kx + Math.sin(aM - 0.15) * 520, ky - Math.cos(aM - 0.15) * 520];
         Valdor.brilhoRadial(ctx, (kx + tip[0]) / 2, (ky + tip[1]) / 2, 520 * elet, AZUL, 0.55 * elet);
         Combate.maoEletrica(ctx, px + 40, py - 60, 70, api.t, elet);
         for (let i = 0; i < 3; i++) Combate.relampago(ctx, [kx, ky + 40], [tip[0] + (i - 1) * 25, tip[1] + i * 15], api.t + i, elet, { espessura: 0.9 });
@@ -533,16 +532,15 @@
         depois: ([rc]) => {
           const alvo = cam.p(C[0], 1.15, C[1]);
           // a faca voando com rastro elétrico, ficando pequena com a distância
-          if (ks > 0 && voo < 1) { const x = mix(820, alvo.x, voo), y = mix(1380, alvo.y, voo), s = mix(240, 40, voo); Combate.relampago(ctx, [mix(820, alvo.x, Math.max(0, voo - 0.35)), mix(1380, alvo.y, Math.max(0, voo - 0.35))], [x, y], api.t, 1, { espessura: 1.1 }); Valdor.brilhoRadial(ctx, x, y, s * 2.2, AZUL, 0.6); faca(ctx, x, y, s, -0.9 + voo * 0.3); }
+          if (ks > 0 && voo < 1) { const x = mix(820, alvo.x, voo), y = mix(1380, alvo.y, voo), s = mix(420, 50, voo); Combate.relampago(ctx, [mix(820, alvo.x, Math.max(0, voo - 0.35)), mix(1380, alvo.y, Math.max(0, voo - 0.35))], [x, y], api.t, 1, { espessura: 1.1 }); Valdor.brilhoRadial(ctx, x, y, s * 2.2, AZUL, 0.6); faca(ctx, x, y, s, -0.9 + voo * 0.3); }
           if (bate > 0 && bate < 0.5) { raioXCorpo(ctx, rc, api.t, 1); Combate.eletrocutado(ctx, alvo.x, alvo.y + 0.5 * alvo.s, 0.9 * alvo.s, 1.7 * alvo.s, api.t, 1); }
           Combate.impacto(ctx, alvo.x, alvo.y, 240, bate, { rgb: AZUL }); Combate.numero(ctx, alvo.x, alvo.y - 260, '-48', bate, 'critico');
           // braço do Davi em primeira pessoa: puxa para trás e lança
           const kb = ks < 0 ? cl(u / solta) : 1, avanca = ks < 0 ? 0 : api.ease.entra(cl(ks / 0.2));
           const hx = ks < 0 ? mix(900, 1010, kb) : mix(1010, 640, avanca), hy = ks < 0 ? mix(1500, 1560, kb) : mix(1560, 1250, avanca), ang = ks < 0 ? 0.5 + 0.4 * kb : mix(0.9, -0.2, avanca);
-          ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = '#3C4C66'; ctx.lineWidth = 260; ctx.beginPath(); ctx.moveTo(1250, 2100); ctx.quadraticCurveTo(hx + 160, hy + 260, hx + 30, hy + 80); ctx.stroke(); ctx.restore();
-          if (ks < 0) faca(ctx, hx + Math.sin(ang) * 290 * 0.95, hy - Math.cos(ang) * 290 * 0.95, 260, ang - 0.1);
-          Maos.desenhar(ctx, hx, hy, 290, { curl: ks < 0 ? [0.85, 1, 1, 1, 1] : [0.25, 0.1 * (1 - avanca), 0.1, 0.15, 0.2], abre: ks < 0 ? 0 : 0.5 * avanca, ang, pele: 'azulArdosia', manga: 'azulArdosia', faixa: 'mostarda' });
-          if (ks < 0) { const bx = hx + Math.sin(ang) * 290 * 0.95, by = hy - Math.cos(ang) * 290 * 0.95, tx2 = bx + Math.sin(ang - 0.1) * 260, ty2 = by - Math.cos(ang - 0.1) * 260; Combate.maoEletrica(ctx, bx, by + 30, 70, api.t, 1); Combate.relampago(ctx, [bx, by + 20], [tx2, ty2], api.t, 0.9, { espessura: 0.8 }); Valdor.brilhoRadial(ctx, (bx + tx2) / 2, (by + ty2) / 2, 380, AZUL, 0.5); }
+          if (ks < 0) faca(ctx, hx + Math.sin(ang) * 290 * 0.95, hy - Math.cos(ang) * 290 * 0.95, 480, ang - 0.1);
+          Maos.desenhar(ctx, hx, hy, 290, { curl: ks < 0 ? [0.85, 1, 1, 1, 1] : [0.25, 0.1 * (1 - avanca), 0.1, 0.15, 0.2], abre: ks < 0 ? 0 : 0.5 * avanca, ang, pele: 'azulArdosia', manga: 'azulArdosia', faixa: false, mangaLarg: 1.05, mangaComp: 8, luvaPunho: 'mostarda', semVincos: true });
+          if (ks < 0) { const bx = hx + Math.sin(ang) * 290 * 0.95, by = hy - Math.cos(ang) * 290 * 0.95, tx2 = bx + Math.sin(ang - 0.1) * 480, ty2 = by - Math.cos(ang - 0.1) * 480; Combate.maoEletrica(ctx, bx, by + 30, 70, api.t, 1); Combate.relampago(ctx, [bx, by + 20], [tx2, ty2], api.t, 0.9, { espessura: 0.8 }); Valdor.brilhoRadial(ctx, (bx + tx2) / 2, (by + ty2) / 2, 380, AZUL, 0.5); }
           if (ks > 0 && ks < 0.2) Combate.velocidade(ctx, 700, 1200, -2.4, 0.8, api.t);
           flash(ctx, bate, 0.6);
         },

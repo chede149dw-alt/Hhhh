@@ -4,6 +4,8 @@
 //   o.curl: [polegar, indicador, médio, anelar, mínimo] de 0 (aberto) a 1 (fechado)
 //   o.abre: 0..1 afasta os dedos; o.ang: giro da mão (rad, 0 = dedos para cima); o.espelhar: mão esquerda
 //   o.pele: tom do guia (padrão pele3), o.manga / o.faixa: cores do punho (padrão Marinho / Turquesa)
+//   o.mangaLarg / o.mangaComp: largura e comprimento da manga (padrão 1.44 / 2.2; use comprimento grande para o braço sair da tela)
+//   o.luvaPunho: cor do punho da luva no pulso (cobre a emenda luva/manga); o.semVincos: sem linhas da palma (luva)
 // Modo suave do guia: sem contorno preto, degradê de luz da esquerda, vincos discretos.
 (function () {
   const T = (n) => Estilo.tom(n);
@@ -66,9 +68,10 @@
       // punho do moletom
       const manga = T(o.manga || 'marinho');
       const gm = ctx.createLinearGradient(-0.75, 0, 0.75, 0); gm.addColorStop(0, manga.luz); gm.addColorStop(0.55, manga.base); gm.addColorStop(1, manga.sombra);
-      ctx.fillStyle = gm; ctx.beginPath(); ctx.roundRect(-0.72, 0.15, 1.44, 2.2, 0.2); ctx.fill();
-      ctx.fillStyle = Estilo.base[o.faixa || 'turquesa']; ctx.fillRect(0.38, 0.15, 0.12, 2.2);
-      ctx.fillStyle = manga.sombra; ctx.beginPath(); ctx.roundRect(-0.7, 0.1, 1.4, 0.22, 0.1); ctx.fill();
+      const mw = o.mangaLarg || 1.44, mc = o.mangaComp || 2.2, mk = mw / 1.44;
+      ctx.fillStyle = gm; ctx.beginPath(); ctx.roundRect(-mw / 2, 0.15, mw, mc, 0.2); ctx.fill();
+      if (o.faixa !== false) { ctx.fillStyle = Estilo.base[o.faixa || 'turquesa']; ctx.fillRect(0.38 * mk, 0.15, 0.12 * mk, mc); }
+      ctx.fillStyle = manga.sombra; ctx.beginPath(); ctx.roundRect(-mw / 2 + 0.02, 0.1, mw - 0.04, 0.22, 0.1); ctx.fill();
       // pulso e palma
       const gp = ctx.createLinearGradient(-0.6, 0, 0.6, 0); gp.addColorStop(0, cores.luz); gp.addColorStop(0.5, cores.base); gp.addColorStop(1, cores.sombra);
       ctx.fillStyle = gp;
@@ -82,7 +85,7 @@
       ctx.closePath(); ctx.fill();
       ctx.strokeStyle = cores.borda; ctx.lineWidth = 0.025; ctx.stroke();
       // vincos da palma
-      ctx.strokeStyle = cores.vinco; ctx.lineWidth = 0.022; ctx.lineCap = 'round';
+      ctx.strokeStyle = o.semVincos ? 'rgba(0,0,0,0)' : cores.vinco; ctx.lineWidth = 0.022; ctx.lineCap = 'round';
       ctx.beginPath();
       ctx.moveTo(-0.45, -0.85); ctx.quadraticCurveTo(0.0, -0.72, 0.5, -0.88);
       ctx.moveTo(-0.5, -0.62); ctx.quadraticCurveTo(-0.05, -0.55, 0.28, -0.42);
@@ -100,6 +103,13 @@
       const angP = (-1.05 + c0 * 0.95) - abre * 0.25;
       const dirP = [Math.sin(angP), -Math.cos(angP)];
       dedo(ctx, [-0.5, -0.35], dirP, 0.7 * (1 - c0 * 0.25), 0.22, c0 * 0.6, cores, pontas);
+      // punho da luva: faixa larga no pulso, por cima da emenda com a manga
+      if (o.luvaPunho) {
+        const pt = T(o.luvaPunho), gl = ctx.createLinearGradient(-0.6, 0, 0.6, 0); gl.addColorStop(0, pt.luz); gl.addColorStop(0.5, pt.base); gl.addColorStop(1, pt.sombra);
+        ctx.fillStyle = gl; ctx.beginPath(); ctx.moveTo(-0.46, -0.06); ctx.lineTo(0.46, -0.06); ctx.lineTo(0.56, 0.4); ctx.quadraticCurveTo(0, 0.46, -0.56, 0.4); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 0.025; ctx.beginPath(); ctx.moveTo(-0.5, 0.14); ctx.quadraticCurveTo(0, 0.19, 0.5, 0.14); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(-0.4, -0.03, 0.8, 0.05);
+      }
       ctx.restore();
       // devolve as pontas dos dedos em px (para ancorar efeitos)
       const m = new DOMMatrix().translate(x, y).rotate((o.ang || 0) * 180 / Math.PI).scale(o.espelhar ? -escala : escala, escala);
