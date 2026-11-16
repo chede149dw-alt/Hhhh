@@ -295,6 +295,27 @@
     ctx.fillStyle = '#9AA0AA'; ctx.fillRect(-s * 0.2, -s * 0.04, s * 0.4, s * 0.08);
     ctx.restore();
   }
+  // punho de luva segurando a faca: (x, y) = centro do punho, s = largura do punho em px, ang = direção da lâmina (0 = para cima)
+  function punhoComFaca(ctx, x, y, s, ang, o = {}) {
+    // braço preso num ponto fixo da tela (primeira pessoa: sempre vem do canto de baixo)
+    if (o.ancora) { const [ax, ay] = o.ancora, dx = ax - x, dy = ay - y, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, w0 = 0.42 * s, w1 = 0.95 * s; const gm = ctx.createLinearGradient(x + nx * w0, y + ny * w0, x - nx * w0, y - ny * w0); gm.addColorStop(0, '#5A6B88'); gm.addColorStop(0.55, '#46566F'); gm.addColorStop(1, '#2F3B50'); ctx.save(); ctx.fillStyle = gm; ctx.beginPath(); ctx.moveTo(x + nx * w0, y + ny * w0); ctx.lineTo(ax + nx * w1, ay + ny * w1); ctx.lineTo(ax - nx * w1, ay - ny * w1); ctx.lineTo(x - nx * w0, y - ny * w0); ctx.closePath(); ctx.fill(); ctx.restore(); o = { ...o, manga: false }; }
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.lineJoin = 'round';
+    const g0 = '#4B5D7A', gL = '#6A7FA0', gS = '#33415A', borda = '#1E2738';
+    if (o.manga !== false) { const gm = ctx.createLinearGradient(-0.45 * s, 0, 0.45 * s, 0); gm.addColorStop(0, '#5A6B88'); gm.addColorStop(0.55, '#46566F'); gm.addColorStop(1, '#2F3B50'); ctx.fillStyle = gm; ctx.beginPath(); ctx.moveTo(-0.4 * s, 0.4 * s); ctx.lineTo(0.4 * s, 0.4 * s); ctx.lineTo(0.5 * s, 0.4 * s + (o.comp || 6) * s); ctx.lineTo(-0.5 * s, 0.4 * s + (o.comp || 6) * s); ctx.closePath(); ctx.fill(); }
+    if (o.faca !== false) faca(ctx, 0.02 * s, -0.36 * s, 2.0 * s, 0);
+    // palma (por cima do cabo)
+    const gp = ctx.createLinearGradient(-0.5 * s, 0, 0.5 * s, 0); gp.addColorStop(0, gL); gp.addColorStop(0.5, g0); gp.addColorStop(1, gS);
+    ctx.fillStyle = gp; ctx.strokeStyle = borda; ctx.lineWidth = 0.035 * s; ctx.beginPath(); ctx.roundRect(-0.46 * s, -0.42 * s, 0.92 * s, 0.86 * s, 0.24 * s); ctx.fill(); ctx.stroke();
+    // quatro dedos dobrados enrolando o cabo (por cima dele)
+    for (let i = 0; i < 4; i++) { const yy = -0.36 * s + i * 0.19 * s; const gd = ctx.createLinearGradient(0, yy, 0, yy + 0.18 * s); gd.addColorStop(0, gL); gd.addColorStop(1, gS); ctx.fillStyle = gd; ctx.beginPath(); ctx.roundRect(-0.5 * s, yy, 0.7 * s, 0.18 * s, 0.09 * s); ctx.fill(); ctx.stroke(); ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.beginPath(); ctx.ellipse(-0.36 * s, yy + 0.05 * s, 0.07 * s, 0.03 * s, 0, 0, TAU); ctx.fill(); }
+    // polegar fechando por cima dos dedos
+    ctx.fillStyle = gp; ctx.beginPath(); ctx.moveTo(0.36 * s, -0.12 * s); ctx.quadraticCurveTo(0.52 * s, -0.44 * s, 0.12 * s, -0.46 * s); ctx.quadraticCurveTo(-0.16 * s, -0.47 * s, -0.2 * s, -0.36 * s); ctx.quadraticCurveTo(0.0 * s, -0.3 * s, 0.2 * s, -0.24 * s); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // punho dourado da luva
+    const gc = ctx.createLinearGradient(-0.5 * s, 0, 0.5 * s, 0); gc.addColorStop(0, '#F2CF6A'); gc.addColorStop(0.5, '#D9A93A'); gc.addColorStop(1, '#9C7420');
+    ctx.fillStyle = gc; ctx.beginPath(); ctx.moveTo(-0.44 * s, 0.3 * s); ctx.lineTo(0.44 * s, 0.3 * s); ctx.lineTo(0.52 * s, 0.62 * s); ctx.quadraticCurveTo(0, 0.68 * s, -0.52 * s, 0.62 * s); ctx.closePath(); ctx.fill(); ctx.stroke();
+    if (o.runa !== false) { Valdor.brilhoRadial(ctx, 0, 0.0, 0.35 * s, '120,200,255', 0.6); }
+    ctx.restore();
+  }
   // vapor da respiração no frio
   function vapor(ctx, x, y, s, t) { for (let i = 0; i < 3; i++) { const f = (t * 1.2 + i / 3) % 1; Noite.fumaca(ctx, x + f * s * 0.8, y - f * s * 0.3, s * (0.25 + f * 0.4), f, { seed: 21 + i, cor: '220,228,245', n: 6, largura: 0.8, sobe: 0.2 }); } }
   // brasa/fagulhas subindo
@@ -488,7 +509,7 @@
       noite(ctx, api, cam, [{ f: () => { const A = alturaH(item, 'tq'); return api.personagem(item, W * 0.68 + 60 * desvia, 1080 - 0.47 * Hpx + A * Hpx, A * Hpx, { luz: LUZ_LUA }); } }], {
         desfoque: 12, forca: 0, t: api.t * 0.25,
         depois: ([rd]) => {
-          if (kf > 0 && kf < 1) { ctx.save(); ctx.globalCompositeOperation = 'screen'; for (let i = 1; i <= 5; i++) { ctx.globalAlpha = 0.12 * (6 - i) / 5; faca(ctx, fx - i * 50, fy, 150, lento * 14 - i * 0.25); } ctx.restore(); faca(ctx, fx, fy, 150, lento * 14); }
+          if (kf > 0 && kf < 1) { ctx.save(); ctx.globalCompositeOperation = 'screen'; for (let i = 1; i <= 5; i++) { ctx.globalAlpha = 0.12 * (6 - i) / 5; faca(ctx, fx - i * 70, fy, 430, lento * 14 - i * 0.25); } ctx.restore(); faca(ctx, fx, fy, 430, lento * 14); }
           if (lento > 0.45 && rd && rd.pontoMundo) { const c = rd.pontoMundo('cabeca', [0.3, -0.6]), f2 = lento - 0.45; ctx.save(); ctx.strokeStyle = '#1A1210'; ctx.lineWidth = 9; ctx.lineCap = 'round'; for (let i = 0; i < 2; i++) { const x = c.x + 40 + i * 34 + f2 * 120, y = c.y + f2 * 260 + Math.sin(f2 * 5 + i) * 16; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + 24, y + 14, x + 8, y + 46); ctx.stroke(); } ctx.restore(); }
           Combate.numero(ctx, 560, 380, 'ESQUIVA!', u - 1.1, 'esquiva');
           ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = 'rgba(10,20,50,0.2)'; ctx.fillRect(0, 0, W, H); ctx.restore();
@@ -506,15 +527,16 @@
       // braço (manga) vindo de baixo à esquerda até o pulso
       const px = 470 + 30 * Math.sin(api.t * 1.5) * (1 - fecha), py = 1080;
       const aM = 0.35, kx = px + Math.sin(aM) * 300 * 0.95, ky = py - Math.cos(aM) * 300 * 0.95;
-      if (kp < 0) faca(ctx, fx, fy, 500, ang); else faca(ctx, kx, ky, 520, aM - 0.15);
-      Maos.desenhar(ctx, px, py, 300, { curl: [0.3 + 0.6 * fecha, 0.15 + 0.85 * fecha, 0.15 + 0.85 * fecha, 0.2 + 0.8 * fecha, 0.25 + 0.75 * fecha], abre: 0.6 * (1 - fecha), ang: 0.35, pele: 'azulArdosia', manga: 'azulArdosia', faixa: false, mangaLarg: 1.05, mangaComp: 8, luvaPunho: 'mostarda', semVincos: true });
-      if (kp >= 0) Combate.impacto(ctx, px + 60, py - 200, 200, kp, { rgb: '255,240,220', dura: 0.35 });
+      if (kp < 0) faca(ctx, fx, fy, 560, ang);
+      const fcx = px + Math.sin(aM) * 300 * 0.55, fcy = py - Math.cos(aM) * 300 * 0.55;
+      if (kp >= 0) punhoComFaca(ctx, fcx, fcy, 300, aM - 0.1, { comp: 6 }); else Maos.desenhar(ctx, px, py, 300, { curl: [0.3 + 0.6 * fecha, 0.15 + 0.85 * fecha, 0.15 + 0.85 * fecha, 0.2 + 0.8 * fecha, 0.25 + 0.75 * fecha], abre: 0.6 * (1 - fecha), ang: 0.35, pele: 'azulArdosia', manga: 'azulArdosia', faixa: false, mangaLarg: 1.05, mangaComp: 8, luvaPunho: 'mostarda', semVincos: true });
+      if (kp >= 0) Combate.impacto(ctx, fcx, fcy - 120, 220, kp, { rgb: '255,240,220', dura: 0.35 });
       if (elet > 0) {
-        const tip = [kx + Math.sin(aM - 0.15) * 520, ky - Math.cos(aM - 0.15) * 520];
-        Valdor.brilhoRadial(ctx, (kx + tip[0]) / 2, (ky + tip[1]) / 2, 520 * elet, AZUL, 0.55 * elet);
-        Combate.maoEletrica(ctx, px + 40, py - 60, 70, api.t, elet);
-        for (let i = 0; i < 3; i++) Combate.relampago(ctx, [kx, ky + 40], [tip[0] + (i - 1) * 25, tip[1] + i * 15], api.t + i, elet, { espessura: 0.9 });
-        Combate.eletrocutado(ctx, (kx + tip[0]) / 2, (ky + tip[1]) / 2 + 80, 200, 300, api.t, elet);
+        const aB = aM - 0.1, base = [fcx + Math.sin(aB) * 0.36 * 300, fcy - Math.cos(aB) * 0.36 * 300], tip = [fcx + Math.sin(aB) * (0.36 + 2.0) * 300, fcy - Math.cos(aB) * (0.36 + 2.0) * 300]; const kx2 = base[0], ky2 = base[1];
+        Valdor.brilhoRadial(ctx, (kx2 + tip[0]) / 2, (ky2 + tip[1]) / 2, 520 * elet, AZUL, 0.5 * elet);
+        Combate.maoEletrica(ctx, fcx, fcy, 80, api.t, elet);
+        for (let i = 0; i < 3; i++) Combate.relampago(ctx, [kx2, ky2], [tip[0] + (i - 1) * 25, tip[1] + i * 15], api.t + i, elet, { espessura: 0.9 });
+        Combate.eletrocutado(ctx, (kx2 + tip[0]) / 2, (ky2 + tip[1]) / 2 + 80, 200, 300, api.t, elet);
       }
       Combate.velocidade(ctx, 640, 860, Math.PI, kp < 0 ? 0.5 : 0, api.t);
     },
@@ -532,19 +554,20 @@
         depois: ([rc]) => {
           const alvo = cam.p(C[0], 1.15, C[1]);
           // a faca voando com rastro elétrico, ficando pequena com a distância
-          if (ks > 0 && voo < 1) { const x = mix(820, alvo.x, voo), y = mix(1380, alvo.y, voo), s = mix(420, 50, voo); Combate.relampago(ctx, [mix(820, alvo.x, Math.max(0, voo - 0.35)), mix(1380, alvo.y, Math.max(0, voo - 0.35))], [x, y], api.t, 1, { espessura: 1.1 }); Valdor.brilhoRadial(ctx, x, y, s * 2.2, AZUL, 0.6); faca(ctx, x, y, s, -0.9 + voo * 0.3); }
+          if (ks > 0 && voo < 1) { const x = mix(640, alvo.x, voo), y = mix(1000, alvo.y, voo), s = mix(380, 50, voo); Combate.relampago(ctx, [mix(640, alvo.x, Math.max(0, voo - 0.35)), mix(1000, alvo.y, Math.max(0, voo - 0.35))], [x, y], api.t, 1, { espessura: 1.1 }); Valdor.brilhoRadial(ctx, x, y, s * 1.6, AZUL, 0.6); faca(ctx, x, y, s, voo * 14); }
           if (bate > 0 && bate < 0.5) { raioXCorpo(ctx, rc, api.t, 1); Combate.eletrocutado(ctx, alvo.x, alvo.y + 0.5 * alvo.s, 0.9 * alvo.s, 1.7 * alvo.s, api.t, 1); }
           Combate.impacto(ctx, alvo.x, alvo.y, 240, bate, { rgb: AZUL }); Combate.numero(ctx, alvo.x, alvo.y - 260, '-48', bate, 'critico');
-          // braço do Davi em primeira pessoa: puxa para trás e lança
-          const kb = ks < 0 ? cl(u / solta) : 1, avanca = ks < 0 ? 0 : api.ease.entra(cl(ks / 0.2));
-          const hx = ks < 0 ? mix(900, 1010, kb) : mix(1010, 640, avanca), hy = ks < 0 ? mix(1500, 1560, kb) : mix(1560, 1250, avanca), ang = ks < 0 ? 0.5 + 0.4 * kb : mix(0.9, -0.2, avanca);
-          if (ks < 0) faca(ctx, hx + Math.sin(ang) * 290 * 0.95, hy - Math.cos(ang) * 290 * 0.95, 480, ang - 0.1);
-          Maos.desenhar(ctx, hx, hy, 290, { curl: ks < 0 ? [0.85, 1, 1, 1, 1] : [0.25, 0.1 * (1 - avanca), 0.1, 0.15, 0.2], abre: ks < 0 ? 0 : 0.5 * avanca, ang, pele: 'azulArdosia', manga: 'azulArdosia', faixa: false, mangaLarg: 1.05, mangaComp: 8, luvaPunho: 'mostarda', semVincos: true });
-          if (ks < 0) { const bx = hx + Math.sin(ang) * 290 * 0.95, by = hy - Math.cos(ang) * 290 * 0.95, tx2 = bx + Math.sin(ang - 0.1) * 480, ty2 = by - Math.cos(ang - 0.1) * 480; Combate.maoEletrica(ctx, bx, by + 30, 70, api.t, 1); Combate.relampago(ctx, [bx, by + 20], [tx2, ty2], api.t, 0.9, { espessura: 0.8 }); Valdor.brilhoRadial(ctx, (bx + tx2) / 2, (by + ty2) / 2, 380, AZUL, 0.5); }
+          // braço do Davi em primeira pessoa (como jogo de primeira pessoa): puxa para trás com a faca eletrificada e lança para a frente
+          const puxa = ks < 0 ? api.ease.suave(cl(u / solta)) : 1, vai = ks < 0 ? 0 : api.ease.entra(cl(ks / 0.16)), some = ks < 0 ? 0 : cl((ks - 0.18) / 0.35);
+          const hx = ks < 0 ? mix(860, 960, puxa) : mix(mix(960, 600, vai), 1300, some), hy = ks < 0 ? mix(1560, 1440, puxa) : mix(mix(1440, 1080, vai), 2300, some);
+          const hs = ks < 0 ? mix(330, 380, puxa) : mix(380, 210, vai), ha = ks < 0 ? mix(-0.2, -0.75, puxa) : mix(-0.75, 0.6, vai) + some * 0.3;
+          if (ks > 0 && vai < 1) { ctx.save(); for (let i = 3; i >= 1; i--) { const v2 = Math.max(0, vai - i * 0.12); ctx.globalAlpha = 0.18; punhoComFaca(ctx, mix(960, 600, v2), mix(1440, 1080, v2), mix(380, 210, v2), mix(-0.75, 0.6, v2), { faca: false, runa: false, ancora: [1350, 2400] }); } ctx.restore(); }
+          punhoComFaca(ctx, hx, hy, hs, ha, { faca: ks < 0.1, ancora: [1350, 2400] });
+          if (ks < 0.1) { const bx = hx + Math.sin(ha) * 0.36 * hs, by = hy - Math.cos(ha) * 0.36 * hs, tx2 = hx + Math.sin(ha) * 2.36 * hs, ty2 = hy - Math.cos(ha) * 2.36 * hs; Combate.maoEletrica(ctx, hx, hy, 80, api.t, 1); Combate.relampago(ctx, [bx, by], [tx2, ty2], api.t, 0.9, { espessura: 0.9 }); Valdor.brilhoRadial(ctx, (bx + tx2) / 2, (by + ty2) / 2, 420, AZUL, 0.45); }
           if (ks > 0 && ks < 0.2) Combate.velocidade(ctx, 700, 1200, -2.4, 0.8, api.t);
           flash(ctx, bate, 0.6);
         },
-        fx: { cx: W / 2 + tx, cy: H / 2 + ty, zoom: soco(bate, 0.08) },
+        fx: { cx: W / 2 + tx, cy: H / 2 + ty, zoom: soco(bate, 0.08), rolo: ks > 0 && ks < 0.3 ? -0.05 * Math.sin(cl(ks / 0.3) * Math.PI) : 0, borrao: ks > 0 && ks < 0.15 ? [-40, -30] : [0, 0] },
       });
     },
     // 9) o Téo arranca a corrente e gira o ladrão no ar
@@ -763,7 +786,7 @@
         { f: () => api.personagem3d(cam, { ...LADRAO(1), pose: 'andando', expressao: 'medo' }, F[0] - 0.5, F[1] + 0.3, 1.85, { olhaPara: [5, 14], luz: LUZ_LUA, caminhar: api.t * 1.4 }) },
         { f: () => api.personagem3d(cam, { ...LIDER, opcoes: { lider: true, estilo: 'C', semEspada: true }, pose: 'caido', expressao: 'medo' }, F[0], F[1], 1.9, { olhaPara: [5, 14], luz: LUZ_LUA }) },
         { f: () => api.personagem3d(cam, { ...LADRAO(2), pose: 'andando', expressao: 'medo' }, F[0] + 0.5, F[1] + 0.3, 1.85, { olhaPara: [5, 14], luz: LUZ_LUA, caminhar: api.t * 1.4 + 0.5 }) },
-        { pos: [1.15, 6.6], alt: 1.2, f: () => { const q = cam.p(1.15, 0, 6.6); Combate.laminaRubra(ctx, q.x, q.y + 0.05 * q.s, 1.0 * q.s, api.t, Math.PI + 0.12, { brilho: 0.8 }); } },
+        { pos: [1.15, 6.6], alt: 1.2, f: () => { const q = cam.p(1.15, 0, 6.6); Combate.laminaRubra(ctx, q.x, q.y - 0.72 * q.s, 1.0 * q.s, api.t, Math.PI + 0.12, { brilho: 0.8 }); } },
       ], {
         luzes: [{ x: -2.2, y: 0.3, z: 5.4, cor: '#FFB066', forca: 0.8 }, { x: -0.6, y: 0.3, z: 6.9, cor: '#FFB066', forca: 0.8 }],
         depois: () => {
@@ -782,13 +805,13 @@
     // 22b) o Téo volta a ser gente numa nuvem de fumaça — com a roupa toda rasgada; o Davi ri
     rasgado(ctx, u, d, api) {
       const cam = camNoite(api, { f: 1150, x: -0.2, y: 1.35, z: 3.0 + u * 0.1, cy: 920, yaw: 0.06 });
-      const volta = 0.55, humano = u > volta, vergonha = cl((u - volta - 0.3) / 0.4);
+      const volta = 0.55, humano = u > volta, vergonha = api.ease.suave(cl((u - volta - 0.12) / 0.25));
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'parado', expressao: u > 1.2 ? 'rindo' : 'espanto' }, -1.1, 5.4, 1.76, { olhaPara: [0.35, 5.6], luz: LUZ_LUA }) },
-        { f: () => humano ? api.personagem3d(cam, { fabrica: 'criarTeoRasgado', registroPoses: 'POSES_PADRAO', pose: { braco_d: -20 * vergonha, antebraco_d: -110 * vergonha, braco_e: 20 * vergonha, antebraco_e: 110 * vergonha, coxa_d: 4, coxa_e: -4, cabeca: 8 * vergonha }, expressao: expr('preocupado', { olhar: [0, 0.01] }) }, 0.35, 5.6, 1.82, { olhaPara: [-1.1, 5.4], luz: LUZ_LUA })
-          : api.personagem3d(cam, { ...LOBO, pose: 'parado' }, 0.35, 5.6, 2.55 * (1 - 0.25 * cl(u / volta)), { luz: LUZ_LUA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'parado', expressao: u > 1.2 ? 'rindo' : 'espanto' }, 1.1, 6.5, 1.76, { olhaPara: [0.0, 5.6], luz: LUZ_LUA }) },
+        { f: () => humano ? api.personagem3d(cam, { fabrica: 'criarTeoRasgado', registroPoses: 'POSES_PADRAO', pose: { braco_d: 6 - 26 * vergonha, antebraco_d: -3 - 107 * vergonha, braco_e: -6 + 26 * vergonha, antebraco_e: 3 + 107 * vergonha, coxa_d: 4, coxa_e: -4, cabeca: 8 * vergonha }, expressao: expr('preocupado', { olhar: [0, 0.01] }) }, 0.0, 5.6, 1.82, { rumo: 0.15, luz: LUZ_LUA })
+          : api.personagem3d(cam, { ...LOBO, pose: 'parado' }, 0.0, 5.6, 2.55 * (1 - 0.25 * cl(u / volta)), { luz: LUZ_LUA }) },
       ], {
-        depois: () => { const q = cam.p(0.35, 0, 5.6); Noite.fumaca(ctx, q.x, q.y - 0.2 * q.s, 1.1 * q.s, (u - volta + 0.25) / 1.6, { seed: 17, cor: '200,205,230', n: 22, largura: 1.4, sobe: 0.8 }); Noite.clarao(ctx, q.x, q.y - 0.9 * q.s, Math.max(0, 1 - Math.abs(u - volta) / 0.3)); if (humano) for (let i = 0; i < 6; i++) { const f = cl((u - volta) / 1.4), x = q.x + (rnd(i) - 0.5) * 260, y = q.y - 1.5 * q.s + f * 1.4 * q.s + Math.sin(api.t * 3 + i) * 10; ctx.save(); ctx.globalAlpha = 1 - f; ctx.fillStyle = i % 2 ? '#3F7A55' : '#B39A6F'; ctx.translate(x, y); ctx.rotate(api.t * 2 + i); ctx.fillRect(-14, -6, 28, 12); ctx.restore(); } },
+        depois: () => { const q = cam.p(0.0, 0, 5.6); Noite.fumaca(ctx, q.x, q.y - 0.2 * q.s, 1.1 * q.s, (u - volta + 0.25) / 1.6, { seed: 17, cor: '200,205,230', n: 22, largura: 1.4, sobe: 0.8 }); Noite.clarao(ctx, q.x, q.y - 0.9 * q.s, Math.max(0, 1 - Math.abs(u - volta) / 0.3)); if (humano) for (let i = 0; i < 6; i++) { const f = cl((u - volta) / 1.4), x = q.x + (rnd(i) - 0.5) * 260, y = q.y - 1.5 * q.s + f * 1.4 * q.s + Math.sin(api.t * 3 + i) * 10; ctx.save(); ctx.globalAlpha = 1 - f; ctx.fillStyle = i % 2 ? '#3F7A55' : '#B39A6F'; ctx.translate(x, y); ctx.rotate(api.t * 2 + i); ctx.fillRect(-14, -6, 28, 12); ctx.restore(); } },
       });
     },
     // 23) tela de equipamento: a roupa rasgada do Téo e a do Davi trocam pela roupa nova do drop, peças entrando com brilho
@@ -823,11 +846,11 @@
     },
     // 25) o aluguel transborda; o Davi de roupa nova encosta a mão no cabo da espada cravada
     aluguel(ctx, u, d, api) {
-      const cam = camNoite(api, { f: 1150, x: -0.3, y: 1.3, z: 3.9 + u * 0.1, cy: 940, yaw: 0.12 });
+      const cam = camNoite(api, { f: 1100, x: -0.4, y: 1.3, z: 3.7 + u * 0.1, cy: 940, yaw: 0.34 });
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: 'espanto' }, 1.3, 7.6, 1.82, { olhaPara: [0.55, 6.2], luz: LUZ_LUA }) },
-        { pos: [1.15, 6.6], alt: 1.2, f: () => { const q = cam.p(1.15, 0, 6.6); Combate.laminaRubra(ctx, q.x, q.y + 0.05 * q.s, 1.0 * q.s, api.t, Math.PI + 0.12, { brilho: 0.9 }); } },
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: 35 * cl((u - 1) / 0.6), antebraco_d: 30 * cl((u - 1) / 0.6), braco_e: -8, coxa_d: 4, coxa_e: -4 }, expressao: u < 1.2 ? 'espanto' : 'feliz' }, 0.55, 6.2, 1.76, { olhaPara: [1.15, 6.6], luz: { lado: 1, forca: 0.6, cor: 'rgb(255,120,90)', sombra: 1 } }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: 'espanto' }, 2.1, 7.0, 1.82, { olhaPara: [0.55, 6.2], luz: LUZ_LUA }) },
+        { pos: [0.02, 6.05], alt: 1.2, f: () => { const q = cam.p(0.02, 0, 6.05); Combate.laminaRubra(ctx, q.x, q.y - 0.72 * q.s, 1.0 * q.s, api.t, Math.PI + 0.12, { brilho: 0.9 }); } },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: 35 * cl((u - 1) / 0.6), antebraco_d: 30 * cl((u - 1) / 0.6), braco_e: -8, coxa_d: 4, coxa_e: -4 }, expressao: u < 1.2 ? 'espanto' : 'feliz' }, 0.6, 6.3, 1.76, { rumo: 0.35, luz: { lado: 1, forca: 0.6, cor: 'rgb(255,120,90)', sombra: 1 } }) },
       ], {
         luzes: [{ x: 1.15, y: 0.8, z: 6.5, cor: '#FF4030', forca: 0.9, raio: 4 }],
         fim: () => {
