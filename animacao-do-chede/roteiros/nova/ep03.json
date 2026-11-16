@@ -1,0 +1,324 @@
+{
+ "serie": "VALDOR",
+ "episodio": 3,
+ "parte": 3,
+ "scripts": [
+  "personagens/nova/cores.js",
+  "personagens/nova/equipamento.js",
+  "personagens/nova/davi/davi.js",
+  "personagens/nova/davi/davi-jogo.js",
+  "personagens/nova/teo/teo.js",
+  "personagens/nova/teo/teo-jogo.js",
+  "personagens/nova/teo/teo-fera.js",
+  "personagens/nova/teo/teo-lobisomem.js",
+  "personagens/nova/ladroes.js",
+  "motor/vendor/three-r160.min.js",
+  "cenarios/valdor-3d.js",
+  "cenarios/valdor-campo.js",
+  "cenarios/valdor-noite.js",
+  "efeitos/criaturas.js",
+  "efeitos/valdor.js",
+  "efeitos/noite.js",
+  "efeitos/combate.js",
+  "efeitos/teo-closes.js"
+ ],
+ "legenda": {
+  "faixas": [
+   1180,
+   1400,
+   760,
+   420
+  ]
+ },
+ "planos": [
+  {
+   "id": "capa",
+   "fala": {
+    "texto": "O líder dos ladrões tinha uma espada que rouba vida.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "ROUBA",
+    "VIDA."
+   ],
+   "duracao": 4.0
+  },
+  {
+   "id": "ataque",
+   "fala": {
+    "texto": "E ele partiu pra cima do Téo.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "TÉO."
+   ]
+  },
+  {
+   "id": "choque",
+   "fala": {
+    "texto": "O Téo segurou o golpe com as garras.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "GARRAS."
+   ]
+  },
+  {
+   "id": "rouba",
+   "fala": {
+    "texto": "Mas cada corte da Lâmina Rubra rouba a vida de quem é atingido.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "ROUBA",
+    "VIDA"
+   ]
+  },
+  {
+   "id": "cerco",
+   "fala": {
+    "texto": "Enquanto isso, três ladrões cercaram o Davi.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "DAVI."
+   ]
+  },
+  {
+   "id": "maos",
+   "fala": {
+    "texto": "O Davi abriu as mãos...",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "MÃOS..."
+   ]
+  },
+  {
+   "id": "corrente",
+   "fala": {
+    "texto": "...e o raio pulou de um ladrão pro outro.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "RAIO",
+    "PULOU"
+   ]
+  },
+  {
+   "id": "faca",
+   "fala": {
+    "texto": "O terceiro jogou uma faca.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "FACA."
+   ]
+  },
+  {
+   "id": "puxa",
+   "fala": {
+    "texto": "O Téo arrancou a corrente da mão de um ladrão...",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "CORRENTE"
+   ]
+  },
+  {
+   "id": "muro",
+   "fala": {
+    "texto": "...e jogou ele no muro.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "MURO."
+   ]
+  },
+  {
+   "id": "duelo",
+   "fala": {
+    "texto": "Mas o líder era rápido demais.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "RÁPIDO"
+   ]
+  },
+  {
+   "id": "devolve",
+   "fala": {
+    "texto": "E a espada devolvia a vida pra ele.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "VIDA"
+   ]
+  },
+  {
+   "id": "joelho",
+   "fala": {
+    "texto": "O Téo caiu de joelho.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "JOELHO."
+   ]
+  },
+  {
+   "id": "raio",
+   "fala": {
+    "texto": "O Davi mandou o raio mais forte que tinha...",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "MAIS",
+    "FORTE"
+   ]
+  },
+  {
+   "id": "bloqueia",
+   "fala": {
+    "texto": "...e o líder bloqueou com a espada.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "BLOQUEOU"
+   ]
+  },
+  {
+   "id": "metal",
+   "fala": {
+    "texto": "Foi aí que o Davi percebeu: a lâmina era de metal.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "METAL."
+   ]
+  },
+  {
+   "id": "caminho",
+   "fala": {
+    "texto": "E a eletricidade sempre escolhe o caminho mais fácil.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "MAIS",
+    "FÁCIL."
+   ]
+  },
+  {
+   "id": "solta",
+   "fala": {
+    "texto": "No ar, ela quase não passa. No metal, ela corre solta.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "CORRE",
+    "SOLTA."
+   ]
+  },
+  {
+   "id": "plano",
+   "fala": {
+    "texto": "Então ele não mirou no líder... mirou na espada.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "ESPADA."
+   ]
+  },
+  {
+   "id": "final",
+   "fala": {
+    "texto": "O raio atravessou a espada... e o líder junto.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "JUNTO."
+   ]
+  },
+  {
+   "id": "fugiram",
+   "fala": {
+    "texto": "Os ladrões fugiram... e deixaram tudo pra trás.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "TUDO"
+   ]
+  },
+  {
+   "id": "loot",
+   "fala": {
+    "texto": "Poção, moedas, botas...",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "BOTAS..."
+   ]
+  },
+  {
+   "id": "roupa",
+   "fala": {
+    "texto": "...e roupa nova pros dois.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "ROUPA",
+    "NOVA"
+   ]
+  },
+  {
+   "id": "premio",
+   "fala": {
+    "texto": "E a última carta era a Lâmina Rubra.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "LÂMINA",
+    "RUBRA."
+   ]
+  },
+  {
+   "id": "aluguel",
+   "fala": {
+    "texto": "Trezentos e quarenta e sete mil. Dava pra pagar o aluguel por vinte e quatro anos.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "VINTE",
+    "QUATRO",
+    "ANOS."
+   ]
+  },
+  {
+   "id": "aviso",
+   "fala": {
+    "texto": "Só que, no mesmo segundo, todo jogador de Valdor recebeu um aviso...",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "AVISO..."
+   ]
+  },
+  {
+   "id": "rosto",
+   "fala": {
+    "texto": "...com o rosto do Davi.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "ROSTO",
+    "DAVI."
+   ]
+  },
+  {
+   "id": "parte",
+   "fala": {
+    "texto": "Segue pra ver a parte quatro!",
+    "voz": "narrador"
+   }
+  }
+ ]
+}
