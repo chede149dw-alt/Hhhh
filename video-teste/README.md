@@ -23,3 +23,18 @@ Vídeo vertical de 22 s sobre a origem do Creeper, em motion graphics no estilo 
 ```bash
 npx remotion render CuriosidadeMinecraft out/curiosidade-minecraft.mp4
 ```
+
+## Duelo sob a Lua (anime de luta)
+
+Vídeo vertical de 60 s de uma luta em estilo anime, com personagens originais (Ren, da lâmina de trovão, e Kaen, do punho de brasa). Tudo é desenhado por código em SVG: bonecos articulados por poses, câmera com paralaxe, quadros de impacto, auras, raios e feixes.
+
+- Cenas, câmera e coreografia: `src/luta/LutaAnime.tsx`
+- Boneco articulado, poses e aparência dos lutadores: `src/luta/rig.tsx`
+- Efeitos e cenário: `src/luta/fx.tsx`
+- Tempos de cada cena e de cada golpe (usados pelo vídeo e pela trilha): `src/luta/timing.json`
+- Trilha e efeitos sonoros sintetizados: `python3 scripts/gerar_trilha_luta.py` (precisa de `numpy` e `scipy`; gera `public/luta/trilha.wav`)
+- A composição `LutaPoses` mostra todas as poses lado a lado, útil para ajustar a coreografia no `npm run studio`
+
+```bash
+npm run render:luta   # gera out/duelo-sob-a-lua.mp4
+```
