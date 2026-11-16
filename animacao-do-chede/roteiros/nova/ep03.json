@@ -116,6 +116,26 @@
    ]
   },
   {
+   "id": "agarra",
+   "fala": {
+    "texto": "O Davi desviou, agarrou a faca no ar...",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "AGARROU"
+   ]
+  },
+  {
+   "id": "devolveu",
+   "fala": {
+    "texto": "...e devolveu ela cheia de eletricidade.",
+    "voz": "narrador"
+   },
+   "destaque": [
+    "ELETRICIDADE."
+   ]
+  },
+  {
    "id": "puxa",
    "fala": {
     "texto": "O Téo arrancou a corrente da mão de um ladrão...",
