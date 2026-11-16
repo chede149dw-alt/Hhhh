@@ -283,13 +283,12 @@
   {
    "id": "aluguel",
    "fala": {
-    "texto": "Trezentos e quarenta e oito mil. Dava pra pagar o aluguel por vinte e quatro anos.",
+    "texto": "Trezentos e quarenta e sete reais. Quase um terço do aluguel de uma vez só.",
     "voz": "narrador"
    },
    "destaque": [
-    "VINTE",
-    "QUATRO",
-    "ANOS."
+    "UM",
+    "TERÇO"
    ]
   },
   {

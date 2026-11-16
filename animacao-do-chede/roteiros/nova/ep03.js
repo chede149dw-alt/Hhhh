@@ -223,7 +223,7 @@
   const OURO = [[0, '#FFF2B0'], [0.45, '#FFC83D'], [0.55, '#D98A12'], [1, '#FFD45E']];
   // ================= Parte 3: peças novas =================
   const DAVIA = { fabrica: 'criarDaviArcano', registroPoses: 'DAVI_JOGO_POSES' };
-  const TEOG = { fabrica: 'criarTeoGuardiao', registroPoses: 'POSES_PADRAO' };
+  const TEOG = { fabrica: 'criarTeoRoupa', opcoes: { estilo: 'B' }, registroPoses: 'POSES_PADRAO' };
   const LIDERM = { fabrica: 'criarLadrao', opcoes: { lider: true, estilo: 'C', semEspada: true, espadaNaMao: true }, registroPoses: 'LADRAO_POSES' };
   const VERMELHO = '255,70,60', LARANJA = '255,170,80', AZUL = '130,200,255';
   const LUZ_RUBRA = { lado: 1, forca: 0.6, cor: 'rgb(255,110,80)', sombra: 1 };
@@ -336,9 +336,9 @@
   const LOOT3 = [
     { nome: 'Saco de moedas', rar: 'comum', preco: 'R$ 18,40', icone: 'moedas' },
     { nome: 'Poção grande', rar: 'comum', preco: 'R$ 4,00', icone: 'pocaoG' },
-    { nome: 'Botas do vento', rar: 'raro', preco: 'R$ 120', icone: 'botas' },
-    { nome: 'Colete do Guardião', rar: 'epico', preco: 'R$ 2.300', icone: 'colete' },
-    { nome: 'Manto do Arcano', rar: 'epico', preco: 'R$ 2.800', icone: 'manto' },
+    { nome: 'Botas do vento', rar: 'raro', preco: 'R$ 35,00', icone: 'botas' },
+    { nome: 'Colete do Caçador', rar: 'epico', preco: 'R$ 120,00', icone: 'colete' },
+    { nome: 'Manto do Arcano', rar: 'epico', preco: 'R$ 150,00', icone: 'manto' },
   ];
   // posições da luta (Z < 17: ninguém na água)
   const PT = [0.25, 5.6], PL = [0.95, 6.9], PD = [-1.7, 4.3], LA = [-2.9, 5.6], LB = [-1.2, 6.4], LC = [-3.3, 3.5];
@@ -360,7 +360,7 @@
       const cam = camNoite(api, { f: 1000, x: 2.3, y: 0.45, z: 4.4 + u * 0.2, cy: 1180, yaw: -0.62 });
       const k = api.ease.entra(cl((u - 0.35) / 0.9)), X = mix(1.6, 0.85, k), Z = mix(9.0, 6.6, k);
       espada(api, -1.2 + 0.4 * k, 1);
-      const pose = { braco_d: 110, antebraco_d: -20, braco_e: -50, antebraco_e: -30, tronco: 14 * k, coxa_d: 30 * k, canela_d: -20 * k, coxa_e: -35 * k, canela_e: 30 * k, _maos: { d: 'punho' } };
+      const pose = { braco_d: 110, antebraco_d: -20, braco_e: -50, antebraco_e: -30, tronco: 14 * k, coxa_d: 30 * k, canela_d: -20 * k, coxa_e: -35 * k, canela_e: 30 * k, _maos: { d: 'punho' }, _plantar: true };
       const fant = [0.7, 0.45, 0.2].map((a, i) => ({ alfa: a * (k > 0.05 && k < 0.98 ? 0.6 : 0), f: () => api.personagem3d(cam, { ...LIDERM, pose, expressao: 'raiva' }, mix(1.6, 0.85, Math.max(0, k - 0.08 * (i + 1))), mix(9.0, 6.6, Math.max(0, k - 0.08 * (i + 1))), 1.9, { olhaPara: PT, luz: LUZ_RUBRA }), cor: `rgba(255,40,40,0.5)` }));
       noite(ctx, api, cam, [
         ...fant,
@@ -382,7 +382,7 @@
       const cam = api.orbita({ alvo: [0.55, 1.4, 6.0], raio: chave(u, [[0, 4.4], [d, 3.6]]), ang: chave(u, [[0, -1.35], [d, -1.1]]), altura: 1.3, f: 1050, ySalvo: 900, nevoa: V().nevoa(1) });
       const TZ = PT[1] - 0.6 * emp, LZ = 6.5 - 0.5 * emp;
       espada(api, kb < 0 ? -0.6 : 0.9, 1);
-      const poseL = kb < 0 ? { braco_d: 150, antebraco_d: -40, braco_e: -40, tronco: -6, coxa_d: 10, coxa_e: -10, _maos: { d: 'punho' } } : { braco_d: 70, antebraco_d: -30, braco_e: -30, tronco: 12, coxa_d: 25, canela_d: -10, coxa_e: -20, canela_e: 20, _maos: { d: 'punho' } };
+      const poseL = kb < 0 ? { braco_d: 150, antebraco_d: -40, braco_e: -40, tronco: -6, coxa_d: 10, coxa_e: -10, _maos: { d: 'punho' }, _plantar: true } : { braco_d: 70, antebraco_d: -30, braco_e: -30, tronco: 12, coxa_d: 25, canela_d: -10, coxa_e: -20, canela_e: 20, _maos: { d: 'punho' }, _plantar: true };
       const res = noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...LOBO, pose: 'garras', expressao: 'rugido' }, PT[0], TZ, 2.55, { olhaPara: [0.95, LZ], luz: LUZ_LUA }) },
         { f: () => api.personagem3d(cam, { ...LIDERM, pose: poseL, expressao: 'raiva' }, 0.9, LZ, 1.9, { olhaPara: PT, luz: LUZ_RUBRA }) },
@@ -404,7 +404,7 @@
     rouba(ctx, u, d, api) {
       const corte = 0.45, kc = u - corte, cam = camNoite(api, { f: 1050, x: 1.6, y: 1.25, z: 1.9 + u * 0.15, cy: 940, yaw: -0.18 });
       espada(api, kc < 0 ? -1.4 + u * 1.2 : 1.6, 1);
-      const poseL = kc < 0 ? { braco_d: 120, antebraco_d: -60, tronco: -10, coxa_d: 8, coxa_e: -8, _maos: { d: 'punho' } } : { braco_d: 40, antebraco_d: 30, tronco: 16, coxa_d: 20, canela_d: -8, coxa_e: -18, canela_e: 14, _maos: { d: 'punho' } };
+      const poseL = kc < 0 ? { braco_d: 120, antebraco_d: -60, tronco: -10, coxa_d: 8, coxa_e: -8, _maos: { d: 'punho' }, _plantar: true } : { braco_d: 40, antebraco_d: 30, tronco: 16, coxa_d: 20, canela_d: -8, coxa_e: -18, canela_e: 14, _maos: { d: 'punho' }, _plantar: true };
       const vt = 1 - 0.24 * cl(kc / 0.2), vl = 0.62 + 0.12 * cl((kc - 0.4) / 1.2);
       noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...LOBO, pose: kc > 0 && kc < 0.5 ? 'rugindo' : 'garras', expressao: 'rugido' }, 0.05, 5.0, 2.55, { olhaPara: [1.2, 5.9], luz: LUZ_LUA }), cor: kc > 0 && kc < 0.08 ? 'rgba(255,255,255,0.85)' : undefined },
@@ -432,7 +432,7 @@
         { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'parado', expressao: 'medo' }, PD[0], PD[1], 1.76, { olhaPara: ladr[0], luz: LUZ_LUA }) },
         ...ladr.map(([x, z], i) => ({ f: () => api.personagem3d(cam, { ...LADRAO(i + 1), pose: i === 0 ? 'tocha' : 'faca', expressao: 'raiva' }, x, z, 1.85, { olhaPara: PD, luz: { lado: 1, forca: 0.8, cor: 'rgb(255,170,90)', sombra: 0.9 }, caminhar: anda < 1 ? api.t : undefined, semente: i }) })),
         { f: () => api.personagem3d(cam, { ...LOBO, pose: Math.sin(api.t * 5) > 0 ? 'garras' : 'rugindo', expressao: 'rugido' }, 0.6, 7.6, 2.55, { olhaPara: [1.3, 8.4], luz: LUZ_LUA }) },
-        { f: () => { espada(api, Math.sin(api.t * 5) * 1.2, 1); return api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 80 + 50 * Math.sin(api.t * 5), antebraco_d: -30, _maos: { d: 'punho' } }, expressao: 'raiva' }, 1.3, 8.4, 1.9, { olhaPara: [0.6, 7.6], luz: LUZ_RUBRA }); } },
+        { f: () => { espada(api, Math.sin(api.t * 5) * 1.2, 1); return api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 80 + 50 * Math.sin(api.t * 5), antebraco_d: -30, _maos: { d: 'punho' }, _plantar: true }, expressao: 'raiva' }, 1.3, 8.4, 1.9, { olhaPara: [0.6, 7.6], luz: LUZ_RUBRA }); } },
       ], {
         luzes: [{ x: ladr[0][0] + 0.3, y: 1.7, z: ladr[0][1], cor: '#FFB066', forca: 0.9 }],
         depois: (rs) => { tochaNaMao(ctx, rs[1], api.t, 2); ladr.forEach(([x, z], i) => { const q = cam.p(x, 2.15, z); Valdor.placaNivel(ctx, q.x, q.y, [12, 13, 14][i], api.fase(0.5 + i * 0.15, 0.8 + i * 0.15, 'volta'), { tam: 34, cor: '#FFB0B0' }); });
@@ -483,7 +483,7 @@
       const lento = remap(u, [[0, 0], [0.4, 0.4], [d - 0.5, 0.75], [d, 1.4]]); // segundos "do mundo"
       const cam = camNoite(api, { f: 1250, x: -1.15, y: 1.55, z: 2.75, cy: 860, yaw: -0.38 });
       const desvia = api.ease.suave(cl((lento - 0.35) / 0.25));
-      const pose = { cabeca: -16 * desvia, tronco: -10 * desvia, braco_d: 20, antebraco_d: 20, braco_e: -20, antebraco_e: -20, coxa_d: 4, coxa_e: -4 };
+      const pose = { cabeca: -16 * desvia, tronco: -10 * desvia, braco_d: 20 + 30 * desvia, antebraco_d: 20 + 40 * desvia, braco_e: -20 - 20 * desvia, antebraco_e: -20, coxa_d: 4 + 30 * desvia, canela_d: -48 * desvia, pe_d: 16 * desvia, coxa_e: -4 - 30 * desvia, canela_e: 48 * desvia, pe_e: -16 * desvia, _plantar: true };
       const kf = cl(lento / 0.95), FX = mix(LC[0], 0.2, kf), FY = 1.55 - 0.05 * kf, FZ = mix(LC[1], 5.4, kf);
       noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...LADRAO(3), pose: lento < 0.2 ? 'faca' : 'aponta', expressao: 'raiva' }, LC[0], LC[1], 1.85, { olhaPara: PD, luz: LUZ_LUA }) },
@@ -540,9 +540,9 @@
       const cam = camNoite(api, { f: 1100, ...cams[i], z: cams[i].z + uu * 0.15 });
       const g = cl((uu - 0.25) / 0.2);
       let TP = [0.2, 5.6], LP = [0.9, 6.7], poseL, angE, poseT = 'garras', ty = 0;
-      if (i === 0) { TP = [0.2 - 0.6 * g, 5.6]; poseL = g < 0.01 ? { braco_d: 160, antebraco_d: -30, tronco: -8, _maos: { d: 'punho' } } : { braco_d: 30, antebraco_d: 20, tronco: 20, coxa_d: 25, canela_d: -10, coxa_e: -20, _maos: { d: 'punho' } }; angE = g < 0.01 ? -0.5 : 2.6; }
-      if (i === 1) { TP = [0.2 - 0.6, 5.6 - 0.7 * g]; ty = Math.sin(g * Math.PI) * 0.45; poseL = { braco_d: 95, antebraco_d: g < 0.01 ? -60 : 10, tronco: g < 0.01 ? -14 : 14, _maos: { d: 'punho' } }; angE = g < 0.01 ? -1.6 : 1.5; poseT = 'bote'; }
-      if (i === 2) { TP = [-0.1, 5.0 + 0.4 * g]; LP = [0.9 + 0.35 * cl((uu - 0.35) / 0.4), 6.7 + 0.4 * cl((uu - 0.35) / 0.4)]; poseL = { braco_d: 40, antebraco_d: -40, tronco: -16 * g, _maos: { d: 'punho' } }; angE = 0.4; poseT = g > 0 ? 'rugindo' : 'garras'; }
+      if (i === 0) { TP = [0.2 - 0.6 * g, 5.6]; poseL = g < 0.01 ? { braco_d: 160, antebraco_d: -30, tronco: -8, _maos: { d: 'punho' }, _plantar: true } : { braco_d: 30, antebraco_d: 20, tronco: 20, coxa_d: 25, canela_d: -10, coxa_e: -20, _maos: { d: 'punho' }, _plantar: true }; angE = g < 0.01 ? -0.5 : 2.6; }
+      if (i === 1) { TP = [0.2 - 0.6, 5.6 - 0.7 * g]; ty = Math.sin(g * Math.PI) * 0.45; poseL = { braco_d: 95, antebraco_d: g < 0.01 ? -60 : 10, tronco: g < 0.01 ? -14 : 14, _maos: { d: 'punho' }, _plantar: true }; angE = g < 0.01 ? -1.6 : 1.5; poseT = 'bote'; }
+      if (i === 2) { TP = [-0.1, 5.0 + 0.4 * g]; LP = [0.9 + 0.35 * cl((uu - 0.35) / 0.4), 6.7 + 0.4 * cl((uu - 0.35) / 0.4)]; poseL = { braco_d: 40, antebraco_d: -40, tronco: -16 * g, _maos: { d: 'punho' }, _plantar: true }; angE = 0.4; poseT = g > 0 ? 'rugindo' : 'garras'; }
       espada(api, angE, 1);
       noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...LIDERM, pose: poseL, expressao: 'raiva' }, LP[0], LP[1], 1.9, { olhaPara: TP, luz: LUZ_RUBRA }), cor: i === 2 && g > 0 && g < 0.4 ? 'rgba(255,255,255,0.7)' : undefined },
@@ -565,7 +565,7 @@
       const gira = u * 4, vl = 0.7 + 0.2 * cl((u - 0.5) / 1.4);
       espada(api, Math.sin(gira) * 1.4 + 0.2, 1.3);
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 55 + 20 * Math.sin(gira), antebraco_d: -70, braco_e: -18, coxa_d: 6, coxa_e: -6, _maos: { d: 'punho' } }, expressao: expr('raiva', { palpebra: 0.45 }) }, 1.35, 7.0, 1.9, { olhaPara: [0.2, 5.6], luz: LUZ_RUBRA }) },
+        { f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 55 + 20 * Math.sin(gira), antebraco_d: -70, braco_e: -18, coxa_d: 6, coxa_e: -6, _maos: { d: 'punho' }, _plantar: true }, expressao: expr('raiva', { palpebra: 0.45 }) }, 1.35, 7.0, 1.9, { olhaPara: [0.2, 5.6], luz: LUZ_RUBRA }) },
       ], {
         luzes: [{ x: 1.35, y: 1.6, z: 6.8, cor: '#FF3020', forca: 1.2, raio: 4 }],
         depois: ([rl]) => { if (!rl || !rl.pontoMundo) return; const lam = rl.pontoMundo('mao_d', [0, 0.2]); drenoVida(ctx, [-120, 1100], [lam.x, lam.y - 140], api.t, cl(u / 0.3) * (1 - cl((u - 2.2) / 0.4)), 30); Valdor.brilhoRadial(ctx, lam.x, lam.y - 200, 300, VERMELHO, 0.4); Combate.numero(ctx, lam.x + 140, lam.y - 380, '+40', u - 0.6, 'esquiva'); },
@@ -578,7 +578,7 @@
       const anda = cl(u / d), LP = [1.6 - 0.8 * anda, 7.6 - 1.0 * anda], bat = Math.max(0, Math.sin(api.t * 9)) ** 6;
       espada(api, 2.8, 1);
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 20, antebraco_d: 15, braco_e: -10, coxa_d: 0, coxa_e: 0, _maos: { d: 'punho' } }, expressao: 'raiva', caminhar: undefined }, LP[0], LP[1], 1.9, { olhaPara: [0.1, 5.2], luz: LUZ_RUBRA, caminhar: api.t * 0.6 }) },
+        { f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 20, antebraco_d: 15, braco_e: -10, coxa_d: 0, coxa_e: 0, _maos: { d: 'punho' }, _plantar: true }, expressao: 'raiva', caminhar: undefined }, LP[0], LP[1], 1.9, { olhaPara: [0.1, 5.2], luz: LUZ_RUBRA, caminhar: api.t * 0.6 }) },
         { f: () => api.personagem3d(cam, { ...LOBO, pose: { coxa_d: -75, canela_d: 105, coxa_e: 30, canela_e: 40, tronco: 22, cabeca: 10, braco_d: 20, antebraco_d: 40, braco_e: -30, antebraco_e: -20, _desloca: [0, 0.9] }, expressao: 'rugido' }, 0.1, 5.2, 2.55, { olhaPara: LP, luz: LUZ_LUA }) },
       ], {
         chaoEm: [LP[0], LP[1]], chao: () => { const a = cam.p(1.5, 0.08, 7.5), b = cam.p(LP[0] + 0.25, 0.08, LP[1] - 0.15); ctx.save(); ctx.strokeStyle = 'rgba(255,140,90,0.75)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.restore(); },
@@ -596,7 +596,7 @@
       const corre = cl(u / 1.0), DP = [mix(-2.2, -1.2, corre), mix(3.4, 4.4, corre)], disp = u - 1.2;
       espada(api, 0.4, 1);
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 40, antebraco_d: -40, _maos: { d: 'punho' } }, expressao: 'raiva' }, 0.9, 6.4, 1.9, { olhaPara: DP, luz: LUZ_RUBRA }) },
+        { f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 40, antebraco_d: -40, _maos: { d: 'punho' }, _plantar: true }, expressao: 'raiva' }, 0.9, 6.4, 1.9, { olhaPara: DP, luz: LUZ_RUBRA }) },
         { f: () => api.personagem3d(cam, { ...DAVIL, pose: disp > 0 ? 'conjurando' : 'parado', expressao: 'raiva' }, DP[0], DP[1], 1.76, { olhaPara: [0.9, 6.4], luz: { lado: 1, forca: 1, cor: 'rgb(130,200,255)', sombra: 0.8 }, caminhar: corre < 1 ? api.t : undefined }) },
       ], {
         magias: (rs) => [orbe(maoMundo(cam, rs[1], 'mao_d', DP[0], DP[1]), 1), { tipo: 'circulo', x: DP[0], z: DP[1], raio: 0.9, k: cl(disp / 0.3) }],
@@ -610,7 +610,7 @@
       const ativo = u < 1.6;
       espada(api, -0.2, 2);
       const galhos = [[-0.4, 5.6], [0.3, 5.3], [1.6, 5.5], [2.0, 6.2], [-0.2, 6.8]];
-      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 75, antebraco_d: -95, braco_e: -30, antebraco_e: -40, coxa_d: 15, canela_d: -6, coxa_e: -15, canela_e: 6, _maos: { d: 'punho' } }, expressao: 'raiva' }, 0.9, 6.4, 1.9, { olhaPara: PD, luz: { lado: 1, forca: 0.9, cor: 'rgb(150,200,255)', sombra: 1 } }) }], {
+      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LIDERM, pose: { braco_d: 75, antebraco_d: -95, braco_e: -30, antebraco_e: -40, coxa_d: 15, canela_d: -6, coxa_e: -15, canela_e: 6, _maos: { d: 'punho' }, _plantar: true }, expressao: 'raiva' }, 0.9, 6.4, 1.9, { olhaPara: PD, luz: { lado: 1, forca: 0.9, cor: 'rgb(150,200,255)', sombra: 1 } }) }], {
         luzes: [{ x: 0.9, y: 2.0, z: 6.2, cor: '#8FD0FF', forca: ativo ? 2 : 0.2, raio: 6 }],
         chaoEm: [0.9, 6.5], chao: () => { ctx.save(); ctx.lineCap = 'round'; for (const [x, z] of galhos) { const a = cam.p(0.9, 0.03, 6.3), b = cam.p(mix(0.9, x, cl(u / 0.4)), 0.03, mix(6.3, z, cl(u / 0.4))); ctx.strokeStyle = 'rgba(20,12,10,0.85)'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.strokeStyle = 'rgba(255,140,60,0.7)'; ctx.lineWidth = 3; ctx.stroke(); } ctx.restore(); },
         depois: ([rl]) => {
@@ -665,7 +665,7 @@
       const crava = api.ease.entra(cl((u - 0.6) / 0.35)), kc = api.fase(0, 1.2);
       espada(api, mix(-0.7, 2.9, crava), 1.2);
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...LIDERM, pose: crava < 0.05 ? { braco_d: 160, antebraco_d: -30, tronco: -8, _maos: { d: 'punho' } } : { braco_d: 35, antebraco_d: 25, tronco: 26, coxa_d: 28, canela_d: -12, coxa_e: -22, _maos: { d: 'punho' } }, expressao: crava > 0 ? 'medo' : 'raiva' }, 0.75, 6.3, 1.9, { olhaPara: [0.2, 5.6], luz: LUZ_RUBRA }) },
+        { f: () => api.personagem3d(cam, { ...LIDERM, pose: crava < 0.05 ? { braco_d: 160, antebraco_d: -30, tronco: -8, _maos: { d: 'punho' }, _plantar: true } : { braco_d: 35, antebraco_d: 25, tronco: 26, coxa_d: 28, canela_d: -12, coxa_e: -22, _maos: { d: 'punho' }, _plantar: true }, expressao: crava > 0 ? 'medo' : 'raiva' }, 0.75, 6.3, 1.9, { olhaPara: [0.2, 5.6], luz: LUZ_RUBRA }) },
         { f: () => api.personagem3d(cam, { ...LOBO, pose: { coxa_d: -60, canela_d: 90, coxa_e: 20, canela_e: 30, tronco: 10, braco_d: 100 * crava + 20, antebraco_d: -20, braco_e: 60, antebraco_e: 40, _desloca: [0, 0.6] }, expressao: 'rugido' }, 0.2, 5.6, 2.55, { olhaPara: [0.75, 6.3], luz: LUZ_LUA }) },
         { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'conjurando', expressao: 'raiva' }, -1.6, 3.6, 1.76, { olhaPara: [0.75, 6.3], luz: { lado: 1, forca: 1, cor: 'rgb(140,210,255)', sombra: 0.8 } }) },
       ], {
@@ -684,7 +684,7 @@
       espada(api, 2.9, 1.5);
       const tcena = u < parado ? api.t - u : api.t;
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...LIDERM, opcoes: { lider: true, estilo: 'C', semEspada: true, espadaNaMao: kf < 0.35 }, pose: kf < 0.35 ? { braco_d: 35, antebraco_d: 25, tronco: 26, coxa_d: 28, canela_d: -12, coxa_e: -22, _maos: { d: 'punho' } } : 'caido', expressao: 'medo' }, LP[0], LP[1], 1.9, { olhaPara: [0.2, 5.6], luz: LUZ_RUBRA, y: Math.sin(voa * Math.PI) * 0.6 }), cor: kf > 0.1 && kf < 0.45 && Math.sin(api.t * 50) > 0 ? 'rgba(170,220,255,0.7)' : undefined },
+        { f: () => api.personagem3d(cam, { ...LIDERM, opcoes: { lider: true, estilo: 'C', semEspada: true, espadaNaMao: kf < 0.35 }, pose: kf < 0.35 ? { braco_d: 35, antebraco_d: 25, tronco: 26, coxa_d: 28, canela_d: -12, coxa_e: -22, _maos: { d: 'punho' }, _plantar: true } : 'caido', expressao: 'medo' }, LP[0], LP[1], 1.9, { olhaPara: [0.2, 5.6], luz: LUZ_RUBRA, y: Math.sin(voa * Math.PI) * 0.6 }), cor: kf > 0.1 && kf < 0.45 && Math.sin(api.t * 50) > 0 ? 'rgba(170,220,255,0.7)' : undefined },
         { f: () => api.personagem3d(cam, { ...LOBO, pose: { coxa_d: -60, canela_d: 90, coxa_e: 20, canela_e: 30, tronco: 10, braco_d: 120, antebraco_d: -20, braco_e: 60, antebraco_e: 40, _desloca: [0, 0.6] }, expressao: 'rugido' }, 0.2, 5.6, 2.55, { olhaPara: LP, luz: LUZ_LUA }) },
         { f: () => api.personagem3d(cam, { ...DAVIL, pose: 'conjurando', expressao: 'raiva' }, -1.6, 3.6, 1.76, { olhaPara: [0.75, 6.3], luz: { lado: 1, forca: 1, cor: 'rgb(140,210,255)', sombra: 0.8 } }) },
       ], {
@@ -756,7 +756,7 @@
       ctx.save(); ctx.fillStyle = 'rgba(30,4,8,0.55)'; ctx.fillRect(0, 0, W, H); ctx.restore();
       Valdor.feixe(ctx, 540, 0, 1500, 700, VERMELHO, 0.6);
       const k = api.fase(0.1, 0.6, 'volta'), giro = (1 - cl(u / 0.9)) * TAU * 1.5;
-      ctx.save(); ctx.translate(540, 960); ctx.scale(Math.cos(giro) || 0.01, 1); ctx.translate(-540, -960); carta3(ctx, 540, 960, 520, { nome: 'Lâmina Rubra', rar: 'lendario', preco: 'R$ 348.000', icone: 'lamina' }, k, api.t); ctx.restore();
+      ctx.save(); ctx.translate(540, 960); ctx.scale(Math.cos(giro) || 0.01, 1); ctx.translate(-540, -960); carta3(ctx, 540, 960, 520, { nome: 'Lâmina Rubra', rar: 'lendario', preco: 'R$ 347,00', icone: 'lamina' }, k, api.t); ctx.restore();
       brasas(ctx, 540, 1500, 800, api.t, 0.8, 12);
     },
     // 25) o aluguel transborda; o Davi de roupa nova encosta a mão no cabo da espada cravada
@@ -769,9 +769,9 @@
       ], {
         luzes: [{ x: 1.15, y: 0.8, z: 6.5, cor: '#FF4030', forca: 0.9, raio: 4 }],
         fim: () => {
-          const v = 71.08 + 347928.92 * api.ease.entra(api.fase(0.2, 1.6)), frac = v / ALUGUEL_META;
-          Combate.aluguel(ctx, Math.min(1, frac), 'R$ ' + Math.round(v).toLocaleString('pt-BR') + ' / 1.200', { dias: '29 DIAS', y: 150 });
-          if (frac > 1) for (let i = 0; i < 18; i++) { const f = ((api.t * 0.8 + i / 18) % 1), x = 860 + (rnd(i) - 0.5) * 220, y = 230 + f * 600 + rnd(i * 3) * 40; Valdor.moeda(ctx, x, y, 22, api.t * 4 + i, 1 - f * 0.6); }
+          const v = 71.08 + 347 * api.ease.entra(api.fase(0.2, 1.6)), frac = v / ALUGUEL_META;
+          Combate.aluguel(ctx, Math.min(1, frac), reaisTxt(v), { dias: '29 DIAS', y: 150 });
+          { const kq = api.fase(0.2, 1.6); if (kq > 0 && kq < 1) for (let i = 0; i < 12; i++) { const f = ((api.t * 1.2 + i / 12) % 1), x = 300 + rnd(i) * 300, y = 600 - f * 380; Valdor.moeda(ctx, x, y, 22, api.t * 4 + i, 1 - f); } }
           for (const [x, txt, cor] of [[300, 'VENDER', '#D9A21A'], [780, 'EQUIPAR', '#2FA84A']]) { const k = api.fase(1.8 + (x > 500 ? 0.15 : 0), 2.2 + (x > 500 ? 0.15 : 0), 'volta'); if (k <= 0) continue; zoomEm(ctx, x, 1640, k, () => { ctx.fillStyle = cor; ctx.beginPath(); ctx.roundRect(x - 190, 1590, 380, 100, 50); ctx.fill(); ctx.font = '900 54px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#FFFFFF'; ctx.fillText(txt, x, 1642); }); }
         },
       });
@@ -800,7 +800,7 @@
           ctx.fillStyle = '#1A0A10'; ctx.beginPath(); ctx.roundRect(290, 600, 500, 520, 24); ctx.fill(); ctx.save(); ctx.beginPath(); ctx.roundRect(290, 600, 500, 520, 24); ctx.clip();
           close(api, { ...DAVIA, pose: 'parado', expressao: 'neutro' }, 540, 900, 470, {}); ctx.restore();
           ctx.strokeStyle = '#D9A93A'; ctx.lineWidth = 6; ctx.beginPath(); ctx.roundRect(290, 600, 500, 520, 24); ctx.stroke();
-          ctx.font = '900 96px Inter'; ctx.fillStyle = '#FFE680'; ctx.fillText('R$ 500.000', 540, 1250);
+          ctx.font = '900 96px Inter'; ctx.fillStyle = '#FFE680'; ctx.fillText('R$ 1.000', 540, 1250);
           ctx.font = '800 42px Inter'; ctx.fillStyle = '#FFFFFF'; ctx.fillText('QUEM PEGOU A LÂMINA RUBRA', 540, 1340); ctx.restore();
         });
       } else {

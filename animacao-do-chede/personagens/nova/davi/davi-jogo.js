@@ -16,7 +16,7 @@
   };
   window.DAVI_JOGO_POSES = {
     ...window.POSES_PADRAO,
-    conjurando: { vista: 'frente', expressao: 'determinado', angulos: { braco_d: 62, antebraco_d: 48, braco_e: -62, antebraco_e: -48, coxa_d: 4, canela_d: -2, coxa_e: -4, canela_e: 2, cabeca: 0, _magia: 1 } },
+    conjurando: { vista: 'frente', expressao: 'determinado', angulos: { braco_d: 62, antebraco_d: 48, braco_e: -62, antebraco_e: -48, coxa_d: 16, canela_d: -24, pe_d: 8, coxa_e: -16, canela_e: 24, pe_e: -8, cabeca: 0, _magia: 1, _plantar: true } },
     'magia-na-mao': { vista: 'tq', expressao: 'espanto', angulos: { braco_d: 75, antebraco_d: 70, mao_d: -20, braco_e: -4, coxa_d: -3, coxa_e: 3, cabeca: -4, _magia: 0.7 } },
   };
   window.criarDaviJogo = (opcoes = {}, vista = 'frente') => window.equipar(window.criarPersonagem({ ...window.DAVI_OPCOES, ...window.DAVI_JOGO_OPCOES, ...opcoes, poses: Object.fromEntries(Object.entries(window.DAVI_JOGO_POSES).map(([k, v]) => [k, v.angulos])) }, vista), window.DAVI_JOGO_EQUIP);

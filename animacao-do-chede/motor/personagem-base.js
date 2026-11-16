@@ -585,6 +585,10 @@
   // Poses padrão (ângulos genéricos)
   window.POSES_PADRAO = {
     parado: { vista: 'frente', expressao: 'neutro', angulos: { braco_d: 6, antebraco_d: -3, braco_e: -6, antebraco_e: 3, coxa_d: 1.5, canela_d: -1.5, coxa_e: -1.5, canela_e: 1.5 } },
+    // agachados (16/11): o motor desce o corpo o quanto a perna dobrou (_plantar), os pés ficam no chão
+    agachado: { vista: 'perfil', expressao: 'determinado', angulos: { coxa_d: -95, canela_d: 125, pe_d: -25, coxa_e: -35, canela_e: 75, pe_e: -35, tronco: 22, cabeca: -12, braco_d: 30, antebraco_d: -40, braco_e: -10, antebraco_e: -30, _plantar: true } },
+    'agachado-frente': { vista: 'frente', expressao: 'determinado', angulos: { coxa_d: 50, canela_d: -85, pe_d: 30, coxa_e: -50, canela_e: 85, pe_e: -30, braco_d: 25, antebraco_d: 30, braco_e: -25, antebraco_e: -30, _plantar: true } },
+    'base-luta': { vista: 'tq', expressao: 'determinado', angulos: { coxa_d: 22, canela_d: -30, pe_d: 8, coxa_e: -20, canela_e: 28, pe_e: -8, tronco: 6, braco_d: 40, antebraco_d: 60, braco_e: -30, antebraco_e: -60, _plantar: true } },
     tq: { vista: 'tq', expressao: 'neutro', angulos: { braco_d: 5, braco_e: -4, coxa_d: -3, coxa_e: 3 } },
     perfil: { vista: 'perfil', expressao: 'neutro', angulos: {} },
     costas: { vista: 'costas', expressao: 'neutro', angulos: { braco_d: -6, braco_e: 6 } },

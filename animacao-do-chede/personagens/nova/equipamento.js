@@ -378,12 +378,18 @@
     // capa atrás do corpo (na vista de costas, por cima das costas)
     if (eq.capa) {
       const cor = T(eq.capa.cor || 'verdeEscuro'), bc = T(eq.capa.borda || 'ouroBordado').base;
-      def.partes.push({ nome: 'capa', pai: 'tronco', pivo: [0, 0], z: costas ? 7.6 : 0.3, desenhar: (pc) => {
+      def.partes.push({ nome: 'capa', pai: 'tronco', pivo: [0, 0], z: costas ? 7.6 : 0.3, desenhar: (pc, rig) => {
         const y0 = neckY + 0.04, y1 = 2.2 * f, a0 = (hw + 0.02) * k, a1 = (hw + 0.34) * k;
-        const forma = perfil ? P((p) => { p.moveTo(-d * 0.4, y0); p.lineTo(-d - 0.04, y0 + 0.08); p.quadraticCurveTo(-d - 0.4, y1 * 0.6, -d - 0.32, y1); p.lineTo(-d * 0.2, y1 + 0.02); p.closePath(); })
-          : P((p) => { p.moveTo(cx - a0, y0); p.lineTo(cx + a0, y0); p.quadraticCurveTo(cx + a1, y1 * 0.5, cx + a1, y1); p.quadraticCurveTo(cx + a1 * 0.5, y1 + 0.05, cx, y1 - 0.02); p.quadraticCurveTo(cx - a1 * 0.5, y1 + 0.05, cx - a1, y1); p.quadraticCurveTo(cx - a1, y1 * 0.5, cx - a0, y0); p.closePath(); });
+        // vento e movimento: a barra ondula; andando, a capa voa um pouco para trás; fica pendurada para baixo quando o corpo inclina
+        const tt = window.TEMPO_PERSONAGEM || 0, mov = window.MOVIMENTO_PERSONAGEM || 0, pose = (rig && rig.pose) || {};
+        const w1 = 0.05 * Math.sin(tt * 2.1) + 0.07 * mov * Math.sin(tt * 6.3), w2 = 0.05 * Math.sin(tt * 2.1 + 1.7) + 0.07 * mov * Math.sin(tt * 6.3 + 2), atras = 0.22 * mov;
+        const incl = ((pose.tronco || 0) + (pose.quadril || 0)) * Math.PI / 180 * 0.85;
+        pc.ctx.save(); pc.ctx.translate(cx, y0); pc.ctx.rotate(-incl); pc.ctx.translate(-cx, -y0);
+        const forma = perfil ? P((p) => { p.moveTo(-d * 0.4, y0); p.lineTo(-d - 0.04, y0 + 0.08); p.quadraticCurveTo(-d - 0.4 - atras * 0.5, y1 * 0.6, -d - 0.32 - atras + w1, y1 - atras * 0.4); p.quadraticCurveTo(-d * 0.6 - atras * 0.5, y1 + 0.06 + w2 * 0.5, -d * 0.2 - atras * 0.3, y1 + 0.02 - atras * 0.3); p.closePath(); })
+          : P((p) => { p.moveTo(cx - a0, y0); p.lineTo(cx + a0, y0); p.quadraticCurveTo(cx + a1, y1 * 0.5, cx + a1 + w1, y1); p.quadraticCurveTo(cx + a1 * 0.5, y1 + 0.05 + w2 * 0.6, cx, y1 - 0.02 + w1 * 0.4); p.quadraticCurveTo(cx - a1 * 0.5, y1 + 0.05 - w1 * 0.6, cx - a1 + w2, y1); p.quadraticCurveTo(cx - a1, y1 * 0.5, cx - a0, y0); p.closePath(); });
         pc.peca(forma, cor, { sombra: 0.18 });
-        if (costas) { pc.linha(P((p) => { p.moveTo(cx - 0.1, y0 + 0.2); p.quadraticCurveTo(cx - 0.16, y1 * 0.6, cx - 0.2, y1 - 0.05); p.moveTo(cx + 0.12, y0 + 0.2); p.quadraticCurveTo(cx + 0.18, y1 * 0.6, cx + 0.24, y1 - 0.05); }), pc.interno, 'rgba(0,0,0,0.25)'); borda(pc, P((p) => { p.moveTo(cx - a1, y1 - 0.03); p.quadraticCurveTo(cx - a1 * 0.5, y1 + 0.02, cx, y1 - 0.05); p.quadraticCurveTo(cx + a1 * 0.5, y1 + 0.02, cx + a1, y1 - 0.03); }), bc, 0.045); }
+        if (costas) { pc.linha(P((p) => { p.moveTo(cx - 0.1, y0 + 0.2); p.quadraticCurveTo(cx - 0.16, y1 * 0.6, cx - 0.2 + w2 * 0.5, y1 - 0.05); p.moveTo(cx + 0.12, y0 + 0.2); p.quadraticCurveTo(cx + 0.18, y1 * 0.6, cx + 0.24 + w1 * 0.5, y1 - 0.05); }), pc.interno, 'rgba(0,0,0,0.25)'); borda(pc, P((p) => { p.moveTo(cx - a1 + w2, y1 - 0.03); p.quadraticCurveTo(cx - a1 * 0.5, y1 + 0.02 - w1 * 0.6, cx, y1 - 0.05 + w1 * 0.4); p.quadraticCurveTo(cx + a1 * 0.5, y1 + 0.02 + w2 * 0.6, cx + a1 + w1, y1 - 0.03); }), bc, 0.045); }
+        pc.ctx.restore();
       } });
     }
     // malha de aço nas mangas (escamas em arco)

@@ -74,15 +74,34 @@
   }
 
   // ciclo de caminhada procedural (vista de perfil)
+  // caminhada de perfil natural (pedido do autor 16/11: "dobra no joelho, nada de andar esquisitão"):
+  // o joelho dobra forte quando a perna vai para a frente, a perna de apoio fica quase reta, o pé pisa reto e sai na
+  // ponta, o corpo sobe e desce (os pés ficam no chão pelo _plantar), tronco um pouco inclinado e braços com cotovelo.
   function caminhada(t, vel = 1) {
-    const f = t * 2 * Math.PI * 1.1 * vel, s = Math.sin(f), c = Math.cos(f);
-    return {
-      tronco: 3, cabeca: -2,
-      coxa_d: -22 * s, canela_d: 14 + 16 * Math.max(0, c), pe_d: 22 * s * 0.4,
-      coxa_e: 22 * s, canela_e: 14 + 16 * Math.max(0, -c), pe_e: -22 * s * 0.4,
-      braco_d: 20 * s, antebraco_d: -16, braco_e: -20 * s, antebraco_e: -16,
-      _desloca: [0, -0.03 - 0.03 * Math.abs(Math.cos(f))],
+    const f = t * 2 * Math.PI * 1.05 * vel, perna = (p) => {
+      const sp = Math.sin(p), cp = Math.cos(p);
+      const coxa = -26 * sp + 6 * Math.max(0, cp);                       // vai à frente (negativo) e volta
+      const canela = 6 + 58 * Math.pow(Math.max(0, cp), 1.4) + 10 * Math.max(0, -cp) * Math.max(0, -sp); // dobra no balanço
+      const pe = -(coxa + canela) * 0.85 + (cp < 0 && sp < 0 ? 22 * Math.min(1, -sp) * Math.min(1, -cp * 1.5) : 0); // pé reto no apoio, ponta no fim
+      return [coxa, canela, pe];
     };
+    const [cd, kd, pd] = perna(f), [ce, ke, pe] = perna(f + Math.PI), s = Math.sin(f);
+    return {
+      tronco: 5 + 1.5 * Math.cos(2 * f), cabeca: -3, quadril: 0,
+      coxa_d: cd, canela_d: kd, pe_d: pd, coxa_e: ce, canela_e: ke, pe_e: pe,
+      braco_d: 22 * s, antebraco_d: -14 - 24 * Math.max(0, s), braco_e: -22 * s, antebraco_e: -14 - 24 * Math.max(0, -s),
+      _desloca: [0, 0], _plantar: true,
+    };
+  }
+  // pés no chão: quando as pernas dobram, o corpo desce o quanto a perna encurtou (agachar sem flutuar)
+  function plantar(def, ang) {
+    const cn = def.partes.find((q) => q.nome === 'canela_d'), pe = def.partes.find((q) => q.nome === 'pe_d');
+    if (!cn || !pe) return ang;
+    const Lc = cn.pivo[1], Ls = pe.pivo[1], rad = Math.PI / 180;
+    const alt = (c, k) => Lc * Math.cos((c || 0) * rad) + Ls * Math.cos(((c || 0) + (k || 0)) * rad);
+    const desce = Lc + Ls - Math.max(alt(ang.coxa_d, ang.canela_d), alt(ang.coxa_e, ang.canela_e));
+    const [dx, dy] = ang._desloca || [0, 0];
+    return { ...ang, _desloca: [dx, dy + desce] };
   }
 
   // luz da cena no personagem (referência 2): contraluz no lado da luz + sombra fria do outro lado.
@@ -164,7 +183,10 @@
     // de costas, os braços ficam espelhados: uma pose feita de frente (ex.: braços abertos) cruzava os braços nas costas.
     // Inverte os ângulos dos braços, menos nas poses feitas para a vista de costas e nas caminhadas (que já tratam isso).
     if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
-    rig.usarPose(o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida));
+    let pf = o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida);
+    if (pf._plantar) pf = plantar(def, pf);
+    rig.usarPose(pf);
+    window.TEMPO_PERSONAGEM = TL.t; window.MOVIMENTO_PERSONAGEM = andando ? 1 : (pf._vento || 0); // capa/casaco se mexendo
     const exprBase = typeof item.expressao === 'object' ? item.expressao : (def.expressoes[item.expressao || (pdef && pdef.expressao) || 'neutro']);
     rig.usarExpressao(expressaoViva(exprBase, TL.t, { voz: item.voz, semente: o.semente }));
     rig.desenhar(ctx, x, ySola, alturaPx, { espelhar: item.espelhar });
