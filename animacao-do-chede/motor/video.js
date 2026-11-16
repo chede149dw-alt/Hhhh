@@ -1,5 +1,6 @@
 // Monta um episódio: voz, linha do tempo, legendas, quadros e MP4 final.
-// Uso: node motor/video.js <roteiro.json> <planos.js> <saida.mp4> [--previa] [--workers 4]
+// Uso: node motor/video.js <roteiro.json> <planos.js> <saida.mp4> [--previa] [--workers 4] [--blocos 60]
+//   --blocos: divide o render em pedaços salvos em disco; se cair, rodar o mesmo comando continua de onde parou.
 //   --previa: voz sintética gratuita (espeak-ng), só para conferir o tempo das cenas.
 //   sem --previa: usa a voz final de cada fala (fala.voz_final.arquivo, relativo a audio/<serie>/<ep>/).
 // Regras aplicadas: plano de 2 a 3 s; legenda de até 3 palavras; capa nos 2 primeiros segundos; "PARTE X" no fim.
@@ -164,24 +165,32 @@ const scripts = ['motor/cena.js', 'motor/cena3d.js', 'motor/cinema.js', 'motor/p
   'efeitos/invisibilidade.js', 'efeitos/poder-energia.js', 'efeitos/poder-terra.js', 'efeitos/terra-cena.js', 'motor/mao-detalhe.js', ...(roteiro.scripts || []), 'motor/episodio.js', planosArq].map((s) => path.resolve(raiz, s));
 
 const tmp = path.join(pastaAudio, 'partes'); fs.mkdirSync(tmp, { recursive: true });
-async function trabalhador(k, browser) {
-  const ini = Math.floor((nQuadros * k) / WORKERS), fim = Math.floor((nQuadros * (k + 1)) / WORKERS);
+// blocos pequenos (--blocos N): cada bloco pronto fica salvo em partes/; se o render cair, rodar de novo continua de onde parou
+const BLOCOS = Math.max(WORKERS, +opt('blocos', WORKERS));
+const arqBloco = (k) => path.join(tmp, `parte-${String(k).padStart(3, '0')}.mp4`);
+let feitos = 0;
+async function trabalhador(fila, browser) {
   const page = await browser.newPage();
   page.on('pageerror', (e) => { console.error('Erro na página:', e.message); process.exitCode = 1; });
   await page.goto('file://' + path.join(__dirname, 'palco.html'));
   for (const s of scripts) await page.addScriptTag({ path: s });
   await page.evaluate(async (tl) => { await document.fonts.load('900 98px Inter'); Episodio.iniciar(tl); }, TL);
-  const arq = path.join(tmp, `parte-${k}.mp4`);
-  const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19', '-preset', 'veryfast', arq], { stdio: ['pipe', 'inherit', 'inherit'] });
-  for (let q = ini; q < fim; q++) {
-    const b64 = await page.evaluate((q) => { Episodio.quadro(q); return document.getElementById('c').toDataURL('image/jpeg', 0.93).split(',')[1]; }, q);
-    if (!ff.stdin.write(Buffer.from(b64, 'base64'))) await new Promise((r) => ff.stdin.once('drain', r));
-    if (k === 0 && (q - ini) % 30 === 0) process.stdout.write(`\r  quadros: ${Math.round(((q - ini) / (fim - ini)) * 100)}% `);
+  while (fila.length) {
+    const k = fila.shift();
+    const ini = Math.floor((nQuadros * k) / BLOCOS), fim = Math.floor((nQuadros * (k + 1)) / BLOCOS);
+    const arq = arqBloco(k), arqTmp = arq.replace('.mp4', '.tmp.mp4');
+    const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
+      '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19', '-preset', 'veryfast', arqTmp], { stdio: ['pipe', 'inherit', 'inherit'] });
+    for (let q = ini; q < fim; q++) {
+      const b64 = await page.evaluate((q) => { Episodio.quadro(q); return document.getElementById('c').toDataURL('image/jpeg', 0.93).split(',')[1]; }, q);
+      if (!ff.stdin.write(Buffer.from(b64, 'base64'))) await new Promise((r) => ff.stdin.once('drain', r));
+    }
+    ff.stdin.end();
+    await new Promise((r, j) => ff.on('close', (c) => (c === 0 ? r() : j(new Error('ffmpeg ' + c)))));
+    fs.renameSync(arqTmp, arq);
+    feitos++; process.stdout.write(`\r  blocos: ${feitos}/${BLOCOS} `);
   }
-  ff.stdin.end();
-  await new Promise((r, j) => ff.on('close', (c) => (c === 0 ? r() : j(new Error('ffmpeg ' + c)))));
-  return arq;
+  await page.close();
 }
 
 // modo teste: um quadro de cada plano numa folha de contato (--teste saida.png [--momento 0.5])
@@ -209,7 +218,13 @@ async function teste(png) {
   if (opt('teste')) { await teste(opt('teste')); return; }
   const t0 = Date.now();
   const browser = await chromium.launch();
-  const partes = await Promise.all([...Array(WORKERS).keys()].map((k) => trabalhador(k, browser)));
+  // blocos de um render antigo com outro tamanho não servem: apaga
+  const marca = path.join(tmp, 'blocos.txt'), assinatura = `${BLOCOS} ${nQuadros}`;
+  if (!fs.existsSync(marca) || fs.readFileSync(marca, 'utf8') !== assinatura) { for (const f of fs.readdirSync(tmp)) if (f.startsWith('parte-')) fs.rmSync(path.join(tmp, f)); fs.writeFileSync(marca, assinatura); }
+  const partes = [...Array(BLOCOS).keys()].map(arqBloco);
+  const fila = [...Array(BLOCOS).keys()].filter((k) => !fs.existsSync(arqBloco(k)));
+  feitos = BLOCOS - fila.length; if (feitos) console.log(`  continuando: ${feitos}/${BLOCOS} blocos já prontos`);
+  await Promise.all([...Array(Math.min(WORKERS, fila.length)).keys()].map(() => trabalhador(fila, browser)));
   await browser.close();
   console.log(`\n  render: ${((Date.now() - t0) / 1000).toFixed(0)}s`);
   const lista = path.join(tmp, 'lista.txt');
