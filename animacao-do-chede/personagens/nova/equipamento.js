@@ -373,6 +373,79 @@
         pelagem(pc, cx - a - 0.02, cx + a + 0.02, neckY + 0.16, 0.1);
       });
     }
+    // ===== Parte 3 · opções de roupa do Téo =====
+    const borda = (pc, path, cor, w = 0.035) => { if (pc.modo === 'contorno') return; pc.linha(path, w, cor); pc.linha(path, w * 0.3, 'rgba(255,245,210,0.6)'); };
+    // capa atrás do corpo (na vista de costas, por cima das costas)
+    if (eq.capa) {
+      const cor = T(eq.capa.cor || 'verdeEscuro'), bc = T(eq.capa.borda || 'ouroBordado').base;
+      def.partes.push({ nome: 'capa', pai: 'tronco', pivo: [0, 0], z: costas ? 7.6 : 0.3, desenhar: (pc) => {
+        const y0 = neckY + 0.04, y1 = 2.2 * f, a0 = (hw + 0.02) * k, a1 = (hw + 0.34) * k;
+        const forma = perfil ? P((p) => { p.moveTo(-d * 0.4, y0); p.lineTo(-d - 0.04, y0 + 0.08); p.quadraticCurveTo(-d - 0.4, y1 * 0.6, -d - 0.32, y1); p.lineTo(-d * 0.2, y1 + 0.02); p.closePath(); })
+          : P((p) => { p.moveTo(cx - a0, y0); p.lineTo(cx + a0, y0); p.quadraticCurveTo(cx + a1, y1 * 0.5, cx + a1, y1); p.quadraticCurveTo(cx + a1 * 0.5, y1 + 0.05, cx, y1 - 0.02); p.quadraticCurveTo(cx - a1 * 0.5, y1 + 0.05, cx - a1, y1); p.quadraticCurveTo(cx - a1, y1 * 0.5, cx - a0, y0); p.closePath(); });
+        pc.peca(forma, cor, { sombra: 0.18 });
+        if (costas) { pc.linha(P((p) => { p.moveTo(cx - 0.1, y0 + 0.2); p.quadraticCurveTo(cx - 0.16, y1 * 0.6, cx - 0.2, y1 - 0.05); p.moveTo(cx + 0.12, y0 + 0.2); p.quadraticCurveTo(cx + 0.18, y1 * 0.6, cx + 0.24, y1 - 0.05); }), pc.interno, 'rgba(0,0,0,0.25)'); borda(pc, P((p) => { p.moveTo(cx - a1, y1 - 0.03); p.quadraticCurveTo(cx - a1 * 0.5, y1 + 0.02, cx, y1 - 0.05); p.quadraticCurveTo(cx + a1 * 0.5, y1 + 0.02, cx + a1, y1 - 0.03); }), bc, 0.045); }
+      } });
+    }
+    // malha de aço nas mangas (escamas em arco)
+    if (eq.malha) {
+      const tom = T(eq.malha === true ? 'cinzaMalha' : eq.malha);
+      const escamas = (pc, L) => { if (pc.modo === 'contorno') return; for (let r = 0; r < 7; r++) for (let i = -2; i <= 2; i++) { const x = i * 0.08 + (r % 2) * 0.04, y = 0.03 + r * L / 7; if (Math.abs(x) > 0.17) continue; pc.linha(P((p) => p.arc(x, y, 0.045, 0.1 * Math.PI, 0.9 * Math.PI)), 0.012, 'rgba(20,24,32,0.45)'); pc.linha(P((p) => p.arc(x, y - 0.008, 0.04, 0.2 * Math.PI, 0.5 * Math.PI)), 0.008, 'rgba(255,255,255,0.35)'); } };
+      depois('braco_d', (pc) => escamas(pc, Lbraco)); depois('braco_e', (pc) => escamas(pc, Lbraco));
+      depois('antebraco_d', (pc) => escamas(pc, Lante * 0.6)); depois('antebraco_e', (pc) => escamas(pc, Lante * 0.6));
+    }
+    // peitoral de aço moldado (crista no meio, brilho, borda dourada, emblema)
+    if (eq.peitoralAco) {
+      const cor = T(eq.peitoralAco.cor || 'acoGuardiao'), bc = T(eq.peitoralAco.borda || 'ouroBordado').base;
+      depois('tronco', (pc) => {
+        const y0 = shoulderY + 0.02, y1 = hemY - 0.3 * f;
+        if (perfil) { const fm = P((p) => { p.moveTo(-d * 0.7, y0); p.quadraticCurveTo(d + 0.16, y0 + 0.05, d + 0.1, (y0 + y1) / 2); p.quadraticCurveTo(d + 0.02, y1, -d * 0.6, y1); p.closePath(); }); pc.peca(fm, cor, { sombra: 0.2 }); borda(pc, fm, bc); return; }
+        const a = (hw - 0.01) * k, b = (hw - 0.09) * k;
+        const fm = P((p) => { p.moveTo(cx - a, y0 + 0.04); if (!costas) { p.lineTo(cx - 0.15 * k, y0); p.quadraticCurveTo(cx, y0 + 0.12, cx + 0.15 * k, y0); } p.lineTo(cx + a, y0 + 0.04); p.quadraticCurveTo(cx + a + 0.03, (y0 + y1) / 2, cx + b, y1); p.quadraticCurveTo(cx, y1 + 0.06, cx - b, y1); p.quadraticCurveTo(cx - a - 0.03, (y0 + y1) / 2, cx - a, y0 + 0.04); p.closePath(); });
+        pc.peca(fm, cor, { sombra: 0.22 });
+        if (pc.modo !== 'contorno') {
+          pc.sombraDentro(fm, P((p) => p.rect(cx - a - 0.1, y0, a * 0.55, y1 - y0 + 0.1)), 'rgba(255,255,255,0.22)');
+          if (!costas) { pc.linha(P((p) => { p.moveTo(cx, y0 + 0.13); p.lineTo(cx, y1 - 0.02); }), 0.02, 'rgba(30,34,44,0.5)'); pc.linha(P((p) => { p.moveTo(cx - 0.012, y0 + 0.14); p.lineTo(cx - 0.012, y1 - 0.04); }), 0.01, 'rgba(255,255,255,0.6)'); }
+          pc.linha(P((p) => { p.moveTo(cx - b, y1 - 0.14); p.quadraticCurveTo(cx, y1 - 0.08, cx + b, y1 - 0.14); }), pc.interno, 'rgba(30,34,44,0.45)');
+        }
+        borda(pc, fm, bc);
+        if (!costas && eq.peitoralAco.emblema) { const ex = cx, ey = y0 + 0.34; pc.peca(P((p) => { p.moveTo(ex, ey - 0.1); p.lineTo(ex + 0.09, ey - 0.03); p.lineTo(ex + 0.06, ey + 0.09); p.lineTo(ex, ey + 0.12); p.lineTo(ex - 0.06, ey + 0.09); p.lineTo(ex - 0.09, ey - 0.03); p.closePath(); }), T('ouroBordado'), { sombra: 0.1 }); pc.preencher(P((p) => { p.moveTo(ex - 0.05, ey - 0.06); p.lineTo(ex - 0.03, ey - 0.12); p.lineTo(ex - 0.01, ey - 0.05); p.moveTo(ex + 0.05, ey - 0.06); p.lineTo(ex + 0.03, ey - 0.12); p.lineTo(ex + 0.01, ey - 0.05); }), '#8A6A20'); }
+        for (const [x, y] of [[-0.7, 0.12], [0.7, 0.12], [-0.62, 0.8], [0.62, 0.8]]) if (!costas) pc.preencher(P((p) => p.arc(cx + x * a, y0 + (y1 - y0) * y, 0.018, 0, Math.PI * 2)), '#E8D9A8');
+      });
+    }
+    // armadura de escamas (verde) com bordas de bronze
+    if (eq.escamas) {
+      const cor = T(eq.escamas.cor || 'verdeEscama'), bc = T(eq.escamas.borda || 'bronze').base;
+      depois('tronco', (pc) => {
+        const y0 = shoulderY + 0.04, y1 = hemY - 0.2 * f;
+        const a = perfil ? d : (hw + 0.01) * k, x0 = perfil ? -d * 0.8 : cx - a;
+        const fm = perfil ? P((p) => p.roundRect(-d * 0.8, y0, d * 1.85, y1 - y0, 0.06)) : P((p) => { p.moveTo(cx - a, y0 + 0.05); if (!costas) { p.lineTo(cx - 0.13 * k, y0); p.lineTo(cx, y0 + 0.14); p.lineTo(cx + 0.13 * k, y0); } p.lineTo(cx + a, y0 + 0.05); p.lineTo(cx + a + 0.02, y1); p.quadraticCurveTo(cx, y1 + 0.05, cx - a - 0.02, y1); p.closePath(); });
+        pc.peca(fm, cor, { sombra: 0.18 });
+        if (pc.modo !== 'contorno') { pc.ctx.save(); pc.ctx.clip(fm); const W2 = perfil ? d * 1.85 : 2 * a; for (let r = 0; r < 9; r++) for (let i = 0; i < 9; i++) { const x = x0 + i * W2 / 8 + (r % 2) * W2 / 16, y = y0 + 0.1 + r * (y1 - y0) / 9; pc.preencher(P((p) => p.arc(x, y, 0.06, 0, Math.PI)), r % 2 ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.06)'); pc.linha(P((p) => p.arc(x, y, 0.06, 0.05 * Math.PI, 0.95 * Math.PI)), 0.012, 'rgba(10,30,22,0.5)'); } pc.ctx.restore(); }
+        borda(pc, fm, bc, 0.04);
+      });
+    }
+    // sobreveste (tabardo) da cintura até o joelho, com borda e emblema de lobo
+    if (eq.sobreveste) {
+      const cor = T(eq.sobreveste.cor || 'verdeTabardo'), bc = T(eq.sobreveste.borda || 'ouroBordado').base;
+      depois('tronco', (pc) => {
+        if (perfil) return;
+        const yc = hemY - 0.32 * f, y1 = 1.5 * f, w = 0.22 * k;
+        const fm = P((p) => { p.moveTo(cx - w, yc); p.lineTo(cx + w, yc); p.lineTo(cx + w * 1.12, y1); p.lineTo(cx, y1 + 0.1); p.lineTo(cx - w * 1.12, y1); p.closePath(); });
+        pc.peca(fm, cor, { sombra: 0.14 }); borda(pc, fm, bc, 0.035);
+        if (!costas && pc.modo !== 'contorno') { const ex = cx, ey = yc + 0.36; pc.preencher(P((p) => { p.moveTo(ex, ey - 0.13); p.lineTo(ex + 0.07, ey - 0.02); p.lineTo(ex + 0.1, ey - 0.16); p.lineTo(ex + 0.12, ey + 0.02); p.lineTo(ex + 0.06, ey + 0.13); p.lineTo(ex, ey + 0.16); p.lineTo(ex - 0.06, ey + 0.13); p.lineTo(ex - 0.12, ey + 0.02); p.lineTo(ex - 0.1, ey - 0.16); p.lineTo(ex - 0.07, ey - 0.02); p.closePath(); }), bc); pc.preencher(P((p) => { p.arc(ex - 0.04, ey + 0.0, 0.015, 0, Math.PI * 2); p.arc(ex + 0.04, ey + 0.0, 0.015, 0, Math.PI * 2); }), T(eq.sobreveste.cor || 'verdeTabardo').sombra); }
+      });
+    }
+    // manto de pele grosso nos ombros (caçador de feras)
+    if (eq.pele) {
+      const pel = T(eq.pele.cor || 'peloGuardiao'), claro = T(eq.pele.claro || 'peloClaro').base;
+      const tufos = (pc, x0, x1, y, alt, n = 12) => { const fm = P((p) => { p.moveTo(x0, y); for (let i = 0; i <= n; i++) { const x = x0 + (x1 - x0) * (i / n); p.quadraticCurveTo(x - (x1 - x0) / n / 2, y - alt * (1.1 + 0.3 * Math.sin(i * 2.3)), x, y - alt * 0.6); } p.lineTo(x1, y + alt * 0.4); for (let i = n; i >= 0; i--) { const x = x0 + (x1 - x0) * (i / n); p.quadraticCurveTo(x + (x1 - x0) / n / 2, y + alt * (1.0 + 0.25 * Math.sin(i * 1.7)), x, y + alt * 0.5); } p.closePath(); }); pc.peca(fm, pel, { sombra: 0.16 }); if (pc.modo !== 'contorno') for (let i = 0; i < n; i++) { const x = x0 + (x1 - x0) * ((i + 0.5) / n); pc.linha(P((p) => { p.moveTo(x, y + alt * 0.2); p.quadraticCurveTo(x + 0.02, y - alt * 0.3, x - 0.01, y - alt * 0.8); }), 0.016, claro); } };
+      depois('tronco', (pc) => { const a = perfil ? d + 0.12 : (hw + 0.14) * k; tufos(pc, cx - a, cx + a, neckY + 0.14, 0.17, perfil ? 7 : 12); if (!perfil && !costas) tufos(pc, cx - a * 0.75, cx + a * 0.75, neckY + 0.28, 0.1, 9); });
+      for (const nome of ['braco_d', 'braco_e']) depois(nome, (pc) => tufos(pc, -0.24, 0.24, 0.02, 0.12, 6));
+    }
+    // colar de dentes
+    if (eq.colarDentes) {
+      depois('tronco', (pc) => { if (perfil || costas) return; const y = neckY + 0.2; pc.linha(P((p) => { p.moveTo(cx - 0.2 * k, neckY + 0.05); p.quadraticCurveTo(cx, y + 0.06, cx + 0.2 * k, neckY + 0.05); }), 0.014, '#3A2414'); for (let i = -2; i <= 2; i++) { const x = cx + i * 0.07 * k, yy = y + 0.04 - Math.abs(i) * 0.025; pc.peca(P((p) => { p.moveTo(x - 0.022, yy); p.quadraticCurveTo(x + 0.01, yy + 0.05, x, yy + 0.09); p.quadraticCurveTo(x + 0.03, yy + 0.04, x + 0.022, yy); p.closePath(); }), T('garra'), { sombra: 0.05, espessura: pc.interno * 0.6 }); } });
+    }
     return def;
   };
 })();

@@ -11,3 +11,4 @@
 (function () { Object.assign(Estilo.base, { peleFera: '#D98E5C', peloFera: '#B4471F', garra: '#F1ECE2', narizFera: '#2A1A14' }); })();
 (function () { Object.assign(Estilo.base, { azulArcano: '#1F2C5C', azulArcanoLuz: '#33478C', ouroBordado: '#D9A93A', vinhoFaixa: '#7A2638', linhoClaro: '#E8DCC4',
   acoGuardiao: '#A3ACBE', acoEscuro: '#5E6678', peloGuardiao: '#8A6A4C', verdeGuardiao: '#2F5D45', couroGuardiao: '#6B4429' }); })();
+(function () { Object.assign(Estilo.base, { cinzaMalha: '#7C8494', bronze: '#B07A3A', verdeEscama: '#3A7A62', peloClaro: '#C9A27A', vinhoCapa: '#6A1E2E', verdeTabardo: '#2E6B4E' }); })();

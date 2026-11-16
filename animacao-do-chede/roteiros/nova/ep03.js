@@ -749,14 +749,14 @@
       setaAtributo(ctx, 600, 1530, '+DEFESA', (u - 0.7) * 2);
       setaAtributo(ctx, 380, 1640, '+VELOCIDADE', (u - 0.9) * 2);
     },
-    // 24) a carta lendária: Lâmina Rubra · R$ 347.000
+    // 24) a carta lendária: Lâmina Rubra · R$ 348.000
     premio(ctx, u, d, api) {
       const cam = camNoite(api, { x: 0, y: 1.4, z: 3.4, cy: 900 });
       noite(ctx, api, cam, [], { desfoque: 16, forca: 0 });
       ctx.save(); ctx.fillStyle = 'rgba(30,4,8,0.55)'; ctx.fillRect(0, 0, W, H); ctx.restore();
       Valdor.feixe(ctx, 540, 0, 1500, 700, VERMELHO, 0.6);
       const k = api.fase(0.1, 0.6, 'volta'), giro = (1 - cl(u / 0.9)) * TAU * 1.5;
-      ctx.save(); ctx.translate(540, 960); ctx.scale(Math.cos(giro) || 0.01, 1); ctx.translate(-540, -960); carta3(ctx, 540, 960, 520, { nome: 'Lâmina Rubra', rar: 'lendario', preco: 'R$ 347.000', icone: 'lamina' }, k, api.t); ctx.restore();
+      ctx.save(); ctx.translate(540, 960); ctx.scale(Math.cos(giro) || 0.01, 1); ctx.translate(-540, -960); carta3(ctx, 540, 960, 520, { nome: 'Lâmina Rubra', rar: 'lendario', preco: 'R$ 348.000', icone: 'lamina' }, k, api.t); ctx.restore();
       brasas(ctx, 540, 1500, 800, api.t, 0.8, 12);
     },
     // 25) o aluguel transborda; o Davi de roupa nova encosta a mão no cabo da espada cravada
@@ -769,7 +769,7 @@
       ], {
         luzes: [{ x: 1.15, y: 0.8, z: 6.5, cor: '#FF4030', forca: 0.9, raio: 4 }],
         fim: () => {
-          const v = 71.08 + 346928.92 * api.ease.entra(api.fase(0.2, 1.6)), frac = v / ALUGUEL_META;
+          const v = 71.08 + 347928.92 * api.ease.entra(api.fase(0.2, 1.6)), frac = v / ALUGUEL_META;
           Combate.aluguel(ctx, Math.min(1, frac), 'R$ ' + Math.round(v).toLocaleString('pt-BR') + ' / 1.200', { dias: '29 DIAS', y: 150 });
           if (frac > 1) for (let i = 0; i < 18; i++) { const f = ((api.t * 0.8 + i / 18) % 1), x = 860 + (rnd(i) - 0.5) * 220, y = 230 + f * 600 + rnd(i * 3) * 40; Valdor.moeda(ctx, x, y, 22, api.t * 4 + i, 1 - f * 0.6); }
           for (const [x, txt, cor] of [[300, 'VENDER', '#D9A21A'], [780, 'EQUIPAR', '#2FA84A']]) { const k = api.fase(1.8 + (x > 500 ? 0.15 : 0), 2.2 + (x > 500 ? 0.15 : 0), 'volta'); if (k <= 0) continue; zoomEm(ctx, x, 1640, k, () => { ctx.fillStyle = cor; ctx.beginPath(); ctx.roundRect(x - 190, 1590, 380, 100, 50); ctx.fill(); ctx.font = '900 54px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#FFFFFF'; ctx.fillText(txt, x, 1642); }); }
