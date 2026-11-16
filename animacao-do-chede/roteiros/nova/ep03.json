@@ -1,353 +1,843 @@
 {
- "serie": "VALDOR",
- "episodio": 3,
- "parte": 3,
- "scripts": [
-  "personagens/nova/cores.js",
-  "personagens/nova/equipamento.js",
-  "personagens/nova/davi/davi.js",
-  "personagens/nova/davi/davi-jogo.js",
-  "personagens/nova/teo/teo.js",
-  "personagens/nova/teo/teo-jogo.js",
-  "personagens/nova/teo/teo-fera.js",
-  "personagens/nova/teo/teo-lobisomem.js",
-  "personagens/nova/ladroes.js",
-  "motor/vendor/three-r160.min.js",
-  "cenarios/valdor-3d.js",
-  "cenarios/valdor-campo.js",
-  "cenarios/valdor-noite.js",
-  "efeitos/criaturas.js",
-  "efeitos/valdor.js",
-  "efeitos/noite.js",
-  "efeitos/combate.js",
-  "efeitos/teo-closes.js"
- ],
- "legenda": {
-  "faixas": [
-   1180,
-   1400,
-   760,
-   420
-  ]
- },
- "planos": [
-  {
-   "id": "capa",
-   "fala": {
-    "texto": "O líder dos ladrões tinha uma espada que rouba vida.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "ROUBA",
-    "VIDA."
-   ],
-   "duracao": 4.0
+  "serie": "VALDOR",
+  "episodio": 3,
+  "parte": 3,
+  "scripts": [
+    "personagens/nova/cores.js",
+    "personagens/nova/equipamento.js",
+    "personagens/nova/davi/davi.js",
+    "personagens/nova/davi/davi-jogo.js",
+    "personagens/nova/teo/teo.js",
+    "personagens/nova/teo/teo-jogo.js",
+    "personagens/nova/teo/teo-fera.js",
+    "personagens/nova/teo/teo-lobisomem.js",
+    "personagens/nova/ladroes.js",
+    "motor/vendor/three-r160.min.js",
+    "cenarios/valdor-3d.js",
+    "cenarios/valdor-campo.js",
+    "cenarios/valdor-noite.js",
+    "efeitos/criaturas.js",
+    "efeitos/valdor.js",
+    "efeitos/noite.js",
+    "efeitos/combate.js",
+    "efeitos/teo-closes.js"
+  ],
+  "legenda": {
+    "faixas": [
+      1180,
+      1400,
+      760,
+      420
+    ]
   },
-  {
-   "id": "ataque",
-   "fala": {
-    "texto": "E ele partiu pra cima do Téo.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "TÉO."
-   ]
-  },
-  {
-   "id": "choque",
-   "fala": {
-    "texto": "O Téo segurou o golpe com as garras.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "GARRAS."
-   ]
-  },
-  {
-   "id": "rouba",
-   "fala": {
-    "texto": "Mas cada corte da Lâmina Rubra rouba a vida de quem é atingido.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "ROUBA",
-    "VIDA"
-   ]
-  },
-  {
-   "id": "cerco",
-   "fala": {
-    "texto": "Enquanto isso, três ladrões cercaram o Davi.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "DAVI."
-   ]
-  },
-  {
-   "id": "maos",
-   "fala": {
-    "texto": "O Davi abriu as mãos...",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "MÃOS..."
-   ]
-  },
-  {
-   "id": "corrente",
-   "fala": {
-    "texto": "...e o raio pulou de um ladrão pro outro.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "RAIO",
-    "PULOU"
-   ]
-  },
-  {
-   "id": "faca",
-   "fala": {
-    "texto": "O terceiro jogou uma faca.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "FACA."
-   ]
-  },
-  {
-   "id": "agarra",
-   "fala": {
-    "texto": "O Davi desviou, agarrou a faca no ar...",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "AGARROU"
-   ]
-  },
-  {
-   "id": "devolveu",
-   "fala": {
-    "texto": "...e devolveu ela cheia de eletricidade.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "ELETRICIDADE."
-   ]
-  },
-  {
-   "id": "puxa",
-   "fala": {
-    "texto": "O Téo arrancou a corrente da mão de um ladrão...",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "CORRENTE"
-   ]
-  },
-  {
-   "id": "muro",
-   "fala": {
-    "texto": "...e jogou ele no muro.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "MURO."
-   ]
-  },
-  {
-   "id": "duelo",
-   "fala": {
-    "texto": "Mas o líder era rápido demais.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "RÁPIDO"
-   ]
-  },
-  {
-   "id": "devolve",
-   "fala": {
-    "texto": "E a espada devolvia a vida pra ele.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "VIDA"
-   ]
-  },
-  {
-   "id": "joelho",
-   "fala": {
-    "texto": "O Téo caiu de joelho.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "JOELHO."
-   ]
-  },
-  {
-   "id": "raio",
-   "fala": {
-    "texto": "O Davi mandou o raio mais forte que tinha...",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "MAIS",
-    "FORTE"
-   ]
-  },
-  {
-   "id": "bloqueia",
-   "fala": {
-    "texto": "...e o líder bloqueou com a espada.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "BLOQUEOU"
-   ]
-  },
-  {
-   "id": "metal",
-   "fala": {
-    "texto": "Foi aí que o Davi percebeu: a lâmina era de metal.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "METAL."
-   ]
-  },
-  {
-   "id": "caminho",
-   "fala": {
-    "texto": "E a eletricidade sempre escolhe o caminho mais fácil.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "MAIS",
-    "FÁCIL."
-   ]
-  },
-  {
-   "id": "solta",
-   "fala": {
-    "texto": "No ar, ela quase não passa. No metal, ela corre solta.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "CORRE",
-    "SOLTA."
-   ]
-  },
-  {
-   "id": "plano",
-   "fala": {
-    "texto": "Então ele não mirou no líder... mirou na espada.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "ESPADA."
-   ]
-  },
-  {
-   "id": "final",
-   "fala": {
-    "texto": "O raio atravessou a espada... e o líder junto.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "JUNTO."
-   ]
-  },
-  {
-   "id": "fugiram",
-   "fala": {
-    "texto": "Os ladrões fugiram... e deixaram tudo pra trás.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "TUDO"
-   ]
-  },
-  {
-   "id": "loot",
-   "fala": {
-    "texto": "Poção, moedas, botas...",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "BOTAS..."
-   ]
-  },
-  {
-   "id": "rasgado",
-   "fala": {
-    "texto": "A transformação tinha rasgado a roupa do Téo...",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "RASGADO"
-   ]
-  },
-  {
-   "id": "roupa",
-   "fala": {
-    "texto": "...mas no drop tinha roupa nova pros dois.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "ROUPA",
-    "NOVA"
-   ]
-  },
-  {
-   "id": "premio",
-   "fala": {
-    "texto": "E a última carta era a Lâmina Rubra.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "LÂMINA",
-    "RUBRA."
-   ]
-  },
-  {
-   "id": "aluguel",
-   "fala": {
-    "texto": "Trezentos e quarenta e sete reais. Quase um terço do aluguel de uma vez só.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "UM",
-    "TERÇO"
-   ]
-  },
-  {
-   "id": "aviso",
-   "fala": {
-    "texto": "Só que, no mesmo segundo, todo jogador de Valdor recebeu um aviso...",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "AVISO..."
-   ]
-  },
-  {
-   "id": "rosto",
-   "fala": {
-    "texto": "...com o rosto do Davi.",
-    "voz": "narrador"
-   },
-   "destaque": [
-    "ROSTO",
-    "DAVI."
-   ]
-  },
-  {
-   "id": "parte",
-   "fala": {
-    "texto": "Segue pra ver a parte quatro!",
-    "voz": "narrador"
-   }
+  "planos": [
+    {
+      "id": "capa",
+      "fala": {
+        "texto": "O líder dos ladrões tinha uma espada que rouba vida.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/capa.wav"
+        }
+      },
+      "destaque": [
+        "ROUBA",
+        "VIDA."
+      ],
+      "duracao": 4.0,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/dreno.wav",
+          "em": 0.6,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 2.6,
+          "volume": 0.18
+        }
+      ]
+    },
+    {
+      "id": "ataque",
+      "fala": {
+        "texto": "E ele partiu pra cima do Téo.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/ataque.wav"
+        }
+      },
+      "destaque": [
+        "TÉO."
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.25,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rosnado.mp3",
+          "em": 1.0,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "choque",
+      "fala": {
+        "texto": "O Téo segurou o golpe com as garras.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/choque.wav"
+        }
+      },
+      "destaque": [
+        "GARRAS."
+      ],
+      "duracao": 2.85,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 0.35,
+          "volume": 0.28
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rosnado.mp3",
+          "em": 1.5,
+          "volume": 0.18
+        }
+      ]
+    },
+    {
+      "id": "rouba",
+      "fala": {
+        "texto": "Mas cada corte da Lâmina Rubra rouba a vida de quem é atingido.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/rouba.wav"
+        }
+      },
+      "destaque": [
+        "ROUBA",
+        "VIDA"
+      ],
+      "duracao": 4.38,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 0.2,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/dreno.wav",
+          "em": 0.5,
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "id": "cerco",
+      "fala": {
+        "texto": "Enquanto isso, três ladrões cercaram o Davi.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/cerco.wav"
+        }
+      },
+      "destaque": [
+        "DAVI."
+      ],
+      "duracao": 3.35,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/arrasta.mp3",
+          "em": 0.3,
+          "volume": 0.18
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 2.2,
+          "volume": 0.18
+        }
+      ]
+    },
+    {
+      "id": "maos",
+      "fala": {
+        "texto": "O Davi abriu as mãos...",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/maos.wav"
+        }
+      },
+      "destaque": [
+        "MÃOS..."
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 0.3,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 1.7,
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "id": "corrente",
+      "fala": {
+        "texto": "...e o raio pulou de um ladrão pro outro.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/corrente.wav"
+        }
+      },
+      "destaque": [
+        "RAIO",
+        "PULOU"
+      ],
+      "duracao": 2.95,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 0.1,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 0.9,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 1.7,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "faca",
+      "fala": {
+        "texto": "O terceiro jogou uma faca.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/faca.wav"
+        }
+      },
+      "destaque": [
+        "FACA."
+      ],
+      "duracao": 3.05,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.2,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.5,
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "id": "agarra",
+      "fala": {
+        "texto": "O Davi desviou, agarrou a faca no ar...",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/agarra.wav"
+        }
+      },
+      "destaque": [
+        "AGARROU"
+      ],
+      "duracao": 3.45,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 1.4,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 2.3,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "devolveu",
+      "fala": {
+        "texto": "...e devolveu ela cheia de eletricidade.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/devolveu.wav"
+        }
+      },
+      "destaque": [
+        "ELETRICIDADE."
+      ],
+      "duracao": 3.25,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.3,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 0.4,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 1.8,
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "id": "puxa",
+      "fala": {
+        "texto": "O Téo arrancou a corrente da mão de um ladrão...",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/puxa.wav"
+        }
+      },
+      "destaque": [
+        "CORRENTE"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/arrasta.mp3",
+          "em": 0.3,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rosnado.mp3",
+          "em": 1.3,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "muro",
+      "fala": {
+        "texto": "...e jogou ele no muro.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/muro.wav"
+        }
+      },
+      "destaque": [
+        "MURO."
+      ],
+      "duracao": 2.45,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.1,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 0.5,
+          "volume": 0.3
+        }
+      ]
+    },
+    {
+      "id": "duelo",
+      "fala": {
+        "texto": "Mas o líder era rápido demais.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/duelo.wav"
+        }
+      },
+      "destaque": [
+        "RÁPIDO"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.2,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 0.8,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 1.7,
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "id": "devolve",
+      "fala": {
+        "texto": "E a espada devolvia a vida pra ele.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "VIDA"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/dreno.wav",
+          "em": 0.3,
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "id": "joelho",
+      "fala": {
+        "texto": "O Téo caiu de joelho.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "JOELHO."
+      ],
+      "duracao": 2.45,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 0.3,
+          "volume": 0.14
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rosnado.mp3",
+          "em": 1.1,
+          "volume": 0.16
+        }
+      ]
+    },
+    {
+      "id": "raio",
+      "fala": {
+        "texto": "O Davi mandou o raio mais forte que tinha...",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "MAIS",
+        "FORTE"
+      ],
+      "duracao": 2.95,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 0.2,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/trovao.wav",
+          "em": 1.4,
+          "volume": 0.3
+        }
+      ]
+    },
+    {
+      "id": "bloqueia",
+      "fala": {
+        "texto": "...e o líder bloqueou com a espada.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "BLOQUEOU"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 0.4,
+          "volume": 0.28
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 0.45,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "metal",
+      "fala": {
+        "texto": "Foi aí que o Davi percebeu: a lâmina era de metal.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "METAL."
+      ],
+      "duracao": 3.39,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 0.2,
+          "volume": 0.18
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 1.0,
+          "volume": 0.18
+        }
+      ]
+    },
+    {
+      "id": "caminho",
+      "fala": {
+        "texto": "E a eletricidade sempre escolhe o caminho mais fácil.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "MAIS",
+        "FÁCIL."
+      ],
+      "duracao": 3.49,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 0.2,
+          "volume": 0.15
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 1.6,
+          "volume": 0.15
+        }
+      ]
+    },
+    {
+      "id": "solta",
+      "fala": {
+        "texto": "No ar, ela quase não passa. No metal, ela corre solta.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "CORRE",
+        "SOLTA."
+      ],
+      "duracao": 3.85,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 2.0,
+          "volume": 0.16
+        }
+      ]
+    },
+    {
+      "id": "plano",
+      "fala": {
+        "texto": "Então ele não mirou no líder... mirou na espada.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "ESPADA."
+      ],
+      "duracao": 3.06,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 0.4,
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "fala": {
+        "texto": "O raio atravessou a espada... e o líder junto.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "JUNTO."
+      ],
+      "duracao": 3.65,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/trovao.wav",
+          "em": 0.5,
+          "volume": 0.32
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 0.6,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 1.7,
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "id": "fugiram",
+      "fala": {
+        "texto": "Os ladrões fugiram... e deixaram tudo pra trás.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "TUDO"
+      ],
+      "duracao": 3.34,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/arrasta.mp3",
+          "em": 0.4,
+          "volume": 0.18
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.1,
+          "volume": 0.18
+        }
+      ]
+    },
+    {
+      "id": "loot",
+      "fala": {
+        "texto": "Poção, moedas, botas...",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "BOTAS..."
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.3,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.8,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 1.3,
+          "volume": 0.18
+        }
+      ]
+    },
+    {
+      "id": "rasgado",
+      "fala": {
+        "texto": "A transformação tinha rasgado a roupa do Téo...",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "RASGADO"
+      ],
+      "duracao": 3.21,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.5,
+          "volume": 0.14
+        }
+      ]
+    },
+    {
+      "id": "roupa",
+      "fala": {
+        "texto": "...mas no drop tinha roupa nova pros dois.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "ROUPA",
+        "NOVA"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/compra.mp3",
+          "em": 0.6,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 1.5,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "premio",
+      "fala": {
+        "texto": "E a última carta era a Lâmina Rubra.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "LÂMINA",
+        "RUBRA."
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 0.3,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 1.2,
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "id": "aluguel",
+      "fala": {
+        "texto": "Trezentos e quarenta e sete reais. Quase um terço do aluguel de uma vez só.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "UM",
+        "TERÇO"
+      ],
+      "duracao": 5.15,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.4,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 2.2,
+          "volume": 0.18
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/compra.mp3",
+          "em": 4.2,
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "id": "aviso",
+      "fala": {
+        "texto": "Só que, no mesmo segundo, todo jogador de Valdor recebeu um aviso...",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "AVISO..."
+      ],
+      "duracao": 4.55,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/alerta.wav",
+          "em": 0.3,
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "id": "rosto",
+      "fala": {
+        "texto": "...com o rosto do Davi.",
+        "voz": "narrador"
+      },
+      "destaque": [
+        "ROSTO",
+        "DAVI."
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 0.25,
+          "volume": 0.15
+        }
+      ]
+    },
+    {
+      "id": "parte",
+      "fala": {
+        "texto": "Segue pra ver a parte quatro!",
+        "voz": "narrador"
+      },
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 0.3,
+          "volume": 0.2
+        }
+      ]
+    }
+  ],
+  "trilha": {
+    "arquivo": "ep03/trilha.wav",
+    "volume": 0.4
   }
- ]
 }
