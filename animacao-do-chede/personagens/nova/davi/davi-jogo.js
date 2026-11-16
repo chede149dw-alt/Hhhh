@@ -22,4 +22,16 @@
   window.criarDaviJogo = (opcoes = {}, vista = 'frente') => window.equipar(window.criarPersonagem({ ...window.DAVI_OPCOES, ...window.DAVI_JOGO_OPCOES, ...opcoes, poses: Object.fromEntries(Object.entries(window.DAVI_JOGO_POSES).map(([k, v]) => [k, v.angulos])) }, vista), window.DAVI_JOGO_EQUIP);
   // depois de equipar as Luvas do conjurador (Parte 2)
   window.criarDaviLuvas = (opcoes = {}, vista = 'frente') => window.equipar(window.criarPersonagem({ ...window.DAVI_OPCOES, ...window.DAVI_JOGO_OPCOES, ...opcoes, poses: Object.fromEntries(Object.entries(window.DAVI_JOGO_POSES).map(([k, v]) => [k, v.angulos])) }, vista), { ...window.DAVI_JOGO_EQUIP, luvas: { cor: 'azulArdosia', punho: 'mostarda' } });
+  // Parte 3: Manto do Arcano (épico, do loot) — roupa completamente nova
+  window.DAVI_ARCANO_OPCOES = {
+    top: { tipo: 'cardiga', cor: 'azulArcanoLuz', corInterna: 'linhoClaro' },
+    calca: { tipo: 'reta', cor: 'carvao' },
+    calcado: { tipo: 'cano-alto', cor: 'couroEscuro', acento: 'ouroBordado' },
+  };
+  window.DAVI_ARCANO_EQUIP = {
+    casaco: { cor: 'azulArcano', forro: 'vinhoFaixa', bordado: 'ouroBordado' },
+    luvas: { cor: 'azulArdosia', punho: 'ouroBordado' }, botas: { cor: 'couroEscuro', cano: 0.55 },
+    magiaMaos: { cor: '111,200,255' },
+  };
+  window.criarDaviArcano = (opcoes = {}, vista = 'frente') => window.equipar(window.criarPersonagem({ ...window.DAVI_OPCOES, ...window.DAVI_ARCANO_OPCOES, ...opcoes, poses: Object.fromEntries(Object.entries(window.DAVI_JOGO_POSES).map(([k, v]) => [k, v.angulos])) }, vista), window.DAVI_ARCANO_EQUIP);
 })();

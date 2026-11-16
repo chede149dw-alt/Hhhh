@@ -272,6 +272,107 @@
         for (const [x, y] of [[-0.13, -0.04], [0.13, -0.04], [0, Lbraco * 0.3]]) pc.peca(P((p) => p.arc(x, y, 0.025, 0, Math.PI * 2)), reb, { sombra: 0, espessura: pc.interno * 0.5 });
       });
     }
+    // ===== Parte 3: roupas novas do loot =====
+    // Manto do Arcano (épico, Davi): casaco longo de mago com abas até o joelho, bordado dourado, runas que brilham,
+    // gola alta, capa curta nos ombros com broche e faixa de pano na cintura.
+    if (eq.casaco) {
+      const cor = T(eq.casaco.cor || 'azulArcano'), forro = T(eq.casaco.forro || 'vinhoFaixa'), bord = T(eq.casaco.bordado || 'ouroBordado'), runa = eq.casaco.runa || '127,230,255';
+      const trim = (pc, path, w = 0.05) => { if (pc.modo === 'contorno') return; pc.linha(path, w, bord.base); pc.linha(path, w * 0.3, 'rgba(255,240,190,0.75)'); };
+      const runaBrilho = (pc, x, y, s0 = 0.035) => { if (pc.modo === 'contorno') return; const g = pc.ctx.createRadialGradient(x, y, 0, x, y, s0 * 2.4); g.addColorStop(0, `rgba(${runa},0.85)`); g.addColorStop(1, `rgba(${runa},0)`); pc.preencher(P((p) => p.arc(x, y, s0 * 2.4, 0, Math.PI * 2)), g); pc.linha(P((p) => { p.moveTo(x, y - s0); p.lineTo(x + s0 * 0.7, y); p.lineTo(x, y + s0); p.lineTo(x - s0 * 0.7, y); p.closePath(); p.moveTo(x, y - s0 * 1.3); p.lineTo(x, y + s0 * 1.3); }), 0.012, '#EFFFFF'); };
+      // punhos largos com bordado nas mangas
+      for (const nome of ['antebraco_d', 'antebraco_e']) depois(nome, (pc) => {
+        const ya = Lante * 0.5, yb = Lante + 0.02;
+        const f0 = P((p) => { p.moveTo(-0.13, ya); p.lineTo(0.13, ya); p.lineTo(0.2, yb); p.quadraticCurveTo(0, yb + 0.05, -0.2, yb); p.closePath(); });
+        pc.peca(f0, cor, { sombra: 0.12 });
+        trim(pc, P((p) => { p.moveTo(-0.19, yb - 0.035); p.quadraticCurveTo(0, yb + 0.01, 0.19, yb - 0.035); }), 0.04);
+      });
+      // capa curta no ombro (por cima do braço)
+      for (const nome of ['braco_d', 'braco_e']) depois(nome, (pc) => {
+        const f0 = P((p) => { p.moveTo(-0.24, 0.0); p.quadraticCurveTo(-0.26, -0.18, 0, -0.2); p.quadraticCurveTo(0.26, -0.18, 0.24, 0.0); p.lineTo(0.22, Lbraco * 0.42); p.quadraticCurveTo(0.11, Lbraco * 0.5, 0, Lbraco * 0.44); p.quadraticCurveTo(-0.11, Lbraco * 0.5, -0.22, Lbraco * 0.42); p.closePath(); });
+        pc.peca(f0, cor, { sombra: 0.14 });
+        trim(pc, P((p) => { p.moveTo(-0.21, Lbraco * 0.4); p.quadraticCurveTo(-0.11, Lbraco * 0.47, 0, Lbraco * 0.41); p.quadraticCurveTo(0.11, Lbraco * 0.47, 0.21, Lbraco * 0.4); }), 0.04);
+      });
+      depois('tronco', (pc) => {
+        const y0 = shoulderY + 0.02, yc = hemY - 0.28 * f, y1 = 1.72 * f;
+        if (perfil) {
+          const forma = P((p) => { p.moveTo(-d - 0.04, y0); p.lineTo(d + 0.06, y0); p.lineTo(d + 0.1, yc); p.lineTo(d + 0.24, y1); p.quadraticCurveTo(0, y1 + 0.06, -d - 0.16, y1); p.lineTo(-d - 0.06, yc); p.closePath(); });
+          pc.peca(forma, cor, { sombra: 0.14 });
+          trim(pc, P((p) => { p.moveTo(d + 0.22, y1 - 0.03); p.quadraticCurveTo(0, y1 + 0.03, -d - 0.14, y1 - 0.03); }));
+          trim(pc, P((p) => { p.moveTo(d + 0.06, y0 + 0.05); p.lineTo(d + 0.22, y1 - 0.04); }), 0.04);
+          pc.peca(P((p) => p.roundRect(-d - 0.06, yc - 0.06, 2 * d + 0.14, 0.12, 0.03)), forro, { sombra: 0.06 });
+          pc.peca(P((p) => { p.moveTo(-0.02, neckY + 0.04); p.lineTo(0.02, neckY - 0.2); p.lineTo(0.16, neckY - 0.08); p.lineTo(0.14, neckY + 0.06); p.closePath(); }), cor, { sombra: 0.1 });
+          runaBrilho(pc, 0.06, y1 - 0.12);
+          return;
+        }
+        const a = (hw + 0.05) * k, b = (hw + 0.2) * k;
+        if (costas) {
+          const forma = P((p) => { p.moveTo(-a, y0); p.lineTo(a, y0); p.lineTo(a + 0.02, yc); p.lineTo(b, y1); p.quadraticCurveTo(0, y1 + 0.07, -b, y1); p.lineTo(-a - 0.02, yc); p.closePath(); });
+          pc.peca(forma, cor, { sombra: 0.14 });
+          trim(pc, P((p) => { p.moveTo(b - 0.02, y1 - 0.035); p.quadraticCurveTo(0, y1 + 0.035, -b + 0.02, y1 - 0.035); }));
+          pc.peca(P((p) => p.roundRect(-a - 0.02, yc - 0.06, 2 * a + 0.04, 0.12, 0.03)), forro, { sombra: 0.06 });
+          for (const x of [-0.18, 0, 0.18]) runaBrilho(pc, x * k, y1 - 0.13);
+          const cap = P((p) => { p.moveTo(-0.3, neckY + 0.02); p.quadraticCurveTo(0, neckY - 0.06, 0.3, neckY + 0.02); p.quadraticCurveTo(0.32, shoulderY + 0.42, 0, shoulderY + 0.55); p.quadraticCurveTo(-0.32, shoulderY + 0.42, -0.3, neckY + 0.02); p.closePath(); });
+          pc.peca(cap, cor, { sombra: 0.16 }); pc.sombraDentro(cap, P((p) => p.rect(-0.4, neckY - 0.1, 0.8, 0.12)), forro.base);
+          trim(pc, P((p) => { p.moveTo(-0.28, neckY + 0.05); p.quadraticCurveTo(0.3, shoulderY + 0.38, 0, shoulderY + 0.53); }), 0.03);
+          // gola alta por trás
+          pc.peca(P((p) => { p.moveTo(-0.3, neckY + 0.06); p.quadraticCurveTo(-0.34, neckY - 0.22, 0, neckY - 0.24); p.quadraticCurveTo(0.34, neckY - 0.22, 0.3, neckY + 0.06); p.closePath(); }), cor, { sombra: 0.1 });
+          return;
+        }
+        // duas metades do casaco (abrem em V no peito e se abrem nas abas, mostrando a túnica e as pernas)
+        const meia = (s) => P((p) => { const X = (x) => cx + s * x; p.moveTo(X(0.15 * k), neckY + 0.04); p.lineTo(X(a), y0); p.lineTo(X(a + 0.02), yc); p.lineTo(X(b), y1); p.quadraticCurveTo(X((a + 0.02) * 0.55), y1 + 0.06, X(0.07), y1 - 0.03); p.lineTo(X(0.03), yc + 0.08); p.lineTo(X(0.02), yc - 0.22); p.closePath(); });
+        for (const s of [-1, 1]) {
+          const fm = meia(s); pc.peca(fm, cor, { sombra: 0.14 });
+          // forro aparecendo na dobra da aba
+          pc.sombraDentro(fm, P((p) => { const X = (x) => cx + s * x; p.moveTo(X(0.02), yc + 0.06); p.lineTo(X(0.13), y1); p.lineTo(X(0.02), y1); p.closePath(); }), forro.base);
+          trim(pc, P((p) => { const X = (x) => cx + s * x; p.moveTo(X(0.15 * k), neckY + 0.06); p.lineTo(X(0.03), yc - 0.2); p.lineTo(X(0.04), yc + 0.08); p.lineTo(X(0.08), y1 - 0.04); p.quadraticCurveTo(X((a + 0.02) * 0.55), y1 + 0.03, X(b - 0.02), y1 - 0.02); }));
+          for (let i = 0; i < 3; i++) runaBrilho(pc, cx + s * (0.15 + i * 0.09) * k, y1 - 0.13 - i * 0.01, 0.03);
+          if (pc.modo !== 'contorno') { const X = (x) => cx + s * x * k; pc.linha(P((p) => { p.moveTo(X(0.12), y0 + 0.12); p.bezierCurveTo(X(0.3), y0 + 0.1, X(0.32), y0 + 0.3, X(0.2), y0 + 0.32); p.bezierCurveTo(X(0.12), y0 + 0.33, X(0.13), y0 + 0.22, X(0.21), y0 + 0.23); p.moveTo(X(0.08), y0 + 0.42); p.bezierCurveTo(X(0.26), y0 + 0.4, X(0.3), y0 + 0.56, X(0.18), y0 + 0.6); }), 0.022, bord.base); pc.linha(P((p) => { p.moveTo(X(a / k - 0.05), y0 + 0.05); p.lineTo(X(a / k - 0.03), yc - 0.08); }), 0.03, bord.base); }
+          // bordado em losangos descendo na frente
+          if (pc.modo !== 'contorno') for (let i = 0; i < 5; i++) { const t = (i + 0.5) / 5, x = cx + s * (0.05 + 0.04 * t), y = yc + 0.12 + (y1 - yc - 0.25) * t; pc.preencher(P((p) => { p.moveTo(x + s * 0.045, y - 0.03); p.lineTo(x + s * 0.075, y); p.lineTo(x + s * 0.045, y + 0.03); p.lineTo(x + s * 0.015, y); p.closePath(); }), bord.base); }
+        }
+        // faixa de pano na cintura com pontas caindo e bolsinha
+        pc.peca(P((p) => p.roundRect(cx - a - 0.02, yc - 0.065, 2 * a + 0.04, 0.13, 0.03)), forro, { sombra: 0.08 });
+        pc.linha(P((p) => { p.moveTo(cx - a, yc + 0.0); p.quadraticCurveTo(cx, yc + 0.03, cx + a, yc + 0.0); }), pc.interno, 'rgba(0,0,0,0.25)');
+        pc.peca(P((p) => { p.moveTo(cx + 0.18 * k, yc + 0.03); p.quadraticCurveTo(cx + 0.24 * k, yc + 0.3, cx + 0.2 * k, yc + 0.48); p.lineTo(cx + 0.3 * k, yc + 0.45); p.quadraticCurveTo(cx + 0.31 * k, yc + 0.25, cx + 0.28 * k, yc + 0.03); p.closePath(); }), forro, { sombra: 0.1 });
+        trim(pc, P((p) => { p.moveTo(cx + 0.2 * k, yc + 0.47); p.lineTo(cx + 0.3 * k, yc + 0.44); }), 0.03);
+        pc.peca(P((p) => p.roundRect(cx - a + 0.02, yc + 0.03, 0.2, 0.2, 0.05)), T('couroEscuro'), { sombra: 0.1 });
+        // gola alta (duas abas em pé dos lados do pescoço, forro por dentro)
+        for (const s of [-1, 1]) {
+          const X = (x) => cx + s * x;
+          pc.peca(P((p) => { p.moveTo(X(0.13 * k), neckY + 0.06); p.lineTo(X(0.3 * k), neckY - 0.18); p.quadraticCurveTo(X(0.36 * k), neckY - 0.02, X(0.32 * k), neckY + 0.08); p.closePath(); }), cor, { sombra: 0.08 });
+          pc.preencher(P((p) => { p.moveTo(X(0.16 * k), neckY + 0.04); p.lineTo(X(0.29 * k), neckY - 0.14); p.lineTo(X(0.28 * k), neckY + 0.02); p.closePath(); }), forro.base);
+          trim(pc, P((p) => { p.moveTo(X(0.3 * k), neckY - 0.18); p.quadraticCurveTo(X(0.36 * k), neckY - 0.02, X(0.32 * k), neckY + 0.08); }), 0.03);
+        }
+        // broche com gema na capa
+        pc.peca(P((p) => p.arc(cx, neckY + 0.2, 0.055, 0, Math.PI * 2)), bord, { sombra: 0.05 });
+        runaBrilho(pc, cx, neckY + 0.2, 0.028);
+      });
+    }
+    // Colete do Guardião (épico, Téo): colete de couro aberto com cordão, placas de aço no peito, gola de pelo.
+    if (eq.colete) {
+      const cor = T(eq.colete.cor || 'couroGuardiao'), aco = T(eq.colete.placas || 'acoGuardiao'), pelo = T(eq.colete.pelo || 'peloGuardiao');
+      const placa = (pc, x, y, w, h) => { const f0 = P((p) => p.roundRect(x - w / 2, y - h / 2, w, h, 0.035)); pc.peca(f0, aco, { sombra: 0.18 }); if (pc.modo !== 'contorno') { pc.preencher(P((p) => p.roundRect(x - w / 2 + 0.02, y - h / 2 + 0.015, w - 0.04, h * 0.25, 0.02)), 'rgba(255,255,255,0.35)'); for (const sx of [-1, 1]) pc.preencher(P((p) => p.arc(x + sx * (w / 2 - 0.03), y + h / 2 - 0.03, 0.015, 0, Math.PI * 2)), '#E8D9A8'); } };
+      const pelagem = (pc, x0, x1, y, alt) => { const f0 = P((p) => { p.moveTo(x0, y); const n = 9; for (let i = 0; i <= n; i++) { const x = x0 + (x1 - x0) * (i / n); p.lineTo(x, y - alt * (i % 2 ? 1.25 : 0.65)); } p.lineTo(x1, y + alt * 0.5); for (let i = n; i >= 0; i--) { const x = x0 + (x1 - x0) * (i / n); p.lineTo(x + 0.01, y + alt * (i % 2 ? 0.9 : 0.55)); } p.closePath(); }); pc.peca(f0, pelo, { sombra: 0.12 }); if (pc.modo !== 'contorno') for (let i = 0; i < 9; i++) { const x = x0 + (x1 - x0) * ((i + 0.5) / 9); pc.linha(P((p) => { p.moveTo(x, y + alt * 0.3); p.lineTo(x + 0.015, y - alt * 0.6); }), 0.012, 'rgba(255,235,200,0.45)'); } };
+      depois('tronco', (pc) => {
+        const y0 = shoulderY + 0.02, y1 = hemY - 0.08 * f;
+        if (perfil) { const forma = P((p) => p.roundRect(-d * 0.9, y0, d * 1.9, y1 - y0, 0.05)); pc.peca(forma, cor, { sombra: 0.14 }); placa(pc, d * 0.35, y0 + 0.3, 0.26, 0.2); placa(pc, d * 0.35, y0 + 0.52, 0.26, 0.2); pelagem(pc, -d - 0.05, d + 0.08, neckY + 0.08, 0.09); return; }
+        const a = (hw + 0.035) * k;
+        if (costas) { const forma = P((p) => p.roundRect(cx - a, y0, 2 * a, y1 - y0, 0.06)); pc.peca(forma, cor, { sombra: 0.14 }); costura(pc, P((p) => { p.moveTo(cx, y0 + 0.08); p.lineTo(cx, y1 - 0.05); })); pelagem(pc, cx - a - 0.06, cx + a + 0.06, neckY + 0.08, 0.1); return; }
+        for (const s of [-1, 1]) {
+          const X = (x) => cx + s * x;
+          const fm = P((p) => { p.moveTo(X(0.12 * k), neckY + 0.06); p.lineTo(X(a), y0); p.lineTo(X(a + 0.02), y1); p.quadraticCurveTo(X(a * 0.5), y1 + 0.04, X(0.04), y1 - 0.02); p.lineTo(X(0.04), y0 + 0.16); p.closePath(); });
+          pc.peca(fm, cor, { sombra: 0.14 });
+          costura(pc, P((p) => { p.moveTo(X(a - 0.04), y0 + 0.06); p.lineTo(X(a - 0.03), y1 - 0.04); p.moveTo(X(0.08), y0 + 0.18); p.lineTo(X(0.08), y1 - 0.05); p.quadraticCurveTo(X(a * 0.5), y1 - 0.0, X(a - 0.03), y1 - 0.04); }));
+          // placas de aço sobrepostas em duas fileiras
+          for (let i = 0; i < 3; i++) placa(pc, X((0.19 + 0.015 * i) * k), y0 + 0.24 + i * 0.17, 0.2 * k, 0.15);
+        }
+        // cordão cruzado na abertura
+        if (pc.modo !== 'contorno') for (let i = 0; i < 4; i++) { const y = y0 + 0.22 + i * 0.13; pc.linha(P((p) => { p.moveTo(cx - 0.05, y); p.lineTo(cx + 0.05, y + 0.08); p.moveTo(cx + 0.05, y); p.lineTo(cx - 0.05, y + 0.08); }), 0.02, '#D8C39A'); }
+        // gola de pelo nos ombros
+        pelagem(pc, cx - a - 0.1, cx + a + 0.1, neckY + 0.12, 0.15);
+        pelagem(pc, cx - a - 0.02, cx + a + 0.02, neckY + 0.16, 0.1);
+      });
+    }
     return def;
   };
 })();
