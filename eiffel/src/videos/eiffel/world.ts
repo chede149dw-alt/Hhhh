@@ -16,7 +16,7 @@ const discTex = () => ctex("sunDisc", 128, 128, (g) => {
   const gr = g.createRadialGradient(64, 64, 58, 64, 64, 64); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(1, "rgba(255,255,255,0)");
   g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
 });
-const SUN_SHOT: Record<number, { az?: number; el?: number }> = { 1: { az: 120 }, 2: { az: 110 }, 3: { az: 115 }, 4: { az: 125 }, 5: { az: 30, el: 8 }, 6: { az: 120 }, 7: { az: 115 }, 8: { az: 120 }, 9: { az: 125 } };
+const SUN_SHOT: Record<number, { az?: number; el?: number }> = { 1: { az: 120 }, 2: { az: 110 }, 3: { az: 115 }, 4: { az: 125 }, 5: { az: 30, el: 8 }, 6: { az: 120 }, 7: { az: 115 }, 8: { az: 120 }, 9: { az: 125 }, 10: { az: 125, el: 40 } };
 
 /** horizontal quad facing up at height y covering x0..x1, z0..z1 */
 const quadUp = (x0: number, x1: number, z0: number, z1: number, u: number, v: number, y = D0) => {

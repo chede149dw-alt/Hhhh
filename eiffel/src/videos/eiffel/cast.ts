@@ -321,6 +321,16 @@ const riflemen = (cam: CamInfo, t: number, out: Stage) => {
   }
 };
 
+/** profile picture: mason, dad with the kid on his shoulders, tourist and artist, all happy */
+const poster = (cam: CamInfo, t: number, out: Stage) => {
+  const z = -228.2;
+  const add = (who: Who, x: number, zz: number, fo: FrontOpts, sc = 1, y = D0) => { out.places.push(person(cam, who, x, y, zz, { side: false, mirror: false }, fo, {}, sc)); if (y === D0) blob(out, x, D0, zz, sc); };
+  add({ i: 400, o: MASON(0), okey: "mason0" }, -1.05, z + 0.25, { mode: "stand", expr: "grin", prop: ["hammer", 0], look: 1 });
+  add({ i: 700, o: PARENT, okey: "dad" }, 0, z, { mode: "stand", expr: "grin", look: 1 });
+  add({ i: 701, o: KID, okey: "kid" }, 0.05, z + 0.12, { mode: "stand", expr: "laugh", wave: 1, look: 1 }, 0.72, D0 + 1.3);
+  add({ i: 301, o: MODERN(1), okey: "m1" }, 1.05, z + 0.25, { mode: "stand", expr: "laugh", wave: 1, look: 1 });
+};
+
 /** radio waves leaving the antenna tip */
 const rings = (id: number, t: number, out: Stage) => {
   const r = towerState(id, t).rings;
@@ -344,6 +354,7 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
   if (s.crowd === "artists") artists(cam, t, out);
   if (s.crowd === "kid") kidOnDad(cam, t, out);
   if (s.crowd === "soldiers") riflemen(cam, t, out);
+  if (s.crowd === "poster") poster(cam, t, out);
   rings(id, t, out);
   return out;
 };

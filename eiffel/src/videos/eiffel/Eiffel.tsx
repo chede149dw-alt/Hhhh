@@ -8,7 +8,7 @@
 // Place changes crossfade by stacking a second canvas for the fade frames; the hook ends on a 4-frame white flash.
 import React, { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
-import { AbsoluteFill, continueRender, delayRender, getInputProps, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Freeze, continueRender, delayRender, getInputProps, useCurrentFrame } from "remotion";
 import { ThreeCanvas } from "@remotion/three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { BlendFunction, BloomEffect, EffectComposer, EffectPass, RenderPass, ToneMappingEffect, ToneMappingMode } from "postprocessing";
@@ -82,7 +82,7 @@ const Inner: React.FC<{ id: number; kit: Kit }> = ({ id, kit }) => {
   target.copy(world.update(id, f, cam, scene));
   noInkFallback(world.root);
   // thin-lens focus: distance along the view axis to the shot's focus point (default: the camera's look target)
-  const d = dofAt(f);
+  const d = id === 10 ? { cInf: 5, focus: () => [0, 1.6, -228] as [number, number, number] } : dofAt(f);
   cam.getWorldDirection(fwd);
   if (d.focus) fpt.set(...d.focus(f)); else fpt.copy(target);
   fx.lens.focus = Math.max(0.3, fpt.sub(cam.position).dot(fwd));
@@ -116,6 +116,17 @@ export const EiffelShort: React.FC = () => {
     <AbsoluteFill style={{ background: "#cfe3f2" }}>
       {layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} kit={kit} alpha={l.alpha} />)}
       {flash > 0 && <AbsoluteFill style={{ background: "#ffffff", opacity: flash }} />}
+    </AbsoluteFill>
+  );
+};
+
+/** channel profile picture: shot 10 frozen on one frame (crop the centre square) */
+export const EiffelProfile: React.FC = () => {
+  const kit = useKit();
+  if (!kit) return null;
+  return (
+    <AbsoluteFill style={{ background: "#cfe3f2" }}>
+      <Freeze frame={TOTAL}><ShotView id={10} kit={kit} alpha={1} /></Freeze>
     </AbsoluteFill>
   );
 };

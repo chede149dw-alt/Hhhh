@@ -24,7 +24,7 @@ export const T_SINK = T_HATE, T_WAR = T_ARMY, T_NOT = 30.0;
 
 // ---------------- shots ----------------
 export type Light = "day" | "golden";
-export type Crowd = "tourists" | "masons" | "artists" | "kid" | "soldiers" | "none" | "cheer";
+export type Crowd = "poster" | "tourists" | "masons" | "artists" | "kid" | "soldiers" | "none" | "cheer";
 export type ShotDef = { id: number; a: number; b: number; light: Light; crowd: Crowd };
 export const SHOTS: ShotDef[] = [
   { id: 1, a: 0, b: 60, light: "day", crowd: "tourists" },     // hook: today
@@ -36,6 +36,7 @@ export const SHOTS: ShotDef[] = [
   { id: 7, a: 702, b: 842, light: "day", crowd: "kid" },       // kid on dad's shoulders
   { id: 8, a: 842, b: 892, light: "day", crowd: "soldiers" },  // the army
   { id: 9, a: 892, b: TOTAL, light: "day", crowd: "cheer" },   // today: 6 million a year
+  { id: 10, a: TOTAL, b: TOTAL + 1, light: "day", crowd: "poster" }, // channel profile picture (not in the video)
 ];
 export const XFADE: Record<number, number> = { 2: 8, 5: 10, 6: 10, 9: 8 };
 export const FLASH_AT = 60;
@@ -67,6 +68,7 @@ export const towerState = (id: number, t: number): TowerState => {
     case 4: case 5: return { built: 999, antenna: 0, rings: -1 };
     case 6: return { built: 999, antenna: clamp01((t - T_ANTENNA + 0.07) / 0.35), rings: t >= T_RADIO ? t - T_RADIO : -1 };
     case 7: case 8: return { built: 999, antenna: 1, rings: t - 23.0 };
+    case 10: return { built: 999, antenna: 1, rings: 0.35 };
     default: return { built: 999, antenna: 1, rings: -1 };
   }
 };
@@ -128,6 +130,8 @@ const CAMS: Record<number, Key[]> = {
   // the army: riflemen march past, the tower sending behind them
   8: [{ f: 842, cut: true, s: (f) => dolly([-2, 2.0, -136], [2, 30, 0], f, 842, 0.002, { fov: 60 }) }],
   // today: cheering crowd
+  // profile picture: low and far back, the whole cast in front of the tower
+  10: [{ f: TOTAL, s: () => ({ pos: [0, 0.55, -232], look: [0, 0.55 + 230 * Math.tan(0.24), 0], fov: 62, roll: 0 }) }],
   9: [{ f: 884, s: (f) => dolly([-1.5, 1.6, -152], [1, 44, 0], f, 884, 0.0014, { fov: 60, roll: 0.02 }) }],
 };
 /** impact kicks: flip sign every frame, decay over 7 frames */
@@ -160,6 +164,7 @@ export const DOF: Dof[] = [
   { f: 780, dur: 30, cInf: 0 },
   { f: 842, cInf: 7, focus: () => [0, 1.5, -128] },
   { f: 892, cInf: 7, focus: () => [0, 1.5, -146] },
+  { f: TOTAL, cInf: 8, focus: () => [0, 1.6, -227] },
 ];
 export const dofAt = (f: number) => {
   let i = 0; while (i + 1 < DOF.length && f >= DOF[i + 1].f) i++;
