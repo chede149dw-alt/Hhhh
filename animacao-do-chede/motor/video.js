@@ -41,6 +41,8 @@ for (const p of roteiro.planos) {
   fs.renameSync(cortado, arq);
   p.fala.arquivo = arq;
   p.fala.dur = dur(arq);
+  // --sem-robo: fala sem voz final fica muda (só a legenda), no lugar da voz sintética
+  if (args.includes('--sem-robo') && !final) execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=mono', '-t', String(p.fala.dur), arq]);
 }
 
 // envelope de volume por quadro (sincronia labial)

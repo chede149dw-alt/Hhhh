@@ -811,14 +811,14 @@
       "id": "devolve",
       "voz": "narrador",
       "inicio": 39.472,
-      "fim": 41.432998,
+      "fim": 41.812396,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep03/final/devolve.wav"
     },
     {
       "id": "joelho",
       "voz": "narrador",
-      "inicio": 41.813,
-      "fim": 42.992093000000004,
+      "inicio": 41.912396,
+      "fim": 43.091489,
       "arquivo": "/home/user/Hhhh/animacao-do-chede/audio/nova/ep03/final/joelho.wav"
     },
     {
@@ -1586,7 +1586,7 @@
     },
     {
       "inicio": 39.472,
-      "fim": 40.095953909090916,
+      "fim": 40.216671454545455,
       "palavras": [
         {
           "texto": "E",
@@ -1596,86 +1596,86 @@
         {
           "texto": "A",
           "destaque": false,
-          "inicio": 39.60570440909091
+          "inicio": 39.631572454545456
         },
         {
           "texto": "ESPADA",
           "destaque": false,
-          "inicio": 39.73940881818182
+          "inicio": 39.79114490909091
         }
       ]
     },
     {
-      "inicio": 40.095953909090916,
-      "fim": 40.94274850000001,
+      "inicio": 40.216671454545455,
+      "fim": 41.227297,
       "palavras": [
         {
           "texto": "DEVOLVIA",
           "destaque": false,
-          "inicio": 40.095953909090916
+          "inicio": 40.216671454545455
         },
         {
           "texto": "A",
           "destaque": false,
-          "inicio": 40.54163527272728
+          "inicio": 40.74857963636364
         },
         {
           "texto": "VIDA",
           "destaque": true,
-          "inicio": 40.67533968181819
+          "inicio": 40.90815209090909
         }
       ]
     },
     {
-      "inicio": 40.94274850000001,
-      "fim": 41.58299800000001,
+      "inicio": 41.227297,
+      "fim": 41.912396,
       "palavras": [
         {
           "texto": "PRA",
           "destaque": false,
-          "inicio": 40.94274850000001
+          "inicio": 41.227297
         },
         {
           "texto": "ELE.",
           "destaque": false,
-          "inicio": 41.16558918181819
+          "inicio": 41.49325109090909
         }
       ]
     },
     {
-      "inicio": 41.813,
-      "fim": 42.424381555555556,
+      "inicio": 41.912396,
+      "fim": 42.523777555555554,
       "palavras": [
         {
           "texto": "O",
           "destaque": false,
-          "inicio": 41.813
+          "inicio": 41.912396
         },
         {
           "texto": "TÉO",
           "destaque": false,
-          "inicio": 41.94401033333334
+          "inicio": 42.04340633333334
         },
         {
           "texto": "CAIU",
           "destaque": false,
-          "inicio": 42.16236088888889
+          "inicio": 42.26175688888889
         }
       ]
     },
     {
-      "inicio": 42.424381555555556,
-      "fim": 43.142093,
+      "inicio": 42.523777555555554,
+      "fim": 43.241489,
       "palavras": [
         {
           "texto": "DE",
           "destaque": false,
-          "inicio": 42.424381555555556
+          "inicio": 42.523777555555554
         },
         {
           "texto": "JOELHO.",
           "destaque": true,
-          "inicio": 42.599062
+          "inicio": 42.698458
         }
       ]
     },
