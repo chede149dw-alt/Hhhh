@@ -44,7 +44,7 @@
         "ROUBA",
         "VIDA."
       ],
-      "duracao": 4.0,
+      "duracao": 4,
       "sfx": [
         {
           "tipo": "arquivo",
@@ -85,7 +85,8 @@
           "em": 1.0,
           "volume": 0.2
         }
-      ]
+      ],
+      "duracao": 2.164
     },
     {
       "id": "choque",
@@ -209,7 +210,8 @@
           "em": 1.7,
           "volume": 0.22
         }
-      ]
+      ],
+      "duracao": 2.012
     },
     {
       "id": "corrente",
@@ -373,7 +375,8 @@
           "em": 1.3,
           "volume": 0.2
         }
-      ]
+      ],
+      "duracao": 2.872
     },
     {
       "id": "muro",
@@ -434,7 +437,8 @@
           "em": 1.7,
           "volume": 0.22
         }
-      ]
+      ],
+      "duracao": 2.614
     },
     {
       "id": "devolve",
@@ -452,7 +456,8 @@
           "em": 0.3,
           "volume": 0.25
         }
-      ]
+      ],
+      "duracao": 2.341
     },
     {
       "id": "joelho",
@@ -527,7 +532,8 @@
           "em": 0.45,
           "volume": 0.2
         }
-      ]
+      ],
+      "duracao": 2.087
     },
     {
       "id": "metal",
@@ -715,7 +721,8 @@
           "em": 1.3,
           "volume": 0.18
         }
-      ]
+      ],
+      "duracao": 2.034
     },
     {
       "id": "rasgado",
@@ -759,7 +766,8 @@
           "em": 1.5,
           "volume": 0.2
         }
-      ]
+      ],
+      "duracao": 2.616
     },
     {
       "id": "premio",
@@ -784,7 +792,8 @@
           "em": 1.2,
           "volume": 0.22
         }
-      ]
+      ],
+      "duracao": 2.382
     },
     {
       "id": "aluguel",
@@ -854,7 +863,8 @@
           "em": 0.25,
           "volume": 0.15
         }
-      ]
+      ],
+      "duracao": 2.0
     },
     {
       "id": "parte",
@@ -869,7 +879,8 @@
           "em": 0.3,
           "volume": 0.2
         }
-      ]
+      ],
+      "duracao": 2.071
     }
   ],
   "trilha": {

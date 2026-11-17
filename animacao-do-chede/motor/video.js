@@ -1,5 +1,6 @@
 // Monta um episódio: voz, linha do tempo, legendas, quadros e MP4 final.
 // Uso: node motor/video.js <roteiro.json> <planos.js> <saida.mp4> [--previa] [--workers 4] [--blocos 60]
+//   --som-de <video.mp4>: não renderiza a imagem; só refaz o som (ex.: vozes novas) por cima do vídeo dado.
 //   --blocos: divide o render em pedaços salvos em disco; se cair, rodar o mesmo comando continua de onde parou.
 //   --previa: voz sintética gratuita (espeak-ng), só para conferir o tempo das cenas.
 //   sem --previa: usa a voz final de cada fala (fala.voz_final.arquivo, relativo a audio/<serie>/<ep>/).
@@ -11,7 +12,7 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 const opt = (n, p) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : p; };
-const [roteiroArq, planosArq, saida] = args.filter((a, i) => !a.startsWith('--') && !['--workers', '--teste', '--momento'].includes(args[i - 1]));
+const [roteiroArq, planosArq, saida] = args.filter((a, i) => !a.startsWith('--') && !['--workers', '--teste', '--momento', '--blocos', '--som-de'].includes(args[i - 1]));
 const WORKERS = +opt('workers', 4);
 const FPS = 30;
 const raiz = path.resolve(__dirname, '..');
@@ -216,6 +217,12 @@ async function teste(png) {
 
 (async () => {
   if (opt('teste')) { await teste(opt('teste')); return; }
+  // --som-de video.mp4: só troca o som (vozes novas, efeitos, trilha) usando a imagem de um vídeo já renderizado.
+  // Funciona quando todos os planos têm "duracao" fixa no roteiro (a linha do tempo não muda com a voz nova).
+  if (opt('som-de')) {
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', opt('som-de'), '-i', audioFinal, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', saida]);
+    console.log('Pronto (só o som trocado):', saida); return;
+  }
   const t0 = Date.now();
   const browser = await chromium.launch();
   // blocos de um render antigo com outro tamanho não servem: apaga
