@@ -466,7 +466,10 @@
       "id": "joelho",
       "fala": {
         "texto": "O Téo caiu de joelho.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/joelho.wav"
+        }
       },
       "destaque": [
         "JOELHO."
@@ -491,7 +494,10 @@
       "id": "raio",
       "fala": {
         "texto": "O Davi mandou o raio mais forte que tinha...",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/raio.wav"
+        }
       },
       "destaque": [
         "MAIS",
@@ -517,7 +523,10 @@
       "id": "bloqueia",
       "fala": {
         "texto": "...e o líder bloqueou com a espada.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/bloqueia.wav"
+        }
       },
       "destaque": [
         "BLOQUEOU"
@@ -542,7 +551,10 @@
       "id": "metal",
       "fala": {
         "texto": "Foi aí que o Davi percebeu: a lâmina era de metal.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/metal.wav"
+        }
       },
       "destaque": [
         "METAL."
@@ -567,7 +579,10 @@
       "id": "caminho",
       "fala": {
         "texto": "E a eletricidade sempre escolhe o caminho mais fácil.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/caminho.wav"
+        }
       },
       "destaque": [
         "MAIS",
@@ -593,7 +608,10 @@
       "id": "solta",
       "fala": {
         "texto": "No ar, ela quase não passa. No metal, ela corre solta.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/solta.wav"
+        }
       },
       "destaque": [
         "CORRE",
@@ -613,7 +631,10 @@
       "id": "plano",
       "fala": {
         "texto": "Então ele não mirou no líder... mirou na espada.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/plano.wav"
+        }
       },
       "destaque": [
         "ESPADA."
@@ -632,7 +653,10 @@
       "id": "final",
       "fala": {
         "texto": "O raio atravessou a espada... e o líder junto.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/final.wav"
+        }
       },
       "destaque": [
         "JUNTO."
@@ -663,7 +687,10 @@
       "id": "fugiram",
       "fala": {
         "texto": "Os ladrões fugiram... e deixaram tudo pra trás.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/fugiram.wav"
+        }
       },
       "destaque": [
         "TUDO"
@@ -700,7 +727,10 @@
       "id": "loot",
       "fala": {
         "texto": "Poção, moedas, botas...",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/loot.wav"
+        }
       },
       "destaque": [
         "BOTAS..."
@@ -731,7 +761,10 @@
       "id": "rasgado",
       "fala": {
         "texto": "A transformação tinha rasgado a roupa do Téo...",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/rasgado.wav"
+        }
       },
       "destaque": [
         "RASGADO"
@@ -750,7 +783,10 @@
       "id": "roupa",
       "fala": {
         "texto": "...mas no drop tinha roupa nova pros dois.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/roupa.wav"
+        }
       },
       "destaque": [
         "ROUPA",
@@ -776,7 +812,10 @@
       "id": "premio",
       "fala": {
         "texto": "E a última carta era a Lâmina Rubra.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/premio.wav"
+        }
       },
       "destaque": [
         "LÂMINA",
@@ -802,7 +841,10 @@
       "id": "aluguel",
       "fala": {
         "texto": "Trezentos e quarenta e sete reais. Quase um terço do aluguel de uma vez só.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/aluguel.wav"
+        }
       },
       "destaque": [
         "UM",
@@ -834,7 +876,10 @@
       "id": "aviso",
       "fala": {
         "texto": "Só que, no mesmo segundo, todo jogador de Valdor recebeu um aviso...",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/aviso.wav"
+        }
       },
       "destaque": [
         "AVISO..."
@@ -853,7 +898,10 @@
       "id": "rosto",
       "fala": {
         "texto": "...com o rosto do Davi.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/rosto.wav"
+        }
       },
       "destaque": [
         "ROSTO",
@@ -873,7 +921,10 @@
       "id": "parte",
       "fala": {
         "texto": "Segue pra ver a parte quatro!",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/parte.wav"
+        }
       },
       "sfx": [
         {
