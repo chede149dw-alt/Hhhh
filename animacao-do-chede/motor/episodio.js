@@ -185,6 +185,16 @@
     if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
     let pf = o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida);
     if (pf._plantar) pf = plantar(def, pf);
+    // respiração: o peito enche e esvazia (o.respira = força, 0 desliga; o.ofegante = respiração rápida depois do esforço)
+    const resp = o.respira === undefined ? (o.parado || pf._semRespirar ? 0 : 1) : o.respira;
+    if (resp && !pf._escala_tronco) {
+      let semente = o.semente || 0; for (const ch of (item.fabrica || '') + JSON.stringify(item.opcoes || {})) semente = (semente * 31 + ch.charCodeAt(0)) % 997;
+      const per = o.ofegante ? 1.3 : 3.4, forca = resp * (o.ofegante ? 1.5 : 1);
+      const fase = ((TL.t + semente * 0.013) / per) % 1;
+      // inspira mais rápido que expira (como gente): sobe em 40% do ciclo, desce em 60%
+      const b = fase < 0.4 ? Math.sin((fase / 0.4) * Math.PI / 2) : Math.cos(((fase - 0.4) / 0.6) * Math.PI / 2);
+      pf = { ...pf, _escala_tronco: [1 + 0.032 * b * forca, 1 + 0.022 * b * forca] };
+    }
     rig.usarPose(pf);
     window.TEMPO_PERSONAGEM = TL.t; window.MOVIMENTO_PERSONAGEM = andando ? 1 : (pf._vento || 0); // capa/casaco se mexendo
     const exprBase = typeof item.expressao === 'object' ? item.expressao : (def.expressoes[item.expressao || (pdef && pdef.expressao) || 'neutro']);

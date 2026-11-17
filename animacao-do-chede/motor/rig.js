@@ -107,7 +107,10 @@
         const [dx, dy] = (!p.pai && this.pose._desloca) || [0, 0];
         // _dy_<peça>: desloca o pivô na vertical (ex.: erguer a perna no passo visto de costas)
         const ergue = this.pose['_dy_' + p.nome] || 0;
-        m[p.nome] = pai.translate(p.pivo[0] + dx, p.pivo[1] + dy + ergue).rotate(this.pose[p.nome] || 0);
+        // _escala_<peça> = [sx, sy]: a peça é desenhada maior/menor (respiração no tronco); os filhos acompanham a
+        // borda da peça (ombros sobem com o peito) sem esticar
+        const ep = (p.pai && this.pose['_escala_' + p.pai]) || [1, 1];
+        m[p.nome] = pai.translate(p.pivo[0] * ep[0] + dx, p.pivo[1] * ep[1] + dy + ergue).rotate(this.pose[p.nome] || 0);
         return m[p.nome];
       };
       for (const p of this.def.partes) calc(p);
@@ -147,7 +150,9 @@
       const ordem = [...this.def.partes].sort((a, b) => a.z - b.z);
       const feitos = new Set();
       const desenharPeca = (p, modo) => {
-        const md = p.espelho === -1 ? m[p.nome].scale(-1, 1) : m[p.nome];
+        const esc = this.pose['_escala_' + p.nome];
+        const mb = esc ? m[p.nome].scale(esc[0], esc[1]) : m[p.nome];
+        const md = p.espelho === -1 ? mb.scale(-1, 1) : mb;
         ctx.save();
         ctx.setTransform(md);
         p.desenhar(criarPincel(ctx, md, linha, modo), this);
