@@ -1,0 +1,54 @@
+VALDOR PARTE 3 — FALAS PARA GERAR NO ELEVENLABS
+Voz: Witalo Guimarães   |   Modelo: Eleven v4
+Gere uma por vez, baixe, e mande os áudios na mesma ordem.
+
+02  (joelho)
+O Téo caiu de joelho.
+
+03  (raio)
+O Davi mandou o raio mais forte que tinha...
+
+04  (bloqueia)
+...e o líder bloqueou com a espada.
+
+05  (metal)
+Foi aí que o Davi percebeu: a lâmina era de metal.
+
+06  (caminho)
+E a eletricidade sempre escolhe o caminho mais fácil.
+
+07  (solta)
+No ar, ela quase não passa. No metal, ela corre solta.
+
+08  (plano)
+Então ele não mirou no líder... mirou na espada.
+
+09  (final)
+O raio atravessou a espada... e o líder junto.
+
+10  (fugiram)
+Os ladrões fugiram... e deixaram tudo pra trás.
+
+11  (loot)
+Poção, moedas, botas...
+
+12  (rasgado)
+A transformação tinha rasgado a roupa do Téo...
+
+13  (roupa)
+...mas no drop tinha roupa nova pros dois.
+
+14  (premio)
+E a última carta era a Lâmina Rubra.
+
+15  (aluguel)
+Trezentos e quarenta e sete reais. Quase um terço do aluguel de uma vez só.
+
+16  (aviso)
+Só que, no mesmo segundo, todo jogador de Valdor recebeu um aviso...
+
+17  (rosto)
+...com o rosto do Davi.
+
+18  (parte)
+Segue pra ver a parte quatro!
