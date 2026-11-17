@@ -444,7 +444,10 @@
       "id": "devolve",
       "fala": {
         "texto": "E a espada devolvia a vida pra ele.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/devolve.wav"
+        }
       },
       "destaque": [
         "VIDA"
