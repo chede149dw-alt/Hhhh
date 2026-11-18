@@ -461,6 +461,29 @@
     ctx.fillStyle = 'rgba(70,40,20,0.6)'; ctx.beginPath(); ctx.ellipse(q.x, q.y, 0.7 * hp, 0.08 * hp, 0, 0, TAU); ctx.fill();
     ctx.restore();
   }
+  // raízes enroladas no corpo: cada raiz sobe do chão e dá voltas em volta das pernas, do tronco e dos braços
+  function raizesNoCorpo(ctx, rig, k, t) {
+    if (!rig || !rig.pontoMundo || k <= 0) return;
+    const e = rig.escalaPx, partes = [['canela_d', 0, 1, 0], ['coxa_d', 0, 1, 0.12], ['canela_e', 0, 1, 0.05], ['coxa_e', 0, 1, 0.17], ['tronco', -0.05, -1.1, 0.3], ['antebraco_d', 0, 0.9, 0.45], ['antebraco_e', 0, 0.9, 0.5]];
+    ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    partes.forEach(([nome, y0, y1, atraso], j) => {
+      const kk = Math.max(0, Math.min(1, (k - atraso) / 0.45)); if (kk <= 0) return;
+      const n = 22, larg = (nome === 'tronco' ? 0.3 : 0.12) * e, voltas = nome === 'tronco' ? 2.2 : 2.8, pts = [];
+      for (let i = 0; i <= n * kk; i++) { const f = i / n, y = y0 + (y1 - y0) * f, a = rig.pontoMundo(nome, [0, y]), b = rig.pontoMundo(nome, [0.1, y]), nx = b.x - a.x, ny = b.y - a.y, nl = Math.hypot(nx, ny) || 1, ang = f * voltas * Math.PI * 2 + j; pts.push([a.x + (nx / nl) * Math.sin(ang) * larg, a.y + (ny / nl) * Math.sin(ang) * larg, Math.cos(ang)]); }
+      // parte de trás da volta (mais escura e fina) e parte da frente (grossa, com brilho)
+      for (const frente of [false, true]) for (let i = 1; i < pts.length; i++) {
+        const [x0, y0p, z0] = pts[i - 1], [x1, y1p, z1] = pts[i]; if ((z0 + z1 > 0) !== frente) continue;
+        ctx.strokeStyle = frente ? '#5A3A1E' : '#2E1C10'; ctx.lineWidth = (frente ? 0.075 : 0.05) * e; ctx.beginPath(); ctx.moveTo(x0, y0p); ctx.lineTo(x1, y1p); ctx.stroke();
+        if (frente) { ctx.strokeStyle = 'rgba(190,140,80,0.6)'; ctx.lineWidth = 0.018 * e; ctx.beginPath(); ctx.moveTo(x0, y0p - 0.02 * e); ctx.lineTo(x1, y1p - 0.02 * e); ctx.stroke(); }
+      }
+      // folhas brotando nas raízes
+      for (let i = 3; i < pts.length; i += 6) if (pts[i][2] > 0) { ctx.fillStyle = '#5ACF6A'; ctx.beginPath(); ctx.ellipse(pts[i][0] + 0.04 * e, pts[i][1], 0.05 * e, 0.022 * e, 0.6 + j, 0, TAU); ctx.fill(); ctx.strokeStyle = '#2E7A3A'; ctx.lineWidth = 0.006 * e; ctx.stroke(); }
+    });
+    // raízes grossas saindo do chão em volta dos pés
+    const pe = rig.pontoMundo('pe_d', [0, 0.05]), pe2 = rig.pontoMundo('pe_e', [0, 0.05]), cx = (pe.x + pe2.x) / 2, cy = Math.max(pe.y, pe2.y);
+    for (let i = 0; i < 6; i++) { const lado = i % 2 ? 1 : -1, x0 = cx + lado * (0.25 + 0.12 * i) * e * Math.min(1, k * 2); ctx.strokeStyle = '#4A2E18'; ctx.lineWidth = 0.09 * e * (1 - i * 0.1); ctx.beginPath(); ctx.moveTo(x0, cy + 0.02 * e); ctx.quadraticCurveTo((x0 + cx) / 2, cy - 0.18 * e * Math.min(1, k * 2), cx + lado * 0.08 * e, cy - 0.05 * e); ctx.stroke(); }
+    ctx.restore();
+  }
   // meteoro (rocha em chamas com rastro)
   function meteoro(ctx, x, y, s, t) {
     ctx.save(); ctx.globalCompositeOperation = 'screen';
@@ -482,6 +505,15 @@
   // relógio da recompensa
   function relogio(ctx, x, y, txt, k = 1, tam = 64) { ctx.save(); ctx.globalAlpha = k; ctx.fillStyle = 'rgba(40,6,10,0.85)'; ctx.strokeStyle = '#FF5A4A'; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(x - tam * 3.1, y - tam * 0.85, tam * 6.2, tam * 1.5, 18); ctx.fill(); ctx.stroke(); ctx.font = `900 ${tam}px Inter`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#FFD0C8'; ctx.fillText('⏱ ' + txt, x, y); ctx.restore(); }
   const D0 = [-0.55, 5.2], T0P = [0.6, 5.5];
+  // conversa andando: câmera de costas na frente deles, fechada em quem fala (boca mexendo com a voz)
+  function papo(ctx, u, d, api, quem, eD, eT, o = {}) {
+    const anda = o.para ? Math.max(0, 0.4 - u * 0.5) : 1, z = 0.4 + u * 0.75 * anda, dav = quem === 'davi';
+    const cam = camDia(api, { x: dav ? 0.32 : -0.38, y: 1.6, z: z + 1.75, cy: 740, f: 1450, yaw: Math.PI });
+    dia(ctx, api, cam, [
+      { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: eD, voz: 'davi' }, 0.45, z, 1.76, o.para ? { rumo: Math.PI - 0.5 } : { caminharFrontal: api.t * 1.25, rumo: Math.PI }) },
+      { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: eT, voz: 'teo' }, -0.5, z + 0.1, 1.8, { caminharFrontal: api.t * 1.25 + 0.5, rumo: Math.PI }) },
+    ], { forca: 0.3, bokeh: 6 });
+  }
   const borda = (z, lado) => V().canParede(z, lado, V().CAN_ALT);
 
   window.PLANOS = {
@@ -526,7 +558,7 @@
     // 3c) Téo olhando as mãos: "De noite, quem manda é a fera"
     maos(ctx, u, d, api) {
       const cam = camDia(api, { x: -0.2, y: 1.55, z: 2.3 + u * 0.3, cy: 820, f: 1200 });
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_d: 10, antebraco_d: -115, braco_e: -10, antebraco_e: 115, cabeca: 14, tronco: 4 }, expressao: expr('preocupado', { olhar: [0, 0.012] }) }, 0.1, 5.2, 1.8, { rumo: 0.15 }) }], { forca: 0.4 });
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_d: 10, antebraco_d: -115, braco_e: -10, antebraco_e: 115, cabeca: 14, tronco: 4 }, expressao: expr('preocupado', { olhar: [0, 0.012] }), voz: 'teo' }, 0.1, 5.2, 1.8, { rumo: 0.15 }) }], { forca: 0.4 });
       if (u > 0.5) { ctx.save(); ctx.fillStyle = `rgba(160,20,20,${0.18 * Math.sin(api.t * 6) ** 2})`; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     },
     // 3d) os dois rindo, o Davi empurrando o ombro do Téo
@@ -534,7 +566,7 @@
       const cam = camDia(api, { x: 0, y: 1.5, z: 2.6, cy: 860, f: 1150 });
       dia(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_e: -75, antebraco_e: -10, braco_d: 10, antebraco_d: -10 }, expressao: 'feliz' }, -0.45, 5.3, 1.76, { olhaPara: [0.5, 5.4] }) },
-        { f: () => api.personagem3d(cam, { ...TEOG, pose: { tronco: -8, cabeca: -10, braco_d: 20, antebraco_d: -40 }, expressao: 'feliz' }, 0.45, 5.4, 1.8, { olhaPara: [-0.5, 5.3] }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: { tronco: -8, cabeca: -10, braco_d: 20, antebraco_d: -40 }, expressao: 'rindo', voz: 'teo' }, 0.45, 5.4, 1.8, { olhaPara: [-0.5, 5.3] }) },
       ], { forca: 0.4 });
     },
     // 4) a espada não pode ser vendida + relógio 24h
@@ -641,14 +673,13 @@
     },
     // 10b) raízes anciãs prendendo o cavaleiro
     raizes(ctx, u, d, api) {
-      const cam = camRuina(api, { x: -0.3, y: 1.3, z: 1.2, cy: 900, f: 950 });
+      const cam = camRuina(api, { x: -0.4, y: 1.35, z: 1.4, cy: 900, f: 900 });
       window.ARMA_ANG = { martelo: 30 };
       ruina(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...GIG, pose: { braco_d: -30 - 20 * Math.sin(api.t * 6), antebraco_d: -20, braco_e: 30, antebraco_e: -30, tronco: 10 + 3 * Math.sin(api.t * 8), coxa_d: 10, coxa_e: -10 }, expressao: 'raiva' }, 0.2, 6.2, 2.6, { rumo: 0, luz: LUZ_TOCHA }) },
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { tronco: 25, braco_d: 20, antebraco_d: -20, braco_e: -20, antebraco_e: 20, coxa_d: -40, canela_d: 70, coxa_e: 30, canela_e: 30, _plantar: true }, expressao: 'determinado' }, -0.9, 4.0, 1.76, { olhaPara: [0.2, 6.2], luz: LUZ_TOCHA }) },
+        { f: () => { const rg = api.personagem3d(cam, { ...GIG, pose: { braco_d: -30 - 20 * Math.sin(api.t * 6), antebraco_d: -20, braco_e: 30, antebraco_e: -30, tronco: 10 + 3 * Math.sin(api.t * 8), coxa_d: 10, coxa_e: -10 }, expressao: 'raiva' }, 0.3, 6.6, 2.6, { rumo: 0, luz: LUZ_TOCHA }); raizesNoCorpo(ctx, rg, api.fase(0.05, 0.75), api.t); return rg; } },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { tronco: 25, braco_d: 20, antebraco_d: -20, braco_e: -20, antebraco_e: 20, coxa_d: -40, canela_d: 70, coxa_e: 30, canela_e: 30, _plantar: true }, expressao: 'determinado' }, -1.25, 4.4, 1.76, { olhaPara: [0.3, 6.6], luz: LUZ_TOCHA }) },
       ], { forca: 0.3, luzes: [{ x: 0.2, y: 0.5, z: 6.2, cor: '#7AF07A', forca: 1.0, raio: 6 }],
-        chaoEm: [0.2, 6.2], chao: () => { const q = cam.p(-0.9, 0.02, 4.0); Valdor.brilhoRadial(ctx, q.x, q.y, 200, VERDE, 0.7); },
-        depois: () => raizes(ctx, cam, 0.2, 6.2, 2.6, api.fase(0.1, 0.6), api.t) });
+        chaoEm: [-1.25, 4.4], chao: () => { const q = cam.p(-1.25, 0.02, 4.4); Valdor.brilhoRadial(ctx, q.x, q.y, 200, VERDE, 0.7); const g = cam.p(0.3, 0.02, 6.6); Valdor.brilhoRadial(ctx, g.x, g.y, 260, VERDE, 0.5 * api.fase(0, 0.4)); } });
       const k = api.fase(0, 0.25, 'volta'); zoomEm(ctx, 540, 320, k, () => api.texto('RAÍZES ANCIÃS', 540, 320, 80, { cor: '#8AF08A' }));
     },
     // 10c) meteoro: rompe o teto da ruína e cai em cima do cavaleiro preso
@@ -656,9 +687,9 @@
       const cam = camRuina(api, { x: -0.5, y: 1.0, z: 0.3, cy: 1250, f: 900 });
       const cai = Math.min(1, u / (d * 0.55)), kb = u - d * 0.55;
       window.ARMA_ANG = { martelo: 30 };
-      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...GIG, pose: kb > 0 ? { tronco: -40, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -30 } : { braco_d: -30, antebraco_d: -20, tronco: 10 }, expressao: kb > 0 ? 'medo' : 'espanto' }, 0.2, 6.8, 2.6, { rumo: 0, luz: LUZ_TOCHA }) }], { forca: 0.2,
+      ruina(ctx, api, cam, [{ f: () => { const rg = api.personagem3d(cam, { ...GIG, pose: kb > 0 ? { tronco: -40, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -30 } : { braco_d: -30, antebraco_d: -20, tronco: 10 }, expressao: kb > 0 ? 'medo' : 'espanto' }, 0.2, 6.8, 2.6, { rumo: 0, luz: LUZ_TOCHA }); if (kb < 0.1) raizesNoCorpo(ctx, rg, 1, api.t); return rg; } }], { forca: 0.2,
         luzes: [{ x: 0.2, y: 3, z: 6.8, cor: '#FF9A40', forca: kb > 0 ? 3 : 1.2 * cai, raio: 14 }],
-        depois: () => { raizes(ctx, cam, 0.2, 6.8, 2.6, 1, api.t); const alvo = cam.p(0.2, 1.3, 6.8), teto = cam.p(-3, 30, 14);
+        depois: () => { const alvo = cam.p(0.2, 1.3, 6.8), teto = cam.p(-3, 30, 14);
           ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createLinearGradient(teto.x, 0, alvo.x, alvo.y); g.addColorStop(0, `rgba(255,220,170,${0.5 * cai})`); g.addColorStop(1, 'rgba(255,200,150,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(teto.x - 120, 0); ctx.lineTo(teto.x + 120, 0); ctx.lineTo(alvo.x + 260, alvo.y + 200); ctx.lineTo(alvo.x - 260, alvo.y + 200); ctx.closePath(); ctx.fill(); ctx.restore();
           if (kb < 0) { meteoro(ctx, mix(teto.x, alvo.x, cai), mix(-200, alvo.y, cai * cai), 120, api.t); destrocos(ctx, cam, -0.8 + cai, 6 - cai * 4, 6.8, cai * 0.6, { n: 10, forca: 1, tam: 0.12, seed: 2, cor: '#3A3E4A' }); } else { explosao(ctx, alvo.x, alvo.y, 320, kb * 1.4, api.t); Combate.numero(ctx, alvo.x, alvo.y - 380, '-320', kb, 'critico'); } flash(ctx, kb); } });
       ctx.save(); ctx.fillStyle = `rgba(255,120,40,${0.12 * cai})`; ctx.fillRect(0, 0, W, H); ctx.restore();
@@ -693,6 +724,74 @@
       noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...ENC, pose: { braco_d: -100, antebraco_d: -40 } }, x, P0.z, 1.85, { y: P0.y - 2.2 * Math.sin(Math.PI * 0.52) + 0.05, rumo: Math.PI }) }], { noite: 0, forca: 0, bokeh: 4 });
       const k = api.fase(0.45, 0.75, 'volta');
       zoomEm(ctx, 540, 1350, k, () => { ctx.save(); ctx.fillStyle = 'rgba(40,8,12,0.92)'; ctx.strokeStyle = '#FF6A5A'; ctx.lineWidth = 8; ctx.beginPath(); ctx.roundRect(140, 1000, 800, 700, 40); ctx.fill(); ctx.stroke(); ctx.restore(); api.texto('RECOMPENSA', 540, 1100, 72, { cor: '#FF8A7A' }); ctx.save(); ctx.beginPath(); ctx.roundRect(390, 1150, 300, 300, 20); ctx.clip(); ctx.fillStyle = '#1A0A10'; ctx.fillRect(390, 1150, 300, 300); close(api, { ...TEOG, pose: 'parado', expressao: 'neutro' }, 540, 1320, 330, {}); ctx.restore(); api.texto('R$ 5.000', 540, 1545, 92, { cor: '#FFE680' }); api.texto('HOMEM-FERA VIVO', 540, 1640, 50); });
+    },
+
+    // ciência, parte 2: a fita do cérebro cheia de quadros
+    ciencia2(ctx, u, d, api) { window.PLANOS.ciencia(ctx, u, d, api); api.texto('MAIS DETALHES POR SEGUNDO', 540, 1320, 46, { cor: '#BFE6FF' }); },
+    // ---------- conversa andando: câmera de frente, fechando em quem fala (vozes do Davi e do Téo) ----------
+    davi1(ctx, u, d, api) { papo(ctx, u, d, api, 'davi', expr('preocupado', { olhar: [-0.012, 0] }), 'neutro'); },
+    teo1(ctx, u, d, api) { papo(ctx, u, d, api, 'teo', 'neutro', expr('preocupado', { olhar: [0.01, 0] })); },
+    davi2(ctx, u, d, api) { papo(ctx, u, d, api, 'davi', 'espanto', 'neutro', { para: true }); },
+    davi3(ctx, u, d, api) { papo(ctx, u, d, api, 'davi', expr('neutro', { olhar: [-0.012, 0] }), 'neutro'); },
+    davi4(ctx, u, d, api) { papo(ctx, u, d, api, 'davi', expr('preocupado', { olhar: [-0.012, 0] }), 'neutro'); },
+    // o Téo lembrando da noite: olhos amarelos e garras (tom vermelho)
+    maos2(ctx, u, d, api) {
+      const cam = camDia(api, { x: 0.1, y: 1.6, z: 3.0, cy: 760, f: 1500 });
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_d: 10, antebraco_d: -115, braco_e: -10, antebraco_e: 115, cabeca: 10 }, expressao: expr('preocupado', { olhar: [0, 0.01] }), voz: 'teo' }, 0.1, 5.2, 1.8, { rumo: 0.1 }) }], { forca: 0.3 });
+      const r = u / d, k = cl((r - 0.2) / 0.1) * (1 - cl((r - 0.72) / 0.1));
+      if (k > 0) { ctx.save(); ctx.globalAlpha = k; ctx.fillStyle = 'rgba(70,0,0,0.75)'; ctx.fillRect(0, 0, W, H); close(api, { ...LOBO, pose: 'rugindo', expressao: 'rugido' }, 540, 980, 1100, {}); ctx.fillStyle = 'rgba(200,20,20,0.25)'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+    },
+    // "Vinte e quatro horas?!": close do Davi em choque com o relógio
+    horas(ctx, u, d, api) {
+      const cam = camDia(api, { x: 0.1, y: 1.6, z: 3.4 + u * 0.3, cy: 760, f: 1500 });
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: 30, antebraco_d: -90, braco_e: -30, antebraco_e: 90 }, expressao: 'espanto', voz: 'davi' }, 0.1, 5.4, 1.76, { rumo: 0.05 }) }], { forca: 0.3, desfoque: 4 });
+      relogio(ctx, 540, 380, '24:00:00', 1, 70);
+    },
+    // a regra: o relógio grande correndo
+    regra(ctx, u, d, api) {
+      const cam = camDia(api, { x: 0.2, y: 1.6, z: 3.2, cy: 820 });
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'preocupado' }, -0.4, 5.4, 1.76, { rumo: 0.1 }) }, { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: 'preocupado' }, 0.6, 5.6, 1.8, { rumo: -0.1 }) }], { forca: 0.3, desfoque: 7 });
+      const s = 86400 - Math.floor(u * 3), hh = String(Math.floor(s / 3600)).padStart(2, '0'), mm = String(Math.floor(s / 60) % 60).padStart(2, '0'), ss = String(s % 60).padStart(2, '0');
+      relogio(ctx, 540, 820, `${hh}:${mm}:${ss}`, api.fase(0, 0.2, 'volta'), 110);
+    },
+    // "Eu fico com a arqueira": o Téo puxa o escudo
+    arqueira(ctx, u, d, api) {
+      const cam = camDia(api, { x: 0.4, y: 1.55, z: 4.3, cy: 800, f: 1400 });
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_e: -50, antebraco_e: -60, braco_d: 20, antebraco_d: -30, coxa_d: 15, canela_d: -10, coxa_e: -15, canela_e: 15, _plantar: true }, expressao: 'determinado', voz: 'teo' }, 0.5, 6.0, 1.8, { olhaPara: [-5.2, 15] }) }], { forca: 0.3 });
+    },
+    // "Ai! Essa doeu!": o Davi de joelho depois das flechas
+    ai(ctx, u, d, api) {
+      const cam = camDia(api, { x: 0.3, y: 1.1, z: 3.6, cy: 900, f: 1400 });
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: { coxa_d: -50, canela_d: 80, coxa_e: 20, canela_e: 40, tronco: 12, braco_d: 30, antebraco_d: -110, braco_e: -20, _plantar: true }, expressao: 'medo', voz: 'davi' }, 0.2, 5.2, 1.76, { rumo: 0.1 }) }], { forca: 0.3,
+        depois: ([rig]) => { const a = rig.pontoMundo('braco_d', [0, 0.15]); ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(-0.5); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-100, -4, 100, 8); ctx.restore(); } });
+      ctx.save(); const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.75); v.addColorStop(0, 'rgba(200,0,0,0)'); v.addColorStop(1, `rgba(200,0,0,${0.35 + 0.1 * Math.sin(api.t * 8)})`); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H); ctx.restore();
+    },
+    // "Sem arco, sem flecha.": o Téo em cima do rochedo, o arco partido
+    arco(ctx, u, d, api) {
+      const S = V().CAN_ROCHA;
+      const cam = camDia(api, { x: -3.2, y: S.y + 1.4, z: 11.8, cy: 900, f: 1200, yaw: -0.45 });
+      dia(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_e: -40, antebraco_e: -50, braco_d: 30, antebraco_d: -20 }, expressao: 'feliz', voz: 'teo' }, -4.7, 14.6, 1.8, { y: S.y, olhaPara: [-5.6, 15.6] }) },
+        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_d: 60, braco_e: -60, tronco: -15 }, expressao: 'espanto' }, -5.7, 15.6, 1.75, { y: S.y, olhaPara: [-4.7, 14.6] }) },
+      ], { forca: 0.2, depois: () => { const q = cam.p(-5.2, S.y + 0.1, 15.1); for (const sd of [-1, 1]) { ctx.save(); ctx.translate(q.x + sd * 30, q.y); ctx.rotate(sd * 0.9); ctx.strokeStyle = '#7A4A26'; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(0, 0, 60, -0.6, 0.6); ctx.stroke(); ctx.restore(); } } });
+    },
+    // "Cadê ela?!": os dois de costas um pro outro
+    cade(ctx, u, d, api) {
+      const cam = camDia(api, { x: 0, y: 1.5, z: 3.2 + u * 0.2, cy: 840, f: 1250 });
+      espada(api, -2.2, 1.1);
+      dia(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIE, pose: { braco_d: 80, antebraco_d: -20, _maos: { d: 'punho' } }, expressao: 'preocupado' }, -0.35, 5.3, 1.76, { olhaPara: [-3, 5.1] }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_e: -50, antebraco_e: -60, coxa_d: 15, coxa_e: -15 }, expressao: 'medo', voz: 'teo' }, 0.4, 5.4, 1.8, { olhaPara: [3, 5.5] }) },
+      ], { forca: 0.3, depois: () => pegadas(ctx, cam, [[1.6, 7.0], [1.3, 6.6], [0.9, 6.3]], api.fase(0.2, 0.9)) });
+    },
+    // a piada no fim: o Téo rindo, o Davi respondendo
+    entregar(ctx, u, d, api) { papo(ctx, u, d, api, 'teo', 'neutro', 'rindo'); },
+    engracado(ctx, u, d, api) { papo(ctx, u, d, api, 'davi', expr('feliz', { olhar: [-0.012, 0] }), 'rindo'); },
+    // gancho em duas partes: o pôr do sol e as mãos do Téo; depois o encapuzado na ponte
+    gancho1(ctx, u, d, api) {
+      const cam = camDia(api, { x: 0, y: 1.55, z: 3.2, cy: 820, f: 1300, nevoa: V().nevoa(0, false, 'canion') });
+      noite(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_d: 10, antebraco_d: -115, braco_e: -10, antebraco_e: 115, cabeca: 14 }, expressao: expr('medo', { olhar: [0, 0.012] }) }, 0.1, 5.2, 1.8, { rumo: 0.1, tremor: 1 }) }], { noite: 0, forca: 0.3 });
+      relogio(ctx, 540, 360, '23:41:07', 1, 64);
     },
     // 14) cartela
     parte(ctx, u, d, api) {
