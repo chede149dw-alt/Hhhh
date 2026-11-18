@@ -12,6 +12,7 @@
     acoGigante: '#9AA2B2', acoGiganteEsc: '#5C6474', peleGigante: '#C88A62', barbaRuiva: '#8A3A1E',
     pretoAssassina: '#25222E', roxoNoite: '#3A2C55', laminaClara: '#D8DEE8',
     cinzaManto: '#4E4A56', cinzaMantoEsc: '#34313C', cristalLente: '#9EE6FF',
+    ouroArmadura: '#D6A85C', ouroArmaduraEsc: '#9A7038', vermelhoPluma: '#C8382A', madeiraEscudo: '#B07A44', roxoAsa: '#8A5AD8', capuzCinza: '#4A4650', couroColete: '#7A4E2C',
   });
   const P = (fn) => { const p = new Path2D(); fn(p); return p; };
   const T = (n) => Estilo.tom(n);
@@ -44,6 +45,40 @@
       if (vista !== 'costas') pc.linha(P((q) => { q.moveTo(dx - r * 0.9 * k, 0.1); q.quadraticCurveTo(dx - r * 0.98 * k, -0.62, dx, -0.47 - r * 0.78); q.quadraticCurveTo(dx + r * 0.98 * k, -0.62, dx + r * 0.9 * k, 0.1); }), pc.interno * 3, cap.sombra);
     };
   }
+  function golaCapuz(def, cor) {
+    const pes = def.partes.find((q) => q.nome === 'pescoco'), cab = def.partes.find((q) => q.nome === 'cabeca'); if (!pes || !cab) return;
+    const yO = pes.pivo[1] + 0.02, L = def.larguraOmbrosH * 0.5, c = T(cor);
+    def.partes.push({ nome: 'capuz_gola', pai: 'tronco', pivo: [0, yO], z: cab.z - 0.01, desenhar: (pc) => {
+      const costas = def.vista === 'costas';
+      pc.peca(P((q) => { q.moveTo(-L * 0.95, 0.32); q.quadraticCurveTo(-L * 1.05, -0.02, -L * 0.45, -0.12); q.quadraticCurveTo(0, costas ? -0.2 : 0.05, L * 0.45, -0.12); q.quadraticCurveTo(L * 1.05, -0.02, L * 0.95, 0.32); q.quadraticCurveTo(L * 0.5, 0.2, 0, costas ? 0.42 : 0.3); q.quadraticCurveTo(-L * 0.5, 0.2, -L * 0.95, 0.32); q.closePath(); }), c, { sombra: 0.18 });
+      pc.linha(P((q) => { q.moveTo(-L * 0.6, 0.2); q.quadraticCurveTo(0, 0.34, L * 0.6, 0.2); }), pc.interno * 1.2, c.sombra);
+    } });
+  }
+  // asinhas nas botas (roxas, como na referência)
+  function asasBota(def, cor) {
+    for (const l of ['d', 'e']) {
+      const can = def.partes.find((q) => q.nome === 'canela_' + l), pe = def.partes.find((q) => q.nome === 'pe_' + l); if (!can || !pe) continue;
+      const Lc = pe.pivo[1], sd = l === 'd' ? -1 : 1;
+      def.partes.push({ nome: 'asa_' + l, pai: 'canela_' + l, pivo: [0, Lc * 0.78], z: can.z + 0.02, desenhar: (pc) => {
+        const c = T(cor);
+        for (let k = 0; k < 3; k++) pc.peca(P((q) => { const a = sd * (0.5 + k * 0.32), x0 = sd * 0.1; q.moveTo(x0, 0); q.quadraticCurveTo(x0 + Math.sin(a) * 0.22, -Math.cos(a) * 0.1 - 0.08, x0 + Math.sin(a) * 0.36, -Math.cos(a) * 0.22); q.quadraticCurveTo(x0 + Math.sin(a) * 0.16, -0.02, x0, 0.06); q.closePath(); }), c, { sombra: 0.12 });
+        pc.peca(P((q) => q.roundRect(-0.13, -0.04, 0.26, 0.07, 0.02)), T('couroEscuro'), { sombra: 0.1 });
+      } });
+    }
+  }
+  // escudo alto (de torre) no braço esquerdo, com borda dourada, rebites e emblema
+  function escudoTorre(def) {
+    const m = def.partes.find((q) => q.nome === 'mao_e'); if (!m) return;
+    def.partes.push({ nome: 'escudo_torre', pai: 'antebraco_e', pivo: [0, 0.3], z: m.z + 0.006, desenhar: (pc) => {
+      const c = pc.ctx; c.save(); c.rotate(ang('escudo', 0)); const w = def.vista === 'perfil' ? 0.22 : def.vista === 'tq' ? 0.55 : 0.7, h = 1.7;
+      pc.peca(P((q) => q.roundRect(-w, -h * 0.45, w * 2, h, 0.12)), T('madeiraEscudo'), { sombra: 0.25 });
+      pc.peca(P((q) => { q.roundRect(-w, -h * 0.45, w * 2, h, 0.12); q.roundRect(-w + 0.09, -h * 0.45 + 0.09, w * 2 - 0.18, h - 0.18, 0.08); }), T('ouroArmadura'), { sombra: 0.15 });
+      for (const y of [-h * 0.15, h * 0.2]) pc.peca(P((q) => q.rect(-w + 0.09, y, w * 2 - 0.18, 0.07)), T('ouroArmaduraEsc'), { sombra: 0 });
+      if (def.vista !== 'perfil') pc.peca(P((q) => { q.rect(-0.05, -h * 0.3, 0.1, h * 0.7); q.rect(-0.25, -h * 0.1, 0.5, 0.1); }), T('vermelhoPluma'), { sombra: 0.1 });
+      for (const [x, y] of [[-w + 0.05, -h * 0.4], [w - 0.05, -h * 0.4], [-w + 0.05, h * 0.5], [w - 0.05, h * 0.5]]) pc.preencher(P((q) => q.arc(x, y, 0.035, 0, Math.PI * 2)), '#FFF0C8');
+      c.restore();
+    } });
+  }
   // elmo de ferro com crista e protetor de nariz
   function elmo(def) {
     const p = def.partes.find((q) => q.nome === 'cabeca'); if (!p) return;
@@ -51,10 +86,10 @@
     p.desenhar = (pc, ...resto) => {
       orig(pc, ...resto);
       const dx = vista === 'tq' ? 0.07 : vista === 'perfil' ? 0.12 : 0, k = vista === 'perfil' ? 0.75 : vista === 'tq' ? 0.9 : 1;
-      pc.peca(P((q) => { q.moveTo(-r * 1.08, -0.52); q.bezierCurveTo(-r * 1.1, -0.47 - r * 1.25, r * 1.1, -0.47 - r * 1.25, r * 1.08, -0.52); q.lineTo(r * 1.1, -0.36); q.lineTo(-r * 1.1, -0.36); q.closePath(); }), T('acoGigante'), { sombra: 0.2 });
-      pc.peca(P((q) => q.roundRect(-r * 1.12, -0.52, r * 2.24, 0.12, 0.03)), T('acoGiganteEsc'), { sombra: 0.1 });
-      if (vista !== 'costas') pc.peca(P((q) => q.roundRect(dx - 0.035, -0.52, 0.07, 0.3, 0.02)), T('acoGiganteEsc'), { sombra: 0.1 });
-      pc.peca(P((q) => { q.moveTo(-0.04, -0.47 - r * 0.95); q.quadraticCurveTo(0, -0.47 - r * 1.45, 0.25 * k, -0.47 - r * 1.3); q.quadraticCurveTo(0.06, -0.47 - r * 1.15, 0.04, -0.47 - r * 0.95); q.closePath(); }), T('barbaRuiva'), { sombra: 0.15 });
+      pc.peca(P((q) => { q.moveTo(-0.06, -0.47 - r * 0.95); q.bezierCurveTo(-0.1, -0.47 - r * 1.7, 0.45 * k + 0.15, -0.47 - r * 1.75, 0.55 * k + 0.1, -0.47 - r * 1.05); q.quadraticCurveTo(0.2, -0.47 - r * 1.3, 0.06, -0.47 - r * 0.95); q.closePath(); }), T('vermelhoPluma'), { sombra: 0.18 });
+      pc.peca(P((q) => { q.moveTo(-r * 1.08, -0.52); q.bezierCurveTo(-r * 1.1, -0.47 - r * 1.25, r * 1.1, -0.47 - r * 1.25, r * 1.08, -0.52); q.lineTo(r * 1.1, -0.36); q.lineTo(-r * 1.1, -0.36); q.closePath(); }), T('ouroArmadura'), { sombra: 0.2 });
+      pc.peca(P((q) => q.roundRect(-r * 1.12, -0.52, r * 2.24, 0.12, 0.03)), T('ouroArmaduraEsc'), { sombra: 0.1 });
+      if (vista !== 'costas') { pc.peca(P((q) => q.roundRect(dx - 0.035, -0.52, 0.07, 0.3, 0.02)), T('ouroArmaduraEsc'), { sombra: 0.1 }); pc.peca(P((q) => { q.moveTo(-r * 1.1, -0.38); q.lineTo(-r * 0.95, -0.05); q.lineTo(-r * 0.7, -0.38); q.closePath(); q.moveTo(r * 1.1, -0.38); q.lineTo(r * 0.95, -0.05); q.lineTo(r * 0.7, -0.38); q.closePath(); }), T('ouroArmadura'), { sombra: 0.15 }); }
       for (const sx of [-0.7, -0.35, 0.35, 0.7]) pc.preencher(P((q) => q.arc(sx * r, -0.46, 0.022, 0, Math.PI * 2)), '#E6E9EF');
     };
   }
@@ -96,7 +131,7 @@
   };
   window.criarArqueira = (o = {}, vista = 'frente') => {
     const def = window.equipar(window.criarPersonagem({ ...window.ARQUEIRA_OPCOES, ...o, poses: poses() }, vista), window.ARQUEIRA_EQUIP);
-    capuz(def, 'verdeArqueira');
+    capuz(def, 'verdeArqueira'); golaCapuz(def, 'verdeArqueiraEsc');
     // aljava com flechas nas costas
     nasCostas(def, 'aljava', (pc) => {
       pc.ctx.save(); pc.ctx.rotate(0.35);
@@ -122,21 +157,21 @@
 
   // ---------- Gigante ----------
   window.GIGANTE_OPCOES = {
-    nome: 'Gigante NV 30', altura: 7.6, cabecaLargura: 0.95, pele: 'pele2', fatorContorno: 1.45,
+    nome: 'Cavaleiro NV 30', altura: 7.6, cabecaLargura: 0.95, pele: 'pele2', fatorContorno: 1.45,
     olhos: { raio: 0.055, sep: 0.2, iris: 'irisCastanho' }, sobrancelha: { esp: 0.08, tipo: 'reta' },
     cabelo: { estilo: 'liso-lateral', cor: 'cabRuivo', volume: 0.6 },
     corpo: { ombro: 0.86, quadril: 0.26 },
-    top: { tipo: 'cardiga', cor: 'acoGiganteEsc', corInterna: 'couroEscuro' },
-    calca: { tipo: 'reta', cor: 'couroEscuro' },
-    calcado: { tipo: 'cano-alto', cor: 'acoGigante', acento: 'acoGiganteEsc' },
+    top: { tipo: 'cardiga', cor: 'ouroArmaduraEsc', corInterna: 'couroEscuro' },
+    calca: { tipo: 'reta', cor: 'ouroArmaduraEsc' },
+    calcado: { tipo: 'cano-alto', cor: 'ouroArmadura', acento: 'ouroArmaduraEsc' },
   };
   window.GIGANTE_EQUIP = {
-    peitoral: { cor: 'acoGigante', faixas: 4, tachas: 'prata' }, ombreira: { cor: 'acoGigante', rebites: 'acoGiganteEsc' },
-    cinto: { cor: 'couroEscuro', fivela: 'mostarda' }, botas: { cor: 'acoGigante', cano: 0.65 }, bracadeira: 'acoGigante', cinta: { cor: 'couroEscuro', tachas: 'prata' },
+    peitoral: { cor: 'ouroArmadura', faixas: 4, tachas: 'linhoClaro' }, ombreira: { cor: 'ouroArmadura', rebites: 'linhoClaro' },
+    cinto: { cor: 'vermelhoPluma', fivela: 'ouroArmadura' }, botas: { cor: 'ouroArmadura', cano: 0.7 }, bracadeira: 'ouroArmadura',
   };
   window.criarGigante = (o = {}, vista = 'frente') => {
     const def = window.equipar(window.criarPersonagem({ ...window.GIGANTE_OPCOES, ...o, poses: poses() }, vista), window.GIGANTE_EQUIP);
-    barba(def, 'barbaRuiva'); elmo(def);
+    barba(def, 'barbaRuiva'); elmo(def); if (!o.semEscudo) escudoTorre(def);
     // martelo de guerra: cabo comprido de madeira com anéis de ferro, cabeça de ferro enorme com cravos
     naMao(def, 'd', 'martelo', (pc) => {
       const c = pc.ctx; c.save(); c.rotate(ang('martelo', 0));
@@ -157,13 +192,13 @@
     olhos: { raio: 0.066, sep: 0.19, iris: 'irisVioleta', cilios: true }, sobrancelha: { esp: 0.045, tipo: 'arqueada' },
     cabelo: { estilo: 'coque', cor: 'carvao', volume: 0.85, prendedor: 'carvao' },
     corpo: { ombro: 0.5, quadril: 0.22 },
-    top: { tipo: 'cardiga', cor: 'pretoAssassina', corInterna: 'roxoNoite' },
+    top: { tipo: 'cardiga', cor: 'capuzCinza', corInterna: 'pretoAssassina' },
     calca: { tipo: 'reta', cor: 'pretoAssassina' },
-    calcado: { tipo: 'cano-alto', cor: 'pretoAssassina', acento: 'roxoNoite' },
+    calcado: { tipo: 'cano-alto', cor: 'couroColete', acento: 'couroEscuro' },
   };
   window.ASSASSINA_EQUIP = {
-    cinto: { cor: 'roxoNoite', fivela: 'prata', bolsa: 'pretoAssassina' }, botas: { cor: 'pretoAssassina', cano: 0.6 }, bracadeira: 'roxoNoite',
-    cinta: { cor: 'roxoNoite', tachas: 'prata' }, ombreira: { cor: 'roxoNoite', rebites: 'prata' },
+    peitoral: { cor: 'couroColete', faixas: 4, tachas: 'prata' }, cinto: { cor: 'couroEscuro', fivela: 'prata', bolsa: 'couroColete' }, botas: { cor: 'couroColete', cano: 0.65 }, bracadeira: 'couroEscuro',
+    cinta: { cor: 'couroEscuro', tachas: 'prata' },
   };
   const adaga = (nome) => (pc) => {
     const c = pc.ctx; c.save(); c.rotate(ang(nome, 0));
@@ -175,7 +210,7 @@
   };
   window.criarAssassina = (o = {}, vista = 'frente') => {
     const def = window.equipar(window.criarPersonagem({ ...window.ASSASSINA_OPCOES, ...o, poses: poses() }, vista), window.ASSASSINA_EQUIP);
-    capuz(def, 'roxoNoite', { mascara: 'pretoAssassina' });
+    capuz(def, 'capuzCinza', { mascara: 'pretoAssassina' }); golaCapuz(def, 'capuzCinza'); asasBota(def, 'roxoAsa');
     if (!o.semAdagas) { naMao(def, 'd', 'adaga_d', adaga('adaga_d')); naMao(def, 'e', 'adaga_e', adaga('adaga_e')); }
     return def;
   };
@@ -192,7 +227,7 @@
   };
   window.criarEncapuzado = (o = {}, vista = 'frente') => {
     const def = window.equipar(window.criarPersonagem({ ...window.ENCAPUZADO_OPCOES, ...o, poses: poses() }, vista), { manto: { cor: 'cinzaManto', barra: 'cinzaMantoEsc' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'cinzaMantoEsc', cano: 0.4 } });
-    capuz(def, 'cinzaManto', { semRosto: true });
+    capuz(def, 'cinzaManto', { semRosto: true }); golaCapuz(def, 'cinzaMantoEsc');
     // olhos acesos dentro da sombra do capuz
     const cab = def.partes.find((q) => q.nome === 'cabeca'), orig = cab.desenhar;
     cab.desenhar = (pc, ...resto) => { orig(pc, ...resto); if (def.vista === 'costas') return; const dx = def.vista === 'tq' ? 0.09 : def.vista === 'perfil' ? 0.2 : 0; for (const sx of def.vista === 'perfil' ? [0.06] : [-0.12, 0.12]) { pc.preencher(P((q) => q.ellipse(dx + sx, -0.5, 0.05, 0.02, 0, 0, Math.PI * 2)), '#FFC24A'); pc.preencher(P((q) => q.arc(dx + sx, -0.5, 0.11, 0, Math.PI * 2)), 'rgba(255,190,80,0.25)'); } };

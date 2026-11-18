@@ -102,7 +102,7 @@ for (const p of roteiro.planos) {
 for (let i = 0; i < legendas.length - 1; i++) legendas[i].fim = Math.min(legendas[i].fim + 0.15, legendas[i + 1].inicio);
 const total = t;
 const nQuadros = Math.round(total * FPS);
-const TL = { fps: FPS, total, planos, falas: falas.map(({ arquivo, ...f }) => f), legendas, legendaFaixas: (roteiro.legenda || {}).faixas };
+const TL = { fps: FPS, total, planos, falas: falas.map(({ arquivo, ...f }) => f), legendas, legendaFaixas: (roteiro.legenda || {}).faixas, legendaEstilo: roteiro.legenda || {} };
 fs.writeFileSync(path.join(pastaAudio, 'linha-do-tempo.json'), JSON.stringify({ ...TL, falas: falas.map(({ envelope, ...f }) => f) }, null, 2));
 console.log('Duração', total.toFixed(2) + 's,', nQuadros, 'quadros');
 for (const p of planos) console.log('  ', p.id.padEnd(12), (p.fim - p.inicio).toFixed(2) + 's');

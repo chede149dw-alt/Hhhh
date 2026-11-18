@@ -263,7 +263,7 @@
   // ---------------- montagem do mundo ----------------
   let R = null; const MUNDOS = {};
   // escolhe o mundo do plano: o.mundo ou window.MUNDO_3D ('campo' = padrão, 'canion' = Cânion Vermelho)
-  function usar(o) { const m = (o && o.mundo) || window.MUNDO_3D || 'campo'; if (!MUNDOS[m]) { R = null; if (m === 'canion') montarCanion(); else { montar(); R.figPool = []; R.contatoPool = []; } MUNDOS[m] = R; } R = MUNDOS[m]; }
+  function usar(o) { const m = (o && o.mundo) || window.MUNDO_3D || 'campo'; if (!MUNDOS[m]) { R = null; if (m === 'canion') montarCanion(); else if (m === 'masmorra') montarMasmorra(); else { montar(); R.figPool = []; R.contatoPool = []; } MUNDOS[m] = R; } R = MUNDOS[m]; }
   function montar() {
     const T = THREE, r = rng(2024), arvores = [];
     const canvas = document.createElement('canvas');
@@ -519,6 +519,153 @@
   }
   let R_estrelas = null;
 
+  // ---------------- MUNDO 3: Ruína / masmorra de pedra (Parte 4, referência do autor) ----------------
+  // Salão de blocos grandes de pedra azul-acinzentada com linhas escuras entre os blocos (o fundo escuro aparece nas
+  // frestas), lajes do chão soltas e quebradas, entulho com contorno, rachaduras vermelhas acesas no chão, corredores
+  // escuros, tochas e um baú dourado brilhando (a única luz quente). Salão: X de -8 a 8, Z de -3 a 28, teto em y = 11.
+  const MAS = { x0: -8, x1: 8, z0: -3, z1: 28, alt: 11, sacada: { x0: -8, x1: -5.4, z0: 12, z1: 18, y: 3.6 }, bau: [5.6, 7.5] };
+  const PAL_MASMORRA = (() => { const t = (c) => [c, c, c]; return { ceuTopo: t('#0A0E18'), ceuHz: t('#141A28'), ceuBaixo: t('#0A0E18'), nevoa: t('#121826'), hemiCeu: t('#8A9AC8'), hemiChao: t('#2A2228'), sol: t('#A8B8E8') }; })();
+  function montarMasmorra() {
+    const T = THREE, r = rng(4242);
+    const canvas = document.createElement('canvas');
+    const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+    const esc = 0.75; renderer.setPixelRatio(1); renderer.setSize(Math.round(W * esc), Math.round(H * esc), false);
+    renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
+    const cena = new T.Scene(); cena.fog = new T.Fog(0x121826, 12, 48);
+    const camera = new T.PerspectiveCamera(60, W / H, 0.05, 900);
+    const uni = { uTempo: { value: 0 }, uNoite: { value: 1 } };
+    const lambert = (o) => new T.MeshLambertMaterial(o);
+    const ceuMat = new T.ShaderMaterial({ side: T.BackSide, depthWrite: false, fog: false, uniforms: { topo: { value: new T.Color() }, hz: { value: new T.Color() }, baixo: { value: new T.Color() } },
+      vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+      fragmentShader: 'uniform vec3 topo; uniform vec3 hz; uniform vec3 baixo; varying vec3 vP; void main(){ float y = normalize(vP).y; vec3 c = y > 0.0 ? mix(hz, topo, clamp(y,0.0,1.0)) : mix(hz, baixo, clamp(-y,0.0,1.0)); gl_FragColor = vec4(c,1.0);\n#include <colorspace_fragment>\n}' });
+    const grupoCeu = new T.Group(); cena.add(grupoCeu); const ceu = new T.Mesh(new T.SphereGeometry(800, 16, 8), ceuMat); ceu.frustumCulled = false; grupoCeu.add(ceu);
+    const lua = new T.Sprite(new T.SpriteMaterial({ transparent: true, opacity: 0 })); const sol = new T.Sprite(new T.SpriteMaterial({ transparent: true, opacity: 0 })); grupoCeu.add(lua); grupoCeu.add(sol);
+    const hemi = new T.HemisphereLight(0x8a9ac8, 0x2a2228, 1); cena.add(hemi);
+    const dir = new T.DirectionalLight(0xa8b8e8, 1); dir.castShadow = true; dir.shadow.mapSize.set(2048, 2048);
+    Object.assign(dir.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: 1, far: 140 }); dir.shadow.camera.updateProjectionMatrix(); dir.shadow.bias = -0.0008; dir.shadow.normalBias = 0.03;
+    cena.add(dir); cena.add(dir.target);
+    const pontos = []; for (let i = 0; i < 9; i++) { const p = new T.PointLight(0xffa050, 0, 9, 1.6); cena.add(p); pontos.push(p); }
+    const contorno = new T.LineBasicMaterial({ color: 0x07090f, transparent: true, opacity: 0.85 });
+    const comContorno = (mesh) => { const l = new T.LineSegments(new T.EdgesGeometry(mesh.geometry, 25), contorno); mesh.add(l); return mesh; };
+    const pedra = (l) => new T.Color().setHSL(0.6 + r() * 0.04, 0.07 + r() * 0.05, l + (r() - 0.5) * 0.07);
+    // fundo escuro (aparece nas frestas entre blocos e lajes = as linhas escuras do estilo)
+    const fundo = lambert({ color: 0x07090f });
+    { const g = new T.PlaneGeometry(200, 200).rotateX(-Math.PI / 2); const m = new T.Mesh(g, fundo); m.position.y = -0.18; cena.add(m); }
+    // paredes de blocos: grade de caixas com fresta, cada bloco com um tom; aberturas para corredores escuros
+    const blocos = [];
+    const parede = (eixo, fixo, a0, a1, lado, aberturas = []) => {
+      let y = 0, linha = 0;
+      while (y < MAS.alt) {
+        const h = 0.62 + r() * 0.22; let a = a0 - (linha % 2) * 0.6;
+        while (a < a1) {
+          const l = 1.1 + r() * 1.3, c = Math.min(a + l, a1), m = (Math.max(a, a0) + c) / 2, w = c - Math.max(a, a0);
+          const livre = !aberturas.some(([b0, b1, h1]) => m > b0 && m < b1 && y < h1);
+          if (w > 0.2 && livre) { const inset = r() * 0.08; blocos.push(eixo === 'x' ? [fixo - lado * inset, y + h / 2, m, 0.6, h - 0.06, w - 0.06] : [m, y + h / 2, fixo - lado * inset, w - 0.06, h - 0.06, 0.6]); }
+          a += l;
+        }
+        y += h; linha++;
+      }
+      // placa escura atrás (fresta)
+      const pl = new T.Mesh(new T.PlaneGeometry(a1 - a0 + 2, MAS.alt + 2), fundo); pl.position.set(eixo === 'x' ? fixo + lado * 0.32 : (a0 + a1) / 2, MAS.alt / 2, -(eixo === 'x' ? (a0 + a1) / 2 : fixo + lado * 0.32)); pl.rotation.y = eixo === 'x' ? -lado * Math.PI / 2 : (lado > 0 ? Math.PI : 0); cena.add(pl);
+    };
+    parede('x', MAS.x0, MAS.z0, MAS.z1, -1, [[19, 23.5, 4.2]]);
+    parede('x', MAS.x1, MAS.z0, MAS.z1, 1, [[9, 11.5, 3.2]]);
+    parede('z', MAS.z1, MAS.x0, MAS.x1, 1, [[-1.6, 1.6, 3.8]]);
+    parede('z', MAS.z0, MAS.x0, MAS.x1, -1, [[-1.5, 1.5, 3.6]]);
+    // entrada da ruína: luz forte do cânion lá fora
+    { const m = new T.Mesh(new T.PlaneGeometry(6, 6), new T.MeshBasicMaterial({ color: 0xffe2b0, toneMapped: false, fog: false, side: T.DoubleSide })); m.position.set(0, 2.5, -(MAS.z0 - 2.2)); cena.add(m);
+      const c = new T.Mesh(new T.BoxGeometry(3.6, 4.2, 2.5), lambert({ color: 0x3a2a24, side: T.BackSide })); c.position.set(0, 2.1, -(MAS.z0 - 1.2)); cena.add(c); }
+    {
+      const m = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), lambert({}), blocos.length), o = new T.Object3D();
+      blocos.forEach(([x, y, z, sx, sy, sz], i) => { o.position.set(x, y, -z); o.rotation.set(0, 0, 0); o.scale.set(sx, sy, sz); o.updateMatrix(); m.setMatrixAt(i, o.matrix); m.setColorAt(i, pedra(0.3 - (y / MAS.alt) * 0.1)); });
+      m.castShadow = true; m.receiveShadow = true; cena.add(m);
+    }
+    // corredores escuros atrás das aberturas
+    for (const [x, z, w, h, d, ry] of [[0, MAS.z1 + 5, 3.2, 3.8, 10, 0], [MAS.x0 - 5, 21.25, 4.5, 4.2, 10, Math.PI / 2], [MAS.x1 + 5, 10.25, 2.5, 3.2, 10, Math.PI / 2]]) {
+      const g = new T.BoxGeometry(w + 0.6, h + 0.6, d); const m = new T.Mesh(g, lambert({ color: 0x0c0f18, side: T.BackSide })); m.position.set(x, h / 2, -z); m.rotation.y = ry; cena.add(m);
+    }
+    // teto
+    { const m = new T.Mesh(new T.PlaneGeometry(40, 50).rotateX(Math.PI / 2), lambert({ color: 0x10131c })); m.position.set(0, MAS.alt, -12); cena.add(m); }
+    // lajes do chão (soltas, com fresta, algumas levantadas/quebradas perto do entulho)
+    {
+      const L = [];
+      for (let z = MAS.z0, lin = 0; z < MAS.z1; z += 1.5, lin++) for (let x = MAS.x0 - (lin % 2) * 0.7; x < MAS.x1; x += 1.5) {
+        if (r() < 0.05) continue; const jx = (r() - 0.5) * 0.12, jz = (r() - 0.5) * 0.12, quebra = r() < 0.08;
+        L.push([x + 0.75 + jx, z + 0.75 + jz, 1.42 - r() * 0.08, 1.42 - r() * 0.08, (r() - 0.5) * 0.06, quebra ? (r() - 0.5) * 0.35 : (r() - 0.5) * 0.02, quebra ? 0.08 : 0]);
+      }
+      const m = new T.InstancedMesh(new T.BoxGeometry(1, 0.2, 1).translate(0, -0.1, 0), lambert({}), L.length), o = new T.Object3D();
+      L.forEach(([x, z, w, d, ry, rx, dy], i) => { o.position.set(x, dy, -z); o.rotation.set(rx, ry, rx * 0.5); o.scale.set(w, 1, d); o.updateMatrix(); m.setMatrixAt(i, o.matrix); m.setColorAt(i, new T.Color().setHSL(0.07 + r() * 0.5 * 0.1, 0.08 + r() * 0.06, 0.2 + r() * 0.07)); });
+      m.receiveShadow = true; m.castShadow = false; cena.add(m);
+    }
+    // entulho: blocos caídos, lajes inclinadas, pedras (com contorno)
+    {
+      const mat = lambert({ flatShading: true });
+      const pilhas = [[-6.2, 9, 2.4], [6.4, 15, 2.0], [-5.8, 24, 2.6], [4.8, 24.5, 1.8], [-3.2, 4.5, 0.9], [3.6, 12, 0.8]];
+      for (const [cx, cz, tam] of pilhas) for (let i = 0; i < 9 * tam; i++) {
+        const sx = 0.3 + r() * 0.9 * tam * 0.5, sy = 0.2 + r() * 0.5, sz = 0.3 + r() * 0.8 * tam * 0.5;
+        const m = new T.Mesh(new T.BoxGeometry(sx, sy, sz), mat.clone()); m.material.color = pedra(0.25);
+        m.position.set(cx + (r() - 0.5) * tam * 1.6, sy / 2 + r() * 0.5 * tam * (1 - Math.abs(r() - 0.5)), -(cz + (r() - 0.5) * tam * 1.6)); m.rotation.set((r() - 0.5) * 0.8, r() * 3, (r() - 0.5) * 0.8);
+        m.castShadow = m.receiveShadow = true; comContorno(m); cena.add(m);
+      }
+      // pedras pontudas (pirâmides) e pedaços de pilar
+      for (let i = 0; i < 10; i++) { const m = new T.Mesh(new T.ConeGeometry(0.25 + r() * 0.3, 0.6 + r() * 0.8, 4), mat.clone()); m.material.color = pedra(0.32); m.position.set((r() < 0.5 ? -1 : 1) * (4 + r() * 3.5), 0.3, -(3 + r() * 22)); m.castShadow = true; comContorno(m); cena.add(m); }
+      for (const [x, z, h] of [[-4.5, 18, 5.5], [4.5, 18, 2.2], [-4.5, 6, 3.4], [4.5, 6, 6.5]]) { const m = new T.Mesh(new T.BoxGeometry(1.1, h, 1.1), mat.clone()); m.material.color = pedra(0.3); m.position.set(x, h / 2, -z); m.castShadow = m.receiveShadow = true; comContorno(m); cena.add(m); }
+    }
+    // sacada alta de pedra (onde a arqueira fica), com escada de entulho
+    {
+      const s = MAS.sacada, m = new T.Mesh(new T.BoxGeometry(s.x1 - s.x0, 0.5, s.z1 - s.z0), lambert({ color: pedra(0.3) })); m.position.set((s.x0 + s.x1) / 2, s.y - 0.25, -(s.z0 + s.z1) / 2); m.castShadow = m.receiveShadow = true; comContorno(m); cena.add(m);
+      for (let i = 0; i < 4; i++) { const b = new T.Mesh(new T.BoxGeometry(0.4, 0.5, 0.4), lambert({ color: pedra(0.34) })); b.position.set(s.x1 - 0.2, s.y + 0.25, -(s.z0 + 0.6 + i * 1.6)); b.castShadow = true; comContorno(b); cena.add(b); }
+    }
+    // rachaduras vermelhas acesas no chão (galhos)
+    {
+      const P = [], Pg = [];
+      const fita = (arr, a, b, w, y) => { const dx = b[0] - a[0], dz = b[1] - a[1], n = Math.hypot(dx, dz) || 1, px = (-dz / n) * w, pz = (dx / n) * w; arr.push(a[0] - px, y, -(a[1] - pz), a[0] + px, y, -(a[1] + pz), b[0] + px, y, -(b[1] + pz), a[0] - px, y, -(a[1] - pz), b[0] + px, y, -(b[1] + pz), b[0] - px, y, -(b[1] - pz)); };
+      const galho = (x, z, ang, len, prof) => { let p = [x, z]; const n = 6 + Math.floor(r() * 5); for (let i = 0; i < n; i++) { ang += (r() - 0.5) * 0.9; const q = [p[0] + Math.cos(ang) * len / n, p[1] + Math.sin(ang) * len / n]; fita(P, p, q, 0.014, 0.012); fita(Pg, p, q, 0.09, 0.01); if (prof > 0 && r() < 0.3) galho(q[0], q[1], ang + (r() < 0.5 ? 0.8 : -0.8), len * 0.5, prof - 1); p = q; } };
+      for (const [x, z, a, l] of [[-3, 7, 0.3, 5], [2.5, 11, 2.4, 4], [-1, 16, 0.9, 5], [3, 20, 2.0, 4]]) galho(x, z, a, l, 1);
+      const g1 = new T.BufferGeometry(); g1.setAttribute('position', new T.Float32BufferAttribute(P, 3));
+      const g2 = new T.BufferGeometry(); g2.setAttribute('position', new T.Float32BufferAttribute(Pg, 3));
+      const m1 = new T.Mesh(g1, new T.MeshBasicMaterial({ color: 0xc8301c, toneMapped: false, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -3 })); cena.add(m1);
+      const m2 = new T.Mesh(g2, new T.MeshBasicMaterial({ color: 0xff2a10, transparent: true, opacity: 0.14, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2 })); cena.add(m2);
+    }
+    // tochas nas paredes (sempre acesas)
+    const chamas = [];
+    {
+      const tChama = textura(texChama()), tBrilho = textura(texBrilho('255,170,80')), ferro = lambert({ color: 0x2a2a30 });
+      [[MAS.x0 + 0.35, 2.6, 5], [MAS.x1 - 0.35, 2.6, 5], [MAS.x0 + 0.35, 2.6, 15], [MAS.x1 - 0.35, 2.6, 15], [-2.6, 2.8, MAS.z1 - 0.35], [2.6, 2.8, MAS.z1 - 0.35]].forEach(([x, y, z], i) => {
+        const g = new T.Group(); g.position.set(x, y, -z);
+        const c = new T.Mesh(new T.CylinderGeometry(0.12, 0.06, 0.2, 8, 1, true), ferro); g.add(c);
+        const ch = new T.Sprite(new T.SpriteMaterial({ map: tChama, transparent: true, depthWrite: false, blending: T.AdditiveBlending, fog: false })); ch.position.y = 0.15; ch.center.set(0.5, 0.15); g.add(ch);
+        const br = new T.Sprite(new T.SpriteMaterial({ map: tBrilho, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.6 })); br.position.y = 0.15; br.scale.set(1.6, 1.6, 1); g.add(br);
+        cena.add(g); chamas.push({ x, y: y + 0.15, z, ch, br, i });
+      });
+    }
+    // baú dourado aberto brilhando (a luz quente da cena)
+    {
+      const [bx, bz] = MAS.bau, g = new T.Group(); g.position.set(bx, 0, -bz); g.rotation.y = 0.5;
+      const mad = lambert({ color: 0x8a5a2a }), ouro = new T.MeshPhongMaterial({ color: 0xd9a03a, emissive: 0x6a4010, shininess: 60 });
+      const base = new T.Mesh(new T.BoxGeometry(1.1, 0.6, 0.7), mad); base.position.y = 0.3; base.castShadow = true; comContorno(base); g.add(base);
+      const tampa = new T.Mesh(new T.BoxGeometry(1.1, 0.12, 0.7), mad); tampa.position.set(0, 0.85, 0.3); tampa.rotation.x = -1.2; comContorno(tampa); g.add(tampa);
+      for (const dx of [-0.5, 0.5]) { const f = new T.Mesh(new T.BoxGeometry(0.08, 0.62, 0.72), ouro); f.position.set(dx, 0.3, 0); g.add(f); }
+      const luz = new T.Mesh(new T.PlaneGeometry(1.0, 0.6).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ color: 0xffd070, toneMapped: false })); luz.position.y = 0.58; g.add(luz);
+      const brilho = new T.Sprite(new T.SpriteMaterial({ map: textura(texBrilho('255,200,100')), transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.9 })); brilho.position.y = 1.1; brilho.scale.set(3.2, 3.2, 1); g.add(brilho);
+      cena.add(g);
+    }
+    // poeira/brasas douradas flutuando
+    {
+      const n = 220, Pp = new Float32Array(n * 3), F = new Float32Array(n); for (let i = 0; i < n; i++) { Pp.set([(r() - 0.5) * 15, 0.2 + r() * 2.6, -(r() * 26)], i * 3); F[i] = r() * 100; }
+      const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(Pp, 3)); g.setAttribute('fase', new T.BufferAttribute(F, 1));
+      const m = new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, uniforms: uni,
+        vertexShader: 'attribute float fase; uniform float uTempo; varying float vA; void main(){ vec3 p = position + vec3(sin(uTempo*0.3+fase)*0.4, mod(uTempo*0.15+fase*0.05,1.0)*0.8, cos(uTempo*0.25+fase*1.3)*0.4); vA = 0.5 + 0.5*sin(uTempo*1.5 + fase*2.0); vec4 mv = modelViewMatrix * vec4(p,1.0); gl_PointSize = 9.0 * (6.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
+        fragmentShader: 'varying float vA; void main(){ float d = length(gl_PointCoord - 0.5); float a = smoothstep(0.5, 0.0, d); gl_FragColor = vec4(vec3(1.0,0.8,0.45), a * (0.12 + 0.35*vA)); }' });
+      const pts = new T.Points(g, m); pts.frustumCulled = false; cena.add(pts);
+    }
+    R = { renderer, canvas, cena, camera, uni, arvores: [], magia: montarMagia(cena, uni), ceuMat, lua, sol, hemi, dir, pontos, chamas, nevoas: [], runasMat: new T.MeshBasicMaterial(), grupoCeu, esc,
+      PAL: PAL_MASMORRA, nevoaPerto: [12, 12, 12], nevoaLonge: [48, 48, 48], forcaHemi: [0.75, 0.75, 0.75], forcaSol: [1.1, 1.1, 1.1], solEl: 1.6, solX: -0.25, sempreAcesa: true,
+      luzesFixas: [{ x: MAS.bau[0], y: 1.0, z: MAS.bau[1], cor: '#FFB850', forca: 1.6, raio: 9 }, { x: 0, y: 0.3, z: 14, cor: '#FF3A22', forca: 0.18, raio: 4 }],
+      altura: () => 0, naTrilha: () => false, semRaiosLua: true, figPool: [], contatoPool: [] };
+  }
+
   // ---------------- MUNDO 2: Cânion Vermelho (Parte 4) ----------------
   // Paredes altas de pedra em camadas (vermelho/laranja/creme), chão de terra batida, trilha clara no meio, pedras,
   // arbustos secos, cristais azuis saindo das paredes, ponte de corda lá no alto, poeira dourada no ar.
@@ -752,7 +899,7 @@
     atualizaMagia(o.magias || [], t);
     for (const n of R.nevoas) { const x = ((n.x + t * n.v + 30) % 60 + 60) % 60 - 30; n.s.position.x = x; n.s.material.opacity = 0.05 + 0.13 * noite; n.s.material.color.set(noite > 0.5 ? 0x96aae6 : (R.nevoaCor ? R.nevoaCor[0] : 0xf0c8b0)); }
     // tochas: acendem no pôr do sol; as 9 luzes vão para as tochas mais perto do que a câmera vê + luzes extras do plano
-    const acesa = suave(1.15, 1.7, h), extras = [...(o.magias || []).filter((g) => g.k > 0.02).map((g) => ({ x: g.x, y: g.tipo === 'circulo' ? 0.7 : g.y, z: g.z, cor: g.cor || '#4E9CFF', forca: (g.tipo === 'circulo' ? 1.4 : 0.9) * g.k, raio: g.tipo === 'circulo' ? 6 : 3.5 })), ...(o.luzes || [])].slice(0, 5);
+    const acesa = R.sempreAcesa ? 1 : suave(1.15, 1.7, h), extras = [...(o.magias || []).filter((g) => g.k > 0.02).map((g) => ({ x: g.x, y: g.tipo === 'circulo' ? 0.7 : g.y, z: g.z, cor: g.cor || '#4E9CFF', forca: (g.tipo === 'circulo' ? 1.4 : 0.9) * g.k, raio: g.tipo === 'circulo' ? 6 : 3.5 })), ...(o.luzes || []), ...(R.luzesFixas || [])].slice(0, 6);
     const lista = R.chamas.map((c) => ({ c, d: Math.hypot(c.x - fx, c.z - fz) })).sort((a, b) => a.d - b.d);
     for (const { c } of lista) { const fl = 0.85 + 0.15 * Math.sin(t * 13 + c.i * 2) * Math.sin(t * 7.3 + c.i); c.ch.scale.set(0.34 * fl * acesa, 0.62 * (0.9 + 0.2 * Math.sin(t * 11 + c.i)) * acesa, 1); c.br.material.opacity = 0.55 * acesa * fl; c.br.visible = acesa > 0.01; c.ch.visible = acesa > 0.01; c.fl = fl; }
     let li = 0;
@@ -813,8 +960,8 @@
   }
 
   window.Valdor3D = {
-    trilhaX, trilhaW, rioZ, RIO, PONTE, altura, canX, canParede, CAN_PONTE, CAN_ALT,
-    nevoa: (n = 1, dia = false, mundo) => { const A = ((mundo || window.MUNDO_3D) === 'canion' ? PAL_CANION : PAL).nevoa, h = dia ? 0 : 1 + n, i = Math.min(1, Math.floor(h)), k = h - i; return hex(new THREE.Color(A[i]).lerp(new THREE.Color(A[Math.min(2, i + 1)]), k)); },
+    trilhaX, trilhaW, rioZ, RIO, PONTE, altura, canX, canParede, CAN_PONTE, CAN_ALT, MAS,
+    nevoa: (n = 1, dia = false, mundo) => { const mm = mundo || window.MUNDO_3D, A = (mm === 'canion' ? PAL_CANION : mm === 'masmorra' ? PAL_MASMORRA : PAL).nevoa, h = dia ? 0 : 1 + n, i = Math.min(1, Math.floor(h)), k = h - i; return hex(new THREE.Color(A[i]).lerp(new THREE.Color(A[Math.min(2, i + 1)]), k)); },
     // ponto da tela (px) na profundidade dz (m) da câmera → mundo { x, y, z }
     paraMundo(cam, sx, sy, dz) { const yaw = cam.yaw || 0, co = Math.cos(yaw), si = Math.sin(yaw), xr = ((sx - (cam.cx || W / 2)) * dz) / cam.f, yr = (((cam.cy || H / 2) - sy) * dz) / cam.f; return { x: cam.x + xr * co + dz * si, y: cam.y + yr, z: cam.z - xr * si + dz * co }; },
     // fundo: renderiza tudo que está além de `perto` metros da câmera
@@ -870,7 +1017,7 @@
         }
       }
       const d = st.dl, L = cam.p(cam.x + d.x * 500, cam.y + d.y * 500, cam.z - d.z * 500);
-      if (!L.atras && n > 0.3) {
+      if (!L.atras && n > 0.3 && !R.semRaiosLua) {
         ctx.globalCompositeOperation = 'screen';
         for (let i = 0; i < 5; i++) {
           const x0 = L.x - 100 + i * 120, larg = 60 + i * 30, a = (0.045 - i * 0.006 + 0.01 * Math.sin(t * 0.6 + i * 1.3)) * n;

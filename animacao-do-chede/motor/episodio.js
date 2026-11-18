@@ -312,8 +312,9 @@
     if (legAnterior.bloco === bloco && legAnterior.y !== melhor && dist(legAnterior.y) > 40) melhor = legAnterior.y;
     legAnterior.bloco = bloco; legAnterior.y = melhor;
     const k = fase(t, bloco.inicio, bloco.inicio + 0.09, 'entra');
-    const tam = 98 * (1.18 - 0.18 * k);
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    // estilo opcional do roteiro: "legenda": { "tam": 70, "estreita": 0.82 } (letra menor e mais estreita, como nas referências)
+    const est = TL.legendaEstilo || {}, tam = (est.tam || 98) * (1.18 - 0.18 * k), e = est.estreita || 1;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); if (e !== 1) { ctx.translate(W / 2, 0); ctx.scale(e, 1); ctx.translate(-W / 2, 0); }
     ctx.font = `900 ${tam}px Inter`;
     const palavras = bloco.palavras;
     const larguras = palavras.map((p) => ctx.measureText(p.texto + ' ').width);

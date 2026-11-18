@@ -25,11 +25,13 @@
   ],
   "legenda": {
     "faixas": [
+      1480,
       1180,
-      1400,
-      760,
-      420
-    ]
+      420,
+      760
+    ],
+    "tam": 74,
+    "estreita": 0.84
   },
   "planos": [
     {
@@ -88,6 +90,14 @@
         "voz": "narrador"
       },
       "duracao": 4
+    },
+    {
+      "id": "ruina",
+      "fala": {
+        "texto": "No fim do cânion, tinha uma ruína antiga.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
     },
     {
       "id": "chegaram",

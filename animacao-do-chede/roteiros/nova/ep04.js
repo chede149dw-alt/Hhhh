@@ -372,8 +372,18 @@
   const ASS = { fabrica: 'criarAssassina', registroPoses: 'POSES_PADRAO' }, ENC = { fabrica: 'criarEncapuzado', registroPoses: 'POSES_PADRAO' };
   const DAVIE = { fabrica: 'criarDaviEspada', registroPoses: 'DAVI_JOGO_POSES' };
   const VERDE = '120,230,120', GELO = '170,230,255', FOGO = '255,150,60';
-  const camDia = (api, o) => api.camera({ f: 1100, x: 0, y: 1.5, z: 0, cy: 900, nevoa: V().nevoa(0, true, 'canion'), ...o });
+  const camDia = (api, o) => { window.MUNDO_3D = 'canion'; return api.camera({ f: 1100, x: 0, y: 1.5, z: 0, cy: 900, nevoa: V().nevoa(0, true, 'canion'), ...o }); };
   const dia = (ctx, api, cam, ents, o = {}) => noite(ctx, api, cam, ents, { dia: true, bokeh: 3, ...o });
+  // ruína (masmorra de pedra, estilo da referência do autor)
+  const camRuina = (api, o) => { window.MUNDO_3D = 'masmorra'; return api.camera({ f: 1050, x: 0, y: 1.6, z: 0, cy: 900, nevoa: V().nevoa(1, false, 'masmorra'), ...o }); };
+  const ruina = (ctx, api, cam, ents, o = {}) => noite(ctx, api, cam, ents, { noite: 1, bokeh: 3, ...o });
+  const LUZ_TOCHA = { lado: 1, forca: 0.75, cor: 'rgb(255,190,120)', sombra: 0.8 };
+  // barrinha de vida verde em cima da cabeça (como na referência)
+  function vidaCabeca(ctx, x, y, frac, o = {}) { const w = o.w || 120, h = o.h || 14; ctx.save(); ctx.fillStyle = 'rgba(10,14,20,0.85)'; ctx.beginPath(); ctx.roundRect(x - w / 2 - 3, y - h / 2 - 3, w + 6, h + 6, 8); ctx.fill(); ctx.fillStyle = o.cor || '#4FD06A'; ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w * Math.max(0, Math.min(1, frac)), h, 6); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(x - w / 2 + 4, y - h / 2 + 2, w * Math.max(0, frac) - 8, 3); ctx.restore(); }
+  // etiqueta verde de preço em cima da cabeça ("R$ 1.000")
+  function etiqueta(ctx, x, y, txt, k = 1) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.font = '800 30px Inter'; const w = ctx.measureText(txt).width + 64; ctx.fillStyle = 'rgba(14,40,24,0.92)'; ctx.strokeStyle = '#4FD06A'; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(-w / 2, -22, w, 44, 22); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#4FD06A'; ctx.beginPath(); ctx.arc(-w / 2 + 24, 0, 12, 0, TAU); ctx.fill(); ctx.strokeStyle = '#0E2818'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-w / 2 + 18, 0); ctx.lineTo(-w / 2 + 23, 5); ctx.lineTo(-w / 2 + 31, -5); ctx.stroke(); ctx.fillStyle = '#E8FFE8'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(txt, -w / 2 + 44, 1); ctx.restore(); }
+  // transição de clarão: uma faixa de luz varrendo a tela (como na referência)
+  function clarao(ctx, k) { if (k <= 0 || k >= 1) return; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const x = -400 + k * (W + 800); ctx.globalCompositeOperation = 'screen'; for (const [w, a] of [[520, 0.35], [220, 0.7], [70, 1]]) { const g = ctx.createLinearGradient(x - w, 0, x + w, 0); g.addColorStop(0, 'rgba(200,220,255,0)'); g.addColorStop(0.5, `rgba(235,242,255,${a})`); g.addColorStop(1, 'rgba(200,220,255,0)'); ctx.fillStyle = g; ctx.fillRect(x - w, 0, w * 2, H); } ctx.restore(); }
   // Davi com a Lâmina Rubra na mão (cabo atrás dos dedos, lâmina na frente de tudo); ângulo em window.ESPADA_MAO
   window.criarDaviEspada = (o = {}, vista = 'frente') => {
     const def = window.criarDaviArcano(o, vista), mao = def.partes.find((q) => q.nome === 'mao_d'); if (!mao) return def;
@@ -535,31 +545,42 @@
       const s = Math.max(0, 86400 - Math.floor(api.fase(0.4, 1) * 3)), hh = String(Math.floor(s / 3600)).padStart(2, '0'), mm = String(Math.floor(s / 60) % 60).padStart(2, '0'), ss = String(s % 60).padStart(2, '0');
       relogio(ctx, 540, 1000, `${hh}:${mm}:${ss}`, api.fase(0.35, 0.5));
     },
-    // 5) os caçadores na borda do cânion (câmera atrás deles, lá embaixo os dois)
+    // 4b) no fim do cânion, a ruína: os dois entram (contra a luz da entrada)
+    ruina(ctx, u, d, api) {
+      const cam = camRuina(api, { x: 0.3, y: 1.5, z: 9 - u * 0.4, cy: 950, f: 1000, yaw: Math.PI });
+      ruina(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado' }, -0.45, 0.6 + u * 0.7, 1.76, { caminharFrontal: api.t * 1.2, rumo: Math.PI, luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado' }, 0.55, 0.4 + u * 0.7, 1.8, { caminharFrontal: api.t * 1.2 + 0.5, rumo: Math.PI, luz: LUZ_TOCHA }) },
+      ], { forca: 0.3 });
+      clarao(ctx, u / 0.5);
+    },
+    // 5) os caçadores saem do escuro: por cima do ombro do Davi (vidas e preço em cima das cabeças)
     chegaram(ctx, u, d, api) {
-      const z = 16, bx = borda(z, -1) + 0.6, yy = V().CAN_ALT, G = 3; // de longe parecem pequenos: escala de leitura
-      const cam = camDia(api, { f: 900, x: 1.2, y: 1.5, z: 15.5 + u * 0.3, cy: 2250, yaw: -1.42 });
-      const H3 = [[borda(12.5, -1) + 0.6, 12.5, 22, 1.75 * G, ARQ, Math.PI / 2], [borda(16, -1) + 0.3, 16, 30, 2.6 * G, GIG, Math.PI / 2], [borda(19.5, -1) + 0.6, 19.5, 26, 1.72 * G, ASS, Math.PI / 2]];
-      dia(ctx, api, cam, H3.map(([x, zz, nv, a, it, r]) => ({ f: () => api.personagem3d(cam, { ...it, pose: 'parado' }, x, zz, a, { y: yy, rumo: r }) })), { forca: 0, bokeh: 0,
-        depois: () => { H3.forEach(([x, zz, nv, a], i) => { const q = cam.p(x, yy + a + 0.6, zz); Valdor.placaNivel(ctx, q.x, q.y, nv, api.fase(0.2 + i * 0.1, 0.5 + i * 0.1, 'volta'), { tam: 34, cor: '#FFB0B0' }); }); for (let i = 0; i < 6; i++) { const q = cam.p(borda(16, -1) + 0.4, yy - ((api.t * 6 + i * 3) % 30), 16); ctx.fillStyle = '#7A3424'; ctx.beginPath(); ctx.arc(q.x, q.y, 5, 0, TAU); ctx.fill(); } },
+      const cam = camRuina(api, { x: 0.45, y: 1.8, z: 5.6 + u * 0.12, cy: 880, f: 950 });
+      const S = V().MAS.sacada, sai = api.fase(0.05, 0.5);
+      const H3 = [[-6.4, 14.2, 1.75, ARQ, S.y, 22], [0.6, 17.5 - 2.5 * sai, 2.6, GIG, 0, 30], [3.2, 12.4, 1.72, ASS, 0, 26]];
+      ruina(ctx, api, cam, [
+        ...H3.map(([x, z, a, it, y]) => ({ f: () => api.personagem3d(cam, { ...it, pose: 'parado', expressao: 'raiva' }, x, z, a, { y, olhaPara: [0, 4.6], luz: LUZ_TOCHA }) })),
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado' }, -0.2, 7.7, 1.76, { rumo: 0.15 + Math.PI, luz: LUZ_TOCHA }) },
+      ], { forca: 0.3, bokeh: 2,
+        depois: () => { H3.forEach(([x, z, a, it, y, nv], i) => { const q = cam.p(x, y + a + 0.35, z), k = api.fase(0.25 + i * 0.1, 0.5 + i * 0.1, 'volta'); vidaCabeca(ctx, q.x, q.y, 1, { w: 90 * k, h: 12 }); Valdor.placaNivel(ctx, q.x, q.y - 40, nv, k, { tam: 28, cor: '#FFB0B0' }); }); const qd = cam.p(-0.2, 2.05, 7.7); etiqueta(ctx, qd.x, qd.y - 30, 'R$ 1.000', api.fase(0.5, 0.75, 'volta')); },
       });
-      const k = api.fase(0.5, 0.8, 'volta'); zoomEm(ctx, 540, 1650, k, () => { api.texto('R$ 1.000', 540, 1650, 120, { cor: '#FFE680' }); });
     },
     // 5b) magias novas girando em volta do Davi
     magias(ctx, u, d, api) {
-      const cam = camDia(api, { x: 0, y: 1.4, z: 3.2, cy: 900, f: 1150 });
-      const res = dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: 'conjurando', expressao: 'determinado' }, 0, 5.5, 1.76, { rumo: 0 }) }], { forca: 0.3,
-        magias: () => [{ tipo: 'circulo', x: 0, z: 5.5, raio: 1.1, k: Math.min(1, u * 2), cor: '#FFD27A' }] });
+      const cam = camRuina(api, { x: 0, y: 1.4, z: 2.4, cy: 900, f: 1150 });
+      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: 'conjurando', expressao: 'determinado' }, 0, 5.0, 1.76, { rumo: 0, luz: LUZ_TOCHA }) }], { forca: 0.3,
+        magias: () => [{ tipo: 'circulo', x: 0, z: 5.0, raio: 1.1, k: Math.min(1, u * 2), cor: '#FFD27A' }] });
       [['MURALHA DE GELO', GELO, 'gelo'], ['RAÍZES ANCIÃS', VERDE, 'raiz'], ['METEORO', FOGO, 'meteoro']].forEach(([n, c, t], i) => { const a = api.t * 0.9 + (i / 3) * TAU, x = 540 + Math.cos(a) * 360, y = 760 + Math.sin(a) * 140; cartaMagia(ctx, x, y, 0.95 + 0.15 * Math.sin(a), n, c, t, api.t, api.fase(0.1 + i * 0.12, 0.4 + i * 0.12, 'volta')); });
-      const k = api.fase(0.5, 0.8, 'volta'); zoomEm(ctx, 540, 320, k, () => api.texto('NOVAS MAGIAS', 540, 320, 100, { cor: AMARELO }));
+      const k = api.fase(0.5, 0.8, 'volta'); zoomEm(ctx, 540, 320, k, () => api.texto('NOVAS MAGIAS', 540, 320, 90, { cor: AMARELO }));
     },
-    // 6) a arqueira atira e a flecha vira dez
+    // 6) a arqueira atira lá da sacada e a flecha vira dez
     flechas(ctx, u, d, api) {
-      const cam = camDia(api, { x: -1.6, y: 1.5, z: 3.4, cy: 880, f: 1200, yaw: 0.25 });
-      const puxa = Math.min(1, u / (d * 0.45)), solta = u > d * 0.45; window.ARCO = { puxa: solta ? 0 : puxa, flecha: !solta, brilho: puxa };
-      window.ARMA_ANG = { arco: 0 };
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, mao_e: 0, braco_d: -80, antebraco_d: 95 + (solta ? -60 : 0), tronco: -4, coxa_d: 14, coxa_e: -10 }, expressao: 'determinado', vista: 'frente' }, -0.6, 5.6, 1.75, { rumo: Math.PI * 0.5 }) }], { forca: 0.3 });
-      if (solta) { const k = (u - d * 0.45) / (d * 0.55); for (let i = 0; i < 10; i++) { const a = -0.5 + i * 0.1, x = 420 + k * 520 + i * 10, y = 840 - k * 560 - (i - 4.5) * 46 * Math.min(1, k * 3); ctx.save(); ctx.translate(x + i * k * 20, y); ctx.rotate(-0.4 + a * 0.3); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-60, -3, 120, 6); ctx.fillStyle = '#E8F8FF'; ctx.beginPath(); ctx.moveTo(60, -10); ctx.lineTo(84, 0); ctx.lineTo(60, 10); ctx.fill(); Valdor.brilhoRadial(ctx, 70, 0, 50, '160,255,170', 0.5); ctx.restore(); } }
+      const S = V().MAS.sacada, AX = -6.6, AZ = 15;
+      const cam = camRuina(api, { x: AX + 2.6, y: S.y + 1.6, z: AZ - 2.6, cy: 940, f: 1100, yaw: -0.75 });
+      const puxa = Math.min(1, u / (d * 0.45)), solta = u > d * 0.45; window.ARCO = { puxa: solta ? 0 : puxa, flecha: !solta, brilho: puxa }; window.ARMA_ANG = { arco: 0 };
+      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, mao_e: 0, braco_d: -80, antebraco_d: 95 + (solta ? -60 : 0), tronco: -4, coxa_d: 14, coxa_e: -10 }, expressao: 'determinado', vista: 'frente' }, AX, AZ, 1.75, { y: S.y, rumo: Math.PI * 0.5, luz: LUZ_TOCHA }) }], { forca: 0.3 });
+      if (solta) { const k = (u - d * 0.45) / (d * 0.55); for (let i = 0; i < 10; i++) { const x = 420 + k * 520 + i * 10, y = 840 - k * 300 + (i - 4.5) * 46 * Math.min(1, k * 3); ctx.save(); ctx.translate(x + i * k * 20, y); ctx.rotate(0.2); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-60, -3, 120, 6); ctx.fillStyle = '#E8F8FF'; ctx.beginPath(); ctx.moveTo(60, -10); ctx.lineTo(84, 0); ctx.lineTo(60, 10); ctx.fill(); Valdor.brilhoRadial(ctx, 70, 0, 50, '160,255,170', 0.5); ctx.restore(); } }
     },
     // 7) ciência: adrenalina e o cérebro gravando mais quadros
     ciencia(ctx, u, d, api) {
@@ -576,82 +597,90 @@
     },
     // 8) muralha de gelo: as flechas cravam, três passam e acertam o Davi
     gelo(ctx, u, d, api) {
-      const cam = camDia(api, { x: 0.6, y: 1.3, z: 2.0, cy: 900, f: 1100, yaw: -0.08 });
+      const cam = camRuina(api, { x: 0.6, y: 1.3, z: 1.6, cy: 900, f: 1100, yaw: -0.08 });
       const sobe = api.fase(0, 0.25), dano = u > d * 0.62;
-      const res = dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: dano ? { coxa_d: -50, canela_d: 80, coxa_e: 20, canela_e: 40, tronco: 12, braco_d: 30, antebraco_d: -40, braco_e: -20, _plantar: true } : 'conjurando', expressao: dano ? 'medo' : 'determinado' }, 0, 5.6, 1.76, { rumo: 0 }) }], { forca: 0.3,
+      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: dano ? { coxa_d: -50, canela_d: 80, coxa_e: 20, canela_e: 40, tronco: 12, braco_d: 30, antebraco_d: -40, braco_e: -20, _plantar: true } : 'conjurando', expressao: dano ? 'medo' : 'determinado' }, 0, 5.2, 1.76, { rumo: 0, luz: LUZ_TOCHA }) }], { forca: 0.3,
+        luzes: [{ x: 0, y: 1, z: 4.3, cor: '#9FE0FF', forca: 1.2 * sobe, raio: 6 }],
         depois: ([rig]) => {
-          muralhaGelo(ctx, cam, 0, 4.7, 2.6, sobe, api.t, api.fase(0.3, 0.6));
-          for (let i = 0; i < 6; i++) { const q = cam.p(-1 + i * 0.4, 0.8 + rnd(i) * 0.7, 4.65); if (api.fase(0.25 + i * 0.05, 0.3 + i * 0.05) > 0) { ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(0.3); ctx.fillStyle = '#C9A06A'; ctx.fillRect(0, -3, 70, 6); ctx.restore(); Noite.faiscas(ctx, q.x, q.y, 30, 50, api.t, 0.6, i, GELO); } }
+          muralhaGelo(ctx, cam, 0, 4.3, 2.6, sobe, api.t, api.fase(0.3, 0.6));
+          for (let i = 0; i < 6; i++) { const q = cam.p(-1 + i * 0.4, 0.8 + rnd(i) * 0.7, 4.25); if (api.fase(0.25 + i * 0.05, 0.3 + i * 0.05) > 0) { ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(0.3); ctx.fillStyle = '#C9A06A'; ctx.fillRect(0, -3, 70, 6); ctx.restore(); Noite.faiscas(ctx, q.x, q.y, 30, 50, api.t, 0.6, i, GELO); } }
           if (dano) { const a = rig.pontoMundo('braco_d', [0, 0.1]); Combate.numero(ctx, a.x - 60, a.y - 120, '-45', u - d * 0.62, 'recebido'); Combate.numero(ctx, a.x + 80, a.y + 200, '-30', u - d * 0.66, 'recebido'); }
         } });
       if (dano) { ctx.save(); const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.75); v.addColorStop(0, 'rgba(200,0,0,0)'); v.addColorStop(1, 'rgba(200,0,0,0.45)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H); ctx.restore(); }
     },
     // 8b) o Davi saca a Lâmina Rubra e corta o resto das flechas
     corta(ctx, u, d, api) {
-      const cam = camDia(api, { x: 0, y: 1.3, z: 2.5, cy: 900, f: 1150 });
+      const cam = camRuina(api, { x: 0, y: 1.3, z: 2.2, cy: 900, f: 1150 });
       espada(api, -1.6 + Math.min(1, u / (d * 0.5)) * 3.2, 1);
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIE, pose: { braco_d: 95 - 140 * Math.min(1, u / (d * 0.5)), antebraco_d: -10, tronco: 8, coxa_d: 20, canela_d: -15, coxa_e: -15, canela_e: 15, _maos: { d: 'punho' }, _plantar: true }, expressao: 'determinado' }, 0, 5.4, 1.76, { rumo: 0.1 }) }], { forca: 0.3,
+      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIE, pose: { braco_d: 95 - 140 * Math.min(1, u / (d * 0.5)), antebraco_d: -10, tronco: 8, coxa_d: 20, canela_d: -15, coxa_e: -15, canela_e: 15, _maos: { d: 'punho' }, _plantar: true }, expressao: 'determinado' }, 0, 5.0, 1.76, { rumo: 0.1, luz: LUZ_TOCHA }) }], { forca: 0.3,
+        luzes: [{ x: 0.3, y: 1.4, z: 4.6, cor: '#FF5A4A', forca: 1.2, raio: 5 }],
         depois: () => { for (let i = 0; i < 5; i++) { const x = 300 + i * 120, y = 700 + i * 30 + u * 300; ctx.save(); ctx.translate(x, y); ctx.rotate(1 + i); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-30, -3, 30, 6); ctx.rotate(0.8); ctx.fillRect(4, -3, 30, 6); ctx.restore(); } Valdor.brilhoRadial(ctx, 540, 820, 380, VERMELHO, 0.3); } });
     },
-    // 9) o Téo sobe a parede do cânion; uma flecha pega no braço
+    // 9) o Téo sobe o entulho até a sacada; uma flecha pega no braço
     parede(ctx, u, d, api) {
-      const bx = V().canParede(7, 1, 3) - 0.35;
-      const cam = camDia(api, { x: bx - 3.6, y: 2.6, z: 4.6, cy: 1000, f: 1000, yaw: 0.95 });
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_d: -160, antebraco_d: -10, braco_e: 150, antebraco_e: 20, coxa_d: -60, canela_d: 70, coxa_e: 10, canela_e: 30 }, expressao: 'medo' }, bx, 7, 1.8, { y: 2.2, rumo: -Math.PI / 2 }) }], { forca: 0.3,
-        depois: ([rig]) => { const a = rig.pontoMundo('antebraco_e', [0, 0.2]); ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(-0.6); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-90, -4, 90, 8); ctx.restore(); Combate.numero(ctx, a.x + 40, a.y - 100, '-35', 0.2, 'recebido'); for (let i = 0; i < 5; i++) { const q = cam.p(bx - 0.2, 2.0 - i * 0.4 - api.t % 1 * 0.3, 7 + i * 0.1); ctx.fillStyle = '#9A4A2A'; ctx.beginPath(); ctx.arc(q.x, q.y, 6, 0, TAU); ctx.fill(); } } });
+      const S = V().MAS.sacada, TX = S.x1 + 0.2, TZ = 14.2;
+      const cam = camRuina(api, { x: 0.5, y: 2.2, z: 9.5, cy: 1050, f: 1050, yaw: -0.55 });
+      ruina(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, braco_d: -80, antebraco_d: 95, tronco: -4 }, expressao: 'raiva' }, -6.8, 15.6, 1.75, { y: S.y, olhaPara: [TX, TZ], luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_d: -160, antebraco_d: -10, braco_e: 150, antebraco_e: 20, coxa_d: -60, canela_d: 70, coxa_e: 10, canela_e: 30 }, expressao: 'medo' }, TX, TZ, 1.8, { y: 1.9 + u * 0.4, rumo: Math.PI / 2, luz: LUZ_TOCHA }) },
+      ], { forca: 0.3,
+        depois: ([ra, rig]) => { const a = rig.pontoMundo('antebraco_e', [0, 0.2]); ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(-0.6); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-90, -4, 90, 8); ctx.restore(); Combate.numero(ctx, a.x + 40, a.y - 100, '-35', 0.2, 'recebido'); for (let i = 0; i < 5; i++) { const q = cam.p(TX - 0.1, 1.6 - ((api.t * 2 + i * 0.4) % 1.6), TZ); ctx.fillStyle = '#4A4E5A'; ctx.beginPath(); ctx.arc(q.x, q.y, 6, 0, TAU); ctx.fill(); } } });
     },
-    // 10) o martelo do gigante: onda de choque joga o Davi na parede
+    // 10) o martelo do cavaleiro: onda de choque joga o Davi contra a parede
     martelo(ctx, u, d, api) {
-      const cam = camDia(api, { x: -0.7, y: 0.7, z: 2.2, cy: 1100, f: 950, yaw: 0.05 });
+      const cam = camRuina(api, { x: -0.7, y: 0.7, z: 1.6, cy: 1100, f: 950, yaw: 0.05 });
       const bate = 0.4, kb = u - bate, [tx, ty] = api.tremor(kb > 0 && kb < 0.5 ? 14 : 0);
       window.ARMA_ANG = { martelo: kb < 0 ? 180 : 60 };
-      dia(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...GIG, pose: kb < 0 ? { braco_d: -170, antebraco_d: -10, braco_e: 160, antebraco_e: 10, coxa_d: -40, canela_d: 50, coxa_e: 20 } : { braco_d: -60, antebraco_d: -10, tronco: 25, coxa_d: -30, canela_d: 40, coxa_e: 30, canela_e: 10, _plantar: true }, expressao: 'raiva' }, 0, 6.2, 2.6, { y: kb < 0 ? 1.5 * Math.sin(Math.min(1, u / bate) * Math.PI * 0.5) : 0, rumo: Math.PI }) },
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { tronco: -30, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -40, canela_e: 50 }, expressao: 'medo' }, kb > 0 ? -1.2 - Math.min(kb, 0.5) * 1.2 : -1.2, 4.6, 1.76, { y: kb > 0 ? Math.sin(Math.min(1, kb / 0.5) * Math.PI) * 0.6 : 0, rumo: 0.3 }) },
+      ruina(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...GIG, pose: kb < 0 ? { braco_d: -170, antebraco_d: -10, braco_e: 60, antebraco_e: -40, coxa_d: -40, canela_d: 50, coxa_e: 20 } : { braco_d: -60, antebraco_d: -10, braco_e: 40, antebraco_e: -40, tronco: 25, coxa_d: -30, canela_d: 40, coxa_e: 30, canela_e: 10, _plantar: true }, expressao: 'raiva' }, 0, 5.8, 2.6, { y: kb < 0 ? 1.5 * Math.sin(Math.min(1, u / bate) * Math.PI * 0.5) : 0, rumo: 0, luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { tronco: -30, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -40, canela_e: 50 }, expressao: 'medo' }, kb > 0 ? -1.2 - Math.min(kb, 0.5) * 1.2 : -1.2, 4.2, 1.76, { y: kb > 0 ? Math.sin(Math.min(1, kb / 0.5) * Math.PI) * 0.6 : 0, rumo: 0.3, luz: LUZ_TOCHA }) },
       ], { forca: 0.3,
-        depois: () => { const q = cam.p(0, 0, 5.6); if (kb > 0) { rachadura(ctx, cam, 0, 5.6, 2.5, Math.min(1, kb * 3), 4); Noite.onda(ctx, q.x, q.y, 1100, Math.min(1, kb / 0.6)); Noite.fumaca(ctx, q.x, q.y, 2 * q.s, Math.min(0.95, kb / 1.4), { seed: 4, cor: '200,110,70', sobe: 0.5, largura: 2.4, n: 22 }); destrocos(ctx, cam, 0, 0.05, 5.6, kb, { n: 20, forca: 2.2, tam: 0.08, seed: 5, cor: '#9A4A2A' }); const qd = cam.p(-1.2 - Math.min(kb, 0.5) * 1.2, 1.5, 4.6); Combate.numero(ctx, qd.x, qd.y - 160, '-120', kb - 0.15, 'recebido'); } flash(ctx, kb); },
+        depois: () => { const q = cam.p(0, 0, 5.2); if (kb > 0) { rachadura(ctx, cam, 0, 5.2, 2.5, Math.min(1, kb * 3), 4); Noite.onda(ctx, q.x, q.y, 1100, Math.min(1, kb / 0.6)); Noite.fumaca(ctx, q.x, q.y, 2 * q.s, Math.min(0.95, kb / 1.4), { seed: 4, cor: '120,125,140', sobe: 0.5, largura: 2.4, n: 22 }); destrocos(ctx, cam, 0, 0.05, 5.2, kb, { n: 20, forca: 2.2, tam: 0.08, seed: 5, cor: '#4A4E5A' }); const qd = cam.p(-1.2 - Math.min(kb, 0.5) * 1.2, 1.5, 4.2); Combate.numero(ctx, qd.x, qd.y - 160, '-120', kb - 0.15, 'recebido'); } flash(ctx, kb); },
         fx: { cx: W / 2 + tx, cy: H / 2 + ty, zoom: soco(kb, 0.14) } });
     },
-    // 10b) raízes anciãs prendendo o gigante
+    // 10b) raízes anciãs prendendo o cavaleiro
     raizes(ctx, u, d, api) {
-      const cam = camDia(api, { x: -0.3, y: 1.3, z: 1.4, cy: 900, f: 950 });
+      const cam = camRuina(api, { x: -0.3, y: 1.3, z: 1.2, cy: 900, f: 950 });
       window.ARMA_ANG = { martelo: 30 };
-      dia(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...GIG, pose: { braco_d: -30 - 20 * Math.sin(api.t * 6), antebraco_d: -20, braco_e: 30, tronco: 10 + 3 * Math.sin(api.t * 8), coxa_d: 10, coxa_e: -10 }, expressao: 'raiva' }, 0.2, 6.4, 2.6, { rumo: Math.PI }) },
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { tronco: 25, braco_d: 20, antebraco_d: -20, braco_e: -20, antebraco_e: 20, coxa_d: -40, canela_d: 70, coxa_e: 30, canela_e: 30, _plantar: true }, expressao: 'determinado' }, -0.9, 4.2, 1.76, { olhaPara: [0.2, 6.4] }) },
-      ], { forca: 0.3,
-        chaoEm: [0.2, 6.4], chao: () => { const q = cam.p(-0.9, 0.02, 4.2); Valdor.brilhoRadial(ctx, q.x, q.y, 200, VERDE, 0.7); },
-        depois: () => raizes(ctx, cam, 0.2, 6.4, 2.6, api.fase(0.1, 0.6), api.t) });
-      const k = api.fase(0, 0.25, 'volta'); zoomEm(ctx, 540, 320, k, () => api.texto('RAÍZES ANCIÃS', 540, 320, 90, { cor: '#8AF08A' }));
+      ruina(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...GIG, pose: { braco_d: -30 - 20 * Math.sin(api.t * 6), antebraco_d: -20, braco_e: 30, antebraco_e: -30, tronco: 10 + 3 * Math.sin(api.t * 8), coxa_d: 10, coxa_e: -10 }, expressao: 'raiva' }, 0.2, 6.2, 2.6, { rumo: 0, luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { tronco: 25, braco_d: 20, antebraco_d: -20, braco_e: -20, antebraco_e: 20, coxa_d: -40, canela_d: 70, coxa_e: 30, canela_e: 30, _plantar: true }, expressao: 'determinado' }, -0.9, 4.0, 1.76, { olhaPara: [0.2, 6.2], luz: LUZ_TOCHA }) },
+      ], { forca: 0.3, luzes: [{ x: 0.2, y: 0.5, z: 6.2, cor: '#7AF07A', forca: 1.0, raio: 6 }],
+        chaoEm: [0.2, 6.2], chao: () => { const q = cam.p(-0.9, 0.02, 4.0); Valdor.brilhoRadial(ctx, q.x, q.y, 200, VERDE, 0.7); },
+        depois: () => raizes(ctx, cam, 0.2, 6.2, 2.6, api.fase(0.1, 0.6), api.t) });
+      const k = api.fase(0, 0.25, 'volta'); zoomEm(ctx, 540, 320, k, () => api.texto('RAÍZES ANCIÃS', 540, 320, 80, { cor: '#8AF08A' }));
     },
-    // 10c) meteoro caindo em cima do gigante preso
+    // 10c) meteoro: rompe o teto da ruína e cai em cima do cavaleiro preso
     meteoro(ctx, u, d, api) {
-      const cam = camDia(api, { x: -0.5, y: 1.0, z: 0.5, cy: 1250, f: 900 });
+      const cam = camRuina(api, { x: -0.5, y: 1.0, z: 0.3, cy: 1250, f: 900 });
       const cai = Math.min(1, u / (d * 0.55)), kb = u - d * 0.55;
       window.ARMA_ANG = { martelo: 30 };
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...GIG, pose: kb > 0 ? { tronco: -40, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -30 } : { braco_d: -30, antebraco_d: -20, tronco: 10 }, expressao: kb > 0 ? 'medo' : 'espanto' }, 0.2, 7.0, 2.6, { rumo: Math.PI }) }], { forca: 0.2,
-        luzes: [{ x: 0.2, y: 3, z: 7, cor: '#FF9A40', forca: kb > 0 ? 3 : 1.2 * cai, raio: 14 }],
-        depois: () => { raizes(ctx, cam, 0.2, 7.0, 2.6, 1, api.t); const alvo = cam.p(0.2, 1.3, 7.0); if (kb < 0) meteoro(ctx, mix(alvo.x - 600, alvo.x, cai), mix(-200, alvo.y, cai * cai), 120, api.t); else { explosao(ctx, alvo.x, alvo.y, 320, kb * 1.4, api.t); Combate.numero(ctx, alvo.x, alvo.y - 380, '-320', kb, 'critico'); } flash(ctx, kb); } });
-      ctx.save(); ctx.fillStyle = `rgba(255,120,40,${0.15 * cai})`; ctx.fillRect(0, 0, W, H); ctx.restore();
+      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...GIG, pose: kb > 0 ? { tronco: -40, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -30 } : { braco_d: -30, antebraco_d: -20, tronco: 10 }, expressao: kb > 0 ? 'medo' : 'espanto' }, 0.2, 6.8, 2.6, { rumo: 0, luz: LUZ_TOCHA }) }], { forca: 0.2,
+        luzes: [{ x: 0.2, y: 3, z: 6.8, cor: '#FF9A40', forca: kb > 0 ? 3 : 1.2 * cai, raio: 14 }],
+        depois: () => { raizes(ctx, cam, 0.2, 6.8, 2.6, 1, api.t); const alvo = cam.p(0.2, 1.3, 6.8), teto = cam.p(-0.8, V().MAS.alt, 6.8);
+          ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createLinearGradient(teto.x, 0, alvo.x, alvo.y); g.addColorStop(0, `rgba(255,220,170,${0.5 * cai})`); g.addColorStop(1, 'rgba(255,200,150,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(teto.x - 120, 0); ctx.lineTo(teto.x + 120, 0); ctx.lineTo(alvo.x + 260, alvo.y + 200); ctx.lineTo(alvo.x - 260, alvo.y + 200); ctx.closePath(); ctx.fill(); ctx.restore();
+          if (kb < 0) { meteoro(ctx, mix(teto.x, alvo.x, cai), mix(-200, alvo.y, cai * cai), 120, api.t); destrocos(ctx, cam, -0.8 + cai, V().MAS.alt - cai * 8, 6.8, cai * 0.6, { n: 10, forca: 1, tam: 0.12, seed: 2, cor: '#3A3E4A' }); } else { explosao(ctx, alvo.x, alvo.y, 320, kb * 1.4, api.t); Combate.numero(ctx, alvo.x, alvo.y - 380, '-320', kb, 'critico'); } flash(ctx, kb); } });
+      ctx.save(); ctx.fillStyle = `rgba(255,120,40,${0.12 * cai})`; ctx.fillRect(0, 0, W, H); ctx.restore();
     },
-    // 11) a assassina invisível: pegadas, contorno vermelho, a espada puxando como bússola
+    // 11) a assassina invisível: pegadas na poeira, contorno vermelho, a espada puxando como bússola
     assassina(ctx, u, d, api) {
-      const cam = camDia(api, { x: -0.25, y: 1.4, z: 2.2, cy: 880, f: 1050 });
+      const cam = camRuina(api, { x: -0.25, y: 1.4, z: 2.0, cy: 880, f: 1050 });
       const revela = api.fase(0.45, 0.7);
       espada(api, -1.9 + 0.2 * Math.sin(api.t * 20) * (1 - revela), 1.2);
-      dia(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIE, pose: { braco_d: 80, antebraco_d: -20, tronco: -5, _maos: { d: 'punho' } }, expressao: 'determinado' }, 0.4, 5.3, 1.76, { olhaPara: [-0.8, 5.0] }) },
-        { f: () => api.personagem3d(cam, { ...ASS, pose: { braco_d: -150, antebraco_d: -20, braco_e: 150, antebraco_e: 20, coxa_d: 20, coxa_e: -30, canela_e: 30 }, expressao: 'raiva' }, -0.8, 5.0, 1.72, { olhaPara: [0.4, 5.3] }), alfa: 0.12 + 0.75 * revela, cor: revela < 1 ? 'rgba(255,40,40,0.55)' : undefined },
-      ], { forca: 0.3, depois: () => pegadas(ctx, cam, [[-2.4, 6.6], [-2.1, 6.2], [-1.8, 5.8], [-1.4, 5.5], [-1.1, 5.2]], api.fase(0, 0.5)) });
+      ruina(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIE, pose: { braco_d: 80, antebraco_d: -20, tronco: -5, _maos: { d: 'punho' } }, expressao: 'determinado' }, 0.4, 5.1, 1.76, { olhaPara: [-0.8, 4.8], luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...ASS, pose: { braco_d: -150, antebraco_d: -20, braco_e: 150, antebraco_e: 20, coxa_d: 20, coxa_e: -30, canela_e: 30 }, expressao: 'raiva' }, -0.8, 4.8, 1.72, { olhaPara: [0.4, 5.1] }), alfa: 0.12 + 0.75 * revela, cor: revela < 1 ? 'rgba(255,40,40,0.55)' : undefined },
+      ], { forca: 0.3, luzes: [{ x: 0.4, y: 1.4, z: 4.7, cor: '#FF4A3A', forca: 1.0, raio: 5 }], depois: () => pegadas(ctx, cam, [[-2.4, 6.4], [-2.1, 6.0], [-1.8, 5.6], [-1.4, 5.3], [-1.1, 5.0]], api.fase(0, 0.5)) });
       if (revela > 0) Valdor.brilhoRadial(ctx, 380, 900, 360, VERMELHO, 0.35 * revela);
     },
-    // 12) loot dos caçadores e a barra do aluguel subindo
+    // 12) loot dos caçadores perto do baú dourado e a barra do aluguel subindo
     loot(ctx, u, d, api) {
-      const cam = camDia(api, { x: 0, y: 1.5, z: 2.4, cy: 880 });
-      dia(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'feliz' }, -0.6, 5.6, 1.76, { rumo: 0.1 }) },
-        { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: 'feliz' }, 0.6, 5.8, 1.8, { rumo: -0.1 }) },
-      ], { forca: 0.3, desfoque: 5 });
+      const B = V().MAS.bau;
+      const cam = camRuina(api, { x: B[0] - 2.4, y: 1.7, z: B[1] - 4.2, cy: 900, f: 1050, yaw: 0.25 });
+      ruina(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'feliz' }, B[0] - 2.2, B[1] - 1.2, 1.76, { olhaPara: B, luz: { lado: 1, forca: 0.9, cor: 'rgb(255,200,120)', sombra: 0.8 } }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: 'feliz' }, B[0] - 1.0, B[1] - 2.0, 1.8, { olhaPara: B, luz: { lado: 1, forca: 0.9, cor: 'rgb(255,200,120)', sombra: 0.8 } }) },
+      ], { forca: 0.3, desfoque: 4 });
       const L = [{ nome: 'Arco longo', rar: 'raro', preco: 'R$ 28,00', icone: 'arco' }, { nome: 'Moedas', rar: 'comum', preco: 'R$ 21,30', icone: 'moedas' }, { nome: 'Adagas gêmeas', rar: 'raro', preco: 'R$ 32,00', icone: 'adagas' }];
       L.forEach((it, i) => { const k = api.fase(0.05 + i * 0.12, 0.35 + i * 0.12, 'volta'); carta3(ctx, 220 + i * 320, 900, 290, it, k, api.t); });
       const v = mix(418.08, 499.38, api.fase(0.55, 0.9)); Combate.aluguel(ctx, v / 1200, reaisTxt(v), { dias: '28 DIAS', y: 150 });
