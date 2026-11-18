@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Animação Pronta</title>
+<style>
+@font-face{font-family:Inter;font-weight:400;src:url(inter-latin-400-normal.woff2)}
+@font-face{font-family:Inter;font-weight:600;src:url(inter-latin-600-normal.woff2)}
+@font-face{font-family:Inter;font-weight:800;src:url(inter-latin-800-normal.woff2)}
+@font-face{font-family:Playfair;font-weight:500;src:url(playfair-display-latin-500-normal.woff2)}
+@font-face{font-family:Playfair;font-weight:500;font-style:italic;src:url(playfair-display-latin-500-italic.woff2)}
+@page{size:A5;margin:13mm 12mm 15mm;@bottom-center{content:counter(page);font-family:Inter;font-size:7pt;color:#9A93A6}}
+@page capa{margin:0}
+:root{--tinta:#1E1A26;--brasa:#E0663A;--ambar:#F2B544;--noite:#14122B;--papel:#FBF8F3;--cinza:#6B6675;--linha:#E6DFD4}
+*{box-sizing:border-box}
+html{background:#fff}
+body{margin:0;font-family:Inter,sans-serif;font-size:9.2pt;line-height:1.5;color:var(--tinta)}
+h1,h2,h3{line-height:1.2;margin:0}
+h2{font-family:Playfair;font-weight:500;font-size:19pt;margin:1.5mm 0 3.5mm}
+h3{font-size:10.5pt;font-weight:800;margin:5mm 0 1.5mm;color:var(--tinta)}
+p{margin:0 0 2.6mm}
+ul,ol{margin:0 0 3mm;padding-left:5mm}
+li{margin-bottom:1.2mm}
+strong{font-weight:800}
+.capa{page:capa;page-break-after:always;background:var(--noite);color:#fff;padding:24mm 14mm 16mm;width:148mm;height:210mm;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.capa .rach{position:absolute;inset:0}
+.capa .selo{font-size:7.5pt;letter-spacing:.25em;text-transform:uppercase;color:var(--ambar);font-weight:600;position:relative}
+.capa h1{font-family:Inter;font-weight:800;font-size:36pt;letter-spacing:-.02em;line-height:1;margin:8mm 0 5mm;position:relative}
+.capa h1 span{color:var(--ambar)}
+.capa .sub{font-family:Playfair;font-style:italic;font-size:13pt;line-height:1.35;color:#E9E3F5;max-width:100mm;position:relative}
+.capa .rod{margin-top:auto;font-size:8pt;color:#B9B3C9;position:relative;align-self:flex-start;background:var(--noite);padding:1mm 2mm 1mm 0}
+.cap{margin-top:9mm;padding-top:6mm;border-top:.4mm solid var(--linha)}
+.cap>.num,.cap>h2{break-after:avoid}
+h3{break-after:avoid}
+.sumario{page-break-after:always}
+.cap.nova{page-break-before:always;margin-top:0;border-top:0;padding-top:0}
+.num{font-size:7.5pt;letter-spacing:.25em;color:var(--brasa);font-weight:800;text-transform:uppercase}
+.lead{font-size:10.5pt;color:#3B3546}
+.box{border-radius:3mm;padding:3.5mm 4mm;margin:3.5mm 0;break-inside:avoid}
+.box.regra{background:#FFF3DC;border-left:1.2mm solid var(--ambar)}
+.box.erro{background:#FCE9E2;border-left:1.2mm solid var(--brasa)}
+.box.dica{background:#EAF0F7;border-left:1.2mm solid #4E78A8}
+.box .t{font-size:7pt;letter-spacing:.2em;text-transform:uppercase;font-weight:800;margin-bottom:1mm;display:block}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:8.4pt}
+tr{break-inside:avoid}
+th{text-align:left;font-weight:800;border-bottom:.5mm solid var(--tinta);padding:1.5mm 1.5mm 1.5mm 0}
+td{border-bottom:.2mm solid var(--linha);padding:1.5mm 1.5mm 1.5mm 0;vertical-align:top}
+.sumario ol{list-style:none;padding:0;counter-reset:c}
+.sumario li{counter-increment:c;display:flex;gap:3mm;padding:1.2mm 0;border-bottom:.2mm solid var(--linha);margin:0}
+.sumario li::before{content:counter(c,decimal-leading-zero);font-weight:800;color:var(--brasa);width:7mm}
+.check li{list-style:none;position:relative;padding-left:1mm}
+.check li::before{content:"☐";position:absolute;left:-5mm;color:var(--brasa)}
+.prompt{font-family:ui-monospace,Menlo,monospace;font-size:7.6pt;line-height:1.5;background:var(--noite);color:#EDE8F7;border-radius:3mm;padding:4mm;white-space:pre-wrap;margin:3mm 0}
+.fluxo{display:flex;flex-wrap:wrap;gap:1.5mm;margin:3mm 0 4mm}
+.fluxo span{background:var(--noite);color:#fff;border-radius:5mm;padding:1mm 3mm;font-size:7.6pt;font-weight:600}
+.fluxo b{color:var(--ambar);font-weight:800;margin-right:1mm}
+.fim{page-break-before:always;text-align:center;padding-top:50mm}
+.fim p{font-family:Playfair;font-style:italic;font-size:14pt}
+</style>
+</head>
+<body>
+
+<section class="capa">
+<svg class="rach" viewBox="0 0 148 210" preserveAspectRatio="none" aria-hidden="true">
+  <defs><radialGradient id="g" cx="50%" cy="85%" r="60%"><stop offset="0" stop-color="#F2B544" stop-opacity=".35"/><stop offset="1" stop-color="#14122B" stop-opacity="0"/></radialGradient></defs>
+  <rect width="148" height="210" fill="url(#g)"/>
+  <path d="M74 210 L70 188 L78 176 L66 160 L74 146 L68 132" stroke="#F2B544" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <path d="M78 176 L96 168 L104 154" stroke="#F2B544" stroke-width=".6" fill="none"/>
+  <path d="M66 160 L48 156 L40 142" stroke="#F2B544" stroke-width=".6" fill="none"/>
+  <path d="M70 188 L52 196 L36 192" stroke="#E0663A" stroke-width=".5" fill="none"/>
+  <path d="M74 146 L90 138" stroke="#E0663A" stroke-width=".4" fill="none"/>
+  <g fill="#F2B544"><circle cx="58" cy="128" r=".8"/><circle cx="88" cy="122" r="1.1"/><circle cx="76" cy="112" r=".6"/><circle cx="64" cy="104" r=".9"/><circle cx="96" cy="140" r=".5"/></g>
+</svg>
+<div class="selo">Ebook · Método completo</div>
+<h1>Animação<br><span>Pronta</span></h1>
+<p class="sub">Tudo o que aprendemos fazendo vídeos animados verticais com inteligência artificial — e as regras que a IA precisa seguir para o vídeo sair pronto.</p>
+<p class="rod">Do roteiro à postagem · Reels, TikTok e Shorts · 9:16</p>
+</section>
+
+<section class="sumario">
+<div class="num">Sumário</div>
+<h2>O que tem aqui dentro</h2>
+<ol>
+<li>Como funciona uma animação feita com IA</li>
+<li>A série: premissa, partes e duração</li>
+<li>O roteiro</li>
+<li>Personagens que não mudam</li>
+<li>Cenário e luz</li>
+<li>Câmera: o segredo do vídeo vivo</li>
+<li>Poderes e efeitos</li>
+<li>Voz, som e ritmo</li>
+<li>Legenda</li>
+<li>Capa, final e postagem</li>
+<li>Conferência antes de entregar</li>
+<li>Erros que já cometemos (e o conserto)</li>
+<li>As regras que a IA deve seguir</li>
+<li>Prompt pronto para colar na IA</li>
+</ol>
+<div class="box dica"><span class="t">Sobre este ebook</span>
+<p>Aqui está o <strong>método</strong>: o processo, as regras e as lições. O motor que desenha os vídeos e o visual dos nossos personagens são do autor e não fazem parte deste material. Você vai montar o seu próprio estilo e os seus próprios personagens seguindo o mesmo caminho.</p></div>
+</section>
+
+<!-- 1 -->
+<section class="cap nova">
+<div class="num">Capítulo 01</div>
+<h2>Como funciona uma animação feita com IA</h2>
+<p class="lead">A IA não "imagina" o vídeo de uma vez. Ela desenha cada quadro com código, junta tudo, coloca voz e legenda, e entrega um MP4 pronto para postar.</p>
+<p>O vídeo é vertical (9:16, 1080×1920), a 30 quadros por segundo. Cada quadro é desenhado a partir de regras fixas — personagem, cenário, câmera e efeitos — e por isso o resultado sai <strong>sempre igual</strong> quando você manda renderizar de novo. Isso é o que permite corrigir um detalhe sem estragar o resto.</p>
+<h3>O caminho de um episódio</h3>
+<div class="fluxo">
+<span><b>1</b>Ideia</span><span><b>2</b>Roteiro aprovado</span><span><b>3</b>Roteiro em planos</span><span><b>4</b>Folha de teste</span><span><b>5</b>Prévia com voz grátis</span><span><b>6</b>Ajustes</span><span><b>7</b>Voz final</span><span><b>8</b>Render final</span><span><b>9</b>Capa e descrição</span><span><b>10</b>Anotar o que aprendeu</span>
+</div>
+<div class="box regra"><span class="t">Regra de ouro</span>
+<p>Nada é produzido antes de o roteiro ser aprovado. E nada de voz paga antes de uma prévia com voz grátis ser aprovada.</p></div>
+<h3>Por que esse caminho economiza tempo</h3>
+<ul>
+<li><strong>Roteiro primeiro:</strong> mudar uma frase no papel custa segundos; mudar uma cena renderizada custa minutos.</li>
+<li><strong>Folha de teste:</strong> uma imagem com um quadro de cada cena pega quase todos os erros de enquadramento antes de gastar tempo com o vídeo inteiro.</li>
+<li><strong>Prévia com voz robótica grátis:</strong> mostra o ritmo e o tempo de cada fala sem gastar créditos.</li>
+<li><strong>Anotar os aprendizados:</strong> cada erro vira uma regra, e o próximo vídeo já nasce melhor.</li>
+</ul>
+<h3>Para quem não é programador</h3>
+<p>Peça para a IA falar em português simples e <strong>mostrar o resultado</strong> (imagem e vídeo) em vez de explicar código. Você aprova ou pede mudança olhando o que vê na tela.</p>
+</section>
+
+<!-- 2 -->
+<section class="cap">
+<div class="num">Capítulo 02</div>
+<h2>A série: premissa, partes e duração</h2>
+<p class="lead">Vídeo curto que prende é uma pergunta que a pessoa quer ver respondida — e que só se responde na próxima parte.</p>
+<h3>A premissa "E se você…"</h3>
+<p>A série nasce de uma frase: <em>"E se você acordasse controlando a terra?"</em>. Ela coloca quem assiste dentro da história (narração em "você") e já promete algo visual nos primeiros segundos.</p>
+<ul>
+<li>Escolha um poder ou situação que <strong>dá para ver</strong> (terra subindo, objetos tremendo, alguém sumindo).</li>
+<li>O poder não é brinquedo: ele <strong>assusta, foge do controle e põe alguém em perigo</strong>. Isso cria tensão.</li>
+<li>Cada parte termina com uma pergunta aberta (ex.: "algo embaixo da terra acordou junto com ele").</li>
+</ul>
+<h3>Tamanho e formato</h3>
+<table>
+<tr><th>Item</th><th>Regra</th></tr>
+<tr><td>Formato</td><td>Vertical 9:16, 1080×1920</td></tr>
+<tr><td>Duração</td><td>No máximo <strong>1 min 15 s</strong> por episódio</td></tr>
+<tr><td>Cada fala</td><td>2 a 3 segundos</td></tr>
+<tr><td>Abertura</td><td>2 primeiros segundos = capa com a premissa escrita grande</td></tr>
+<tr><td>Final</td><td>Cartela "PARTE X" + "SEGUE PRA VER A PARTE X+1" (3 s)</td></tr>
+</table>
+<h3>Tom</h3>
+<p>Testamos uma versão engraçada e uma dramática do mesmo episódio. A dramática funcionou melhor: <strong>medo e mistério</strong>, luz fria, uma única luz quente (o poder), batida de coração nos momentos de tensão e narração com pausas.</p>
+<div class="box dica"><span class="t">Dica</span><p>Mantenha uma "ficha da série" com: personagens, cenários já prontos, objetos, efeitos do poder e o status de cada episódio. Assim a IA nunca recomeça do zero.</p></div>
+</section>
+
+<!-- 3 -->
+<section class="cap">
+<div class="num">Capítulo 03</div>
+<h2>O roteiro</h2>
+<p class="lead">O roteiro é uma tabela: tempo, cena, fala e o que aparece na tela. É isso que você aprova antes de qualquer desenho.</p>
+<table>
+<tr><th>#</th><th>Tempo</th><th>Fala</th><th>O que aparece</th></tr>
+<tr><td>1</td><td>0–2 s</td><td>E se você acordasse controlando a terra?</td><td>Capa: quarto escuro, pedras flutuando, título grande</td></tr>
+<tr><td>2</td><td>2–4,5 s</td><td>Ontem à noite, a cidade inteira tremeu.</td><td>Rua à noite, postes piscando; câmera sobe até a janela</td></tr>
+<tr><td>3</td><td>4,5–7 s</td><td>Você acorda… e o chão ainda treme.</td><td>Close abrindo os olhos; poeira caindo; batida de coração</td></tr>
+</table>
+<h3>A fórmula das batidas</h3>
+<ol>
+<li><strong>Gancho:</strong> o fato absurdo numa frase.</li>
+<li><strong>Cenário:</strong> onde e quando.</li>
+<li><strong>Ação que cresce:</strong> três ou quatro batidas, cada uma maior que a anterior.</li>
+<li><strong>O estalo:</strong> o momento em que dá errado.</li>
+<li><strong>Consequência:</strong> alguém vê, alguém se machuca, alguém desconfia.</li>
+<li><strong>Virada final:</strong> o mistério que puxa a próxima parte.</li>
+</ol>
+<h3>Regras de escrita</h3>
+<ul>
+<li>Frases curtas, que caibam em 2–3 segundos de fala (cerca de 3,5 palavras por segundo).</li>
+<li><strong>Nunca descreva o que a pessoa já está vendo.</strong> A narração acrescenta, a imagem mostra.</li>
+<li>Use pausas dramáticas: "Um tapa…" (pausa) "…e a casa inteira treme."</li>
+<li>Diálogos curtos entre personagens dão vida (a mãe desconfiando, o amigo com medo, o protagonista mentindo).</li>
+<li>Coloque o som no roteiro também: onde entra o coração, o silêncio antes do impacto, o ronco do chão.</li>
+</ul>
+<div class="box regra"><span class="t">Regra</span><p>A IA escreve o roteiro, mostra e <strong>espera aprovação</strong>. Só depois transforma em cenas.</p></div>
+</section>
+
+<!-- 4 -->
+<section class="cap">
+<div class="num">Capítulo 04</div>
+<h2>Personagens que não mudam</h2>
+<p class="lead">Numa série, o público reconhece o personagem pela silhueta e pelas cores. Se ele muda de um vídeo para o outro, a série morre.</p>
+<h3>A ficha oficial</h3>
+<p>Todo personagem principal tem uma <strong>ficha</strong>: uma imagem com as vistas (frente, três quartos, perfil e costas), as expressões e uma tabela com proporções, cores, roupa, cabelo, olhos e poder.</p>
+<div class="box regra"><span class="t">Regra</span><p>Em todo vídeo, o protagonista aparece <strong>exatamente</strong> como na ficha. A IA não muda proporção, cor, roupa, cabelo, rosto nem poder. Mudança só com pedido e aprovação do autor — e aí a ficha é refeita.</p></div>
+<h3>Como criar um personagem novo</h3>
+<ol>
+<li>Peça <strong>6 variações numa folha só</strong>, cada uma com letra e nome.</li>
+<li>Escolha uma. Peça mais 6 variações em cima dela. Em duas rodadas você chega no personagem.</li>
+<li>Na folha, compare pelo tamanho da cabeça, não pela altura total.</li>
+<li>Gere a ficha oficial e congele o design.</li>
+</ol>
+<h3>O que um bom personagem tem</h3>
+<ul>
+<li>Silhueta simples e legível; cabeça grande; roupa com forma marcante (ex.: moletom largo).</li>
+<li>Poucas cores: no máximo 5 (pele, cabelo, 1–2 neutras e <strong>uma cor de destaque</strong>).</li>
+<li>Proporção medida em "cabeças" e igual em todas as vistas.</li>
+<li><strong>Expressões obrigatórias:</strong> neutro, feliz, bravo, surpreso, triste, determinado (e, para série de suspense, medo e cansado).</li>
+<li>Expressões mudam mais de uma coisa: sobrancelha, pálpebra, boca, tamanho da pupila, gota de suor.</li>
+</ul>
+<div class="box erro"><span class="t">Não copie</span><p>Use referências só para estudar o que se repete (proporção, tipo de roupa, tipo de sombra). Nunca reproduza rosto, cabelo, roupa ou combinação de cores de um personagem que já existe.</p></div>
+<h3>Personagens de apoio</h3>
+<p>Mãe, amigo e figurantes podem partir de uma base comum, que já sabe girar, falar e fazer expressões. Assim o protagonista nunca é mexido para criar os outros.</p>
+</section>
+
+<!-- 5 -->
+<section class="cap">
+<div class="num">Capítulo 05</div>
+<h2>Cenário e luz</h2>
+<p class="lead">O que tira o vídeo da cara de "desenho de criança" é o cenário com profundidade e luz de cinema — os personagens podem continuar simples.</p>
+<h3>O que dá cara de cinema</h3>
+<ul>
+<li><strong>Perspectiva real:</strong> câmera baixa, na altura de uma pessoa, com ponto de fuga.</li>
+<li><strong>Névoa por distância:</strong> o que está longe fica mais claro e apagado.</li>
+<li><strong>Luz baixa:</strong> sol de manhã ou fim de tarde vindo de um lado, com feixes de luz entrando pela janela.</li>
+<li><strong>Desfoque de fundo</strong> nos closes, e primeiro plano bem desfocado.</li>
+<li><strong>Acabamento em todo quadro:</strong> cor quente, brilho leve, cantos escurecidos (vinheta) e um grão fino.</li>
+</ul>
+<h3>Menos cartunesco</h3>
+<p>O que mais deixava o vídeo com cara de desenho era o <strong>contorno preto grosso</strong> e a <strong>sombra dura de um tom só</strong>. A troca que resolveu: borda fina da cor da própria peça, sombra em degradê e uma sombra leve de contato entre as peças (cabeça no pescoço, braço no corpo).</p>
+<h3>Cenário cheio</h3>
+<p>Cada cena tem pelo menos <strong>3 objetos</strong> além das paredes: carro, lixeira, arbusto, cartaz, banco, vaso, livros. E os objetos aparecem <strong>perto de quem usa</strong>.</p>
+<h3>Clima de madrugada sem refazer o cenário</h3>
+<p>Desenhe a cena normal, escureça tudo com um azul por cima e cantos escuros, e só depois desenhe o que brilha (o poder). O laranja do poder vira a única luz quente — muito dramático e barato.</p>
+<div class="box dica"><span class="t">Dica</span><p>Objetos redondos (vaso, copo, poste) precisam de volume com degradê. Feitos como caixa, ficam falsos.</p></div>
+</section>
+
+<!-- 6 -->
+<section class="cap">
+<div class="num">Capítulo 06</div>
+<h2>Câmera: o segredo do vídeo vivo</h2>
+<p class="lead">A regra mais importante do estilo: <strong>nada fica parado mais de 1 segundo.</strong></p>
+<h3>Tomadas contínuas em volta dos personagens</h3>
+<p>Em vez de cortar a cada fala, a cena é uma tomada longa que atravessa várias falas. A câmera <strong>gira em volta dos personagens</strong> e, ao girar, <strong>revela outro personagem</strong> que estava ali. Os personagens viram o corpo conforme o ângulo e nunca ficam estátuas: andam, viram, reagem, trocam o peso do corpo.</p>
+<h3>Câmera na mão</h3>
+<p>Por cima de tudo, a câmera tem uma deriva leve: anda devagar, gira poucos décimos de grau, aproxima suave. Depois de cada corte, ela "chega" um pouco deslocada e se acomoda.</p>
+<h3>Perto dos personagens</h3>
+<ul>
+<li>A maioria das cenas da cintura para cima, rosto no terço de cima.</li>
+<li>Plano aberto só para situar, e curto.</li>
+<li>Lente mais fechada (zoom) para aproximar sem deformar o cenário.</li>
+<li>Closes para mãos, efeitos e reações rápidas.</li>
+</ul>
+<h3>Reação em três tempos</h3>
+<ol>
+<li><strong>Os olhos</strong> mexem primeiro (0 a 0,4 s).</li>
+<li><strong>A cabeça vira</strong> e a expressão muda (0,4 a 0,9 s).</li>
+<li><strong>A câmera</strong> faz um pequeno ajuste: chega 3 a 6% mais perto.</li>
+</ol>
+<div class="box erro"><span class="t">Cuidado</span>
+<ul>
+<li>Nada rente à câmera: qualquer coisa a menos de ~1 m da lente vira um quadrado gigante preto ou branco piscando.</li>
+<li>Não parar a câmera girando bem na troca entre duas vistas do personagem: ele fica transparente, "fantasma".</li>
+<li>Ao trocar de personagem, a câmera passa por fora (raio maior), nunca através deles.</li>
+</ul></div>
+</section>
+
+<!-- 7 -->
+<section class="cap">
+<div class="num">Capítulo 07</div>
+<h2>Poderes e efeitos</h2>
+<p class="lead">Poder bonito é poder em camadas. Um círculo brilhando sozinho parece barato.</p>
+<h3>As 5 camadas de um poder</h3>
+<table>
+<tr><th>Camada</th><th>O que é</th></tr>
+<tr><td>1. Aura</td><td>Brilho grande e desfocado, meio transparente</td></tr>
+<tr><td>2. Corpo</td><td>As formas do poder (lascas, pedras, labaredas), cor forte</td></tr>
+<tr><td>3. Miolo</td><td>A versão clara da cor</td></tr>
+<tr><td>4. Núcleo</td><td>Quase branco, bem pequeno (no máximo 6% do efeito)</td></tr>
+<tr><td>5. Partículas</td><td>Faíscas em estrela, pontos, poeira</td></tr>
+</table>
+<p>Brilho só aparece bem sobre <strong>fundo escuro</strong>. Em cena de dia, use efeitos chapados (pedra, terra, poeira) com o brilho só nas rachaduras.</p>
+<h3>O ritmo de um poder</h3>
+<div class="fluxo"><span>Carregar 0,3–0,6 s</span><span>Disparar 2–4 quadros</span><span>Viajar</span><span>Impactar: flash + tremida</span><span>Dissipar 0,4–0,8 s</span></div>
+<h3>Vocabulário do poder da terra</h3>
+<ul>
+<li>Rachadura que corre pelo chão e brilha laranja por dentro.</li>
+<li>Terra subindo em fios na direção da mão; esfera de terra com placas e rachaduras acesas.</li>
+<li>Anel no chão, anéis de choque, espinhos em leque, poeira em bolhas, brasas.</li>
+<li>Onda de pedras que arrasta o personagem; coluna de terra que segura alguém.</li>
+<li>Linhas de energia ligando a mão ao alvo quando ele controla à distância.</li>
+<li>Close da mão grande na tela, dedos fechando, nos momentos de poder.</li>
+</ul>
+<div class="box dica"><span class="t">Dica</span><p>Quem está perto do poder recebe a luz dele: uma borda colorida do lado virado para o efeito. Isso "cola" o efeito na cena.</p></div>
+<div class="box erro"><span class="t">Cuidado</span><p>Brilho somado demais estoura e vira mancha branca. Rachadura muito perto da câmera fica enorme: comece a pelo menos 1,5 m dela.</p></div>
+</section>
+
+<!-- 8 -->
+<section class="cap">
+<div class="num">Capítulo 08</div>
+<h2>Voz, som e ritmo</h2>
+<p class="lead">O som decide se a cena dá medo ou não. E a voz decide o tempo de cada cena.</p>
+<h3>Primeiro a voz grátis</h3>
+<p>A prévia é feita com uma voz robótica grátis. Ela serve para medir o tempo e o ritmo. Falas que passam de 2,5 s são medidas antes e aceleradas ou cortadas.</p>
+<h3>Depois a voz final</h3>
+<ol>
+<li>Uma voz diferente para cada personagem (narrador, mãe, protagonista, amigo), em português do Brasil.</li>
+<li>Uma geração por fala, com marcações de emoção (nervoso, sussurrando…).</li>
+<li>Cortar o silêncio das pontas e usar a versão mais curta.</li>
+<li>Vozes reais falam cerca de 25% mais devagar que a robótica. Acelere no máximo ~1,25×; se ainda não couber, aumente a cena até 3 s e tire tempo das cenas com folga — sempre dentro de 1 min 15 s.</li>
+<li>Se a câmera é uma tomada contínua, ela deve continuar batendo com as falas mesmo quando as cenas mudam de tamanho.</li>
+</ol>
+<h3>Som que dá tensão</h3>
+<ul>
+<li><strong>Batida de coração</strong> que acelera; a imagem pulsa (brilho e zoom de 1–3%) <strong>no mesmo instante</strong> da batida.</li>
+<li>Cortes alternados a cada batida dão muita tensão.</li>
+<li><strong>Meio segundo de silêncio</strong> antes de cada impacto.</li>
+<li>Ronco grave vindo do chão nos tremores; estrondo no impacto.</li>
+<li>Volume final por volta de −16 LUFS (padrão das redes).</li>
+</ul>
+<div class="box dica"><span class="t">Dica</span><p>Trave os tempos da imagem antes de finalizar o som. Mudou o tempo, refaça o som.</p></div>
+</section>
+
+<!-- 9 -->
+<section class="cap">
+<div class="num">Capítulo 09</div>
+<h2>Legenda</h2>
+<p class="lead">Metade das pessoas assiste sem som. A legenda precisa ser lida num piscar de olhos.</p>
+<table>
+<tr><th>Regra</th><th>Como</th></tr>
+<tr><td>Tamanho do bloco</td><td><strong>No máximo 3 palavras</strong> por vez, quebrando na pontuação</td></tr>
+<tr><td>Fonte</td><td>Grossa (peso 900), caixa alta, branca com contorno escuro</td></tr>
+<tr><td>Destaque</td><td>A palavra-chave em amarelo (ex.: TERRA?, TREME.)</td></tr>
+<tr><td>Posição</td><td><strong>Nunca em cima de rosto</strong> — vai para a faixa mais longe dos rostos</td></tr>
+<tr><td>Estabilidade</td><td>Não muda de lugar no meio de um bloco</td></tr>
+<tr><td>Capa e cartela</td><td>Sem legenda (já têm texto grande)</td></tr>
+</table>
+<div class="box regra"><span class="t">Regra</span><p>A legenda acompanha a fala, palavra por palavra no tempo certo, e nunca tampa o rosto de quem está falando.</p></div>
+</section>
+
+<!-- 10 -->
+<section class="cap">
+<div class="num">Capítulo 10</div>
+<h2>Capa, final e postagem</h2>
+<h3>Os 2 primeiros segundos</h3>
+<p>A capa do vídeo é a própria premissa escrita grande ("E SE VOCÊ ACORDASSE CONTROLANDO A TERRA?") sobre a imagem mais forte do episódio, com o narrador lendo.</p>
+<h3>A cartela final (3 s)</h3>
+<ul>
+<li>"PARTE X" + "SEGUE PRA VER A PARTE X+1".</li>
+<li>Botão de seguir pulsando de leve — <strong>sem mão clicando</strong>.</li>
+<li>O narrador fala: "Segue pra ver a parte X+1!".</li>
+</ul>
+<h3>Capa do Reels / TikTok</h3>
+<ul>
+<li>Imagem própria, que não entra no vídeo.</li>
+<li>Título e rosto entre 15% e 85% da altura: o Instagram corta em 4:5 e o TikTok em 3:4 na grade do perfil.</li>
+<li>Título no terço de cima com uma faixa escura atrás; selo "PARTE X".</li>
+<li>Personagem parado numa vista fixa (sem a câmera girando).</li>
+</ul>
+<h3>Descrição do post</h3>
+<ol>
+<li>Gancho (a pergunta da premissa).</li>
+<li>Resumo sem entregar o final.</li>
+<li>"PARTE X".</li>
+<li>Uma pergunta para as pessoas comentarem.</li>
+<li>Hashtags.</li>
+</ol>
+</section>
+
+<!-- 11 -->
+<section class="cap">
+<div class="num">Capítulo 11</div>
+<h2>Conferência antes de entregar</h2>
+<p class="lead">A IA confere o vídeo como um editor chato antes de mostrar para você.</p>
+<ul class="check">
+<li>Folha de teste com um quadro do meio de cada cena: enquadramento, ninguém cortado, ninguém sumido.</li>
+<li>Nenhum trecho parado por mais de 1 segundo (detector de imagem congelada).</li>
+<li>Duração total até 1 min 15 s.</li>
+<li>Nenhum quadro piscando preto, branco ou com um bloco gigante.</li>
+<li>Câmera nunca dentro de parede ou de personagem.</li>
+<li>Legenda nunca em cima de rosto; no máximo 3 palavras.</li>
+<li>Protagonista igual à ficha.</li>
+<li>Volume certo; voz clara por cima da trilha.</li>
+<li>Capa nos 2 primeiros segundos e cartela "PARTE X" no fim.</li>
+<li>O resultado sai igual a cada render (nada sorteado sem controle).</li>
+</ul>
+<div class="box dica"><span class="t">Velocidade</span><p>Renderizar em várias abas ao mesmo tempo e desfocar em resolução menor reduz muito o tempo. Um episódio de ~1 minuto ficou em torno de 2 minutos de render.</p></div>
+</section>
+
+<!-- 12 -->
+<section class="cap">
+<div class="num">Capítulo 12</div>
+<h2>Erros que já cometemos (e o conserto)</h2>
+<table>
+<tr><th>Problema</th><th>Conserto</th></tr>
+<tr><td>Quadrado preto/branco piscando por 1 quadro</td><td>Algo rente ou atrás da câmera. Não desenhar o que a câmera já passou.</td></tr>
+<tr><td>Personagem "fantasma", transparente</td><td>Câmera parada na troca de vista. Parar a câmera longe desse ângulo; na capa, vista fixa.</td></tr>
+<tr><td>Personagem some e reaparece</td><td>Câmera passou muito perto. Planejar o caminho por fora.</td></tr>
+<tr><td>Expressão "assustado" com cara de bravo</td><td>Sobrancelha invertida. Testar cada expressão numa folha.</td></tr>
+<tr><td>Todas as expressões com cara de sono</td><td>Pálpebra reta. A borda da pálpebra tem que ser curva.</td></tr>
+<tr><td>Boca de raiva parecendo sorriso</td><td>Curvar os cantos da boca para baixo.</td></tr>
+<tr><td>Bolinhas nas juntas (cotovelo, joelho)</td><td>Desenhar o contorno do membro inteiro primeiro e o preenchimento depois.</td></tr>
+<tr><td>Pernas cruzando ao andar de costas</td><td>O lado das pernas inverte de frente para costas.</td></tr>
+<tr><td>Cores erradas "no olho"</td><td>Sombra e luz sempre calculadas por fórmula, nunca à mão.</td></tr>
+<tr><td>Voz final não cabe no tempo</td><td>Cortar silêncio, acelerar até 1,25×, redistribuir o tempo entre cenas.</td></tr>
+<tr><td>Esfera de poder some na tela</td><td>Aumentar: ela precisa de mais ou menos meia cabeça de raio.</td></tr>
+<tr><td>Duas mãos no close cruzando os dedos</td><td>Ângulos pequenos e mãos bem separadas.</td></tr>
+<tr><td>Copa de árvore tampando metade do quadro</td><td>Primeiro plano sempre na borda.</td></tr>
+<tr><td>Render muito lento</td><td>Desfocar numa camada pequena e ampliar; várias abas em paralelo.</td></tr>
+<tr><td>Espera que parece vídeo travado</td><td>Toda espera tem zoom lento.</td></tr>
+</table>
+</section>
+
+<!-- 13 -->
+<section class="cap nova">
+<div class="num">Capítulo 13</div>
+<h2>As regras que a IA deve seguir</h2>
+<p class="lead">Esta é a lista completa. Ela vale para todo episódio, a não ser que o autor peça diferente.</p>
+<h3>Comportamento</h3>
+<ol>
+<li>Responder em português do Brasil, com palavras simples.</li>
+<li>Mostrar imagens e vídeos em vez de explicar código.</li>
+<li>Mostrar o roteiro e esperar aprovação antes de produzir.</li>
+<li>Fazer prévia com voz grátis antes de qualquer voz paga.</li>
+<li>Conferir tudo (capítulo 11) antes de entregar.</li>
+<li>Anotar o que funcionou e o que deu errado depois de cada episódio.</li>
+</ol>
+<h3>Formato</h3>
+<ol start="7">
+<li>Vertical 9:16, 1080×1920, 30 fps.</li>
+<li>No máximo 1 min 15 s.</li>
+<li>Cada fala com 2 a 3 segundos.</li>
+<li>Primeiros 2 s = capa com a premissa escrita grande.</li>
+<li>Final = "PARTE X" + "SEGUE PRA VER A PARTE X+1", botão pulsando, sem mão, narrador falando.</li>
+</ol>
+<h3>Personagens</h3>
+<ol start="12">
+<li>Protagonista sempre igual à ficha oficial. Mudança só com aprovação.</li>
+<li>Personagens nunca estáticos: respiram, trocam o peso, olham em volta, reagem.</li>
+<li>Reação em três tempos: olhos → cabeça e expressão → ajuste de câmera.</li>
+<li>Nunca copiar personagem, roupa ou combinação de cores de referência.</li>
+<li>Objeto aparece perto de quem usa.</li>
+</ol>
+<h3>Câmera e cena</h3>
+<ol start="17">
+<li>Nada parado por mais de 1 segundo.</li>
+<li>Tomadas contínuas girando em volta dos personagens e revelando outros.</li>
+<li>Câmera perto, da cintura para cima; plano aberto só para situar.</li>
+<li>Nada a menos de ~1 m da câmera.</li>
+<li>Cenas ricas: pelo menos 3 objetos além da arquitetura.</li>
+<li>Cenário com perspectiva, névoa, luz baixa, desfoque e acabamento de cinema.</li>
+<li>Poderes sempre em camadas: aura, corpo, miolo, núcleo e partículas.</li>
+</ol>
+<h3>Texto e som</h3>
+<ol start="24">
+<li>Legenda com no máximo 3 palavras, palavra-chave destacada, nunca em cima de rosto.</li>
+<li>Narração não descreve o que já está na tela.</li>
+<li>Som marca a tensão: coração sincronizado com a imagem, silêncio antes do impacto.</li>
+<li>Volume final por volta de −16 LUFS.</li>
+</ol>
+<h3>Entrega</h3>
+<ol start="28">
+<li>Vídeo final + capa do Reels/TikTok + texto da descrição.</li>
+<li>Nunca publicar ou enviar vídeos de referência; nunca usar nome de outro canal.</li>
+</ol>
+</section>
+
+<!-- 14 -->
+<section class="cap nova">
+<div class="num">Capítulo 14</div>
+<h2>Prompt pronto para colar na IA</h2>
+<p>Copie, troque o que está entre colchetes e cole no começo da conversa. Quanto mais completa a ficha do personagem que você entregar, mais igual ele sai em todos os episódios.</p>
+<div class="prompt">Você vai criar um vídeo animado vertical para [Reels/TikTok/Shorts].
+
+SÉRIE: "[E se você…?]" — PARTE [X]
+PERSONAGENS: [nome do protagonista + link/descrição da ficha], [apoio]
+PODER/SITUAÇÃO: [o que acontece de visual]
+TOM: dramático, medo e mistério.
+
+REGRAS:
+- Fale comigo em português simples e me mostre imagens/vídeos, não código.
+- Primeiro me mostre o roteiro em tabela (tempo, fala, o que aparece). Só produza depois que eu aprovar.
+- 9:16, 1080×1920, 30 fps, no máximo 1 min 15 s; cada fala 2–3 s.
+- 2 primeiros segundos: capa com a premissa escrita grande.
+- Final: "PARTE X" + "SEGUE PRA VER A PARTE X+1", botão pulsando sem mão, narrador falando.
+- O protagonista aparece exatamente como na ficha. Não mude nada nele.
+- Nada parado por mais de 1 s. Tomadas contínuas com a câmera girando em volta dos personagens e revelando outros. Câmera perto (cintura para cima). Reação em 3 tempos.
+- Personagens nunca estáticos. Objetos perto de quem usa. Pelo menos 3 objetos por cena.
+- Poderes em camadas (aura, corpo, miolo, núcleo, partículas).
+- Legenda: no máximo 3 palavras, palavra-chave em amarelo, nunca em cima de rosto.
+- Narração não descreve o que já se vê. Coração sincronizado com a imagem; silêncio antes do impacto.
+- Faça uma folha de teste e uma prévia com voz grátis antes da voz final.
+- Confira: nada parado > 1 s, duração, quadros piscando, legenda em rosto.
+- Entregue: vídeo, capa do Reels/TikTok e descrição (gancho, resumo sem spoiler, PARTE X, pergunta, hashtags).</div>
+</section>
+
+<section class="fim">
+<p>Agora é com você.<br>Faça a parte 1.</p>
+<div class="num" style="margin-top:8mm">Animação Pronta</div>
+</section>
+
+</body>
+</html>
