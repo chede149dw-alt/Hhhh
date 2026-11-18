@@ -375,9 +375,10 @@
   const camDia = (api, o) => { window.MUNDO_3D = 'canion'; return api.camera({ f: 1100, x: 0, y: 1.5, z: 0, cy: 900, nevoa: V().nevoa(0, true, 'canion'), ...o }); };
   const dia = (ctx, api, cam, ents, o = {}) => noite(ctx, api, cam, ents, { dia: true, bokeh: 3, ...o });
   // ruína (masmorra de pedra, estilo da referência do autor)
-  const camRuina = (api, o) => { window.MUNDO_3D = 'masmorra'; return api.camera({ f: 1050, x: 0, y: 1.6, z: 0, cy: 900, nevoa: V().nevoa(1, false, 'masmorra'), ...o }); };
-  const ruina = (ctx, api, cam, ents, o = {}) => noite(ctx, api, cam, ents, { noite: 1, bokeh: 3, ...o });
-  const LUZ_TOCHA = { lado: 1, forca: 0.75, cor: 'rgb(255,190,120)', sombra: 0.8 };
+  // a luta também é no cânion (pedido do autor): mesmas câmeras do cânion, luz de sol de lado nos personagens
+  const camRuina = (api, o) => camDia(api, o);
+  const ruina = (ctx, api, cam, ents, o = {}) => dia(ctx, api, cam, ents, o);
+  const LUZ_TOCHA = { lado: 1, forca: 0.5, cor: 'rgb(255,225,180)', sombra: 0.6 };
   // barrinha de vida verde em cima da cabeça (como na referência)
   function vidaCabeca(ctx, x, y, frac, o = {}) { const w = o.w || 120, h = o.h || 14; ctx.save(); ctx.fillStyle = 'rgba(10,14,20,0.85)'; ctx.beginPath(); ctx.roundRect(x - w / 2 - 3, y - h / 2 - 3, w + 6, h + 6, 8); ctx.fill(); ctx.fillStyle = o.cor || '#4FD06A'; ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w * Math.max(0, Math.min(1, frac)), h, 6); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(x - w / 2 + 4, y - h / 2 + 2, w * Math.max(0, frac) - 8, 3); ctx.restore(); }
   // etiqueta verde de preço em cima da cabeça ("R$ 1.000")
@@ -556,14 +557,14 @@
     },
     // 5) os caçadores saem do escuro: por cima do ombro do Davi (vidas e preço em cima das cabeças)
     chegaram(ctx, u, d, api) {
-      const cam = camRuina(api, { x: 0.45, y: 1.8, z: 5.6 + u * 0.12, cy: 880, f: 950 });
-      const S = V().MAS.sacada, sai = api.fase(0.05, 0.5);
-      const H3 = [[-6.4, 14.2, 1.75, ARQ, S.y, 22], [0.6, 17.5 - 2.5 * sai, 2.6, GIG, 0, 30], [3.2, 12.4, 1.72, ASS, 0, 26]];
+      const cam = camRuina(api, { x: 0.45, y: 1.8, z: 5.6 + u * 0.12, cy: 880, f: 950, yaw: -0.35 });
+      const S = V().CAN_ROCHA, sai = api.fase(0.05, 0.5);
+      const H3 = [[-5.2, 15, 1.75, ARQ, S.y, 22], [1.0, 18 - 2.5 * sai, 2.6, GIG, 0, 30], [-1.6, 12, 1.72, ASS, 0, 26]];
       ruina(ctx, api, cam, [
         ...H3.map(([x, z, a, it, y]) => ({ f: () => api.personagem3d(cam, { ...it, pose: 'parado', expressao: 'raiva' }, x, z, a, { y, olhaPara: [0, 4.6], luz: LUZ_TOCHA }) })),
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado' }, -0.2, 7.7, 1.76, { rumo: 0.15 + Math.PI, luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado' }, 0.1, 7.6, 1.76, { rumo: 0.15 + Math.PI, luz: LUZ_TOCHA }) },
       ], { forca: 0.3, bokeh: 2,
-        depois: () => { H3.forEach(([x, z, a, it, y, nv], i) => { const q = cam.p(x, y + a + 0.35, z), k = api.fase(0.25 + i * 0.1, 0.5 + i * 0.1, 'volta'); vidaCabeca(ctx, q.x, q.y, 1, { w: 90 * k, h: 12 }); Valdor.placaNivel(ctx, q.x, q.y - 40, nv, k, { tam: 28, cor: '#FFB0B0' }); }); const qd = cam.p(-0.2, 2.05, 7.7); etiqueta(ctx, qd.x, qd.y - 30, 'R$ 1.000', api.fase(0.5, 0.75, 'volta')); },
+        depois: () => { H3.forEach(([x, z, a, it, y, nv], i) => { const q = cam.p(x, y + a + 0.35, z), k = api.fase(0.25 + i * 0.1, 0.5 + i * 0.1, 'volta'); vidaCabeca(ctx, q.x, q.y, 1, { w: 90 * k, h: 12 }); Valdor.placaNivel(ctx, q.x, q.y - 40, nv, k, { tam: 28, cor: '#FFB0B0' }); }); const qd = cam.p(0.1, 2.05, 7.6); etiqueta(ctx, qd.x, qd.y - 30, 'R$ 1.000', api.fase(0.5, 0.75, 'volta')); },
       });
     },
     // 5b) magias novas girando em volta do Davi
@@ -576,7 +577,7 @@
     },
     // 6) a arqueira atira lá da sacada e a flecha vira dez
     flechas(ctx, u, d, api) {
-      const S = V().MAS.sacada, AX = -6.6, AZ = 15;
+      const S = V().CAN_ROCHA, AX = -5.2, AZ = 15;
       const cam = camRuina(api, { x: AX + 2.6, y: S.y + 1.6, z: AZ - 2.6, cy: 940, f: 1100, yaw: -0.75 });
       const puxa = Math.min(1, u / (d * 0.45)), solta = u > d * 0.45; window.ARCO = { puxa: solta ? 0 : puxa, flecha: !solta, brilho: puxa }; window.ARMA_ANG = { arco: 0 };
       ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, mao_e: 0, braco_d: -80, antebraco_d: 95 + (solta ? -60 : 0), tronco: -4, coxa_d: 14, coxa_e: -10 }, expressao: 'determinado', vista: 'frente' }, AX, AZ, 1.75, { y: S.y, rumo: Math.PI * 0.5, luz: LUZ_TOCHA }) }], { forca: 0.3 });
@@ -618,10 +619,10 @@
     },
     // 9) o Téo sobe o entulho até a sacada; uma flecha pega no braço
     parede(ctx, u, d, api) {
-      const S = V().MAS.sacada, TX = S.x1 + 0.2, TZ = 14.2;
+      const S = V().CAN_ROCHA, TX = S.x1 + 0.2, TZ = 14.2;
       const cam = camRuina(api, { x: 0.5, y: 2.2, z: 9.5, cy: 1050, f: 1050, yaw: -0.55 });
       ruina(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, braco_d: -80, antebraco_d: 95, tronco: -4 }, expressao: 'raiva' }, -6.8, 15.6, 1.75, { y: S.y, olhaPara: [TX, TZ], luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, braco_d: -80, antebraco_d: 95, tronco: -4 }, expressao: 'raiva' }, -5.4, 15.4, 1.75, { y: S.y, olhaPara: [TX, TZ], luz: LUZ_TOCHA }) },
         { f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_d: -160, antebraco_d: -10, braco_e: 150, antebraco_e: 20, coxa_d: -60, canela_d: 70, coxa_e: 10, canela_e: 30 }, expressao: 'medo' }, TX, TZ, 1.8, { y: 1.9 + u * 0.4, rumo: Math.PI / 2, luz: LUZ_TOCHA }) },
       ], { forca: 0.3,
         depois: ([ra, rig]) => { const a = rig.pontoMundo('antebraco_e', [0, 0.2]); ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(-0.6); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-90, -4, 90, 8); ctx.restore(); Combate.numero(ctx, a.x + 40, a.y - 100, '-35', 0.2, 'recebido'); for (let i = 0; i < 5; i++) { const q = cam.p(TX - 0.1, 1.6 - ((api.t * 2 + i * 0.4) % 1.6), TZ); ctx.fillStyle = '#4A4E5A'; ctx.beginPath(); ctx.arc(q.x, q.y, 6, 0, TAU); ctx.fill(); } } });
@@ -657,9 +658,9 @@
       window.ARMA_ANG = { martelo: 30 };
       ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...GIG, pose: kb > 0 ? { tronco: -40, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -30 } : { braco_d: -30, antebraco_d: -20, tronco: 10 }, expressao: kb > 0 ? 'medo' : 'espanto' }, 0.2, 6.8, 2.6, { rumo: 0, luz: LUZ_TOCHA }) }], { forca: 0.2,
         luzes: [{ x: 0.2, y: 3, z: 6.8, cor: '#FF9A40', forca: kb > 0 ? 3 : 1.2 * cai, raio: 14 }],
-        depois: () => { raizes(ctx, cam, 0.2, 6.8, 2.6, 1, api.t); const alvo = cam.p(0.2, 1.3, 6.8), teto = cam.p(-0.8, V().MAS.alt, 6.8);
+        depois: () => { raizes(ctx, cam, 0.2, 6.8, 2.6, 1, api.t); const alvo = cam.p(0.2, 1.3, 6.8), teto = cam.p(-3, 30, 14);
           ctx.save(); ctx.globalCompositeOperation = 'screen'; const g = ctx.createLinearGradient(teto.x, 0, alvo.x, alvo.y); g.addColorStop(0, `rgba(255,220,170,${0.5 * cai})`); g.addColorStop(1, 'rgba(255,200,150,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(teto.x - 120, 0); ctx.lineTo(teto.x + 120, 0); ctx.lineTo(alvo.x + 260, alvo.y + 200); ctx.lineTo(alvo.x - 260, alvo.y + 200); ctx.closePath(); ctx.fill(); ctx.restore();
-          if (kb < 0) { meteoro(ctx, mix(teto.x, alvo.x, cai), mix(-200, alvo.y, cai * cai), 120, api.t); destrocos(ctx, cam, -0.8 + cai, V().MAS.alt - cai * 8, 6.8, cai * 0.6, { n: 10, forca: 1, tam: 0.12, seed: 2, cor: '#3A3E4A' }); } else { explosao(ctx, alvo.x, alvo.y, 320, kb * 1.4, api.t); Combate.numero(ctx, alvo.x, alvo.y - 380, '-320', kb, 'critico'); } flash(ctx, kb); } });
+          if (kb < 0) { meteoro(ctx, mix(teto.x, alvo.x, cai), mix(-200, alvo.y, cai * cai), 120, api.t); destrocos(ctx, cam, -0.8 + cai, 6 - cai * 4, 6.8, cai * 0.6, { n: 10, forca: 1, tam: 0.12, seed: 2, cor: '#3A3E4A' }); } else { explosao(ctx, alvo.x, alvo.y, 320, kb * 1.4, api.t); Combate.numero(ctx, alvo.x, alvo.y - 380, '-320', kb, 'critico'); } flash(ctx, kb); } });
       ctx.save(); ctx.fillStyle = `rgba(255,120,40,${0.12 * cai})`; ctx.fillRect(0, 0, W, H); ctx.restore();
     },
     // 11) a assassina invisível: pegadas na poeira, contorno vermelho, a espada puxando como bússola
@@ -675,7 +676,7 @@
     },
     // 12) loot dos caçadores perto do baú dourado e a barra do aluguel subindo
     loot(ctx, u, d, api) {
-      const B = V().MAS.bau;
+      const B = [2.6, 9.5];
       const cam = camRuina(api, { x: B[0] - 2.4, y: 1.7, z: B[1] - 4.2, cy: 900, f: 1050, yaw: 0.25 });
       ruina(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'feliz' }, B[0] - 2.2, B[1] - 1.2, 1.76, { olhaPara: B, luz: { lado: 1, forca: 0.9, cor: 'rgb(255,200,120)', sombra: 0.8 } }) },

@@ -92,14 +92,6 @@
       "duracao": 4
     },
     {
-      "id": "ruina",
-      "fala": {
-        "texto": "No fim do cânion, tinha uma ruína antiga.",
-        "voz": "narrador"
-      },
-      "duracao": 3.5
-    },
-    {
       "id": "chegaram",
       "fala": {
         "texto": "Só que os caçadores chegaram em menos de um minuto.",

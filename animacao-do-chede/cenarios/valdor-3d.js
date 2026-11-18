@@ -672,7 +672,7 @@
   // O cânion corre ao longo de Z (para dentro da tela), então o sol nascendo lá no fundo ilumina o corredor.
   const canX = (z) => Math.sin(z * 0.045) * 1.2;
   const canParede = (z, lado, y) => lado * (7.2 + 2.2 * Math.sin(z * 0.06 + lado * 1.7) + 1.6 * fbm(z * 0.05 + 3, lado + 5)) + lado * (y * 0.22 + Math.floor(y / 3.2) * 0.35 * (0.6 + 0.8 * ruido(z * 0.13, Math.floor(y / 3.2))));
-  const CAN_ALT = 34, CAN_PONTE = { z: 36, y: 23 };
+  const CAN_ALT = 34, CAN_PONTE = { z: 36, y: 23 }, CAN_ROCHA = { x0: -6.6, x1: -3.8, z0: 13.6, z1: 16.4, y: 3.6 };
   const PAL_CANION = {
     ceuTopo: ['#5A98DC', '#5A4E98', '#141E52'], ceuHz: ['#FFE0B0', '#F2955E', '#3A4C96'], ceuBaixo: ['#F0C49A', '#C47460', '#26326A'],
     nevoa: ['#EAC7A0', '#D88E6C', '#24316A'], hemiCeu: ['#FFEBD2', '#F4B494', '#5C74C8'], hemiChao: ['#9A5236', '#5E3A36', '#141A30'],
@@ -771,6 +771,17 @@
       const m = new T.InstancedMesh(g, lambert({ flatShading: true }), L.length), o = new T.Object3D(), c = new T.Color();
       L.forEach(([x, z, s, a], i) => { o.position.set(x, -0.05 * s, -z); o.rotation.set(0, a, 0); o.scale.set(s * 1.2, s, s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); c.set(ESTRATOS[i % ESTRATOS.length]).lerp(new T.Color('#7A3A26'), 0.25); m.setColorAt(i, c); });
       m.castShadow = true; m.receiveShadow = true; cena.add(m);
+    }
+    // rochedo alto de topo plano (onde a arqueira fica), com pedras em degrau na base
+    {
+      const R0 = CAN_ROCHA, cx = (R0.x0 + R0.x1) / 2, cz = (R0.z0 + R0.z1) / 2, mat = lambert({ vertexColors: true, flatShading: true });
+      for (const [h0, h1, rr, dx] of [[0, 1.4, 1.75, 0], [1.3, 2.6, 1.55, 0.12], [2.5, R0.y, 1.4, -0.08]]) {
+        const g = amassar(new T.CylinderGeometry(rr, rr * 1.08, h1 - h0, 9, 2), 0.12, 1.4);
+        const geo = juntar([{ g, cor: (x2, y2) => ESTRATOS[Math.abs(Math.floor((y2 + h0 + 5) / 0.6)) % ESTRATOS.length] }]);
+        const m = new T.Mesh(geo, mat); m.position.set(cx + dx, (h0 + h1) / 2, -cz); m.castShadow = m.receiveShadow = true; cena.add(m);
+      }
+      const gp = amassar(new T.DodecahedronGeometry(1, 0), 0.15, 1.2), mp = lambert({ flatShading: true, color: 0xb05a36 });
+      for (const [x, z, s2] of [[R0.x1 + 0.4, cz - 1.2, 0.7], [R0.x1 + 0.1, cz - 0.4, 1.0], [R0.x1 + 0.6, cz + 0.8, 0.5]]) { const m = new T.Mesh(gp, mp); m.position.set(x, s2 * 0.5, -z); m.scale.setScalar(s2); m.castShadow = m.receiveShadow = true; cena.add(m); }
     }
     // arbustos e capim secos (tufos instanciados, cor de palha)
     const gramaMat = lambert({ vertexColors: true, side: T.DoubleSide });
@@ -960,7 +971,7 @@
   }
 
   window.Valdor3D = {
-    trilhaX, trilhaW, rioZ, RIO, PONTE, altura, canX, canParede, CAN_PONTE, CAN_ALT, MAS,
+    trilhaX, trilhaW, rioZ, RIO, PONTE, altura, canX, canParede, CAN_PONTE, CAN_ALT, CAN_ROCHA, MAS,
     nevoa: (n = 1, dia = false, mundo) => { const mm = mundo || window.MUNDO_3D, A = (mm === 'canion' ? PAL_CANION : mm === 'masmorra' ? PAL_MASMORRA : PAL).nevoa, h = dia ? 0 : 1 + n, i = Math.min(1, Math.floor(h)), k = h - i; return hex(new THREE.Color(A[i]).lerp(new THREE.Color(A[Math.min(2, i + 1)]), k)); },
     // ponto da tela (px) na profundidade dz (m) da câmera → mundo { x, y, z }
     paraMundo(cam, sx, sy, dz) { const yaw = cam.yaw || 0, co = Math.cos(yaw), si = Math.sin(yaw), xr = ((sx - (cam.cx || W / 2)) * dz) / cam.f, yr = (((cam.cy || H / 2) - sy) * dz) / cam.f; return { x: cam.x + xr * co + dz * si, y: cam.y + yr, z: cam.z - xr * si + dz * co }; },
