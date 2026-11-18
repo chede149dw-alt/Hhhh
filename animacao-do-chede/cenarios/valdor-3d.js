@@ -47,7 +47,7 @@
     sol: ['#FFF2D8', '#FFB070', '#A8C0FF'],
   };
   const forcaHemi = [0.62, 0.5, 0.26], forcaSol = [4.0, 2.4, 2.0], nevoaPerto = [40, 22, 14], nevoaLonge = [260, 170, 120];
-  function pal(chave, h) { const a = PAL[chave], i = Math.min(1, Math.floor(h)), k = h - i; return new THREE.Color(a[i]).lerp(new THREE.Color(a[Math.min(2, i + 1)]), k); }
+  function pal(chave, h) { const a = ((R && R.PAL) || PAL)[chave], i = Math.min(1, Math.floor(h)), k = h - i; return new THREE.Color(a[i]).lerp(new THREE.Color(a[Math.min(2, i + 1)]), k); }
   function num(arr, h) { const i = Math.min(1, Math.floor(h)), k = h - i; return lerp(arr[i], arr[Math.min(2, i + 1)], k); }
   const hex = (c) => '#' + c.getHexString();
 
@@ -238,8 +238,8 @@
     return juntar([{ g, cor: (x, y, z, nx, ny) => ny > 0.6 ? mix('#5E7A3C', '#7E9A4C', ruido(x * 3, z * 3)) : mix('#6E7078', '#9A9CA4', 0.3 + ny * 0.4 + ruido(x * 4, y * 4) * 0.3) }]);
   }
   // tufo de grama: 7 lâminas curvas, escura na base e clara na ponta
-  function geoTufo(seed) {
-    const r = rng(seed), P = [], C = [], N = [], c0 = new THREE.Color('#1F4A1C'), c1 = new THREE.Color('#9AD05A'), c = new THREE.Color();
+  function geoTufo(seed, cores) {
+    const r = rng(seed), P = [], C = [], N = [], c0 = new THREE.Color(cores ? cores[0] : '#1F4A1C'), c1 = new THREE.Color(cores ? cores[1] : '#9AD05A'), c = new THREE.Color();
     for (let b = 0; b < 7; b++) {
       const a = r() * Math.PI * 2, inc = 0.25 + r() * 0.5, h = 0.16 + r() * 0.26, w = 0.022 + r() * 0.014, ox = (r() - 0.5) * 0.14, oz = (r() - 0.5) * 0.14;
       const dx = Math.cos(a), dz = Math.sin(a), px = -dz, pz = dx, seg = 3, pts = [];
@@ -261,7 +261,9 @@
   }
 
   // ---------------- montagem do mundo ----------------
-  let R = null;
+  let R = null; const MUNDOS = {};
+  // escolhe o mundo do plano: o.mundo ou window.MUNDO_3D ('campo' = padrão, 'canion' = Cânion Vermelho)
+  function usar(o) { const m = (o && o.mundo) || window.MUNDO_3D || 'campo'; if (!MUNDOS[m]) { R = null; if (m === 'canion') montarCanion(); else { montar(); R.figPool = []; R.contatoPool = []; } MUNDOS[m] = R; } R = MUNDOS[m]; }
   function montar() {
     const T = THREE, r = rng(2024), arvores = [];
     const canvas = document.createElement('canvas');
@@ -517,6 +519,169 @@
   }
   let R_estrelas = null;
 
+  // ---------------- MUNDO 2: Cânion Vermelho (Parte 4) ----------------
+  // Paredes altas de pedra em camadas (vermelho/laranja/creme), chão de terra batida, trilha clara no meio, pedras,
+  // arbustos secos, cristais azuis saindo das paredes, ponte de corda lá no alto, poeira dourada no ar.
+  // O cânion corre ao longo de Z (para dentro da tela), então o sol nascendo lá no fundo ilumina o corredor.
+  const canX = (z) => Math.sin(z * 0.045) * 1.2;
+  const canParede = (z, lado, y) => lado * (7.2 + 2.2 * Math.sin(z * 0.06 + lado * 1.7) + 1.6 * fbm(z * 0.05 + 3, lado + 5)) + lado * (y * 0.22 + Math.floor(y / 3.2) * 0.35 * (0.6 + 0.8 * ruido(z * 0.13, Math.floor(y / 3.2))));
+  const CAN_ALT = 34, CAN_PONTE = { z: 36, y: 23 };
+  const PAL_CANION = {
+    ceuTopo: ['#5A98DC', '#5A4E98', '#141E52'], ceuHz: ['#FFE0B0', '#F2955E', '#3A4C96'], ceuBaixo: ['#F0C49A', '#C47460', '#26326A'],
+    nevoa: ['#EAC7A0', '#D88E6C', '#24316A'], hemiCeu: ['#FFEBD2', '#F4B494', '#5C74C8'], hemiChao: ['#9A5236', '#5E3A36', '#141A30'],
+    sol: ['#FFE6BE', '#FF9A50', '#A8C0FF'],
+  };
+  function montarCanion() {
+    const T = THREE, r = rng(77);
+    const canvas = document.createElement('canvas');
+    const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+    const esc = 0.75; renderer.setPixelRatio(1); renderer.setSize(Math.round(W * esc), Math.round(H * esc), false);
+    renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
+    const cena = new T.Scene(); cena.fog = new T.Fog(0xeac7a0, 30, 220);
+    const camera = new T.PerspectiveCamera(60, W / H, 0.05, 900);
+    const uni = { uTempo: { value: 0 }, uNoite: { value: 0 } };
+    const lambert = (o) => new T.MeshLambertMaterial(o);
+    const madeira = textura(texMadeira());
+    // céu, sol, lua (o mesmo esquema do campo)
+    const ceuMat = new T.ShaderMaterial({
+      side: T.BackSide, depthWrite: false, fog: false,
+      uniforms: { topo: { value: new T.Color() }, hz: { value: new T.Color() }, baixo: { value: new T.Color() } },
+      vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+      fragmentShader: 'uniform vec3 topo; uniform vec3 hz; uniform vec3 baixo; varying vec3 vP; void main(){ float y = normalize(vP).y; vec3 c = y > 0.0 ? mix(hz, topo, pow(clamp(y*1.6,0.0,1.0),0.7)) : mix(hz, baixo, clamp(-y*6.0,0.0,1.0)); gl_FragColor = vec4(c,1.0);\n#include <colorspace_fragment>\n}',
+    });
+    const grupoCeu = new T.Group(); cena.add(grupoCeu);
+    const ceu = new T.Mesh(new T.SphereGeometry(800, 32, 16), ceuMat); ceu.frustumCulled = false; ceu.renderOrder = -10; grupoCeu.add(ceu);
+    const lua = new T.Sprite(new T.SpriteMaterial({ map: textura(texLua()), transparent: true, depthWrite: false, fog: false })); lua.scale.set(260, 260, 1); lua.renderOrder = -8; grupoCeu.add(lua);
+    const sol = new T.Sprite(new T.SpriteMaterial({ map: textura(texBrilho('255,236,190')), transparent: true, depthWrite: false, fog: false, blending: T.AdditiveBlending })); sol.scale.set(300, 300, 1); sol.renderOrder = -8; grupoCeu.add(sol);
+    const hemi = new T.HemisphereLight(0xffffff, 0x884433, 1); cena.add(hemi);
+    const dir = new T.DirectionalLight(0xffffff, 1); dir.castShadow = true; dir.shadow.mapSize.set(2048, 2048);
+    Object.assign(dir.shadow.camera, { left: -26, right: 26, top: 26, bottom: -26, near: 1, far: 160 }); dir.shadow.camera.updateProjectionMatrix(); dir.shadow.bias = -0.0008; dir.shadow.normalBias = 0.03;
+    cena.add(dir); cena.add(dir.target);
+    const pontos = []; for (let i = 0; i < 9; i++) { const p = new T.PointLight(0xffa050, 0, 9, 1.6); cena.add(p); pontos.push(p); }
+
+    // chão: terra batida vermelha, trilha mais clara no meio, marcas e manchas
+    {
+      const xs = eixo(-60, 60, -14, 14, 0.35), zs = eixo(-80, 420, -20, 60, 0.4), nx = xs.length, nz = zs.length;
+      const P = new Float32Array(nx * nz * 3), C = new Float32Array(nx * nz * 3), idx = [], c = new T.Color();
+      const tA = new T.Color('#B8653E'), tB = new T.Color('#D4844E'), tC = new T.Color('#9A4E32'), trilha = new T.Color('#E8B888'), seco = new T.Color('#D0A070');
+      for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
+        const X = xs[i], Z = zs[j], k = j * nx + i, dw = Math.abs(X) - Math.abs(canParede(Z, Math.sign(X) || 1, 0));
+        const h = dw > -1.2 ? Math.max(0, dw + 1.2) * 0.35 : (fbm(X * 0.3, Z * 0.3) - 0.5) * 0.05 * suave(1.5, 4, Math.abs(X - canX(Z)));
+        P.set([X, h, -Z], k * 3);
+        const v = fbm(X * 0.12, Z * 0.12), v2 = ruido(X * 0.9, Z * 0.9);
+        c.copy(tA).lerp(tB, v).lerp(tC, v2 * 0.55).lerp(new T.Color('#7A3424'), suave(0.62, 0.8, ruido(X * 2.2 + 3, Z * 2.2)) * 0.35);
+        c.lerp(trilha, suave(1.5, 0.4, Math.abs(X - canX(Z))) * 0.6 * (0.7 + 0.3 * ruido(X * 1.5, Z * 1.5)));
+        c.lerp(seco, suave(0.55, 0.8, ruido(X * 0.35 + 9, Z * 0.35)) * 0.35);
+        C.set([c.r, c.g, c.b], k * 3);
+      }
+      for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) { const a = j * nx + i, b = a + 1, d = a + nx, e = d + 1; idx.push(a, b, d, b, e, d); }
+      const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(P, 3)); g.setAttribute('color', new T.BufferAttribute(C, 3)); g.setIndex(idx); g.computeVertexNormals();
+      const chao = new T.Mesh(g, lambert({ vertexColors: true })); chao.receiveShadow = true; cena.add(chao);
+    }
+    // paredes do cânion em camadas (estratos), com saliências e degraus; topo plano (platô) para fora
+    const ESTRATOS = ['#B5452A', '#D0683A', '#E39A5C', '#C25A35', '#8E3A26', '#E8B07A', '#A84A2C', '#D9804A'];
+    for (const lado of [-1, 1]) {
+      const zs = eixo(-80, 420, -20, 60, 0.6), ys = []; for (let y = 0; y <= CAN_ALT; y += 0.7) ys.push(y);
+      const nz = zs.length, ny = ys.length, P = new Float32Array(nz * (ny + 1) * 3), C = new Float32Array(nz * (ny + 1) * 3), idx = [], c = new T.Color();
+      for (let j = 0; j < nz; j++) {
+        const Z = zs[j];
+        for (let i = 0; i <= ny; i++) {
+          const k = j * (ny + 1) + i, top = i === ny, y = top ? CAN_ALT : ys[i];
+          let x = top ? lado * 220 : canParede(Z, lado, y) + lado * (ruido(Z * 0.5, y * 0.5) - 0.5) * 0.9 + lado * (ruido(Z * 1.7, y * 1.7) - 0.5) * 0.25;
+          P.set([x, y + (top ? 0 : (ruido(Z * 0.8, y) - 0.5) * 0.2), -Z], k * 3);
+          const banda = Math.floor((y + (fbm(Z * 0.04, lado) - 0.5) * 2.5) / 1.6), base = new T.Color(ESTRATOS[((banda % ESTRATOS.length) + ESTRATOS.length) % ESTRATOS.length]);
+          c.copy(base).lerp(new T.Color('#5A2A1E'), suave(3, 0, y) * 0.35).lerp(new T.Color('#F0C69A'), ruido(Z * 0.6, y * 0.6) * 0.18);
+          if (top) c.set('#B86A44');
+          C.set([c.r, c.g, c.b], k * 3);
+        }
+      }
+      for (let j = 0; j < nz - 1; j++) for (let i = 0; i < ny; i++) { const a = j * (ny + 1) + i, b = a + 1, d = a + ny + 1, e = d + 1; if (lado > 0) idx.push(a, d, b, b, d, e); else idx.push(a, b, d, b, e, d); }
+      const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(P, 3)); g.setAttribute('color', new T.BufferAttribute(C, 3)); g.setIndex(idx); g.computeVertexNormals();
+      const m = new T.Mesh(g, lambert({ vertexColors: true, flatShading: true, side: T.DoubleSide })); m.castShadow = true; m.receiveShadow = true; cena.add(m);
+    }
+    // mesas (morros de topo plano) lá no fim do cânion, na névoa
+    {
+      const mat = lambert({ vertexColors: true, flatShading: true });
+      for (let i = 0; i < 9; i++) {
+        const x = (r() - 0.5) * 260, z = 300 + r() * 220, rr = 14 + r() * 30, hh = 30 + r() * 40;
+        const g = amassar(new T.CylinderGeometry(rr * 0.8, rr, hh, 9, 4), rr * 0.06, 0.08);
+        const geo = juntar([{ g, cor: (x2, y2) => ESTRATOS[Math.abs(Math.floor((y2 + hh) / 4)) % ESTRATOS.length] }]);
+        const m = new T.Mesh(geo, mat); m.position.set(x, hh / 2 - 2, -z); cena.add(m);
+      }
+    }
+    // pedras e pedregulhos (vermelhos, facetados)
+    {
+      const g = amassar(new T.DodecahedronGeometry(1, 1), 0.25, 1.3); g.scale(1, 0.7, 0.9); g.translate(0, 0.3, 0);
+      const L = [];
+      for (let i = 0; i < 1600 && L.length < 160; i++) {
+        const z = -20 + r() * 260, lado = r() < 0.5 ? -1 : 1, borda = Math.abs(canParede(z, lado, 0));
+        const x = lado * (borda - 0.3 - Math.pow(r(), 1.6) * (borda - 1.6)); if (Math.abs(x - canX(z)) < 1.6) continue;
+        const pertoParede = Math.abs(x) > borda - 2; L.push([x, z, (pertoParede ? 0.35 + r() * 1.1 : 0.12 + r() * 0.35), r() * 6.28]);
+      }
+      for (const [x, z, s] of [[-3.4, 4.5, 0.9], [3.8, 8.5, 1.3], [-4.2, 13, 1.1], [3.2, 2.0, 0.5], [-2.6, 9.5, 0.4]]) L.push([x, z, s, r() * 6]);
+      for (let i = 0; i < 1400; i++) { const z = -6 + r() * 70, x = (r() - 0.5) * 2 * (Math.abs(canParede(z, 1, 0)) - 0.8); L.push([x, z, 0.03 + Math.pow(r(), 2) * 0.08, r() * 6.28]); } // pedrinhas soltas
+      const m = new T.InstancedMesh(g, lambert({ flatShading: true }), L.length), o = new T.Object3D(), c = new T.Color();
+      L.forEach(([x, z, s, a], i) => { o.position.set(x, -0.05 * s, -z); o.rotation.set(0, a, 0); o.scale.set(s * 1.2, s, s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); c.set(ESTRATOS[i % ESTRATOS.length]).lerp(new T.Color('#7A3A26'), 0.25); m.setColorAt(i, c); });
+      m.castShadow = true; m.receiveShadow = true; cena.add(m);
+    }
+    // arbustos e capim secos (tufos instanciados, cor de palha)
+    const gramaMat = lambert({ vertexColors: true, side: T.DoubleSide });
+    gramaMat.onBeforeCompile = (sh) => { sh.uniforms.uTempo = uni.uTempo; sh.vertexShader = 'uniform float uTempo;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n vec4 wp = instanceMatrix * vec4(0.0,0.0,0.0,1.0); float bal = sin(uTempo*1.3 + wp.x*0.45 + wp.z*0.3); transformed.x += bal * 0.08 * position.y * position.y * 6.0;'); };
+    {
+      const protos = [geoTufo(21, ['#6A4A2A', '#E8C888']), geoTufo(22, ['#5E3E24', '#D8B070'])], lista = [[], []];
+      for (let i = 0; i < 9000; i++) {
+        const z = -10 + r() * 120, lado = r() < 0.5 ? -1 : 1, borda = Math.abs(canParede(z, lado, 0)), x = lado * (1.8 + r() * (borda - 2));
+        if (Math.abs(x - canX(z)) < 1.4 || ruido(x * 0.4, z * 0.4) < 0.5) continue;
+        lista[i % 2].push([x, z, 0.8 + r() * 1.4, r() * 6.28, r()]);
+      }
+      const o = new T.Object3D(), c = new T.Color();
+      protos.forEach((g, k) => { const L = lista[k], m = new T.InstancedMesh(g, gramaMat, L.length); L.forEach(([x, z, s, a, v], i) => { o.position.set(x, 0, -z); o.rotation.set(0, a, 0); o.scale.set(s, s * (0.7 + v * 0.6), s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); c.setHSL(0.09, 0.2, 0.75 + v * 0.2); m.setColorAt(i, c); }); m.receiveShadow = true; cena.add(m); });
+    }
+    // cristais azuis saindo das paredes (brilham sozinhos)
+    const runasMat = new T.MeshPhongMaterial({ color: 0x8fe4ff, emissive: 0x2a8ccf, specular: 0xffffff, shininess: 90, flatShading: true, transparent: true, opacity: 0.95 });
+    {
+      const gc = new T.OctahedronGeometry(1, 0); gc.scale(0.22, 1, 0.22); gc.translate(0, 0.8, 0);
+      const L = [];
+      for (let i = 0; i < 70; i++) {
+        const z = -6 + r() * 90, lado = r() < 0.5 ? -1 : 1, y = 0.3 + Math.pow(r(), 1.5) * 9, x = canParede(z, lado, y) - lado * 0.15;
+        const n = 2 + Math.floor(r() * 4); for (let k = 0; k < n; k++) L.push([x, y + (r() - 0.5) * 0.4, z + (r() - 0.5) * 0.6, 0.3 + r() * 0.6, -lado * (0.5 + r() * 0.9), (r() - 0.5) * 0.8]);
+      }
+      const m = new T.InstancedMesh(gc, runasMat, L.length), o = new T.Object3D();
+      L.forEach(([x, y, z, s, rz, rx], i) => { o.position.set(x, y, -z); o.rotation.set(rx, 0, rz); o.scale.setScalar(s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); });
+      m.castShadow = true; cena.add(m);
+    }
+    // ponte de corda lá no alto, de parede a parede
+    {
+      const z = CAN_PONTE.z, y0 = CAN_PONTE.y, xa = canParede(z, -1, y0) + 0.6, xb = canParede(z, 1, y0) - 0.6, L = xb - xa, n = Math.floor(L / 0.32);
+      const mad = lambert({ map: madeira, color: 0xa07a58 }), corda = lambert({ color: 0x8a6a44 }), g = new T.Group();
+      const flecha = (s) => y0 - 2.2 * Math.sin(Math.PI * s);
+      for (let i = 0; i < n; i++) { const s = (i + 0.5) / n; if (r() < 0.06) continue; const t = new T.Mesh(new T.BoxGeometry(0.26, 0.05, 1.3), mad); t.position.set(xa + s * L, flecha(s), -z); t.rotation.set((r() - 0.5) * 0.08, (r() - 0.5) * 0.08, Math.cos(Math.PI * s) * -0.28); t.castShadow = true; g.add(t); }
+      for (const dz of [-0.62, 0.62]) for (const dy of [0.0, 0.95]) {
+        const pts = []; for (let i = 0; i <= 40; i++) { const s = i / 40; pts.push(new T.Vector3(xa + s * L, flecha(s) + dy - (dy ? 0.25 * Math.sin(Math.PI * s) : 0), -z + dz)); }
+        const tubo = new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), 60, 0.035, 5, false), corda); tubo.castShadow = true; g.add(tubo);
+      }
+      for (let i = 0; i <= 14; i++) { const s = i / 14; for (const dz of [-0.62, 0.62]) { const v = new T.Mesh(new T.CylinderGeometry(0.015, 0.015, 0.95, 4), corda); v.position.set(xa + s * L, flecha(s) + 0.45, -z + dz); g.add(v); } }
+      cena.add(g);
+    }
+    // poeira dourada flutuando no ar (aparece de dia contra a luz)
+    {
+      const n = 900, Pp = new Float32Array(n * 3), F = new Float32Array(n); for (let i = 0; i < n; i++) { Pp.set([(r() - 0.5) * 16, 0.2 + r() * 9, -(-4 + r() * 50)], i * 3); F[i] = r() * 100; }
+      const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(Pp, 3)); g.setAttribute('fase', new T.BufferAttribute(F, 1));
+      const m = new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, uniforms: uni,
+        vertexShader: 'attribute float fase; uniform float uTempo; varying float vA; void main(){ vec3 p = position + vec3(sin(uTempo*0.25+fase)*0.5 + uTempo*0.12, sin(uTempo*0.4+fase*1.7)*0.25, cos(uTempo*0.2+fase*1.3)*0.5); vA = 0.5 + 0.5*sin(uTempo*1.2 + fase*2.0); vec4 mv = modelViewMatrix * vec4(p,1.0); gl_PointSize = 10.0 * (6.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
+        fragmentShader: 'uniform float uNoite; varying float vA; void main(){ float d = length(gl_PointCoord - 0.5); float a = smoothstep(0.5, 0.0, d); gl_FragColor = vec4(vec3(1.0,0.86,0.6), a * (0.25 + 0.45*vA) * (1.0 - uNoite)); }' });
+      const pts = new T.Points(g, m); pts.frustumCulled = false; cena.add(pts);
+    }
+    // véu de poeira baixo (placas macias andando devagar)
+    const nevoas = [];
+    { const tn = textura(texNevoa()); for (let i = 0; i < 18; i++) { const s = new T.Sprite(new T.SpriteMaterial({ map: tn, transparent: true, depthWrite: false, opacity: 0.12, color: 0xf0c8a0 })); const w = 7 + r() * 9; s.scale.set(w, w * 0.2, 1); const x = (r() - 0.5) * 12, z = 6 + r() * 60; s.position.set(x, 0.3, -z); cena.add(s); nevoas.push({ s, x, z, v: 0.1 + r() * 0.2 }); } }
+
+    R = { renderer, canvas, cena, camera, uni, arvores: [], magia: montarMagia(cena, uni), ceuMat, lua, sol, hemi, dir, pontos, chamas: [], nevoas, runasMat, grupoCeu, esc,
+      PAL: PAL_CANION, nevoaPerto: [34, 24, 14], nevoaLonge: [240, 170, 120], forcaHemi: [0.78, 0.6, 0.26], forcaSol: [3.0, 2.4, 2.0],
+      altura: (x, z) => 0, naTrilha: () => false, raiosSol: true, solEl: 1.25, solX: 0.12, nevoaCor: [0xf0c8a0, 0x96aae6], figPool: [], contatoPool: [] };
+  }
+
   // ---------------- magia em 3D: círculo no chão (em perspectiva, girando) e faíscas em volta das mãos ----------------
   // magias: [{ tipo: 'circulo', x, z, raio, k, cor } | { tipo: 'orbe', x, y, z, k, cor }]
   function montarMagia(cena, uni) {
@@ -562,17 +727,17 @@
   }
   const horaDe = (o) => (o.dia ? 0 : 1 + (o.noite === undefined ? 1 : o.noite));
   function dirLua(h) { const el = lerp(0.1, 0.55, suave(1.0, 1.85, h)); return new THREE.Vector3(-0.32, el, -1).normalize(); }
-  function dirSol(h) { const el = lerp(0.62, 0.06, suave(0, 1.15, h)); return new THREE.Vector3(0.32, el, -1).normalize(); }
+  function dirSol(h) { const el = lerp((R && R.solEl) || 0.62, 0.06, suave(0, 1.15, h)); return new THREE.Vector3((R && R.solX !== undefined) ? R.solX : 0.32, el, -1).normalize(); }
 
   function atualizar(cam, o) {
     const t = o.t || 0, h = horaDe(o), noite = suave(1.0, 1.9, h), T = THREE;
     R.uni.uTempo.value = t; R.uni.uNoite.value = noite;
     R.ceuMat.uniforms.topo.value.copy(pal('ceuTopo', h)); R.ceuMat.uniforms.hz.value.copy(pal('ceuHz', h)); R.ceuMat.uniforms.baixo.value.copy(pal('ceuBaixo', h));
-    R.cena.fog.color.copy(pal('nevoa', h)); R.cena.fog.near = num(nevoaPerto, h); R.cena.fog.far = num(nevoaLonge, h);
-    R.hemi.color.copy(pal('hemiCeu', h)); R.hemi.groundColor.copy(pal('hemiChao', h)); R.hemi.intensity = num(forcaHemi, h);
+    R.cena.fog.color.copy(pal('nevoa', h)); R.cena.fog.near = num(R.nevoaPerto || nevoaPerto, h); R.cena.fog.far = num(R.nevoaLonge || nevoaLonge, h);
+    R.hemi.color.copy(pal('hemiCeu', h)); R.hemi.groundColor.copy(pal('hemiChao', h)); R.hemi.intensity = num(R.forcaHemi || forcaHemi, h);
     // luz principal: sol de dia → lua de noite (troca no pôr do sol)
     const dl = dirLua(h), ds = dirSol(h), k = suave(1.25, 1.6, h), dls = new THREE.Vector3(dl.x * 0.6, Math.max(dl.y, 0.7), dl.z).normalize(), d = ds.clone().lerp(dls, k).normalize();
-    R.dir.color.copy(pal('sol', h)); R.dir.intensity = num(forcaSol, h) * (1 - 0.55 * Math.sin(Math.PI * k));
+    R.dir.color.copy(pal('sol', h)); R.dir.intensity = num(R.forcaSol || forcaSol, h) * (1 - 0.55 * Math.sin(Math.PI * k));
     const fx = cam.x + Math.sin(cam.yaw || 0) * 9, fz = cam.z + Math.cos(cam.yaw || 0) * 9;
     R.dir.target.position.set(fx, 0, -fz); R.dir.position.set(fx + d.x * 60, d.y * 60, -fz + d.z * 60); R.dir.target.updateMatrixWorld();
     // céu, lua, sol, estrelas
@@ -580,12 +745,12 @@
     R.lua.position.copy(dl).multiplyScalar(600); R.lua.material.opacity = suave(1.1, 1.6, h);
     R.sol.position.copy(ds).multiplyScalar(600); R.sol.material.opacity = 1 - suave(1.0, 1.4, h);
     // emissivos que acendem à noite
-    R.runasMat.opacity = 0.25 + 0.75 * noite * (0.75 + 0.25 * Math.sin(t * 2)); R.janelaMat.opacity = 0.2 + 0.8 * noite; R.florMat.opacity = 0.15 + 0.85 * noite;
-    R.aguaNorm.offset.set(t * 0.03, t * 0.015);
-    R.aguaMat.color.copy(new T.Color('#4A80B8').lerp(new T.Color('#E09A88'), suave(0.5, 1, h) * (1 - suave(1.2, 1.7, h))).lerp(new T.Color('#1C2C66'), noite));
+    if (R.janelaMat) { R.runasMat.opacity = 0.25 + 0.75 * noite * (0.75 + 0.25 * Math.sin(t * 2)); R.janelaMat.opacity = 0.2 + 0.8 * noite; R.florMat.opacity = 0.15 + 0.85 * noite; }
+    if (R.aguaNorm) R.aguaNorm.offset.set(t * 0.03, t * 0.015);
+    if (R.aguaMat) R.aguaMat.color.copy(new T.Color('#4A80B8').lerp(new T.Color('#E09A88'), suave(0.5, 1, h) * (1 - suave(1.2, 1.7, h))).lerp(new T.Color('#1C2C66'), noite));
     { const o = new T.Object3D(), cx = cam.x, cz = cam.z, tom = new T.Color(1, 1, 1).lerp(new T.Color('#55628E'), 0.62 * noite); for (const m of R.arvores) { m.material.color.copy(tom); m.userData.arv.forEach(([x, y, z, s], i) => { o.position.set(x, y, -z); o.rotation.set(0, Math.atan2(cx - x, -(cz - z)), 0); o.scale.setScalar(s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); }); m.instanceMatrix.needsUpdate = true; } }
     atualizaMagia(o.magias || [], t);
-    for (const n of R.nevoas) { const x = ((n.x + t * n.v + 30) % 60 + 60) % 60 - 30; n.s.position.x = x; n.s.material.opacity = 0.05 + 0.13 * noite; n.s.material.color.set(noite > 0.5 ? 0x96aae6 : 0xf0c8b0); }
+    for (const n of R.nevoas) { const x = ((n.x + t * n.v + 30) % 60 + 60) % 60 - 30; n.s.position.x = x; n.s.material.opacity = 0.05 + 0.13 * noite; n.s.material.color.set(noite > 0.5 ? 0x96aae6 : (R.nevoaCor ? R.nevoaCor[0] : 0xf0c8b0)); }
     // tochas: acendem no pôr do sol; as 9 luzes vão para as tochas mais perto do que a câmera vê + luzes extras do plano
     const acesa = suave(1.15, 1.7, h), extras = [...(o.magias || []).filter((g) => g.k > 0.02).map((g) => ({ x: g.x, y: g.tipo === 'circulo' ? 0.7 : g.y, z: g.z, cor: g.cor || '#4E9CFF', forca: (g.tipo === 'circulo' ? 1.4 : 0.9) * g.k, raio: g.tipo === 'circulo' ? 6 : 3.5 })), ...(o.luzes || [])].slice(0, 5);
     const lista = R.chamas.map((c) => ({ c, d: Math.hypot(c.x - fx, c.z - fz) })).sort((a, b) => a.d - b.d);
@@ -599,18 +764,17 @@
 
   // personagens 2D dentro do 3D: cada recorte vira uma placa em pé, virada para a câmera, na profundidade dos pés.
   // A grama da frente passa na frente das pernas (teste de profundidade) e a luz (sol/lua) projeta a sombra da silhueta.
-  const figPool = [];
   function figuras3d(lista, cam) {
     const T = THREE, yaw = cam.yaw || 0, co = Math.cos(yaw), si = Math.sin(yaw), f = cam.f, cx = cam.cx || W / 2, cy = cam.cy || H / 2;
     const mundo = (sx, sy, dz) => { const xr = ((sx - cx) * dz) / f, yr = ((cy - sy) * dz) / f; return new T.Vector3(cam.x + xr * co + dz * si, cam.y + yr, -(cam.z - xr * si + dz * co)); };
     lista.forEach((fg, i) => {
-      let m = figPool[i];
+      let m = R.figPool[i];
       if (!m) {
         const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(new Float32Array(12), 3)); g.setAttribute('uv', new T.BufferAttribute(new Float32Array([0, 1, 1, 1, 0, 0, 1, 0]), 2)); g.setIndex([0, 2, 1, 1, 2, 3]);
         const vazio = new T.DataTexture(new Uint8Array(4), 1, 1); vazio.needsUpdate = true;
         const mat = new T.MeshBasicMaterial({ map: vazio, transparent: true, alphaTest: 0.35, depthWrite: false, toneMapped: false, fog: false, side: T.DoubleSide });
         m = new T.Mesh(g, mat); m.customDepthMaterial = new T.MeshDepthMaterial({ depthPacking: T.RGBADepthPacking, map: vazio, alphaTest: 0.5, side: T.DoubleSide });
-        m.frustumCulled = false; R.cena.add(m); figPool[i] = m;
+        m.frustumCulled = false; R.cena.add(m); R.figPool[i] = m;
       }
       const velha = m.material.map; const tex = new T.CanvasTexture(fg.canvas); tex.colorSpace = T.SRGBColorSpace; tex.generateMipmaps = false; tex.minFilter = T.LinearFilter;
       m.material.map = tex; m.customDepthMaterial.map = tex; if (velha && velha.isCanvasTexture) velha.dispose();
@@ -619,21 +783,21 @@
       c.forEach((v, k) => pos.setXYZ(k, v.x - centro.x, v.y - centro.y, v.z - centro.z)); pos.needsUpdate = true; m.geometry.computeBoundingSphere();
       m.position.copy(centro); m.castShadow = fg.sombra !== false; m.visible = true;
     });
-    for (let i = lista.length; i < figPool.length; i++) figPool[i].visible = false;
+    for (let i = lista.length; i < R.figPool.length; i++) R.figPool[i].visible = false;
     // sombra de contato (oclusão) no chão, embaixo dos pés: a grama da frente passa por cima dela
     const comPe = lista.filter((fg) => fg.X !== undefined && fg.sombra !== false);
     comPe.forEach((fg, i) => {
-      let d = contatoPool[i];
+      let d = R.contatoPool[i];
       if (!d) {
         if (!texContato) texContato = textura(tela(128, 128, (g, w) => { const gr = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(0.45, 'rgba(0,0,0,0.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, w); }));
         d = new T.Mesh(new T.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ map: texContato, transparent: true, depthWrite: false, opacity: 0.55, color: 0x000000, polygonOffset: true, polygonOffsetFactor: -4 }));
-        d.renderOrder = 1; R.cena.add(d); contatoPool[i] = d;
+        d.renderOrder = 1; R.cena.add(d); R.contatoPool[i] = d;
       }
-      const a = fg.alt || 1.8, y = fg.y || 0; d.position.set(fg.X, altura(fg.X, fg.Z) + (naTrilha(fg.X, fg.Z, 0.15) ? 0.09 : 0.02), -fg.Z); d.scale.set(a * 0.42, 1, a * 0.26); d.material.opacity = 0.55 / (1 + y * 2.5); d.visible = true;
+      const a = fg.alt || 1.8, y = fg.y || 0; d.position.set(fg.X, (R.altura || altura)(fg.X, fg.Z) + ((R.naTrilha || naTrilha)(fg.X, fg.Z, 0.15) ? 0.09 : 0.02), -fg.Z); d.scale.set(a * 0.42, 1, a * 0.26); d.material.opacity = 0.55 / (1 + y * 2.5); d.visible = true;
     });
-    for (let i = comPe.length; i < contatoPool.length; i++) contatoPool[i].visible = false;
+    for (let i = comPe.length; i < R.contatoPool.length; i++) R.contatoPool[i].visible = false;
   }
-  const contatoPool = []; let texContato = null;
+  let texContato = null;
 
   // brilho das chamas por cima (bloom simples em 2D)
   function brilhos(ctx, cam, acesa, t, perto) {
@@ -649,13 +813,13 @@
   }
 
   window.Valdor3D = {
-    trilhaX, trilhaW, rioZ, RIO, PONTE, altura, 
-    nevoa: (n = 1, dia = false) => hex(pal('nevoa', dia ? 0 : 1 + n)),
+    trilhaX, trilhaW, rioZ, RIO, PONTE, altura, canX, canParede, CAN_PONTE, CAN_ALT,
+    nevoa: (n = 1, dia = false, mundo) => { const A = ((mundo || window.MUNDO_3D) === 'canion' ? PAL_CANION : PAL).nevoa, h = dia ? 0 : 1 + n, i = Math.min(1, Math.floor(h)), k = h - i; return hex(new THREE.Color(A[i]).lerp(new THREE.Color(A[Math.min(2, i + 1)]), k)); },
     // ponto da tela (px) na profundidade dz (m) da câmera → mundo { x, y, z }
     paraMundo(cam, sx, sy, dz) { const yaw = cam.yaw || 0, co = Math.cos(yaw), si = Math.sin(yaw), xr = ((sx - (cam.cx || W / 2)) * dz) / cam.f, yr = (((cam.cy || H / 2) - sy) * dz) / cam.f; return { x: cam.x + xr * co + dz * si, y: cam.y + yr, z: cam.z - xr * si + dz * co }; },
     // fundo: renderiza tudo que está além de `perto` metros da câmera
     desenhar(ctx, cam, o = {}) {
-      if (!R) montar();
+      usar(o);
       const st = atualizar(cam, o), perto = o.perto || 0;
       figuras3d(o.figuras || [], cam);
       const foco = o.foco || 0, bokeh = o.bokeh || 0;
@@ -677,7 +841,7 @@
     },
     // primeiro plano: o que está a menos de `perto` metros (grama, pedras perto da lente), desfocado, + luz da cena
     frente(ctx, cam, o = {}) {
-      if (!R) montar();
+      usar(o);
       const perto = o.perto || 0, forca = o.forca === undefined ? 0.5 : o.forca, st = atualizar(cam, o);
       if (perto > 0.06 && forca > 0) {
         ajustaCamera(cam, 0.05, perto);
@@ -688,8 +852,23 @@
     },
     // luz da cena: feixes de luar, tom e vinheta
     luz(ctx, cam, o = {}) {
+      usar(o);
       const st = o.st || atualizar(cam, o), t = o.t || 0, n = st.noite;
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+      // raios de sol entrando pelo cânion (de dia e no pôr do sol), saindo do ponto do sol na tela
+      if (R.raiosSol && n < 0.6) {
+        const ds = dirSol(st.h), S = cam.p(cam.x + ds.x * 500, cam.y + ds.y * 500, cam.z - ds.z * 500), a0 = (1 - n) * (o.raios === undefined ? 1 : o.raios);
+        if (!S.atras) {
+          ctx.globalCompositeOperation = 'screen';
+          const g0 = ctx.createRadialGradient(S.x, S.y, 0, S.x, S.y, 900); g0.addColorStop(0, `rgba(255,220,160,${0.35 * a0})`); g0.addColorStop(1, 'rgba(255,200,140,0)'); ctx.fillStyle = g0; ctx.fillRect(0, 0, W, H);
+          for (let i = 0; i < 7; i++) {
+            const ang = Math.PI / 2 + (i - 3) * 0.16 + 0.03 * Math.sin(t * 0.3 + i), len = 2600, larg = 0.035 + 0.02 * ((i * 7) % 3), a = (0.06 + 0.03 * Math.sin(t * 0.5 + i * 1.7)) * a0;
+            const g = ctx.createLinearGradient(S.x, S.y, S.x + Math.cos(ang) * len, S.y + Math.sin(ang) * len); g.addColorStop(0, `rgba(255,214,150,${a})`); g.addColorStop(1, 'rgba(255,214,150,0)');
+            ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(S.x, S.y); ctx.lineTo(S.x + Math.cos(ang - larg) * len, S.y + Math.sin(ang - larg) * len); ctx.lineTo(S.x + Math.cos(ang + larg) * len, S.y + Math.sin(ang + larg) * len); ctx.closePath(); ctx.fill();
+          }
+          ctx.globalCompositeOperation = 'source-over';
+        }
+      }
       const d = st.dl, L = cam.p(cam.x + d.x * 500, cam.y + d.y * 500, cam.z - d.z * 500);
       if (!L.atras && n > 0.3) {
         ctx.globalCompositeOperation = 'screen';

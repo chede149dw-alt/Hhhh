@@ -1,0 +1,205 @@
+{
+  "serie": "VALDOR",
+  "episodio": 4,
+  "parte": 4,
+  "scripts": [
+    "personagens/nova/cores.js",
+    "personagens/nova/equipamento.js",
+    "personagens/nova/davi/davi.js",
+    "personagens/nova/davi/davi-jogo.js",
+    "personagens/nova/teo/teo.js",
+    "personagens/nova/teo/teo-jogo.js",
+    "personagens/nova/teo/teo-fera.js",
+    "personagens/nova/teo/teo-lobisomem.js",
+    "personagens/nova/ladroes.js",
+    "personagens/nova/cacadores.js",
+    "motor/vendor/three-r160.min.js",
+    "cenarios/valdor-3d.js",
+    "cenarios/valdor-campo.js",
+    "cenarios/valdor-noite.js",
+    "efeitos/criaturas.js",
+    "efeitos/valdor.js",
+    "efeitos/noite.js",
+    "efeitos/combate.js",
+    "efeitos/teo-closes.js"
+  ],
+  "legenda": {
+    "faixas": [
+      1180,
+      1400,
+      760,
+      420
+    ]
+  },
+  "planos": [
+    {
+      "id": "capa",
+      "fala": {
+        "texto": "Mil reais pela cabeça do Davi.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5,
+      "semLegenda": true
+    },
+    {
+      "id": "canion",
+      "fala": {
+        "texto": "O dia nasceu, e os dois seguiram pro Cânion Vermelho.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "conversa",
+      "fala": {
+        "texto": "Mano... por que você nunca me contou que virava lobisomem?",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "raca",
+      "fala": {
+        "texto": "Quase nunca aparece pra um jogador.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "maos",
+      "fala": {
+        "texto": "De noite, quem manda é a fera.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "rindo",
+      "fala": {
+        "texto": "Aí você corre.",
+        "voz": "narrador"
+      },
+      "duracao": 3
+    },
+    {
+      "id": "vender",
+      "fala": {
+        "texto": "Ela não deixou. Vinte e quatro horas?!",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "chegaram",
+      "fala": {
+        "texto": "Só que os caçadores chegaram em menos de um minuto.",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "magias",
+      "fala": {
+        "texto": "Mas o Manto do Arcano tinha liberado magias novas.",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "flechas",
+      "fala": {
+        "texto": "A arqueira atirou primeiro.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "ciencia",
+      "fala": {
+        "texto": "Num susto, o corpo solta adrenalina.",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "gelo",
+      "fala": {
+        "texto": "O Davi bateu o pé no chão: Muralha de Gelo.",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "corta",
+      "fala": {
+        "texto": "Então ele sacou a Lâmina Rubra...",
+        "voz": "narrador"
+      },
+      "duracao": 3
+    },
+    {
+      "id": "parede",
+      "fala": {
+        "texto": "De dia, o Téo não vira fera... mas continua rápido.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "martelo",
+      "fala": {
+        "texto": "Enquanto isso, o gigante desceu o martelo.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "raizes",
+      "fala": {
+        "texto": "Segunda magia: Raízes Anciãs.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "meteoro",
+      "fala": {
+        "texto": "Terceira magia: Meteoro.",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "assassina",
+      "fala": {
+        "texto": "Só que a espada sente quem está vivo.",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "loot",
+      "fala": {
+        "texto": "Os três caçadores saíram do jogo.",
+        "voz": "narrador"
+      },
+      "duracao": 3.5
+    },
+    {
+      "id": "gancho",
+      "fala": {
+        "texto": "Lá em cima, alguém estava filmando tudo.",
+        "voz": "narrador"
+      },
+      "duracao": 4
+    },
+    {
+      "id": "parte",
+      "fala": {
+        "texto": "Segue pra ver a parte cinco!",
+        "voz": "narrador"
+      },
+      "duracao": 3
+    }
+  ]
+}
