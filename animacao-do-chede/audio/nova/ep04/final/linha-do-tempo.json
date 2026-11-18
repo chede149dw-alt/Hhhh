@@ -9,7 +9,20 @@
       "semLegenda": true,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.7,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 0.95,
+          "volume": 0.14
+        }
+      ]
     },
     {
       "id": "canion",
@@ -81,7 +94,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rugido.mp3",
+          "em": 1,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "davi4",
@@ -108,7 +128,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/desfaz.mp3",
+          "em": 0.6,
+          "volume": 0.18
+        }
+      ]
     },
     {
       "id": "horas",
@@ -117,7 +144,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 0.3,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "regra",
@@ -126,7 +160,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 0.2,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "chegaram",
@@ -135,7 +176,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/alerta.wav",
+          "em": 0.3,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "arqueira",
@@ -144,7 +192,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/escudo.mp3",
+          "em": 0.3,
+          "volume": 0.18
+        }
+      ]
     },
     {
       "id": "magias",
@@ -153,7 +208,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 0.4,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 0.2,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "flechas",
@@ -162,7 +230,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.4,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.6,
+          "volume": 0.18
+        }
+      ]
     },
     {
       "id": "ciencia",
@@ -189,7 +270,26 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 0.2,
+          "volume": 0.14
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 1.3,
+          "volume": 0.16
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 1.6,
+          "volume": 0.14
+        }
+      ]
     },
     {
       "id": "ai",
@@ -198,7 +298,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 0.1,
+          "volume": 0.2
+        }
+      ]
     },
     {
       "id": "corta",
@@ -207,7 +314,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 0.6,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.4,
+          "volume": 0.2
+        }
+      ]
     },
     {
       "id": "parede",
@@ -216,7 +336,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.5,
+          "volume": 0.18
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 1.8,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "arco",
@@ -225,7 +358,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 0.1,
+          "volume": 0.14
+        }
+      ]
     },
     {
       "id": "martelo",
@@ -234,7 +374,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.2,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 1.4400000000000002,
+          "volume": 0.3
+        }
+      ]
     },
     {
       "id": "raizes",
@@ -243,7 +396,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/arrasta.mp3",
+          "em": 0.2,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/rosnado.mp3",
+          "em": 1.4,
+          "volume": 0.12
+        }
+      ]
     },
     {
       "id": "meteoro",
@@ -252,7 +418,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/trovao.wav",
+          "em": 0.4,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 2.2,
+          "volume": 0.3
+        }
+      ]
     },
     {
       "id": "assassina",
@@ -261,7 +440,20 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/dreno.wav",
+          "em": 0.3,
+          "volume": 0.14
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 2.3,
+          "volume": 0.2
+        }
+      ]
     },
     {
       "id": "cade",
@@ -270,7 +462,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.5,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "loot",
@@ -279,7 +478,26 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.3,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 0.8,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/ping.mp3",
+          "em": 1.6,
+          "volume": 0.16
+        }
+      ]
     },
     {
       "id": "entregar",
@@ -315,7 +533,14 @@
       "semLegenda": false,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/alerta.wav",
+          "em": 1.3,
+          "volume": 0.22
+        }
+      ]
     },
     {
       "id": "parte",
@@ -324,7 +549,14 @@
       "semLegenda": true,
       "semCinema": false,
       "batidas": [],
-      "sfx": []
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 0.3,
+          "volume": 0.2
+        }
+      ]
     }
   ],
   "falas": [
