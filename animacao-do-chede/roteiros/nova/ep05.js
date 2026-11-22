@@ -721,6 +721,15 @@
     ctx.globalAlpha = 1; ctx.font = '800 38px Inter'; ctx.textAlign = 'center'; ctx.fillStyle = '#FFB0A0'; ctx.fillText('CONES (COR)', x0 + w * 0.27, y0 + 290); ctx.fillStyle = '#D0DCF0'; ctx.fillText('BASTONETES (ESCURO)', x0 + w * 0.72, y0 + 290);
     ctx.restore();
   }
+  // "FIM DE JOGO" (pedido do autor): placa de fim de jogo em cima de quem é derrotado e some; tam = escala
+  function fimDeJogo(ctx, x, y, k, tam = 1) {
+    if (k <= 0) return; ctx.save(); ctx.translate(x, y); const e = k < 0.3 ? 0.5 + 0.7 * (k / 0.3) : 1.2 - 0.2 * Math.min(1, (k - 0.3) / 0.2); ctx.scale(e * tam, e * tam); ctx.globalAlpha = Math.min(1, k * 2);
+    ctx.fillStyle = 'rgba(14,4,8,0.9)'; ctx.strokeStyle = '#FF3A3A'; ctx.lineWidth = 5; ctx.beginPath(); ctx.roundRect(-190, -46, 380, 84, 12); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,90,90,0.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-180, -36, 360, 64, 8); ctx.stroke();
+    ctx.font = '900 46px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 8; ctx.strokeStyle = '#3A0006'; ctx.strokeText('FIM DE JOGO', 0, -3); ctx.fillStyle = '#FF4A4A'; ctx.fillText('FIM DE JOGO', 0, -3);
+    ctx.fillStyle = 'rgba(255,255,255,0.18)'; for (let i = -30; i < 30; i += 6) ctx.fillRect(-180, i, 360, 2); // linhas de tela antiga
+    ctx.restore();
+  }
   // ---------- corrente de prata (bem feita): elos alternando de frente (anel com furo) e de lado (barrinha) ----------
   // cada elo: contorno escuro, prata em degradê, brilho branco na borda de cima; s = tamanho do elo em px
   function elo(ctx, x, y, ang, s, frente, luz = 1) {
@@ -907,7 +916,9 @@
         luzes: [{ x: kb > 0 ? B0[0] : mp[0], y: kb > 0 ? 1.5 : mp[1], z: kb > 0 ? B0[2] : mp[2], cor: '#FF8A30', forca: kb > 0 ? 4 * Math.max(0, 1 - kb) : 2.5, raio: kb > 0 ? 18 : 22 }],
         fx3d: () => [kb < 0 ? { tipo: 'meteoro', x: mp[0], y: mp[1], z: mp[2], dx: B0[0] - A0[0], dy: B0[1] - A0[1], dz: B0[2] - A0[2], s: 1.2 } : null, kb >= 0 && kb < 1.4 ? { tipo: 'explosao', x: B0[0], z: B0[2], k: kb * 1.0, s: 1.4 } : null, ...H5.map(([x, z], i) => (kd(i) > 0 ? { tipo: 'pixels', x, z, alt: 1.78, k: kd(i), cor: '#A8ECFF' } : null))],
         depois: () => { const alvo = cam.p(B0[0], 1.3, B0[2]); if (kb >= 0) { Combate.numero(ctx, alvo.x, alvo.y - 360, '-400', kb, 'critico'); flash(ctx, kb); }
-          H5.forEach(([x, z], i) => { const q = cam.p(x, 2.2, z), kt = api.ease.suave(cl((kd(i) - 0.1) / 0.3)) * (1 - cl((kd(i) - 0.8) / 0.2)); if (kt > 0) etiquetaSaiu(ctx, q.x, q.y - 40, kt); }); },
+          H5.forEach(([x, z], i) => { const q = cam.p(x, 2.2, z), kt = api.ease.suave(cl((kd(i) - 0.1) / 0.3)) * (1 - cl((kd(i) - 0.8) / 0.2)); if (kt > 0) fimDeJogo(ctx, q.x, q.y - 40, kt, 0.8); });
+          // quando o último some: FIM DE JOGO grande no meio da tela
+          const kf = cl((kd(H5.length - 1) - 0.6) / 0.4); if (kf > 0) { ctx.save(); ctx.fillStyle = `rgba(0,0,0,${0.35 * kf})`; ctx.fillRect(0, 0, W, H); ctx.restore(); fimDeJogo(ctx, 540, 860, kf, 2.0); } },
       });
       ctx.save(); ctx.fillStyle = `rgba(255,120,40,${0.12 * cai * (kb < 0 ? 1 : Math.max(0, 1 - kb))})`; ctx.fillRect(0, 0, W, H); ctx.restore();
       hudDavi(ctx, api, 1, gasta(MANA.raizes, MANA.meteoro, r / 0.2), MANA.raizes, { custo: 30, kCusto: cl(r / 0.5), aMana: aparece(r, -0.1, 0.9) });
