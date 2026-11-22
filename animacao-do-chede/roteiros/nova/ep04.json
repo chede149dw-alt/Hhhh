@@ -250,7 +250,10 @@
       "id": "horas",
       "fala": {
         "texto": "Vinte e quatro horas?!",
-        "voz": "davi"
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_horas.wav"
+        }
       },
       "destaque": [
         "HORAS?!"
@@ -498,7 +501,10 @@
       "id": "corta",
       "fala": {
         "texto": "Então ele sacou a Lâmina Rubra... e cortou as flechas no ar.",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_corta.wav"
+        }
       },
       "destaque": [
         "LÂMINA",
@@ -819,7 +825,10 @@
       "id": "parte",
       "fala": {
         "texto": "Segue pra ver a parte cinco!",
-        "voz": "narrador"
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_parte.wav"
+        }
       },
       "destaque": [
         "CINCO!"

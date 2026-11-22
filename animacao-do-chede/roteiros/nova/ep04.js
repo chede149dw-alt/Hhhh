@@ -52,7 +52,7 @@
       if (!dia) { g.fillStyle = `rgba(22,36,100,${0.26 * n})`; g.fillRect(0, 0, W, H); }
       if (e.cor) { g.fillStyle = e.cor; g.fillRect(0, 0, W, H); }
       const alfa = e.alfa === undefined ? 1 : e.alfa, pos = reg || (e.pos ? { X: e.pos[0], Z: e.pos[1], y: 0, alt: e.alt || 1.2 } : null);
-      if (pos && !o.desfoque) {
+      if (pos && !o.desfoque && !e.plano) {
         const q = cam.p(pos.X, pos.y, pos.Z), hp = pos.alt * q.s;
         const x0 = Math.max(0, Math.floor(q.x - 0.95 * hp)), x1 = Math.min(W, Math.ceil(q.x + 0.95 * hp)), y0 = Math.max(0, Math.floor(q.y - 1.75 * hp)), y1 = Math.min(H, Math.ceil(q.y + 0.12 * hp));
         if (q.dz > 0.6 && x1 > x0 + 2 && y1 > y0 + 2) {
@@ -610,10 +610,12 @@
     // 6) a arqueira de costas em cima do rochedo: puxa a corda devagar (a ponta da flecha brilha), clarão e dispara
     flechas(ctx, u, d, api) {
       const S = V().CAN_ROCHA, AX = -5.2, AZ = 15, r = u / d, puxa = api.ease.suave(cl(r / 0.55)), solta = r > 0.58, ks = (r - 0.58) / 0.42;
-      const cam = camDia(api, { x: AX - 0.9, y: S.y + 1.55, z: AZ + 1.7 - r * 0.25, cy: 980, f: 1250, yaw: Math.PI + 0.42 });
+      const cam = camDia(api, { x: AX + 0.42, y: S.y + 1.65, z: AZ + 1.9 - r * 0.25, cy: 980, f: 1150, yaw: Math.PI - 0.08 });
       window.ARCO = { puxa: solta ? 0 : puxa, flecha: !solta, brilho: puxa }; window.ARMA_ANG = { arco: 0 };
       const corda = solta ? Math.max(0, 1 - ks * 6) : puxa;
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, mao_e: 0, braco_d: -60 - 25 * corda, antebraco_d: 60 + 55 * corda, tronco: -3 - 4 * corda, cabeca: 6, coxa_d: 16, canela_d: -10, coxa_e: -12, canela_e: 12, _plantar: true }, expressao: 'determinado' }, AX, AZ, 1.75, { y: S.y, olhaPara: [0, 5.2], luz: { lado: -1, forca: 0.8, cor: 'rgb(255,220,160)', sombra: 0.7 } }) }], { forca: 0, bokeh: 6,
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -88, antebraco_e: 0, mao_e: 0, braco_d: -60 - 25 * corda, antebraco_d: 60 + 55 * corda, tronco: -3 - 4 * corda, cabeca: 6, coxa_d: 16, canela_d: -10, coxa_e: -12, canela_e: 12, _plantar: true }, expressao: 'determinado' }, AX, AZ, 1.75, { y: S.y, olhaPara: [0, 5.2], luz: { lado: -1, forca: 0.8, cor: 'rgb(255,220,160)', sombra: 0.7 } }) },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'espanto' }, 0, 5.2, 1.76, { olhaPara: [AX, AZ] }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado', expressao: 'espanto' }, 1.1, 5.6, 1.8, { olhaPara: [AX, AZ] }) }], { forca: 0, bokeh: 6,
         depois: ([rig]) => {
           const m = rig.pontoMundo('mao_e', [0, 0.2]);
           // energia juntando na ponta da flecha enquanto ela puxa
@@ -647,9 +649,22 @@
         luzes: [{ x: 0, y: 1, z: 4.4, cor: '#9FE0FF', forca: 1.4 * sobe, raio: 6 }],
         depois: () => {
           muralhaGelo(ctx, cam, 0, 4.4, 2.8, sobe, api.t, cl((r - 0.5) / 0.4));
-          for (let i = 0; i < 8; i++) { const t0 = 0.28 + i * 0.07; if (r < t0) continue; const k = cl((r - t0) / 0.05), cong = cl((r - t0 - 0.05) / 0.2), q = cam.p(-1.1 + i * 0.32, 0.7 + rnd(i) * 0.8, 4.35);
-            ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(0.35 + rnd(i * 3) * 0.2); ctx.fillStyle = '#C9A06A'; ctx.fillRect(-90 * k, -3, 90 * k, 6); ctx.fillStyle = `rgba(220,245,255,${0.85 * cong})`; ctx.beginPath(); ctx.roundRect(-90, -9, 90 * cong, 18, 8); ctx.fill(); ctx.strokeStyle = `rgba(255,255,255,${cong})`; ctx.lineWidth = 2; for (let j = 0; j < 4; j++) { const x = -10 - j * 22 * cong; ctx.beginPath(); ctx.moveTo(x, -9); ctx.lineTo(x - 6, -18); ctx.moveTo(x, 9); ctx.lineTo(x - 6, 18); ctx.stroke(); } ctx.restore();
-            if (k < 1) Noite.faiscas(ctx, q.x, q.y, 30, 60, api.t, 1 - k, i, GELO); if (cong > 0 && cong < 1) Noite.fumaca(ctx, q.x, q.y, 50, cong, { seed: i, cor: '220,245,255', sobe: 0.4, n: 6 }); }
+          // flechas chegando do lado da câmera, cravando no gelo e congelando (haste + penas verdes + casca de gelo)
+          for (let i = 0; i < 8; i++) { const t0 = 0.26 + i * 0.065; if (r < t0) continue; const k = cl((r - t0) / 0.05), cong = cl((r - t0 - 0.06) / 0.22), q = cam.p(-1.1 + i * 0.32, 0.6 + rnd(i) * 1.1, 4.3), ang = -0.5 + rnd(i * 3) * 0.5 + (i % 2 ? Math.PI : 0) * 0;
+            const L = 190, vx = Math.cos(ang + 2.6), vy = Math.sin(ang + 2.6), ex = q.x + vx * L * (2.5 - 1.5 * k), ey = q.y + vy * L * (2.5 - 1.5 * k) + (1 - k) * 300;
+            ctx.save(); ctx.lineCap = 'round';
+            if (k < 1) { const g = ctx.createLinearGradient(ex + vx * 400, ey + vy * 400, ex, ey); g.addColorStop(0, 'rgba(200,255,210,0)'); g.addColorStop(1, 'rgba(220,255,230,0.8)'); ctx.strokeStyle = g; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(ex + vx * 400, ey + vy * 400 + (1 - k) * 300); ctx.lineTo(ex, ey); ctx.stroke(); }
+            const px = mix(ex, q.x, 1), py = mix(ey, q.y, 1), tx = k < 1 ? ex - vx * L * 0.2 : q.x, ty = k < 1 ? ey - vy * L * 0.2 : q.y, bx = tx + vx * L, by = ty + vy * L;
+            ctx.strokeStyle = '#6A4626'; ctx.lineWidth = 11; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(bx, by); ctx.stroke(); ctx.strokeStyle = '#C9A06A'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(bx, by); ctx.stroke();
+            ctx.fillStyle = '#5FD07A'; for (const sd of [-1, 1]) { ctx.beginPath(); ctx.moveTo(bx - vx * 10, by - vy * 10); ctx.lineTo(bx - vx * 50 + vy * 22 * sd, by - vy * 50 - vx * 22 * sd); ctx.lineTo(bx + vx * 4 + vy * 20 * sd, by + vy * 4 - vx * 20 * sd); ctx.closePath(); ctx.fill(); }
+            if (k >= 1) { Valdor.brilhoRadial(ctx, q.x, q.y, 70, '160,230,255', 0.6 * (1 - cong * 0.5));
+              // casca de gelo subindo pela haste
+              ctx.fillStyle = `rgba(225,247,255,${0.9 * cong})`; ctx.strokeStyle = `rgba(255,255,255,${cong})`; ctx.lineWidth = 3; const cx = q.x + vx * L * 0.55 * cong, cy2 = q.y + vy * L * 0.55 * cong;
+              ctx.beginPath(); ctx.moveTo(q.x + vy * 26, q.y - vx * 26); ctx.lineTo(cx + vy * 16, cy2 - vx * 16); ctx.lineTo(cx + vx * 14, cy2 + vy * 14); ctx.lineTo(cx - vy * 16, cy2 + vx * 16); ctx.lineTo(q.x - vy * 26, q.y + vx * 26); ctx.closePath(); ctx.fill(); ctx.stroke();
+              for (let j = 0; j < 5; j++) { const f = (j + 0.5) / 5 * cong, sx = q.x + vx * L * 0.55 * f, sy = q.y + vy * L * 0.55 * f, sd = j % 2 ? 1 : -1; ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + vy * 34 * sd - vx * 10, sy - vx * 34 * sd - vy * 10); ctx.stroke(); }
+              if (cong < 1) Noite.fumaca(ctx, q.x, q.y, 60, cong, { seed: i, cor: '220,245,255', sobe: 0.4, n: 6 }); }
+            else Noite.faiscas(ctx, tx, ty, 30, 60, api.t, 1 - k, i, GELO);
+            ctx.restore(); }
         } });
     },
     // 8b) o Davi saca a Lâmina Rubra e corta o resto das flechas
@@ -662,11 +677,12 @@
     },
     // 9) o Téo escala o rochedo (câmera baixa e perto), a flecha pega no braço, ele escorrega e se segura
     parede(ctx, u, d, api) {
-      const S = V().CAN_ROCHA, TX = S.x1 + 0.15, TZ = 15, r = u / d, sobe = Math.min(r / 0.45, 1), hit = r > 0.45, kh = r - 0.45;
-      const yT = hit ? Math.max(0.9, 1.9 - Math.min(kh * 4, 0.6) * 1.6) + Math.max(0, kh - 0.25) * 2.5 : 0.2 + sobe * 1.7;
-      const cam = camDia(api, { x: -1.3, y: 0.9, z: 12.6, cy: 1250, f: 1150, yaw: -0.78 });
+      const S = V().CAN_ROCHA, TX = S.x1 + 0.3, TZ = 15, r = u / d, sobe = Math.min(r / 0.45, 1), hit = r > 0.45, kh = r - 0.45;
+      const yT = hit ? Math.max(0.35, 1.25 - Math.min(kh * 4, 0.6) * 1.5) + Math.max(0, kh - 0.25) * 1.2 : 0.1 + sobe * 1.15;
+      const cam = camDia(api, { x: -0.5 + r * 0.15, y: 0.7, z: 14.0, cy: 1380, f: 950, yaw: -1.22 });
       const esc = Math.sin(api.t * 9);
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: hit && kh < 0.25 ? { braco_d: -175, antebraco_d: 0, braco_e: 40, antebraco_e: 30, coxa_d: 30, coxa_e: -20, canela_e: 40 } : { braco_d: -160 + 25 * esc, antebraco_d: -15, braco_e: 150 - 25 * esc, antebraco_e: 15, coxa_d: -60 + 30 * esc, canela_d: 70, coxa_e: -10 - 30 * esc, canela_e: 40 }, expressao: hit ? 'medo' : 'determinado' }, TX, TZ, 1.8, { y: yT, rumo: Math.PI / 2, luz: LUZ_TOCHA }) }], { forca: 0.4,
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: hit && kh < 0.25 ? { braco_d: -175, antebraco_d: 0, braco_e: 40, antebraco_e: 30, coxa_d: 30, coxa_e: -20, canela_e: 40, _escala_capa: [0.8, 0.5] } : { braco_d: -160 + 25 * esc, antebraco_d: -15, braco_e: 150 - 25 * esc, antebraco_e: 15, coxa_d: -60 + 30 * esc, canela_d: 70, coxa_e: -10 - 30 * esc, canela_e: 40, _escala_capa: [0.8, 0.5] }, expressao: hit ? 'medo' : 'determinado' }, TX, TZ, 1.8, { y: yT, rumo: Math.PI / 2 + 0.75, luz: LUZ_TOCHA }), plano: true },
+        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -50, antebraco_e: 0, braco_d: -30, antebraco_d: 100, tronco: 25, cabeca: 25, _plantar: true }, expressao: 'raiva' }, S.x1 - 0.35, 15.4, 1.75, { y: S.y, rumo: Math.PI / 2 + 0.3 }), plano: true }], { forca: 0.4,
         depois: ([rig]) => {
           for (let i = 0; i < 7; i++) { const f = (api.t * 1.3 + i / 7) % 1, q = cam.p(TX + 0.05, yT - f * 1.8, TZ + (rnd(i) - 0.5) * 0.5); ctx.fillStyle = '#8A4228'; ctx.beginPath(); ctx.arc(q.x, q.y, 5 + rnd(i) * 6, 0, TAU); ctx.fill(); }
           const qp = cam.p(TX, yT, TZ); Noite.fumaca(ctx, qp.x, qp.y, 0.5 * qp.s, (api.t * 0.8) % 1, { seed: 2, cor: '210,150,110', sobe: 0.2, n: 8 });
@@ -677,21 +693,29 @@
     // 10) o cavaleiro gira o martelo e acerta a barriga do Davi: ele voa e bate na parede do cânion, que racha
     martelo(ctx, u, d, api) {
       const r = u / d, bate = 0.38, kb = r - bate, voa = cl(kb / 0.3), naParede = kb > 0.3, kp = kb - 0.3;
-      const DZ = 5.2, xP = V().canParede(DZ, -1, 1.0) + 0.55, DX0 = -0.2;
+      const DZ = 5.2, xP = V().canParede(DZ, -1, 1.0) + 0.55, DX0 = 0.1;
       const dx = kb < 0 ? DX0 : mix(DX0, xP, api.ease.entra(voa)), dy = kb < 0 ? 0 : naParede ? Math.max(0, 0.9 - kp * 3) : 0.9 * Math.sin(voa * Math.PI * 0.5);
-      const cam = camDia(api, { x: 2.0, y: 1.4, z: 0.2, cy: 930, f: 900, yaw: -0.42 });
+      // câmera de frente acompanha o Davi voando até a parede (pan lateral)
+      const pan = api.ease.suave(cl(kb / 0.34)), camX = mix(0.25, xP + 1.25, pan);
+      const cam = camDia(api, { x: camX, y: 1.6 + pan * 0.5, z: DZ - 3.9 + pan * 1.6, cy: mix(900, 820, pan), f: 880, yaw: mix(-0.05, -0.34, pan) });
       const [tx, ty] = api.tremor(kb > 0 && kb < 0.12 ? 12 : naParede && kp < 0.12 ? 16 : 0);
       window.ARMA_ANG = { martelo: 95 };
       const giro = kb < 0 ? api.ease.suave(cl(r / bate)) : 1;
       dia(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...GIG, pose: { braco_d: mix(-150, 70, giro), antebraco_d: -10, braco_e: 40, antebraco_e: -40, tronco: mix(-15, 20, giro), coxa_d: -25, canela_d: 30, coxa_e: 25, canela_e: 10, _plantar: true }, expressao: 'raiva' }, 1.0, 5.6, 2.6, { olhaPara: [DX0, DZ], luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...GIG, pose: { braco_d: mix(160, -75, giro), antebraco_d: -10, braco_e: 40, antebraco_e: -40, tronco: mix(-15, 20, giro), coxa_d: -25, canela_d: 30, coxa_e: 25, canela_e: 10, _plantar: true }, expressao: 'raiva' }, 1.0, 5.6, 2.6, { olhaPara: [DX0, DZ], luz: LUZ_TOCHA }) },
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: kb < 0 ? { braco_d: 30, antebraco_d: -40, braco_e: -30, antebraco_e: 40, coxa_d: 10, coxa_e: -10 } : naParede ? { tronco: 10, braco_d: 60, braco_e: -60, coxa_d: -30, canela_d: 60, coxa_e: 20, canela_e: 40, cabeca: 20 } : { tronco: 40, cabeca: 30, braco_d: -100, braco_e: 100, coxa_d: -50, canela_d: 40, coxa_e: -30, canela_e: 30 }, expressao: kb < 0 ? 'espanto' : 'medo' }, dx, DZ, 1.76, { y: dy, olhaPara: [1, 5.6], luz: LUZ_TOCHA }) },
       ], { forca: 0.3,
+        chaoEm: naParede ? [xP + 0.05, DZ - 0.5] : undefined, chao: naParede ? () => { const w = cam.p(xP - 0.35, 1.2, DZ), g0 = cam.p(xP - 0.1, 0.1, DZ);
+            Noite.fumaca(ctx, g0.x, g0.y, 150, Math.min(0.9, kp / 1.5), { seed: 6, cor: '200,120,80', sobe: 0.4, largura: 1.3, n: 12 });
+            const kr = Math.min(1, kp * 6); ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            for (const [cor, lw] of [['rgba(255,210,170,0.75)', 9], ['#1E0804', 0]]) { ctx.strokeStyle = cor; for (let i = 0; i < 11; i++) { const a = (i / 11) * TAU + rnd(i), L = (260 + rnd(i * 3) * 360) * kr; ctx.lineWidth = (22 - i * 1.2) + lw; ctx.beginPath(); ctx.moveTo(w.x, w.y); let px = w.x, py = w.y; for (let j = 1; j <= 5; j++) { px += Math.cos(a + (rnd(i * 7 + j) - 0.5) * 0.9) * L / 5; py += Math.sin(a + (rnd(i * 5 + j) - 0.5) * 0.9) * L / 5; ctx.lineTo(px, py); if (j === 2 && rnd(i * 11) > 0.4) { ctx.moveTo(px, py); ctx.lineTo(px + Math.cos(a + 0.9) * L * 0.25, py + Math.sin(a + 0.9) * L * 0.25); ctx.moveTo(px, py); } } ctx.stroke(); } }
+            ctx.fillStyle = 'rgba(25,8,4,0.8)'; ctx.beginPath(); ctx.ellipse(w.x + 40, w.y, 170 * kr, 230 * kr, 0, 0, TAU); ctx.fill(); ctx.restore();
+        } : undefined,
         depois: ([rg, rd]) => {
           if (kb > 0 && kb < 0.3) { const b = rd.pontoMundo('tronco', [0, -0.3]); Combate.impacto(ctx, b.x, b.y, 260, kb, { rgb: '255,200,120', dura: 0.5 }); Combate.numero(ctx, b.x, b.y - 200, '-120', kb, 'recebido'); Combate.velocidade(ctx, b.x, b.y, Math.PI, 1 - voa, api.t); Noite.fumaca(ctx, b.x, b.y, 120, voa, { seed: 3, cor: '220,170,120', sobe: 0.2, n: 10 }); }
-          if (naParede) { const w = cam.p(xP - 0.35, 1.2, DZ); ctx.save(); ctx.strokeStyle = '#3A1A10'; ctx.lineCap = 'round'; for (let i = 0; i < 10; i++) { const a = (i / 10) * TAU + rnd(i), L = (120 + rnd(i * 3) * 220) * Math.min(1, kp * 6); ctx.lineWidth = 8 - i * 0.5; ctx.beginPath(); ctx.moveTo(w.x, w.y); let px = w.x, py = w.y; for (let j = 1; j <= 4; j++) { px += Math.cos(a + (rnd(i * 7 + j) - 0.5) * 0.8) * L / 4; py += Math.sin(a + (rnd(i * 5 + j) - 0.5) * 0.8) * L / 4; ctx.lineTo(px, py); } ctx.stroke(); } ctx.restore();
-            destrocos(ctx, cam, xP - 0.3, 1.2, DZ, kp, { n: 22, forca: 2, tam: 0.1, seed: 8, cor: '#9A4A2A' }); Noite.fumaca(ctx, w.x, w.y + 80, 260, Math.min(0.95, kp / 1.2), { seed: 6, cor: '200,120,80', sobe: 0.6, largura: 1.6, n: 20 }); Combate.impacto(ctx, w.x, w.y, 300, kp, { rgb: '255,160,100', dura: 0.5 }); }
-          flash(ctx, kb, 0.6); if (naParede) flash(ctx, kp, 0.5);
+          if (naParede) { const w = cam.p(xP - 0.35, 1.2, DZ);
+            destrocos(ctx, cam, xP - 0.3, 1.2, DZ, kp, { n: 16, forca: 2.4, tam: 0.06, seed: 8, cor: '#9A4A2A' }); Combate.impacto(ctx, w.x, w.y, 260, kp, { rgb: '255,160,100', dura: 0.35 }); }
+          flash(ctx, kb, 0.45); if (naParede) flash(ctx, kp, 0.25);
           if (naParede) { ctx.save(); const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.75); v.addColorStop(0, 'rgba(200,0,0,0)'); v.addColorStop(1, 'rgba(200,0,0,0.4)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H); ctx.restore(); }
         },
         fx: { cx: W / 2 + tx, cy: H / 2 + ty, zoom: soco(kb, 0.14) } });
