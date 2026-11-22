@@ -378,7 +378,8 @@
   // o.mov = { orbita (rad), empurra (fração da distância), sobe (m), dist (m até o assunto) } | false
   const camDia = (api, o) => {
     window.MUNDO_3D = 'canion'; const c = { f: 1100, x: 0, y: 1.5, z: 0, cy: 900, nevoa: V().nevoa(0, true, 'canion'), ...o };
-    const sem = Math.sin((c.x * 7.1 + c.z * 13.7 + (c.yaw || 0) * 5.3 + c.f * 0.01) * 10), m = o.mov === false ? null : { orbita: 0.17 * (sem > 0 ? 1 : -1), empurra: 0.08, sobe: 0.1 * (sem > 0.5 ? -1 : 1), dist: 4.2, ...(o.mov || {}) };
+    // direção do giro fixa no plano inteiro (sorteada pela duração do plano; nunca pela posição, que muda a cada quadro)
+    const h = Math.sin((api.dur || 1) * 12.9898) * 43758.5453, sem = (h - Math.floor(h)) * 2 - 1, m = o.mov === false ? null : { orbita: 0.17 * (sem > 0 ? 1 : -1), empurra: 0.08, sobe: 0.1 * (sem > 0.5 ? -1 : 1), dist: 4.2, ...(o.mov || {}) };
     if (m && api.dur) { const r = api.ease.suave(cl(api.u / api.dur)) - 0.5, D = m.dist, y0 = c.yaw || 0, px = c.x + Math.sin(y0) * D, pz = c.z + Math.cos(y0) * D, yaw = y0 + m.orbita * r, Dd = D * (1 - m.empurra * r);
       c.x = px - Math.sin(yaw) * Dd; c.z = pz - Math.cos(yaw) * Dd; c.yaw = yaw; c.y += m.sobe * r; }
     return api.camera(c);
