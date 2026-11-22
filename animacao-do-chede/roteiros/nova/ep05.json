@@ -35,6 +35,14 @@
   },
   "planos": [
     {
+      "id": "ficha_lider",
+      "duracao": 3
+    },
+    {
+      "id": "ficha_cacadores",
+      "duracao": 3
+    },
+    {
       "id": "noite",
       "duracao": 5
     },

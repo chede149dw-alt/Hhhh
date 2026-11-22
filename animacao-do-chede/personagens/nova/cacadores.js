@@ -242,4 +242,114 @@
     }, true);
     return def;
   };
+
+  // ================= Parte 5: caçadores da noite (jogadores que descem de rapel atrás do homem-fera) =================
+  // criarCacadorNoite({ variante 0..3, arma: 'rede' | 'besta' | null }, vista)
+  //   arnês de rapel no peito (cinta + argola de ferro), corda enrolada no ombro, tocha na mão esquerda (desenhada pela cena
+  //   com tochaNaMao, como os ladrões), e na mão direita a rede de prata dobrada OU a besta de prata.
+  Object.assign(Estilo.base, {
+    prataViva: '#D6E0EE', prataVivaEsc: '#8E9AB0', cordaRapel: '#C8A46A', tealCacador: '#2E6A70', tealCacadorEsc: '#1E4A50',
+    vinhoCacador: '#7A2E36', vinhoCacadorEsc: '#521E24', pardoCacador: '#7A6A52', pardoCacadorEsc: '#54483A', cinzaCacador: '#5A6070', cinzaCacadorEsc: '#3C404C',
+  });
+  const VAR_NOITE = [
+    { nome: 'Caçador NV 18', pele: 'pele3', altura: 6.0, roupa: 'tealCacador', esc: 'tealCacadorEsc', cab: 'capuz', cabelo: 'cabCafe', iris: 'irisCastanho' },
+    { nome: 'Caçadora NV 21', pele: 'pele1', altura: 5.8, roupa: 'vinhoCacador', esc: 'vinhoCacadorEsc', cab: 'faixa', cabelo: 'cabRuivo', iris: 'irisVerde', cilios: true },
+    { nome: 'Caçador NV 24', pele: 'pele2', altura: 6.3, roupa: 'cinzaCacador', esc: 'cinzaCacadorEsc', cab: 'elmo', cabelo: 'carvao', iris: 'irisAmbar' },
+    { nome: 'Caçador NV 19', pele: 'pele1', altura: 5.9, roupa: 'pardoCacador', esc: 'pardoCacadorEsc', cab: 'mascara', cabelo: 'cabCafe', iris: 'irisCastanho' },
+  ];
+  // faixa de pano na testa (com as pontas do nó saindo atrás)
+  function faixaTesta(def, cor) {
+    const p = def.partes.find((q) => q.nome === 'cabeca'); if (!p) return;
+    const orig = p.desenhar, r = def.opcoes.cabecaLargura / 2, vista = def.vista;
+    p.desenhar = (pc, ...resto) => {
+      orig(pc, ...resto);
+      const k = vista === 'perfil' ? 0.75 : vista === 'tq' ? 0.92 : 1, dx = vista === 'tq' ? 0.05 : vista === 'perfil' ? 0.1 : 0;
+      pc.peca(P((q) => q.roundRect(dx - r * 1.02 * k, -0.74, 2 * r * 1.02 * k, 0.11, 0.04)), T(cor), { sombra: 0.12 });
+      const sx = vista === 'perfil' ? -1 : 1, bx = vista === 'costas' ? 0 : -r * 0.95 * sx;
+      pc.peca(P((q) => { q.moveTo(bx, -0.72); q.quadraticCurveTo(bx - 0.18 * sx, -0.6, bx - 0.26 * sx, -0.44); q.lineTo(bx - 0.16 * sx, -0.46); q.quadraticCurveTo(bx - 0.1 * sx, -0.6, bx + 0.04 * sx, -0.66); q.closePath(); }), T(cor), { sombra: 0.1 });
+    };
+  }
+  // elmo simples de ferro (meia cúpula com borda e protetor de nariz, sem pluma)
+  function elmoSimples(def) {
+    const p = def.partes.find((q) => q.nome === 'cabeca'); if (!p) return;
+    const orig = p.desenhar, r = def.opcoes.cabecaLargura / 2, vista = def.vista;
+    p.desenhar = (pc, ...resto) => {
+      orig(pc, ...resto);
+      const dx = vista === 'tq' ? 0.07 : vista === 'perfil' ? 0.12 : 0;
+      pc.peca(P((q) => { q.moveTo(-r * 1.1, -0.5); q.bezierCurveTo(-r * 1.12, -0.47 - r * 1.3, r * 1.12, -0.47 - r * 1.3, r * 1.1, -0.5); q.closePath(); }), T('acoGigante'), { sombra: 0.22 });
+      pc.peca(P((q) => q.roundRect(-r * 1.14, -0.56, r * 2.28, 0.1, 0.03)), T('acoGiganteEsc'), { sombra: 0.1 });
+      pc.linha(P((q) => { q.moveTo(0, -0.47 - r * 0.95); q.lineTo(0, -0.56); }), pc.interno * 1.4, 'rgba(40,44,54,0.6)');
+      if (vista !== 'costas') pc.peca(P((q) => q.roundRect(dx - 0.032, -0.56, 0.064, 0.26, 0.02)), T('acoGiganteEsc'), { sombra: 0.1 });
+      for (const sx of [-0.8, -0.4, 0.4, 0.8]) pc.preencher(P((q) => q.arc(sx * r, -0.51, 0.02, 0, Math.PI * 2)), '#E6E9EF');
+    };
+  }
+  // arnês de rapel: duas tiras cruzando o peito, argola de ferro no meio e a corda enrolada no ombro
+  function arnes(def, cor) {
+    const c = def.opcoes, A = c.altura, f = (A - 1) / 4.5, ombroL = -1.4 * f, shoulderY = ombroL + 0.04, hw = c.corpo.ombro + 0.02, vista = def.vista;
+    const tro = def.partes.find((q) => q.nome === 'tronco'), orig = tro.desenhar;
+    tro.desenhar = (pc, ...resto) => {
+      orig(pc, ...resto);
+      if (vista === 'perfil') return;
+      const cx = vista === 'tq' ? 0.15 : 0, k = vista === 'tq' ? 0.94 : 1, y0 = shoulderY + 0.02, y1 = 0.42 * f, ym = (y0 + y1) / 2 + 0.06;
+      for (const s of [-1, 1]) pc.peca(P((q) => { q.moveTo(cx + s * (hw - 0.12) * k, y0); q.lineTo(cx + s * (hw - 0.02) * k, y0 + 0.04); q.lineTo(cx - s * 0.02, ym + 0.05); q.lineTo(cx - s * (hw - 0.05) * k, y1); q.lineTo(cx - s * (hw - 0.16) * k, y1); q.lineTo(cx - s * 0.08, ym - 0.04); q.closePath(); }), T(cor), { sombra: 0.12 });
+      if (vista !== 'costas') { pc.peca(P((q) => { q.arc(cx, ym, 0.085, 0, Math.PI * 2); q.arc(cx, ym, 0.05, 0, Math.PI * 2, true); }), T('acoGiganteEsc'), { sombra: 0.1 }); pc.preencher(P((q) => q.arc(cx - 0.03, ym - 0.04, 0.015, 0, Math.PI * 2)), 'rgba(255,255,255,0.7)'); }
+      // rolo de corda de rapel preso no quadril (voltas trançadas)
+      if (vista !== 'costas') { const rx = cx - (hw - 0.02) * k, ry = 0.62 * f;
+        for (let i = 0; i < 4; i++) { const e = P((q) => q.ellipse(rx + i * 0.012, ry + i * 0.018, 0.16, 0.2, 0.25, 0, Math.PI * 2)); pc.linha(e, pc.interno * 3.6, '#7A5A30'); pc.linha(e, pc.interno * 2.2, i % 2 ? '#E2C48C' : Estilo.base.cordaRapel); }
+        pc.ctx.save(); pc.ctx.setLineDash([0.02, 0.025]); pc.linha(P((q) => q.ellipse(rx + 0.02, ry + 0.03, 0.16, 0.2, 0.25, 0, Math.PI * 2)), pc.interno * 1.2, 'rgba(90,60,30,0.7)'); pc.ctx.restore(); }
+    };
+  }
+  // rede de prata dobrada pendurada na mão (malha em losango, pesinhos de chumbo na ponta, brilho frio)
+  const redeDobrada = (pc) => {
+    const c = pc.ctx; c.save(); c.rotate(ang('rede', 0)); c.scale(1.45, 1.45);
+    const forma = P((q) => { q.moveTo(-0.1, 0.0); q.lineTo(0.1, 0.0); q.quadraticCurveTo(0.34, 0.45, 0.3, 0.92); q.quadraticCurveTo(0, 1.02, -0.3, 0.92); q.quadraticCurveTo(-0.34, 0.45, -0.1, 0.0); q.closePath(); });
+    pc.preencher(forma, 'rgba(160,190,230,0.18)');
+    c.save(); c.clip(forma);
+    const malha = P((q) => { for (let i = -6; i <= 6; i++) { q.moveTo(i * 0.09 - 0.5, -0.1); q.lineTo(i * 0.09 + 0.5, 1.1); q.moveTo(i * 0.09 + 0.5, -0.1); q.lineTo(i * 0.09 - 0.5, 1.1); } });
+    pc.linha(malha, pc.interno * 1.6, Estilo.base.prataVivaEsc); pc.linha(malha, pc.interno * 0.8, Estilo.base.prataViva);
+    c.restore();
+    pc.linha(P((q) => { q.moveTo(-0.3, 0.92); q.quadraticCurveTo(0, 1.02, 0.3, 0.92); }), pc.interno * 2, Estilo.base.prataViva);
+    for (let i = 0; i < 5; i++) { const s = (i + 0.5) / 5, x = -0.3 + 0.6 * s, y = 0.92 + 0.1 * Math.sin(Math.PI * s); pc.peca(P((q) => q.arc(x, y + 0.03, 0.04, 0, Math.PI * 2)), fixo('#6A7080', '#3A3E48', '#A8B0C0'), { sombra: 0.1 }); }
+    pc.preencher(P((q) => q.ellipse(0, 0.5, 0.42, 0.6, 0, 0, Math.PI * 2)), 'rgba(190,225,255,0.12)');
+    c.restore();
+  };
+  // besta de prata: coronha ao longo da mão, arco atravessado na ponta, virote de prata armado
+  const bestaPrata = (pc) => {
+    const c = pc.ctx; c.save(); c.rotate(ang('besta', 0));
+    pc.peca(P((q) => q.roundRect(-0.06, -0.2, 0.12, 0.95, 0.04)), T('madeiraArco'), { sombra: 0.15 });
+    pc.peca(P((q) => q.roundRect(-0.075, -0.05, 0.15, 0.12, 0.03)), T('acoGiganteEsc'), { sombra: 0.1 });
+    pc.peca(P((q) => { q.moveTo(-0.55, 0.62); q.quadraticCurveTo(0, 0.82, 0.55, 0.62); q.lineTo(0.55, 0.68); q.quadraticCurveTo(0, 0.9, -0.55, 0.68); q.closePath(); }), T('prataViva'), { sombra: 0.2 });
+    pc.linha(P((q) => { q.moveTo(-0.54, 0.64); q.lineTo(0, 0.42); q.lineTo(0.54, 0.64); }), pc.interno * 0.9, '#EDE6D0');
+    pc.peca(P((q) => q.rect(-0.014, 0.42, 0.028, 0.62)), T('prataViva'), { sombra: 0 });
+    pc.peca(P((q) => { q.moveTo(-0.05, 1.0); q.lineTo(0, 1.13); q.lineTo(0.05, 1.0); q.closePath(); }), fixo('#F0F6FF', '#9AA6BA'), { sombra: 0 });
+    pc.preencher(P((q) => q.arc(0, 1.06, 0.1, 0, Math.PI * 2)), 'rgba(200,230,255,0.35)');
+    c.restore();
+  };
+  window.CACADOR_NOITE_VARIANTES = VAR_NOITE;
+  window.criarCacadorNoite = (o = {}, vista = 'frente') => {
+    const v = VAR_NOITE[(o.variante || 0) % VAR_NOITE.length];
+    const opc = {
+      nome: v.nome, altura: v.altura, cabecaLargura: 0.88, pele: v.pele, fatorContorno: 1.35,
+      olhos: { raio: 0.062, sep: 0.19, iris: v.iris, cilios: !!v.cilios }, sobrancelha: { esp: 0.06, tipo: v.cilios ? 'arqueada' : 'reta' },
+      cabelo: { estilo: v.cilios ? 'coque' : 'liso-lateral', cor: v.cabelo, volume: 0.75, prendedor: 'couro' },
+      corpo: { ombro: 0.56, quadril: 0.22 },
+      top: { tipo: 'cardiga', cor: v.roupa, corInterna: v.esc },
+      calca: { tipo: 'reta', cor: 'couroEscuro' },
+      calcado: { tipo: 'cano-alto', cor: 'couroClaro', acento: 'couroEscuro' },
+      ...o, poses: poses(),
+    };
+    const def = window.equipar(window.criarPersonagem(opc, vista), {
+      peitoral: { cor: 'couroColete', faixas: 3, tachas: 'prata' }, cinto: { cor: 'couroEscuro', fivela: 'prata', bolsa: 'couroClaro' },
+      botas: { cor: 'couroClaro', cano: 0.55 }, bracadeira: 'couroEscuro', ombreira: { cor: v.esc, rebites: 'prata' },
+    });
+    arnes(def, 'couroEscuro');
+    if (v.cab === 'capuz') { capuz(def, v.roupa); golaCapuz(def, v.esc); }
+    else if (v.cab === 'mascara') { capuz(def, v.esc, { mascara: 'carvao' }); golaCapuz(def, v.esc); }
+    else if (v.cab === 'faixa') faixaTesta(def, v.esc);
+    else if (v.cab === 'elmo') elmoSimples(def);
+    const arma = o.arma === undefined ? (v.cab === 'elmo' ? 'besta' : 'rede') : o.arma;
+    if (arma === 'rede') naMao(def, 'd', 'rede', redeDobrada);
+    else if (arma === 'besta') naMao(def, 'd', 'besta', bestaPrata);
+    return def;
+  };
 })();

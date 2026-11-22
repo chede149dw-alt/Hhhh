@@ -559,7 +559,41 @@
   // ================= Parte 5: o Cânion Vermelho de noite =================
   // câmera de noite: a mesma do cânion, com a névoa azul da noite
   const camCan = (api, o) => camDia(api, { nevoa: V().nevoa(1, false, 'canion'), ...o });
+  const CAC = (v, arma) => ({ fabrica: 'criarCacadorNoite', opcoes: { variante: v, ...(arma !== undefined ? { arma } : {}) }, registroPoses: 'POSES_PADRAO' });
+  const LIDER5 = { fabrica: 'criarLadrao', opcoes: { lider: true, estilo: 'D' }, registroPoses: 'LADRAO_POSES' };
+  const POSE_TOCHA = { braco_d: 10, antebraco_d: -12, braco_e: -38, antebraco_e: -115, mao_e: 10, coxa_d: 4, coxa_e: -4, tronco: 2 };
+  function fundoFicha(ctx, titulo, sub) {
+    const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#1A1838'); g.addColorStop(0.6, '#2A1E3E'); g.addColorStop(1, '#3A2230'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 90; i++) { const x = (i * 397) % W, y = (i * 211) % 700; ctx.fillStyle = `rgba(220,230,255,${0.2 + (i % 5) * 0.1})`; ctx.fillRect(x, y, 2, 2); }
+    ctx.save(); ctx.font = '900 64px Inter'; ctx.fillStyle = '#FFFFFF'; ctx.textAlign = 'center'; ctx.fillText(titulo, W / 2, 120); ctx.font = '700 32px Inter'; ctx.fillStyle = '#BFC8E8'; sub.split('\\n').forEach((l, i) => ctx.fillText(l, W / 2, 178 + i * 40)); ctx.restore();
+  }
+  function rotuloFicha(ctx, x, y, nome, extra) { ctx.save(); ctx.textAlign = 'center'; ctx.font = '800 32px Inter'; ctx.fillStyle = '#FFE6A0'; ctx.fillText(nome, x, y); if (extra) { ctx.font = '600 25px Inter'; ctx.fillStyle = '#C8D0E8'; extra.split('\n').forEach((l, i) => ctx.fillText(l, x, y + 36 + i * 30)); } ctx.restore(); }
+  function sombraPe(ctx, x, y, w) { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(x, y, w, w * 0.18, 0, 0, TAU); ctx.fill(); ctx.restore(); }
   window.PLANOS = {
+    // ficha: os caçadores da noite (4 variações), com tocha e rede de prata ou besta
+    ficha_cacadores(ctx, u, d, api) {
+      fundoFicha(ctx, 'CAÇADORES DA NOITE', 'jogadores atrás do homem-fera\\ntocha + rede de prata ou besta de prata');
+      const lista = [[0, 'rede', 'capuz verde-azulado\nrede de prata'], [1, 'rede', 'faixa na testa\nrede de prata'], [2, 'besta', 'elmo de ferro\nbesta de prata'], [3, 'rede', 'capuz e máscara\nrede de prata']];
+      lista.forEach(([v, arma, txt], i) => {
+        const x = 280 + (i % 2) * 520, y = 900 + Math.floor(i / 2) * 760, item = { ...CAC(v, arma), vista: 'tq', pose: POSE_TOCHA, expressao: i === 1 ? 'determinado' : 'raiva' };
+        sombraPe(ctx, x, y, 120);
+        const rig = api.personagem(item, x, y, 560 * window.criarCacadorNoite({ variante: v }, 'tq').alturaEmH / 6.2);
+        tochaNaMao(ctx, rig, api.t, v + 1, 0.55);
+        rotuloFicha(ctx, x, y + 60, window.CACADOR_NOITE_VARIANTES[v].nome, txt);
+      });
+    },
+    // ficha: o líder dos ladrões de volta, com armadura nova (frente, 3/4, costas) e a corrente de prata
+    ficha_lider(ctx, u, d, api) {
+      fundoFicha(ctx, 'O LÍDER VOLTOU', 'o líder dos ladrões da Parte 3, agora NV 41\\narmadura de aço negro + corrente de prata');
+      window.CORRENTE = { t: api.t };
+      const A = window.criarLadrao({ lider: true, estilo: 'D' }, 'frente').alturaEmH, hp = 980;
+      sombraPe(ctx, 540, 1500, 200);
+      api.personagem({ ...LIDER5, vista: 'frente', pose: { braco_e: -14, antebraco_e: -40, braco_d: 8, antebraco_d: -6 }, expressao: 'raiva' }, 540, 1500, hp);
+      sombraPe(ctx, 175, 1500, 90); api.personagem({ ...LIDER5, vista: 'tq', pose: 'parado', expressao: 'determinado' }, 175, 1500, hp * 0.5);
+      sombraPe(ctx, 905, 1500, 90); api.personagem({ ...LIDER5, vista: 'costas', pose: 'parado' }, 905, 1500, hp * 0.5);
+      rotuloFicha(ctx, 540, 1580, 'Líder dos ladrões · NV 41', 'o mesmo da Parte 3: cabelo branco, bandana vermelha e cicatriz\nagora com peitoral de aço negro, ombreiras com espinhos e capa roxa\na corrente de prata enrolada no braço (é ela que prende a fera)');
+      rotuloFicha(ctx, 175, 1560, '3/4'); rotuloFicha(ctx, 905, 1560, 'costas');
+    },
     // a noite caindo no cânion: céu vira roxo, a lua sobe atrás da ponte, os cristais acendem um por um
     noite(ctx, u, d, api) {
       const cam = camCan(api, { f: 1000, x: 0, y: 2.4, z: -6 + u * 1.5, cy: 980, mov: false });

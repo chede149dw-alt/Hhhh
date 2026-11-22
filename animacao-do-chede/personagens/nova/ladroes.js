@@ -126,6 +126,35 @@
     def.partes.push(peca('espada_cabo', mao.z - 0.004, 'cabo'), peca('espada_lamina', zMax + 1, 'lamina'));
   }
 
+  // Parte 5: o líder volta com armadura nova (estilo 'D'): mesmo rosto do estilo C (cabelo branco, bandana vermelha,
+  // cicatriz), peitoral de aço negro com borda de prata, ombreiras pontudas, capa roxo-escura e uma corrente de prata
+  // enrolada no braço esquerdo (é com ela que ele prende a fera). Sem a Lâmina Rubra (ficou com o Davi).
+  Object.assign(Estilo.base, { acoNegro: '#363B4A', acoNegroEsc: '#22252F', roxoCapaLider: '#3E2458', prataCorrente: '#D4DCEA' });
+  function correnteNoBraco(def) {
+    const ant = def.partes.find((q) => q.nome === 'antebraco_e'), mao = def.partes.find((q) => q.nome === 'mao_e'); if (!ant || !mao) return;
+    const L = mao.pivo[1];
+    const elo = (pc, x, y, a, s = 1) => { pc.ctx.save(); pc.ctx.translate(x, y); pc.ctx.rotate(a); const f = P((q) => { q.ellipse(0, 0, 0.055 * s, 0.032 * s, 0, 0, Math.PI * 2); q.ellipse(0, 0, 0.03 * s, 0.012 * s, 0, 0, Math.PI * 2, true); }); pc.peca(f, { base: '#D4DCEA', sombra: '#7E889C', luz: '#FFFFFF' }, { sombra: 0.2, espessura: pc.interno * 0.7 }); pc.ctx.restore(); };
+    // voltas enroladas no antebraço
+    def.partes.push({ nome: 'corrente_braco', pai: 'antebraco_e', pivo: [0, 0], z: ant.z + 0.02, desenhar: (pc) => { for (let v = 0; v < 3; v++) for (let i = -2; i <= 2; i++) elo(pc, i * 0.045, L * (0.35 + v * 0.16) + Math.abs(i) * 0.012, i % 2 ? 0.2 : -0.2, 0.9); } });
+    // ponta pendurada da mão, balançando (window.CORRENTE = { t, solta: 0..1 } controla o balanço / quando ela é jogada)
+    def.partes.push({ nome: 'corrente_ponta', pai: 'mao_e', pivo: [0, 0.08], z: mao.z + 0.01, desenhar: (pc) => {
+      const cc = window.CORRENTE || {}, t = cc.t || 0, n = 11;
+      pc.preencher(P((q) => q.ellipse(0, 0.35, 0.18, 0.45, 0, 0, Math.PI * 2)), 'rgba(200,225,255,0.12)');
+      for (let i = 0; i < n; i++) { const s = i / n, x = Math.sin(t * 2 + s * 3) * 0.06 * s, y = s * 0.78; elo(pc, x, y, i % 2 ? Math.PI / 2 : 0); }
+      pc.peca(P((q) => { q.moveTo(-0.06, 0.8); q.lineTo(0, 0.95); q.lineTo(0.06, 0.8); q.closePath(); }), { base: '#E8EEF8', sombra: '#8A94A8' }, { sombra: 0.1 });
+    } });
+  }
+  function ombreiraPontuda(def) {
+    for (const nome of ['braco_d', 'braco_e']) {
+      const b = def.partes.find((q) => q.nome === nome); if (!b) continue;
+      def.partes.push({ nome: 'espinho_' + nome, pai: nome, pivo: [0, 0], z: b.z + 0.03, desenhar: (pc) => {
+        const s = def.vista === 'perfil' ? 0.7 : 1;
+        pc.peca(P((q) => { q.moveTo(-0.26 * s, 0.06); q.quadraticCurveTo(-0.3 * s, -0.2, 0, -0.24); q.quadraticCurveTo(0.3 * s, -0.2, 0.26 * s, 0.06); q.quadraticCurveTo(0, 0.12, -0.26 * s, 0.06); q.closePath(); }), Estilo.tom('acoNegro'), { sombra: 0.25 });
+        pc.linha(P((q) => { q.moveTo(-0.24 * s, 0.03); q.quadraticCurveTo(0, 0.1, 0.24 * s, 0.03); }), pc.interno * 2.2, '#C8D2E2');
+        for (const x of [-0.13, 0.0, 0.13]) pc.peca(P((q) => { q.moveTo((x - 0.04) * s, -0.16 + Math.abs(x) * 0.3); q.lineTo(x * s * 1.25, -0.4 + Math.abs(x) * 0.5); q.lineTo((x + 0.04) * s, -0.16 + Math.abs(x) * 0.3); q.closePath(); }), { base: '#C8D2E2', sombra: '#6E788C' }, { sombra: 0.1 });
+      } });
+    }
+  }
   window.LADRAO_POSES = {
     ...window.POSES_PADRAO,
     faca: { vista: 'tq', expressao: 'raiva', angulos: { braco_d: 55, antebraco_d: 60, mao_d: -10, braco_e: -20, antebraco_e: -30, coxa_d: 18, canela_d: -22, pe_d: 6, coxa_e: -16, canela_e: 20, pe_e: -6, tronco: 6, _plantar: true } },
@@ -146,7 +175,10 @@
       calcado: { tipo: 'cano-alto', cor: 'couroLadrao', acento: 'carvao' },
       poses: Object.fromEntries(Object.entries(window.LADRAO_POSES).map(([k, x]) => [k, x.angulos])),
     };
-    const eq = lider && est === 'B'
+    if (est === 'D') { opc.nome = 'Líder dos ladrões NV 41'; opc.altura = 6.4; opc.cabelo = { estilo: 'liso-lateral', cor: 'cabBranco', volume: 1.05 }; opc.top = { tipo: 'cardiga', cor: 'acoNegroEsc', corInterna: 'carvao' }; opc.corpo = { ombro: 0.68, quadril: 0.2 }; opc.olhos = { raio: 0.058, sep: 0.19, iris: 'irisVioleta' }; }
+    const eq = lider && est === 'D'
+      ? { peitoralAco: { cor: 'acoNegro', borda: 'prata' }, capa: { cor: 'roxoCapaLider', borda: 'prata' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'acoNegro', cano: 0.7 }, bracadeira: 'prata', ombreira: { cor: 'acoNegro', rebites: 'prata' }, calca: undefined }
+      : lider && est === 'B'
       ? { peitoral: { cor: 'armaduraEscura', faixas: 4, tachas: 'prata' }, manto: { cor: 'vinho', barra: 'prata' }, cinto: { cor: 'carvao', fivela: 'prata' }, botas: { cor: 'armaduraEscura', cano: 0.6 }, bracadeira: 'prata', ombreira: { cor: 'prata', rebites: 'carvao' }, adagaCinto: o.semAdaga ? undefined : { epica: true } }
       : lider && est === 'C'
       ? { peitoral: { cor: 'couroEscuro', faixas: 3, tachas: 'mostarda' }, cinto: { cor: 'couroEscuro', fivela: 'mostarda' }, botas: { cor: 'couroEscuro', cano: 0.6 }, bracadeira: 'couroVermelho', cinta: { cor: 'couroEscuro', tachas: 'mostarda' }, ombreira: { cor: 'couroVermelho', rebites: 'mostarda' } }
@@ -155,6 +187,7 @@
       : { cinto: { cor: 'couroLadrao', fivela: 'carvao', bolsa: 'couroLadrao' }, botas: { cor: 'couroLadrao', cano: 0.4 }, bracadeira: 'couroLadrao', peitoral: { cor: 'couroLadrao', faixas: 3, tachas: 'prata' }, cinta: { cor: 'carvao', tachas: 'prata', bolsa: 'carvao' }, ombreira: { cor: 'couroLadrao', rebites: 'prata' }, arma: o.semFaca ? undefined : { tipo: 'adaga', mao: 'd' } };
     const def = window.equipar(window.criarPersonagem(opc, vista), eq);
     if (est === 'B') { vestirCabeca(def, 'carvao', 'mascara', null); vestirLider(def, 'B'); }
+    else if (est === 'D') { vestirLider(def, 'C'); ombreiraPontuda(def); if (!o.semCorrente) correnteNoBraco(def); }
     else if (est === 'C') { vestirLider(def, 'C'); if (!o.semEspada) espadaNasCostas(def); if (o.espadaNaMao) espadaNaMao(def); }
     else vestirCabeca(def, lider ? 'vinho' : v.capuz, 'mascara', lider ? 'rgba(200,40,60,0.9)' : null);
     return def;
