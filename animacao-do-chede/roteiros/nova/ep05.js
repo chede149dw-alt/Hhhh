@@ -588,11 +588,12 @@
   //   0,7 pisa: o corpo afunda, a cabeça dá um tranco, o braço do outro lado balança · 0,7–1 assenta com um repique
   //   p = null → parada entre passos: respira pesado (ombros sobem e descem), cabeça baixa, garras abertas
   function passoFera(k, p, t) {
-    const G = window.TEO_LOBISOMEM_POSES.garras.angulos, o = { ...G, tronco: 8, cabeca: 8 };
+    // vista de frente: tronco/cabeça/quadril giram NO PLANO DA TELA (inclinam para o lado), então ficam quase retos
+    const G = window.TEO_LOBISOMEM_POSES.garras.angulos, o = { ...G, tronco: 0, cabeca: 0 };
     const sm = (a, b, x) => { const q = cl((x - a) / (b - a)); return q * q * (3 - 2 * q); };
     if (p === null) {
       const r = Math.sin(t * 3.2), r2 = Math.sin(t * 3.2 + 0.9);
-      Object.assign(o, { tronco: 8 + 2.5 * r, cabeca: 9 - 3 * r2, braco_d: G.braco_d + 3 * r, braco_e: G.braco_e - 3 * r, antebraco_d: G.antebraco_d - 4 * r2, antebraco_e: G.antebraco_e + 4 * r2, _desloca: [0, 0.02 * r] });
+      Object.assign(o, { tronco: 0.8 * r, cabeca: -1 * r2, braco_d: G.braco_d + 3 * r, braco_e: G.braco_e - 3 * r, antebraco_d: G.antebraco_d - 4 * r2, antebraco_e: G.antebraco_e + 4 * r2, _desloca: [0, 0.02 * r] });
       return o;
     }
     const perna = k % 2 ? 'e' : 'd', s = perna === 'd' ? 1 : -1, apoio = -s;           // _d fica à esquerda da tela (vista de frente)
@@ -609,9 +610,9 @@
     // braço do lado oposto à perna vai à frente (abre), o do mesmo lado recolhe; garras balançando com o tranco
     o['braco_' + outra] = (G['braco_' + outra] || 0) - s * (10 * sobe + 8 * pisa); o['antebraco_' + outra] = (G['antebraco_' + outra] || 0) - s * 14 * sobe;
     o['braco_' + perna] = (G['braco_' + perna] || 0) + s * 6 * sobe; o['mao_' + perna] = (G['mao_' + perna] || 0) + s * 10 * pisa;
-    o.quadril = 6 * apoio * peso; o.tronco = 10 + 8 * pisa + 4 * rep + 5 * apoio * peso; o.cabeca = 6 + 14 * pisa + 6 * rep - 4 * apoio * peso;
+    o.quadril = 2 * apoio * peso; o.tronco = 2 * apoio * peso; o.cabeca = -1.5 * apoio * peso;
     o['braco_' + outra] -= s * 8 * sobe; o['braco_' + perna] += s * 10 * sobe;
-    o._desloca = [0.09 * apoio * peso, -0.06 * sobe + 0.09 * pisa + 0.03 * rep];
+    o._desloca = [0.03 * apoio * peso, -0.05 * sobe + 0.08 * pisa + 0.03 * rep];
     // o tranco da pisada vai para o tronco e os joelhos (o corpo afunda sem tirar os pés do chão)
     o['canela_' + outra] += -s * 10 * pisa; o['coxa_' + outra] += -s * 3 * pisa;
     return o;
@@ -626,7 +627,7 @@
     const base = o.passos.length ? o.passos[0][1] : 0, FZ = Z0 - 0.5 * (anda - base) - (o.perto || 0) * 0.5;
     const imp = Math.max(0, 1 - (u - pisada) / 0.4) * (u >= pisada ? 1 : 0);
     const cam = camCan(api, { x: PD5[0] + Math.sin(api.t * 1.7) * 0.012, y: 1.62 + Math.sin(api.t * 2.3) * 0.01 - 0.03 * imp, z: PD5[1] - 0.15 * (o.perto || 0), cy: 1200 - 100 * (o.perto || 0), f: 2000 - 250 * (o.perto || 0), yaw: 0.02 + Math.sin(api.t * 1.1) * 0.006, mov: false });
-    nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: (() => { const ps = passoFera(passo ? passo[0] : 0, passo ? passo[1] : null, api.t); if (o.perto) { ps.tronco += 12 * o.perto; ps.cabeca += 6 * o.perto; } return ps; })(), expressao: passo ? 'raiva' : 'rugido' }, X, FZ, 2.55, { y: -0.12, parado: true, olhaPara: [PD5[0], PD5[1] - 3], luz: LUA5 }) }], {
+    nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: (() => { const ps = passoFera(passo ? passo[0] : 0, passo ? passo[1] : null, api.t); if (o.perto) { ps._desloca = [(ps._desloca || [0, 0])[0], (ps._desloca || [0, 0])[1] + 0.12 * o.perto]; } return ps; })(), expressao: passo ? 'raiva' : 'rugido' }, X, FZ, 2.55, { y: -0.12, parado: true, olhaPara: [PD5[0], PD5[1] - 3], luz: LUA5 }) }], {
       forca: 0, bokeh: 3, fx: { borrao: [Math.sin(api.t * 40) * 6 * imp, Math.cos(api.t * 37) * 6 * imp] },
       fim: () => {
         // chão some no escuro embaixo do quadro (as pernas ficam fora de vista)
