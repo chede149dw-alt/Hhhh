@@ -668,6 +668,28 @@
       ]
     },
     {
+      "id": "cade",
+      "fala": {
+        "texto": "Cadê ela?!",
+        "voz": "teo",
+        "voz_final": {
+          "arquivo": "vozes/final/t_cade.wav"
+        }
+      },
+      "destaque": [
+        "CADÊ"
+      ],
+      "duracao": 2.2,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.5,
+          "volume": 0.16
+        }
+      ]
+    },
+    {
       "id": "assassina",
       "fala": {
         "texto": "Mas a assassina tinha sumido... Só que a espada sente quem está vivo.",
@@ -697,29 +719,31 @@
       ]
     },
     {
-      "id": "cade",
-      "fala": {
-        "texto": "Cadê ela?!",
-        "voz": "teo",
-        "voz_final": {
-          "arquivo": "vozes/final/t_cade.wav"
-        }
-      },
-      "destaque": [
-        "CADÊ"
-      ],
-      "duracao": 2.2,
+      "id": "golpe",
+      "duracao": 2.6,
       "sfx": [
         {
           "tipo": "arquivo",
           "arquivo": "sfx/whoosh.mp3",
+          "em": 0.25,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
           "em": 0.5,
-          "volume": 0.16
+          "volume": 0.28
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 0.85,
+          "volume": 0.3
         }
       ]
     },
     {
-      "id": "loot",
+      "id": "derrota",
       "fala": {
         "texto": "Os três caçadores saíram do jogo.",
         "voz": "narrador",
@@ -727,10 +751,40 @@
           "arquivo": "vozes/final/n_loot.wav"
         }
       },
+      "duracao": 4.8,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/desfaz.mp3",
+          "em": 0.9,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/desfaz.mp3",
+          "em": 1.75,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/desfaz.mp3",
+          "em": 2.6,
+          "volume": 0.24
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 3.9,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "loot",
       "destaque": [
         "SAÍRAM"
       ],
-      "duracao": 2.79,
+      "duracao": 3.0,
       "sfx": [
         {
           "tipo": "arquivo",
