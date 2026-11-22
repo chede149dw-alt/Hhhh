@@ -1,0 +1,58 @@
+{
+  "serie": "VALDOR",
+  "episodio": 5,
+  "parte": 5,
+  "scripts": [
+    "personagens/nova/cores.js",
+    "personagens/nova/equipamento.js",
+    "personagens/nova/davi/davi.js",
+    "personagens/nova/davi/davi-jogo.js",
+    "personagens/nova/teo/teo.js",
+    "personagens/nova/teo/teo-jogo.js",
+    "personagens/nova/teo/teo-fera.js",
+    "personagens/nova/teo/teo-lobisomem.js",
+    "personagens/nova/ladroes.js",
+    "personagens/nova/cacadores.js",
+    "motor/vendor/three-r160.min.js",
+    "cenarios/valdor-3d.js",
+    "cenarios/valdor-campo.js",
+    "cenarios/valdor-noite.js",
+    "efeitos/criaturas.js",
+    "efeitos/valdor.js",
+    "efeitos/noite.js",
+    "efeitos/combate.js",
+    "efeitos/teo-closes.js"
+  ],
+  "legenda": {
+    "faixas": [
+      1480,
+      1180,
+      420,
+      760
+    ],
+    "tam": 74,
+    "estreita": 0.84
+  },
+  "planos": [
+    {
+      "id": "noite",
+      "duracao": 5
+    },
+    {
+      "id": "tochas",
+      "duracao": 4
+    },
+    {
+      "id": "olhando",
+      "duracao": 4
+    },
+    {
+      "id": "descem",
+      "duracao": 4
+    }
+  ],
+  "trilha": {
+    "arquivo": "ep04/trilha.wav",
+    "volume": 0.4
+  }
+}

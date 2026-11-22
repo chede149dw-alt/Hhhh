@@ -675,7 +675,7 @@
   const CAN_ALT = 34, CAN_PONTE = { z: 36, y: 23 }, CAN_ROCHA = { x0: -6.6, x1: -3.8, z0: 13.6, z1: 16.4, y: 3.6 };
   const PAL_CANION = {
     ceuTopo: ['#5A98DC', '#5A4E98', '#141E52'], ceuHz: ['#FFE0B0', '#F2955E', '#3A4C96'], ceuBaixo: ['#F0C49A', '#C47460', '#26326A'],
-    nevoa: ['#EAC7A0', '#D88E6C', '#24316A'], hemiCeu: ['#FFEBD2', '#F4B494', '#5C74C8'], hemiChao: ['#9A5236', '#5E3A36', '#141A30'],
+    nevoa: ['#EAC7A0', '#D88E6C', '#2A2E6E'], hemiCeu: ['#FFEBD2', '#F4B494', '#9A86E8'], hemiChao: ['#9A5236', '#5E3A36', '#3A2448'],
     sol: ['#FFE6BE', '#FF9A50', '#A8C0FF'],
   };
   function montarCanion() {
@@ -797,6 +797,7 @@
       protos.forEach((g, k) => { const L = lista[k], m = new T.InstancedMesh(g, gramaMat, L.length); L.forEach(([x, z, s, a, v], i) => { o.position.set(x, 0, -z); o.rotation.set(0, a, 0); o.scale.set(s, s * (0.7 + v * 0.6), s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); c.setHSL(0.09, 0.2, 0.75 + v * 0.2); m.setColorAt(i, c); }); m.receiveShadow = true; cena.add(m); });
     }
     // cristais azuis saindo das paredes (brilham sozinhos)
+    const cristais = [];
     const runasMat = new T.MeshPhongMaterial({ color: 0x8fe4ff, emissive: 0x2a8ccf, specular: 0xffffff, shininess: 90, flatShading: true, transparent: true, opacity: 0.95 });
     {
       const gc = new T.OctahedronGeometry(1, 0); gc.scale(0.22, 1, 0.22); gc.translate(0, 0.8, 0);
@@ -808,7 +809,34 @@
       const m = new T.InstancedMesh(gc, runasMat, L.length), o = new T.Object3D();
       L.forEach(([x, y, z, s, rz, rx], i) => { o.position.set(x, y, -z); o.rotation.set(rx, 0, rz); o.scale.setScalar(s); o.updateMatrix(); m.setMatrixAt(i, o.matrix); });
       m.castShadow = true; cena.add(m);
+      // de noite cada grupo de cristais acende: halo azul em volta (e as luzes que sobram vão para os mais perto da câmera)
+      const tb = textura(texBrilho('110,205,255'));
+      for (let i = 0; i < L.length; i++) {
+        const [x, y, z, s] = L[i]; if (i > 0 && Math.hypot(L[i - 1][0] - x, L[i - 1][2] - z) < 0.9) continue;
+        const sp = new T.Sprite(new T.SpriteMaterial({ map: tb, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0, fog: false }));
+        const w = 1.6 + s * 2.2; sp.scale.set(w, w, 1); sp.position.set(x, y + 0.6 * s, -z); cena.add(sp); cristais.push({ x, y: y + 0.6 * s, z, sp, w, f: r() * 6.28 });
+      }
     }
+    // tochas dos jogadores na borda lá em cima (aparecem uma a uma e descem de rapel pela parede)
+    const tochasBorda = [];
+    {
+      const tChama = textura(texChama()), tBr = textura(texBrilho('255,170,80')), corda = new T.MeshBasicMaterial({ color: 0x2a1c14, transparent: true, opacity: 0.8 }), gCorda = new T.CylinderGeometry(0.02, 0.02, 1, 4);
+      for (let i = 0; i < 64; i++) {
+        const lado = i % 2 ? 1 : -1, z = 4 + r() * 46, g = new T.Group();
+        const ch = new T.Sprite(new T.SpriteMaterial({ map: tChama, transparent: true, depthWrite: false, blending: T.AdditiveBlending, fog: false })); ch.center.set(0.5, 0.15); g.add(ch);
+        const br = new T.Sprite(new T.SpriteMaterial({ map: tBr, transparent: true, depthWrite: false, blending: T.AdditiveBlending, fog: false })); g.add(br);
+        const cd = new T.Mesh(gCorda, corda); cena.add(cd); cena.add(g); g.visible = cd.visible = false;
+        tochasBorda.push({ g, ch, br, cd, lado, z, lim: r(), atraso: r() * 0.35, f: r() * 6.28 });
+      }
+      tochasBorda.sort((a, b) => a.lim - b.lim); tochasBorda.forEach((t, i) => { t.lim = i / tochasBorda.length; });
+    }
+    // estrelas (só de noite)
+    { const n = 1400, P = new Float32Array(n * 3), S = new Float32Array(n), F = new Float32Array(n); for (let i = 0; i < n; i++) { const a = r() * Math.PI * 2, y = 0.04 + Math.pow(r(), 0.8) * 0.96, rr = Math.sqrt(1 - y * y); P.set([Math.cos(a) * rr * 700, y * 700, Math.sin(a) * rr * 700], i * 3); S[i] = 1.2 + Math.pow(r(), 3) * 4.5; F[i] = r() * 6.28; }
+      const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(P, 3)); g.setAttribute('tam', new T.BufferAttribute(S, 1)); g.setAttribute('fase', new T.BufferAttribute(F, 1));
+      const m = new T.ShaderMaterial({ transparent: true, depthWrite: false, fog: false, blending: T.AdditiveBlending, uniforms: uni,
+        vertexShader: 'attribute float tam; attribute float fase; uniform float uTempo; varying float vA; void main(){ vA = 0.6 + 0.4*sin(uTempo*2.0 + fase*3.0); gl_PointSize = tam * 0.75; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+        fragmentShader: 'uniform float uNoite; varying float vA; void main(){ vec2 d = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.0, length(d)); gl_FragColor = vec4(vec3(0.85,0.9,1.0), a * vA * uNoite); }' });
+      const pts = new T.Points(g, m); pts.frustumCulled = false; pts.renderOrder = -9; grupoCeu.add(pts); }
     // ponte de corda lá no alto, de parede a parede
     {
       const z = CAN_PONTE.z, y0 = CAN_PONTE.y, xa = canParede(z, -1, y0) + 0.6, xb = canParede(z, 1, y0) - 0.6, L = xb - xa, n = Math.floor(L / 0.32);
@@ -828,7 +856,7 @@
       const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(Pp, 3)); g.setAttribute('fase', new T.BufferAttribute(F, 1));
       const m = new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, uniforms: uni,
         vertexShader: 'attribute float fase; uniform float uTempo; varying float vA; void main(){ vec3 p = position + vec3(sin(uTempo*0.25+fase)*0.5 + uTempo*0.12, sin(uTempo*0.4+fase*1.7)*0.25, cos(uTempo*0.2+fase*1.3)*0.5); vA = 0.5 + 0.5*sin(uTempo*1.2 + fase*2.0); vec4 mv = modelViewMatrix * vec4(p,1.0); gl_PointSize = 10.0 * (6.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
-        fragmentShader: 'uniform float uNoite; varying float vA; void main(){ float d = length(gl_PointCoord - 0.5); float a = smoothstep(0.5, 0.0, d); gl_FragColor = vec4(vec3(1.0,0.86,0.6), a * (0.25 + 0.45*vA) * (1.0 - uNoite)); }' });
+        fragmentShader: 'uniform float uNoite; varying float vA; void main(){ float d = length(gl_PointCoord - 0.5); float a = smoothstep(0.5, 0.0, d); gl_FragColor = vec4(mix(vec3(1.0,0.86,0.6), vec3(0.55,0.85,1.0), uNoite), a * (0.25 + 0.45*vA) * (1.0 - 0.55*uNoite)); }' });
       const pts = new T.Points(g, m); pts.frustumCulled = false; cena.add(pts);
     }
     // véu de poeira baixo (placas macias andando devagar)
@@ -836,8 +864,8 @@
     { const tn = textura(texNevoa()); for (let i = 0; i < 18; i++) { const s = new T.Sprite(new T.SpriteMaterial({ map: tn, transparent: true, depthWrite: false, opacity: 0.12, color: 0xf0c8a0 })); const w = 7 + r() * 9; s.scale.set(w, w * 0.2, 1); const x = (r() - 0.5) * 12, z = 6 + r() * 60; s.position.set(x, 0.3, -z); cena.add(s); nevoas.push({ s, x, z, v: 0.1 + r() * 0.2 }); } }
 
     R = { renderer, canvas, cena, camera, uni, arvores: [], magia: montarMagia(cena, uni), ceuMat, lua, sol, hemi, dir, pontos, chamas: [], nevoas, runasMat, grupoCeu, esc,
-      PAL: PAL_CANION, nevoaPerto: [34, 24, 14], nevoaLonge: [240, 170, 120], forcaHemi: [0.78, 0.6, 0.26], forcaSol: [3.0, 2.4, 2.0],
-      altura: (x, z) => 0, naTrilha: () => false, raiosSol: true, solEl: 1.25, solX: 0.12, nevoaCor: [0xf0c8a0, 0x96aae6], figPool: [], contatoPool: [] };
+      PAL: PAL_CANION, nevoaPerto: [34, 24, 18], nevoaLonge: [240, 170, 140], forcaHemi: [0.78, 0.6, 0.62], forcaSol: [3.0, 2.4, 1.5],
+      altura: (x, z) => 0, naTrilha: () => false, raiosSol: true, solEl: 1.25, solX: 0.12, luaX: 0.04, nevoaCor: [0xf0c8a0, 0x96aae6], figPool: [], contatoPool: [], cristais, tochasBorda };
   }
 
   // ---------------- magia em 3D: círculo no chão (em perspectiva, girando) e faíscas em volta das mãos ----------------
@@ -1041,7 +1069,7 @@
     c.projectionMatrixInverse.copy(c.projectionMatrix).invert();
   }
   const horaDe = (o) => (o.dia ? 0 : 1 + (o.noite === undefined ? 1 : o.noite));
-  function dirLua(h) { const el = lerp(0.1, 0.55, suave(1.0, 1.85, h)); return new THREE.Vector3(-0.32, el, -1).normalize(); }
+  function dirLua(h) { const el = lerp(0.1, (R && R.luaEl) || 0.55, suave(1.0, 1.85, h)); return new THREE.Vector3((R && R.luaX !== undefined) ? R.luaX : -0.32, el, -1).normalize(); }
   function dirSol(h) { const el = lerp((R && R.solEl) || 0.62, 0.06, suave(0, 1.15, h)); return new THREE.Vector3((R && R.solX !== undefined) ? R.solX : 0.32, el, -1).normalize(); }
 
   function atualizar(cam, o) {
@@ -1074,6 +1102,23 @@
     let li = 0;
     for (const e of extras) { const p = R.pontos[li++]; p.position.set(e.x, e.y === undefined ? 1.6 : e.y, -e.z); p.color.set(e.cor || '#FFA050'); p.intensity = 5.5 * (e.forca === undefined ? 1 : e.forca); p.distance = e.raio || 9; }
     for (const { c } of lista) { if (li >= R.pontos.length) break; const p = R.pontos[li++]; p.position.set(c.x, c.y + 0.1, -c.z); p.color.set('#FFB066'); p.intensity = 5 * acesa * c.fl; p.distance = 10; }
+    if (R.cristais) {
+      // cristais: halo e brilho próprio acendem com a noite; as luzes que sobraram iluminam a parede em volta dos mais perto
+      R.runasMat.emissiveIntensity = 0.55 + 1.9 * noite;
+      for (const c of R.cristais) { const p = 0.8 + 0.2 * Math.sin(t * 1.7 + c.f); c.sp.material.opacity = (0.04 + 0.5 * noite) * p; c.sp.scale.set(c.w * p, c.w * p, 1); }
+      if (noite > 0.05) { const perto = R.cristais.map((c) => ({ c, d: Math.hypot(c.x - fx, c.z - fz) })).sort((a, b) => a.d - b.d); for (const { c } of perto) { if (li >= R.pontos.length) break; const p = R.pontos[li++]; p.position.set(c.x, c.y, -c.z); p.color.set('#9ADCFF'); p.intensity = 3.0 * noite * (0.85 + 0.15 * Math.sin(t * 1.7 + c.f)); p.distance = 7; } }
+    }
+    if (R.tochasBorda) {
+      // o.borda = { n: 0..1 (quantas tochas já apareceram), desce: 0..1 (quanto já desceram pela corda) }
+      const b = o.borda || { n: 0, desce: 0 };
+      for (const tc of R.tochasBorda) {
+        const vis = suave(tc.lim, tc.lim + 0.06, b.n || 0); tc.g.visible = tc.cd.visible = vis > 0.01; if (!tc.g.visible) continue;
+        const ds = Math.max(0, Math.min(1, ((b.desce || 0) - tc.atraso) / (1 - tc.atraso))), yt = CAN_ALT + 0.6, y = lerp(yt, 1.3, ds * ds * (3 - 2 * ds));
+        const xt = canParede(tc.z, tc.lado, CAN_ALT) - tc.lado * 0.4, x = ds > 0 ? canParede(tc.z, tc.lado, y) - tc.lado * 0.7 : xt, fl = 0.85 + 0.15 * Math.sin(t * 13 + tc.f) * Math.sin(t * 7 + tc.f);
+        tc.g.position.set(x, y, -tc.z); tc.ch.scale.set(0.5 * fl * vis, 0.9 * fl * vis, 1); tc.br.scale.set(2.4 * vis, 2.4 * vis, 1); tc.br.material.opacity = 0.55 * vis * fl;
+        if (ds > 0) { const dx = xt - x, dy = yt - y; tc.cd.position.set((x + xt) / 2, (y + yt) / 2 + 0.3, -tc.z); tc.cd.scale.set(1, Math.hypot(dx, dy), 1); tc.cd.rotation.set(0, 0, -Math.atan2(dx, dy)); } else tc.cd.visible = false;
+      }
+    }
     for (; li < R.pontos.length; li++) R.pontos[li].intensity = 0;
     return { h, noite, acesa, dl };
   }
