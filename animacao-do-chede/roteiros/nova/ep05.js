@@ -592,7 +592,7 @@
     const sm = (a, b, x) => { const q = cl((x - a) / (b - a)); return q * q * (3 - 2 * q); };
     if (p === null) {
       const r = Math.sin(t * 3.2), r2 = Math.sin(t * 3.2 + 0.9);
-      Object.assign(o, { tronco: 8 + 2.5 * r, cabeca: 9 - 3 * r2, braco_d: G.braco_d + 3 * r, braco_e: G.braco_e - 3 * r, antebraco_d: G.antebraco_d - 4 * r2, antebraco_e: G.antebraco_e + 4 * r2, _desloca: [0, 0], _plantar: true });
+      Object.assign(o, { tronco: 8 + 2.5 * r, cabeca: 9 - 3 * r2, braco_d: G.braco_d + 3 * r, braco_e: G.braco_e - 3 * r, antebraco_d: G.antebraco_d - 4 * r2, antebraco_e: G.antebraco_e + 4 * r2, _desloca: [0, 0.02 * r] });
       return o;
     }
     const perna = k % 2 ? 'e' : 'd', s = perna === 'd' ? 1 : -1, apoio = -s;           // _d fica à esquerda da tela (vista de frente)
@@ -609,8 +609,9 @@
     // braço do lado oposto à perna vai à frente (abre), o do mesmo lado recolhe; garras balançando com o tranco
     o['braco_' + outra] = (G['braco_' + outra] || 0) - s * (10 * sobe + 8 * pisa); o['antebraco_' + outra] = (G['antebraco_' + outra] || 0) - s * 14 * sobe;
     o['braco_' + perna] = (G['braco_' + perna] || 0) + s * 6 * sobe; o['mao_' + perna] = (G['mao_' + perna] || 0) + s * 10 * pisa;
-    o.quadril = 5 * apoio * peso; o.tronco = 8 + 6 * pisa + 4 * rep - 3 * apoio * peso * 0; o.cabeca = 8 + 12 * pisa + 5 * rep;
-    o._desloca = [0.07 * apoio * peso, 0]; o._plantar = true;
+    o.quadril = 6 * apoio * peso; o.tronco = 10 + 8 * pisa + 4 * rep + 5 * apoio * peso; o.cabeca = 6 + 14 * pisa + 6 * rep - 4 * apoio * peso;
+    o['braco_' + outra] -= s * 8 * sobe; o['braco_' + perna] += s * 10 * sobe;
+    o._desloca = [0.09 * apoio * peso, -0.06 * sobe + 0.09 * pisa + 0.03 * rep];
     // o tranco da pisada vai para o tronco e os joelhos (o corpo afunda sem tirar os pés do chão)
     o['canela_' + outra] += -s * 10 * pisa; o['coxa_' + outra] += -s * 3 * pisa;
     return o;
@@ -622,12 +623,14 @@
     let anda = o.passos.length ? o.passos[0][1] : 0, passo = null, pisada = -9;
     const sm = (a, b, x) => { const q = cl((x - a) / (b - a)); return q * q * (3 - 2 * q); };
     for (const [t0, k] of o.passos) { const p = cl((u - t0) / DUR); if (u >= t0) { anda = k + sm(0.18, 0.74, p); if (p < 1) passo = [k, p]; pisada = t0 + 0.72 * DUR; } }
-    const base = o.passos.length ? o.passos[0][1] : 0, FZ = Z0 - 0.8 * (anda - base) - (o.perto || 0) * 0.55;
+    const base = o.passos.length ? o.passos[0][1] : 0, FZ = Z0 - 0.5 * (anda - base) - (o.perto || 0) * 0.5;
     const imp = Math.max(0, 1 - (u - pisada) / 0.4) * (u >= pisada ? 1 : 0);
-    const cam = camCan(api, { x: PD5[0] + Math.sin(api.t * 1.7) * 0.012, y: 1.62 + Math.sin(api.t * 2.3) * 0.01 - 0.025 * imp, z: PD5[1] - 0.15 * (o.perto || 0), cy: 900 - 60 * (o.perto || 0), f: 1050, yaw: 0.02 + Math.sin(api.t * 1.1) * 0.006, mov: false });
+    const cam = camCan(api, { x: PD5[0] + Math.sin(api.t * 1.7) * 0.012, y: 1.62 + Math.sin(api.t * 2.3) * 0.01 - 0.03 * imp, z: PD5[1] - 0.15 * (o.perto || 0), cy: 1200 - 100 * (o.perto || 0), f: 2000 - 250 * (o.perto || 0), yaw: 0.02 + Math.sin(api.t * 1.1) * 0.006, mov: false });
     nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: (() => { const ps = passoFera(passo ? passo[0] : 0, passo ? passo[1] : null, api.t); if (o.perto) { ps.tronco += 12 * o.perto; ps.cabeca += 6 * o.perto; } return ps; })(), expressao: passo ? 'raiva' : 'rugido' }, X, FZ, 2.55, { y: -0.12, parado: true, olhaPara: [PD5[0], PD5[1] - 3], luz: LUA5 }) }], {
       forca: 0, bokeh: 3, fx: { borrao: [Math.sin(api.t * 40) * 6 * imp, Math.cos(api.t * 37) * 6 * imp] },
       fim: () => {
+        // chão some no escuro embaixo do quadro (as pernas ficam fora de vista)
+        { const gb = ctx.createLinearGradient(0, H * 0.72, 0, H); gb.addColorStop(0, 'rgba(6,4,14,0)'); gb.addColorStop(1, 'rgba(6,4,14,0.85)'); ctx.fillStyle = gb; ctx.fillRect(0, H * 0.72, W, H * 0.28); }
         maoPOV(ctx, o.maoK || 0, api.t);
         // bordas escuras de quem está olhando (visão de primeira pessoa) e o coração batendo
         const bat = 0.5 + 0.5 * Math.pow(Math.max(0, Math.sin(api.t * 7.5)), 8), v = ctx.createRadialGradient(W / 2, H * 0.48, H * 0.26, W / 2, H * 0.5, H * 0.75);
@@ -720,13 +723,13 @@
     },
     // ===== na visão do Davi (pedido do autor): a fera vem na direção dele, um passo de cada vez =====
     // "encara": ela vem de longe, para, rosna, dá outro passo... a câmera respira e treme a cada pisada
-    encara(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 5.4, passos: [[0.4, 0], [1.6, 1], [2.8, 2], [4.0, 3]], maoK: 0 }); },
+    encara(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 3.8, passos: [[0.5, 0], [1.9, 1], [3.3, 2]], maoK: 0 }); },
     // "Não. Dessa vez eu não vou correr." — mais um passo; a mão do Davi entra no quadro, aberta
-    naocorrer(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 5.4 - 4 * 0.8, passos: [[0.6, 4]], maoK: api.fase(1.5, 2.4) }); },
+    naocorrer(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 3.8 - 3 * 0.5, passos: [[0.6, 3]], maoK: api.fase(1.5, 2.4) }); },
     // "Sou eu, Téo." — o focinho chega a um palmo... e no close a pupila de fenda abre redonda (é o Téo ali dentro)
     soueu(ctx, u, d, api) {
       const corte = d * 0.42;
-      if (u < corte) povFera(ctx, u, d, api, { z0: 5.4 - 5 * 0.8, passos: [], perto: api.fase(0.1, corte), maoK: 1 });
+      if (u < corte) povFera(ctx, u, d, api, { z0: 3.8 - 4 * 0.5, passos: [], perto: api.fase(0.1, corte), maoK: 1 });
       else {
         ctx.fillStyle = '#05040A'; ctx.fillRect(0, 0, W, H);
         const muda = api.fase(corte + 0.5, corte + 1.6), z = 1 + 0.06 * api.fase(corte, d);
