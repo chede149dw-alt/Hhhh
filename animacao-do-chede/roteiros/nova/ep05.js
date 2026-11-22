@@ -665,18 +665,25 @@
   const caminhoRede = (k, de, ate, sobe = 1.0) => { const x = de[0] + (ate[0] - de[0]) * k, z = de[2] + (ate[2] - de[2]) * k, y = de[1] + (ate[1] - de[1]) * k + sobe * 4 * k * (1 - k); return [x, y, z]; };
   // ---------- HUD do Davi na luta: vida + MANA (pedido do autor: a mana desce a cada magia) ----------
   // mana: 0..1 agora; antes: valor antes da última magia (o pedaço gasto some devagar, em azul claro)
+  // HUD do Davi (pedido do autor): a MANA só aparece quando ele usa magia; a VIDA só quando ele leva dano.
+  // o = { aMana: 0..1 (aparece), custo, kCusto, aVida: 0..1, vida, vidaAntes }
+  const aparece = (r, a, b) => cl((r - a) / 0.08) * (1 - cl((r - (b - 0.08)) / 0.08));
   function hudDavi(ctx, api, vida, mana, antes, o = {}) {
-    Combate.hud(ctx, 40, 150, 'DAVI', 14, vida, vida, { max: 220, w: 300, corRetrato: '#2F4FA8', t: api.t, alfa: o.alfa });
-    const x = 160, y = 270, w = 300, h = 22, a = o.alfa === undefined ? 1 : o.alfa; if (a <= 0) return;
-    ctx.save(); ctx.globalAlpha = a; ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = 'rgba(12,16,34,0.78)'; ctx.beginPath(); ctx.roundRect(40, y - 18, 450, 58, 20); ctx.fill(); ctx.strokeStyle = 'rgba(120,190,255,0.55)'; ctx.lineWidth = 3; ctx.stroke();
-    ctx.font = '900 24px Inter'; ctx.fillStyle = '#8AD8FF'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText('MANA', 60, y + h / 2);
+    const aV = o.aVida || 0, aM = o.aMana || 0;
+    if (aV > 0) Combate.hud(ctx, 40, 150, 'DAVI', 14, vida, o.vidaAntes === undefined ? vida : o.vidaAntes, { max: 220, w: 300, corRetrato: '#2F4FA8', t: api.t, alfa: aV });
+    if (aM <= 0) return;
+    const y0 = aV > 0 ? 280 : 150, x = 170, w = 300, h = 26, y = y0 + 52;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = aM; ctx.translate(-30 * (1 - aM), 0);
+    ctx.fillStyle = 'rgba(12,16,34,0.8)'; ctx.beginPath(); ctx.roundRect(40, y0, 470, 100, 24); ctx.fill(); ctx.strokeStyle = 'rgba(120,190,255,0.6)'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.fillStyle = '#2F4FA8'; ctx.beginPath(); ctx.arc(100, y0 + 50, 36, 0, TAU); ctx.fill(); ctx.strokeStyle = '#8AD8FF'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.fillStyle = '#BFE8FF'; ctx.beginPath(); ctx.moveTo(100, y0 + 28); ctx.lineTo(114, y0 + 50); ctx.lineTo(100, y0 + 72); ctx.lineTo(86, y0 + 50); ctx.closePath(); ctx.fill();
+    ctx.font = '800 28px Inter'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#FFFFFF'; ctx.fillText('DAVI', x, y0 + 26); ctx.fillStyle = '#8AD8FF'; ctx.fillText('MANA', x + 82, y0 + 26);
     ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.beginPath(); ctx.roundRect(x, y, w, h, h / 2); ctx.fill();
-    if (antes !== undefined && antes > mana) { ctx.fillStyle = `rgba(200,240,255,${0.9 * (o.kGasto === undefined ? 1 : o.kGasto)})`; ctx.beginPath(); ctx.roundRect(x, y, w * cl(antes), h, h / 2); ctx.fill(); }
+    if (antes !== undefined && antes > mana) { ctx.fillStyle = 'rgba(210,245,255,0.9)'; ctx.beginPath(); ctx.roundRect(x, y, w * cl(antes), h, h / 2); ctx.fill(); }
     const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#8AD8FF'); g.addColorStop(1, '#2A6FE0'); ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x, y, Math.max(h * 0.5, w * cl(mana)), h, h / 2); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(x + 6, y + 3, Math.max(0, w * cl(mana) - 12), 4);
-    ctx.font = '800 18px Inter'; ctx.fillStyle = '#FFFFFF'; ctx.textAlign = 'center'; ctx.fillText(`${Math.round(mana * 100)}/100`, x + w / 2, y + h / 2 + 1);
-    if (o.custo && o.kCusto > 0 && o.kCusto < 1) { ctx.globalAlpha = a * Math.sin(Math.PI * o.kCusto); ctx.font = '900 34px Inter'; ctx.fillStyle = '#8AD8FF'; ctx.fillText('-' + o.custo + ' MANA', x + w * cl(mana) + 60, y - 18 - 30 * o.kCusto); }
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(x + 6, y + 4, Math.max(0, w * cl(mana) - 12), 5);
+    ctx.font = '800 20px Inter'; ctx.fillStyle = '#FFFFFF'; ctx.textAlign = 'center'; ctx.fillText(`${Math.round(mana * 100)}/100`, x + w / 2, y + h / 2 + 1);
+    if (o.custo && o.kCusto > 0 && o.kCusto < 1) { ctx.globalAlpha = aM * Math.sin(Math.PI * o.kCusto); ctx.font = '900 38px Inter'; ctx.fillStyle = '#8AD8FF'; ctx.strokeStyle = '#0C1430'; ctx.lineWidth = 6; const tx = x + w * cl(mana) + 40, ty = y - 30 - 40 * o.kCusto; ctx.strokeText('-' + o.custo, tx, ty); ctx.fillText('-' + o.custo, tx, ty); }
     ctx.restore();
   }
   // mana ao longo da luta (100 → gelo 75 → relâmpago 65 → raízes 35 → meteoro 5)
@@ -714,11 +721,47 @@
     ctx.globalAlpha = 1; ctx.font = '800 38px Inter'; ctx.textAlign = 'center'; ctx.fillStyle = '#FFB0A0'; ctx.fillText('CONES (COR)', x0 + w * 0.27, y0 + 290); ctx.fillStyle = '#D0DCF0'; ctx.fillText('BASTONETES (ESCURO)', x0 + w * 0.72, y0 + 290);
     ctx.restore();
   }
-  // corrente de prata em tela (do ponto A ao B), com elos, avançando até k
-  function correnteTela(ctx, A, B, k, t, curva = 120) {
-    if (k <= 0) return; const n = 34; ctx.save();
-    for (let i = 0; i < n * k; i++) { const s = i / n, x = A[0] + (B[0] - A[0]) * s + Math.sin(s * Math.PI) * curva * 0.3, y = A[1] + (B[1] - A[1]) * s - Math.sin(s * Math.PI) * curva + Math.sin(t * 8 + i) * 3; ctx.save(); ctx.translate(x, y); ctx.rotate(Math.atan2(B[1] - A[1], B[0] - A[0]) + (i % 2 ? Math.PI / 2 : 0)); ctx.strokeStyle = '#E8F0FF'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(0, 0, 14, 8, 0, 0, TAU); ctx.stroke(); ctx.restore(); }
-    Valdor.brilhoRadial(ctx, A[0] + (B[0] - A[0]) * k, A[1] + (B[1] - A[1]) * k, 120, '200,230,255', 0.5); ctx.restore();
+  // ---------- corrente de prata (bem feita): elos alternando de frente (anel com furo) e de lado (barrinha) ----------
+  // cada elo: contorno escuro, prata em degradê, brilho branco na borda de cima; s = tamanho do elo em px
+  function elo(ctx, x, y, ang, s, frente, luz = 1) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+    const g = ctx.createLinearGradient(0, -s * 0.6, 0, s * 0.6); g.addColorStop(0, `rgba(250,252,255,${luz})`); g.addColorStop(0.45, '#C6D0E0'); g.addColorStop(0.55, '#8A96AC'); g.addColorStop(1, '#DCE6F4');
+    ctx.lineJoin = 'round';
+    if (frente) {
+      const fora = new Path2D(); fora.ellipse(0, 0, s, s * 0.58, 0, 0, TAU); fora.ellipse(0, 0, s * 0.62, s * 0.24, 0, 0, TAU);
+      ctx.fillStyle = g; ctx.fill(fora, 'evenodd'); ctx.strokeStyle = '#1E222C'; ctx.lineWidth = Math.max(1.5, s * 0.13); ctx.stroke(fora);
+      ctx.strokeStyle = `rgba(255,255,255,${0.85 * luz})`; ctx.lineWidth = Math.max(1, s * 0.09); ctx.beginPath(); ctx.ellipse(0, 0, s * 0.8, s * 0.42, 0, Math.PI * 1.1, Math.PI * 1.75); ctx.stroke();
+    } else {
+      ctx.fillStyle = g; ctx.strokeStyle = '#1E222C'; ctx.lineWidth = Math.max(1.5, s * 0.13); ctx.beginPath(); ctx.roundRect(-s, -s * 0.2, s * 2, s * 0.4, s * 0.2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = `rgba(255,255,255,${0.8 * luz})`; ctx.fillRect(-s * 0.75, -s * 0.12, s * 1.3, s * 0.08);
+    }
+    ctx.restore();
+  }
+  // corrente ao longo de uma curva (bézier quadrática de A a B, barriga para cima); k = quanto já saiu (0..1)
+  function correnteTela(ctx, A, B, k, t, curva = 120, s = 15) {
+    if (k <= 0) return; const C = [(A[0] + B[0]) / 2 + curva * 0.25, (A[1] + B[1]) / 2 - curva];
+    const pt = (u) => [(1 - u) * (1 - u) * A[0] + 2 * (1 - u) * u * C[0] + u * u * B[0], (1 - u) * (1 - u) * A[1] + 2 * (1 - u) * u * C[1] + u * u * B[1]];
+    const pts = [pt(0)]; let L = 0; const N = 160; for (let i = 1; i <= N; i++) { const p = pt(i / N); L += Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]); pts.push(p); }
+    const passo = s * 1.45, n = Math.floor(L * k / passo); let acc = 0, idx = 1;
+    ctx.save(); ctx.shadowColor = 'rgba(160,210,255,0.55)'; ctx.shadowBlur = s * 0.8;
+    for (let e = 0; e < n; e++) {
+      const alvo = e * passo + passo / 2; while (idx < pts.length - 1 && acc + Math.hypot(pts[idx][0] - pts[idx - 1][0], pts[idx][1] - pts[idx - 1][1]) < alvo) { acc += Math.hypot(pts[idx][0] - pts[idx - 1][0], pts[idx][1] - pts[idx - 1][1]); idx++; }
+      const a = pts[idx - 1], b = pts[idx], ang = Math.atan2(b[1] - a[1], b[0] - a[0]), bal = Math.sin(t * 9 + e * 0.7) * s * 0.15;
+      elo(ctx, a[0] - Math.sin(ang) * bal, a[1] + Math.cos(ang) * bal, ang, s, e % 2 === 0);
+    }
+    ctx.restore();
+    const ponta = pt(k); Valdor.brilhoRadial(ctx, ponta[0], ponta[1], s * 7, '200,230,255', 0.55);
+  }
+  // corrente enrolando no corpo (hélice em volta do tronco): só as voltas da frente aparecem; aperta com o tempo
+  function correnteEnrolada(ctx, cx, cy, larg, alt, k, aperto, t, s = 14) {
+    if (k <= 0) return; const voltas = 3.2, N = 700; let prev = null, acc = 0, e = 0;
+    ctx.save(); ctx.shadowColor = 'rgba(160,210,255,0.5)'; ctx.shadowBlur = s * 0.7;
+    for (let i = 0; i <= N * k; i++) {
+      const v = i / N, a = v * voltas * TAU + t * 0.6, rx = larg * 0.5 * (1 - 0.18 * aperto), x = cx + Math.cos(a) * rx, y = cy - alt / 2 + v * alt + Math.sin(a) * rx * 0.22, p = [x, y];
+      if (prev) { acc += Math.hypot(p[0] - prev[0], p[1] - prev[1]); if (acc >= s * 1.45) { acc = 0; e++; if (Math.sin(a) > -0.1) { const ang = Math.atan2(p[1] - prev[1], p[0] - prev[0]); elo(ctx, x, y, ang, s, e % 2 === 0, 0.6 + 0.4 * Math.sin(a)); if (e % 5 === 0) Valdor.brilhoRadial(ctx, x, y, s * 2.4, '220,240,255', 0.35 * (0.6 + 0.4 * Math.sin(t * 20 + e))); } } }
+      prev = p;
+    }
+    ctx.restore();
   }
   const H5 = [[2.2, 6.8, 0], [-2.3, 6.3, 1], [2.5, 3.8, 3], [-1.6, 8.4, 2]];   // caçadores em volta: [x, z, variante]
   const POSE_RAPEL = { braco_d: 165, antebraco_d: -10, braco_e: -165, antebraco_e: 10, coxa_d: -30, canela_d: 40, coxa_e: -20, canela_e: 30, tronco: -10 };
@@ -778,7 +821,6 @@
       nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: 30, antebraco_d: -30, braco_e: -30, antebraco_e: 30 }, expressao: 'raiva', voz: 'davi' }, PD5[0], PD5[1], 1.76, { olhaPara: [PD5[0] + 0.4, PD5[1] - 2], luz: LUA5 }) }], {
         luzes: [{ x: 1.15, y: 1.2, z: 6.5, cor: '#9FE0FF', forca: 1.2, raio: 7 }],
         fx3d: () => [{ tipo: 'gelo', x: 1.15, z: 6.5, larg: 2.4, alt: 2.4, k: 1, rumo: -0.3 }, { tipo: 'rede', x: 1.2, y: 1.7, z: 6.62, dx: 0.32, dy: 0, dz: -1, abre: 1, gira: 12, R: 1.3, congela: 1, tCongela: 1 }] });
-      hudDavi(ctx, api, 0.92, MANA.gelo);
     },
     // 22a) o cerco: câmera alta girando, a fera e o Davi no meio, os caçadores fechando o círculo com as tochas
     cerco(ctx, u, d, api) {
@@ -789,7 +831,6 @@
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: 30, antebraco_d: -30, braco_e: -30, antebraco_e: 30 }, expressao: 'determinado' }, PD5[0], PD5[1], 1.76, { olhaPara: [H5[1][0], H5[1][1]], luz: LUA5 }) },
         ...H5.map(([x, z, v], i) => ({ f: () => (rigs[i] = api.personagem3d(cam, { ...CAC(v), pose: POSE_TOCHA, expressao: 'raiva' }, x * (1 - 0.12 * u / d), z, 1.78, { olhaPara: PF5, luz: LUA5 })) })),
       ], { forca: 0, bokeh: 0, depois: () => { rigs.forEach((rg, i) => tochaNaMao(ctx, rg, api.t, i + 2, 0.55)); const q = cam.p(PF5[0], 2.9, PF5[1]); etiqueta(ctx, q.x, q.y, 'R$ 5.000', api.fase(0.3, 0.6, 'volta')); } });
-      hudDavi(ctx, api, 0.92, MANA.gelo);
     },
     // 22b) a fera pula em cima de dois caçadores; uma rede de prata pega no braço dela (fumaça, -90)
     fera_ataca(ctx, u, d, api) {
@@ -806,7 +847,6 @@
         depois: () => { const q = cam.p(B[0] + 0.3, 2.4, B[1] + 0.5); if (hit) { Combate.numero(ctx, q.x - 80, q.y - 120, '-140', kh); Combate.numero(ctx, q.x + 120, q.y - 60, '-140', kh - 0.1); }
           if (redeK >= 1) { const f = cam.p(B[0], 1.7, B[1]); Noite.fumaca(ctx, f.x, f.y, 0.6 * f.s, cl((r - 0.8) / 0.2), { seed: 4, cor: '230,235,250', n: 14, largura: 1.2 }); Combate.numero(ctx, f.x, f.y - 200, '-90', (r - 0.8) * d, 'recebido'); } },
       });
-      hudDavi(ctx, api, 0.92, MANA.gelo);
     },
     // 22c) o Davi: passo-relâmpago (some num raio e aparece do lado do caçador) e corta com a Lâmina Rubra
     davi_corta(ctx, u, d, api) {
@@ -824,7 +864,7 @@
           if (hit && rc && rc.pontoMundo) { const b = rc.pontoMundo('tronco', [0, -0.3]); Combate.impacto(ctx, b.x, b.y, 240, kh, { rgb: '255,90,80', dura: 0.5 }); Combate.numero(ctx, b.x, b.y - 240, '-160', kh); const dv = cam.p(aqui[0], 2.2, aqui[1]); Combate.numero(ctx, dv.x - 60, dv.y - 60, '+40', kh - 0.2, 'cura'); }
         },
       });
-      hudDavi(ctx, api, Math.min(1, 0.92 + (hit ? 0.08 * cl(kh / 0.4) : 0)), gasta(MANA.gelo, MANA.raio, (r - 0.15) / 0.2), MANA.gelo, { custo: 10, kCusto: cl((r - 0.15) / 0.5) });
+      hudDavi(ctx, api, 1, gasta(MANA.gelo, MANA.raio, (r - 0.15) / 0.2), MANA.gelo, { custo: 10, kCusto: cl((r - 0.15) / 0.5), aMana: aparece(r, 0.06, 0.85) });
     },
     // 22d) um caçador mira a besta nas costas do Davi; câmera lenta: a fera salta na frente e o virote crava nela (-200)
     besta(ctx, u, d, api) {
@@ -844,7 +884,6 @@
         depois: () => { if (hit) { const q = cam.p(FB[0], 2.0, FB[1]); Combate.impacto(ctx, q.x, q.y, 260, kh, { rgb: '220,230,255', dura: 0.5 }); Combate.numero(ctx, q.x, q.y - 250, '-200', kh, 'recebido'); flash(ctx, kh, 0.5); } },
       });
       if (r > 0.3 && r < 0.62) { ctx.save(); ctx.fillStyle = 'rgba(10,20,40,0.25)'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
-      hudDavi(ctx, api, 1, MANA.raio);
     },
     // 22e) "Raízes Anciãs." — o Davi bate as mãos no chão: raízes prendem os caçadores de uma vez
     raizes5(ctx, u, d, api) {
@@ -856,7 +895,7 @@
       ], { forca: 0.2, luzes: [{ x: 0, y: 0.5, z: 6, cor: '#7AF07A', forca: 1.2, raio: 9 }], fx3d: () => presos.map(([x, z], i) => ({ tipo: 'raizes', x, z, raio: 0.45, alt: 1.9, k: api.fase(0.05 + i * 0.08, 0.9 + i * 0.08) })),
         chaoEm: PD5, chao: () => { const q = cam.p(PD5[0], 0.02, PD5[1]); Valdor.brilhoRadial(ctx, q.x, q.y, 220, VERDE, 0.7); } });
       const k = api.fase(0, 0.25, 'volta'); zoomEm(ctx, 540, 380, k, () => api.texto('RAÍZES ANCIÃS', 540, 380, 80, { cor: '#8AF08A' }));
-      hudDavi(ctx, api, 1, gasta(MANA.raio, MANA.raizes, r / 0.3), MANA.raio, { custo: 30, kCusto: cl(r / 0.6) });
+      hudDavi(ctx, api, 1, gasta(MANA.raio, MANA.raizes, r / 0.3), MANA.raio, { custo: 30, kCusto: cl(r / 0.6), aMana: aparece(r, -0.1, 1.05) });
     },
     // 22f) "Meteoro." — cai no meio deles: CRÍTICO -400, e um por um vira pixel e sai do jogo
     meteoro5(ctx, u, d, api) {
@@ -871,7 +910,7 @@
           H5.forEach(([x, z], i) => { const q = cam.p(x, 2.2, z), kt = api.ease.suave(cl((kd(i) - 0.1) / 0.3)) * (1 - cl((kd(i) - 0.8) / 0.2)); if (kt > 0) etiquetaSaiu(ctx, q.x, q.y - 40, kt); }); },
       });
       ctx.save(); ctx.fillStyle = `rgba(255,120,40,${0.12 * cai * (kb < 0 ? 1 : Math.max(0, 1 - kb))})`; ctx.fillRect(0, 0, W, H); ctx.restore();
-      hudDavi(ctx, api, 1, gasta(MANA.raizes, MANA.meteoro, r / 0.2), MANA.raizes, { custo: 30, kCusto: cl(r / 0.5) });
+      hudDavi(ctx, api, 1, gasta(MANA.raizes, MANA.meteoro, r / 0.2), MANA.raizes, { custo: 30, kCusto: cl(r / 0.5), aMana: aparece(r, -0.1, 0.9) });
     },
     // 23) o loot: redes, besta, moedas · o aluguel passa da metade pela primeira vez
     loot5(ctx, u, d, api) {
@@ -911,12 +950,12 @@
     },
     // 27) ele joga a corrente de prata lá de cima: enrola na fera, que some num clarão roxo junto com ele
     corrente5(ctx, u, d, api) {
-      const r = u / d, cam = camCan(api, { x: 0.2, y: 1.2, z: 0.4, cy: 1250, f: 900, mov: false });
-      const voa = cl(r / 0.4), some = cl((r - 0.62) / 0.15);
+      const r = u / d, cam = camCan(api, { x: PF5[0] - 0.2, y: 1.45, z: PF5[1] - 2.6, cy: 1000, f: 1050, mov: { orbita: 0.08, empurra: 0.08, sobe: 0, dist: 3 } });
+      const voa = cl(r / 0.4), some = cl((r - 0.66) / 0.14);
       let rf; nt(ctx, api, cam, [{ f: () => (rf = api.personagem3d(cam, { ...LOBO, pose: voa >= 1 ? 'rugindo' : 'garras', expressao: 'rugido' }, PF5[0], PF5[1] + 0.6, 2.55, { y: -0.12, olhaPara: [0, 0], luz: LUA5 })), alfa: 1 - some }], {
         forca: 0.2, depois: () => {
-          const top = cam.p(0.6, 21, 36), f = cam.p(PF5[0], 1.6, PF5[1] + 0.6); correnteTela(ctx, [top.x, top.y], [f.x, f.y], voa * (1 - some), api.t, 200);
-          if (voa >= 1 && some < 1) { ctx.save(); ctx.globalAlpha = 1 - some; ctx.strokeStyle = '#E8F0FF'; ctx.lineWidth = 6; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.ellipse(f.x, f.y - 60 + i * 70, 0.55 * f.s, 0.16 * f.s, 0.1 * Math.sin(api.t * 6 + i), 0, TAU); ctx.stroke(); } ctx.restore(); Noite.fumaca(ctx, f.x, f.y, 0.7 * f.s, cl((r - 0.4) / 0.3), { seed: 3, cor: '230,235,250', n: 12, largura: 1 }); }
+          const top = cam.p(0.6, 21, 36), f = cam.p(PF5[0], 1.6, PF5[1] + 0.6); correnteTela(ctx, [top.x, top.y], [f.x, f.y - 0.5 * f.s], voa, api.t, 260, 0.065 * f.s);
+          if (voa >= 1 && some < 1) { ctx.save(); ctx.globalAlpha = 1 - some; correnteEnrolada(ctx, f.x, f.y + 0.3 * f.s, 0.98 * f.s, 0.95 * f.s, cl((r - 0.38) / 0.2), cl((r - 0.45) / 0.15), api.t, 0.07 * f.s); ctx.restore(); Combate.numero(ctx, f.x + 0.4 * f.s, f.y - 0.9 * f.s, 'PRESO', (r - 0.5) * d, 'recebido'); }
           if (some > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; Valdor.brilhoRadial(ctx, f.x, f.y - 100, 700 * (0.5 + some), '155,92,255', 1 - Math.abs(some - 0.4)); ctx.restore(); }
         },
       });
@@ -982,7 +1021,7 @@
           { tipo: 'rede', x: P[0], y: P[1], z: P[2], dx: r < bate ? P2[0] - P[0] : 0.32, dy: r < bate ? P2[1] - P[1] : 0, dz: r < bate ? P2[2] - P[2] : -1, abre: 1, gira: r < bate ? api.t * 11 : bate * d * 11, R: 1.3, congela: cg, tCongela: bate * d },
         ],
       });
-      hudDavi(ctx, api, 0.92, gasta(MANA.inicio, MANA.gelo, (r - 0.2) / 0.25), MANA.inicio, { custo: 25, kCusto: cl((r - 0.2) / 0.5) });
+      hudDavi(ctx, api, 1, gasta(MANA.inicio, MANA.gelo, (r - 0.2) / 0.25), MANA.inicio, { custo: 25, kCusto: cl((r - 0.2) / 0.5), aMana: aparece(r, 0.12, 0.98) });
     },
     // "E eu tô começando a virar." — o Téo olhando as mãos tremendo
     virar(ctx, u, d, api) {
