@@ -580,8 +580,8 @@
     olhando(ctx, u, d, api) {
       const cam = camCan(api, { f: 1050, x: 0.1, y: 1.0, z: -1.2, cy: 1350, mov: { orbita: 0.1, empurra: 0.06, sobe: 0.15, dist: 4 } });
       noite(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { cabeca: -14 } }, -0.45, 1.4, 1.76, { rumo: Math.PI }) },
-        { f: () => api.personagem3d(cam, { ...TEOG, pose: { cabeca: -12 } }, 0.5, 1.6, 1.8, { rumo: Math.PI }) },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: { cabeca: -14, braco_d: 8, antebraco_d: -12, braco_e: -8, antebraco_e: 12 } }, -0.45, 1.4, 1.76, { rumo: Math.PI }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: { cabeca: -12, braco_d: 8, antebraco_d: -12, braco_e: -8, antebraco_e: 12 } }, 0.5, 1.6, 1.8, { rumo: Math.PI }) },
       ], { noite: 1, forca: 0.3, bokeh: 3, borda: { n: 1, desce: 0 } });
     },
     // os jogadores descendo de rapel pela parede com as tochas

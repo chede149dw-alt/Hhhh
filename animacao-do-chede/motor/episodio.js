@@ -205,7 +205,9 @@
     const andando = o.caminhar !== undefined || o.caminharFrontal !== undefined;
     // de costas, os braços ficam espelhados: uma pose feita de frente (ex.: braços abertos) cruzava os braços nas costas.
     // Inverte os ângulos dos braços, menos nas poses feitas para a vista de costas e nas caminhadas (que já tratam isso).
-    if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
+    if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k];
+      // de costas os braços ficam atrás do tronco: abre um pouco para as mangas aparecerem dos lados (mãos na frente do corpo)
+      ang.braco_d = (ang.braco_d || 0) - 8; ang.braco_e = (ang.braco_e || 0) + 8; }
     let pf = o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida);
     if (item.voz && !o.parado && !o.semGesto && !item.semGesto) { const G = gestoFala(item.voz, TL.t); if (G && G.ativo > 0) pf = aplicaGesto(pf, G, TL.t + (o.semente || 0), andando, vista === 'costas'); }
     if (pf._plantar) pf = plantar(def, pf);

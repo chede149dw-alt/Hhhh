@@ -537,7 +537,10 @@
       capuz: 4, pescoco: 5, tronco: 6, braco_d: 7, antebraco_d: 7.1, braco_e: 7.2, antebraco_e: 7.3, mao_d: 9, mao_e: 9, cabeca: 10 };
     const zLado = { braco_e: 0.2, antebraco_e: 0.25, mao_e: 0.3, pe_e: 0.5, coxa_e: 0.6, canela_e: 0.65, quadril: 0.9,
       pe_d: 1.0, coxa_d: 1.1, canela_d: 1.15, capuz: 4, pescoco: 5, tronco: 6, braco_d: 7, antebraco_d: 7.1, mao_d: 9, cabeca: 10 };
-    const z = lado ? zLado : zFrente;
+    // de costas, braços e mãos ficam ATRÁS do tronco (estão na frente do corpo, do lado oposto ao da câmera):
+    // só aparece o que sai pelos lados da silhueta, e a mão nunca fica "colada" nas costas ou por cima da capa
+    const zCostas = { ...zFrente, braco_d: 5.6, antebraco_d: 5.65, braco_e: 5.7, antebraco_e: 5.75, mao_d: 5.8, mao_e: 5.8 };
+    const z = lado ? zLado : vista === 'costas' ? zCostas : zFrente;
     const bx = bracoX * cosT, qx = quadrilX * cosT;
     const espMao = { frente: [-1, 1], costas: [1, -1], tq: [-1, -1], perfil: [-1, -1] }[vista];
     const espBraco = vista === 'costas' ? [1, -1] : [-1, 1];
