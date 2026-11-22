@@ -101,6 +101,18 @@
     {
       "id": "soueu",
       "duracao": 4.6
+    },
+    {
+      "id": "rede_gira",
+      "duracao": 2.6
+    },
+    {
+      "id": "rede_voa",
+      "duracao": 3.2
+    },
+    {
+      "id": "rede_gelo",
+      "duracao": 3.4
     }
   ],
   "trilha": {

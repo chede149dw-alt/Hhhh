@@ -655,7 +655,60 @@
     ctx.restore();
   }
 
+  // ---------- rede de prata (caçador → fera) ----------
+  const PC5 = [2.3, 9.2], PF5 = [0.7, 4.4];                       // caçador da rede e a fera
+  const POSE_GIRA = (t) => ({ braco_d: 150 + 12 * Math.sin(t * 10), antebraco_d: -25 + 15 * Math.sin(t * 10 + 1), braco_e: -38, antebraco_e: -115, mao_e: 10, coxa_d: 8, canela_d: -6, coxa_e: -8, canela_e: 6 });
+  const POSE_JOGA = (k) => poseChave(k, [[0, POSE_GIRA(0)], [0.35, { braco_d: 165, antebraco_d: -40, braco_e: -38, antebraco_e: -115, tronco: -6, coxa_d: 10, coxa_e: -10 }], [0.6, { braco_d: 40, antebraco_d: 10, braco_e: -38, antebraco_e: -115, tronco: 10, coxa_d: 14, canela_d: -10, coxa_e: -12, canela_e: 8 }, 'golpe']]);
+  // trajeto da rede: arco da mão do caçador até a fera
+  const caminhoRede = (k, de, ate, sobe = 1.0) => { const x = de[0] + (ate[0] - de[0]) * k, z = de[2] + (ate[2] - de[2]) * k, y = de[1] + (ate[1] - de[1]) * k + sobe * 4 * k * (1 - k); return [x, y, z]; };
   window.PLANOS = {
+    // o caçador gira a rede de prata em cima da cabeça (tocha na outra mão)
+    rede_gira(ctx, u, d, api) {
+      const cam = camCan(api, { x: PC5[0] - 1.6, y: 1.2, z: PC5[1] - 3.2, cy: 1050, f: 1250, yaw: 0.45, mov: { orbita: 0.1, empurra: 0.08, sobe: 0.1, dist: 3.4 } });
+      let rig;
+      nt(ctx, api, cam, [{ f: () => (rig = api.personagem3d(cam, { ...CAC(0, null), pose: POSE_GIRA(api.t), expressao: 'raiva' }, PC5[0], PC5[1], 1.78, { olhaPara: PF5, luz: LUA5, parado: true })) }], {
+        forca: 0.2, bokeh: 3,
+        fx3d: () => { const m = maoMundo(cam, rig, 'mao_d', PC5[0], PC5[1]); if (!m) return []; return [{ tipo: 'rede', x: m.x, y: m.y + 0.15, z: m.z, dx: 0, dy: 1, dz: 0.001, abre: 0.42, gira: api.t * 11, R: 1.2 }]; },
+        depois: () => tochaNaMao(ctx, rig, api.t, 1, 0.55),
+      });
+    },
+    // câmera lenta: ele solta, a rede abre no ar girando e voa para a fera (a corda ainda presa na mão dele)
+    rede_voa(ctx, u, d, api) {
+      const r = u / d, solta = 0.3, cam = camCan(api, { x: 3.7, y: 1.5, z: 1.6, cy: 900, f: 900, yaw: -0.42, mov: { orbita: 0.1, empurra: 0.05, sobe: 0, dist: 5 } });
+      let rig; const k = cl((r - solta) / (1 - solta)), lento = k * (0.6 + 0.4 * k);
+      nt(ctx, api, cam, [
+        { f: () => (rig = api.personagem3d(cam, { ...CAC(0, null), pose: POSE_JOGA(cl(r / 0.45)), expressao: 'raiva' }, PC5[0], PC5[1], 1.78, { olhaPara: PF5, luz: LUA5, parado: true })) },
+        { f: () => api.personagem3d(cam, { ...LOBO, pose: { ...window.TEO_LOBISOMEM_POSES.garras.angulos, tronco: 0 }, expressao: 'rugido' }, PF5[0], PF5[1], 2.55, { y: -0.12, olhaPara: PC5, luz: LUA5 }) },
+      ], {
+        forca: 0.2, bokeh: 2,
+        fx3d: () => {
+          const m = maoMundo(cam, rig, 'mao_d', PC5[0], PC5[1]); if (!m) return [];
+          if (r < solta) return [{ tipo: 'rede', x: m.x, y: m.y + 0.15, z: m.z, dx: 0, dy: 1, dz: 0.001, abre: 0.42, gira: api.t * 11, R: 1.2 }];
+          const de = [m.x, m.y + 0.1, m.z], ate = [PF5[0] + 0.2, 1.9, PF5[1] + 0.9], P = caminhoRede(lento, de, ate, 0.9), P2 = caminhoRede(Math.min(1, lento + 0.02), de, ate, 0.9);
+          return [{ tipo: 'rede', x: P[0], y: P[1], z: P[2], dx: P2[0] - P[0], dy: P2[1] - P[1], dz: P2[2] - P[2], abre: Math.min(1, 0.42 + k * 1.6), gira: api.t * 11 + k * 2, R: 1.35, corda: de }];
+        },
+        depois: () => tochaNaMao(ctx, rig, api.t, 1, 0.55),
+      });
+    },
+    // o Davi bate o pé: a Muralha de Gelo sobe entre a fera e a rede; a rede bate no gelo e gruda congelada, chiando
+    rede_gelo(ctx, u, d, api) {
+      const r = u / d, cam = camCan(api, { x: 3.5, y: 1.5, z: 0.6, cy: 900, f: 860, yaw: -0.74, mov: { orbita: 0.08, empurra: 0.08, sobe: 0, dist: 4.5 } });
+      const pisa = poseChave(cl(r / 0.25), [[0, { coxa_d: 0 }], [0.6, { coxa_d: -40, canela_d: 50, braco_d: 20, braco_e: -20 }], [1, { coxa_d: 4, canela_d: -2, braco_d: 30, antebraco_d: -30, braco_e: -30, antebraco_e: 30 }, 'golpe']]);
+      const subiu = cl((r - 0.2) / 0.25), MZ = 6.5, MX = 1.15, bate = 0.5, k = cl(r / bate), de = [PC5[0] - 0.1, 2.3, PC5[1] - 0.4];
+      const ate = [MX + 0.05, 1.7, MZ + 0.12], P = r < bate ? caminhoRede(k * (0.6 + 0.4 * k), de, ate, 0.7) : ate, P2 = caminhoRede(Math.min(1, k + 0.02), de, ate, 0.7);
+      const cg = cl((r - bate) / 0.25), [tx, ty] = api.tremor(r > bate && r < bate + 0.08 ? 6 : r > 0.2 && r < 0.3 ? 4 : 0);
+      nt(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: pisa, expressao: 'raiva' }, PD5[0], PD5[1], 1.76, { olhaPara: [MX, MZ], luz: LUA5, parado: true }) },
+        { f: () => api.personagem3d(cam, { ...LOBO, pose: { ...window.TEO_LOBISOMEM_POSES.garras.angulos, tronco: 0 }, expressao: 'raiva' }, PF5[0], PF5[1], 2.55, { y: -0.12, olhaPara: PC5, luz: LUA5 }) },
+      ], {
+        forca: 0.2, bokeh: 2, fx: { borrao: [tx, ty] },
+        luzes: [{ x: MX, y: 1.2, z: MZ, cor: '#9FE0FF', forca: 1.2 * subiu, raio: 7 }],
+        fx3d: () => [
+          { tipo: 'gelo', x: MX, z: MZ, larg: 2.4, alt: 2.4, k: subiu, rumo: -0.3, racha: 0 },
+          { tipo: 'rede', x: P[0], y: P[1], z: P[2], dx: r < bate ? P2[0] - P[0] : 0.32, dy: r < bate ? P2[1] - P[1] : 0, dz: r < bate ? P2[2] - P[2] : -1, abre: 1, gira: r < bate ? api.t * 11 : bate * d * 11, R: 1.3, congela: cg, tCongela: bate * d },
+        ],
+      });
+    },
     // "E eu tô começando a virar." — o Téo olhando as mãos tremendo
     virar(ctx, u, d, api) {
       const cam = camCan(api, { x: 0.35, y: 1.55, z: 1.1, cy: 820, f: 1350, mov: { orbita: 0.08, empurra: 0.1, sobe: 0, dist: 2.2 } });

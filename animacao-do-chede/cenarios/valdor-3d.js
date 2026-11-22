@@ -910,7 +910,7 @@
   //      { tipo: 'pixels', x, z, alt, k, cor }]  (coordenadas do motor: z para dentro da tela)
   const v3 = (x, y, z) => new THREE.Vector3(x, y, -z);
   function montarFx(cena) {
-    const T = THREE, F = { flechas: [], gelos: [], raizes: [], meteoros: [], explosoes: [], pixels: [], ondas: [] };
+    const T = THREE, F = { flechas: [], gelos: [], raizes: [], meteoros: [], explosoes: [], pixels: [], ondas: [], redes: [] };
     const tBr = textura(texBrilho('255,255,255')), tRastro = textura(tela(256, 32, (g, w, h) => { const gr = g.createLinearGradient(0, 0, w, 0); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(255,255,255,1)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); const v = g.createLinearGradient(0, 0, 0, h); v.addColorStop(0, 'rgba(0,0,0,1)'); v.addColorStop(0.5, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,1)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = v; g.fillRect(0, 0, w, h); }));
     tRastro.wrapS = tRastro.wrapT = T.ClampToEdgeWrapping;
     const aditivo = (cor, map = tBr, op = 1) => new T.MeshBasicMaterial({ map, color: cor, transparent: true, opacity: op, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide, toneMapped: false, fog: false });
@@ -932,6 +932,21 @@
       const casca = new T.Group(); for (let k = 0; k < 6; k++) { const c = new T.Mesh(new T.OctahedronGeometry(0.05 + (k % 3) * 0.02, 0), gelo); c.position.set(Math.sin(k * 2.1) * 0.03, Math.cos(k * 2.1) * 0.03, L / 2 - 0.05 - k * 0.06); c.rotation.set(k, k * 1.7, k * 0.6); c.scale.set(1, 1, 1.8); casca.add(c); } gr.add(casca);
       const brilho = new T.Mesh(new T.PlaneGeometry(1, 1), aditivo(0x9CFFB8)); brilho.position.z = L / 2 + 0.06; gr.add(brilho);
       gr.visible = false; cena.add(gr); F.flechas.push({ gr, rastro, casca, brilho, L });
+    }
+    // ---- rede de prata: malha redonda (raios + anéis) com pesinhos de chumbo na borda, brilho frio, abre girando no ar ----
+    {
+      const NR = 20, NA = 8, nSeg = NR * NA * 2;               // segmentos: anéis (NR por anel) + raios (NR por anel)
+      const matFio = new T.LineBasicMaterial({ color: 0xDCE6F4, transparent: true, opacity: 0.95, toneMapped: false, fog: false });
+      const matBrilho = new T.LineBasicMaterial({ color: 0x9FD4FF, transparent: true, opacity: 0.55, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false, fog: false });
+      const chumbo = new T.MeshStandardMaterial({ color: 0x5A6070, roughness: 0.4, metalness: 0.8 }), geloPeso = new T.MeshStandardMaterial({ color: 0xDFF6FF, roughness: 0.1, transparent: true, opacity: 0.85, emissive: 0x3AA0D0, emissiveIntensity: 0.4, flatShading: true });
+      for (let i = 0; i < 4; i++) {
+        const gr = new T.Group(), geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(new Float32Array(nSeg * 2 * 3), 3));
+        const fio = new T.LineSegments(geo, matFio.clone()), brilho = new T.LineSegments(geo, matBrilho.clone()); fio.frustumCulled = brilho.frustumCulled = false; gr.add(brilho); gr.add(fio);
+        const pesos = []; for (let k = 0; k < NR; k++) { const m = new T.Mesh(new T.SphereGeometry(0.045, 8, 6), chumbo); const c = new T.Mesh(new T.OctahedronGeometry(0.075, 0), geloPeso); c.visible = false; m.add(c); gr.add(m); pesos.push(m); }
+        const halo = new T.Mesh(new T.PlaneGeometry(1, 1), aditivo(0x9FD4FF, tBr, 0.35)); gr.add(halo);
+        const cordaGeo = new T.BufferGeometry(); cordaGeo.setAttribute('position', new T.BufferAttribute(new Float32Array(6), 3)); const cordaL = new T.Line(cordaGeo, new T.LineBasicMaterial({ color: 0xC8A46A, toneMapped: false })); cordaL.frustumCulled = false; cena.add(cordaL); cordaL.visible = false;
+        gr.visible = false; cena.add(gr); F.redes.push({ gr, geo, fio, brilho, pesos, halo, cordaL, NR, NA });
+      }
     }
     // ---- muralha de gelo: cristais hexagonais com ponta, facetados, translúcidos, arestas claras e geada no chão ----
     const cristalMat = new T.MeshPhysicalMaterial({ color: 0xBDEBFF, roughness: 0.05, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.05, transparent: true, opacity: 0.62, emissive: 0x1E6E9E, emissiveIntensity: 0.45, flatShading: true, side: T.DoubleSide, depthWrite: false });
@@ -996,9 +1011,30 @@
   }
   function atualizaFx(lista, t) {
     if (!R.fx) R.fx = montarFx(R.cena);
-    const F = R.fx, T = THREE, ix = { flecha: 0, gelo: 0, raizes: 0, meteoro: 0, explosao: 0, pixels: 0, onda: 0 }, o = new T.Object3D(), cl = (v) => Math.max(0, Math.min(1, v));
+    const F = R.fx, T = THREE, ix = { flecha: 0, gelo: 0, raizes: 0, meteoro: 0, explosao: 0, pixels: 0, onda: 0, rede: 0 }, o = new T.Object3D(), cl = (v) => Math.max(0, Math.min(1, v));
     for (const g of lista) {
       if (!g) continue;
+      // rede: { tipo: 'rede', x, y, z, dx, dy, dz (para onde voa), abre 0..1, gira (rad), R (raio aberta, m), congela 0..1, corda: [x, y, z] }
+      if (g.tipo === 'rede' && ix.rede < F.redes.length) {
+        const N = F.redes[ix.rede++], p = v3(g.x, g.y, g.z), d = new T.Vector3(g.dx || 0, g.dy || 0, -(g.dz === undefined ? 1 : g.dz)).normalize();
+        N.gr.position.copy(p); N.gr.lookAt(p.clone().add(d)); N.gr.visible = true;
+        const ab = g.abre === undefined ? 1 : g.abre, Rm = (g.R || 1.3) * (0.12 + 0.88 * ab), gira = g.gira || 0, cg = g.congela || 0, tt = cg > 0 ? (g.tCongela || t) : t;
+        const pos = N.geo.attributes.position.array; let w = 0;
+        const pt = (i, k) => { // anel i (0 = centro), raio k
+          const a = (k / N.NR) * Math.PI * 2 + gira, f = i / N.NA, r = Rm * f * (1 + 0.06 * Math.sin(k * 2.3 + i)),
+            onda = (1 - cg) * (0.09 * ab * f * Math.sin(a * 3 + tt * 9) + 0.05 * f * Math.sin(tt * 13 + k)), cuia = (1 - 0.7 * cg) * (0.55 * (1 - ab) + 0.28) * Rm * f * f;
+          return [Math.cos(a) * r, Math.sin(a) * r, -cuia + onda]; };
+        for (let i = 1; i <= N.NA; i++) for (let k = 0; k < N.NR; k++) {
+          const A = pt(i, k), B = pt(i, (k + 1) % N.NR), C = pt(i - 1, k);
+          pos.set(A, w); pos.set(B, w + 3); pos.set(A, w + 6); pos.set(C, w + 9); w += 12;
+        }
+        N.geo.attributes.position.needsUpdate = true;
+        const cor = new T.Color(0xDCE6F4).lerp(new T.Color(0xF4FCFF), cg); N.fio.material.color.copy(cor); N.brilho.material.color.copy(new T.Color(0x9FD4FF).lerp(new T.Color(0xBFF0FF), cg)); N.brilho.material.opacity = 0.45 + 0.35 * cg;
+        N.pesos.forEach((m, k) => { const q = pt(N.NA, k); m.position.set(q[0] * 1.03, q[1] * 1.03, q[2] - 0.04); m.children[0].visible = cg > 0.05; m.children[0].scale.setScalar(cl(cg * 1.5)); m.children[0].rotation.set(k, k * 2, 0); });
+        N.halo.scale.setScalar(Rm * 2.6); N.halo.material.opacity = 0.18 + 0.25 * cg;
+        if (g.corda) { const c = N.cordaL.geometry.attributes.position.array, q = v3(g.corda[0], g.corda[1], g.corda[2]); c.set([p.x, p.y, p.z, q.x, q.y, q.z]); N.cordaL.geometry.attributes.position.needsUpdate = true; N.cordaL.visible = true; } else N.cordaL.visible = false;
+        continue;
+      }
       if (g.tipo === 'flecha' && ix.flecha < F.flechas.length) {
         const A = F.flechas[ix.flecha++], p = v3(g.x, g.y, g.z), d = new T.Vector3(g.dx, g.dy, -g.dz).normalize(), s = g.s || 1;
         A.gr.position.copy(p); A.gr.lookAt(p.clone().add(d)); A.gr.scale.setScalar(s); A.gr.visible = true;
@@ -1057,6 +1093,7 @@
     for (; ix.raizes < F.raizes.length; ix.raizes++) { F.raizes[ix.raizes].gr.visible = false; F.raizes[ix.raizes].brilhos.forEach((s) => (s.visible = false)); }
     for (; ix.meteoro < F.meteoros.length; ix.meteoro++) { const M = F.meteoros[ix.meteoro]; M.gr.visible = false; M.cauda.forEach((s) => (s.visible = false)); M.fumaca.forEach((s) => (s.visible = false)); }
     for (; ix.explosao < F.explosoes.length; ix.explosao++) { const E = F.explosoes[ix.explosao]; E.gr.visible = false; E.fogo.forEach((s) => (s.visible = false)); E.pedras.forEach((p) => (p.p.visible = false)); }
+    for (; ix.rede < F.redes.length; ix.rede++) { F.redes[ix.rede].gr.visible = false; F.redes[ix.rede].cordaL.visible = false; }
     for (; ix.pixels < F.pixels.length; ix.pixels++) { F.pixels[ix.pixels].im.visible = false; F.pixels[ix.pixels].raio.visible = false; }
   }
 
