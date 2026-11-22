@@ -7,13 +7,13 @@ NARRADOR (Witalo Guimarães, cLjWzehDrurj3fqQ6yN7)
 [x] n_escuro      Só que o Davi não enxergava quase nada.
 [x] n_turno       Quando a luz some, o olho precisa trocar de turno.
 [x] n_bastonetes  Os bastonetes enxergam no escuro, mas demoram uns vinte minutos pra acordar de vez. E não veem cor.
-[ ] n_espelho     Já o olho de uma fera tem um espelho no fundo, que usa a mesma luz duas vezes.
-[ ] n_fera        E aí o Téo virou fera.
+[x] n_espelho     Já o olho de uma fera tem um espelho no fundo, que usa a mesma luz duas vezes.
+[x] n_fera        E aí o Téo virou fera.
 [x] n_desceram    Os jogadores desceram pelas cordas, com redes de prata.
 [x] n_pe          O Davi bateu o pé no chão.
 [ ] n_raizes      Raízes Anciãs.
 [x] n_meteoro     Meteoro.
-[ ] n_encapuzado  Mas o encapuzado ainda estava lá em cima.
+[x] n_encapuzado  Mas o encapuzado ainda estava lá em cima.
 [ ] n_parte       Segue pra ver a parte seis!
 
 DAVI (Wesley Bessa, WFSxKvz27RguNRD3Phoq)
@@ -31,9 +31,9 @@ TÉO (Naldo Araújo, WjLshZDgXgxLxYRcotEO)
 [ ] t_lembra      Lembra o que eu falei? Se eu te atacar...
 
 LÍDER (2 opções pro autor escolher)
-[ ] l_rannox      Rannox Elion (NvHN9pLXN2C3JhUv7ZCi): Você ficou com a minha espada. Agora eu fico com o seu amigo.
-[ ] l_marcio      Marcio Brasil (29Pm0vQJJRoVfMCsUKB6): Você ficou com a minha espada. Agora eu fico com o seu amigo.
+[x] l_rannox      Rannox Elion (NvHN9pLXN2C3JhUv7ZCi): Você ficou com a minha espada. Agora eu fico com o seu amigo.
+[x] l_marcio      Marcio Brasil (29Pm0vQJJRoVfMCsUKB6): Você ficou com a minha espada. Agora eu fico com o seu amigo.
 
 SONS
-[ ] uivo          uivo de lobo bonito, longo, ecoando no cânion à noite
-[ ] rosnado       rosnado grave de fera, perto
+[x] uivo          4 opções (6 s) em audio/nova/ep05/sfx/uivo-a..d.mp3
+[x] rosnado       3 opções (4 s) em audio/nova/ep05/sfx/rosnado-a..c.mp3
