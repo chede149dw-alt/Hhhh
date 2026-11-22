@@ -583,6 +583,42 @@
   // capa verde rasgada caindo (2D, em tela)
   function capaCaindo(ctx, x, y, s, k) { if (k <= 0 || k >= 1) return; ctx.save(); ctx.translate(x - 0.3 * s * k, y + 0.9 * s * k * k); ctx.rotate(-0.9 * k); ctx.globalAlpha = 1 - Math.max(0, k - 0.75) * 4; ctx.fillStyle = '#2E5A34'; ctx.strokeStyle = '#1A2A1C'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-0.3 * s, 0); ctx.lineTo(0.28 * s, 0.05 * s); ctx.lineTo(0.36 * s, 0.6 * s); ctx.lineTo(0.18 * s, 0.52 * s); ctx.lineTo(0.08 * s, 0.7 * s); ctx.lineTo(-0.1 * s, 0.55 * s); ctx.lineTo(-0.34 * s, 0.66 * s); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
 
+  // ---------- visão do Davi (câmera nos olhos dele) ----------
+  // passos: [[segundo em que começa, índice do passo]] · cada passo anda 0,8 m em 0,55 s; entre eles a fera para e rosna
+  function povFera(ctx, u, d, api, o) {
+    const X = PD5[0] + 0.12, Z0 = PD5[1] + o.z0, DUR = 0.55;
+    let anda = 0, fase = null, pisada = -9;
+    for (const [t0, k] of o.passos) { const p = cl((u - t0) / DUR); if (u >= t0) { anda = k + p; if (p < 1) fase = (k + p) * 0.4545; pisada = t0 + DUR; } }
+    if (!o.passos.length) anda = 0;
+    const base = o.passos.length ? o.passos[0][1] : 0, FZ = Z0 - 0.8 * (anda - base) - (o.perto || 0) * 0.55;
+    const imp = Math.max(0, 1 - (u - pisada) / 0.35) * (u >= pisada ? 1 : 0);
+    const cam = camCan(api, { x: PD5[0] + Math.sin(api.t * 1.7) * 0.012, y: 1.62 + Math.sin(api.t * 2.3) * 0.01 - 0.025 * imp, z: PD5[1] - 0.15 * (o.perto || 0), cy: 900 - 60 * (o.perto || 0), f: 1050, yaw: 0.02 + Math.sin(api.t * 1.1) * 0.006, mov: false });
+    nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: fase === null ? { ...window.TEO_LOBISOMEM_POSES.garras.angulos, tronco: 8 + 10 * (o.perto || 0), cabeca: 6 } : 'parado', expressao: fase === null ? 'rugido' : 'raiva' }, X, FZ, 2.55, { y: -0.12, olhaPara: [PD5[0], PD5[1] - 3], caminharFrontal: fase === null ? undefined : fase, luz: LUA5 }) }], {
+      forca: 0, bokeh: 3, fx: { borrao: [Math.sin(api.t * 40) * 6 * imp, Math.cos(api.t * 37) * 6 * imp] },
+      fim: () => {
+        maoPOV(ctx, o.maoK || 0, api.t);
+        // bordas escuras de quem está olhando (visão de primeira pessoa) e o coração batendo
+        const bat = 0.5 + 0.5 * Math.pow(Math.max(0, Math.sin(api.t * 7.5)), 8), v = ctx.createRadialGradient(W / 2, H * 0.48, H * 0.26, W / 2, H * 0.5, H * 0.75);
+        v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, `rgba(4,2,10,${0.55 + 0.12 * bat})`); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+      },
+    });
+  }
+  // a mão do Davi entrando no quadro por baixo, aberta (manga azul com punho dourado e a luva com a pedra azul)
+  function maoPOV(ctx, k, t) {
+    if (k <= 0) return; const e = 1 - Math.pow(1 - k, 3), x = 700 + 40 * (1 - e), y = H + 260 - 720 * e, bal = Math.sin(t * 2) * 6;
+    ctx.save(); ctx.translate(x, y + bal); ctx.rotate(-0.12);
+    const g = ctx.createLinearGradient(-120, 0, 120, 0); g.addColorStop(0, '#1E2C6A'); g.addColorStop(0.5, '#3448A8'); g.addColorStop(1, '#1A2660');
+    ctx.fillStyle = g; ctx.strokeStyle = '#0C1230'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-130, 700); ctx.lineTo(-105, 120); ctx.lineTo(105, 120); ctx.lineTo(140, 700); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#D9B44A'; ctx.beginPath(); ctx.roundRect(-112, 96, 224, 46, 14); ctx.fill(); ctx.stroke();
+    const luva = '#22306E', luz = '#3E56B8';
+    ctx.fillStyle = luva; ctx.beginPath(); ctx.roundRect(-95, -60, 190, 170, 50); ctx.fill(); ctx.stroke();
+    for (const [dx, h, a] of [[-66, 150, -0.12], [-22, 175, -0.03], [22, 170, 0.04], [64, 140, 0.13]]) { ctx.save(); ctx.translate(dx, -40); ctx.rotate(a); ctx.beginPath(); ctx.roundRect(-20, -h, 40, h + 20, 20); ctx.fill(); ctx.stroke(); ctx.fillStyle = luz; ctx.fillRect(-8, -h + 22, 8, h - 50); ctx.fillStyle = luva; ctx.restore(); }
+    ctx.save(); ctx.translate(-92, 30); ctx.rotate(-0.85); ctx.beginPath(); ctx.roundRect(-22, -120, 44, 135, 22); ctx.fill(); ctx.stroke(); ctx.restore();
+    const gl = ctx.createRadialGradient(0, 30, 0, 0, 30, 70); gl.addColorStop(0, 'rgba(140,210,255,0.9)'); gl.addColorStop(1, 'rgba(80,160,255,0)'); ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(0, 30, 70, 0, TAU); ctx.fill();
+    ctx.fillStyle = '#BFE8FF'; ctx.beginPath(); ctx.moveTo(0, 6); ctx.lineTo(16, 30); ctx.lineTo(0, 54); ctx.lineTo(-16, 30); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
   window.PLANOS = {
     // "E eu tô começando a virar." — o Téo olhando as mãos tremendo
     virar(ctx, u, d, api) {
@@ -650,36 +686,19 @@
       nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: { ...window.TEO_LOBISOMEM_POSES.rugindo.angulos, cabeca: -30, tronco: -6 }, expressao: 'rugido' }, X, Z, 2.55, { luz: { ...LUA5, forca: 1 } }) }],
         { forca: 0, fx: { borrao: [tx, ty] }, fim: () => pedrinhas(ctx, api, api.fase(0.6, 1.0)) });
     },
-    // a fera vira devagar para o Davi, rosnando; o Davi dá um passo para trás
-    encara(ctx, u, d, api) {
-      const passo = api.fase(1.3, 1.8), dz = -0.35 * passo;
-      const cam = camCan(api, { x: PD5[0] - 0.55, y: 1.65, z: PD5[1] - 1.7 + dz, cy: 880, f: 1150, yaw: 0.22, mov: { orbita: 0.05, empurra: 0.1, sobe: 0, dist: 2.5 } });
-      const FX = PT5[0] + 0.35, FZ = PT5[1] + 1.2, vira = api.fase(0, 1.2);
-      nt(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: expr('medo', { olhar: [0, -0.01] }) }, PD5[0], PD5[1] + dz, 1.76, { olhaPara: [FX, FZ], luz: LUA5, caminhar: passo > 0 && passo < 1 ? -passo * 2 : undefined }) },
-        { f: () => api.personagem3d(cam, { ...LOBO, pose: vira < 1 ? 'tq' : 'garras', expressao: 'raiva' }, FX, FZ, 2.55, { olhaPara: [PD5[0], PD5[1] - 2 + vira * 2], luz: LUA5 }) },
-      ], { forca: 0.2 });
-    },
-    // "Não. Dessa vez eu não vou correr." — o Davi para, guarda a espada e abre a mão
-    naocorrer(ctx, u, d, api) {
-      const cam = camCan(api, { x: PD5[0] + 0.95, y: 1.6, z: PD5[1] - 1.5, cy: 830, f: 1350, yaw: -0.45, mov: { orbita: -0.06, empurra: 0.08, sobe: 0, dist: 1.9 } });
-      const abre = api.fase(1.6, 2.4);
-      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: poseChave(abre, [[0, { braco_d: 8, antebraco_d: -10, braco_e: -8, antebraco_e: 10 }], [1, { braco_d: -62, antebraco_d: -12, mao_d: 0, braco_e: -8, antebraco_e: 10 }]]), expressao: 'determinado', voz: 'davi' }, PD5[0], PD5[1], 1.76, { olhaPara: [PT5[0], PT5[1] + 1.2], luz: LUA5 }) }]);
-    },
-    // "Sou eu, Téo." — o focinho a um palmo do rosto dele... e os olhos piscam castanho uma vez
+    // ===== na visão do Davi (pedido do autor): a fera vem na direção dele, um passo de cada vez =====
+    // "encara": ela vem de longe, para, rosna, dá outro passo... a câmera respira e treme a cada pisada
+    encara(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 5.4, passos: [[0.5, 0], [1.6, 1], [2.7, 2], [3.8, 3]], maoK: 0 }); },
+    // "Não. Dessa vez eu não vou correr." — mais um passo; a mão do Davi entra no quadro, aberta
+    naocorrer(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 5.4 - 4 * 0.8, passos: [[0.6, 4]], maoK: api.fase(1.5, 2.4) }); },
+    // "Sou eu, Téo." — o focinho chega a um palmo... e no close a pupila de fenda abre redonda (é o Téo ali dentro)
     soueu(ctx, u, d, api) {
-      const r = u / d;
-      if (r < 0.72) {
-        const cam = camCan(api, { x: PD5[0] + 0.45, y: 1.7, z: PD5[1] - 2.0, cy: 840, f: 1150, mov: { orbita: 0.05, empurra: 0.1, sobe: 0, dist: 2.2 } });
-        const FX = PD5[0] + 0.85, FZ = PD5[1] + 0.35;
-        nt(ctx, api, cam, [
-          { f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: -55, antebraco_d: -12, braco_e: -8, antebraco_e: 10 }, expressao: expr('determinado', { olhar: [0.012, -0.012] }), voz: 'davi' }, PD5[0], PD5[1], 1.76, { olhaPara: [FX, FZ], luz: LUA5 }) },
-          { f: () => api.personagem3d(cam, { ...LOBO, vista: 'perfil', pose: { ...window.TEO_LOBISOMEM_POSES.perfil.angulos, tronco: 20, cabeca: 12, coxa_d: -6, canela_d: 10, pe_d: -4, coxa_e: 6, canela_e: 8, pe_e: -6 }, expressao: 'raiva' }, FX, FZ, 2.55, { olhaPara: PD5, luz: LUA5 }) },
-        ], { forca: 0.2 });
-      } else {
+      const corte = d * 0.42;
+      if (u < corte) povFera(ctx, u, d, api, { z0: 5.4 - 5 * 0.8, passos: [], perto: api.fase(0.1, corte), maoK: 1 });
+      else {
         ctx.fillStyle = '#05040A'; ctx.fillRect(0, 0, W, H);
-        const pis = api.fase(d * 0.78, d * 0.84) * (1 - api.fase(d * 0.9, d * 0.97));
-        TeoCloses.olho(ctx, 540, 960, 560, api.t, { humano: pis, abre: 1 - 0.85 * Math.sin(Math.PI * api.fase(d * 0.84, d * 0.9)) });
+        const muda = api.fase(corte + 0.5, corte + 1.6), z = 1 + 0.06 * api.fase(corte, d);
+        zoomEm(ctx, 540, 960, z, () => TeoCloses.olho(ctx, 540, 960, 600, api.t, { humano: muda, abre: 0.85 + 0.15 * muda }));
       }
     },
     // ficha: os caçadores da noite (4 variações), com tocha e rede de prata ou besta
