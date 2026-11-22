@@ -583,17 +583,49 @@
   // capa verde rasgada caindo (2D, em tela)
   function capaCaindo(ctx, x, y, s, k) { if (k <= 0 || k >= 1) return; ctx.save(); ctx.translate(x - 0.3 * s * k, y + 0.9 * s * k * k); ctx.rotate(-0.9 * k); ctx.globalAlpha = 1 - Math.max(0, k - 0.75) * 4; ctx.fillStyle = '#2E5A34'; ctx.strokeStyle = '#1A2A1C'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-0.3 * s, 0); ctx.lineTo(0.28 * s, 0.05 * s); ctx.lineTo(0.36 * s, 0.6 * s); ctx.lineTo(0.18 * s, 0.52 * s); ctx.lineTo(0.08 * s, 0.7 * s); ctx.lineTo(-0.1 * s, 0.55 * s); ctx.lineTo(-0.34 * s, 0.66 * s); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
 
+  // passo pesado da fera vista de frente (um passo de cada vez): k = número do passo (alterna a perna), p = 0..1 dentro do passo
+  //   0–0,2 joga o peso para a perna de apoio · 0,15–0,7 levanta e traz a outra perna (joelho dobra, corpo sobe)
+  //   0,7 pisa: o corpo afunda, a cabeça dá um tranco, o braço do outro lado balança · 0,7–1 assenta com um repique
+  //   p = null → parada entre passos: respira pesado (ombros sobem e descem), cabeça baixa, garras abertas
+  function passoFera(k, p, t) {
+    const G = window.TEO_LOBISOMEM_POSES.garras.angulos, o = { ...G, tronco: 8, cabeca: 8 };
+    const sm = (a, b, x) => { const q = cl((x - a) / (b - a)); return q * q * (3 - 2 * q); };
+    if (p === null) {
+      const r = Math.sin(t * 3.2), r2 = Math.sin(t * 3.2 + 0.9);
+      Object.assign(o, { tronco: 8 + 2.5 * r, cabeca: 9 - 3 * r2, braco_d: G.braco_d + 3 * r, braco_e: G.braco_e - 3 * r, antebraco_d: G.antebraco_d - 4 * r2, antebraco_e: G.antebraco_e + 4 * r2, _desloca: [0, 0], _plantar: true });
+      return o;
+    }
+    const perna = k % 2 ? 'e' : 'd', s = perna === 'd' ? 1 : -1, apoio = -s;           // _d fica à esquerda da tela (vista de frente)
+    const peso = sm(0, 0.2, p) * (1 - sm(0.72, 1, p));                                    // peso na perna de apoio
+    const sobe = Math.sin(Math.PI * cl((p - 0.15) / 0.55));                               // perna no ar
+    const pisa = p > 0.7 ? Math.exp(-(p - 0.7) * 9) * Math.sin(Math.min(1, (p - 0.7) / 0.08) * Math.PI / 2) : 0; // tranco da pisada
+    const rep = p > 0.78 ? -0.35 * Math.sin((p - 0.78) / 0.22 * Math.PI) : 0;            // repique ao assentar
+    o['coxa_' + perna] = (G['coxa_' + perna] || 0) + s * 3 * sobe;
+    o['canela_' + perna] = (G['canela_' + perna] || 0) + s * 10 * sobe;
+    o['pe_' + perna] = (G['pe_' + perna] || 0) - s * 6 * sobe;
+    o['_dy_coxa_' + perna] = -0.34 * sobe;
+    const outra = perna === 'd' ? 'e' : 'd';
+    o['coxa_' + outra] = (G['coxa_' + outra] || 0) - s * 4 * peso; o['canela_' + outra] = (G['canela_' + outra] || 0) - s * 8 * peso;
+    // braço do lado oposto à perna vai à frente (abre), o do mesmo lado recolhe; garras balançando com o tranco
+    o['braco_' + outra] = (G['braco_' + outra] || 0) - s * (10 * sobe + 8 * pisa); o['antebraco_' + outra] = (G['antebraco_' + outra] || 0) - s * 14 * sobe;
+    o['braco_' + perna] = (G['braco_' + perna] || 0) + s * 6 * sobe; o['mao_' + perna] = (G['mao_' + perna] || 0) + s * 10 * pisa;
+    o.quadril = 5 * apoio * peso; o.tronco = 8 + 6 * pisa + 4 * rep - 3 * apoio * peso * 0; o.cabeca = 8 + 12 * pisa + 5 * rep;
+    o._desloca = [0.07 * apoio * peso, 0]; o._plantar = true;
+    // o tranco da pisada vai para o tronco e os joelhos (o corpo afunda sem tirar os pés do chão)
+    o['canela_' + outra] += -s * 10 * pisa; o['coxa_' + outra] += -s * 3 * pisa;
+    return o;
+  }
   // ---------- visão do Davi (câmera nos olhos dele) ----------
   // passos: [[segundo em que começa, índice do passo]] · cada passo anda 0,8 m em 0,55 s; entre eles a fera para e rosna
   function povFera(ctx, u, d, api, o) {
-    const X = PD5[0] + 0.12, Z0 = PD5[1] + o.z0, DUR = 0.55;
-    let anda = 0, fase = null, pisada = -9;
-    for (const [t0, k] of o.passos) { const p = cl((u - t0) / DUR); if (u >= t0) { anda = k + p; if (p < 1) fase = (k + p) * 0.4545; pisada = t0 + DUR; } }
-    if (!o.passos.length) anda = 0;
+    const X = PD5[0] + 0.12, Z0 = PD5[1] + o.z0, DUR = 0.85;
+    let anda = o.passos.length ? o.passos[0][1] : 0, passo = null, pisada = -9;
+    const sm = (a, b, x) => { const q = cl((x - a) / (b - a)); return q * q * (3 - 2 * q); };
+    for (const [t0, k] of o.passos) { const p = cl((u - t0) / DUR); if (u >= t0) { anda = k + sm(0.18, 0.74, p); if (p < 1) passo = [k, p]; pisada = t0 + 0.72 * DUR; } }
     const base = o.passos.length ? o.passos[0][1] : 0, FZ = Z0 - 0.8 * (anda - base) - (o.perto || 0) * 0.55;
-    const imp = Math.max(0, 1 - (u - pisada) / 0.35) * (u >= pisada ? 1 : 0);
+    const imp = Math.max(0, 1 - (u - pisada) / 0.4) * (u >= pisada ? 1 : 0);
     const cam = camCan(api, { x: PD5[0] + Math.sin(api.t * 1.7) * 0.012, y: 1.62 + Math.sin(api.t * 2.3) * 0.01 - 0.025 * imp, z: PD5[1] - 0.15 * (o.perto || 0), cy: 900 - 60 * (o.perto || 0), f: 1050, yaw: 0.02 + Math.sin(api.t * 1.1) * 0.006, mov: false });
-    nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: fase === null ? { ...window.TEO_LOBISOMEM_POSES.garras.angulos, tronco: 8 + 10 * (o.perto || 0), cabeca: 6 } : 'parado', expressao: fase === null ? 'rugido' : 'raiva' }, X, FZ, 2.55, { y: -0.12, olhaPara: [PD5[0], PD5[1] - 3], caminharFrontal: fase === null ? undefined : fase, luz: LUA5 }) }], {
+    nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: (() => { const ps = passoFera(passo ? passo[0] : 0, passo ? passo[1] : null, api.t); if (o.perto) { ps.tronco += 12 * o.perto; ps.cabeca += 6 * o.perto; } return ps; })(), expressao: passo ? 'raiva' : 'rugido' }, X, FZ, 2.55, { y: -0.12, parado: true, olhaPara: [PD5[0], PD5[1] - 3], luz: LUA5 }) }], {
       forca: 0, bokeh: 3, fx: { borrao: [Math.sin(api.t * 40) * 6 * imp, Math.cos(api.t * 37) * 6 * imp] },
       fim: () => {
         maoPOV(ctx, o.maoK || 0, api.t);
@@ -688,7 +720,7 @@
     },
     // ===== na visão do Davi (pedido do autor): a fera vem na direção dele, um passo de cada vez =====
     // "encara": ela vem de longe, para, rosna, dá outro passo... a câmera respira e treme a cada pisada
-    encara(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 5.4, passos: [[0.5, 0], [1.6, 1], [2.7, 2], [3.8, 3]], maoK: 0 }); },
+    encara(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 5.4, passos: [[0.4, 0], [1.6, 1], [2.8, 2], [4.0, 3]], maoK: 0 }); },
     // "Não. Dessa vez eu não vou correr." — mais um passo; a mão do Davi entra no quadro, aberta
     naocorrer(ctx, u, d, api) { povFera(ctx, u, d, api, { z0: 5.4 - 4 * 0.8, passos: [[0.6, 4]], maoK: api.fase(1.5, 2.4) }); },
     // "Sou eu, Téo." — o focinho chega a um palmo... e no close a pupila de fenda abre redonda (é o Téo ali dentro)
