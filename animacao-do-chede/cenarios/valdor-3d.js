@@ -965,7 +965,7 @@
     // ---- raízes: tubos afinando que saem do chão e sobem em espiral; veio verde brilhante; folhas; terra levantando ----
     const casca = new T.MeshStandardMaterial({ color: 0x8A6038, roughness: 0.9, flatShading: true, emissive: 0x2A1A0C, emissiveIntensity: 0.6 }), veio = new T.MeshBasicMaterial({ color: 0x8CFF7A, transparent: true, opacity: 0.9, toneMapped: false, blending: T.AdditiveBlending, depthWrite: false });
     const folhaMat = new T.MeshStandardMaterial({ color: 0x4FB04A, roughness: 0.7, side: T.DoubleSide }), gFolha = new T.ShapeGeometry((() => { const s = new T.Shape(); s.moveTo(0, 0); s.quadraticCurveTo(0.05, 0.05, 0, 0.13); s.quadraticCurveTo(-0.05, 0.05, 0, 0); return s; })());
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 4; i++) {
       const gr = new T.Group(), tubos = [], rr = rng(77 + i);
       for (let k = 0; k < 8; k++) {
         const a0 = (k / 8) * Math.PI * 2 + rr() * 0.5, dir = k % 2 ? 1 : -1, voltas = 0.9 + rr() * 0.8, h = 0.55 + rr() * 0.45, pts = [];
@@ -1001,7 +1001,7 @@
       const pedras = []; const rr = rng(9); const rochaM = new T.MeshStandardMaterial({ color: 0x6A3A24, roughness: 0.9, flatShading: true }); for (let k = 0; k < 18; k++) { const p = new T.Mesh(new T.DodecahedronGeometry(0.06 + rr() * 0.1, 0), rochaM); p.visible = false; cena.add(p); pedras.push({ p, a: rr() * 6.28, v: 2 + rr() * 4, up: 3 + rr() * 5 }); }
       const gr = new T.Group(); gr.add(bola); gr.add(nucleo); gr.add(anel); gr.visible = false; cena.add(gr); F.explosoes.push({ gr, bola, nucleo, anel, fogo, pedras }); }
     // ---- pixels: o corpo vira cubinhos de luz subindo (saiu do jogo) + coluna de luz ----
-    for (let i = 0; i < 3; i++) { const n = 150, im = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), new T.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 1, toneMapped: false, blending: T.AdditiveBlending, depthWrite: false }), n); im.frustumCulled = false; im.visible = false; cena.add(im);
+    for (let i = 0; i < 5; i++) { const n = 150, im = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), new T.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 1, toneMapped: false, blending: T.AdditiveBlending, depthWrite: false }), n); im.frustumCulled = false; im.visible = false; cena.add(im);
       const raio = new T.Mesh(new T.CylinderGeometry(0.28, 0.42, 1, 24, 1, true), aditivo(0x9FE8FF, textura(tela(16, 128, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.7, 'rgba(255,255,255,0.6)'); gr.addColorStop(1, 'rgba(255,255,255,1)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); })), 0.8)); raio.visible = false; cena.add(raio);
       const rr = rng(50 + i), sem = []; for (let k = 0; k < n; k++) sem.push([rr(), rr(), rr(), rr()]); F.pixels.push({ im, raio, sem }); }
     // ---- onda no chão: 3 anéis de luz se abrindo (passo forte, impacto) ----

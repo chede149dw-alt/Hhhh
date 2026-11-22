@@ -35,88 +35,778 @@
   },
   "planos": [
     {
-      "id": "ficha_lider",
-      "duracao": 3
-    },
-    {
-      "id": "ficha_cacadores",
-      "duracao": 3
+      "id": "capa",
+      "duracao": 3.0,
+      "fala": {
+        "texto": "Cinco mil reais pelo Téo. Vivo.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_capa.wav"
+        }
+      },
+      "destaque": [
+        "CINCO",
+        "MIL"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/alerta.wav",
+          "em": 0.1,
+          "volume": 0.18
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 0.6,
+          "volume": 0.15
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 0.9,
+          "volume": 0.15
+        }
+      ]
     },
     {
       "id": "noite",
-      "duracao": 5
+      "duracao": 3.0,
+      "fala": {
+        "texto": "A noite caiu no Cânion Vermelho.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_noite.wav"
+        }
+      },
+      "destaque": [
+        "NOITE"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/noite-ambiente.mp3",
+          "em": 0,
+          "volume": 0.12
+        }
+      ]
     },
     {
       "id": "tochas",
-      "duracao": 4
-    },
-    {
-      "id": "olhando",
-      "duracao": 4
-    },
-    {
-      "id": "descem",
-      "duracao": 4
+      "duracao": 3.0,
+      "fala": {
+        "texto": "Mano... aquilo é tudo jogador?",
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_jogador.wav"
+        }
+      },
+      "destaque": [
+        "JOGADOR?"
+      ],
+      "sfx": []
     },
     {
       "id": "virar",
-      "duracao": 2.6
+      "duracao": 2.6,
+      "fala": {
+        "texto": "E eu tô começando a virar.",
+        "voz": "teo",
+        "voz_final": {
+          "arquivo": "vozes/final/t_virar.wav"
+        }
+      },
+      "destaque": [
+        "VIRAR"
+      ],
+      "sfx": []
     },
     {
       "id": "prende",
-      "duracao": 5.6
+      "duracao": 5.6,
+      "fala": {
+        "texto": "Davi, me prende com as raízes. Antes que eu perca o controle.",
+        "voz": "teo",
+        "voz_final": {
+          "arquivo": "vozes/final/t_prende.wav"
+        }
+      },
+      "destaque": [
+        "RAÍZES"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/rosnado-c.mp3",
+          "em": 4.2,
+          "volume": 0.12
+        }
+      ]
     },
     {
       "id": "naoprendo",
-      "duracao": 1.9
+      "duracao": 1.9,
+      "fala": {
+        "texto": "Eu não vou te prender.",
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_prender.wav"
+        }
+      },
+      "destaque": [
+        "NÃO"
+      ],
+      "sfx": []
     },
     {
       "id": "lembra",
-      "duracao": 3.0
+      "duracao": 3.0,
+      "fala": {
+        "texto": "Lembra o que eu falei? Se eu te atacar...",
+        "voz": "teo",
+        "voz_final": {
+          "arquivo": "vozes/final/t_lembra.wav"
+        }
+      },
+      "destaque": [
+        "ATACAR"
+      ],
+      "sfx": []
     },
     {
       "id": "corro",
-      "duracao": 3.2
+      "duracao": 3.2,
+      "fala": {
+        "texto": "...eu corro. Eu sei.",
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_corro.wav"
+        }
+      },
+      "destaque": [
+        "CORRO"
+      ],
+      "sfx": []
     },
     {
       "id": "placa",
-      "duracao": 2.2
+      "duracao": 2.0,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/rosnado.mp3",
+          "em": 0.3,
+          "volume": 0.35
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/visor.mp3",
+          "em": 1.2,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "escuro",
+      "duracao": 2.7,
+      "fala": {
+        "texto": "Só que o Davi não enxergava quase nada.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_escuro.wav"
+        }
+      },
+      "destaque": [
+        "NADA"
+      ],
+      "sfx": []
+    },
+    {
+      "id": "turno",
+      "duracao": 3.2,
+      "fala": {
+        "texto": "Quando a luz some, o olho precisa trocar de turno.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_turno.wav"
+        }
+      },
+      "destaque": [
+        "TURNO"
+      ],
+      "sfx": []
+    },
+    {
+      "id": "bastonetes",
+      "duracao": 6.2,
+      "fala": {
+        "texto": "Os bastonetes enxergam no escuro, mas demoram uns vinte minutos pra acordar de vez. E não veem cor.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_bastonetes.wav"
+        }
+      },
+      "destaque": [
+        "BASTONETES",
+        "COR"
+      ],
+      "sfx": []
+    },
+    {
+      "id": "espelho",
+      "duracao": 5.0,
+      "fala": {
+        "texto": "Já o olho de uma fera tem um espelho no fundo, que usa a mesma luz duas vezes.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_espelho.wav"
+        }
+      },
+      "destaque": [
+        "ESPELHO"
+      ],
+      "sfx": []
     },
     {
       "id": "fera",
-      "duracao": 3.6
+      "duracao": 3.4,
+      "fala": {
+        "texto": "E aí o Téo virou fera.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_fera.wav"
+        }
+      },
+      "destaque": [
+        "FERA"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/transformacao.mp3",
+          "em": 0.4,
+          "volume": 0.3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/trovao.wav",
+          "em": 1.8,
+          "volume": 0.25
+        }
+      ]
     },
     {
       "id": "uivo",
-      "duracao": 3.4
+      "duracao": 3.2,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/uivo.mp3",
+          "em": 0.1,
+          "volume": 0.6
+        }
+      ]
     },
     {
       "id": "encara",
-      "duracao": 5.0
+      "duracao": 5.0,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/rosnado.mp3",
+          "em": 1.3,
+          "volume": 0.5
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/rosnado-c.mp3",
+          "em": 4.1,
+          "volume": 0.45
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 1.11,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 2.51,
+          "volume": 0.22
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 3.91,
+          "volume": 0.25
+        }
+      ]
     },
     {
       "id": "naocorrer",
-      "duracao": 3.6
+      "duracao": 3.6,
+      "fala": {
+        "texto": "Não. Dessa vez eu não vou correr.",
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_naocorrer.wav"
+        }
+      },
+      "destaque": [
+        "CORRER"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 1.21,
+          "volume": 0.27
+        }
+      ]
     },
     {
       "id": "soueu",
-      "duracao": 4.6
+      "duracao": 4.6,
+      "fala": {
+        "texto": "Sou eu, Téo.",
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_soueu.wav"
+        }
+      },
+      "destaque": [
+        "TÉO"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/rosnado-a.mp3",
+          "em": 0.3,
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "id": "desceram",
+      "duracao": 3.3,
+      "fala": {
+        "texto": "Os jogadores desceram pelas cordas, com redes de prata.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_desceram.wav"
+        }
+      },
+      "destaque": [
+        "PRATA"
+      ],
+      "sfx": []
     },
     {
       "id": "rede_gira",
-      "duracao": 2.6
+      "duracao": 2.2,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.2,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.8,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.4,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 2.0,
+          "volume": 0.2
+        }
+      ]
     },
     {
       "id": "rede_voa",
-      "duracao": 3.2
+      "duracao": 3.0,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.9,
+          "volume": 0.5
+        }
+      ]
     },
     {
       "id": "rede_gelo",
-      "duracao": 3.4
+      "duracao": 3.2,
+      "fala": {
+        "texto": "O Davi bateu o pé no chão.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_pe.wav"
+        }
+      },
+      "destaque": [
+        "PÉ"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 0.64,
+          "volume": 0.35
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/carga.mp3",
+          "em": 0.6,
+          "volume": 0.3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 1.6,
+          "volume": 0.3
+        }
+      ]
+    },
+    {
+      "id": "ninguem",
+      "duracao": 2.1,
+      "fala": {
+        "texto": "Ninguém encosta nele.",
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_ninguem.wav"
+        }
+      },
+      "destaque": [
+        "NINGUÉM"
+      ],
+      "sfx": []
+    },
+    {
+      "id": "cerco",
+      "duracao": 2.6,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.2,
+          "volume": 0.15
+        }
+      ]
+    },
+    {
+      "id": "fera_ataca",
+      "duracao": 3.2,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/rosnado-b.mp3",
+          "em": 0.1,
+          "volume": 0.4
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 1.28,
+          "volume": 0.4
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.9,
+          "volume": 0.3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/dreno.wav",
+          "em": 2.6,
+          "volume": 0.3
+        }
+      ]
+    },
+    {
+      "id": "davi_corta",
+      "duracao": 2.6,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/raio.mp3",
+          "em": 0.55,
+          "volume": 0.35
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/corte.mp3",
+          "em": 1.0,
+          "volume": 0.35
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 1.17,
+          "volume": 0.35
+        }
+      ]
+    },
+    {
+      "id": "besta",
+      "duracao": 3.6,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 1.1,
+          "volume": 0.35
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/impacto.wav",
+          "em": 2.23,
+          "volume": 0.4
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/rosnado-c.mp3",
+          "em": 2.3,
+          "volume": 0.4
+        }
+      ]
+    },
+    {
+      "id": "raizes5",
+      "duracao": 2.6,
+      "fala": {
+        "texto": "Raízes Anciãs.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_raizes.wav"
+        }
+      },
+      "destaque": [
+        "RAÍZES"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/arrasta.mp3",
+          "em": 0.2,
+          "volume": 0.35
+        }
+      ]
+    },
+    {
+      "id": "meteoro5",
+      "duracao": 3.4,
+      "fala": {
+        "texto": "Meteoro.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_meteoro.wav"
+        }
+      },
+      "destaque": [
+        "METEORO"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.4,
+          "volume": 0.4
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/trovao.wav",
+          "em": 1.36,
+          "volume": 0.45
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/desfaz.mp3",
+          "em": 1.9,
+          "volume": 0.3
+        }
+      ]
+    },
+    {
+      "id": "loot5",
+      "duracao": 3.4,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/compra.mp3",
+          "em": 0.3,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/compra.mp3",
+          "em": 0.55,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/compra.mp3",
+          "em": 0.8,
+          "volume": 0.2
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/moeda.mp3",
+          "em": 1.7,
+          "volume": 0.25
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/nivel.mp3",
+          "em": 2.6,
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "id": "viu",
+      "duracao": 2.6,
+      "fala": {
+        "texto": "Viu? Eu não corri.",
+        "voz": "davi",
+        "voz_final": {
+          "arquivo": "vozes/final/d_viu.wav"
+        }
+      },
+      "destaque": [
+        "CORRI"
+      ],
+      "sfx": []
+    },
+    {
+      "id": "encapuzado",
+      "duracao": 2.6,
+      "fala": {
+        "texto": "Mas o encapuzado ainda estava lá em cima.",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_encapuzado.wav"
+        }
+      },
+      "destaque": [
+        "ENCAPUZADO"
+      ],
+      "sfx": []
+    },
+    {
+      "id": "lider_fala",
+      "duracao": 6.2,
+      "fala": {
+        "texto": "Você ficou com a minha espada. Agora eu fico com o seu amigo.",
+        "voz": "lider",
+        "voz_final": {
+          "arquivo": "vozes/final/l_espada.wav"
+        }
+      },
+      "destaque": [
+        "ESPADA",
+        "AMIGO"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.5,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "corrente5",
+      "duracao": 3.2,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 0.2,
+          "volume": 0.3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/metal.wav",
+          "em": 1.2,
+          "volume": 0.35
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "ep05/sfx/uivo.mp3",
+          "em": 1.3,
+          "volume": 0.3
+        },
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/desfaz.mp3",
+          "em": 2.0,
+          "volume": 0.4
+        }
+      ]
+    },
+    {
+      "id": "sozinho",
+      "duracao": 3.4,
+      "semLegenda": true,
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/alerta.wav",
+          "em": 0.5,
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "id": "parte",
+      "duracao": 2.8,
+      "fala": {
+        "texto": "Segue pra ver a parte seis!",
+        "voz": "narrador",
+        "voz_final": {
+          "arquivo": "vozes/final/n_parte.wav"
+        }
+      },
+      "destaque": [
+        "SEIS!"
+      ],
+      "sfx": [
+        {
+          "tipo": "arquivo",
+          "arquivo": "sfx/whoosh.mp3",
+          "em": 0.05,
+          "volume": 0.2
+        }
+      ]
     }
   ],
   "trilha": {
-    "arquivo": "ep04/trilha.wav",
+    "arquivo": "ep05/trilha.wav",
     "volume": 0.4
   }
 }

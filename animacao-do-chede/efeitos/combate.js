@@ -134,7 +134,7 @@
   // número de dano com pulo elástico; k = tempo desde o golpe (s)
   function numero(ctx, x, y, txt, k, tipo = 'normal') {
     const dura = tipo === 'critico' ? 1.3 : 1.0; if (k < 0 || k > dura) return;
-    const est = { normal: ['#FFFFFF', '#DDE8FF', 110], critico: ['#FFE36A', '#FF8A1A', 150], recebido: ['#FF6A6A', '#C81E2E', 120], esquiva: ['#BFF4FF', '#5AC8FF', 96] }[tipo];
+    const est = { normal: ['#FFFFFF', '#DDE8FF', 110], critico: ['#FFE36A', '#FF8A1A', 150], recebido: ['#FF6A6A', '#C81E2E', 120], esquiva: ['#BFF4FF', '#5AC8FF', 96], cura: ['#9CFFAA', '#2FA84A', 100] }[tipo] || ['#FFFFFF', '#DDE8FF', 110];
     const el = k < 0.18 ? 0.3 + 1.0 * (k / 0.18) : 1.3 - 0.3 * Math.min(1, (k - 0.18) / 0.15), sobe = 160 * (1 - Math.pow(1 - Math.min(1, k / dura), 2)), al = 1 - cl((k - dura + 0.3) / 0.3);
     ctx.save(); ctx.font = `900 ${est[2]}px Inter`; const meia = ctx.measureText(txt).width * 0.65 + 30, Wc = ctx.canvas.width; x = Math.max(meia, Math.min(Wc - meia, x));
     ctx.globalAlpha = al; ctx.translate(x + (tipo === 'recebido' ? -40 * k : 30 * k), y - sobe); ctx.rotate(tipo === 'critico' ? -0.08 : tipo === 'recebido' ? 0.06 : 0); ctx.scale(el, el);
