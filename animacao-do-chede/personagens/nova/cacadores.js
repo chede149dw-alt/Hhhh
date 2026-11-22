@@ -143,6 +143,7 @@
     // arco comprido na mão esquerda (perpendicular ao braço), corda e flecha opcional: window.ARCO = { puxa: 0..1, flecha: true }
     naMao(def, 'e', 'arco', (pc) => {
       const c = pc.ctx, a = window.ARCO || {}, puxa = a.puxa || 0, L = 1.05;
+      if (a.sem) return; // arco quebrado / sem arco
       c.save(); c.rotate(ang('arco', 0));
       const arco = P((q) => { q.moveTo(-L, -0.05); q.quadraticCurveTo(-L * 0.5, 0.32, 0, 0.12); q.quadraticCurveTo(L * 0.5, 0.32, L, -0.05); q.lineTo(L * 0.98, 0.02); q.quadraticCurveTo(L * 0.5, 0.4, 0, 0.2); q.quadraticCurveTo(-L * 0.5, 0.4, -L * 0.98, 0.02); q.closePath(); });
       pc.peca(arco, T('madeiraArco'), { sombra: 0.15 });

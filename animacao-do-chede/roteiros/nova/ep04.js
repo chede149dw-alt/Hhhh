@@ -692,30 +692,66 @@
     },
     // 8b) o Davi saca a Lâmina Rubra e corta o resto das flechas
     corta(ctx, u, d, api) {
-      const cam = camRuina(api, { x: 0, y: 1.3, z: 2.2, cy: 900, f: 1150 });
-      espada(api, -1.6 + Math.min(1, u / (d * 0.5)) * 3.2, 1);
-      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIE, pose: { braco_d: 95 - 140 * Math.min(1, u / (d * 0.5)), antebraco_d: -10, tronco: 8, coxa_d: 20, canela_d: -15, coxa_e: -15, canela_e: 15, _maos: { d: 'punho' }, _plantar: true }, expressao: 'determinado' }, 0, 5.0, 1.76, { rumo: 0.1, luz: LUZ_TOCHA }) }], { forca: 0.3,
-        luzes: [{ x: 0.3, y: 1.4, z: 4.6, cor: '#FF5A4A', forca: 1.2, raio: 5 }],
-        fx3d: () => Array.from({ length: 6 }, (_, i) => { const r = u / d, t0 = 0.02 + i * 0.05, k = cl((r - t0) / 0.3), A = [-1.2 + i * 0.48, 1.6 + (i % 2) * 0.3, 15], B = [-0.5 + i * 0.2, 1.25 + (i % 3) * 0.12, 4.4];
-          if (k < 1) return flecha3d(A, B, k, { s: 1.3, crava: false });
-          const tt = (r - t0 - 0.3) * d, sd = i % 2 ? 1 : -1, a = tt * (9 + i); return { tipo: 'flecha', x: B[0] + sd * tt * 1.4, y: Math.max(0.05, B[1] + tt * 1.2 - tt * tt * 7), z: B[2] - tt * 0.8, dx: Math.sin(a) * sd, dy: Math.cos(a), dz: Math.sin(a * 0.7), s: 1.3 }; }),
-        depois: () => { const r = u / d; for (let i = 0; i < 6; i++) { const kc = (r - 0.02 - i * 0.05 - 0.3) * d; if (kc < 0 || kc > 0.3) continue; const q = cam.p(-0.5 + i * 0.2, 1.25 + (i % 3) * 0.12, 4.4); Noite.faiscas(ctx, q.x, q.y, 40, 120, api.t, 1 - kc / 0.3, i, '255,120,90'); } Valdor.brilhoRadial(ctx, 540, 820, 380, VERMELHO, 0.3); } });
+      // por cima do ombro do Davi: a arqueira lá no rochedo, as flechas vindo na direção dele (e da câmera) e a lâmina cortando
+      const S = V().CAN_ROCHA, r = u / d, DX = 0, DZ = 5.0;
+      const cam = camDia(api, { x: 1.25, y: 1.7, z: 2.5, cy: 980, f: 1050, yaw: -0.36 });
+      window.ARCO = { puxa: 0.5 + 0.5 * Math.sin(api.t * 9), flecha: true, brilho: 0.6 }; window.ARMA_ANG = { arco: 0 };
+      const golpe = (t) => poseChave(r, [[0, { braco_d: 100, antebraco_d: -20, tronco: -6 }], [0.32, { braco_d: 120, antebraco_d: -30, tronco: -10 }], [0.44, { braco_d: -60, antebraco_d: -10, tronco: 14 }], [0.56, { braco_d: 90, antebraco_d: -20, tronco: -8 }], [0.68, { braco_d: -70, antebraco_d: -10, tronco: 14 }], [1, { braco_d: -40, antebraco_d: -20, tronco: 8 }]]);
+      const pg = golpe(); espada(api, -1.6 + (100 - pg.braco_d) / 160 * 3.2, 1.2);
+      ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -80, antebraco_e: 0, braco_d: -60, antebraco_d: 100, tronco: 10, _plantar: true }, expressao: 'raiva' }, -5.2, 15, 1.75, { y: S.y, olhaPara: [DX, DZ] }) }, { f: () => api.personagem3d(cam, { ...DAVIE, pose: { ...pg, coxa_d: 20, canela_d: -15, coxa_e: -15, canela_e: 15, _maos: { d: 'punho' }, _plantar: true }, expressao: 'determinado' }, DX, DZ, 1.76, { olhaPara: [-5.2, 15], luz: LUZ_TOCHA }) }], { forca: 0.3,
+        luzes: [{ x: 0.3, y: 1.4, z: 5.6, cor: '#FF5A4A', forca: 1.2, raio: 5 }],
+        fx3d: () => Array.from({ length: 6 }, (_, i) => { const t0 = 0.08 + i * 0.07, k = cl((r - t0) / 0.3), A = [-5.0 + (i % 3) * 0.2, S.y + 1.4, 14.8], B = [-0.55 + (i % 3) * 0.25, 1.15 + (i % 2) * 0.35, DZ + 1.05];
+          if (k < 1) return flecha3d(A, B, k, { s: 1.4, crava: false });
+          const tt = (r - t0 - 0.3) * d, sd = i % 2 ? 1 : -1, a = tt * (9 + i); return { tipo: 'flecha', x: B[0] + sd * tt * 1.8, y: Math.max(0.05, B[1] + tt * 1.4 - tt * tt * 7), z: B[2] - tt * 0.3, dx: Math.sin(a) * sd, dy: Math.cos(a), dz: Math.sin(a * 0.7), s: 1.4 }; }),
+        depois: () => { for (let i = 0; i < 6; i++) { const kc = (r - 0.08 - i * 0.07 - 0.3) * d; if (kc < 0 || kc > 0.3) continue; const q = cam.p(-0.55 + (i % 3) * 0.25, 1.15 + (i % 2) * 0.35, DZ + 1.05); Noite.faiscas(ctx, q.x, q.y, 40, 120, api.t, 1 - kc / 0.3, i, '255,120,90'); Valdor.brilhoRadial(ctx, q.x, q.y, 110, VERMELHO, 0.5 * (1 - kc / 0.3)); } Valdor.brilhoRadial(ctx, 540, 820, 380, VERMELHO, 0.25); } });
     },
     // 9) o Téo escala o rochedo (câmera baixa e perto), a flecha pega no braço, ele escorrega e se segura
     parede(ctx, u, d, api) {
-      const S = V().CAN_ROCHA, TX = S.x1 + 0.3, TZ = 15, r = u / d, sobe = Math.min(r / 0.45, 1), hit = r > 0.45, kh = r - 0.45;
-      const yT = hit ? Math.max(0.35, 1.25 - Math.min(kh * 4, 0.6) * 1.5) + Math.max(0, kh - 0.25) * 1.2 : 0.1 + sobe * 1.15;
-      const cam = camDia(api, { x: -0.5 + r * 0.15, y: 0.7, z: 14.0, cy: 1380, f: 950, yaw: -1.22 });
-      const esc = Math.sin(api.t * 9);
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...TEOG, pose: hit && kh < 0.25 ? { braco_d: -175, antebraco_d: 0, braco_e: 40, antebraco_e: 30, coxa_d: 30, coxa_e: -20, canela_e: 40, _escala_capa: [0.8, 0.5] } : { braco_d: -160 + 25 * esc, antebraco_d: -15, braco_e: 150 - 25 * esc, antebraco_e: 15, coxa_d: -60 + 30 * esc, canela_d: 70, coxa_e: -10 - 30 * esc, canela_e: 40, _escala_capa: [0.8, 0.5] }, expressao: hit ? 'medo' : 'determinado' }, TX, TZ, 1.8, { y: yT, rumo: Math.PI / 2 + 0.75, luz: LUZ_TOCHA }), plano: true },
-        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_e: -50, antebraco_e: 0, braco_d: -30, antebraco_d: 100, tronco: 25, cabeca: 25, _plantar: true }, expressao: 'raiva' }, S.x1 - 0.35, 15.4, 1.75, { y: S.y, rumo: Math.PI / 2 + 0.3 }), plano: true }], { forca: 0.4,
-        depois: ([rig]) => {
-          for (let i = 0; i < 7; i++) { const f = (api.t * 1.3 + i / 7) % 1, q = cam.p(TX + 0.05, yT - f * 1.8, TZ + (rnd(i) - 0.5) * 0.5); ctx.fillStyle = '#8A4228'; ctx.beginPath(); ctx.arc(q.x, q.y, 5 + rnd(i) * 6, 0, TAU); ctx.fill(); }
-          const qp = cam.p(TX, yT, TZ); Noite.fumaca(ctx, qp.x, qp.y, 0.5 * qp.s, (api.t * 0.8) % 1, { seed: 2, cor: '210,150,110', sobe: 0.2, n: 8 });
-          const qa = cam.p(S.x1 - 0.1, S.y + 1.3, 15.4); if (!hit && r > 0.3) { const a = rig.pontoMundo('antebraco_e', [0, 0.25]), k = (r - 0.3) / 0.15; flecha2d(ctx, mix(qa.x, a.x, k), mix(qa.y, a.y, k), Math.atan2(a.y - qa.y, a.x - qa.x), 190, { rastro: 1 }); }
-          if (hit) { const a = rig.pontoMundo('antebraco_e', [0, 0.25]); flecha2d(ctx, a.x + 30, a.y + 40, Math.atan2(a.y - qa.y, a.x - qa.x), 190); Combate.impacto(ctx, a.x, a.y, 180, kh, { rgb: '255,90,80', dura: 0.4 }); Combate.numero(ctx, a.x + 50, a.y - 140, '-35', kh, 'recebido'); flash(ctx, kh, 0.4); }
+      // o Téo dispara correndo até o rochedo e sobe em dois pulos (de dia ele não vira fera, mas continua rápido);
+      // no segundo pulo a flecha da arqueira pega no braço, ele aguenta e cai agachado lá em cima
+      const S = V().CAN_ROCHA, r = u / d, AX = S.x1 - 1.9;
+      const corre = cl(u / 1.5), P1 = [1.6, 0], P2 = [S.x1 + 0.35, 0], P3 = [S.x1 - 0.1, 1.5], P4 = [S.x1 - 0.55, S.y];
+      const pulo = (k, A, B, alt) => [mix(A[0], B[0], k), mix(A[1], B[1], k) + Math.sin(Math.PI * k) * alt];
+      let X, Y, fase;
+      if (u < 1.5) { const e = api.ease.entra(corre) * 0.25 + corre * 0.75; X = mix(P1[0], P2[0], e); Y = 0; fase = 'corre'; }
+      else if (u < 1.62) { X = P2[0]; Y = 0; fase = 'agacha'; }
+      else if (u < 2.2) { [X, Y] = pulo((u - 1.62) / 0.58, P2, P3, 0.6); fase = 'pula'; }
+      else if (u < 2.36) { [X, Y] = P3; fase = 'apoia'; }
+      else if (u < 3.0) { [X, Y] = pulo((u - 2.36) / 0.64, P3, P4, 0.8); fase = 'pula'; }
+      else { [X, Y] = P4; fase = 'pousa'; }
+      const TZ = u < 1.62 ? 13.15 : u < 2.36 ? mix(13.15, 13.5, (u - 1.62) / 0.74) : mix(13.5, 14.1, cl((u - 2.36) / 0.64));
+      const hit = u > 2.55, kh = (u - 2.55) / d;
+      const cx = mix(X, -3.6, 0.45), cyM = Math.max(1.0, Y * 0.8 + 1.1);
+      const cam = camDia(api, { x: cx + 0.9, y: cyM, z: 9.0 + Y * 0.3, cy: 1020, f: 1250, yaw: -0.12, mov: false });
+      const t9 = api.t * 11.5, sp = Math.sin(t9);
+      const poses = {
+        corre: { tronco: 16, cabeca: -6, coxa_d: -55 * sp, canela_d: 20 + 75 * Math.max(0, Math.cos(t9)), coxa_e: 55 * sp, canela_e: 20 + 75 * Math.max(0, -Math.cos(t9)), braco_d: 60 * sp, antebraco_d: -80, braco_e: -60 * sp, antebraco_e: -80 },
+        agacha: { tronco: 30, cabeca: -15, coxa_d: -70, canela_d: 110, coxa_e: -40, canela_e: 100, braco_d: 50, antebraco_d: -40, braco_e: 40, antebraco_e: -40 },
+        pula: { tronco: 10, cabeca: -10, coxa_d: -95, canela_d: 120, coxa_e: -30, canela_e: 110, braco_d: -150, antebraco_d: -10, braco_e: -120, antebraco_e: -30 },
+        apoia: { tronco: 25, cabeca: -20, coxa_d: -80, canela_d: 115, coxa_e: -50, canela_e: 95, braco_d: -60, antebraco_d: -30, braco_e: -40, antebraco_e: -30 },
+        pousa: { tronco: 28, cabeca: -5, coxa_d: -85, canela_d: 120, coxa_e: 20, canela_e: 100, braco_d: 30, antebraco_d: -40, braco_e: -70, antebraco_e: -20 },
+      };
+      let pose = poses[fase];
+      if (hit && u < 3.0) pose = { ...pose, braco_e: 60, antebraco_e: 40, cabeca: 15 };
+      window.ARCO = { puxa: u < 2.3 ? cl((u - 1.6) / 0.6) : 0, flecha: u < 2.3, brilho: 0.4 }; window.ARMA_ANG = { arco: 0 };
+      window.MOVIMENTO_PERSONAGEM = fase === 'corre' || fase === 'pula' ? 1 : 0;
+      const A0 = [AX + 0.3, S.y + 1.35, 14.5], A1 = [X - 0.1, Y + 1.25, TZ];
+      dia(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...ARQ, pose: u < 3 ? { braco_e: -55, antebraco_e: 0, braco_d: -35 - 40 * window.ARCO.puxa, antebraco_d: 100, tronco: 20, cabeca: 22, _plantar: true } : { braco_e: 40, braco_d: -40, tronco: -15, cabeca: -10, coxa_e: 15, _plantar: true }, expressao: u < 3 ? 'raiva' : 'espanto' }, AX, 14.6, 1.75, { y: S.y, olhaPara: [X, TZ] }) },
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: { ...pose, _escala_capa: [0.85, 0.75] }, expressao: hit ? 'raiva' : 'determinado' }, X, TZ, 1.8, { y: Y, rumo: Math.PI / 2, luz: LUZ_TOCHA }), plano: true },
+      ], { forca: 0.3,
+        fx3d: () => [u > 2.3 && u < 2.55 ? flecha3d(A0, A1, (u - 2.3) / 0.25, { s: 1.5 }) : null],
+        depois: ([ra, rt]) => {
+          // poeira nos pés (corrida, impulso e pouso)
+          const pe = cam.p(X, Y, TZ);
+          if (fase === 'corre') for (let i = 0; i < 4; i++) { const f = ((api.t * 2.4 + i / 4) % 1); Noite.fumaca(ctx, pe.x + 60 + f * 160, pe.y - 4, 50 + f * 50, f, { seed: i, cor: '220,160,110', sobe: 0.25, n: 5 }); }
+          if (u > 1.55 && u < 2.0) Noite.fumaca(ctx, cam.p(P2[0], 0, TZ).x, cam.p(P2[0], 0, TZ).y, 160, (u - 1.55) / 0.45, { seed: 7, cor: '220,160,110', sobe: 0.4, largura: 1.4, n: 12 });
+          if (u > 2.95 && u < 3.6) { const q = cam.p(P4[0], P4[1], TZ); Noite.fumaca(ctx, q.x, q.y, 180, (u - 2.95) / 0.65, { seed: 9, cor: '220,160,110', sobe: 0.3, largura: 1.6, n: 14 }); }
+          // linhas de velocidade na corrida
+          if (fase === 'corre' && corre > 0.2) Combate.velocidade(ctx, pe.x, pe.y - 150, 0, 0.5, api.t);
+          if (hit) { const a = rt.pontoMundo('antebraco_e', [0, 0.4]); flecha2d(ctx, a.x + 10, a.y + 10, Math.atan2(A1[1] > 0 ? 1 : 1, 0.9) + 0.4, 170); Combate.impacto(ctx, a.x, a.y, 180, kh * d, { rgb: '255,90,80', dura: 0.4 }); Combate.numero(ctx, a.x + 60, a.y - 150, '-35', kh * d, 'recebido'); flash(ctx, kh * d, 0.35); }
         },
-        fx: { zoom: soco(hit ? kh : -1, 0.1) } });
+        fx: { zoom: soco(hit ? kh * d : -1, 0.08) } });
     },
     // 10) o cavaleiro gira o martelo e acerta a barriga do Davi: ele voa e bate na parede do cânion, que racha
     martelo(ctx, u, d, api) {
@@ -884,12 +920,13 @@
     },
     // "Sem arco, sem flecha.": o Téo em cima do rochedo, o arco partido
     arco(ctx, u, d, api) {
-      const S = V().CAN_ROCHA;
-      const cam = camDia(api, { x: -3.2, y: S.y + 1.4, z: 11.8, cy: 900, f: 1200, yaw: -0.45 });
+      const S = V().CAN_ROCHA; window.ARCO = { sem: true };
+      const cam = camDia(api, { x: -6.6, y: S.y + 1.35, z: 12.0, cy: 900, f: 1250, yaw: 0.55 });
       dia(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_e: -40, antebraco_e: -50, braco_d: 30, antebraco_d: -20 }, expressao: 'feliz', voz: 'teo' }, -4.7, 14.6, 1.8, { y: S.y, olhaPara: [-5.6, 15.6] }) },
-        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_d: 60, braco_e: -60, tronco: -15 }, expressao: 'espanto' }, -5.7, 15.6, 1.75, { y: S.y, olhaPara: [-4.7, 14.6] }) },
-      ], { forca: 0.2, depois: () => { const q = cam.p(-5.2, S.y + 0.1, 15.1); for (const sd of [-1, 1]) { ctx.save(); ctx.translate(q.x + sd * 30, q.y); ctx.rotate(sd * 0.9); ctx.strokeStyle = '#7A4A26'; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(0, 0, 60, -0.6, 0.6); ctx.stroke(); ctx.restore(); } } });
+        { f: () => api.personagem3d(cam, { ...TEOG, pose: { braco_e: -40, antebraco_e: -50, braco_d: 30, antebraco_d: -20 }, expressao: 'feliz', voz: 'teo' }, -4.4, 14.4, 1.8, { y: S.y, olhaPara: [-5.7, 15.2] }) },
+        { f: () => api.personagem3d(cam, { ...ARQ, pose: { braco_d: 150, antebraco_d: 20, braco_e: -150, antebraco_e: -20, tronco: -15, cabeca: -10 }, expressao: 'espanto' }, -5.7, 15.2, 1.75, { y: S.y, olhaPara: [-4.4, 14.4] }) },
+      ], { forca: 0.2, depois: () => { const q = cam.p(-5.05, S.y + 0.1, 14.8); for (const sd of [-1, 1]) { ctx.save(); ctx.translate(q.x + sd * 30, q.y); ctx.rotate(sd * 0.9); ctx.strokeStyle = '#7A4A26'; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(0, 0, 60, -0.6, 0.6); ctx.stroke(); ctx.restore(); } } });
+      window.ARCO = {};
     },
     // "Cadê ela?!": os dois de costas um pro outro
     cade(ctx, u, d, api) {
