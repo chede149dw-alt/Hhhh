@@ -43,6 +43,29 @@
     return 0;
   }
 
+  // gesto de quem fala (referências do autor): a mão sobe nas ênfases da voz, a cabeça acompanha o ritmo e o tronco
+  // inclina um pouco para a frente. Fica suave porque usa a média da voz em ~0,4 s (sem tremer a cada sílaba).
+  // Devolve { g: força do gesto 0..1, ritmo: batida rápida da fala, braco: 1 direito | -1 esquerdo | 0 os dois, ativo }
+  function gestoFala(voz, t) {
+    if (window.GESTO_TESTE) return window.GESTO_TESTE;
+    for (const f of TL.falas) {
+      if (f.voz !== voz || t < f.inicio - 0.3 || t > f.fim + 0.5) continue;
+      const env = f.envelope || [], i0 = Math.floor((t - f.inicio) * 30); let soma = 0, n = 0;
+      for (let k = -6; k <= 6; k++) { const v = env[i0 + k]; if (v !== undefined) { soma += v; n++; } }
+      const media = n ? soma / n : 0, ativo = clamp((t - f.inicio + 0.3) / 0.35, 0, 1) * clamp((f.fim + 0.5 - t) / 0.5, 0, 1);
+      const h = Math.sin(f.inicio * 91.7) * 4375.85, sorteio = h - Math.floor(h);
+      return { g: clamp(media * 2.4, 0, 1) * ativo, ritmo: (env[i0] || 0) * ativo, braco: sorteio < 0.45 ? 1 : sorteio < 0.8 ? -1 : 0, ativo };
+    }
+    return null;
+  }
+  function aplicaGesto(a, G, t, andando, costas) {
+    const s = costas ? -1 : 1, g = G.g, onda = Math.sin(t * 3.1) * 0.5 + 0.5, out = { ...a };
+    const mexe = (lado) => { const k = lado === 'd' ? 1 : -1; out['braco_' + lado] = (out['braco_' + lado] || 0) * (1 - 0.7 * g) + s * k * ((G.braco === 0 ? 30 : 20) + 6 * onda) * g; out['antebraco_' + lado] = (out['antebraco_' + lado] || 0) * (1 - 0.7 * g) + s * k * ((G.braco === 0 ? -108 : -122) - 14 * onda) * g; out['mao_' + lado] = (out['mao_' + lado] || 0) + s * k * 15 * Math.sin(t * 4.3) * g; };
+    if (G.braco >= 0) mexe('d'); if (G.braco <= 0) mexe('e');
+    out.cabeca = (out.cabeca || 0) + 4 * Math.sin(t * 6.5) * G.ritmo + 3 * g; out.tronco = (out.tronco || 0) + (andando ? 1 : 3) * g * G.ativo;
+    return out;
+  }
+
   // vida: respiração, piscar e balanço, para nada ficar parado
   function vida(angulos, t, intensidade = 1) {
     const a = { ...angulos };
@@ -184,6 +207,7 @@
     // Inverte os ângulos dos braços, menos nas poses feitas para a vista de costas e nas caminhadas (que já tratam isso).
     if (vista === 'costas' && !andando && !(pdef && pdef.vista === 'costas')) { ang = { ...ang }; for (const k of ['braco_d', 'antebraco_d', 'mao_d', 'braco_e', 'antebraco_e', 'mao_e']) if (ang[k]) ang[k] = -ang[k]; }
     let pf = o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida);
+    if (item.voz && !o.parado && !o.semGesto && !item.semGesto) { const G = gestoFala(item.voz, TL.t); if (G && G.ativo > 0) pf = aplicaGesto(pf, G, TL.t + (o.semente || 0), andando, vista === 'costas'); }
     if (pf._plantar) pf = plantar(def, pf);
     // respiração: o peito enche e esvazia (o.respira = força, 0 desliga; o.ofegante = respiração rápida depois do esforço)
     const resp = o.respira === undefined ? (o.parado || pf._semRespirar ? 0 : 1) : o.respira;
