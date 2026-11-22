@@ -57,6 +57,50 @@
     {
       "id": "descem",
       "duracao": 4
+    },
+    {
+      "id": "virar",
+      "duracao": 2.6
+    },
+    {
+      "id": "prende",
+      "duracao": 5.6
+    },
+    {
+      "id": "naoprendo",
+      "duracao": 1.9
+    },
+    {
+      "id": "lembra",
+      "duracao": 3.0
+    },
+    {
+      "id": "corro",
+      "duracao": 3.2
+    },
+    {
+      "id": "placa",
+      "duracao": 2.2
+    },
+    {
+      "id": "fera",
+      "duracao": 3.6
+    },
+    {
+      "id": "uivo",
+      "duracao": 3.4
+    },
+    {
+      "id": "encara",
+      "duracao": 3.0
+    },
+    {
+      "id": "naocorrer",
+      "duracao": 3.6
+    },
+    {
+      "id": "soueu",
+      "duracao": 3.6
     }
   ],
   "trilha": {

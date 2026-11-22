@@ -18,12 +18,16 @@
   window.criarTeoFera = (opcoes = {}, vista = 'frente') => {
     const e = opcoes.estagio === undefined ? 4 : opcoes.estagio;
     const o = { ...window.TEO_OPCOES, ...window.TEO_JOGO_OPCOES };
+    // roupa: estilo das roupas novas (window.TEO_ROUPAS, ex.: 'B' = Guardião da Parte 3+) em vez da roupa da Parte 2
+    const R = opcoes.roupa && window.TEO_ROUPAS ? window.TEO_ROUPAS[opcoes.roupa] : null;
+    if (R) { o.top = R.top; o.calca = R.calca; o.calcado = R.calcado; }
     if (e >= 1) o.olhos = { ...o.olhos, iris: 'irisAmbar' };
     if (e >= 3) { o.pele = 'peleFera'; o.cabelo = { ...o.cabelo, volume: 1.12 }; o.altura = 6.2; o.corpo = { ombro: 0.62, quadril: 0.2 }; }
     if (e >= 4) { o.altura = 6.6; o.corpo = { ombro: 0.72, quadril: 0.22 }; o.cabelo = { ...o.cabelo, volume: 1.24 }; o.sobrancelha = { esp: 0.08, tipo: 'reta' }; }
-    const { estagio, ...resto } = opcoes;
+    const { estagio, roupa, ...resto } = opcoes;
     const def = window.criarPersonagem({ ...o, ...resto, poses: Object.fromEntries(Object.entries(window.TEO_FERA_POSES).map(([k, v]) => [k, v.angulos])) }, vista);
-    const eq = { ...window.TEO_JOGO_EQUIP };
+    const eq = { ...(R ? R.eq : window.TEO_JOGO_EQUIP) };
+    if (R && e >= 3) delete eq.capa; // a capa rasga e cai na transformação
     if (e >= 4) { delete eq.arma; delete eq.escudo; }
     window.equipar(def, eq);
     const parte = (n) => def.partes.find((p) => p.nome === n);

@@ -569,7 +569,119 @@
   }
   function rotuloFicha(ctx, x, y, nome, extra) { ctx.save(); ctx.textAlign = 'center'; ctx.font = '800 32px Inter'; ctx.fillStyle = '#FFE6A0'; ctx.fillText(nome, x, y); if (extra) { ctx.font = '600 25px Inter'; ctx.fillStyle = '#C8D0E8'; extra.split('\n').forEach((l, i) => ctx.fillText(l, x, y + 36 + i * 30)); } ctx.restore(); }
   function sombraPe(ctx, x, y, w) { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(x, y, w, w * 0.18, 0, 0, TAU); ctx.fill(); ctx.restore(); }
+  // ---------- transformação do Téo no cânion ----------
+  const FERA5 = (e) => ({ fabrica: 'criarTeoFera', opcoes: { estagio: e, roupa: 'B' }, registroPoses: 'TEO_FERA_POSES' });
+  const PD5 = [-0.55, 3.0], PT5 = [0.55, 3.3];                     // Davi e Téo lado a lado
+  const LUA5 = { ...LUZ_LUA, forca: 0.8 };
+  const nt = (ctx, api, cam, ents, o = {}) => noite(ctx, api, cam, ents, { noite: 1, forca: 0.3, ...o });
+  // olhos acesos do Téo na tela (a partir do rig)
+  const olhosTeo = (ctx, rig, r, k, t, vista = 'frente') => { if (!rig || !rig.pontoMundo || k <= 0) return; const xs = vista === 'tq' ? [0.12, 0.38] : [-0.19, 0.19]; Noite.olhos(ctx, xs.map((x) => { const p = rig.pontoMundo('cabeca', [x, -0.37]); return [p.x, p.y]; }), r, k, t); };
+  // placa em cima da cabeça trocando (TÉO · NV 12 → FERA · NV ???)
+  function placaNivel(ctx, x, y, txt, cor, k = 1) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.font = '800 34px Inter'; const w = ctx.measureText(txt).width + 48; ctx.fillStyle = 'rgba(12,12,20,0.88)'; ctx.strokeStyle = cor; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(-w / 2, -26, w, 52, 14); ctx.fill(); ctx.stroke(); ctx.fillStyle = cor; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(txt, 0, 2); ctx.restore(); }
+  // pedrinhas despencando das paredes (o uivo faz o cânion tremer)
+  function pedrinhas(ctx, api, k, seed = 3) { if (k <= 0) return; ctx.save(); for (let i = 0; i < 26; i++) { const lado = i % 2 ? 1 : -1, f = ((api.t * (0.5 + (i % 5) * 0.12) + i * 0.137 + seed) % 1), x = W / 2 + lado * (300 + ((i * 97) % 220)), y = -40 + f * 1300, r = 4 + (i % 4) * 3; ctx.fillStyle = `rgba(60,34,40,${0.85 * k})`; ctx.beginPath(); ctx.arc(x + Math.sin(f * 6 + i) * 12, y, r, 0, TAU); ctx.fill(); } ctx.restore(); }
+  // capa verde rasgada caindo (2D, em tela)
+  function capaCaindo(ctx, x, y, s, k) { if (k <= 0 || k >= 1) return; ctx.save(); ctx.translate(x - 0.3 * s * k, y + 0.9 * s * k * k); ctx.rotate(-0.9 * k); ctx.globalAlpha = 1 - Math.max(0, k - 0.75) * 4; ctx.fillStyle = '#2E5A34'; ctx.strokeStyle = '#1A2A1C'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-0.3 * s, 0); ctx.lineTo(0.28 * s, 0.05 * s); ctx.lineTo(0.36 * s, 0.6 * s); ctx.lineTo(0.18 * s, 0.52 * s); ctx.lineTo(0.08 * s, 0.7 * s); ctx.lineTo(-0.1 * s, 0.55 * s); ctx.lineTo(-0.34 * s, 0.66 * s); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+
   window.PLANOS = {
+    // "E eu tô começando a virar." — o Téo olhando as mãos tremendo
+    virar(ctx, u, d, api) {
+      const cam = camCan(api, { x: 0.35, y: 1.55, z: 1.1, cy: 820, f: 1350, mov: { orbita: 0.08, empurra: 0.1, sobe: 0, dist: 2.2 } });
+      const [tx] = api.tremor(1.6);
+      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...FERA5(u > d - 0.5 ? 1 : 0), pose: { braco_d: 12, antebraco_d: -118, braco_e: -12, antebraco_e: 118, cabeca: 14, tronco: 4 }, expressao: expr('medo', { olhar: [0, 0.014] }), voz: 'teo' }, PT5[0] + tx * 0.002, PT5[1], 1.8, { rumo: 0.2, luz: LUA5 }) }]);
+    },
+    // "Davi, me prende com as raízes. Antes que eu perca o controle." — por cima do ombro do Davi
+    prende(ctx, u, d, api) {
+      const cam = camCan(api, { x: -1.0, y: 1.6, z: 1.3, cy: 850, f: 1250, yaw: 0.5, mov: { orbita: 0.06, empurra: 0.06, sobe: 0, dist: 2.4 } });
+      const [tx] = api.tremor(1.2);
+      let rt; nt(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'preocupado' }, PD5[0], PD5[1], 1.76, { olhaPara: PT5, luz: LUA5 }) },
+        { f: () => (rt = api.personagem3d(cam, { ...FERA5(1), pose: { braco_d: 30, antebraco_d: -70, braco_e: -14, antebraco_e: 40, cabeca: -4 }, expressao: 'medo', voz: 'teo' }, PT5[0] + tx * 0.002, PT5[1], 1.8, { olhaPara: PD5, luz: LUA5 })) },
+      ], { depois: () => olhosTeo(ctx, rt, 6, 0.55 + 0.25 * Math.sin(api.t * 3), api.t, 'tq') });
+    },
+    // "Eu não vou te prender."
+    naoprendo(ctx, u, d, api) {
+      const cam = camCan(api, { x: 0.2, y: 1.6, z: 1.4, cy: 830, f: 1450, yaw: -0.4, mov: { orbita: -0.05, empurra: 0.06, sobe: 0, dist: 2.2 } });
+      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'determinado', voz: 'davi' }, PD5[0], PD5[1], 1.76, { olhaPara: PT5, luz: LUA5 }) }]);
+    },
+    // "Lembra o que eu falei? Se eu te atacar..." — orelhas e garras começando
+    lembra(ctx, u, d, api) {
+      const cam = camCan(api, { x: -0.1, y: 1.55, z: 1.3, cy: 840, f: 1350, yaw: 0.25, mov: { orbita: 0.06, empurra: 0.08, sobe: 0, dist: 2.2 } });
+      const [tx] = api.tremor(2.2); let rt;
+      nt(ctx, api, cam, [{ f: () => (rt = api.personagem3d(cam, { ...FERA5(2), pose: 'tremendo', expressao: expr('cansado', { olhar: [-0.01, 0] }), voz: 'teo' }, PT5[0] + tx * 0.002, PT5[1], 1.82, { olhaPara: PD5, luz: LUA5 })) }],
+        { depois: () => olhosTeo(ctx, rt, 7, 0.8, api.t, 'tq') });
+    },
+    // "...eu corro. Eu sei."
+    corro(ctx, u, d, api) {
+      const cam = camCan(api, { x: 0.25, y: 1.6, z: 1.5, cy: 830, f: 1450, yaw: -0.47, mov: { orbita: -0.05, empurra: 0.08, sobe: 0, dist: 2.2 } });
+      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: 8, antebraco_d: -10, braco_e: -8, antebraco_e: 10, cabeca: 6 }, expressao: expr('preocupado', { olhar: [0.01, 0.006] }), voz: 'davi' }, PD5[0], PD5[1], 1.76, { olhaPara: PT5, luz: LUA5 }) }]);
+    },
+    // close no olho: o castanho engolido pelo amarelo, e a placa trocando
+    placa(ctx, u, d, api) {
+      ctx.fillStyle = '#05040A'; ctx.fillRect(0, 0, W, H);
+      const vira = api.fase(0.3, 1.2);
+      TeoCloses.olho(ctx, 540, 900, 520, api.t, { humano: 1 - vira, abre: 0.6 + 0.4 * vira });
+      const k = api.fase(1.25, 1.6, 'volta');
+      placaNivel(ctx, 540, 1450, 'TÉO · NV 12', '#7FE08A', 1 - api.fase(1.1, 1.25));
+      placaNivel(ctx, 540, 1450, 'FERA · NV ???', '#FF5A4A', k);
+    },
+    // "E aí o Téo virou fera." — a transformação: corpo curvando, capa rasgando, pelo, e a fera inteira
+    fera(ctx, u, d, api) {
+      const X = PT5[0], Z = PT5[1] + 0.6, vira = d * 0.55;
+      const cam = api.orbita({ alvo: [X, 1.2, Z], raio: chave(u, [[0, 3.8], [d, 3.1]]), ang: chave(u, [[0, -0.5], [d, 0.25]]), altura: 0.75, f: 1050, ySalvo: 1150, nevoa: V().nevoa(1, false, 'canion') });
+      const e = Math.min(3, 2 + Math.floor(u / (vira * 0.5))), lobo = u >= vira;
+      const k = api.fase(0.1, 0.8) * (1 - api.fase(vira + 0.3, vira + 1.0)), [tx] = api.tremor(u > 0.3 && u < vira + 0.3 ? 7 : 0);
+      nt(ctx, api, cam, [
+        { f: () => (lobo ? api.personagem3d(cam, { ...LOBO, pose: 'garras' }, X, Z, 2.55, { luz: LUA5 }) : api.personagem3d(cam, { ...FERA5(e), pose: e >= 3 ? 'garras' : 'tremendo', expressao: 'raiva' }, X + tx * 0.002, Z, 1.82 + (e >= 3 ? 0.12 : 0), { luz: LUA5 })) },
+      ], {
+        forca: 0, depois: () => {
+          const q = cam.p(X, 0, Z), h = (lobo ? 2.55 : 1.9) * q.s;
+          Noite.energia(ctx, q.x, q.y, h, api.t, k); Noite.faiscas(ctx, q.x, q.y, h * 0.8, h * 1.3, api.t, Math.max(k, 0.4 * api.fase(vira, vira + 0.2)), 5);
+          Noite.clarao(ctx, q.x, q.y - h * 0.5, Math.max(0, 1 - api.fase(vira - 0.05, vira + 0.7)) * (u > vira - 0.15 ? 1 : 0));
+          Noite.fumaca(ctx, q.x, q.y - 0.1 * q.s, 1.1 * q.s, api.fase(vira - 0.1, vira + 1.4), { seed: 7, cor: '190,200,235', n: 22, largura: 1.8 });
+        },
+      });
+    },
+    // o uivo: câmera baixa, a fera de cabeça erguida para a lua, pedrinhas despencando das paredes
+    uivo(ctx, u, d, api) {
+      const X = PT5[0] - 0.2, Z = PT5[1] + 0.9;
+      const cam = camCan(api, { x: X + 0.1, y: 0.55, z: Z - 2.9, cy: 1480, f: 1000, mov: { orbita: 0.14, empurra: 0.1, sobe: 0.1, dist: 2.9 } });
+      const [tx, ty] = api.tremor(api.fase(0.4, 0.8) * (1 - api.fase(d - 0.5, d)) * 5);
+      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...LOBO, pose: { ...window.TEO_LOBISOMEM_POSES.rugindo.angulos, cabeca: -30, tronco: -6 }, expressao: 'rugido' }, X, Z, 2.55, { luz: { ...LUA5, forca: 1 } }) }],
+        { forca: 0, fx: { borrao: [tx, ty] }, fim: () => pedrinhas(ctx, api, api.fase(0.6, 1.0)) });
+    },
+    // a fera vira devagar para o Davi, rosnando; o Davi dá um passo para trás
+    encara(ctx, u, d, api) {
+      const passo = api.fase(1.3, 1.8), dz = -0.35 * passo;
+      const cam = camCan(api, { x: PD5[0] - 0.55, y: 1.65, z: PD5[1] - 1.7 + dz, cy: 880, f: 1150, yaw: 0.22, mov: { orbita: 0.05, empurra: 0.1, sobe: 0, dist: 2.5 } });
+      const FX = PT5[0] + 0.35, FZ = PT5[1] + 1.2, vira = api.fase(0, 1.2);
+      nt(ctx, api, cam, [
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: expr('medo', { olhar: [0, -0.01] }) }, PD5[0], PD5[1] + dz, 1.76, { olhaPara: [FX, FZ], luz: LUA5, caminhar: passo > 0 && passo < 1 ? -passo * 2 : undefined }) },
+        { f: () => api.personagem3d(cam, { ...LOBO, pose: vira < 1 ? 'tq' : 'garras', expressao: 'raiva' }, FX, FZ, 2.55, { olhaPara: [PD5[0], PD5[1] - 2 + vira * 2], luz: LUA5 }) },
+      ], { forca: 0.2 });
+    },
+    // "Não. Dessa vez eu não vou correr." — o Davi para, guarda a espada e abre a mão
+    naocorrer(ctx, u, d, api) {
+      const cam = camCan(api, { x: PD5[0] + 0.95, y: 1.6, z: PD5[1] - 1.5, cy: 830, f: 1350, yaw: -0.45, mov: { orbita: -0.06, empurra: 0.08, sobe: 0, dist: 1.9 } });
+      const abre = api.fase(1.6, 2.4);
+      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: poseChave(abre, [[0, { braco_d: 8, antebraco_d: -10, braco_e: -8, antebraco_e: 10 }], [1, { braco_d: -62, antebraco_d: -12, mao_d: 0, braco_e: -8, antebraco_e: 10 }]]), expressao: 'determinado', voz: 'davi' }, PD5[0], PD5[1], 1.76, { olhaPara: [PT5[0], PT5[1] + 1.2], luz: LUA5 }) }]);
+    },
+    // "Sou eu, Téo." — o focinho a um palmo do rosto dele... e os olhos piscam castanho uma vez
+    soueu(ctx, u, d, api) {
+      const r = u / d;
+      if (r < 0.72) {
+        const cam = camCan(api, { x: PD5[0] + 0.45, y: 1.7, z: PD5[1] - 2.0, cy: 840, f: 1150, mov: { orbita: 0.05, empurra: 0.1, sobe: 0, dist: 2.2 } });
+        const FX = PD5[0] + 0.85, FZ = PD5[1] + 0.35;
+        nt(ctx, api, cam, [
+          { f: () => api.personagem3d(cam, { ...DAVIA, pose: { braco_d: -55, antebraco_d: -12, braco_e: -8, antebraco_e: 10 }, expressao: expr('determinado', { olhar: [0.012, -0.012] }), voz: 'davi' }, PD5[0], PD5[1], 1.76, { olhaPara: [FX, FZ], luz: LUA5 }) },
+          { f: () => api.personagem3d(cam, { ...LOBO, vista: 'perfil', pose: { ...window.TEO_LOBISOMEM_POSES.perfil.angulos, tronco: 20, cabeca: 12, coxa_d: -6, canela_d: 10, pe_d: -4, coxa_e: 6, canela_e: 8, pe_e: -6 }, expressao: 'raiva' }, FX, FZ, 2.55, { olhaPara: PD5, luz: LUA5 }) },
+        ], { forca: 0.2 });
+      } else {
+        ctx.fillStyle = '#05040A'; ctx.fillRect(0, 0, W, H);
+        const pis = api.fase(d * 0.78, d * 0.84) * (1 - api.fase(d * 0.9, d * 0.97));
+        TeoCloses.olho(ctx, 540, 960, 560, api.t, { humano: pis, abre: 1 - 0.85 * Math.sin(Math.PI * api.fase(d * 0.84, d * 0.9)) });
+      }
+    },
     // ficha: os caçadores da noite (4 variações), com tocha e rede de prata ou besta
     ficha_cacadores(ctx, u, d, api) {
       fundoFicha(ctx, 'CAÇADORES DA NOITE', 'jogadores atrás do homem-fera\\ntocha + rede de prata ou besta de prata');
@@ -600,7 +712,7 @@
       noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado' }, -0.45, 3.2, 1.76, { rumo: 0.2 }) },
         { f: () => api.personagem3d(cam, { ...TEOG, pose: 'parado' }, 0.5, 3.4, 1.8, { rumo: -0.2 }) },
-      ], { noite: Math.min(1, u * 1.25), forca: 0, bokeh: 0 });
+      ], { noite: Math.min(1, (u / d) * 1.25), forca: 0, bokeh: 0 });
     },
     // tochas aparecendo na borda, uma, depois dez, depois dezenas
     tochas(ctx, u, d, api) {
@@ -608,7 +720,7 @@
       noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: { cabeca: -12 }, expressao: expr('preocupado', { olhar: [0, -0.014] }) }, -0.5, 3.0, 1.76, { rumo: 0.15 }) },
         { f: () => api.personagem3d(cam, { ...TEOG, pose: { cabeca: -10 }, expressao: expr('medo', { olhar: [0, -0.014] }) }, 0.55, 3.3, 1.8, { rumo: -0.15 }) },
-      ], { noite: 1, forca: 0.2, bokeh: 0, borda: { n: Math.min(1, 0.02 + u * 1.1), desce: 0 } });
+      ], { noite: 1, forca: 0.2, bokeh: 0, borda: { n: Math.min(1, 0.02 + (u / d) * 1.1), desce: 0 } });
     },
     // de costas para os dois, olhando para cima: a borda cheia de tochas
     olhando(ctx, u, d, api) {
@@ -623,7 +735,7 @@
       const cam = camCan(api, { f: 950, x: -0.4, y: 1.5, z: 0, cy: 1100, mov: { orbita: -0.12, empurra: 0.08, sobe: 0, dist: 6 } });
       noite(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...DAVIA, pose: 'parado', expressao: 'preocupado' }, -0.3, 4.2, 1.76, { rumo: 0 }) },
-      ], { noite: 1, forca: 0.2, bokeh: 0, borda: { n: 1, desce: 0.1 + u * 0.8 } });
+      ], { noite: 1, forca: 0.2, bokeh: 0, borda: { n: 1, desce: 0.1 + (u / d) * 0.8 } });
     },
   };
 })();

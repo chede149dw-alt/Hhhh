@@ -11,7 +11,8 @@
     for (let i = 0; i < n; i++) { const x = x0 + r() * w, y = y0 + r() * h, a = ang + (r() - 0.5) * 0.5, c = comp * (0.6 + r() * 0.6); ctx.lineWidth = comp * 0.08; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + Math.cos(a) * c * 0.5 + c * 0.1, y + Math.sin(a) * c * 0.5, x + Math.cos(a) * c, y + Math.sin(a) * c); ctx.stroke(); }
   }
   function olho(ctx, x, y, s, t = 0, o = {}) {
-    const abre = o.abre === undefined ? 1 : o.abre, br = o.brilho === undefined ? 1 : o.brilho;
+    // o.humano (0..1): o olho volta a ser do Téo (íris castanha, pupila redonda, sem brilho)
+    const hu = Math.max(0, Math.min(1, o.humano || 0)), abre = o.abre === undefined ? 1 : o.abre, br = (o.brilho === undefined ? 1 : o.brilho) * (1 - hu);
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.lineJoin = 'round';
     if (o.pelo !== false) {
       const g = ctx.createLinearGradient(0, -2, 0, 2); g.addColorStop(0, '#B8461C'); g.addColorStop(0.5, PELO); g.addColorStop(1, '#E0743A');
@@ -34,12 +35,13 @@
     ctx.fillStyle = '#2A0E06'; ctx.save(); ctx.translate(0, 0); ctx.scale(1.12, 1.25); ctx.fill(forma); ctx.restore();
     if (abre > 0.03) {
       ctx.save(); ctx.clip(forma);
-      const gi = ctx.createRadialGradient(-0.02, -0.05, 0.02, -0.02, -0.05, 0.42); gi.addColorStop(0, '#FFF6B0'); gi.addColorStop(0.45, '#FFD23A'); gi.addColorStop(0.85, '#E8961A'); gi.addColorStop(1, '#8A4A0A');
+      const gi = ctx.createRadialGradient(-0.02, -0.05, 0.02, -0.02, -0.05, 0.42); const mx = (a, b) => { const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16), c = (sh) => Math.round(((A >> sh) & 255) * (1 - hu) + ((B >> sh) & 255) * hu); return `rgb(${c(16)},${c(8)},${c(0)})`; };
+      gi.addColorStop(0, mx('#FFF6B0', '#D8A878')); gi.addColorStop(0.45, mx('#FFD23A', '#9A6236')); gi.addColorStop(0.85, mx('#E8961A', '#5E3618')); gi.addColorStop(1, mx('#8A4A0A', '#3A200C'));
       ctx.fillStyle = gi; ctx.beginPath(); ctx.arc(-0.02, -0.05, 0.42, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = 'rgba(160,80,10,0.5)'; ctx.lineWidth = 0.012;
       for (let i = 0; i < 24; i++) { const a = (i / 24) * Math.PI * 2; ctx.beginPath(); ctx.moveTo(-0.02 + Math.cos(a) * 0.1, -0.05 + Math.sin(a) * 0.1); ctx.lineTo(-0.02 + Math.cos(a) * 0.38, -0.05 + Math.sin(a) * 0.38); ctx.stroke(); }
       // pupila em fenda
-      ctx.fillStyle = '#0A0402'; ctx.beginPath(); ctx.ellipse(-0.02, -0.05, 0.05, 0.4, 0.05, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#0A0402'; ctx.beginPath(); ctx.ellipse(-0.02, -0.05, 0.05 + 0.11 * hu, 0.4 - 0.24 * hu, 0.05, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); ctx.ellipse(-0.17, -0.17, 0.07, 0.045, -0.4, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(0.13, 0.03, 0.025, 0, Math.PI * 2); ctx.fill();
       // sombra da pálpebra em cima
