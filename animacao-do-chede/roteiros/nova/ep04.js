@@ -373,7 +373,27 @@
   const ASS = { fabrica: 'criarAssassina', registroPoses: 'POSES_PADRAO' }, ENC = { fabrica: 'criarEncapuzado', registroPoses: 'POSES_PADRAO' };
   const DAVIE = { fabrica: 'criarDaviEspada', registroPoses: 'DAVI_JOGO_POSES' };
   const VERDE = '120,230,120', GELO = '170,230,255', FOGO = '255,150,60';
-  const camDia = (api, o) => { window.MUNDO_3D = 'canion'; return api.camera({ f: 1100, x: 0, y: 1.5, z: 0, cy: 900, nevoa: V().nevoa(0, true, 'canion'), ...o }); };
+  // câmera sempre em movimento (referências do autor): gira devagar em volta do assunto, aproxima e sobe um pouco.
+  // O enquadramento escrito no plano é o do MEIO do plano; no começo e no fim a câmera está levemente girada.
+  // o.mov = { orbita (rad), empurra (fração da distância), sobe (m), dist (m até o assunto) } | false
+  const camDia = (api, o) => {
+    window.MUNDO_3D = 'canion'; const c = { f: 1100, x: 0, y: 1.5, z: 0, cy: 900, nevoa: V().nevoa(0, true, 'canion'), ...o };
+    const sem = Math.sin((c.x * 7.1 + c.z * 13.7 + (c.yaw || 0) * 5.3 + c.f * 0.01) * 10), m = o.mov === false ? null : { orbita: 0.17 * (sem > 0 ? 1 : -1), empurra: 0.08, sobe: 0.1 * (sem > 0.5 ? -1 : 1), dist: 4.2, ...(o.mov || {}) };
+    if (m && api.dur) { const r = api.ease.suave(cl(api.u / api.dur)) - 0.5, D = m.dist, y0 = c.yaw || 0, px = c.x + Math.sin(y0) * D, pz = c.z + Math.cos(y0) * D, yaw = y0 + m.orbita * r, Dd = D * (1 - m.empurra * r);
+      c.x = px - Math.sin(yaw) * Dd; c.z = pz - Math.cos(yaw) * Dd; c.yaw = yaw; c.y += m.sobe * r; }
+    return api.camera(c);
+  };
+  // pose por chaves no tempo, com transição suave entre elas (antecipação → golpe → continuação, sem "pulos")
+  function poseChave(r, chaves) {
+    if (r <= chaves[0][0]) return chaves[0][1]; const ult = chaves[chaves.length - 1]; if (r >= ult[0]) return ult[1];
+    let i = 0; while (r > chaves[i + 1][0]) i++; const [r0, A] = chaves[i], [r1, B] = chaves[i + 1], k0 = (r - r0) / (r1 - r0), k = k0 * k0 * (3 - 2 * k0), out = {};
+    for (const n of new Set([...Object.keys(A), ...Object.keys(B)])) { const a = A[n], b = B[n]; if (typeof a === 'number' || typeof b === 'number') out[n] = (typeof a === 'number' ? a : 0) + ((typeof b === 'number' ? b : 0) - (typeof a === 'number' ? a : 0)) * k; else out[n] = k < 0.5 ? (a !== undefined ? a : b) : (b !== undefined ? b : a); }
+    return out;
+  }
+  // parada no impacto (hit-stop): o tempo congela por um instante no golpe
+  const paraNoImpacto = (r, em, dura = 0.05) => (r < em ? r : r < em + dura ? em : r - dura);
+  // onda no chão (anéis de luz saindo do ponto de impacto)
+  const onda = (x, z, k, cor = '#FFE2B0', s = 1) => (k > 0 && k < 1 ? { tipo: 'onda', x, z, k, cor, s } : null);
   const dia = (ctx, api, cam, ents, o = {}) => noite(ctx, api, cam, ents, { dia: true, bokeh: 3, ...o });
   // ruína (masmorra de pedra, estilo da referência do autor)
   // a luta também é no cânion (pedido do autor): mesmas câmeras do cânion, luz de sol de lado nos personagens
@@ -660,10 +680,12 @@
     // 8) muralha de gelo: sobe do chão, as flechas cravam e congelam (casca de gelo e geada), câmera de 3/4 com o Davi atrás
     gelo(ctx, u, d, api) {
       const cam = camDia(api, { x: 2.3, y: 1.5, z: 1.8, cy: 900, f: 1050, yaw: -0.5 });
-      const sobe = api.fase(0, 0.3), r = u / d;
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: 'conjurando', expressao: 'determinado' }, 0, 5.4, 1.76, { rumo: 0, luz: LUZ_TOCHA }) }], { forca: 0.3,
+      // o Davi levanta o pé e bate no chão: uma onda de gelo sai do pé e a muralha sobe
+      const sobe = api.fase(0.3, 0.8), r = u / d;
+      const pose = poseChave(u, [[0, { braco_d: -25, antebraco_d: -40, braco_e: 25, antebraco_e: 40, tronco: 0 }], [0.2, { coxa_d: -70, canela_d: 80, braco_d: -60, antebraco_d: -20, braco_e: 60, antebraco_e: 20, tronco: -6 }], [0.3, { coxa_d: 8, canela_d: 4, coxa_e: -6, braco_d: 40, antebraco_d: -30, braco_e: -40, antebraco_e: 30, tronco: 12, cabeca: 8 }], [3, { coxa_d: 6, coxa_e: -6, braco_d: 20, antebraco_d: -60, braco_e: -20, antebraco_e: 60, tronco: 6 }]]);
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: { ...pose, _plantar: true }, expressao: 'determinado' }, 0, 5.4, 1.76, { rumo: 0, luz: LUZ_TOCHA }) }], { forca: 0.3,
         luzes: [{ x: 0, y: 1, z: 4.0, cor: '#9FE0FF', forca: 1.6 * sobe, raio: 6 }],
-        fx3d: () => [{ tipo: 'gelo', x: 0, z: 4.4, larg: 2.9, alt: 2.3, k: sobe },
+        fx3d: () => [{ tipo: 'gelo', x: 0, z: 4.4, larg: 2.9, alt: 2.3, k: sobe }, onda(0, 5.4, (u - 0.3) / 0.9, '#A8E8FF', 1.2),
           ...Array.from({ length: 9 }, (_, i) => { const t0 = 0.26 + i * 0.06; if (r < t0) return null; const k = cl((r - t0) / 0.06), cong = cl((r - t0 - 0.06) / 0.22), B = [-1.15 + i * 0.29, 0.7 + rnd(i) * 1.1, 4.25]; return flecha3d([B[0] + 0.6 + rnd(i * 2) * 0.4, B[1] + 0.6, B[2] - 5], B, k, { s: 1.5, gelo: cong }); })],
         depois: () => { for (let i = 0; i < 9; i++) { const t0 = 0.26 + i * 0.06, k = (r - t0) / 0.06; if (k < 1 || k > 1.6) continue; const q = cam.p(-1.15 + i * 0.29, 0.7 + rnd(i) * 1.1, 4.25); Noite.faiscas(ctx, q.x, q.y, 30, 70, api.t, 1.6 - k, i, GELO); Valdor.brilhoRadial(ctx, q.x, q.y, 90, '170,230,255', 0.6 * (1.6 - k)); } } });
     },
@@ -696,19 +718,25 @@
     },
     // 10) o cavaleiro gira o martelo e acerta a barriga do Davi: ele voa e bate na parede do cânion, que racha
     martelo(ctx, u, d, api) {
-      const r = u / d, bate = 0.38, kb = r - bate, voa = cl(kb / 0.3), naParede = kb > 0.3, kp = kb - 0.3;
+      const r = paraNoImpacto(u / d, 0.38, 0.045), bate = 0.38, kb = r - bate, voa = cl(kb / 0.3), naParede = kb > 0.3, kp = kb - 0.3;
       const DZ = 5.2, xP = V().canParede(DZ, -1, 1.0) + 0.55, DX0 = 0.1;
       const dx = kb < 0 ? DX0 : mix(DX0, xP, api.ease.entra(voa)), dy = kb < 0 ? 0 : naParede ? Math.max(0, 0.9 - kp * 3) : 0.9 * Math.sin(voa * Math.PI * 0.5);
       // câmera de frente acompanha o Davi voando até a parede (pan lateral)
       const pan = api.ease.suave(cl(kb / 0.34)), camX = mix(0.25, xP + 1.25, pan);
-      const cam = camDia(api, { x: camX, y: 1.6 + pan * 0.5, z: DZ - 3.9 + pan * 1.6, cy: mix(900, 820, pan), f: 880, yaw: mix(-0.05, -0.34, pan) });
+      const cam = camDia(api, { x: camX, y: 1.6 + pan * 0.5, z: DZ - 3.9 + pan * 1.6, cy: mix(900, 820, pan), f: 880, yaw: mix(-0.05, -0.34, pan), mov: false });
       const [tx, ty] = api.tremor(kb > 0 && kb < 0.12 ? 12 : naParede && kp < 0.12 ? 16 : 0);
       window.ARMA_ANG = { martelo: 95 };
       const giro = kb < 0 ? api.ease.suave(cl(r / bate)) : 1;
+      // cavaleiro: antecipação (levanta o martelo atrás), golpe rápido, continuação do movimento
+      const poseG = poseChave(r, [[0, { braco_d: 60, tronco: 0 }], [0.26, { braco_d: 165, tronco: -18 }], [bate, { braco_d: -60, tronco: 22 }], [bate + 0.12, { braco_d: -95, tronco: 28 }], [1, { braco_d: -80, tronco: 18 }]]);
+      const poseD = poseChave(r, [[0, { braco_d: 30, antebraco_d: -40, braco_e: -30, antebraco_e: 40, coxa_d: 10, coxa_e: -10 }], [bate - 0.06, { braco_d: 70, antebraco_d: -90, braco_e: -70, antebraco_e: 90, coxa_d: 15, coxa_e: -15, tronco: -6 }],
+        [bate + 0.04, { tronco: 45, cabeca: 30, braco_d: -110, braco_e: 110, coxa_d: -55, canela_d: 45, coxa_e: -35, canela_e: 35 }], [bate + 0.28, { tronco: 25, cabeca: 10, braco_d: -140, braco_e: 140, coxa_d: -40, canela_d: 40, coxa_e: -20, canela_e: 30 }],
+        [bate + 0.34, { tronco: 10, braco_d: 60, braco_e: -60, coxa_d: -30, canela_d: 60, coxa_e: 20, canela_e: 40, cabeca: 20 }], [1, { tronco: 18, braco_d: 40, braco_e: -40, coxa_d: -20, canela_d: 50, coxa_e: 15, canela_e: 35, cabeca: 30 }]]);
       dia(ctx, api, cam, [
-        { f: () => api.personagem3d(cam, { ...GIG, pose: { braco_d: mix(160, -75, giro), antebraco_d: -10, braco_e: 40, antebraco_e: -40, tronco: mix(-15, 20, giro), coxa_d: -25, canela_d: 30, coxa_e: 25, canela_e: 10, _plantar: true }, expressao: 'raiva' }, 1.0, 5.6, 2.6, { olhaPara: [DX0, DZ], luz: LUZ_TOCHA }) },
-        { f: () => api.personagem3d(cam, { ...DAVIA, pose: kb < 0 ? { braco_d: 30, antebraco_d: -40, braco_e: -30, antebraco_e: 40, coxa_d: 10, coxa_e: -10 } : naParede ? { tronco: 10, braco_d: 60, braco_e: -60, coxa_d: -30, canela_d: 60, coxa_e: 20, canela_e: 40, cabeca: 20 } : { tronco: 40, cabeca: 30, braco_d: -100, braco_e: 100, coxa_d: -50, canela_d: 40, coxa_e: -30, canela_e: 30 }, expressao: kb < 0 ? 'espanto' : 'medo' }, dx, DZ, 1.76, { y: dy, olhaPara: [1, 5.6], luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...GIG, pose: { ...poseG, antebraco_d: -10, braco_e: 40, antebraco_e: -40, coxa_d: -25, canela_d: 30, coxa_e: 25, canela_e: 10, _plantar: true }, expressao: 'raiva' }, 1.0, 5.6, 2.6, { olhaPara: [DX0, DZ], luz: LUZ_TOCHA }) },
+        { f: () => api.personagem3d(cam, { ...DAVIA, pose: poseD, expressao: kb < 0 ? 'espanto' : 'medo' }, dx, DZ, 1.76, { y: dy, olhaPara: [1, 5.6], luz: LUZ_TOCHA }) },
       ], { forca: 0.3,
+        fx3d: () => [onda(DX0, DZ, kb * 2.2, '#FFD9A0', 1.1), naParede ? onda(xP + 0.2, DZ, kp * 1.8, '#FFC08A', 1.3) : null],
         chaoEm: naParede ? [xP + 0.05, DZ - 0.5] : undefined, chao: naParede ? () => { const w = cam.p(xP - 0.35, 1.2, DZ), g0 = cam.p(xP - 0.1, 0.1, DZ);
             Noite.fumaca(ctx, g0.x, g0.y, 150, Math.min(0.9, kp / 1.5), { seed: 6, cor: '200,120,80', sobe: 0.4, largura: 1.3, n: 12 });
             const kr = Math.min(1, kp * 6); ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -744,7 +772,7 @@
       const A0 = [-6, 34, 16], B0 = [0.2, 1.1, 6.8], mp = [mix(A0[0], B0[0], cai * cai), mix(A0[1], B0[1], cai * cai), mix(A0[2], B0[2], cai * cai)];
       ruina(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...GIG, pose: kb > 0 ? { tronco: -40, braco_d: 120, braco_e: -120, coxa_d: 30, coxa_e: -30 } : { braco_d: -30, antebraco_d: -20, tronco: 10 }, expressao: kb > 0 ? 'medo' : 'espanto' }, 0.2, 6.8, 2.6, { rumo: 0, luz: LUZ_TOCHA })}], { forca: 0.2,
         luzes: [{ x: kb > 0 ? 0.2 : mp[0], y: kb > 0 ? 1.5 : mp[1], z: kb > 0 ? 6.8 : mp[2], cor: '#FF8A30', forca: kb > 0 ? 4 * Math.max(0, 1 - kb) : 2.5, raio: kb > 0 ? 18 : 22 }],
-        fx3d: () => [kb < 0.12 ? { tipo: 'raizes', x: 0.2, z: 6.8, raio: 0.55, alt: 2.5, k: 1 } : null, kb < 0 ? { tipo: 'meteoro', x: mp[0], y: mp[1], z: mp[2], dx: B0[0] - A0[0], dy: B0[1] - A0[1], dz: B0[2] - A0[2], s: 1.1 } : null, kb >= 0 ? { tipo: 'explosao', x: 0.2, z: 6.8, k: kb * 1.1, s: 1.3 } : null],
+        fx3d: () => [kb < 0.12 ? { tipo: 'raizes', x: 0.2, z: 6.8, raio: 0.55, alt: 2.5, k: 1 } : null, kb < 0 ? { tipo: 'meteoro', x: mp[0], y: mp[1], z: mp[2], dx: B0[0] - A0[0], dy: B0[1] - A0[1], dz: B0[2] - A0[2], s: 1.1 } : null, kb >= 0 ? { tipo: 'explosao', x: 0.2, z: 6.8, k: kb * 1.1, s: 1.3 } : null, onda(0.2, 6.8, kb * 1.3, '#FFB070', 2.2)],
         depois: () => { const alvo = cam.p(0.2, 1.3, 6.8); if (kb >= 0) { Combate.numero(ctx, alvo.x, alvo.y - 380, '-320', kb, 'critico'); Noite.fumaca(ctx, alvo.x, alvo.y + 60, 300, Math.min(0.95, kb * 0.8), { seed: 9, cor: '90,70,60', sobe: 1.2, largura: 1.6, n: 18 }); } flash(ctx, kb); } });
       ctx.save(); ctx.fillStyle = `rgba(255,120,40,${0.12 * cai})`; ctx.fillRect(0, 0, W, H); ctx.restore();
     },
@@ -761,15 +789,16 @@
     },
     // 11b) o Davi gira e acerta a assassina com a Lâmina Rubra (ela aparece de vez e voa para trás)
     golpe(ctx, u, d, api) {
-      const r = u / d, gira = api.ease.suave(cl((r - 0.12) / 0.2)), hit = r > 0.32, kh = (r - 0.32) * d;
+      const r = paraNoImpacto(u / d, 0.32, 0.05), gira = api.ease.suave(cl((r - 0.12) / 0.2)), hit = r > 0.32, kh = (r - 0.32) * d;
       const cam = camRuina(api, { x: -0.35, y: 1.35, z: 2.0 + r * 0.2, cy: 900, f: 980 });
       const [tx, ty] = api.tremor(hit && kh < 0.2 ? 14 : 0);
       espada(api, mix(-2.4, 1.4, gira), 1.4);
       const ax = hit ? -0.75 - Math.min(1, kh * 2.2) * 0.5 : -0.75, ay = hit ? Math.max(0, Math.sin(Math.min(1, kh * 2.2) * Math.PI) * 0.35) : 0;
       ruina(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...DAVIE, pose: { braco_d: mix(-130, 80, gira), antebraco_d: -15, tronco: mix(10, -14, gira), coxa_d: 25, canela_d: -20, coxa_e: -20, canela_e: 20, _maos: { d: 'punho' }, _plantar: true }, expressao: 'determinado' }, 0.35, 5.1, 1.76, { olhaPara: [-0.8, 4.9], luz: LUZ_TOCHA }) },
-        { f: () => api.personagem3d(cam, { ...ASS, pose: hit ? { tronco: -35, cabeca: -25, braco_d: 140, antebraco_d: 20, braco_e: 120, antebraco_e: 20, coxa_d: -40, canela_d: 50, coxa_e: 10, canela_e: 30 } : { braco_d: -150, antebraco_d: -20, braco_e: 150, antebraco_e: 20, coxa_d: 20, coxa_e: -30, canela_e: 30 }, expressao: hit ? 'medo' : 'raiva' }, ax, 4.9, 1.72, { y: ay, olhaPara: [0.35, 5.1] }), alfa: hit ? 1 : 0.55, cor: hit ? undefined : 'rgba(255,40,40,0.5)' },
+        { f: () => api.personagem3d(cam, { ...ASS, pose: poseChave(r, [[0, { braco_d: -150, antebraco_d: -20, braco_e: 150, antebraco_e: 20, coxa_d: 20, coxa_e: -30, canela_e: 30 }], [0.32, { braco_d: -110, antebraco_d: -30, braco_e: 110, antebraco_e: 30, coxa_d: 30, coxa_e: -35, canela_e: 35 }], [0.38, { tronco: -40, cabeca: -30, braco_d: 150, antebraco_d: 20, braco_e: 130, antebraco_e: 20, coxa_d: -45, canela_d: 55, coxa_e: 10, canela_e: 30 }], [1, { tronco: -25, cabeca: -15, braco_d: 120, antebraco_d: 30, braco_e: 100, antebraco_e: 30, coxa_d: -30, canela_d: 40, coxa_e: 5, canela_e: 25 }]]), expressao: hit ? 'medo' : 'raiva' }, ax, 4.9, 1.72, { y: ay, olhaPara: [0.35, 5.1] }), alfa: hit ? 1 : 0.55, cor: hit ? undefined : 'rgba(255,40,40,0.5)' },
       ], { forca: 0.3, luzes: [{ x: 0.2, y: 1.4, z: 4.6, cor: '#FF4A3A', forca: 1.4, raio: 6 }],
+        fx3d: () => [onda(-0.75, 4.9, (r - 0.32) * 2.6, '#FF8A7A', 1), onda(0.35, 5.1, (r - 0.1) * 3, '#FFB0A0', 0.6)],
         depois: ([rd, ra]) => { const m = rd.pontoMundo('antebraco_d', [0, 1]); Combate.corte(ctx, m.x + 60, m.y + 40, 330, -0.5, -3.9, cl((r - 0.12) / 0.22) * 1.3, { rgb: '255,70,60', espessura: 0.22 });
           if (hit) { const b = ra.pontoMundo('tronco', [0, -0.3]); Combate.impacto(ctx, b.x, b.y, 280, kh, { rgb: '255,90,80', dura: 0.5 }); Combate.numero(ctx, b.x, b.y - 260, '-280', kh, 'critico'); Combate.velocidade(ctx, b.x, b.y, Math.PI, Math.max(0, 1 - kh * 2), api.t); flash(ctx, kh, 0.5); } },
         fx: { cx: W / 2 + tx, cy: H / 2 + ty, zoom: soco(hit ? kh : -1, 0.12) } });
@@ -846,7 +875,7 @@
       const cam = camDia(api, { x: 3.6, y: 1.3, z: 4.9, cy: 920, f: 1100, yaw: -Math.PI / 2 });
       const r = u / d, voo = cl(r / 0.25), acerta = r > 0.25, ka = (r - 0.25);
       const fx = [{ tipo: 'gelo', x: 0, z: 4.4, larg: 2.9, alt: 2.3, k: 1, racha: 1 }, flecha3d([0.12, 1.5, 1.6], [0.12, 1.36, 5.3], voo, { s: 1.5 })];
-      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: acerta ? { coxa_d: -50, canela_d: 80, coxa_e: 20, canela_e: 40, tronco: 14, braco_d: 30, antebraco_d: -110, braco_e: -20, _plantar: true } : 'conjurando', expressao: acerta ? 'medo' : 'determinado', voz: 'davi' }, 0, 5.6, 1.76, { olhaPara: [0, 2], luz: LUZ_TOCHA }) }], { forca: 0.3, fx3d: () => fx,
+      dia(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...DAVIA, pose: acerta ? poseChave(ka, [[0, { braco_d: -20, antebraco_d: -30, braco_e: 20, antebraco_e: 30, _plantar: true }], [0.08, { coxa_d: -55, canela_d: 85, coxa_e: 22, canela_e: 42, tronco: 18, braco_d: 35, antebraco_d: -115, braco_e: -25, _plantar: true }], [1, { coxa_d: -45, canela_d: 75, coxa_e: 18, canela_e: 38, tronco: 12, braco_d: 30, antebraco_d: -105, braco_e: -18, _plantar: true }]]) : 'conjurando', expressao: acerta ? 'medo' : 'determinado', voz: 'davi' }, 0, 5.6, 1.76, { olhaPara: [0, 2], luz: LUZ_TOCHA }) }], { forca: 0.3, fx3d: () => fx,
         depois: ([rig]) => {
           const a = rig.pontoMundo('braco_d', [0, 0.12]);
           if (acerta) { Combate.impacto(ctx, a.x, a.y, 200, ka, { rgb: '255,90,80', dura: 0.5 }); Combate.numero(ctx, a.x + 40, a.y - 160, '-45', ka, 'recebido'); flash(ctx, ka, 0.5); }

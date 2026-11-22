@@ -882,7 +882,7 @@
   //      { tipo: 'pixels', x, z, alt, k, cor }]  (coordenadas do motor: z para dentro da tela)
   const v3 = (x, y, z) => new THREE.Vector3(x, y, -z);
   function montarFx(cena) {
-    const T = THREE, F = { flechas: [], gelos: [], raizes: [], meteoros: [], explosoes: [], pixels: [] };
+    const T = THREE, F = { flechas: [], gelos: [], raizes: [], meteoros: [], explosoes: [], pixels: [], ondas: [] };
     const tBr = textura(texBrilho('255,255,255')), tRastro = textura(tela(256, 32, (g, w, h) => { const gr = g.createLinearGradient(0, 0, w, 0); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(255,255,255,1)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); const v = g.createLinearGradient(0, 0, 0, h); v.addColorStop(0, 'rgba(0,0,0,1)'); v.addColorStop(0.5, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,1)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = v; g.fillRect(0, 0, w, h); }));
     tRastro.wrapS = tRastro.wrapT = T.ClampToEdgeWrapping;
     const aditivo = (cor, map = tBr, op = 1) => new T.MeshBasicMaterial({ map, color: cor, transparent: true, opacity: op, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide, toneMapped: false, fog: false });
@@ -961,11 +961,14 @@
     for (let i = 0; i < 3; i++) { const n = 150, im = new T.InstancedMesh(new T.BoxGeometry(1, 1, 1), new T.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 1, toneMapped: false, blending: T.AdditiveBlending, depthWrite: false }), n); im.frustumCulled = false; im.visible = false; cena.add(im);
       const raio = new T.Mesh(new T.CylinderGeometry(0.28, 0.42, 1, 24, 1, true), aditivo(0x9FE8FF, textura(tela(16, 128, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.7, 'rgba(255,255,255,0.6)'); gr.addColorStop(1, 'rgba(255,255,255,1)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); })), 0.8)); raio.visible = false; cena.add(raio);
       const rr = rng(50 + i), sem = []; for (let k = 0; k < n; k++) sem.push([rr(), rr(), rr(), rr()]); F.pixels.push({ im, raio, sem }); }
+    // ---- onda no chão: 3 anéis de luz se abrindo (passo forte, impacto) ----
+    for (let i = 0; i < 4; i++) { const gr = new T.Group(), aneis = []; for (let k = 0; k < 3; k++) { const a = new T.Mesh(new T.RingGeometry(0.965, 1, 96).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false, fog: false, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -6 })); gr.add(a); aneis.push(a); }
+      const brilho = new T.Mesh(new T.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), aditivo(0xFFFFFF)); brilho.material.polygonOffset = true; brilho.material.polygonOffsetFactor = -5; gr.add(brilho); gr.visible = false; cena.add(gr); F.ondas.push({ gr, aneis, brilho }); }
     return F;
   }
   function atualizaFx(lista, t) {
     if (!R.fx) R.fx = montarFx(R.cena);
-    const F = R.fx, T = THREE, ix = { flecha: 0, gelo: 0, raizes: 0, meteoro: 0, explosao: 0, pixels: 0 }, o = new T.Object3D(), cl = (v) => Math.max(0, Math.min(1, v));
+    const F = R.fx, T = THREE, ix = { flecha: 0, gelo: 0, raizes: 0, meteoro: 0, explosao: 0, pixels: 0, onda: 0 }, o = new T.Object3D(), cl = (v) => Math.max(0, Math.min(1, v));
     for (const g of lista) {
       if (!g) continue;
       if (g.tipo === 'flecha' && ix.flecha < F.flechas.length) {
@@ -1012,6 +1015,14 @@
         P.raio.visible = k > 0 && k < 1; P.raio.position.set(g.x, altura(g.x, g.z) + alt * 1.5, -g.z); P.raio.scale.set(1 + k * 0.4, alt * 3, 1 + k * 0.4); P.raio.material.opacity = 0.32 * Math.sin(Math.PI * k); P.raio.material.color.copy(cor);
       }
     }
+    for (const g of lista) {
+      if (!g || g.tipo !== 'onda' || ix.onda >= F.ondas.length) continue;
+      const O = F.ondas[ix.onda++], k = cl(g.k), s = g.s || 1, cor = new T.Color(g.cor || '#FFE2B0');
+      O.gr.position.set(g.x, altura(g.x, g.z) + 0.04, -g.z); O.gr.visible = k > 0 && k < 1;
+      O.aneis.forEach((a, i) => { const kk = cl((k - i * 0.12) / 0.75), e = 1 - Math.pow(1 - kk, 2.5), R0 = s * (0.2 + 3.2 * e); a.scale.set(R0, 1, R0); a.material.color.copy(cor); a.material.opacity = kk > 0 ? 0.75 * (1 - kk) * (1 - i * 0.2) : 0; a.visible = kk > 0 && kk < 1; });
+      O.brilho.scale.setScalar(s * 2.6 * (0.5 + k)); O.brilho.material.color.copy(cor); O.brilho.material.opacity = 0.55 * (1 - k) * (1 - k);
+    }
+    for (; ix.onda < F.ondas.length; ix.onda++) F.ondas[ix.onda].gr.visible = false;
     // o que não foi usado neste quadro fica escondido
     for (; ix.flecha < F.flechas.length; ix.flecha++) F.flechas[ix.flecha].gr.visible = false;
     for (; ix.gelo < F.gelos.length; ix.gelo++) { F.gelos[ix.gelo].gr.visible = false; F.gelos[ix.gelo].nevoa.forEach((s) => (s.visible = false)); }
