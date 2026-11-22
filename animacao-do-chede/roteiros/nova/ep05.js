@@ -572,7 +572,7 @@
   function rotuloFicha(ctx, x, y, nome, extra) { ctx.save(); ctx.textAlign = 'center'; ctx.font = '800 32px Inter'; ctx.fillStyle = '#FFE6A0'; ctx.fillText(nome, x, y); if (extra) { ctx.font = '600 25px Inter'; ctx.fillStyle = '#C8D0E8'; extra.split('\n').forEach((l, i) => ctx.fillText(l, x, y + 36 + i * 30)); } ctx.restore(); }
   function sombraPe(ctx, x, y, w) { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(x, y, w, w * 0.18, 0, 0, TAU); ctx.fill(); ctx.restore(); }
   // ---------- transformação do Téo no cânion ----------
-  const FERA5 = (e) => ({ fabrica: 'criarTeoFera', opcoes: { estagio: e, roupa: 'B' }, registroPoses: 'TEO_FERA_POSES' });
+  const FERA5 = (e, semArma) => ({ fabrica: 'criarTeoFera', opcoes: { estagio: e, roupa: 'B', semArma }, registroPoses: 'TEO_FERA_POSES' });
   const PD5 = [-0.55, 3.0], PT5 = [0.55, 3.3];                     // Davi e Téo lado a lado
   const LUA5 = { ...LUZ_LUA, forca: 0.8 };
   const nt = (ctx, api, cam, ents, o = {}) => noite(ctx, api, cam, ents, { noite: 1, forca: 0.3, ...o });
@@ -730,48 +730,12 @@
     ctx.fillStyle = 'rgba(255,255,255,0.18)'; for (let i = -30; i < 30; i += 6) ctx.fillRect(-180, i, 360, 2); // linhas de tela antiga
     ctx.restore();
   }
-  // ---------- corrente de prata (bem feita): elos alternando de frente (anel com furo) e de lado (barrinha) ----------
-  // cada elo: contorno escuro, prata em degradê, brilho branco na borda de cima; s = tamanho do elo em px
-  function elo(ctx, x, y, ang, s, frente, luz = 1) {
-    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
-    const g = ctx.createLinearGradient(0, -s * 0.6, 0, s * 0.6); g.addColorStop(0, `rgba(250,252,255,${luz})`); g.addColorStop(0.45, '#C6D0E0'); g.addColorStop(0.55, '#8A96AC'); g.addColorStop(1, '#DCE6F4');
-    ctx.lineJoin = 'round';
-    if (frente) {
-      const fora = new Path2D(); fora.ellipse(0, 0, s, s * 0.58, 0, 0, TAU); fora.ellipse(0, 0, s * 0.62, s * 0.24, 0, 0, TAU);
-      ctx.fillStyle = g; ctx.fill(fora, 'evenodd'); ctx.strokeStyle = '#1E222C'; ctx.lineWidth = Math.max(1.5, s * 0.13); ctx.stroke(fora);
-      ctx.strokeStyle = `rgba(255,255,255,${0.85 * luz})`; ctx.lineWidth = Math.max(1, s * 0.09); ctx.beginPath(); ctx.ellipse(0, 0, s * 0.8, s * 0.42, 0, Math.PI * 1.1, Math.PI * 1.75); ctx.stroke();
-    } else {
-      ctx.fillStyle = g; ctx.strokeStyle = '#1E222C'; ctx.lineWidth = Math.max(1.5, s * 0.13); ctx.beginPath(); ctx.roundRect(-s, -s * 0.2, s * 2, s * 0.4, s * 0.2); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = `rgba(255,255,255,${0.8 * luz})`; ctx.fillRect(-s * 0.75, -s * 0.12, s * 1.3, s * 0.08);
-    }
-    ctx.restore();
-  }
-  // corrente ao longo de uma curva (bézier quadrática de A a B, barriga para cima); k = quanto já saiu (0..1)
-  function correnteTela(ctx, A, B, k, t, curva = 120, s = 15) {
-    if (k <= 0) return; const C = [(A[0] + B[0]) / 2 + curva * 0.25, (A[1] + B[1]) / 2 - curva];
-    const pt = (u) => [(1 - u) * (1 - u) * A[0] + 2 * (1 - u) * u * C[0] + u * u * B[0], (1 - u) * (1 - u) * A[1] + 2 * (1 - u) * u * C[1] + u * u * B[1]];
-    const pts = [pt(0)]; let L = 0; const N = 160; for (let i = 1; i <= N; i++) { const p = pt(i / N); L += Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]); pts.push(p); }
-    const passo = s * 1.45, n = Math.floor(L * k / passo); let acc = 0, idx = 1;
-    ctx.save(); ctx.shadowColor = 'rgba(160,210,255,0.55)'; ctx.shadowBlur = s * 0.8;
-    for (let e = 0; e < n; e++) {
-      const alvo = e * passo + passo / 2; while (idx < pts.length - 1 && acc + Math.hypot(pts[idx][0] - pts[idx - 1][0], pts[idx][1] - pts[idx - 1][1]) < alvo) { acc += Math.hypot(pts[idx][0] - pts[idx - 1][0], pts[idx][1] - pts[idx - 1][1]); idx++; }
-      const a = pts[idx - 1], b = pts[idx], ang = Math.atan2(b[1] - a[1], b[0] - a[0]), bal = Math.sin(t * 9 + e * 0.7) * s * 0.15;
-      elo(ctx, a[0] - Math.sin(ang) * bal, a[1] + Math.cos(ang) * bal, ang, s, e % 2 === 0);
-    }
-    ctx.restore();
-    const ponta = pt(k); Valdor.brilhoRadial(ctx, ponta[0], ponta[1], s * 7, '200,230,255', 0.55);
-  }
-  // corrente enrolando no corpo (hélice em volta do tronco): só as voltas da frente aparecem; aperta com o tempo
-  function correnteEnrolada(ctx, cx, cy, larg, alt, k, aperto, t, s = 14) {
-    if (k <= 0) return; const voltas = 3.2, N = 700; let prev = null, acc = 0, e = 0;
-    ctx.save(); ctx.shadowColor = 'rgba(160,210,255,0.5)'; ctx.shadowBlur = s * 0.7;
-    for (let i = 0; i <= N * k; i++) {
-      const v = i / N, a = v * voltas * TAU + t * 0.6, rx = larg * 0.5 * (1 - 0.18 * aperto), x = cx + Math.cos(a) * rx, y = cy - alt / 2 + v * alt + Math.sin(a) * rx * 0.22, p = [x, y];
-      if (prev) { acc += Math.hypot(p[0] - prev[0], p[1] - prev[1]); if (acc >= s * 1.45) { acc = 0; e++; if (Math.sin(a) > -0.1) { const ang = Math.atan2(p[1] - prev[1], p[0] - prev[0]); elo(ctx, x, y, ang, s, e % 2 === 0, 0.6 + 0.4 * Math.sin(a)); if (e % 5 === 0) Valdor.brilhoRadial(ctx, x, y, s * 2.4, '220,240,255', 0.35 * (0.6 + 0.4 * Math.sin(t * 20 + e))); } } }
-      prev = p;
-    }
-    ctx.restore();
-  }
+  // ---------- corrente de prata 3D (elos de verdade, ver tipo 'corrente' no valdor-3d.js) ----------
+  // caminho: da mão até a ponta, numa curva (bézier quadrática de A até B passando perto de C); n pontos
+  const curva3 = (A, C, B, n = 40) => Array.from({ length: n + 1 }, (_, i) => { const u = i / n, a = (1 - u) * (1 - u), b = 2 * (1 - u) * u, c = u * u; return [a * A[0] + b * C[0] + c * B[0], a * A[1] + b * C[1] + c * B[1], a * A[2] + b * C[2] + c * B[2]]; });
+  const compr = (pts) => pts.reduce((L, p, i) => (i ? L + Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1], p[2] - pts[i - 1][2]) : 0), 0);
+  // hélice em volta do corpo (de cima para baixo), começando do lado esquerdo; a frente (z menor) fica para a câmera
+  const helice = (cx, cz, r, y0, y1, voltas, n = 120) => Array.from({ length: n + 1 }, (_, i) => { const u = i / n, a = -Math.PI / 2 + u * voltas * TAU, rr = r * (1 + 0.04 * Math.sin(u * 23)); return [cx + rr * Math.sin(a), mix(y0, y1, u), cz - rr * 0.8 * Math.cos(a)]; });
   const H5 = [[2.2, 6.8, 0], [-2.3, 6.3, 1], [2.5, 3.8, 3], [-1.6, 8.4, 2]];   // caçadores em volta: [x, z, variante]
   const POSE_RAPEL = { braco_d: 165, antebraco_d: -10, braco_e: -165, antebraco_e: 10, coxa_d: -30, canela_d: 40, coxa_e: -20, canela_e: 30, tronco: -10 };
   window.PLANOS = {
@@ -845,16 +809,17 @@
     fera_ataca(ctx, u, d, api) {
       const r = u / d, cam = camCan(api, { x: 3.4, y: 1.4, z: 2.6, cy: 900, f: 950, yaw: -0.55, mov: { orbita: 0.1, empurra: 0.06, sobe: 0, dist: 4 } });
       const sal = cl((r - 0.08) / 0.32), A = [PF5[0], PF5[1]], B = [H5[0][0] - 0.5, H5[0][1] - 0.4], fx = mix(A[0], B[0], sal), fz = mix(A[1], B[1], sal), hit = r > 0.4, kh = (r - 0.4) * d, voa = cl(kh / 0.5);
-      const redeK = cl((r - 0.62) / 0.18);
+      const redeK = cl((r - 0.5) / 0.14), rasga = cl((r - 0.8) / 0.14), tRede = 0.64 * d; // chega, gruda, e a fera rasga (pedido do autor: não ficar girando no braço)
       nt(ctx, api, cam, [
         { f: () => api.personagem3d(cam, { ...CAC(0, null), pose: hit ? { tronco: -50, braco_d: 120, braco_e: -120, coxa_d: -30, coxa_e: 30 } : POSE_TOCHA, expressao: hit ? 'medo' : 'raiva' }, H5[0][0] + 0.6 * voa, H5[0][1] + 0.8 * voa, 1.78, { y: Math.sin(voa * Math.PI) * 0.6, olhaPara: PF5, luz: LUA5, parado: true }) },
         { f: () => api.personagem3d(cam, { ...CAC(1, null), pose: hit ? { tronco: 45, braco_d: -120, braco_e: 120, coxa_d: 30, coxa_e: -30 } : POSE_TOCHA, expressao: hit ? 'medo' : 'raiva' }, H5[0][0] - 1.2 - 0.6 * voa, H5[0][1] + 0.6 + 0.5 * voa, 1.78, { y: Math.sin(voa * Math.PI) * 0.5, olhaPara: PF5, luz: LUA5, parado: true }) },
-        { f: () => api.personagem3d(cam, { ...LOBO, vista: sal > 0 && sal < 1 ? 'perfil' : undefined, pose: sal > 0 && sal < 1 ? 'bote' : redeK > 0 ? 'rugindo' : 'garras', expressao: 'rugido' }, fx, fz, 2.55, { y: -0.12 + Math.sin(sal * Math.PI) * 1.1, olhaPara: B, luz: LUA5 }) },
+        { f: () => api.personagem3d(cam, { ...LOBO, vista: sal > 0 && sal < 1 ? 'perfil' : undefined, pose: sal > 0 && sal < 1 ? 'bote' : rasga > 0 ? { braco_d: 40, antebraco_d: -125, braco_e: -60, antebraco_e: 40, cabeca: 22, tronco: 8 } : redeK > 0 ? 'rugindo' : 'garras', expressao: 'rugido' }, fx, fz, 2.55, { y: -0.12 + Math.sin(sal * Math.PI) * 1.1, olhaPara: B, luz: LUA5 }) },
       ], {
         forca: 0.2, bokeh: 2,
-        fx3d: () => (redeK > 0 ? [{ tipo: 'rede', x: B[0] - 0.4 + (1 - redeK) * 2.5, y: 1.6, z: B[1] - 0.1 - (1 - redeK) * 2, dx: 1, dy: 0, dz: 0.6, abre: 0.5 + 0.3 * redeK, gira: api.t * 8, R: 0.9 }] : []),
+        fx3d: () => (redeK > 0 && rasga < 1 ? [{ tipo: 'rede', x: B[0] - 0.4 + (1 - redeK) * 2.5 - 1.2 * rasga, y: 1.6 + 1.4 * rasga * rasga, z: B[1] - 0.1 - (1 - redeK) * 2 - 0.6 * rasga, dx: 1, dy: 0.3 * rasga, dz: 0.6, abre: 0.5 + 0.3 * redeK + 0.5 * rasga, gira: (redeK < 1 ? api.t : tRede) * 8 + rasga * 5, R: 0.9, rasga: Math.min(0.95, rasga * 1.3), alfa: 1 - cl((rasga - 0.6) / 0.4) }] : []),
         depois: () => { const q = cam.p(B[0] + 0.3, 2.4, B[1] + 0.5); if (hit) { Combate.numero(ctx, q.x - 80, q.y - 120, '-140', kh); Combate.numero(ctx, q.x + 120, q.y - 60, '-140', kh - 0.1); }
-          if (redeK >= 1) { const f = cam.p(B[0], 1.7, B[1]); Noite.fumaca(ctx, f.x, f.y, 0.6 * f.s, cl((r - 0.8) / 0.2), { seed: 4, cor: '230,235,250', n: 14, largura: 1.2 }); Combate.numero(ctx, f.x, f.y - 200, '-90', (r - 0.8) * d, 'recebido'); } },
+          if (redeK >= 1) { const f = cam.p(B[0] - 0.3, 1.6, B[1]); Noite.fumaca(ctx, f.x, f.y, 0.55 * f.s, cl((r - 0.64) / 0.3), { seed: 4, cor: '230,235,250', n: 12, largura: 1.1 }); Combate.numero(ctx, f.x, f.y - 220, '-90', (r - 0.66) * d, 'recebido'); }
+          if (rasga > 0 && rasga < 1) { const f = cam.p(B[0] - 0.4, 1.9, B[1]); for (let i = 0; i < 10; i++) { const a = i * 2.4, v = rasga * (0.4 + (i % 4) * 0.2) * f.s; ctx.save(); ctx.strokeStyle = `rgba(230,240,255,${0.9 * (1 - rasga)})`; ctx.lineWidth = 3; ctx.beginPath(); const x0 = f.x + Math.cos(a) * v, y0 = f.y + Math.sin(a) * v - rasga * 60; ctx.moveTo(x0, y0); ctx.lineTo(x0 + Math.cos(a + 1) * 22, y0 + Math.sin(a + 1) * 22); ctx.stroke(); ctx.restore(); } } },
       });
     },
     // 22c) o Davi: passo-relâmpago (some num raio e aparece do lado do caçador) e corta com a Lâmina Rubra
@@ -954,19 +919,33 @@
     lider_fala(ctx, u, d, api) {
       const P0 = V().CAN_PONTE, x = 0.6, y0 = P0.y - 2.2 * Math.sin(Math.PI * 0.52) + 0.05, tira = api.fase(0.2, 0.7);
       const cam = camCan(api, { x: 1.4, y: y0 + 1.5, z: P0.z - 3.6, cy: 900, f: 1350, yaw: -0.2, mov: { orbita: 0.06, empurra: 0.08, sobe: 0, dist: 3.4 } });
-      window.CORRENTE = { t: api.t };
-      let rl; nt(ctx, api, cam, [{ f: () => (rl = api.personagem3d(cam, tira < 1 ? { ...ENC, pose: { braco_d: 150, antebraco_d: -30, braco_e: -150, antebraco_e: 30 } } : { ...LIDER5, pose: { braco_e: -14, antebraco_e: -40 }, expressao: 'raiva', voz: 'lider' }, x, P0.z, 1.85, { y: y0, olhaPara: [x, P0.z - 6], luz: LUA5 })) }], {
-        forca: 0, bokeh: 4, depois: () => { if (tira >= 1 && rl && rl.pontoMundo) { const q = rl.pontoMundo('cabeca', [0, -1.3]); placaNivel(ctx, q.x, q.y, 'LÍDER · NV 41', '#FF5A4A', api.fase(0.8, 1.1, 'volta')); } if (tira > 0 && tira < 1) Noite.clarao(ctx, 540, 700, 0.4 * Math.sin(Math.PI * tira)); },
+      // no fim ele gira a corrente por cima da cabeça e joga lá para baixo (a corrente sai da mão dele, em 3D)
+      const ergue = api.fase(4.75, 5.25), joga = api.fase(5.25, 5.45), voo = api.fase(5.4, 6.2), solta = voo > 0;
+      window.CORRENTE = { t: api.t, solta: solta ? 1 : 0 };
+      const poseL = poseChave(ergue + joga, [[0, { braco_e: -14, antebraco_e: -40 }], [1, { braco_e: -165, antebraco_e: 30, tronco: 6, cabeca: -6 }], [2, { braco_e: -38, antebraco_e: -12, tronco: -10, cabeca: 10 }, 'golpe']]);
+      let rl; nt(ctx, api, cam, [{ f: () => (rl = api.personagem3d(cam, tira < 1 ? { ...ENC, pose: { braco_d: 150, antebraco_d: -30, braco_e: -150, antebraco_e: 30 } } : { ...LIDER5, pose: poseL, expressao: 'raiva', voz: 'lider', semGesto: ergue > 0 }, x, P0.z, 1.85, { y: y0, olhaPara: [x, P0.z - 6], luz: LUA5 })) }], {
+        forca: 0, bokeh: 4,
+        fx3d: () => { if (!solta) return []; const m = maoMundo(cam, rl, 'mao_e', x, P0.z); if (!m) return []; const A = [m.x, m.y, m.z], B = [PF5[0], 1.9, PF5[1] + 0.6], C = [A[0] + 1.2, A[1] - 9, A[2] - 4];
+          return [{ tipo: 'corrente', pts: curva3(A, C, B, 60), k: 0.3 * api.ease.suave(voo), s: 1.3, brilho: 0.9 }]; },
+        depois: () => { if (tira >= 1 && rl && rl.pontoMundo) { const q = rl.pontoMundo('cabeca', [0, -1.3]); placaNivel(ctx, q.x, q.y, 'LÍDER · NV 41', '#FF5A4A', api.fase(0.8, 1.1, 'volta')); } if (tira > 0 && tira < 1) Noite.clarao(ctx, 540, 700, 0.4 * Math.sin(Math.PI * tira)); },
       });
     },
-    // 27) ele joga a corrente de prata lá de cima: enrola na fera, que some num clarão roxo junto com ele
+    // 27) a corrente de prata vem voando lá da ponte (dá para ver de onde ela sai), enrola 3 voltas na fera, aperta
+    //     (PRESO) e os dois somem num clarão roxo. Corrente em 3D: as voltas de trás passam por trás do corpo.
     corrente5(ctx, u, d, api) {
       const r = u / d, cam = camCan(api, { x: PF5[0] - 0.2, y: 1.45, z: PF5[1] - 2.6, cy: 1000, f: 1050, mov: { orbita: 0.08, empurra: 0.08, sobe: 0, dist: 3 } });
-      const voa = cl(r / 0.4), some = cl((r - 0.66) / 0.14);
-      let rf; nt(ctx, api, cam, [{ f: () => (rf = api.personagem3d(cam, { ...LOBO, pose: voa >= 1 ? 'rugindo' : 'garras', expressao: 'rugido' }, PF5[0], PF5[1] + 0.6, 2.55, { y: -0.12, olhaPara: [0, 0], luz: LUA5 })), alfa: 1 - some }], {
-        forca: 0.2, depois: () => {
-          const top = cam.p(0.6, 21, 36), f = cam.p(PF5[0], 1.6, PF5[1] + 0.6); correnteTela(ctx, [top.x, top.y], [f.x, f.y - 0.5 * f.s], voa, api.t, 260, 0.065 * f.s);
-          if (voa >= 1 && some < 1) { ctx.save(); ctx.globalAlpha = 1 - some; correnteEnrolada(ctx, f.x, f.y + 0.3 * f.s, 0.98 * f.s, 0.95 * f.s, cl((r - 0.38) / 0.2), cl((r - 0.45) / 0.15), api.t, 0.07 * f.s); ctx.restore(); Combate.numero(ctx, f.x + 0.4 * f.s, f.y - 0.9 * f.s, 'PRESO', (r - 0.5) * d, 'recebido'); }
+      const voa = api.ease.suave(cl(r / 0.34)), enrola = cl((r - 0.32) / 0.22), aperto = api.ease.suave(cl((r - 0.5) / 0.12)), some = cl((r - 0.68) / 0.14), preso = enrola >= 1;
+      const cx = PF5[0], cz = PF5[1] + 0.6, P0 = V().CAN_PONTE, S = [0.9, P0.y - 0.9, P0.z], rH = mix(0.7, 0.5, aperto);
+      const hel = helice(cx, cz, rH, 1.95, 0.95, 3), E = hel[0], C = [mix((S[0] + E[0]) / 2 - 3, (S[0] + E[0]) / 2, aperto), mix(S[1] + 4, (S[1] + E[1]) / 2, aperto), (S[2] + E[2]) / 2];
+      const voo = curva3(S, C, E, 70), Lv = compr(voo), Lh = compr(hel), k = (Lv * voa + Lh * enrola) / (Lv + Lh);
+      const [tx] = api.tremor(preso && some === 0 ? 3 : 0);
+      let rf; nt(ctx, api, cam, [{ f: () => (rf = api.personagem3d(cam, { ...LOBO, pose: preso ? { braco_d: 7, antebraco_d: -5, braco_e: -7, antebraco_e: 5, tronco: 3 * Math.sin(api.t * 17), cabeca: -8 } : 'garras', expressao: 'rugido' }, cx + tx * 0.003, cz, 2.55, { y: -0.12, olhaPara: [0, 0], luz: LUA5 })), alfa: 1 - some }], {
+        forca: 0.2,
+        luzes: [{ x: cx, y: 1.4, z: cz - 0.6, cor: '#9CC8FF', forca: enrola > 0 ? 0.9 : 0, raio: 4 }, { x: cx, y: 1.6, z: cz - 0.5, cor: '#9B5CFF', forca: 3 * Math.sin(Math.PI * some), raio: 8 }],
+        fx3d: () => [{ tipo: 'corrente', pts: [...voo, ...hel.slice(1)], k, s: 1.3, brilho: 0.7 + 0.3 * aperto, alfa: 1 - some, peso: true }],
+        depois: () => {
+          const f = cam.p(cx, 1.6, cz);
+          if (preso && some < 1) { Combate.numero(ctx, f.x + 0.45 * f.s, f.y - 0.95 * f.s, 'PRESO', (r - 0.55) * d, 'recebido'); if (aperto > 0 && aperto < 1) Noite.clarao(ctx, f.x, f.y, 0.12 * Math.sin(Math.PI * aperto)); }
           if (some > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; Valdor.brilhoRadial(ctx, f.x, f.y - 100, 700 * (0.5 + some), '155,92,255', 1 - Math.abs(some - 0.4)); ctx.restore(); }
         },
       });
@@ -1038,7 +1017,7 @@
     virar(ctx, u, d, api) {
       const cam = camCan(api, { x: 0.35, y: 1.55, z: 1.1, cy: 820, f: 1350, mov: { orbita: 0.08, empurra: 0.1, sobe: 0, dist: 2.2 } });
       const [tx] = api.tremor(1.6);
-      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...FERA5(u > d - 0.5 ? 1 : 0), pose: { braco_d: 12, antebraco_d: -118, braco_e: -12, antebraco_e: 118, cabeca: 14, tronco: 4 }, expressao: expr('medo', { olhar: [0, 0.014] }), voz: 'teo' }, PT5[0] + tx * 0.002, PT5[1], 1.8, { rumo: 0.2, luz: LUA5 }) }]);
+      nt(ctx, api, cam, [{ f: () => api.personagem3d(cam, { ...FERA5(u > d - 0.5 ? 1 : 0, true), pose: { braco_d: 20, antebraco_d: -88, mao_d: -10, braco_e: -20, antebraco_e: 88, mao_e: 10, cabeca: 14, tronco: 4 }, expressao: expr('medo', { olhar: [0, 0.014] }), voz: 'teo', semGesto: true }, PT5[0] + tx * 0.002, PT5[1], 1.8, { rumo: 0.2, luz: LUA5 }) }]);
     },
     // "Davi, me prende com as raízes. Antes que eu perca o controle." — por cima do ombro do Davi
     prende(ctx, u, d, api) {
@@ -1058,7 +1037,7 @@
     lembra(ctx, u, d, api) {
       const cam = camCan(api, { x: -0.1, y: 1.55, z: 1.3, cy: 840, f: 1350, yaw: 0.25, mov: { orbita: 0.06, empurra: 0.08, sobe: 0, dist: 2.2 } });
       const [tx] = api.tremor(2.2); let rt;
-      nt(ctx, api, cam, [{ f: () => (rt = api.personagem3d(cam, { ...FERA5(2), pose: 'tremendo', expressao: expr('cansado', { olhar: [-0.01, 0] }), voz: 'teo' }, PT5[0] + tx * 0.002, PT5[1], 1.82, { olhaPara: PD5, luz: LUA5 })) }],
+      nt(ctx, api, cam, [{ f: () => (rt = api.personagem3d(cam, { ...FERA5(2), pose: 'tremendo', expressao: expr('cansado', { olhar: [-0.01, 0] }), voz: 'teo', semGesto: true }, PT5[0] + tx * 0.002, PT5[1], 1.82, { olhaPara: PD5, luz: LUA5 })) }],
         { depois: () => olhosTeo(ctx, rt, 7, 0.8, api.t, 'tq') });
     },
     // "...eu corro. Eu sei."

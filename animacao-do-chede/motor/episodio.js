@@ -60,7 +60,10 @@
   }
   function aplicaGesto(a, G, t, andando, costas) {
     const s = costas ? -1 : 1, g = G.g, onda = Math.sin(t * 3.1) * 0.5 + 0.5, out = { ...a };
-    const mexe = (lado) => { const k = lado === 'd' ? 1 : -1; out['braco_' + lado] = (out['braco_' + lado] || 0) * (1 - 0.7 * g) + s * k * ((G.braco === 0 ? 30 : 20) + 6 * onda) * g; out['antebraco_' + lado] = (out['antebraco_' + lado] || 0) * (1 - 0.7 * g) + s * k * ((G.braco === 0 ? -108 : -122) - 14 * onda) * g; out['mao_' + lado] = (out['mao_' + lado] || 0) + s * k * 15 * Math.sin(t * 4.3) * g; };
+    // gesto mais solto (pedido do autor 22/11: "o gesto com os braços está muito estranho"): a mão sobe só até a
+    // barriga com o cotovelo meio dobrado (nada de antebraço deitado no peito); com os dois braços, as mãos abrem
+    // para os lados (não juntam na frente como quem segura algo).
+    const mexe = (lado) => { const k = lado === 'd' ? 1 : -1, dois = G.braco === 0; out['braco_' + lado] = (out['braco_' + lado] || 0) * (1 - 0.6 * g) + s * k * ((dois ? 24 : 12) + 5 * onda) * g; out['antebraco_' + lado] = (out['antebraco_' + lado] || 0) * (1 - 0.6 * g) + s * k * ((dois ? -42 : -66) - 10 * onda) * g; out['mao_' + lado] = (out['mao_' + lado] || 0) + s * k * (dois ? 18 : 10 * Math.sin(t * 4.3)) * g; };
     if (G.braco >= 0) mexe('d'); if (G.braco <= 0) mexe('e');
     out.cabeca = (out.cabeca || 0) + 4 * Math.sin(t * 6.5) * G.ritmo + 3 * g; out.tronco = (out.tronco || 0) + (andando ? 1 : 3) * g * G.ativo;
     return out;
@@ -209,7 +212,7 @@
       // de costas os braços ficam atrás do tronco: abre um pouco para as mangas aparecerem dos lados (mãos na frente do corpo)
       ang.braco_d = (ang.braco_d || 0) - 8; ang.braco_e = (ang.braco_e || 0) + 8; }
     let pf = o.parado ? ang : vida(ang, TL.t + (o.semente || 0), o.vida === undefined ? (andando ? 0.15 : 1) : o.vida);
-    if (item.voz && !o.parado && !o.semGesto && !item.semGesto) { const G = gestoFala(item.voz, TL.t); if (G && G.ativo > 0) pf = aplicaGesto(pf, G, TL.t + (o.semente || 0), andando, vista === 'costas'); }
+    if (item.voz && !o.parado && !o.semGesto && !item.semGesto) { let G = gestoFala(item.voz, TL.t); if (G && (item.gestoBraco !== undefined || o.gestoBraco !== undefined)) G = { ...G, braco: item.gestoBraco !== undefined ? item.gestoBraco : o.gestoBraco }; if (G && G.ativo > 0) pf = aplicaGesto(pf, G, TL.t + (o.semente || 0), andando, vista === 'costas'); }
     if (pf._plantar) pf = plantar(def, pf);
     // respiração: o peito enche e esvazia (o.respira = força, 0 desliga; o.ofegante = respiração rápida depois do esforço)
     const resp = o.respira === undefined ? (o.parado || pf._semRespirar ? 0 : 1) : o.respira;

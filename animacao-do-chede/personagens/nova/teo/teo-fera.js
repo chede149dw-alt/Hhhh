@@ -24,11 +24,11 @@
     if (e >= 1) o.olhos = { ...o.olhos, iris: 'irisAmbar' };
     if (e >= 3) { o.pele = 'peleFera'; o.cabelo = { ...o.cabelo, volume: 1.12 }; o.altura = 6.2; o.corpo = { ombro: 0.62, quadril: 0.2 }; }
     if (e >= 4) { o.altura = 6.6; o.corpo = { ombro: 0.72, quadril: 0.22 }; o.cabelo = { ...o.cabelo, volume: 1.24 }; o.sobrancelha = { esp: 0.08, tipo: 'reta' }; }
-    const { estagio, roupa, ...resto } = opcoes;
+    const { estagio, roupa, semArma, ...resto } = opcoes;
     const def = window.criarPersonagem({ ...o, ...resto, poses: Object.fromEntries(Object.entries(window.TEO_FERA_POSES).map(([k, v]) => [k, v.angulos])) }, vista);
     const eq = { ...(R ? R.eq : window.TEO_JOGO_EQUIP) };
     if (R && e >= 3) delete eq.capa; // a capa rasga e cai na transformação
-    if (e >= 4) { delete eq.arma; delete eq.escudo; }
+    if (e >= 4 || semArma) { delete eq.arma; delete eq.escudo; }
     window.equipar(def, eq);
     const parte = (n) => def.partes.find((p) => p.nome === n);
     const depois = (n, fn) => { const p = parte(n); if (!p) return; const orig = p.desenhar; p.desenhar = (pc, ...r) => { orig(pc, ...r); fn(pc, ...r); }; };

@@ -910,7 +910,7 @@
   //      { tipo: 'pixels', x, z, alt, k, cor }]  (coordenadas do motor: z para dentro da tela)
   const v3 = (x, y, z) => new THREE.Vector3(x, y, -z);
   function montarFx(cena) {
-    const T = THREE, F = { flechas: [], gelos: [], raizes: [], meteoros: [], explosoes: [], pixels: [], ondas: [], redes: [] };
+    const T = THREE, F = { flechas: [], gelos: [], raizes: [], meteoros: [], explosoes: [], pixels: [], ondas: [], redes: [], correntes: [] };
     const tBr = textura(texBrilho('255,255,255')), tRastro = textura(tela(256, 32, (g, w, h) => { const gr = g.createLinearGradient(0, 0, w, 0); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(255,255,255,1)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); const v = g.createLinearGradient(0, 0, 0, h); v.addColorStop(0, 'rgba(0,0,0,1)'); v.addColorStop(0.5, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,1)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = v; g.fillRect(0, 0, w, h); }));
     tRastro.wrapS = tRastro.wrapT = T.ClampToEdgeWrapping;
     const aditivo = (cor, map = tBr, op = 1) => new T.MeshBasicMaterial({ map, color: cor, transparent: true, opacity: op, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide, toneMapped: false, fog: false });
@@ -946,6 +946,21 @@
         const halo = new T.Mesh(new T.PlaneGeometry(1, 1), aditivo(0x9FD4FF, tBr, 0.35)); gr.add(halo);
         const cordaGeo = new T.BufferGeometry(); cordaGeo.setAttribute('position', new T.BufferAttribute(new Float32Array(6), 3)); const cordaL = new T.Line(cordaGeo, new T.LineBasicMaterial({ color: 0xC8A46A, toneMapped: false })); cordaL.frustumCulled = false; cena.add(cordaL); cordaL.visible = false;
         gr.visible = false; cena.add(gr); F.redes.push({ gr, geo, fio, brilho, pesos, halo, cordaL, NR, NA });
+      }
+    }
+    // ---- corrente de prata viva (pedido do autor 22/11: "essa corrente ficou muito estranha... o design dela é feio"):
+    //      elos de verdade (toro alongado, de metal), cada um girado 90° em relação ao vizinho como numa corrente real,
+    //      prata com brilho frio; na ponta, um peso de prata pontudo que brilha. Segue um caminho de pontos no 3D.
+    {
+      const NL = 460, gElo = new T.TorusGeometry(0.05, 0.016, 8, 20); gElo.scale(1.6, 1, 1);
+      const gPeso = new T.OctahedronGeometry(0.1, 0); gPeso.scale(1, 1, 2.1);
+      for (let i = 0; i < 2; i++) {
+        const mat = new T.MeshStandardMaterial({ color: 0xEEF3FA, metalness: 0.65, roughness: 0.22, emissive: 0x5C80BC, emissiveIntensity: 0.5, transparent: true });
+        const im = new T.InstancedMesh(gElo, mat, NL); im.frustumCulled = false; im.visible = false; im.castShadow = true; cena.add(im);
+        const peso = new T.Mesh(gPeso, mat); peso.visible = false; peso.castShadow = true; cena.add(peso);
+        const brilhos = []; for (let k = 0; k < 16; k++) brilhos.push(sprite(0xA8D4FF, 0.4));
+        const ponta = sprite(0xD8ECFF, 1);
+        F.correntes.push({ im, peso, brilhos, ponta, mat, NL });
       }
     }
     // ---- muralha de gelo: cristais hexagonais com ponta, facetados, translúcidos, arestas claras e geada no chão ----
@@ -1011,10 +1026,27 @@
   }
   function atualizaFx(lista, t) {
     if (!R.fx) R.fx = montarFx(R.cena);
-    const F = R.fx, T = THREE, ix = { flecha: 0, gelo: 0, raizes: 0, meteoro: 0, explosao: 0, pixels: 0, onda: 0, rede: 0 }, o = new T.Object3D(), cl = (v) => Math.max(0, Math.min(1, v));
+    const F = R.fx, T = THREE, ix = { flecha: 0, gelo: 0, raizes: 0, meteoro: 0, explosao: 0, pixels: 0, onda: 0, rede: 0, corrente: 0 }, o = new T.Object3D(), cl = (v) => Math.max(0, Math.min(1, v));
     for (const g of lista) {
       if (!g) continue;
       // rede: { tipo: 'rede', x, y, z, dx, dy, dz (para onde voa), abre 0..1, gira (rad), R (raio aberta, m), congela 0..1, corda: [x, y, z] }
+      // corrente: { tipo: 'corrente', pts: [[x, y, z], ...] (caminho, da mão até a ponta), k 0..1 (quanto já saiu),
+      //   s (tamanho do elo), alfa, brilho 0..1 }
+      if (g.tipo === 'corrente' && ix.corrente < F.correntes.length) {
+        const C = F.correntes[ix.corrente++], P = g.pts.map((p) => v3(p[0], p[1], p[2])), s = g.s || 1, passo = 0.112 * s, alfa = g.alfa === undefined ? 1 : g.alfa, br = g.brilho === undefined ? 0.6 : g.brilho;
+        const L = [0]; for (let i = 1; i < P.length; i++) L.push(L[i - 1] + P[i].distanceTo(P[i - 1]));
+        const tot = L[L.length - 1] * cl(g.k === undefined ? 1 : g.k), n = Math.min(C.NL, Math.floor(tot / passo)), X = new T.Vector3(1, 0, 0), q1 = new T.Quaternion(), q2 = new T.Quaternion();
+        let j = 1; const em = (dist) => { while (j < P.length - 1 && L[j] < dist) j++; while (j > 1 && L[j - 1] > dist) j--; const a = P[j - 1], b = P[j], u = (dist - L[j - 1]) / Math.max(1e-6, L[j] - L[j - 1]); return [a.clone().lerp(b, Math.max(0, Math.min(1, u))), b.clone().sub(a).normalize()]; };
+        for (let i = 0; i < n; i++) {
+          const [p, d] = em(tot - (i + 0.5) * passo); // da ponta para trás: a ponta sempre tem elo
+          q1.setFromUnitVectors(X, d); q2.setFromAxisAngle(d, (i % 2) * Math.PI / 2 + 0.25); o.position.copy(p); o.quaternion.copy(q2).multiply(q1); o.scale.setScalar(s); o.updateMatrix(); C.im.setMatrixAt(i, o.matrix);
+        }
+        C.im.count = n; C.im.instanceMatrix.needsUpdate = true; C.im.visible = n > 0 && alfa > 0.01; C.mat.opacity = alfa; C.mat.emissiveIntensity = 0.4 + 0.5 * br;
+        const [pp, dd] = em(tot); C.peso.position.copy(pp).addScaledVector(dd, 0.12 * s); C.peso.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), dd); C.peso.scale.setScalar(s); C.peso.visible = (g.peso !== false) && tot > 0.05 && alfa > 0.01;
+        C.ponta.position.copy(C.peso.position); C.ponta.scale.setScalar(0.55 * s * (0.85 + 0.15 * Math.sin(t * 25))); C.ponta.material.opacity = 0.9 * br * alfa; C.ponta.visible = C.peso.visible;
+        C.brilhos.forEach((sp, k) => { const dist = tot * ((k + 0.5) / C.brilhos.length + 0.03 * Math.sin(t * 3 + k)); if (dist <= 0.05) { sp.visible = false; return; } const [p] = em(dist); sp.position.copy(p); sp.scale.setScalar(0.32 * s); sp.material.opacity = 0.32 * br * alfa * (0.6 + 0.4 * Math.sin(t * 9 + k * 2.1)); sp.visible = true; });
+        continue;
+      }
       if (g.tipo === 'rede' && ix.rede < F.redes.length) {
         const N = F.redes[ix.rede++], p = v3(g.x, g.y, g.z), d = new T.Vector3(g.dx || 0, g.dy || 0, -(g.dz === undefined ? 1 : g.dz)).normalize();
         N.gr.position.copy(p); N.gr.lookAt(p.clone().add(d)); N.gr.visible = true;
@@ -1026,12 +1058,16 @@
           return [Math.cos(a) * r, Math.sin(a) * r, -cuia + onda]; };
         for (let i = 1; i <= N.NA; i++) for (let k = 0; k < N.NR; k++) {
           const A = pt(i, k), B = pt(i, (k + 1) % N.NR), C = pt(i - 1, k);
-          pos.set(A, w); pos.set(B, w + 3); pos.set(A, w + 6); pos.set(C, w + 9); w += 12;
+          const rs = g.rasga || 0, h1 = (Math.sin(i * 12.99 + k * 78.23) * 43758.5) % 1, h2 = (Math.sin(i * 39.35 + k * 11.13) * 24634.6) % 1;
+          if (rs > 0 && Math.abs(h1) < rs) pos.set(A, w), pos.set(A, w + 3); else { pos.set(A, w); pos.set(B, w + 3); }
+          if (rs > 0 && Math.abs(h2) < rs * 0.8) pos.set(A, w + 6), pos.set(A, w + 9); else { pos.set(A, w + 6); pos.set(C, w + 9); }
+          w += 12;
         }
         N.geo.attributes.position.needsUpdate = true;
         const cor = new T.Color(0xDCE6F4).lerp(new T.Color(0xF4FCFF), cg); N.fio.material.color.copy(cor); N.brilho.material.color.copy(new T.Color(0x9FD4FF).lerp(new T.Color(0xBFF0FF), cg)); N.brilho.material.opacity = 0.45 + 0.35 * cg;
         N.pesos.forEach((m, k) => { const q = pt(N.NA, k); m.position.set(q[0] * 1.03, q[1] * 1.03, q[2] - 0.04); m.children[0].visible = cg > 0.05; m.children[0].scale.setScalar(cl(cg * 1.5)); m.children[0].rotation.set(k, k * 2, 0); });
         N.halo.scale.setScalar(Rm * 2.6); N.halo.material.opacity = 0.18 + 0.25 * cg;
+        { const al = g.alfa === undefined ? 1 : g.alfa; N.fio.material.opacity = 0.95 * al; N.brilho.material.opacity *= al; N.halo.material.opacity *= al; N.pesos.forEach((m, k) => (m.visible = al > 0.3 && !(g.rasga && Math.abs((Math.sin(k * 7.7) * 9999) % 1) < g.rasga))); }
         if (g.corda) { const c = N.cordaL.geometry.attributes.position.array, q = v3(g.corda[0], g.corda[1], g.corda[2]); c.set([p.x, p.y, p.z, q.x, q.y, q.z]); N.cordaL.geometry.attributes.position.needsUpdate = true; N.cordaL.visible = true; } else N.cordaL.visible = false;
         continue;
       }
@@ -1093,6 +1129,7 @@
     for (; ix.raizes < F.raizes.length; ix.raizes++) { F.raizes[ix.raizes].gr.visible = false; F.raizes[ix.raizes].brilhos.forEach((s) => (s.visible = false)); }
     for (; ix.meteoro < F.meteoros.length; ix.meteoro++) { const M = F.meteoros[ix.meteoro]; M.gr.visible = false; M.cauda.forEach((s) => (s.visible = false)); M.fumaca.forEach((s) => (s.visible = false)); }
     for (; ix.explosao < F.explosoes.length; ix.explosao++) { const E = F.explosoes[ix.explosao]; E.gr.visible = false; E.fogo.forEach((s) => (s.visible = false)); E.pedras.forEach((p) => (p.p.visible = false)); }
+    for (; ix.corrente < F.correntes.length; ix.corrente++) { const C = F.correntes[ix.corrente]; C.im.visible = C.peso.visible = C.ponta.visible = false; C.brilhos.forEach((sp) => (sp.visible = false)); }
     for (; ix.rede < F.redes.length; ix.rede++) { F.redes[ix.rede].gr.visible = false; F.redes[ix.rede].cordaL.visible = false; }
     for (; ix.pixels < F.pixels.length; ix.pixels++) { F.pixels[ix.pixels].im.visible = false; F.pixels[ix.pixels].raio.visible = false; }
   }

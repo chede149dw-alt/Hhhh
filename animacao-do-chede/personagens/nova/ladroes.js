@@ -138,7 +138,7 @@
     def.partes.push({ nome: 'corrente_braco', pai: 'antebraco_e', pivo: [0, 0], z: ant.z + 0.02, desenhar: (pc) => { for (let v = 0; v < 3; v++) for (let i = -2; i <= 2; i++) elo(pc, i * 0.045, L * (0.35 + v * 0.16) + Math.abs(i) * 0.012, i % 2 ? 0.2 : -0.2, 0.9); } });
     // ponta pendurada da mão, balançando (window.CORRENTE = { t, solta: 0..1 } controla o balanço / quando ela é jogada)
     def.partes.push({ nome: 'corrente_ponta', pai: 'mao_e', pivo: [0, 0.08], z: mao.z + 0.01, desenhar: (pc) => {
-      const cc = window.CORRENTE || {}, t = cc.t || 0, n = 11;
+      const cc = window.CORRENTE || {}, t = cc.t || 0, n = 11; if (cc.solta) return; // já foi jogada
       pc.preencher(P((q) => q.ellipse(0, 0.35, 0.18, 0.45, 0, 0, Math.PI * 2)), 'rgba(200,225,255,0.12)');
       for (let i = 0; i < n; i++) { const s = i / n, x = Math.sin(t * 2 + s * 3) * 0.06 * s, y = s * 0.78; elo(pc, x, y, i % 2 ? Math.PI / 2 : 0); }
       pc.peca(P((q) => { q.moveTo(-0.06, 0.8); q.lineTo(0, 0.95); q.lineTo(0.06, 0.8); q.closePath(); }), { base: '#E8EEF8', sombra: '#8A94A8' }, { sombra: 0.1 });
