@@ -11,14 +11,14 @@ NARRADOR (Witalo Guimarães, cLjWzehDrurj3fqQ6yN7)
 [x] n_fera        E aí o Téo virou fera.
 [x] n_desceram    Os jogadores desceram pelas cordas, com redes de prata.
 [x] n_pe          O Davi bateu o pé no chão.
-[ ] n_raizes      Raízes Anciãs.
+[x] n_raizes      Raízes Anciãs.
 [x] n_meteoro     Meteoro.
 [x] n_encapuzado  Mas o encapuzado ainda estava lá em cima.
-[ ] n_parte       Segue pra ver a parte seis!
+[x] n_parte       Segue pra ver a parte seis!
 
 DAVI (Wesley Bessa, WFSxKvz27RguNRD3Phoq)
 [ ] d_jogador     Mano... aquilo é tudo jogador?
-[ ] d_prender     Eu não vou te prender.
+[x] d_prender     Eu não vou te prender.
 [ ] d_corro       ...eu corro. Eu sei.
 [ ] d_naocorrer   Não. Dessa vez eu não vou correr.
 [ ] d_soueu       Sou eu, Téo.
@@ -37,3 +37,8 @@ LÍDER (2 opções pro autor escolher)
 SONS
 [x] uivo          4 opções (6 s) em audio/nova/ep05/sfx/uivo-a..d.mp3
 [x] rosnado       3 opções (4 s) em audio/nova/ep05/sfx/rosnado-a..c.mp3
+
+ESCOLHIDOS (Claude escolheu, a pedido do autor)
+- Líder: Rannox Elion -> vozes/l_espada.mp3
+- Uivo: opção B (o mais sustentado, ~3,4 s de uivo) -> sfx/uivo.mp3
+- Rosnado: opção B (o mais grave e encorpado) -> sfx/rosnado.mp3
